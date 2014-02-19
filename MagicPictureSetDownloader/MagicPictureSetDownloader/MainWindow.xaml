@@ -1,0 +1,30 @@
+﻿<Window x:Class="MagicPictureSetDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        Title="MainWindow" Height="350" Width="525">
+    
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="CredentialRequiered" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0"  Grid.Column="0" Content="Url"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding BaseSetUrl, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged , NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+        <Label Grid.Row="1" Grid.Column="0"  Content="Output Dir" />
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OutputPath, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged , NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
+        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Padding="10,0" Margin="0,10"  Content="Go" Command="{Binding RunCommand}"/>
+    </Grid>
+</Window>
