@@ -11,20 +11,20 @@ namespace CommonViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private static readonly HashSet<string> InnerPropertyNameSet;
+        private static readonly HashSet<string> _innerPropertyNameSet;
         private readonly HashSet<string> _childPropertyNameSet;
         private readonly Dictionary<string, HashSet<string>> _linkedProperties;
 
         static NotifyPropertyChangedWithLinkedPropertiesBase()
         {
             IEnumerable<string> propertyNames = typeof (NotifyPropertyChangedBase).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi=>pi.Name);
-            InnerPropertyNameSet = new HashSet<string>(propertyNames);
+            _innerPropertyNameSet = new HashSet<string>(propertyNames);
         }
 
         protected NotifyPropertyChangedWithLinkedPropertiesBase()
         {
             _linkedProperties = new Dictionary<string, HashSet<string>>();
-            IEnumerable<string> propertyNames = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi => pi.Name).Where(n=>!InnerPropertyNameSet.Contains((n)));
+            IEnumerable<string> propertyNames = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi => pi.Name).Where(n=>!_innerPropertyNameSet.Contains((n)));
             _childPropertyNameSet = new HashSet<string>(propertyNames);
         }
         public void OnNotifyPropertyChanged<T>(Expression<Func<T>> expression)

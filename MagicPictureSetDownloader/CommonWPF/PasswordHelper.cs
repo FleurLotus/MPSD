@@ -7,6 +7,7 @@ namespace CommonWPF
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof (string), typeof (PasswordHelper), new FrameworkPropertyMetadata(string.Empty, OnPasswordPropertyChanged));
         public static readonly DependencyProperty AttachProperty = DependencyProperty.RegisterAttached("Attach", typeof (bool), typeof (PasswordHelper), new PropertyMetadata(false, Attach));
+// ReSharper disable once InconsistentNaming
         private static readonly DependencyProperty IsUpdatingProperty = DependencyProperty.RegisterAttached("IsUpdating", typeof (bool), typeof (PasswordHelper));
 
 
@@ -37,6 +38,8 @@ namespace CommonWPF
         private static void OnPasswordPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             PasswordBox passwordBox = sender as PasswordBox;
+            if (passwordBox == null)
+                return;
             passwordBox.PasswordChanged -= PasswordChanged;
 
             if (!GetIsUpdating(passwordBox))
@@ -64,6 +67,8 @@ namespace CommonWPF
         private static void PasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordBox passwordBox = sender as PasswordBox;
+            if (passwordBox == null)
+                return;
             SetIsUpdating(passwordBox, true);
             SetPassword(passwordBox, passwordBox.Password);
             SetIsUpdating(passwordBox, false);

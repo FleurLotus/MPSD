@@ -36,6 +36,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,6 +90,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageSourceConverter.cs" />
     <Compile Include="CredentialInput.xaml.cs">
       <DependentUpon>CredentialInput.xaml</DependentUpon>
     </Compile>
@@ -110,6 +129,10 @@
       <Project>{3D77A537-2432-416A-A358-6C5B13581A00}</Project>
       <Name>CommonInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CommonLibray\CommonLibray.csproj">
+      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
+      <Name>CommonLibray</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonViewModel\CommonViewModel.csproj">
       <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
       <Name>CommonViewModel</Name>
@@ -117,6 +140,10 @@
     <ProjectReference Include="..\CommonWPF\CommonWPF.csproj">
       <Project>{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}</Project>
       <Name>CommonWPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
+      <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
+      <Name>MagicPictureSetDownloader.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj">
       <Project>{473562B3-1A2B-4F43-BA88-613C35D15AAC}</Project>

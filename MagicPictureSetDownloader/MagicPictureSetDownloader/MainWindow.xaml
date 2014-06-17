@@ -1,30 +1,88 @@
 ﻿<Window x:Class="MagicPictureSetDownloader.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        Title="MainWindow" Height="350" Width="525">
-    
+        xmlns:commonWpf="clr-namespace:CommonWPF;assembly=CommonWPF"
+        Width="500" SizeToContent="Height" Title="MagicPictureSetDownloader">
+
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="CredentialRequiered" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0"  Grid.Column="0" Content="Url"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding BaseSetUrl, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged , NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-        <Label Grid.Row="1" Grid.Column="0"  Content="Output Dir" />
-        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding OutputPath, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged , NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-        <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Padding="10,0" Margin="0,10"  Content="Go" Command="{Binding RunCommand}"/>
+        
+        <Border Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Black">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Width="80" Content="Set list URL" VerticalContentAlignment="Center" FontWeight="Bold" />
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{commonWpf:TwoWayBinding BaseSetUrl}" />
+                <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetSetListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" Visibility="{Binding Sets.Count, Converter={StaticResource nz2vConv}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Width="82" Content="Out path" VerticalContentAlignment="Center" FontWeight="Bold" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{commonWpf:TwoWayBinding OutputPath}" />
+                    <Button Grid.Column="2" Grid.Row="0" Width="72"  Command="{Binding GetPicturesCommand}" Content="Go" HorizontalAlignment="Center" />
+                </Grid>
+                <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Sets}" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500">
+                    <ListBox.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"/> 
+                                <Border Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="Black">
+                                    <Image Width="30" Height="30" Source="{Binding PictureUrl, Converter={StaticResource imgConv}}" />
+                                </Border> 
+                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
+                                <ProgressBar Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Width="200" Value="{Binding DownloadReporter.Current}"  Maximum="{Binding DownloadReporter.Total}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" Visibility="{Binding Message, Converter={StaticResource no2vConv}}" BorderThickness="2" BorderBrush="Red">
+            <TextBlock Text="{Binding Message}"/>
+        </Border>
     </Grid>
 </Window>

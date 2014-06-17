@@ -1,19 +1,25 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 using CommonInterface;
+using CommonLibray;
 using CommonViewModel;
+using MagicPictureSetDownloader.Core;
 
 namespace MagicPictureSetDownloader.ViewModel
 {
     public class MainViewModel: NotifyPropertyChangedBase
     {
-        
+  
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
 
         private string _baseSetUrl;
         private string _outputPath;
+        private string _message;
         private bool _isBusy;
+        private int _countDown;
         private readonly DownloadManager _downloadManager;
         private readonly IDispatcherInvoker _dispatcherInvoker;
         
@@ -21,11 +27,16 @@ namespace MagicPictureSetDownloader.ViewModel
         {
             _dispatcherInvoker = dispatcherInvoker;
             BaseSetUrl = @"http://mythicspoiler.com/sets.html";
-            RunCommand = new RelayCommand(RunCommandExecute, RunCommandCanExecute);
+            Sets = new AsyncObservableCollection<SetInfoViewModel>();
+            GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
+            GetPicturesCommand = new RelayCommand(GetPicturesCommandExecute, GetPicturesCommandCanExecute);
             _downloadManager = new DownloadManager();
+            _downloadManager.CredentialRequiered += OnCredentialRequiered;
         }
 
-        public ICommand RunCommand { get; private set; }
+        public AsyncObservableCollection<SetInfoViewModel> Sets { get; private set; }
+        public ICommand GetSetListCommand { get; private set; }
+        public ICommand GetPicturesCommand { get; private set; }
         public bool IsBusy
         {
             get
@@ -71,35 +82,136 @@ namespace MagicPictureSetDownloader.ViewModel
                 }
             }
         }
-        
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                if (value != _message)
+                {
+                    _message = value;
+                    OnNotifyPropertyChanged(() => Message);
+                }
+            }
+        }
 
+        
         #region Command
-        private bool RunCommandCanExecute(object o)
+        private bool GetSetListCommandCanExecute(object o)
         {
-            return !IsBusy && !string.IsNullOrWhiteSpace(BaseSetUrl) && Directory.Exists(OutputPath);
+            return !IsBusy && !string.IsNullOrWhiteSpace(BaseSetUrl);
         }
-        private void RunCommandExecute(object o)
+        private void GetSetListCommandExecute(object o)
         {
-            IsBusy = true;
-            _downloadManager.RunCompleted += DownloadManagerRunCompleted;
-            _downloadManager.RunError += DownloadManagerRunError;
-            _downloadManager.CredentialRequiered += OnCredentialRequiered;
-            _downloadManager.RunAsync(new DownloadManagerRunArgs(BaseSetUrl, OutputPath));
+            JobStarting();
+            ThreadPool.QueueUserWorkItem(GetSetListCallBack, BaseSetUrl);
         }
+        private bool GetPicturesCommandCanExecute(object o)
+        {
+            return !IsBusy && Directory.Exists(OutputPath);
+        }
+        private void GetPicturesCommandExecute(object o)
+        {
+            JobStarting();
+            ThreadPool.QueueUserWorkItem(GetPicturesListCallBack);
+            /*
+            Action<string, SetInfoViewModel[]> deleg = GetPictures;
+            deleg.BeginInvoke().ToArray(), GetPicturesCallback, null);*/
+
+        }
+
+        #endregion
+        private void GetSetListCallBack(object state)
+        {
+            try
+            {
+                string baseUrl = (string)state;
+                Sets.Clear();
+                foreach (SetInfo setInfo in _downloadManager.GetSetList(baseUrl))
+                {
+                    SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfo);
+                    Sets.Add(setInfoViewModel);
+                    ThreadPool.QueueUserWorkItem(GetNameCallback, setInfoViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Message = ex.Message;
+            }
+            JobFinished();
+        }
+        private void GetNameCallback(object state)
+        {
+            try
+            {
+                SetInfoViewModel setInfoViewModel = (SetInfoViewModel)state;
+                setInfoViewModel.Name = _downloadManager.GetName(setInfoViewModel.Url);
+            }
+            catch (Exception)
+            {
+            }
+        }
+        private void GetPicturesListCallBack(object state)
+        {
+            foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
+            {
+                Interlocked.Increment(ref _countDown);
+                PictureInfo[] pictures = _downloadManager.GetPicturesList(setInfoViewModel.Url);
+
+                string alias = setInfoViewModel.Alias;
+                if (alias == "con")
+                    alias = "cns";
+                string outpath = Path.Combine(OutputPath, alias);
+                if (!Directory.Exists(outpath))
+                    Directory.CreateDirectory(outpath);
+
+                setInfoViewModel.DownloadReporter.Total = pictures.Length;
+                ThreadPool.QueueUserWorkItem(GetPicturesForOneSetCallBack, new object[] {outpath,setInfoViewModel.Url, pictures, setInfoViewModel.DownloadReporter});
+            }
+        }
+        private void GetPicturesForOneSetCallBack(object state)
+        {
+            object[] args = (object[])state;
+            string output = (string)args[0];
+            string baseUrl = (string)args[1];
+            PictureInfo[] pictures = (PictureInfo[])args[2];
+            DownloadReporter downloadReporter = (DownloadReporter)args[3];
+
+            foreach (PictureInfo pictureInfo in pictures)
+            {
+                string nameurl = DownloadManager.ToAbsoluteUrl(baseUrl, pictureInfo.Url);
+                string pictureurl = DownloadManager.ToAbsoluteUrl(baseUrl, pictureInfo.PictureUrl);
+                string name = _downloadManager.GetName(nameurl);
+                _downloadManager.GetPicture(pictureurl, output, name);
+                downloadReporter.Current++;
+            }
+
+            downloadReporter.Current = downloadReporter.Total;
+            Interlocked.Decrement(ref _countDown);
+            if (_countDown == 0)
+                IsBusy = false;
+        }
+
+
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             var e = CredentialRequiered;
             if (e != null)
                 _dispatcherInvoker.Invoke(() => e(sender, args));
         }
-        private void DownloadManagerRunCompleted(object sender, EventArgs<string> e)
+        private void JobStarting()
         {
-            throw new NotImplementedException();
+            Message = null;
+            IsBusy = true;
         }
-        private void DownloadManagerRunError(object sender, EventArgs<Exception> e)
+        private void JobFinished()
         {
-            throw new NotImplementedException();
+            IsBusy = false;
         }
-        #endregion
+
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-namespace MagicPictureSetDownloader.ViewModel
+namespace MagicPictureSetDownloader.Core
 {
     public class CredentialRequieredArgs
     {

@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{473562B3-1A2B-4F43-BA88-613C35D15AAC}</ProjectGuid>
+    <ProjectGuid>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.ViewModel</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.ViewModel</AssemblyName>
+    <RootNamespace>CommonLibray</RootNamespace>
+    <AssemblyName>CommonLibray</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,34 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CredentialInputViewModel.cs" />
-    <Compile Include="DownloadReporter.cs" />
-    <Compile Include="MainViewModel.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetInfoViewModel.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CommonInterface\CommonInterface.csproj">
-      <Project>{3D77A537-2432-416A-A358-6C5B13581A00}</Project>
-      <Name>CommonInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommonLibray\CommonLibray.csproj">
-      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
-      <Name>CommonLibray</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommonViewModel\CommonViewModel.csproj">
-      <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
-      <Name>CommonViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
-      <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
-      <Name>MagicPictureSetDownloader.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
