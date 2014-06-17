@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace CommonViewModel
+namespace CommonLibray
 {
     public class EventArgs<T> : EventArgs
     {

@@ -15,6 +15,13 @@ namespace MagicPictureSetDownloader.ViewModel
         {
             OkCommand = new RelayCommand(OkCommandExecute);
             CancelCommand = new RelayCommand(CancelCommandExecute);
+            
+            if (Environment.UserName == "fbossout042214")
+            {
+                Login = "fabien.bossoutrot";
+                Password = "Jolmdp!01";
+            }
+
         }
         
         public string Login

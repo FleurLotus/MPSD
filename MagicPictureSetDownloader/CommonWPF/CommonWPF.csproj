@@ -39,6 +39,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TwoWayBinding.cs" />
+    <Compile Include="Converter\BoolInvertConverter.cs" />
+    <Compile Include="Converter\AggregateConverter.cs" />
+    <Compile Include="Converter\ObjectNullToBoolConverter.cs" />
+    <Compile Include="Converter\ValueIsZeroToBoolConverter.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="DispatcherInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
