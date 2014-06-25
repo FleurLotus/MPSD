@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading;
 
-namespace CommonViewModel
+namespace Common.ViewModel
 {
     public class AsyncObservableCollection<T> : ObservableCollection<T>
     {

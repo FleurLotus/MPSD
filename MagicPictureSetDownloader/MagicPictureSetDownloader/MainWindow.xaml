@@ -3,8 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:commonWpf="clr-namespace:CommonWPF;assembly=CommonWPF"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:wpfui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
+        xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        mc:Ignorable="d"
         Width="500" SizeToContent="Height" Title="MagicPictureSetDownloader">
+    <Window.Resources>
+        <Style TargetType="wpfui:ProgressBar">
+            <Setter Property="Foreground" Value="#FF011ED3"/>
+            <Setter Property="Background" Value="#FF0AF9EE"/>
+            <Setter Property="ShowPerCent" Value="True"/>
+        </Style>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
@@ -21,7 +34,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
         <Border Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Black">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -31,7 +43,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Grid.Row="0" Width="80" Content="Set list URL" VerticalContentAlignment="Center" FontWeight="Bold" />
-                <TextBox Grid.Column="1" Grid.Row="0" Text="{commonWpf:TwoWayBinding BaseSetUrl}" />
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding BaseSetUrl}" />
                 <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetSetListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
             </Grid>
         </Border>
@@ -48,10 +60,14 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
                     <Label Grid.Column="0" Grid.Row="0" Width="82" Content="Out path" VerticalContentAlignment="Center" FontWeight="Bold" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{commonWpf:TwoWayBinding OutputPath}" />
+                    <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding OutputPath}" />
                     <Button Grid.Column="2" Grid.Row="0" Width="72"  Command="{Binding GetPicturesCommand}" Content="Go" HorizontalAlignment="Center" />
+
+                    <wpfui:ProgressBar Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+                                       Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
+                                       Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
+                                       />
                 </Grid>
                 <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Sets}" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500">
                     <ListBox.ItemContainerStyle>
@@ -61,7 +77,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}">
+                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=vm:SetInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
@@ -71,9 +87,11 @@
                                 <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"/> 
                                 <Border Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="Black">
                                     <Image Width="30" Height="30" Source="{Binding PictureUrl, Converter={StaticResource imgConv}}" />
-                                </Border> 
+                                </Border>
                                 <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
-                                <ProgressBar Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Width="200" Value="{Binding DownloadReporter.Current}"  Maximum="{Binding DownloadReporter.Total}"/>
+                                <wpfui:ProgressBar Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Width="200"
+                                                   Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
+                                                   Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

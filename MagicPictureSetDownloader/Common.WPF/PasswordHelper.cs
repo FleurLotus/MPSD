@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace CommonWPF
+namespace Common.WPF
 {
     public static class PasswordHelper
     {

@@ -1,0 +1,27 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converter="clr-namespace:Common.WPF.Converter">
+    
+    
+    <BooleanToVisibilityConverter x:Key="b2vConv"/>
+    <converter:EnumMatchToBooleanConverter x:Key="e2bConv"/>
+    <converter:ImageSourceConverter x:Key="imgConv" />
+
+    <converter:AggregateConverter x:Key="no2bConv">
+        <converter:ObjectNullToBoolConverter/>
+        <converter:BoolInvertConverter/>
+    </converter:AggregateConverter>
+    <converter:AggregateConverter x:Key="nz2vConv">
+        <converter:ValueIsZeroToBoolConverter/>
+        <converter:BoolInvertConverter/>
+        <BooleanToVisibilityConverter/>
+    </converter:AggregateConverter>
+    <converter:AggregateConverter x:Key="no2vConv">
+        <converter:ObjectNullToBoolConverter/>
+        <converter:BoolInvertConverter/>
+        <BooleanToVisibilityConverter/>
+    </converter:AggregateConverter>
+
+
+    <converter:ProgressBarFillToRectConverter x:Key="pbf2rectConv"/>
+</ResourceDictionary>

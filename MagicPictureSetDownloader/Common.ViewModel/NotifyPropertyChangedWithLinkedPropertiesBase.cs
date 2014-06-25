@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace CommonViewModel
+namespace Common.ViewModel
 {
     public class NotifyPropertyChangedWithLinkedPropertiesBase: INotifyPropertyChanged
     {

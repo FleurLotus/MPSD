@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using CommonViewModel;
+using Common.ViewModel;
 
 namespace MagicPictureSetDownloader.ViewModel
 {

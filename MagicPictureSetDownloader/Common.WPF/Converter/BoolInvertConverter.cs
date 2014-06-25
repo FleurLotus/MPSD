@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace CommonWPF.Converter
+namespace Common.WPF.Converter
 {
     [ValueConversion(typeof(bool), typeof(bool))]
     public class BoolInvertConverter : IValueConverter

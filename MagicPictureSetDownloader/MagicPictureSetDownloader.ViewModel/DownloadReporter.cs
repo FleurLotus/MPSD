@@ -1,17 +1,19 @@
-﻿using CommonViewModel;
+﻿using System.Threading;
+using Common.ViewModel;
 
 namespace MagicPictureSetDownloader.ViewModel
 {
-    public class DownloadReporter: NotifyPropertyChangedBase
+    public class DownloadReporter : NotifyPropertyChangedBase
     {
         private int _current;
         private int _total;
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
         public DownloadReporter()
         {
             Total = 1;
         }
-        
+
         public int Total
         {
             get { return _total; }
@@ -24,19 +26,33 @@ namespace MagicPictureSetDownloader.ViewModel
                 }
             }
         }
-        
+
         public int Current
         {
-            get { return _current; }
-            set
+            get
             {
-                if (value != _current)
-                {
-                    _current = value;
-                    OnNotifyPropertyChanged(() => Current);
-                }
+                _lock.EnterReadLock();
+                int ret = _current;
+                _lock.ExitReadLock();
+                return ret;
             }
         }
 
+        public void Progress()
+        {
+            _lock.EnterWriteLock();
+            _current++;
+            _lock.ExitWriteLock();
+            OnNotifyPropertyChanged(() => Current);
+        }
+
+        internal void Finish()
+        {
+            _lock.EnterWriteLock();
+            _current = _total;
+            _lock.ExitWriteLock();
+            OnNotifyPropertyChanged(() => Current);
+
+        }
     }
 }
