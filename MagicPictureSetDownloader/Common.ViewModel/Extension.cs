@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace CommonViewModel
+namespace Common.ViewModel
 {
     public static class Extension
     {

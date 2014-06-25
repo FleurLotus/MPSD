@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Windows.Input;
-using CommonInterface;
+using Common.Interface;
+using Common.ViewModel;
 using CommonLibray;
-using CommonViewModel;
 using MagicPictureSetDownloader.Core;
 
 namespace MagicPictureSetDownloader.ViewModel
@@ -30,6 +31,7 @@ namespace MagicPictureSetDownloader.ViewModel
             Sets = new AsyncObservableCollection<SetInfoViewModel>();
             GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
             GetPicturesCommand = new RelayCommand(GetPicturesCommandExecute, GetPicturesCommandCanExecute);
+            DownloadReporter = new DownloadReporter();
             _downloadManager = new DownloadManager();
             _downloadManager.CredentialRequiered += OnCredentialRequiered;
         }
@@ -37,6 +39,7 @@ namespace MagicPictureSetDownloader.ViewModel
         public AsyncObservableCollection<SetInfoViewModel> Sets { get; private set; }
         public ICommand GetSetListCommand { get; private set; }
         public ICommand GetPicturesCommand { get; private set; }
+        public DownloadReporter DownloadReporter { get; private set; }
         public bool IsBusy
         {
             get
@@ -117,10 +120,6 @@ namespace MagicPictureSetDownloader.ViewModel
         {
             JobStarting();
             ThreadPool.QueueUserWorkItem(GetPicturesListCallBack);
-            /*
-            Action<string, SetInfoViewModel[]> deleg = GetPictures;
-            deleg.BeginInvoke().ToArray(), GetPicturesCallback, null);*/
-
         }
 
         #endregion
@@ -151,7 +150,7 @@ namespace MagicPictureSetDownloader.ViewModel
                 SetInfoViewModel setInfoViewModel = (SetInfoViewModel)state;
                 setInfoViewModel.Name = _downloadManager.GetName(setInfoViewModel.Url);
             }
-            catch (Exception)
+            catch (WebException)
             {
             }
         }
@@ -170,6 +169,7 @@ namespace MagicPictureSetDownloader.ViewModel
                     Directory.CreateDirectory(outpath);
 
                 setInfoViewModel.DownloadReporter.Total = pictures.Length;
+                DownloadReporter.Total += pictures.Length;
                 ThreadPool.QueueUserWorkItem(GetPicturesForOneSetCallBack, new object[] {outpath,setInfoViewModel.Url, pictures, setInfoViewModel.DownloadReporter});
             }
         }
@@ -179,7 +179,7 @@ namespace MagicPictureSetDownloader.ViewModel
             string output = (string)args[0];
             string baseUrl = (string)args[1];
             PictureInfo[] pictures = (PictureInfo[])args[2];
-            DownloadReporter downloadReporter = (DownloadReporter)args[3];
+            DownloadReporter setDownloadReporter = (DownloadReporter)args[3];
 
             foreach (PictureInfo pictureInfo in pictures)
             {
@@ -187,13 +187,17 @@ namespace MagicPictureSetDownloader.ViewModel
                 string pictureurl = DownloadManager.ToAbsoluteUrl(baseUrl, pictureInfo.PictureUrl);
                 string name = _downloadManager.GetName(nameurl);
                 _downloadManager.GetPicture(pictureurl, output, name);
-                downloadReporter.Current++;
+                setDownloadReporter.Progress();
+                DownloadReporter.Progress();
             }
 
-            downloadReporter.Current = downloadReporter.Total;
+            setDownloadReporter.Finish();
             Interlocked.Decrement(ref _countDown);
             if (_countDown == 0)
+            {
+                DownloadReporter.Finish();
                 IsBusy = false;
+            }
         }
 
 

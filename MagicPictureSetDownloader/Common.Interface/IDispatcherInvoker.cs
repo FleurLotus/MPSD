@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CommonInterface
+namespace Common.Interface
 {
     public interface IDispatcherInvoker
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace CommonViewModel
+namespace Common.ViewModel
 {
     public class RelayCommand : ICommand
     {

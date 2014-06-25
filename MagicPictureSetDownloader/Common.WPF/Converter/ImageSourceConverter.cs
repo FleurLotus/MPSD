@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace MagicPictureSetDownloader
+namespace Common.WPF.Converter
 {
     public class ImageSourceConverter : IValueConverter
     {

@@ -1,0 +1,56 @@
+<UserControl x:Class="Common.WPF.UI.ProgressBar" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" d:DesignHeight="175" d:DesignWidth="244"
+FontWeight="Bold">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Resources.xaml"/>
+                <ResourceDictionary Source="..\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <!-- Empty Progress Bar Text -->
+        <Label Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=Foreground}"
+               Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=Background}"
+               Style="{StaticResource ResourceKey=HVCentered}"
+               Content="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=DisplayText}"/>
+        <!-- Fill Progress Bar Text -->
+         <Label Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=Background}"
+                Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=Foreground}"
+                Style="{StaticResource ResourceKey=HVCentered}"
+                Content="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}, Path=DisplayText}" >
+            <Label.Clip>
+                <RectangleGeometry>
+                    <RectangleGeometry.Rect>
+                        <MultiBinding Converter="{StaticResource pbf2rectConv}">
+                            <Binding Path="Value">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="{x:Type UserControl}"/>
+                                </Binding.RelativeSource>
+                            </Binding>
+                            <Binding Path="Maximum">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="{x:Type UserControl}"/>
+                                </Binding.RelativeSource>
+                            </Binding>
+                            <Binding Path="ActualWidth">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="{x:Type UserControl}"/>
+                                </Binding.RelativeSource>
+                            </Binding>
+                            <Binding Path="ActualHeight">
+                                <Binding.RelativeSource>
+                                    <RelativeSource Mode="FindAncestor" AncestorType="{x:Type UserControl}"/>
+                                </Binding.RelativeSource>
+                            </Binding>
+                        </MultiBinding>
+                    </RectangleGeometry.Rect>
+                </RectangleGeometry>
+            </Label.Clip>
+        </Label>
+    </Grid>
+</UserControl>
+

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace CommonViewModel
+namespace Common.ViewModel
 {
     public class NotifyPropertyChangedBase: INotifyPropertyChanged
     {

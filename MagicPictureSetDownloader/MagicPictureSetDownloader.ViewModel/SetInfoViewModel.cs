@@ -1,4 +1,4 @@
-﻿using CommonViewModel;
+﻿using Common.ViewModel;
 using MagicPictureSetDownloader.Core;
 
 namespace MagicPictureSetDownloader.ViewModel

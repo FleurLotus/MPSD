@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows.Threading;
-using CommonInterface;
 using System.Windows;
+using System.Windows.Threading;
+using Common.Interface;
 
-namespace CommonWPF
+namespace Common.WPF
 {
     public class DispatcherInvoker : IDispatcherInvoker
     {

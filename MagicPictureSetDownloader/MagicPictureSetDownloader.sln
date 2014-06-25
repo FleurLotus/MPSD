@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader", "MagicPictureSetDownloader\MagicPictureSetDownloader.csproj", "{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonViewModel", "CommonViewModel\CommonViewModel.csproj", "{770CD409-408D-44B1-84AE-B96513D9D7C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.ViewModel", "Common.ViewModel\Common.ViewModel.csproj", "{770CD409-408D-44B1-84AE-B96513D9D7C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.ViewModel", "MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj", "{473562B3-1A2B-4F43-BA88-613C35D15AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonInterface", "CommonInterface\CommonInterface.csproj", "{3D77A537-2432-416A-A358-6C5B13581A00}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Interface", "Common.Interface\Common.Interface.csproj", "{3D77A537-2432-416A-A358-6C5B13581A00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonWPF", "CommonWPF\CommonWPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.WPF", "Common.WPF\Common.WPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Core", "MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj", "{528D3805-C009-4AB4-9481-20F2106EFDE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLibray", "CommonLibray\CommonLibray.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Libray", "Common.Libray\Common.Libray.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{F42F032C-75B0-4B96-8936-09566943FE17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -98,6 +100,16 @@ Global
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|x86.ActiveCfg = Release|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +119,6 @@ Global
 		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{770CD409-408D-44B1-84AE-B96513D9D7C7} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
+		{F42F032C-75B0-4B96-8936-09566943FE17} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 	EndGlobalSection
 EndGlobal
