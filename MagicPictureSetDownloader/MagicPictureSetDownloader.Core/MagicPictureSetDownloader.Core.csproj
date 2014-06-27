@@ -33,22 +33,34 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PictureInfo.cs" />
+    <Compile Include="CardInfo.cs" />
     <Compile Include="CredentialRequieredArgs.cs" />
+    <Compile Include="Db\Block.cs" />
+    <Compile Include="Db\Edition.cs" />
+    <Compile Include="Db\Rarity.cs" />
     <Compile Include="DownloadManager.cs" />
+    <Compile Include="MagicDatabaseManager.cs" />
     <Compile Include="ParserException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetInfo.cs" />
     <Compile Include="InfoParser.cs" />
+    <Compile Include="SetInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.Database\Common.Database.csproj">
+      <Project>{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}</Project>
+      <Name>Common.Database</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

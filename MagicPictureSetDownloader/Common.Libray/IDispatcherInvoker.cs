@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Common.Interface
+namespace Common.Libray
 {
     public interface IDispatcherInvoker
     {

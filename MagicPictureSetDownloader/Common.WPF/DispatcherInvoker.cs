@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
-using Common.Interface;
+using Common.Libray;
 
 namespace Common.WPF
 {

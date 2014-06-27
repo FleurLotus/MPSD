@@ -1,5 +1,5 @@
 ﻿using Common.WPF;
-using CommonLibray;
+using Common.Libray;
 using MagicPictureSetDownloader.Core;
 using MagicPictureSetDownloader.ViewModel;
 

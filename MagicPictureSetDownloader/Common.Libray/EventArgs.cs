@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace CommonLibray
+namespace Common.Libray
 {
     public class EventArgs<T> : EventArgs
     {
