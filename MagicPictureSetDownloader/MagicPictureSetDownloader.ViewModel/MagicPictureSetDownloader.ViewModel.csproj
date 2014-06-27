@@ -43,10 +43,6 @@
     <Compile Include="SetInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Interface\Common.Interface.csproj">
-      <Project>{3D77A537-2432-416A-A358-6C5B13581A00}</Project>
-      <Name>Common.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>

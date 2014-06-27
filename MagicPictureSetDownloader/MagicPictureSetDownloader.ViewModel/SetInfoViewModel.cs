@@ -8,9 +8,7 @@ namespace MagicPictureSetDownloader.ViewModel
         private string _name;
         private bool _active;
 
-        public string Alias { get; private set; }
         public DownloadReporter DownloadReporter { get; private set; }
-        public string PictureUrl { get; private set; }
         public string Url { get; private set; }
         public string Name
         {
@@ -22,8 +20,6 @@ namespace MagicPictureSetDownloader.ViewModel
                     _name = value;
                     OnNotifyPropertyChanged(() => Name);
                 }
-                if (!string.IsNullOrWhiteSpace(_name))
-                    Active = true;
             }
         }
         public bool Active
@@ -38,14 +34,13 @@ namespace MagicPictureSetDownloader.ViewModel
                 }
             }
         }
-        
 
         public SetInfoViewModel(string baseSetUrl, SetInfo setInfo)
         {
-            Active = false;
-            Alias = setInfo.Alias;
-            PictureUrl = DownloadManager.ToAbsoluteUrl(baseSetUrl, setInfo.PictureUrl);
-            Url = DownloadManager.ToAbsoluteUrl(baseSetUrl, setInfo.Url);
+            Name = setInfo.Name;
+
+            string seachUrl = DownloadManager.ToAbsoluteUrl(DownloadManager.ExtractBaseUrl(baseSetUrl), setInfo.BaseSearchUrl);
+            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfo.Name);
             DownloadReporter = new DownloadReporter();
         }
     }

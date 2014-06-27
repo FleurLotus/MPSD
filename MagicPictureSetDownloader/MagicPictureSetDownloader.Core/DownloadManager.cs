@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Net;
-using CommonLibray;
+using Common.Libray;
 
 namespace MagicPictureSetDownloader.Core
 {
@@ -15,9 +15,13 @@ namespace MagicPictureSetDownloader.Core
 
         public DownloadManager()
         {
+            //ALERT: TEMP 
+            MagicDatabaseManager m = new MagicDatabaseManager("MagicData.sdf");
+            m.GetRarityId("R");
             _htmlCache = new Dictionary<string, string>();
             _infoParser = new InfoParser();
         }
+
         private bool OnCredentialRequiered()
         {
             var e = CredentialRequiered;
@@ -36,7 +40,6 @@ namespace MagicPictureSetDownloader.Core
 
             return false;
         }
-
         public static string ToAbsoluteUrl(string baseurl, string relativeurl)
         {
             if (string.IsNullOrWhiteSpace(relativeurl))
@@ -56,35 +59,35 @@ namespace MagicPictureSetDownloader.Core
 
             return baseurl + relativeurl;
         }
+        public static string ExtractBaseUrl(string url)
+        {
+            const string postfixProtocol = @"://";
 
+            if (string.IsNullOrWhiteSpace(url))
+                return url;
+
+            
+            int startIndex = url.IndexOf(postfixProtocol, StringComparison.Ordinal);
+            if (startIndex < 0)
+                return url;
+
+            int index = url.IndexOf('/', startIndex + postfixProtocol.Length);
+            if (index < 0)
+                return url;
+
+            return url.Substring(0, index + 1);
+        }
         public IEnumerable<SetInfo> GetSetList(string url)
         {
             string htmltext = GetHtml(url);
             return _infoParser.ParseSetsList(htmltext);
         }
-        public string GetName(string url)
+        public CardInfo[] GetCardInfos(string url)
         {
             string htmltext = GetHtml(url);
-            return _infoParser.ParseName(htmltext);
-        }
-        public PictureInfo[] GetPicturesList(string url)
-        {
-            string htmltext = GetHtml(url);
-            return _infoParser.ParsePicturesList(htmltext);
-        }
-        public void GetPicture(string pictureurl, string outputPath, string name)
-        {
-            string namefromurl = Path.GetFileName(pictureurl);
+            return _infoParser.ParseCardInfos(htmltext).ToArray();
 
-            if (string.IsNullOrWhiteSpace(name))
-                name = namefromurl;
-            else
-                name += Path.GetExtension(namefromurl);
-
-            name = string.Join(string.Empty,name.Split(Path.GetInvalidFileNameChars()));
-            GetFile(pictureurl, Path.Combine(outputPath, name));
         }
-
         private WebClient GetWebClient()
         {
             WebClient webClient = new WebClient();

@@ -42,7 +42,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0" Width="80" Content="Set list URL" VerticalContentAlignment="Center" FontWeight="Bold" />
+                <Label Grid.Column="0" Grid.Row="0" Width="100" Content="Gatherer URL" VerticalContentAlignment="Center" FontWeight="Bold" />
                 <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding BaseSetUrl}" />
                 <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetSetListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
             </Grid>
@@ -55,16 +55,10 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Width="82" Content="Out path" VerticalContentAlignment="Center" FontWeight="Bold" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding OutputPath}" />
-                    <Button Grid.Column="2" Grid.Row="0" Width="72"  Command="{Binding GetPicturesCommand}" Content="Go" HorizontalAlignment="Center" />
+                    <Button  Width="72" Content="Go" HorizontalAlignment="Center"
+                             Command="{Binding FeedSetsCommand}" />
 
-                    <wpfui:ProgressBar Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" 
+                    <wpfui:ProgressBar 
                                        Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
@@ -81,17 +75,14 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"/> 
-                                <Border Grid.Row="0" Grid.Column="1" BorderThickness="1" BorderBrush="Black">
-                                    <Image Width="30" Height="30" Source="{Binding PictureUrl, Converter={StaticResource imgConv}}" />
-                                </Border>
-                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
-                                <wpfui:ProgressBar Grid.Row="0" Grid.Column="3" HorizontalAlignment="Right" Width="200"
-                                                   Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
+                                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Center" />
+                                <Border Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" Width="200" Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
+                                    <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
                                                    Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
+                                </Border>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
