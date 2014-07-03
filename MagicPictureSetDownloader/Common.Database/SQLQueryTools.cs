@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 
 namespace Common.Database
@@ -6,6 +8,43 @@ namespace Common.Database
     internal static class SQLQueryTools
     {
         private const string NullString = "NULL";
+        private static readonly IDictionary<Type, DbType> _typeToDbTypes = new Dictionary<Type, DbType>
+        {
+            {typeof (byte), DbType.Byte},
+            {typeof (sbyte), DbType.SByte},
+            {typeof (short), DbType.Int16},
+            {typeof (ushort), DbType.UInt16},
+            {typeof (int), DbType.Int32},
+            {typeof (uint), DbType.UInt32},
+            {typeof (long), DbType.Int64},
+            {typeof (ulong), DbType.UInt64},
+            {typeof (float), DbType.Single},
+            {typeof (double), DbType.Double},
+            {typeof (decimal), DbType.Decimal},
+            {typeof (bool), DbType.Boolean},
+            {typeof (string), DbType.String},
+            {typeof (char), DbType.StringFixedLength},
+            {typeof (Guid), DbType.Guid},
+            {typeof (DateTime), DbType.DateTime},
+            {typeof (DateTimeOffset), DbType.DateTimeOffset},
+            {typeof (byte[]), DbType.Binary},
+            {typeof (byte?), DbType.Byte},
+            {typeof (sbyte?), DbType.SByte},
+            {typeof (short?), DbType.Int16},
+            {typeof (ushort?), DbType.UInt16},
+            {typeof (int?), DbType.Int32},
+            {typeof (uint?), DbType.UInt32},
+            {typeof (long?), DbType.Int64},
+            {typeof (ulong?), DbType.UInt64},
+            {typeof (float?), DbType.Single},
+            {typeof (double?), DbType.Double},
+            {typeof (decimal?), DbType.Decimal},
+            {typeof (bool?), DbType.Boolean},
+            {typeof (char?), DbType.StringFixedLength},
+            {typeof (Guid?), DbType.Guid},
+            {typeof (DateTime?), DbType.DateTime},
+            {typeof (DateTimeOffset?), DbType.DateTimeOffset}
+        };
 
         public static string ToSqlString(this object o)
         {
@@ -27,13 +66,11 @@ namespace Common.Database
         {
             return value == NullString ? " IS " : " = ";
         }
-       /* public static object ChangeType(object value, Type desireType)
+
+        public static DbType ToDbType(this Type type)
         {
+            return _typeToDbTypes[type];
+        }
 
-
-
-
-            return Convert.ChangeType(reader.GetValue(kv.Key), kv.Value.PropertyType)
-        }*/
     }
 }

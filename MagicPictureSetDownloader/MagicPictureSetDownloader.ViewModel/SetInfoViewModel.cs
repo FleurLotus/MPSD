@@ -5,23 +5,22 @@ namespace MagicPictureSetDownloader.ViewModel
 {
     public class SetInfoViewModel: NotifyPropertyChangedBase
     {
-        private string _name;
         private bool _active;
 
-        public DownloadReporter DownloadReporter { get; private set; }
-        public string Url { get; private set; }
-        public string Name
+        public SetInfoViewModel(string baseSetUrl, SetInfoWithBlock setInfoWithBlock)
         {
-            get { return _name; }
-            set
-            {
-                if (value != _name)
-                {
-                    _name = value;
-                    OnNotifyPropertyChanged(() => Name);
-                }
-            }
+            Name = setInfoWithBlock.Name;
+            BlockName = setInfoWithBlock.BlockName;
+
+            string seachUrl = DownloadManager.ToAbsoluteUrl(DownloadManager.ExtractBaseUrl(baseSetUrl), setInfoWithBlock.BaseSearchUrl);
+            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Name);
+            DownloadReporter = new DownloadReporter();
         }
+
+        public DownloadReporter DownloadReporter { get; private set; }
+        public string Name { get; private set; }
+        public string BlockName { get; private set; }
+        public string Url { get; private set; }
         public bool Active
         {
             get { return _active; }
@@ -33,15 +32,6 @@ namespace MagicPictureSetDownloader.ViewModel
                     OnNotifyPropertyChanged(() => Active);
                 }
             }
-        }
-
-        public SetInfoViewModel(string baseSetUrl, SetInfo setInfo)
-        {
-            Name = setInfo.Name;
-
-            string seachUrl = DownloadManager.ToAbsoluteUrl(DownloadManager.ExtractBaseUrl(baseSetUrl), setInfo.BaseSearchUrl);
-            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfo.Name);
-            DownloadReporter = new DownloadReporter();
         }
     }
 }

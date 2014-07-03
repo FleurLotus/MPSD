@@ -15,7 +15,6 @@ namespace MagicPictureSetDownloader
             DataContext = new MainViewModel(new DispatcherInvoker());
             InitializeComponent();
         }
-
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             CredentialInputViewModel vm = new CredentialInputViewModel();

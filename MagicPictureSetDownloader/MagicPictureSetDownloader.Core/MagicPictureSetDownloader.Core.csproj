@@ -35,12 +35,13 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardInfo.cs" />
+    <Compile Include="SetInfoWithBlock.cs" />
     <Compile Include="CredentialRequieredArgs.cs" />
     <Compile Include="Db\Block.cs" />
+    <Compile Include="Db\Picture.cs" />
     <Compile Include="Db\Edition.cs" />
     <Compile Include="Db\Rarity.cs" />
     <Compile Include="DownloadManager.cs" />

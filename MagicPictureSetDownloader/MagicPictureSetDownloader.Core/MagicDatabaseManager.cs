@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlServerCe;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Common.Database;
 using MagicPictureSetDownloader.Core.Db;
@@ -11,10 +12,12 @@ namespace MagicPictureSetDownloader.Core
     class MagicDatabaseManager
     {
         private readonly object _sync = new object();
+        private bool _referentialLoaded;
         private readonly string _connectionString;
-        private readonly IDictionary<string, Rarity> _rarities = new Dictionary<string, Rarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IList<Edition> _editions = new List<Edition>();
-        private readonly IDictionary<string, Block> _blocks = new Dictionary<string, Block>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, Rarity> _rarities = new Dictionary<string, Rarity>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, Block> _blocks = new Dictionary<int, Block>();
+        private readonly IDictionary<int, Picture> _pictures = new Dictionary<int, Picture>();
         
         public MagicDatabaseManager(string fileName)
         {
@@ -23,34 +26,106 @@ namespace MagicPictureSetDownloader.Core
 
         public int GetRarityId(string rarity)
         {
-            if (_rarities.Count == 0)
-            {
-                lock (_sync)
-                {
-                    if (_rarities.Count == 0)
-                    {
-                        LoadReferential();
-                    }
-                }
-            }
-
+            CheckReferentialLoaded();
             return _rarities[rarity].Id;
         }
-
-        private void LoadReferential()
+        public void InsertNewPicture(byte[] data)
         {
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
-                
-                foreach (Rarity rarity in Mapper<Rarity>.Load(cnx))
+                Mapper<Picture>.InsertOne(cnx, new Picture {Data = data});
+            }
+        }
+        public Picture GetPicture(int idPicture)
+        {
+            Picture picture;
+            
+            if (!_pictures.TryGetValue(idPicture, out picture))
+            {
+                lock (_sync)
+                {
+                    if (!_pictures.TryGetValue(idPicture, out picture))
+                    {
+                        picture = LoadImage(idPicture);
+                        _pictures.Add(picture.Id, picture);
+                    }
+                }
+            }
+
+            return picture;
+        }
+        public Edition GetEdition(string sourceName)
+        {
+            CheckReferentialLoaded();
+            Edition edition = _editions.FirstOrDefault(ed => String.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
+            if (edition == null)
+            {
+                edition = new Edition {Name = sourceName, GathererName = sourceName};
+                AddToDbAndUpdateReferential(edition, ed=> _editions.Add(edition));
+            }
+
+            return edition;
+        }
+
+        private void AddToDbAndUpdateReferential<T>(T value, Action<T> addToReferential)
+            where T: class, new()
+        {
+            addToReferential(value);
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            {
+                cnx.Open();
+                Mapper<T>.InsertOne(cnx, value);
+            }
+        }
+        private Picture LoadImage(int idPicture)
+        {
+            Picture picture = new Picture{Id = idPicture};
+
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            {
+                cnx.Open();
+                Mapper<Picture>.Load(cnx, picture);
+
+            }
+            return picture;
+        }
+        private void LoadReferentials()
+        {
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            {
+                cnx.Open();
+                _rarities.Clear();
+                _blocks.Clear();
+                _editions.Clear();
+
+                foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
                     _rarities.Add(rarity.Code, rarity);
 
-                foreach (Edition edition in Mapper<Edition>.Load(cnx))
+                foreach (Block block in Mapper<Block>.LoadAll(cnx))
+                    _blocks.Add(block.Id, block);
+
+                foreach (Edition edition in Mapper<Edition>.LoadAll(cnx))
+                {
+                    Block block;
+                    if (edition.IdBlock.HasValue && _blocks.TryGetValue(edition.IdBlock.Value, out block))
+                        edition.BlockName = block.Name;
                     _editions.Add(edition);
-                
-                foreach (Block block in Mapper<Block>.Load(cnx))
-                    _blocks.Add(block.Name, block);
+                }
+            }
+            _referentialLoaded = true;
+        }
+        private void CheckReferentialLoaded()
+        {
+            if (!_referentialLoaded)
+            {
+                lock (_sync)
+                {
+                    if (!_referentialLoaded)
+                    {
+                        LoadReferentials();
+                    }
+                }
             }
         }
     }

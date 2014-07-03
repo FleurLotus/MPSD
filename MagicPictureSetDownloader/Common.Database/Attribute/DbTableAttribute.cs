@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Common.Database.Attribute
+namespace Common.Database
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class DbTableAttribute: System.Attribute
+    public class DbTableAttribute: Attribute
     {
         public string Name { get; set; }
     }

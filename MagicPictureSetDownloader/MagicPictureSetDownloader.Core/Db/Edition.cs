@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Common.Database.Attribute;
+using Common.Database;
 
 namespace MagicPictureSetDownloader.Core.Db
 {
@@ -7,7 +7,7 @@ namespace MagicPictureSetDownloader.Core.Db
     [DbTable]
     class Edition
     {
-        [DbColumn]
+        [DbColumn, DbKeyColumn]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
@@ -15,6 +15,7 @@ namespace MagicPictureSetDownloader.Core.Db
         public string Code { get; set; }
         [DbColumn]
         public int? IdBlock { get; set; }
+        public string BlockName { get; set; }
         [DbColumn]
         public int? BlockPosition { get; set; }
         [DbColumn]
