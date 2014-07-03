@@ -1,15 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System;
 using Common.Database;
 
 namespace MagicPictureSetDownloader.Core.Db
 {
-    [DebuggerDisplay("{Name}")]
     [DbTable]
-    class Block
+    class Picture
     {
         [DbColumn, DbKeyColumn]
         public int Id { get; set; }
         [DbColumn]
-        public string Name { get; set; }
+        public Byte[] Data { get; set; }
     }
 }

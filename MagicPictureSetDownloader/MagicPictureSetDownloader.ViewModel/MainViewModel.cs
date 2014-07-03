@@ -98,7 +98,6 @@ namespace MagicPictureSetDownloader.ViewModel
                 }
             }
         }
-
         
         #region Command
         private bool GetSetListCommandCanExecute(object o)
@@ -124,15 +123,14 @@ namespace MagicPictureSetDownloader.ViewModel
         #endregion
         private void GetSetListCallBack(object state)
         {
-            
             try
             {
                 string baseUrl = (string)state;
                 Sets.Clear();
-                foreach (SetInfo setInfo in _downloadManager.GetSetList(baseUrl))
+                foreach (SetInfoWithBlock setInfoWithBlock in _downloadManager.GetSetList(baseUrl))
                 {
-                    SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfo);
-                    setInfoViewModel.PropertyChanged+=SetInfoViewModelPropertyChanged;
+                    SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
+                    setInfoViewModel.PropertyChanged += SetInfoViewModelPropertyChanged;
                     Sets.Add(setInfoViewModel);
                 }
             }
@@ -151,7 +149,7 @@ namespace MagicPictureSetDownloader.ViewModel
 
                 setInfoViewModel.DownloadReporter.Total = cardInfo.Length;
                 DownloadReporter.Total += cardInfo.Length;
-                //ALERT: à revoir
+                //ALERT: à revoir pour télécharger réellement les images et le texte
                /* ThreadPool.QueueUserWorkItem(GetPicturesForOneSetCallBack, new object[] {outpath,setInfoViewModel.Url, pictures, setInfoViewModel.DownloadReporter});*/
             }
         }

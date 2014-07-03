@@ -29,10 +29,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Black">
             <Grid>
@@ -55,11 +51,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0">
-                    <Button  Width="72" Content="Go" HorizontalAlignment="Center"
-                             Command="{Binding FeedSetsCommand}" />
+                    <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedSetsCommand}" />
 
-                    <wpfui:ProgressBar 
-                                       Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
+                    <wpfui:ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
@@ -74,12 +68,14 @@
                             <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=vm:SetInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="170" />
                                     <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="200" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"/> 
                                 <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Center" />
-                                <Border Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right" Width="200" Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
+                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding BlockName}" VerticalAlignment="Center" />
+                                <Border Grid.Row="0" Grid.Column="3" Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
                                     <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
                                                    Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>

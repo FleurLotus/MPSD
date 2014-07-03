@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Common.Database.Attribute;
+using Common.Database;
 
 namespace MagicPictureSetDownloader.Core.Db
 {
@@ -7,7 +7,7 @@ namespace MagicPictureSetDownloader.Core.Db
     [DbTable]
     class Rarity
     {
-        [DbColumn]
+        [DbColumn, DbKeyColumn]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }

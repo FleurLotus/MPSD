@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using Common.Libray;
+using MagicPictureSetDownloader.Core.Db;
 
 namespace MagicPictureSetDownloader.Core
 {
@@ -11,35 +13,16 @@ namespace MagicPictureSetDownloader.Core
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
         private ICredentials _credentials;
         private readonly InfoParser _infoParser;
+        private readonly MagicDatabaseManager _magicDatabaseManager;
         private readonly IDictionary<string, string> _htmlCache;
 
         public DownloadManager()
         {
-            //ALERT: TEMP 
-            MagicDatabaseManager m = new MagicDatabaseManager("MagicData.sdf");
-            m.GetRarityId("R");
+            _magicDatabaseManager = new MagicDatabaseManager("MagicData.sdf");
             _htmlCache = new Dictionary<string, string>();
             _infoParser = new InfoParser();
         }
-
-        private bool OnCredentialRequiered()
-        {
-            var e = CredentialRequiered;
-            if (e != null)
-            {
-                CredentialRequieredArgs args = new CredentialRequieredArgs();
-
-                e(this, new EventArgs<CredentialRequieredArgs>(args));
-
-                if (!string.IsNullOrEmpty(args.Login))
-                {
-                    _credentials = new NetworkCredential {UserName = args.Login, Password = args.Password};
-                    return true;
-                }
-            }
-
-            return false;
-        }
+        
         public static string ToAbsoluteUrl(string baseurl, string relativeurl)
         {
             if (string.IsNullOrWhiteSpace(relativeurl))
@@ -77,10 +60,14 @@ namespace MagicPictureSetDownloader.Core
 
             return url.Substring(0, index + 1);
         }
-        public IEnumerable<SetInfo> GetSetList(string url)
+        public IEnumerable<SetInfoWithBlock> GetSetList(string url)
         {
             string htmltext = GetHtml(url);
-            return _infoParser.ParseSetsList(htmltext);
+            foreach (SetInfo setInfo in _infoParser.ParseSetsList(htmltext))
+            {
+                Edition edition = _magicDatabaseManager.GetEdition(setInfo.Name);
+                yield return new SetInfoWithBlock(setInfo, edition);
+            }
         }
         public CardInfo[] GetCardInfos(string url)
         {
@@ -88,9 +75,28 @@ namespace MagicPictureSetDownloader.Core
             return _infoParser.ParseCardInfos(htmltext).ToArray();
 
         }
+
+        private bool OnCredentialRequiered()
+        {
+            var e = CredentialRequiered;
+            if (e != null)
+            {
+                CredentialRequieredArgs args = new CredentialRequieredArgs();
+
+                e(this, new EventArgs<CredentialRequieredArgs>(args));
+
+                if (!string.IsNullOrEmpty(args.Login))
+                {
+                    _credentials = new NetworkCredential { UserName = args.Login, Password = args.Password };
+                    return true;
+                }
+            }
+
+            return false;
+        }
         private WebClient GetWebClient()
         {
-            WebClient webClient = new WebClient();
+            WebClient webClient = new WebClient {Encoding = Encoding.UTF8};
             if (_credentials != null)
                 webClient.Proxy.Credentials = _credentials;
 
