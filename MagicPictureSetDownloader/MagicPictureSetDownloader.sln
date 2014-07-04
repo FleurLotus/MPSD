@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Configuration", "Com
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Database", "Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Db", "MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj", "{1F2678D5-43D0-402E-AA40-2B0AA06C9292}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,16 @@ Global
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using Common.Database;
 
-namespace MagicPictureSetDownloader.Core.Db
+namespace MagicPictureSetDownloader.Db
 {
     [DebuggerDisplay("{Name}")]
     [DbTable]
-    class Rarity
+    public class Rarity
     {
         [DbColumn, DbKeyColumn]
         public int Id { get; set; }

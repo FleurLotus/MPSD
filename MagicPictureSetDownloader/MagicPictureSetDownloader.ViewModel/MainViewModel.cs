@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
@@ -145,33 +146,30 @@ namespace MagicPictureSetDownloader.ViewModel
             foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
             {
                 Interlocked.Increment(ref _countDown);
-                CardInfo[] cardInfo = _downloadManager.GetCardInfos(setInfoViewModel.Url);
+                string[] cardInfos = _downloadManager.GetCardUrls(setInfoViewModel.Url);
 
-                setInfoViewModel.DownloadReporter.Total = cardInfo.Length;
-                DownloadReporter.Total += cardInfo.Length;
-                //ALERT: à revoir pour télécharger réellement les images et le texte
-               /* ThreadPool.QueueUserWorkItem(GetPicturesForOneSetCallBack, new object[] {outpath,setInfoViewModel.Url, pictures, setInfoViewModel.DownloadReporter});*/
+                setInfoViewModel.DownloadReporter.Total = cardInfos.Length;
+                DownloadReporter.Total += cardInfos.Length;
+
+                SetInfoViewModel model = setInfoViewModel;
+                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] {model.DownloadReporter, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s))});
             }
         }
-        /*   //ALERT: à revoir
-         * private void GetPicturesForOneSetCallBack(object state)
+        
+        private void RetrieveSetDataCallBack(object state)
         {
             object[] args = (object[])state;
-            string output = (string)args[0];
-            string baseUrl = (string)args[1];
-            PictureInfo[] pictures = (PictureInfo[])args[2];
-            DownloadReporter setDownloadReporter = (DownloadReporter)args[3];
-
-            foreach (PictureInfo pictureInfo in pictures)
+            DownloadReporter setDownloadReporter = (DownloadReporter)args[0];
+            IEnumerable<string> urls = (IEnumerable<string>)args[1];
+            
+            foreach (string cardUrl in urls)
             {
-                string nameurl = DownloadManager.ToAbsoluteUrl(baseUrl, pictureInfo.Url);
-                string pictureurl = DownloadManager.ToAbsoluteUrl(baseUrl, pictureInfo.PictureUrl);
-                string name = _downloadManager.GetName(nameurl);
-                _downloadManager.GetPicture(pictureurl, output, name);
+                CardInfo cardInfo =  _downloadManager.GetCardInfo(cardUrl);
+
                 setDownloadReporter.Progress();
                 DownloadReporter.Progress();
             }
-
+            
             setDownloadReporter.Finish();
             Interlocked.Decrement(ref _countDown);
             if (_countDown == 0)
@@ -180,8 +178,7 @@ namespace MagicPictureSetDownloader.ViewModel
                 IsBusy = false;
             }
         }
-        */
-
+        
         private void SetInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Active")

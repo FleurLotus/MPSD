@@ -1,4 +1,4 @@
-﻿using MagicPictureSetDownloader.Core.Db;
+﻿using MagicPictureSetDownloader.Db;
 
 namespace MagicPictureSetDownloader.Core
 {
@@ -20,6 +20,10 @@ namespace MagicPictureSetDownloader.Core
         public string BlockName
         {
             get { return _edition.BlockName; }
+        }
+        public int EditionId
+        {
+            get { return _edition.Id; }
         }
         public string Name
         {

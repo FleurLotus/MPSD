@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Common.Database;
 
-namespace MagicPictureSetDownloader.Core.Db
+namespace MagicPictureSetDownloader.Db
 {
     [DebuggerDisplay("{Name}")]
     [DbTable]
-    class Block
+    public class Block
     {
         [DbColumn, DbKeyColumn]
         public int Id { get; set; }

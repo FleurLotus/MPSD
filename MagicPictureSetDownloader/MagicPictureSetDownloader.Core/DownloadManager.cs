@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Common.Libray;
-using MagicPictureSetDownloader.Core.Db;
+using MagicPictureSetDownloader.Db;
 
 namespace MagicPictureSetDownloader.Core
 {
@@ -12,7 +12,6 @@ namespace MagicPictureSetDownloader.Core
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
         private ICredentials _credentials;
-        private readonly InfoParser _infoParser;
         private readonly MagicDatabaseManager _magicDatabaseManager;
         private readonly IDictionary<string, string> _htmlCache;
 
@@ -20,10 +19,9 @@ namespace MagicPictureSetDownloader.Core
         {
             _magicDatabaseManager = new MagicDatabaseManager("MagicData.sdf");
             _htmlCache = new Dictionary<string, string>();
-            _infoParser = new InfoParser();
         }
         
-        public static string ToAbsoluteUrl(string baseurl, string relativeurl)
+        public static string ToAbsoluteUrl(string baseurl, string relativeurl, bool useOnlyDomain = false)
         {
             if (string.IsNullOrWhiteSpace(relativeurl))
                 return baseurl;
@@ -34,6 +32,9 @@ namespace MagicPictureSetDownloader.Core
             if (relativeurl.Contains("//"))
                 return relativeurl;
 
+            if (useOnlyDomain)
+                baseurl = ExtractBaseUrl(baseurl);
+
             if (!baseurl.EndsWith("/"))
                 baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/", StringComparison.Ordinal) + 1);
 
@@ -42,14 +43,14 @@ namespace MagicPictureSetDownloader.Core
 
             return baseurl + relativeurl;
         }
-        public static string ExtractBaseUrl(string url)
+        private static string ExtractBaseUrl(string url)
         {
             const string postfixProtocol = @"://";
 
             if (string.IsNullOrWhiteSpace(url))
                 return url;
 
-            
+
             int startIndex = url.IndexOf(postfixProtocol, StringComparison.Ordinal);
             if (startIndex < 0)
                 return url;
@@ -59,21 +60,29 @@ namespace MagicPictureSetDownloader.Core
                 return url;
 
             return url.Substring(0, index + 1);
-        }
+        }       
+
         public IEnumerable<SetInfoWithBlock> GetSetList(string url)
         {
             string htmltext = GetHtml(url);
-            foreach (SetInfo setInfo in _infoParser.ParseSetsList(htmltext))
+            foreach (SetInfo setInfo in InfoParser.ParseSetsList(htmltext))
             {
                 Edition edition = _magicDatabaseManager.GetEdition(setInfo.Name);
                 yield return new SetInfoWithBlock(setInfo, edition);
             }
         }
-        public CardInfo[] GetCardInfos(string url)
+        public string[] GetCardUrls(string url)
         {
             string htmltext = GetHtml(url);
-            return _infoParser.ParseCardInfos(htmltext).ToArray();
-
+            return InfoParser.ParseCardUrls(htmltext).ToArray();
+        }
+        public CardInfo GetCardInfo(string url)
+        {
+            string htmltext = GetHtml(url);
+            //ALERT: à revoir pour parser réellement le texte et récuperer les images
+            // et mettre en base
+            CardInfo cardInfo = InfoParser.ParseCardInfo(htmltext);
+            return cardInfo;
         }
 
         private bool OnCredentialRequiered()

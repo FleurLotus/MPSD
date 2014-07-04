@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Common.Database;
 
-namespace MagicPictureSetDownloader.Core.Db
+namespace MagicPictureSetDownloader.Db
 {
     [DbTable]
-    class Picture
+    public class Picture
     {
         [DbColumn, DbKeyColumn]
         public int Id { get; set; }
