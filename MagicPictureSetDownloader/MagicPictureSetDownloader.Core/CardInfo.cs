@@ -4,15 +4,15 @@ namespace MagicPictureSetDownloader.Core
 {
     public class CardInfo
     {
-        public CardInfo(string name, string url, string rarity)
+        public CardInfo(string name, string url, int rarityId)
         {
             Name = name;
             Url = url;
-            Rarity = rarity;
+            RarityId = rarityId;
         }
 
         public string Name { get; private set; }
-        public string Rarity { get; private set; }
+        public int RarityId { get; private set; }
         public string Url { get; private set; }
     }
 }

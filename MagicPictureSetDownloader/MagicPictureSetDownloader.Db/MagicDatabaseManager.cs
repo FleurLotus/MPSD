@@ -1,15 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlServerCe;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using Common.Database;
-using MagicPictureSetDownloader.Core.Db;
 
-namespace MagicPictureSetDownloader.Core
+namespace MagicPictureSetDownloader.Db
 {
-    class MagicDatabaseManager
+    public class MagicDatabaseManager
     {
         private readonly object _sync = new object();
         private bool _referentialLoaded;
@@ -18,6 +17,7 @@ namespace MagicPictureSetDownloader.Core
         private readonly IDictionary<string, Rarity> _rarities = new Dictionary<string, Rarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, Block> _blocks = new Dictionary<int, Block>();
         private readonly IDictionary<int, Picture> _pictures = new Dictionary<int, Picture>();
+        private readonly IDictionary<string, Card> _cards = new Dictionary<string, Card>(StringComparer.InvariantCultureIgnoreCase);
         
         public MagicDatabaseManager(string fileName)
         {
@@ -98,6 +98,7 @@ namespace MagicPictureSetDownloader.Core
                 _rarities.Clear();
                 _blocks.Clear();
                 _editions.Clear();
+                _cards.Clear();
 
                 foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
                     _rarities.Add(rarity.Code, rarity);
@@ -112,6 +113,10 @@ namespace MagicPictureSetDownloader.Core
                         edition.BlockName = block.Name;
                     _editions.Add(edition);
                 }
+
+                foreach (Card card in Mapper<Card>.LoadAll(cnx))
+                    _cards.Add(card.Name, card);
+
             }
             _referentialLoaded = true;
         }
