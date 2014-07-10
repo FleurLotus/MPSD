@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Common.Libray
@@ -15,6 +16,12 @@ namespace Common.Libray
             where T : Attribute
         {
             return (T[])member.GetCustomAttributes(typeof(T), inherit);
+        }
+        
+        public static void AddRange<TKey, TValue>(this IDictionary<TKey, TValue> source, IDictionary<TKey, TValue> added)
+        {
+            foreach (KeyValuePair<TKey, TValue> kv in added)
+                source.Add(kv);
         }
     }
 }

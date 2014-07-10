@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Common.ViewModel
 {
-    public static class Extension
+    internal static class Extension
     {
         public static string GetMemberName<T>(this Expression<Func<T>> expression)
         {

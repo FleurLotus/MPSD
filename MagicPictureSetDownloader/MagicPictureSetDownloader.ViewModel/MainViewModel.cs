@@ -143,6 +143,8 @@ namespace MagicPictureSetDownloader.ViewModel
         }
         private void FeedSetsCallBack(object state)
         {
+            DownloadReporter.Reset();
+
             foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
             {
                 Interlocked.Increment(ref _countDown);
@@ -164,8 +166,7 @@ namespace MagicPictureSetDownloader.ViewModel
             
             foreach (string cardUrl in urls)
             {
-                CardInfo cardInfo =  _downloadManager.GetCardInfo(cardUrl);
-
+                _downloadManager.GetCardInfo(cardUrl);
                 setDownloadReporter.Progress();
                 DownloadReporter.Progress();
             }

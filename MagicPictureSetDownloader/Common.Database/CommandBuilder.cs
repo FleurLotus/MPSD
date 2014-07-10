@@ -155,7 +155,8 @@ namespace Common.Database
             DbParameter parameter = cmd.CreateParameter();
             PropertyInfo pi = _typeDbInfo.Columns[col];
             parameter.ParameterName = string.Format("@{0}", col);
-            parameter.Value = pi.GetValue(input, null);
+            object value = pi.GetValue(input, null);
+            parameter.Value = value ?? DBNull.Value;
             parameter.DbType = pi.PropertyType.ToDbType();
 
             cmd.Parameters.Add(parameter);
