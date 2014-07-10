@@ -2,7 +2,7 @@
 
 namespace MagicPictureSetDownloader.Core
 {
-    interface IParser<out T>
+    internal interface IParser<out T>
     {
         IEnumerable<T> Parse(string text);
     }

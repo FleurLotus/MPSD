@@ -65,7 +65,7 @@ namespace MagicPictureSetDownloader.Core
         public IEnumerable<SetInfoWithBlock> GetSetList(string url)
         {
             string htmltext = GetHtml(url);
-            foreach (SetInfo setInfo in InfoParser.ParseSetsList(htmltext))
+            foreach (SetInfo setInfo in Parser.ParseSetsList(htmltext))
             {
                 Edition edition = _magicDatabaseManager.GetEdition(setInfo.Name);
                 yield return new SetInfoWithBlock(setInfo, edition);
@@ -74,15 +74,15 @@ namespace MagicPictureSetDownloader.Core
         public string[] GetCardUrls(string url)
         {
             string htmltext = GetHtml(url);
-            return InfoParser.ParseCardUrls(htmltext).ToArray();
+            return Parser.ParseCardUrls(htmltext).ToArray();
         }
-        public CardInfo GetCardInfo(string url)
+        public void GetCardInfo(string url)
         {
             string htmltext = GetHtml(url);
-            //ALERT: à revoir pour parser réellement le texte et récuperer les images
-            // et mettre en base
-            CardInfo cardInfo = InfoParser.ParseCardInfo(htmltext);
-            return cardInfo;
+            
+            IDictionary<string, string> cardInfo = Parser.ParseCardInfo(htmltext);
+
+            //ALERT:  Really retrieve image and use data to update db
         }
 
         private bool OnCredentialRequiered()

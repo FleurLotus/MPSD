@@ -4,7 +4,6 @@ namespace Common.WPF.Binding
 {
     public class TwoWayBinding : System.Windows.Data.Binding
     {
-
         public TwoWayBinding(string path) : base(path)
         {
             Init();

@@ -5,7 +5,7 @@ using System.Net;
 
 namespace MagicPictureSetDownloader.Core
 {
-    internal static class InfoParser
+    internal static class Parser
     {
         internal static IEnumerable<SetInfo> ParseSetsList(string htmltext)
         {
@@ -15,14 +15,16 @@ namespace MagicPictureSetDownloader.Core
         {
             return new CardUrlParser().Parse(htmltext);
         }
-        internal static CardInfo ParseCardInfo(string htmltext)
+        internal static IDictionary<string, string> ParseCardInfo(string htmltext)
         {
             return new CardParser().Parse(htmltext).FirstOrDefault();
         }
 
-        internal static string ExtractContent(string htmltext, string start, string end)
+        internal static string ExtractContent(string htmltext, string start, string end, bool withHtmlDecode)
         {
-            htmltext = WebUtility.HtmlDecode(htmltext);
+            if (withHtmlDecode)
+                htmltext = WebUtility.HtmlDecode(htmltext);
+
             if (string.IsNullOrEmpty(start))
                 return htmltext;
 

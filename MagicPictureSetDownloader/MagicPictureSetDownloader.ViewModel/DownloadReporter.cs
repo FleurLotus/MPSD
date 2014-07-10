@@ -11,7 +11,7 @@ namespace MagicPictureSetDownloader.ViewModel
 
         public DownloadReporter()
         {
-            Total = 1;
+            Reset();
         }
 
         public int Total
@@ -36,6 +36,15 @@ namespace MagicPictureSetDownloader.ViewModel
                 _lock.ExitReadLock();
                 return ret;
             }
+        }
+        public void Reset()
+        {
+            _lock.EnterWriteLock();
+            _current = 0;
+            _lock.ExitWriteLock();
+            OnNotifyPropertyChanged(() => Current);
+
+            Total = 1;
         }
 
         public void Progress()

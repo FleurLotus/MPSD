@@ -4,18 +4,18 @@ using System.Text.RegularExpressions;
 
 namespace MagicPictureSetDownloader.Core
 {
-    class CardUrlParser: IParser<string>
+    internal class CardUrlParser : IParser<string>
     {
         private const string Start = @"class=""checklist""";
         private const string End = @"</table>";
 
-        private readonly Regex _cardLineRegex = new Regex(@"<tr class=""cardItem"">(?<row>.*?)</tr>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Regex _cardNameUrlRegex = new Regex(@"<a class=""nameLink"" href=""(?<url>[^""]+)""[^>]*>(?<name>.*?)</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Regex _cardColumnRegex = new Regex(@"<td class=""(?<class>\w+)"">(?<col>.*?)</td>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex _cardLineRegex = new Regex(@"<tr class=""cardItem"">(?<row>.*?)</tr>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex _cardNameUrlRegex = new Regex(@"<a class=""nameLink"" href=""(?<url>[^""]+)""[^>]*>(?<name>.*?)</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex _cardColumnRegex = new Regex(@"<td class=""(?<class>\w+)"">(?<col>.*?)</td>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public IEnumerable<string> Parse(string text)
         {
-            text = InfoParser.ExtractContent(text, Start, End);
+            text = Parser.ExtractContent(text, Start, End, true);
 
             IList<string> cardUrls = new List<string>();
             int maxIndexNumber = -1;
@@ -27,9 +27,11 @@ namespace MagicPictureSetDownloader.Core
 
 
                 string number = Get(columnInfos, "number");
-                int indexNumber = int.Parse(number);
-                maxIndexNumber = indexNumber > maxIndexNumber ? indexNumber : maxIndexNumber;
-
+                if (!string.IsNullOrWhiteSpace(number))
+                {
+                    int indexNumber = int.Parse(number);
+                    maxIndexNumber = indexNumber > maxIndexNumber ? indexNumber : maxIndexNumber;
+                }
                 Match m = _cardNameUrlRegex.Match(Get(columnInfos, "name"));
                 if (!m.Success)
                     throw new ParserException("Can't parse name for" + row);
@@ -37,7 +39,7 @@ namespace MagicPictureSetDownloader.Core
                 cardUrls.Add(m.Groups["url"].Value);
             }
 
-            if (maxIndexNumber != cardUrls.Count)
+            if (maxIndexNumber!=-1  && maxIndexNumber != cardUrls.Count)
                 throw new ParserException("Error while parsing, number of card info doesn't match max card id for set");
 
             return cardUrls;
@@ -46,7 +48,7 @@ namespace MagicPictureSetDownloader.Core
         private IDictionary<string, string> ExtractColumnInfos(string row)
         {
             return _cardColumnRegex.Matches(row).Cast<Match>()
-                                                .ToDictionary(m => m.Groups["class"].Value, m => m.Groups["col"].Value);
+                .ToDictionary(m => m.Groups["class"].Value, m => m.Groups["col"].Value);
         }
         private TValue Get<TKey, TValue>(IDictionary<TKey, TValue> dic, TKey key)
         {
