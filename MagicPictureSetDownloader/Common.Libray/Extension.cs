@@ -23,5 +23,14 @@ namespace Common.Libray
             foreach (KeyValuePair<TKey, TValue> kv in added)
                 source.Add(kv);
         }
+        public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
+        {
+            TValue ret;
+            if (!source.TryGetValue(key, out ret))
+                ret = default(TValue);
+
+            return ret;
+        }
+
     }
 }

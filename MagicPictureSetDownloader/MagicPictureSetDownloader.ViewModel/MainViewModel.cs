@@ -127,7 +127,11 @@ namespace MagicPictureSetDownloader.ViewModel
             try
             {
                 string baseUrl = (string)state;
+                HasJob = false;
+                foreach (SetInfoViewModel setInfoViewModel in Sets)
+                    setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
                 Sets.Clear();
+                
                 foreach (SetInfoWithBlock setInfoWithBlock in _downloadManager.GetSetList(baseUrl))
                 {
                     SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
@@ -154,7 +158,7 @@ namespace MagicPictureSetDownloader.ViewModel
                 DownloadReporter.Total += cardInfos.Length;
 
                 SetInfoViewModel model = setInfoViewModel;
-                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] {model.DownloadReporter, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s))});
+                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] {model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s))});
             }
         }
         
@@ -162,11 +166,12 @@ namespace MagicPictureSetDownloader.ViewModel
         {
             object[] args = (object[])state;
             DownloadReporter setDownloadReporter = (DownloadReporter)args[0];
-            IEnumerable<string> urls = (IEnumerable<string>)args[1];
+            int editionId = (int)args[1];
+            IEnumerable<string> urls = (IEnumerable<string>)args[2];
             
             foreach (string cardUrl in urls)
             {
-                _downloadManager.GetCardInfo(cardUrl);
+                _downloadManager.GetCardInfo(cardUrl, editionId);
                 setDownloadReporter.Progress();
                 DownloadReporter.Progress();
             }

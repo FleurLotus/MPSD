@@ -27,7 +27,7 @@ namespace Common.Database
             {typeof (Guid), DbType.Guid},
             {typeof (DateTime), DbType.DateTime},
             {typeof (DateTimeOffset), DbType.DateTimeOffset},
-            {typeof (byte[]), DbType.Binary},
+            //{typeof (byte[]), DbType.Binary}, //Remove because Binary is limited to 8000 when SqlDbType.Image is not
             {typeof (byte?), DbType.Byte},
             {typeof (sbyte?), DbType.SByte},
             {typeof (short?), DbType.Int16},
@@ -67,9 +67,12 @@ namespace Common.Database
             return value == NullString ? " IS " : " = ";
         }
 
-        public static DbType ToDbType(this Type type)
+        public static DbType? ToDbType(this Type type)
         {
-            return _typeToDbTypes[type];
+            DbType dbType;
+            if (!_typeToDbTypes.TryGetValue(type, out dbType))
+                return null;
+            return dbType;
         }
 
     }

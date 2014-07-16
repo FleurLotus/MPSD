@@ -15,6 +15,7 @@ namespace Common.Database
         private string _updateQuery;
         private string _insertQuery;
         private string[] _notKeycolumns;
+        private string[] _canInsertColumns;
         
         public CommandBuilder(TypeDbInfo typeDbInfo)
         {
@@ -61,10 +62,14 @@ namespace Common.Database
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _insertQuery;
 
-            foreach (string col in _notKeycolumns)
+            foreach (string col in _canInsertColumns)
             {
                 AddParameter(cmd, input, col);
             }
+        }
+        public PropertyInfo GetIdKeyPropertyInfo()
+        {
+            return string.IsNullOrWhiteSpace(_typeDbInfo.Identity) ? null : _typeDbInfo.Columns[_typeDbInfo.Identity];
         }
         public IDictionary<int, PropertyInfo> GenerateReaderMap(IDataRecord reader)
         {
@@ -93,6 +98,7 @@ namespace Common.Database
             
             string[] allColums = _typeDbInfo.Columns.Keys.ToArray();
             _notKeycolumns = _typeDbInfo.Columns.Keys.Where(s => !_typeDbInfo.Keys.Contains(s)).ToArray();
+            _canInsertColumns = _typeDbInfo.Columns.Keys.Where(s => s != _typeDbInfo.Identity).ToArray();
 
             for (int i = 0; i < allColums.Length; i++)
             {
@@ -114,18 +120,25 @@ namespace Common.Database
                 if (i != 0)
                 {
                     sbUpdate.Append(", ");
+                }
+                sbUpdate.AppendFormat("{0} = @{0}", col);
+            }
+            _updateQuery = sbUpdate.ToString();
+
+            for (int i = 0; i < _canInsertColumns.Length; i++)
+            {
+                string col = _canInsertColumns[i];
+                if (i != 0)
+                {
                     sbInsert.Append(", ");
                     sbInsertValues.Append(", ");
 
                 }
-                sbUpdate.AppendFormat("{0} = @{0}", col);
                 sbInsert.Append(col);
                 sbInsertValues.AppendFormat("@{0}", col);
-
             }
-
-            _updateQuery = sbUpdate.ToString();
             sbInsert.AppendFormat(") VALUES ({0})", sbInsertValues);
+
             _insertQuery = sbInsert.ToString();
 
         }
@@ -157,7 +170,10 @@ namespace Common.Database
             parameter.ParameterName = string.Format("@{0}", col);
             object value = pi.GetValue(input, null);
             parameter.Value = value ?? DBNull.Value;
-            parameter.DbType = pi.PropertyType.ToDbType();
+            DbType? dbtype = pi.PropertyType.ToDbType();
+            //If not type found let the underlying provider try is one job
+            if (dbtype.HasValue)
+                parameter.DbType = dbtype.Value;
 
             cmd.Parameters.Add(parameter);
         }

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace MagicPictureSetDownloader.Core
 {
     internal static class Parser
     {
+        private static readonly Regex _idRegex = new Regex(@"multiverseid=(?<id>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
         internal static IEnumerable<SetInfo> ParseSetsList(string htmltext)
         {
             return new SetParser().Parse(htmltext);
@@ -15,17 +18,24 @@ namespace MagicPictureSetDownloader.Core
         {
             return new CardUrlParser().Parse(htmltext);
         }
-        internal static IDictionary<string, string> ParseCardInfo(string htmltext)
+        internal static CardWithExtraInfo ParseCardInfo(string htmltext)
         {
             return new CardParser().Parse(htmltext).FirstOrDefault();
         }
-
+        public static int ExtractIdGathere(string pictureUrl)
+        {
+            Match m = _idRegex.Match(pictureUrl);
+            if (!m.Success)
+                throw new ParserException("Can't parse card picture Id");
+            return int.Parse(m.Groups["id"].Value);
+        }
+        
         internal static string ExtractContent(string htmltext, string start, string end, bool withHtmlDecode)
         {
             if (withHtmlDecode)
                 htmltext = WebUtility.HtmlDecode(htmltext);
 
-            if (string.IsNullOrEmpty(start))
+            if (String.IsNullOrEmpty(start))
                 return htmltext;
 
             int startIndex = htmltext.LastIndexOf(start, StringComparison.Ordinal);
@@ -40,6 +50,5 @@ namespace MagicPictureSetDownloader.Core
 
             return htmltext.Substring(startIndex, endIndex - startIndex);
         }
-
     }
 }
