@@ -37,7 +37,11 @@ namespace Common.Database
             IEnumerable<string> keys = type.GetProperties().Where(pi => pi.GetCustomAttributes<DbKeyColumnAttribute>().Length == 1)
                                                            .Select(pi => pi.Name);
 
-            typeDbInfo = new TypeDbInfo(tableName, keys, columns);
+            string identities = type.GetProperties().Where(pi => pi.GetCustomAttributes<DbKeyColumnAttribute>().Length == 1 && pi.GetCustomAttributes<DbKeyColumnAttribute>()[0].IsIdentity)
+                                                    .Select(pi => pi.Name)
+                                                    .FirstOrDefault();
+
+            typeDbInfo = new TypeDbInfo(tableName, keys, identities, columns);
             _analysied[type] = typeDbInfo;
 
             return typeDbInfo;

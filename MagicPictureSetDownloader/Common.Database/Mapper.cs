@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Reflection;
 
@@ -31,9 +32,10 @@ namespace Common.Database
                             object value = reader.GetValue(kv.Key);
                             SetValue(input, kv.Value, value);
                         }
+                        return input;
                     }
 
-                    return input;
+                    return null;
                 }
             }
         }
@@ -66,14 +68,30 @@ namespace Common.Database
         }
         public static void InsertOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildInsertOneCommand(cmd, value));
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildInsertOneCommand(cmd, value),
+                                        cmd => GetIdentity(cmd, value));
+        }
+        private static void GetIdentity(DbCommand cmd, T value)
+        {
+            PropertyInfo idKeyPropertyInfo = _commandBuilder.GetIdKeyPropertyInfo();
+            if (idKeyPropertyInfo != null)
+            {
+                //must be done in the transaction because of the way (SQLCE works)
+                //http://connect.microsoft.com/SQLServer/feedback/details/653675/sql-ce-4-0-select-identity-returns-null
+                //It works for others SGBDR
+                cmd.CommandText = "SELECT @@IDENTITY";
+                cmd.CommandType = CommandType.Text;
+                cmd.Parameters.Clear();
+                int id = (int) (decimal) cmd.ExecuteScalar();
+                SetValue(value, idKeyPropertyInfo, id);
+            }
         }
         public static void UpdateOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildUpdateOneCommand(cmd, value));
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildUpdateOneCommand(cmd, value), null);
         }
 
-        private static void ExecuteWithTransaction(DbConnection cnx, Action<DbCommand> prepareCommand)
+        private static void ExecuteWithTransaction(DbConnection cnx, Action<DbCommand> prepareCommand, Action<DbCommand> doPostExecuteAction)
         {
             using (DbTransaction transaction = cnx.BeginTransaction())
             {
@@ -85,6 +103,11 @@ namespace Common.Database
                         prepareCommand(cmd);
                         if (cmd.ExecuteNonQuery() != 1)
                             throw new ApplicationDbException("Wrong number of row affected. Rollback");
+
+                        if (doPostExecuteAction != null)
+                        {
+                            doPostExecuteAction(cmd);
+                        }
                         transaction.Commit();
                     }
                 }

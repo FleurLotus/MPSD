@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Common.Database;
+using Common.Libray;
 
 namespace MagicPictureSetDownloader.Db
 {
@@ -13,42 +14,62 @@ namespace MagicPictureSetDownloader.Db
         private readonly object _sync = new object();
         private bool _referentialLoaded;
         private readonly string _connectionString;
+        private readonly string _connectionStringForPictureDb;
         private readonly IList<Edition> _editions = new List<Edition>();
         private readonly IDictionary<string, Rarity> _rarities = new Dictionary<string, Rarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, Block> _blocks = new Dictionary<int, Block>();
         private readonly IDictionary<int, Picture> _pictures = new Dictionary<int, Picture>();
         private readonly IDictionary<string, Card> _cards = new Dictionary<string, Card>(StringComparer.InvariantCultureIgnoreCase);
         
-        public MagicDatabaseManager(string fileName)
+        public MagicDatabaseManager(string fileName, string pictureFileName)
         {
             _connectionString = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
+            _connectionStringForPictureDb = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
         }
 
+        public Card GetCard(string name)
+        {
+            CheckReferentialLoaded();
+            return _cards.GetOrDefault(name);
+        }
         public int GetRarityId(string rarity)
         {
             CheckReferentialLoaded();
             return _rarities[rarity].Id;
         }
-        public void InsertNewPicture(byte[] data)
+        public void InsertNewPicture(int idGatherer, byte[] data, byte[] foildata = null)
         {
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
-            {
-                cnx.Open();
-                Mapper<Picture>.InsertOne(cnx, new Picture {Data = data});
-            }
+            Picture picture = new Picture { IdGatherer = idGatherer, Image = data, FoilImage = foildata };
+            AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, pic => _pictures.Add(pic.IdGatherer, pic));
         }
-        public Picture GetPicture(int idPicture)
+
+        public void InsertNewCard(Card card)
+        {
+            if (card == null)
+                throw new ArgumentNullException("card");
+            
+            if (string.IsNullOrWhiteSpace(card.Name))
+                    throw new ArgumentException("Card.Name");
+
+            if (GetCard(card.Name) != null)
+                return;
+
+            AddToDbAndUpdateReferential(_connectionString, card, cd => _cards.Add(cd.Name, cd));
+        }
+
+        public Picture GetPicture(int idGatherer)
         {
             Picture picture;
-            
-            if (!_pictures.TryGetValue(idPicture, out picture))
+
+            if (!_pictures.TryGetValue(idGatherer, out picture))
             {
                 lock (_sync)
                 {
-                    if (!_pictures.TryGetValue(idPicture, out picture))
+                    if (!_pictures.TryGetValue(idGatherer, out picture))
                     {
-                        picture = LoadImage(idPicture);
-                        _pictures.Add(picture.Id, picture);
+                        picture = LoadImage(idGatherer);
+                        if (picture != null)
+                            _pictures.Add(picture.IdGatherer, picture);
                     }
                 }
             }
@@ -62,33 +83,33 @@ namespace MagicPictureSetDownloader.Db
             if (edition == null)
             {
                 edition = new Edition {Name = sourceName, GathererName = sourceName};
-                AddToDbAndUpdateReferential(edition, ed=> _editions.Add(edition));
+                AddToDbAndUpdateReferential(_connectionString,edition, ed => _editions.Add(ed));
             }
 
             return edition;
         }
 
-        private void AddToDbAndUpdateReferential<T>(T value, Action<T> addToReferential)
+        private void AddToDbAndUpdateReferential<T>(string connectionString, T value, Action<T> addToReferential)
             where T: class, new()
         {
-            addToReferential(value);
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            using (SqlCeConnection cnx = new SqlCeConnection(connectionString))
             {
                 cnx.Open();
                 Mapper<T>.InsertOne(cnx, value);
             }
-        }
-        private Picture LoadImage(int idPicture)
-        {
-            Picture picture = new Picture{Id = idPicture};
 
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            lock (_sync)
+                addToReferential(value);
+        }
+        private Picture LoadImage(int idGatherer)
+        {
+            Picture picture = new Picture { IdGatherer = idGatherer };
+
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
             {
                 cnx.Open();
-                Mapper<Picture>.Load(cnx, picture);
-
+                return Mapper<Picture>.Load(cnx, picture);
             }
-            return picture;
         }
         private void LoadReferentials()
         {

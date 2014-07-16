@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Common.Drawing;
 using Common.Libray;
 using MagicPictureSetDownloader.Db;
 
@@ -17,7 +18,7 @@ namespace MagicPictureSetDownloader.Core
 
         public DownloadManager()
         {
-            _magicDatabaseManager = new MagicDatabaseManager("MagicData.sdf");
+            _magicDatabaseManager = new MagicDatabaseManager("MagicData.sdf", "MagicPicture.sdf");
             _htmlCache = new Dictionary<string, string>();
         }
         
@@ -76,14 +77,18 @@ namespace MagicPictureSetDownloader.Core
             string htmltext = GetHtml(url);
             return Parser.ParseCardUrls(htmltext).ToArray();
         }
-        public void GetCardInfo(string url)
+        public void GetCardInfo(string url, int editionId)
         {
             string htmltext = GetHtml(url);
-            
-            IDictionary<string, string> cardInfo = Parser.ParseCardInfo(htmltext);
 
-            //ALERT:  Really retrieve image and use data to update db
+            CardWithExtraInfo cardWithExtraInfo = Parser.ParseCardInfo(htmltext);
+
+            string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
+            InsertPictureInDb(pictureUrl);
+            InsertCardInDb(cardWithExtraInfo.Card);
         }
+
+        //ALERT:  Really retrieve image and use data to update db
 
         private bool OnCredentialRequiered()
         {
@@ -102,6 +107,29 @@ namespace MagicPictureSetDownloader.Core
             }
 
             return false;
+        }
+        private void InsertPictureInDb(string pictureUrl)
+        {
+            int idGatherer = Parser.ExtractIdGathere(pictureUrl);
+
+            Picture picture = _magicDatabaseManager.GetPicture(idGatherer);
+            if (picture == null)
+            {
+                //No id found try insert
+                byte[] pictureData = GetFile(pictureUrl);
+
+                _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
+            }
+            else // if (picture.Image == null)
+            {
+               //ALERT: manage update 
+                object o = Converter.BytesToImage(picture.Image);
+            }
+
+        }
+        private void InsertCardInDb(Card card)
+        {
+            _magicDatabaseManager.InsertNewCard(card);
         }
         private WebClient GetWebClient()
         {
@@ -125,14 +153,13 @@ namespace MagicPictureSetDownloader.Core
             }
             return html;
         }
-        private void GetFile(string url, string outpath)
+        private byte[] GetFile(string url)
         {
-            GetDataWithProxyFallBack(
+            return GetDataWithProxyFallBack(
                 () =>
                     {
                         using (WebClient webClient = GetWebClient())
-                            webClient.DownloadFile(url, outpath);
-                        return true;
+                            return webClient.DownloadData(url);
                     }
                );
         }

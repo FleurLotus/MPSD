@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -24,7 +25,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="DAO\Block.cs" />
     <Compile Include="DAO\Card.cs" />
+    <Compile Include="DAO\CardEdition.cs" />
     <Compile Include="DAO\Edition.cs" />
     <Compile Include="MagicDatabaseManager.cs" />
     <Compile Include="DAO\Picture.cs" />
@@ -65,9 +66,16 @@
       <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
       <Name>Common.Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
+      <Name>Common.Libray</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MagicData.sdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MagicPicture.sdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

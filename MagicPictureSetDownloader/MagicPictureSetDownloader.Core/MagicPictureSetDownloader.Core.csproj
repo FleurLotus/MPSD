@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +50,7 @@
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
     <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
+    <Compile Include="CardWithExtraInfo.cs" />
     <Compile Include="Parser\SetParser.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SetInfoWithBlock.cs" />
@@ -60,6 +62,10 @@
     <Compile Include="SetInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.Drawing\Common.Drawing.csproj">
+      <Project>{4D3E434A-9B4E-441E-BA28-07E0385D801E}</Project>
+      <Name>Common.Drawing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>

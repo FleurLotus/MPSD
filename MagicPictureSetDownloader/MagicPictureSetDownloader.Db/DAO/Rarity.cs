@@ -7,7 +7,7 @@ namespace MagicPictureSetDownloader.Db
     [DbTable]
     public class Rarity
     {
-        [DbColumn, DbKeyColumn]
+        [DbColumn, DbKeyColumn(true)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
