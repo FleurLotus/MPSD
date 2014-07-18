@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Common.Database
 {
-    internal class ApplicationDbException : ApplicationException
+    public class ApplicationDbException : ApplicationException
     {
         public ApplicationDbException()
         {

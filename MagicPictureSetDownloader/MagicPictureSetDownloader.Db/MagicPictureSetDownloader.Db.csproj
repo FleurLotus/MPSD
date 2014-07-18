@@ -56,6 +56,12 @@
     <Compile Include="DAO\Card.cs" />
     <Compile Include="DAO\CardEdition.cs" />
     <Compile Include="DAO\Edition.cs" />
+    <Compile Include="Interface\IBlock.cs" />
+    <Compile Include="Interface\ICard.cs" />
+    <Compile Include="Interface\ICardEdition.cs" />
+    <Compile Include="Interface\IEdition.cs" />
+    <Compile Include="Interface\IPicture.cs" />
+    <Compile Include="Interface\IRarity.cs" />
     <Compile Include="MagicDatabaseManager.cs" />
     <Compile Include="DAO\Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +112,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

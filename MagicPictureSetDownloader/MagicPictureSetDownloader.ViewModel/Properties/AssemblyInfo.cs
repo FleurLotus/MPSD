@@ -7,9 +7,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MagicPictureSetDownloader.ViewModel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
 [assembly: AssemblyProduct("MagicPictureSetDownloader.ViewModel")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2014")]
+[assembly: AssemblyCopyright("Blue Force Inc.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

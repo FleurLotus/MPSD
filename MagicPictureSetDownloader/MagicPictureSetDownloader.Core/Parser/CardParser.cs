@@ -4,7 +4,6 @@ using System.Xml;
 using Common.Libray;
 using Common.XML;
 using MagicPictureSetDownloader.Core.CardInfo;
-using MagicPictureSetDownloader.Db;
 
 namespace MagicPictureSetDownloader.Core
 {
@@ -50,19 +49,16 @@ namespace MagicPictureSetDownloader.Core
                 }
             }
 
-            CardWithExtraInfo cardWithExtraInfo = new CardWithExtraInfo
-            {
-                Card = GenerateCard(infos),
-                PictureUrl = infos.GetOrDefault(ImageKey),
-                Rarity = infos.GetOrDefault(RarityKey),
-            };
+            CardWithExtraInfo cardWithExtraInfo = GenerateCard(infos);
+            cardWithExtraInfo.PictureUrl = infos.GetOrDefault(ImageKey);
+            cardWithExtraInfo.Rarity = infos.GetOrDefault(RarityKey);
 
             return new[] {cardWithExtraInfo};
         }
-        private Card GenerateCard(IDictionary<string, string> infos)
+        private CardWithExtraInfo GenerateCard(IDictionary<string, string> infos)
         {
             CheckInfos(infos);
-            Card card = new Card
+            CardWithExtraInfo cardWithExtraInfo = new CardWithExtraInfo
             {
                 Name = infos.GetOrDefault(NameKey),
                 CastingCost = infos.GetOrDefault(ManaCostKey),
@@ -70,20 +66,20 @@ namespace MagicPictureSetDownloader.Core
                 Type = infos.GetOrDefault(TypeKey)
             };
 
-            if (IsCreature(card.Type))
+            if (IsCreature(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
-                card.Power = GetPower(htmlTrim);
-                card.Toughness = GetToughness(htmlTrim);
+                cardWithExtraInfo.Power = GetPower(htmlTrim);
+                cardWithExtraInfo.Toughness = GetToughness(htmlTrim);
             }
-            if (IsPlaneswalker(card.Type))
+            if (IsPlaneswalker(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
-                card.Loyalty = int.Parse(htmlTrim);
+                cardWithExtraInfo.Loyalty = int.Parse(htmlTrim);
             }
-            
-            card.Type = infos.GetOrDefault(TypeKey);
-            return card;
+
+            cardWithExtraInfo.Type = infos.GetOrDefault(TypeKey);
+            return cardWithExtraInfo;
         }
         private IDictionary<string, string> ParseElement(IAwareXmlTextReader xmlReader, ICardInfoParserWorker worker)
         {

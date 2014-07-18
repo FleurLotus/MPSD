@@ -1,18 +1,27 @@
-using System;
 using System.Diagnostics;
 using Common.Database;
 
-namespace MagicPictureSetDownloader.Db
+namespace MagicPictureSetDownloader.Db.DAO
 {
     [DebuggerDisplay("{IdGatherer}")]
     [DbTable]
-    public class Picture
+    internal class Picture : IPicture
     {
+        private byte[] _image;
+        private byte[] _foilImage;
         [DbColumn, DbKeyColumn(false)]
         public int IdGatherer { get; set; }
         [DbColumn]
-        public Byte[] Image { get; set; }
+        public byte[] Image
+        {
+            get { return _image == null ? null : (byte[]) _image.Clone(); }
+            set { _image = value; }
+        }
         [DbColumn]
-        public Byte[] FoilImage { get; set; }
+        public byte[] FoilImage
+        {
+            get { return _foilImage == null ? null : (byte[]) _foilImage.Clone(); }
+            set { _foilImage = value; }
+        }
     }
 }

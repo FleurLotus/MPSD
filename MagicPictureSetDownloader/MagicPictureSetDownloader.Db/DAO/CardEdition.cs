@@ -1,12 +1,10 @@
 ﻿using Common.Database;
 
-namespace MagicPictureSetDownloader.Db
+namespace MagicPictureSetDownloader.Db.DAO
 {
     [DbTable]
-    public class CardEdition
+    internal class CardEdition : ICardEdition
     {
-        [DbColumn, DbKeyColumn(true)]
-        public int Id { get; set; }
         [DbColumn]
         public int IdEdition { get; set; }
         [DbColumn]
@@ -14,6 +12,6 @@ namespace MagicPictureSetDownloader.Db
         [DbColumn]
         public int IdRarity { get; set; }
         [DbColumn]
-        public string IdGatherer { get; set; }
+        public int IdGatherer { get; set; }
     }
 }

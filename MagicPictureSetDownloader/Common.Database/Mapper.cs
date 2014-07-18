@@ -53,6 +53,7 @@ namespace Common.Database
                     
                     while (reader.Read())
                     {
+                        //Don't care about internal or private because it is a call to Activator.CreateInstance<T>()
                         T t = new T();
 
                         foreach (KeyValuePair<int, PropertyInfo> kv in map)
