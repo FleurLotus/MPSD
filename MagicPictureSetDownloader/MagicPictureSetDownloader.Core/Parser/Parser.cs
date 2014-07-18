@@ -22,7 +22,7 @@ namespace MagicPictureSetDownloader.Core
         {
             return new CardParser().Parse(htmltext).FirstOrDefault();
         }
-        public static int ExtractIdGathere(string pictureUrl)
+        public static int ExtractIdGatherer(string pictureUrl)
         {
             Match m = _idRegex.Match(pictureUrl);
             if (!m.Success)

@@ -6,60 +6,55 @@ using System.Linq;
 using System.Reflection;
 using Common.Database;
 using Common.Libray;
+using MagicPictureSetDownloader.Db.DAO;
 
 namespace MagicPictureSetDownloader.Db
 {
     public class MagicDatabaseManager
     {
+        private static readonly Lazy<MagicDatabaseManager> _lazyIntance = new Lazy<MagicDatabaseManager>(() => new MagicDatabaseManager("MagicData.sdf", "MagicPicture.sdf")); 
+
         private readonly object _sync = new object();
         private bool _referentialLoaded;
         private readonly string _connectionString;
         private readonly string _connectionStringForPictureDb;
-        private readonly IList<Edition> _editions = new List<Edition>();
-        private readonly IDictionary<string, Rarity> _rarities = new Dictionary<string, Rarity>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<int, Block> _blocks = new Dictionary<int, Block>();
-        private readonly IDictionary<int, Picture> _pictures = new Dictionary<int, Picture>();
-        private readonly IDictionary<string, Card> _cards = new Dictionary<string, Card>(StringComparer.InvariantCultureIgnoreCase);
-        
-        public MagicDatabaseManager(string fileName, string pictureFileName)
+        private readonly IList<IEdition> _editions = new List<IEdition>();
+        private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
+        private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
+        private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
+
+        public static MagicDatabaseManager Instance
+        {
+            get { return _lazyIntance.Value; }
+        }
+
+        private MagicDatabaseManager(string fileName, string pictureFileName)
         {
             _connectionString = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             _connectionStringForPictureDb = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
         }
 
-        public Card GetCard(string name)
+        public ICard GetCard(string name)
         {
             CheckReferentialLoaded();
             return _cards.GetOrDefault(name);
+        }
+        private ICardEdition GetCardEdition(int idGatherer)
+        {
+            CheckReferentialLoaded();
+
+            return _cardEditions.GetOrDefault(idGatherer);
         }
         public int GetRarityId(string rarity)
         {
             CheckReferentialLoaded();
             return _rarities[rarity].Id;
         }
-        public void InsertNewPicture(int idGatherer, byte[] data, byte[] foildata = null)
+        public IPicture GetPicture(int idGatherer)
         {
-            Picture picture = new Picture { IdGatherer = idGatherer, Image = data, FoilImage = foildata };
-            AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, pic => _pictures.Add(pic.IdGatherer, pic));
-        }
-
-        public void InsertNewCard(Card card)
-        {
-            if (card == null)
-                throw new ArgumentNullException("card");
-            
-            if (string.IsNullOrWhiteSpace(card.Name))
-                    throw new ArgumentException("Card.Name");
-
-            if (GetCard(card.Name) != null)
-                return;
-
-            AddToDbAndUpdateReferential(_connectionString, card, cd => _cards.Add(cd.Name, cd));
-        }
-
-        public Picture GetPicture(int idGatherer)
-        {
-            Picture picture;
+            IPicture picture;
 
             if (!_pictures.TryGetValue(idGatherer, out picture))
             {
@@ -76,21 +71,73 @@ namespace MagicPictureSetDownloader.Db
 
             return picture;
         }
-        public Edition GetEdition(string sourceName)
+        public IEdition GetEdition(string sourceName)
         {
             CheckReferentialLoaded();
-            Edition edition = _editions.FirstOrDefault(ed => String.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
+            IEdition edition = _editions.FirstOrDefault(ed => String.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
             if (edition == null)
             {
-                edition = new Edition {Name = sourceName, GathererName = sourceName};
-                AddToDbAndUpdateReferential(_connectionString,edition, ed => _editions.Add(ed));
+                Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName };
+                AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
+                edition = realEdition;
             }
 
             return edition;
         }
+        public void InsertNewPicture(int idGatherer, byte[] data, byte[] foildata = null)
+        {
+            if (GetPicture(idGatherer) != null)
+                return;
+
+            Picture picture = new Picture {IdGatherer = idGatherer, Image = data, FoilImage = foildata};
+            AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, InsertInReferential);
+        }
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)
+        {
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException("name");
+
+            if (GetCard(name) != null)
+                return;
+
+            Card card = new Card
+            {
+                Name = name,
+                Text = text,
+                Power = power,
+                Toughness = toughness,
+                CastingCost = castingcost,
+                Loyalty = loyalty,
+                Type = type
+            };
+
+            AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
+        }
+        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity)
+        {
+            int idRarity = GetRarityId(rarity);
+            int idCard = GetCard(name).Id;
+            
+            if (idGatherer <= 0 || idEdition <= 0)
+                throw new ApplicationDbException("Data are not filled correctedly");
+
+            if (GetCardEdition(idGatherer) != null)
+                return;
+
+            CardEdition cardEdition = new CardEdition
+            {
+                IdCard = idCard,
+                IdGatherer = idGatherer,
+                IdEdition = idEdition,
+                IdRarity = idRarity
+            };
+
+            AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);
+        }
 
         private void AddToDbAndUpdateReferential<T>(string connectionString, T value, Action<T> addToReferential)
-            where T: class, new()
+            where T : class, new()
         {
             using (SqlCeConnection cnx = new SqlCeConnection(connectionString))
             {
@@ -101,7 +148,8 @@ namespace MagicPictureSetDownloader.Db
             lock (_sync)
                 addToReferential(value);
         }
-        private Picture LoadImage(int idGatherer)
+
+        private IPicture LoadImage(int idGatherer)
         {
             Picture picture = new Picture { IdGatherer = idGatherer };
 
@@ -110,6 +158,7 @@ namespace MagicPictureSetDownloader.Db
                 cnx.Open();
                 return Mapper<Picture>.Load(cnx, picture);
             }
+
         }
         private void LoadReferentials()
         {
@@ -120,26 +169,48 @@ namespace MagicPictureSetDownloader.Db
                 _blocks.Clear();
                 _editions.Clear();
                 _cards.Clear();
+                _cardEditions.Clear();
 
                 foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
-                    _rarities.Add(rarity.Code, rarity);
+                    InsertInReferential(rarity);
 
                 foreach (Block block in Mapper<Block>.LoadAll(cnx))
                     _blocks.Add(block.Id, block);
 
                 foreach (Edition edition in Mapper<Edition>.LoadAll(cnx))
                 {
-                    Block block;
-                    if (edition.IdBlock.HasValue && _blocks.TryGetValue(edition.IdBlock.Value, out block))
-                        edition.BlockName = block.Name;
-                    _editions.Add(edition);
+                    if (edition.IdBlock.HasValue)
+                        edition.BlockName = _blocks.GetOrDefault(edition.IdBlock.Value).Name;
+                    InsertInReferential(edition);
                 }
 
                 foreach (Card card in Mapper<Card>.LoadAll(cnx))
-                    _cards.Add(card.Name, card);
+                    InsertInReferential(card);
 
+                foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
+                    InsertInReferential(cardEdition);
             }
             _referentialLoaded = true;
+        }
+        private void InsertInReferential(IPicture picture)
+        {
+            _pictures.Add(picture.IdGatherer, picture);
+        }
+        private void InsertInReferential(IRarity rarity)
+        {
+            _rarities.Add(rarity.Name, rarity);
+        }
+        private void InsertInReferential(IEdition edition)
+        {
+            _editions.Add(edition);
+        }
+        private void InsertInReferential(ICard card)
+        {
+            _cards.Add(card.Name, card);
+        }
+        private void InsertInReferential(ICardEdition cardEdition)
+        {
+            _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
         }
         private void CheckReferentialLoaded()
         {

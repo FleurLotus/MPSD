@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HashHelper.cs" />
     <Compile Include="ReadOnlyDictionary.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="EventArgs.cs" />

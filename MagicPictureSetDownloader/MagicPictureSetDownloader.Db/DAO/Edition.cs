@@ -1,11 +1,11 @@
 using System.Diagnostics;
 using Common.Database;
 
-namespace MagicPictureSetDownloader.Db
+namespace MagicPictureSetDownloader.Db.DAO
 {
     [DebuggerDisplay("{Name}")]
     [DbTable]
-    public class Edition
+    internal class Edition : IEdition
     {
         [DbColumn, DbKeyColumn(true)]
         public int Id { get; set; }

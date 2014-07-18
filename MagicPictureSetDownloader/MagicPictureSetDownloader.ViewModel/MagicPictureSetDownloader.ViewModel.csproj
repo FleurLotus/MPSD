@@ -36,11 +36,13 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainViewModel.cs" />
     <Compile Include="CredentialInputViewModel.cs" />
     <Compile Include="DownloadReporter.cs" />
-    <Compile Include="MainViewModel.cs" />
+    <Compile Include="DownloadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SetInfoViewModel.cs" />
+    <Compile Include="SetViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">

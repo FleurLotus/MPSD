@@ -1,0 +1,36 @@
+﻿<Window x:Class="MagicPictureSetDownloader.VersionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:viewModel="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+
+        d:DataContext="{d:DesignInstance Type=viewModel:VersionViewModel}"
+        d:DesignWidth="200" d:DesignHeight="150"
+        mc:Ignorable="d"
+        WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterScreen" Title="Version" ResizeMode="NoResize" SizeToContent="WidthAndHeight">
+    <Window.Resources>
+        <Style x:Key="Title" TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Column="0" Grid.Row="0" Content="Name" Style="{StaticResource Title}"/>
+        <Label Grid.Column="1" Grid.Row="0" Content="{Binding Name}"/>
+        <Label Grid.Column="0" Grid.Row="1" Content="Number" Style="{StaticResource Title}"/>
+        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Version}"/>
+        <Label Grid.Column="0" Grid.Row="2" Content="Copyright" Style="{StaticResource Title}"/>
+        <Label Grid.Column="1" Grid.Row="2" Content="{Binding Copyright}"/>
+    </Grid>
+</Window>

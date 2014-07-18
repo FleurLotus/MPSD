@@ -1,6 +1,4 @@
-﻿using Common.WPF;
-using Common.Libray;
-using MagicPictureSetDownloader.Core;
+﻿using System;
 using MagicPictureSetDownloader.ViewModel;
 
 namespace MagicPictureSetDownloader
@@ -12,19 +10,17 @@ namespace MagicPictureSetDownloader
     {
         public MainWindow()
         {
-            DataContext = new MainViewModel(new DispatcherInvoker());
+            DataContext = new MainViewModel();
             InitializeComponent();
         }
-        public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
+
+        public void UpdateDatabaseRequested(object sender, EventArgs args)
         {
-            CredentialInputViewModel vm = new CredentialInputViewModel();
-            CredentialInput f = new CredentialInput(vm) {Owner = this};
-            f.ShowDialog();
-            if (vm.Result.HasValue && vm.Result.Value)
-            {
-                args.Data.Login = vm.Login;
-                args.Data.Password = vm.Password;
-            }
+            new DownloadWindow().ShowDialog();
+        }
+        public void VersionRequested(object sender, EventArgs args)
+        {
+            new VersionWindow().ShowDialog();
         }
     }
 }

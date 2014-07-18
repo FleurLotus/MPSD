@@ -5,9 +5,9 @@ namespace MagicPictureSetDownloader.Core
     public class SetInfoWithBlock
     {
         private readonly SetInfo _setInfo;
-        private readonly Edition _edition;
+        private readonly IEdition _edition;
 
-        internal SetInfoWithBlock(SetInfo setInfo, Edition edition)
+        internal SetInfoWithBlock(SetInfo setInfo, IEdition edition)
         {
             _setInfo = setInfo;
             _edition = edition;
