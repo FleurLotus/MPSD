@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     internal class SetParser : IParser<SetInfo>
     {
         private const string Start = @"<select name=""ctl00$ctl00$MainContent$Content$SearchControls$setAddText""";

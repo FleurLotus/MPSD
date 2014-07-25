@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Reflection;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Common;
+    using System.Reflection;
+
     public static class Mapper<T> where T : class, new()
     {
         private static readonly CommandBuilder _commandBuilder;

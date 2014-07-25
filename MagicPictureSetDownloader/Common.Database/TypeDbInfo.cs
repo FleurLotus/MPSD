@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Common.Libray;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Common.Libray;
+
     internal class TypeDbInfo
     {
         public TypeDbInfo(string tableName, IEnumerable<string> keys,string identity, IDictionary<string, PropertyInfo> prop)

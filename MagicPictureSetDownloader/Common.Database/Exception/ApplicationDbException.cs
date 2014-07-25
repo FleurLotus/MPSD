@@ -1,8 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    [Serializable]
     public class ApplicationDbException : ApplicationException
     {
         public ApplicationDbException()

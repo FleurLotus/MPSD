@@ -1,8 +1,8 @@
-using System.Windows.Data;
-
 namespace Common.WPF.Binding
 {
-    public class TwoWayBinding : System.Windows.Data.Binding
+    using System.Windows.Data;
+
+    public class TwoWayBinding : Binding
     {
         public TwoWayBinding(string path) : base(path)
         {

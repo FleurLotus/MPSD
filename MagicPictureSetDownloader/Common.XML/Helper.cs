@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-
-namespace Common.XML
+﻿namespace Common.XML
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml;
+
     public static class Helper
     {
         public static IDictionary<string, string> GetAttributes(this XmlTextReader reader)

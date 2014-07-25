@@ -1,9 +1,10 @@
-﻿using System;
-using System.Windows.Input;
-using Common.ViewModel;
-
-namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel
 {
+    using System;
+    using System.Windows.Input;
+    using Common.ViewModel;
+    using MagicPictureSetDownloader.Core;
+
     public class MainViewModel : NotifyPropertyChangedBase
     {
         public event EventHandler UpdateDatabaseRequested;
@@ -11,32 +12,29 @@ namespace MagicPictureSetDownloader.ViewModel
         public event EventHandler CloseRequested;
 
         private bool _showPicture;
-        private AsyncObservableCollection<SetViewModel> _sets;
+        private readonly MagicDatabaseManager _magicDatabaseManager;
 
         //ALERT: TO BE CODED for display 
-        public MainViewModel()
+        public MainViewModel() : this(false)
+        {
+        }
+        protected MainViewModel(bool inDesign)
         {
             UpdateDatabaseCommand = new RelayCommand(UpdateDatabaseCommandExecute);
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
-            Sets = new AsyncObservableCollection<SetViewModel>();
+            Hierarchical = new HierarchicalViewModel("Magic Cards");
+            if (!inDesign)
+            {
+                _magicDatabaseManager = new MagicDatabaseManager();
+                //ALERT:load db and fill Hierarchical
+                //MagicDatabase.Instance.
+
+            }
             ShowPicture = true;
         }
 
-        
-
-        public AsyncObservableCollection<SetViewModel> Sets
-        {
-            get { return _sets; }
-            set
-            {
-                if (value != _sets)
-                {
-                    _sets = value;
-                    OnNotifyPropertyChanged(() => Sets);
-                }
-            }
-        }
+        public HierarchicalViewModel Hierarchical { get; private set; }
         public bool ShowPicture
         {
             get { return _showPicture; }

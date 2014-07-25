@@ -1,15 +1,17 @@
-﻿using System.Threading;
-using Common.ViewModel;
-
-namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel
 {
-    public class DownloadReporter : NotifyPropertyChangedBase
+    using System;
+    using System.Threading;
+    using Common.ViewModel;
+
+    public class DownloadReporterViewModel : NotifyPropertyChangedBase, IDisposable
     {
+        private bool _disposed;
         private int _current;
         private int _total;
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
 
-        public DownloadReporter()
+        public DownloadReporterViewModel()
         {
             Reset();
         }
@@ -46,7 +48,6 @@ namespace MagicPictureSetDownloader.ViewModel
 
             Total = 1;
         }
-
         public void Progress()
         {
             _lock.EnterWriteLock();
@@ -54,7 +55,11 @@ namespace MagicPictureSetDownloader.ViewModel
             _lock.ExitWriteLock();
             OnNotifyPropertyChanged(() => Current);
         }
-
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
         internal void Finish()
         {
             _lock.EnterWriteLock();
@@ -62,6 +67,16 @@ namespace MagicPictureSetDownloader.ViewModel
             _lock.ExitWriteLock();
             OnNotifyPropertyChanged(() => Current);
 
+        }
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            if (disposing)
+            {
+                if (_lock != null) 
+                    _lock.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

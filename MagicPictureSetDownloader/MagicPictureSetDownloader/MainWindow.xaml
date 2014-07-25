@@ -6,9 +6,10 @@
         xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:wpf="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
+        xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
 
-        d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+        d:DataContext="{d:DesignInstance Type=vm:DesignMainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="795.65" Width="869">
 
@@ -36,7 +37,7 @@
                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="_Show Picture" IsCheckable="True" IsChecked="{wpf:TwoWayBinding ShowPicture}"/>
+                <MenuItem Header="_Show Picture" IsCheckable="True" IsChecked="{wpfbinding:TwoWayBinding ShowPicture}"/>
             </MenuItem>
             <MenuItem Header="?">
                 <MenuItem Header="_Version" Command="{Binding VersionCommand}"/>
@@ -53,14 +54,20 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" >
-                <ListView ItemsSource="{Binding Sets}">
-            
-                </ListView>
+                <TreeView ItemsSource="{Binding Hierarchical.Root}">
+                    <i:Interaction.Behaviors>
+                        <wpf:BindableSelectedItemBehavior SelectedItem="{Binding Hierarchical.Selected, Mode=OneWayToSource}" />
+                    </i:Interaction.Behaviors>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <TextBlock Text="{Binding Name}" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
             </Border>
             <GridSplitter Grid.Column="1"/>
             <Border Grid.Column="2">
-                <ListView>
-                </ListView>
+                
             </Border>
 
             <GridSplitter Grid.Column="3" Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}"/>

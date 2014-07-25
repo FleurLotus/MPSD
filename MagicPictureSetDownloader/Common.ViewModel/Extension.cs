@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq.Expressions;
-
-namespace Common.ViewModel
+﻿namespace Common.ViewModel
 {
+    using System;
+    using System.Linq.Expressions;
+
     internal static class Extension
     {
         public static string GetMemberName<T>(this Expression<Func<T>> expression)
@@ -16,6 +16,5 @@ namespace Common.ViewModel
                                                           "Only MemberExpressions are currently supported.", expression.Body.Type));
             return memberExpression.Member.Name;
         }
-
     }
 }

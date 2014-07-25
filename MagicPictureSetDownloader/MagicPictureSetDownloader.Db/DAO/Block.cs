@@ -1,8 +1,9 @@
-using System.Diagnostics;
-using Common.Database;
-
 namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System.Diagnostics;
+    using Common.Database;
+    using MagicPictureSetDownloader.Interface;
+
     [DebuggerDisplay("{Name}")]
     [DbTable]
     internal class Block : IBlock

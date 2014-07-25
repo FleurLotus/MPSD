@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Threading;
-using Common.Libray;
-
-namespace Common.WPF
+﻿namespace Common.WPF
 {
+    using System;
+    using System.Windows;
+    using System.Windows.Threading;
+    using Common.Libray;
+
     public class DispatcherInvoker : IDispatcherInvoker
     {
         public void Invoke(Action action)

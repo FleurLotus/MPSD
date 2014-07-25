@@ -1,7 +1,8 @@
-﻿using Common.Database;
-
-namespace MagicPictureSetDownloader.Db.DAO
+﻿namespace MagicPictureSetDownloader.Db.DAO
 {
+    using Common.Database;
+    using MagicPictureSetDownloader.Interface;
+
     [DbTable]
     internal class CardEdition : ICardEdition
     {

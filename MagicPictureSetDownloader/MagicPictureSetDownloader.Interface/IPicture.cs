@@ -1,9 +1,8 @@
-namespace MagicPictureSetDownloader.Db
+namespace MagicPictureSetDownloader.Interface
 {
     public interface IPicture
     {
         int IdGatherer { get; }
         byte[] Image { get; }
-        byte[] FoilImage { get; }
     }
 }

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Xml;
-
-namespace MagicPictureSetDownloader.Core.CardInfo
+﻿namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Collections.Generic;
+    using System.Xml;
+
     internal interface IAwareXmlTextReader
     {
         XmlNodeType NodeType { get;  }

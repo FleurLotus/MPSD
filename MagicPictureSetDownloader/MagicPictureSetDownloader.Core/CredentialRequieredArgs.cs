@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
     public class CredentialRequieredArgs
     {

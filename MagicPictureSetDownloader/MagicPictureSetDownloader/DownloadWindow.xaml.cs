@@ -1,10 +1,10 @@
-﻿using Common.WPF;
-using Common.Libray;
-using MagicPictureSetDownloader.Core;
-using MagicPictureSetDownloader.ViewModel;
-
-namespace MagicPictureSetDownloader
+﻿namespace MagicPictureSetDownloader
 {
+    using Common.WPF;
+    using Common.Libray;
+    using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.ViewModel;
+
     /// <summary>
     /// Interaction logic for DownloadWindow.xaml
     /// </summary>

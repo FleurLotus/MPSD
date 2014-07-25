@@ -1,11 +1,11 @@
-using System;
-using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-
 namespace Common.WPF.Converter
 {
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+
     public class ImageSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

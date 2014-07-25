@@ -1,19 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Data.SqlServerCe;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using Common.Database;
-using Common.Libray;
-using MagicPictureSetDownloader.Db.DAO;
-
 namespace MagicPictureSetDownloader.Db
 {
-    public class MagicDatabaseManager
-    {
-        private static readonly Lazy<MagicDatabaseManager> _lazyIntance = new Lazy<MagicDatabaseManager>(() => new MagicDatabaseManager("MagicData.sdf", "MagicPicture.sdf")); 
+    using System;
+    using System.Collections.Generic;
+    using System.Data.SqlServerCe;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using Common.Database;
+    using Common.Libray;
+    using MagicPictureSetDownloader.Db.DAO;
+    using MagicPictureSetDownloader.Interface;
 
+    public class MagicDatabase
+    {
         private readonly object _sync = new object();
         private bool _referentialLoaded;
         private readonly string _connectionString;
@@ -25,12 +24,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
 
-        public static MagicDatabaseManager Instance
-        {
-            get { return _lazyIntance.Value; }
-        }
-
-        private MagicDatabaseManager(string fileName, string pictureFileName)
+        public MagicDatabase(string fileName, string pictureFileName)
         {
             _connectionString = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             _connectionStringForPictureDb = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
@@ -84,12 +78,19 @@ namespace MagicPictureSetDownloader.Db
 
             return edition;
         }
-        public void InsertNewPicture(int idGatherer, byte[] data, byte[] foildata = null)
+
+        public ICollection<ICardEdition> AllCardEditions() 
+        {
+            CheckReferentialLoaded();
+            return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
+        }
+
+        public void InsertNewPicture(int idGatherer, byte[] data)
         {
             if (GetPicture(idGatherer) != null)
                 return;
 
-            Picture picture = new Picture {IdGatherer = idGatherer, Image = data, FoilImage = foildata};
+            Picture picture = new Picture {IdGatherer = idGatherer, Image = data};
             AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, InsertInReferential);
         }
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)

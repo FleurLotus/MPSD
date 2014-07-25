@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Common.Libray
+﻿namespace Common.Libray
 {
+    using System;
+
     public interface IDispatcherInvoker
     {
         void Invoke(Action action);

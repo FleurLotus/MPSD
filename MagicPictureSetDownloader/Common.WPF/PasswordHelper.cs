@@ -1,8 +1,8 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-
-namespace Common.WPF
+﻿namespace Common.WPF
 {
+    using System.Windows;
+    using System.Windows.Controls;
+
     public static class PasswordHelper
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof (string), typeof (PasswordHelper), new FrameworkPropertyMetadata(string.Empty, OnPasswordPropertyChanged));

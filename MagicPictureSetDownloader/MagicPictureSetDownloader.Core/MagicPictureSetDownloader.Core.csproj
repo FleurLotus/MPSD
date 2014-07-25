@@ -46,6 +46,11 @@
     <Compile Include="CardInfo\RowWorker.cs" />
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
+    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
+    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
+    <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
+    <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
+    <Compile Include="MagicDatabaseManager.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
@@ -77,6 +82,10 @@
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj">
       <Project>{1F2678D5-43D0-402E-AA40-2B0AA06C9292}</Project>
       <Name>MagicPictureSetDownloader.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
+      <Project>{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}</Project>
+      <Name>MagicPictureSetDownloader.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

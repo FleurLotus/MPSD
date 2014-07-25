@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
-
-namespace Common.ViewModel
+﻿namespace Common.ViewModel
 {
+    using System;
+    using System.ComponentModel;
+    using System.Linq.Expressions;
+
     public class NotifyPropertyChangedBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

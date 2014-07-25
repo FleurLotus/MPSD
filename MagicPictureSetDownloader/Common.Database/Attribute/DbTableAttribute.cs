@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+
     [AttributeUsage(AttributeTargets.Class)]
     public class DbTableAttribute: Attribute
     {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text.RegularExpressions;
+
     internal class CardUrlParser : IParser<string>
     {
         private const string Start = @"class=""checklist""";

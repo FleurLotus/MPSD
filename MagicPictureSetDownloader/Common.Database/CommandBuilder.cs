@@ -1,13 +1,13 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Linq;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+    using System.Data;
+    using System.Data.Common;
+    using System.Linq;
+    using System.Reflection;
+    using System.Collections.Generic;
+    using System.Text;
+
     internal class CommandBuilder
     {
         private readonly TypeDbInfo _typeDbInfo;

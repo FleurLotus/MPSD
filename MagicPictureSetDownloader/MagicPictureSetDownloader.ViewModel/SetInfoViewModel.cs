@@ -1,28 +1,47 @@
-﻿using Common.ViewModel;
-using MagicPictureSetDownloader.Core;
-
-namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel
 {
+    using System;
+    using Common.ViewModel;
+    using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Interface;
+
     public class SetInfoViewModel: NotifyPropertyChangedBase
     {
         private bool _active;
+        private readonly IEdition _edition;
 
         public SetInfoViewModel(string baseSetUrl, SetInfoWithBlock setInfoWithBlock)
         {
-            Name = setInfoWithBlock.Name;
-            BlockName = setInfoWithBlock.BlockName;
-            EditionId = setInfoWithBlock.EditionId;
+            _edition = setInfoWithBlock.Edition;
 
             string seachUrl = DownloadManager.ToAbsoluteUrl(baseSetUrl, setInfoWithBlock.BaseSearchUrl, true);
-            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Name);
-            DownloadReporter = new DownloadReporter();
+            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Edition.Name);
+            DownloadReporter = new DownloadReporterViewModel();
         }
 
-        public DownloadReporter DownloadReporter { get; private set; }
-        public string Name { get; private set; }
-        public int EditionId { get; private set; }
-        public string BlockName { get; private set; }
         public string Url { get; private set; }
+        public DownloadReporterViewModel DownloadReporter { get; private set; }
+        public string Name
+        {
+            get { return _edition.Name; }
+        }
+        public DateTime? ReleaseDate
+        {
+            get { return _edition.ReleaseDate; }
+        }
+        public int? CardNumber
+        {
+            get { return _edition.CardNumber; }
+        }
+        public int EditionId
+        {
+            get { return _edition.Id; }
+        }
+        public string BlockName
+        {
+            get { return _edition.BlockName; }
+        }
+        
         public bool Active
         {
             get { return _active; }

@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using Common.Libray;
-
-namespace Common.ViewModel
+﻿namespace Common.ViewModel
 {
+    using System.Reflection;
+    using Common.Libray;
+
     public class VersionViewModel : NotifyPropertyChangedBase
     {
         public VersionViewModel()

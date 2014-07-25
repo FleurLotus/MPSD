@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Collections.Generic;
+
     internal class RowWorker : ICardInfoParserWorker
     {
         private readonly ICardInfoParserWorker _innerWorker;

@@ -1,34 +1,16 @@
-﻿using MagicPictureSetDownloader.Db;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using MagicPictureSetDownloader.Interface;
+
     public class SetInfoWithBlock
     {
-        private readonly SetInfo _setInfo;
-        private readonly IEdition _edition;
-
         internal SetInfoWithBlock(SetInfo setInfo, IEdition edition)
         {
-            _setInfo = setInfo;
-            _edition = edition;
+            BaseSearchUrl = setInfo.BaseSearchUrl;
+            Edition = edition;
         }
 
-        public string BaseSearchUrl
-        {
-            get { return _setInfo.BaseSearchUrl; }
-        }
-        public string BlockName
-        {
-            get { return _edition.BlockName; }
-        }
-        public int EditionId
-        {
-            get { return _edition.Id; }
-        }
-        public string Name
-        {
-            get { return _edition.Name; }
-        }
-
+        public IEdition Edition { get; private set; }
+        public string BaseSearchUrl { get; private set; }
     }
 }

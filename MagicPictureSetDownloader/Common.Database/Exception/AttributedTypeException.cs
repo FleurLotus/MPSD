@@ -1,8 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    [Serializable]
     internal class AttributedTypeException : ApplicationException
     {
         public Type Type { get; private set; }

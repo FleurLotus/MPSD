@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Globalization;
-using System.Windows.Data;
-
-namespace Common.WPF.Converter
+﻿namespace Common.WPF.Converter
 {
+    using System;
+    using System.Collections;
+    using System.Globalization;
+    using System.Windows.Data;
+
     [ValueConversion(typeof (ICollection), typeof (bool))]
     public class ValueIsZeroToBoolConverter : IValueConverter
     {

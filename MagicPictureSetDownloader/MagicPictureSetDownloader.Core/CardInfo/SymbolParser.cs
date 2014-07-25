@@ -1,8 +1,8 @@
-﻿using System.Text.RegularExpressions;
-using System.Xml;
-
-namespace MagicPictureSetDownloader.Core.CardInfo
+﻿namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Text.RegularExpressions;
+    using System.Xml;
+
     internal static class SymbolParser
     {
         private static readonly Regex _symbolRegex = new Regex(@"Image\.ashx\?size=(medium|small)&name=(?<symbol>.+)&type=symbol", RegexOptions.Compiled | RegexOptions.IgnoreCase);

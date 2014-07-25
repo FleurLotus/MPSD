@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using Common.Libray;
-using Common.XML;
-using MagicPictureSetDownloader.Core.CardInfo;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Xml;
+    using Common.Libray;
+    using Common.XML;
+    using MagicPictureSetDownloader.Core.CardInfo;
+
     internal class CardParser : IParser<CardWithExtraInfo>
     {
         private const string Start = @"<!-- Card Details Table -->";

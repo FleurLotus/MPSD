@@ -1,14 +1,14 @@
-using System.Diagnostics;
-using Common.Database;
-
 namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System.Diagnostics;
+    using Common.Database;
+    using MagicPictureSetDownloader.Interface;
+
     [DebuggerDisplay("{IdGatherer}")]
     [DbTable]
     internal class Picture : IPicture
     {
         private byte[] _image;
-        private byte[] _foilImage;
         [DbColumn, DbKeyColumn(false)]
         public int IdGatherer { get; set; }
         [DbColumn]
@@ -16,12 +16,6 @@ namespace MagicPictureSetDownloader.Db.DAO
         {
             get { return _image == null ? null : (byte[]) _image.Clone(); }
             set { _image = value; }
-        }
-        [DbColumn]
-        public byte[] FoilImage
-        {
-            get { return _foilImage == null ? null : (byte[]) _foilImage.Clone(); }
-            set { _foilImage = value; }
         }
     }
 }
