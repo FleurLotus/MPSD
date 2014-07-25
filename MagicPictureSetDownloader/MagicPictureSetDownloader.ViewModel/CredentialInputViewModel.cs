@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows.Input;
-using Common.ViewModel;
-
-namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel
 {
+    using System;
+    using System.Windows.Input;
+    using Common.ViewModel;
+
     public class CredentialInputViewModel : NotifyPropertyChangedBase
     {
         public event EventHandler Closing;

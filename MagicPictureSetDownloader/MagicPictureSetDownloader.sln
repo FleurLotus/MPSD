@@ -25,6 +25,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.XML", "Common.XML\Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Drawing", "Common.Drawing\Common.Drawing.csproj", "{4D3E434A-9B4E-441E-BA28-07E0385D801E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Interface", "MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj", "{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D00700D7-C608-4B74-B712-CF8C773A975C}"
+	ProjectSection(SolutionItems) = preProject
+		Settings.StyleCop = Settings.StyleCop
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +82,10 @@ Global
 		{4D3E434A-9B4E-441E-BA28-07E0385D801E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D3E434A-9B4E-441E-BA28-07E0385D801E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D3E434A-9B4E-441E-BA28-07E0385D801E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

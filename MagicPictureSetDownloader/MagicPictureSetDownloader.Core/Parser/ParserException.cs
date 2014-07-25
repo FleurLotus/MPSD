@@ -1,8 +1,9 @@
-﻿using System;
-using System.Runtime.Serialization;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System;
+    using System.Runtime.Serialization;
+
+    [Serializable]
     public class ParserException : ApplicationException
     {
         public ParserException()

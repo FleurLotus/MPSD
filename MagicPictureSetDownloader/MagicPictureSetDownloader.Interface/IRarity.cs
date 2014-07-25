@@ -1,4 +1,4 @@
-namespace MagicPictureSetDownloader.Db
+namespace MagicPictureSetDownloader.Interface
 {
     public interface IRarity
     {

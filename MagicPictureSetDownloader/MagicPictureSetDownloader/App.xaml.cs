@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader
+﻿namespace MagicPictureSetDownloader
 {
     /// <summary>
     /// Interaction logic for App.xaml

@@ -10,7 +10,7 @@
         /// <param name="input">array of objects, parameters combination that you need
         /// to get a unique hash code for them</param>
         /// <returns>Hash code</returns>
-        public static int RS_Hash(params object[] input)
+        public static int RSHash(params object[] input)
         {
             const int b = 378551;
             int a = 63689;

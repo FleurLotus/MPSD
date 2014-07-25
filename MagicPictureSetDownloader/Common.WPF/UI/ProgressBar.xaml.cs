@@ -1,8 +1,8 @@
-using System.ComponentModel;
-using System.Windows;
-
 namespace Common.WPF.UI
 {
+    using System.ComponentModel;
+    using System.Windows;
+
     public partial class ProgressBar
     {
         #region Members
@@ -90,7 +90,9 @@ namespace Common.WPF.UI
                 double max = Maximum;
                 double value = Value;
                 double percent;
+                // ReSharper disable CompareOfFloatsByEqualityOperator
                 if (max == value)
+                    // ReSharper restore CompareOfFloatsByEqualityOperator
                     percent = 100;
                 else
                     percent = value / max * 100;

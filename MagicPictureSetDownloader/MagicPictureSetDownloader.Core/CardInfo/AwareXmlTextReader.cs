@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml;
-using Common.XML;
-
-namespace MagicPictureSetDownloader.Core.CardInfo
+﻿namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml;
+    using Common.XML;
+
     internal class AwareXmlTextReader : IAwareXmlTextReader
     {
         private readonly XmlTextReader _reader;

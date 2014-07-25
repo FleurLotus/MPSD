@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Collections.Generic;
+
     internal class ImageWorker : ICardInfoParserWorker
     {
         private const string Key = "ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage";

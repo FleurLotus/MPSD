@@ -1,9 +1,9 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-
-namespace Common.Drawing
+﻿namespace Common.Drawing
 {
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+
     public static class Converter
     {
         public static byte[] ImageToBytes(Image img)

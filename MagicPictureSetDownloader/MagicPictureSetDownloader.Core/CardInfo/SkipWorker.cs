@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-
 namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Collections.Generic;
+
     internal class SkipWorker : ICardInfoParserWorker
     {
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)

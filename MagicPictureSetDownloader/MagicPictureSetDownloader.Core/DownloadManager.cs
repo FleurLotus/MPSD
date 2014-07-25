@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using Common.Drawing;
-using Common.Libray;
-using MagicPictureSetDownloader.Db;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Text;
+    using Common.Drawing;
+    using Common.Libray;
+    using MagicPictureSetDownloader.Interface;
+
     public class DownloadManager
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
         private ICredentials _credentials;
         private readonly IDictionary<string, string> _htmlCache;
+        private readonly MagicDatabaseManager _magicDatabaseManager;
 
         public DownloadManager()
         {
+            _magicDatabaseManager = new MagicDatabaseManager();
             _htmlCache = new Dictionary<string, string>();
         }
         
@@ -66,7 +68,7 @@ namespace MagicPictureSetDownloader.Core
             string htmltext = GetHtml(url);
             foreach (SetInfo setInfo in Parser.ParseSetsList(htmltext))
             {
-                IEdition edition = MagicDatabaseManager.Instance.GetEdition(setInfo.Name);
+                IEdition edition = _magicDatabaseManager.GetEdition(setInfo.Name);
                 yield return new SetInfoWithBlock(setInfo, edition);
             }
         }
@@ -91,7 +93,7 @@ namespace MagicPictureSetDownloader.Core
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
-            MagicDatabaseManager.Instance.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
+            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
         }
         private bool OnCredentialRequiered()
         {
@@ -115,13 +117,13 @@ namespace MagicPictureSetDownloader.Core
         {
             int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
 
-            IPicture picture = MagicDatabaseManager.Instance.GetPicture(idGatherer);
+            IPicture picture = _magicDatabaseManager.GetPicture(idGatherer);
             if (picture == null)
             {
                 //No id found try insert
                 byte[] pictureData = GetFile(pictureUrl);
 
-                MagicDatabaseManager.Instance.InsertNewPicture(idGatherer, pictureData);
+                _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
             }
             else // if (picture.Image == null)
             {
@@ -132,7 +134,7 @@ namespace MagicPictureSetDownloader.Core
         }
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
-            MagicDatabaseManager.Instance.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
+            _magicDatabaseManager.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type);
         }
         private WebClient GetWebClient()

@@ -1,9 +1,9 @@
-using System.Collections.Generic;
-using System.Xml;
-using Common.XML;
-
 namespace MagicPictureSetDownloader.Core.CardInfo
 {
+    using System.Collections.Generic;
+    using System.Xml;
+    using Common.XML;
+
     internal class TextRowWorker : ICardInfoParserWorker
     {
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)

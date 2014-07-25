@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace Common.Libray
+﻿namespace Common.Libray
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     public static class Extension
     {
         public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider member)

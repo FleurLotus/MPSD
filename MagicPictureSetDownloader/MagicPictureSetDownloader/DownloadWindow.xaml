@@ -8,6 +8,7 @@
         xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:wpfui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         d:DataContext="{d:DesignInstance Type=vm:DownloadViewModel}"
         mc:Ignorable="d"
         Width="500" SizeToContent="Height" Title="MagicPictureSetDownloader">
@@ -46,6 +47,13 @@
 
         <Border Grid.Row="1" Grid.Column="0" Visibility="{Binding Sets.Count, Converter={StaticResource nz2vConv}}">
             <Grid>
+                <Grid.Resources>
+                    <CollectionViewSource Source="{Binding Sets}" x:Key="sets">
+                        <CollectionViewSource.SortDescriptions>
+                            <componentModel:SortDescription PropertyName="ReleaseDate" Direction="Descending" />
+                        </CollectionViewSource.SortDescriptions>
+                    </CollectionViewSource>
+                </Grid.Resources>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -57,7 +65,7 @@
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
-                <ListBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Sets}" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500">
+                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource sets}}">
                     <ListBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -77,7 +85,7 @@
                                 <Label Grid.Row="0" Grid.Column="2" Content="{Binding BlockName}" VerticalAlignment="Center" />
                                 <Border Grid.Row="0" Grid.Column="3" Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
                                     <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
-                                                   Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
+                                                       Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>
                             </Grid>
                         </DataTemplate>

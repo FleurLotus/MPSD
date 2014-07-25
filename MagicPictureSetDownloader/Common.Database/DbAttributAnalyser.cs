@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Reflection;
-using Common.Libray;
-using System;
-using System.Collections.Generic;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System.Linq;
+    using System.Reflection;
+    using Common.Libray;
+    using System;
+    using System.Collections.Generic;
+
     internal static class DbAttributAnalyser
     {
         private static readonly IDictionary<Type, TypeDbInfo> _analysied = new Dictionary<Type, TypeDbInfo>();

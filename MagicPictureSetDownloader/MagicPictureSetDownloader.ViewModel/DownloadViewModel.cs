@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading;
-using System.Windows.Input;
-using Common.Libray;
-using Common.ViewModel;
-using MagicPictureSetDownloader.Core;
-
-namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Threading;
+    using System.Windows.Input;
+    using Common.Libray;
+    using Common.ViewModel;
+    using MagicPictureSetDownloader.Core;
+
     public class DownloadViewModel: NotifyPropertyChangedBase
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
@@ -30,7 +30,7 @@ namespace MagicPictureSetDownloader.ViewModel
             Sets = new AsyncObservableCollection<SetInfoViewModel>();
             GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
             FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
-            DownloadReporter = new DownloadReporter();
+            DownloadReporter = new DownloadReporterViewModel();
             _downloadManager = new DownloadManager();
             _downloadManager.CredentialRequiered += OnCredentialRequiered;
         }
@@ -38,7 +38,7 @@ namespace MagicPictureSetDownloader.ViewModel
         public AsyncObservableCollection<SetInfoViewModel> Sets { get; private set; }
         public ICommand GetSetListCommand { get; private set; }
         public ICommand FeedSetsCommand { get; private set; }
-        public DownloadReporter DownloadReporter { get; private set; }
+        public DownloadReporterViewModel DownloadReporter { get; private set; }
         public bool IsBusy
         {
             get
@@ -165,7 +165,7 @@ namespace MagicPictureSetDownloader.ViewModel
         private void RetrieveSetDataCallBack(object state)
         {
             object[] args = (object[])state;
-            DownloadReporter setDownloadReporter = (DownloadReporter)args[0];
+            DownloadReporterViewModel setDownloadReporter = (DownloadReporterViewModel)args[0];
             int editionId = (int)args[1];
             IEnumerable<string> urls = (IEnumerable<string>)args[2];
             

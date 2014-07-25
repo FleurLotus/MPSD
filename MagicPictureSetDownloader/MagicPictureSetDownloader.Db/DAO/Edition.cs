@@ -1,8 +1,10 @@
-using System.Diagnostics;
-using Common.Database;
-
 namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System;
+    using System.Diagnostics;
+    using Common.Database;
+    using MagicPictureSetDownloader.Interface;
+
     [DebuggerDisplay("{Name}")]
     [DbTable]
     internal class Edition : IEdition
@@ -20,5 +22,9 @@ namespace MagicPictureSetDownloader.Db.DAO
         public int? BlockPosition { get; set; }
         [DbColumn]
         public string GathererName { get; set; }
+        [DbColumn]
+        public DateTime? ReleaseDate { get; set; }
+        [DbColumn]
+        public int? CardNumber { get; set; }
     }
 }

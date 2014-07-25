@@ -56,13 +56,7 @@
     <Compile Include="DAO\Card.cs" />
     <Compile Include="DAO\CardEdition.cs" />
     <Compile Include="DAO\Edition.cs" />
-    <Compile Include="Interface\IBlock.cs" />
-    <Compile Include="Interface\ICard.cs" />
-    <Compile Include="Interface\ICardEdition.cs" />
-    <Compile Include="Interface\IEdition.cs" />
-    <Compile Include="Interface\IPicture.cs" />
-    <Compile Include="Interface\IRarity.cs" />
-    <Compile Include="MagicDatabaseManager.cs" />
+    <Compile Include="MagicDatabase.cs" />
     <Compile Include="DAO\Picture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DAO\Rarity.cs" />
@@ -75,6 +69,10 @@
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
+      <Project>{eddebc12-cd36-49ce-a47d-ac5e903ab47b}</Project>
+      <Name>MagicPictureSetDownloader.Interface</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Common.Database
+﻿namespace Common.Database
 {
+    using System;
+
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class DbColumnAttribute : Attribute
     {

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Common.Libray
+﻿namespace Common.Libray
 {
+    using System;
+
     public class EventArgs<T> : EventArgs
     {
         public EventArgs(T data)

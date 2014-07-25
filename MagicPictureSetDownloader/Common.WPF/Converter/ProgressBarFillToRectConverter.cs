@@ -1,10 +1,11 @@
-﻿using System;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-
-namespace Common.WPF.Converter
+﻿namespace Common.WPF.Converter
 {
+    using System;
+    using System.Globalization;
+    using System.Windows;
+    using System.Windows.Data;
+
+
     public class ProgressBarFillToRectConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -12,7 +13,9 @@ namespace Common.WPF.Converter
             if (null != values && values.Length >= 4 && 
                 null != values[0] && null != values[1] && null != values[2] && null != values[3] &&
                 values[0] is double && values[1] is double && values[2] is double && values[3] is double && 
+                // ReSharper disable CompareOfFloatsByEqualityOperator
                 0 != (double)values[1])
+                // ReSharper restore CompareOfFloatsByEqualityOperator
             {
                 double fillPercentage = (double)values[0] / (double)values[1];
                 double width = (double)values[2];

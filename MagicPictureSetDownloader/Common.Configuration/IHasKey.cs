@@ -1,5 +1,4 @@
-﻿
-namespace Common.Configuration
+﻿namespace Common.Configuration
 {
     public interface IHasKey
     {

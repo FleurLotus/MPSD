@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace MagicPictureSetDownloader.Core
+﻿namespace MagicPictureSetDownloader.Core
 {
+    using System.Collections.Generic;
+
     internal interface IParser<out T>
     {
         IEnumerable<T> Parse(string text);

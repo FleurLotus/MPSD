@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace Common.Libray
+﻿namespace Common.Libray
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         internal class KeyCollection : ICollection<TKey>

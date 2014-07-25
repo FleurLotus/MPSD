@@ -36,11 +36,14 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\TwoWayBinding.cs" />
+    <Compile Include="BindableSelectedItemBehavior.cs" />
+    <Compile Include="Converter\TreeViewLineConverter.cs" />
     <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Converter\ImageSourceConverter.cs" />
     <Compile Include="Converter\ProgressBarFillToRectConverter.cs" />
@@ -48,6 +51,7 @@
     <Compile Include="Converter\AggregateConverter.cs" />
     <Compile Include="Converter\ObjectNullToBoolConverter.cs" />
     <Compile Include="Converter\ValueIsZeroToBoolConverter.cs" />
+    <Compile Include="Lib.cs" />
     <Compile Include="PasswordHelper.cs" />
     <Compile Include="DispatcherInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,6 +60,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="TreeViewStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

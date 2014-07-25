@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-
-namespace Common.ViewModel
+﻿namespace Common.ViewModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+
     public class NotifyPropertyChangedWithLinkedPropertiesBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
