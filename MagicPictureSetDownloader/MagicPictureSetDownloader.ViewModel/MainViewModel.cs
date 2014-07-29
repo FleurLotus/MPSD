@@ -1,9 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Windows.Input;
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
     public class MainViewModel : NotifyPropertyChangedBase
     {
@@ -14,7 +17,9 @@
         private bool _showPicture;
         private readonly MagicDatabaseManager _magicDatabaseManager;
 
-        //ALERT: TO BE CODED for display 
+        //TODO: TO BE CODED for display picture and text of selected node
+        //TODO: manage picture 
+        //TODO: manage treepicture
         public MainViewModel() : this(false)
         {
         }
@@ -24,17 +29,17 @@
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             Hierarchical = new HierarchicalViewModel("Magic Cards");
+            Analysers = HierarchicalInfoAnalyserFactory.Instance.Names.Select(s=> new HierarchicalInfoAnalyserViewModel(s)).ToList();
             if (!inDesign)
             {
                 _magicDatabaseManager = new MagicDatabaseManager();
-                //ALERT:load db and fill Hierarchical
-                //MagicDatabase.Instance.
-
+                Hierarchical.MakeHierarchyAsync(Analysers.Select(a => a.Analyser), _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
             }
             ShowPicture = true;
         }
 
         public HierarchicalViewModel Hierarchical { get; private set; }
+        public List<HierarchicalInfoAnalyserViewModel> Analysers { get; private set; }
         public bool ShowPicture
         {
             get { return _showPicture; }
@@ -49,9 +54,7 @@
         }
 
 /*
- * 
-
-    FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
+     FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
             DownloadReporter = new DownloadReporter();
             _downloadManager = new DownloadManager();
             _downloadManager.CredentialRequiered += OnCredentialRequiered;

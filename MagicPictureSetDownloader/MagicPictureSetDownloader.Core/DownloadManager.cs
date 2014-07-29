@@ -127,7 +127,7 @@
             }
             else // if (picture.Image == null)
             {
-               //ALERT: manage update 
+               //TODO: manage update 
                 object o = Converter.BytesToImage(picture.Image);
             }
 

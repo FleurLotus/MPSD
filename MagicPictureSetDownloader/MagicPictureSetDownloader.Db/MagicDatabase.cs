@@ -21,6 +21,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
+        private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
 
@@ -30,6 +31,7 @@ namespace MagicPictureSetDownloader.Db
             _connectionStringForPictureDb = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
         }
 
+        //Unitary Get 
         public ICard GetCard(string name)
         {
             CheckReferentialLoaded();
@@ -65,6 +67,25 @@ namespace MagicPictureSetDownloader.Db
 
             return picture;
         }
+        public ITreePicture GetTreePicture(string key)
+        {
+            ITreePicture treepicture;
+
+            if (!_treePictures.TryGetValue(key, out treepicture))
+            {
+                lock (_sync)
+                {
+                    if (!_treePictures.TryGetValue(key, out treepicture))
+                    {
+                        treepicture = LoadTreeImage(key);
+                        if (treepicture != null)
+                            _treePictures.Add(treepicture.Name, treepicture);
+                    }
+                }
+            }
+
+            return treepicture;
+        }
         public IEdition GetEdition(string sourceName)
         {
             CheckReferentialLoaded();
@@ -79,12 +100,50 @@ namespace MagicPictureSetDownloader.Db
             return edition;
         }
 
+        //Ensembly Get 
+        public ICollection<ICardAllDbInfo> GetAllInfos()
+        {
+
+            CheckReferentialLoaded();
+            List<ICardAllDbInfo> ret = _cardEditions.Values.Select(
+                    cardEdition => (ICardAllDbInfo) (new CardAllDbInfo
+                         {
+                             Card = _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard),
+                             Edition = _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition),
+                             Rarity = _rarities.Values.FirstOrDefault(r => r.Id == cardEdition.IdRarity),
+                             IdGatherer = cardEdition.IdGatherer
+                         })).ToList();
+
+            return ret.AsReadOnly();
+        }
+
+        public ICollection<IEdition> AllEditions()
+        {
+            CheckReferentialLoaded();
+            return new List<IEdition>(_editions).AsReadOnly();
+        }
+        public ICollection<IRarity> AllRarities()
+        {
+            CheckReferentialLoaded();
+            return new List<IRarity>(_rarities.Values).AsReadOnly();
+        }
+        public ICollection<IBlock> AllBlocks()
+        {
+            CheckReferentialLoaded();
+            return new List<IBlock>(_blocks.Values).AsReadOnly();
+        }
+        public ICollection<ICard> AllCards()
+        {
+            CheckReferentialLoaded();
+            return new List<ICard>(_cards.Values).AsReadOnly();
+        }
         public ICollection<ICardEdition> AllCardEditions() 
         {
             CheckReferentialLoaded();
             return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
         }
 
+        //Insert one new 
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
             if (GetPicture(idGatherer) != null)
@@ -92,6 +151,14 @@ namespace MagicPictureSetDownloader.Db
 
             Picture picture = new Picture {IdGatherer = idGatherer, Image = data};
             AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, InsertInReferential);
+        }
+        public void InsertNewTreePicture(string name, byte[] data)
+        {
+            if (GetTreePicture(name) != null)
+                return;
+
+            TreePicture treepicture = new TreePicture { Name = name, Image = data };
+            AddToDbAndUpdateReferential(_connectionStringForPictureDb, treepicture, InsertInReferential);
         }
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)
         {
@@ -149,6 +216,16 @@ namespace MagicPictureSetDownloader.Db
             lock (_sync)
                 addToReferential(value);
         }
+        private ITreePicture LoadTreeImage(string name)
+        {
+            TreePicture treePicture = new TreePicture { Name = name };
+
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
+            {
+                cnx.Open();
+                return Mapper<TreePicture>.Load(cnx, treePicture);
+            }
+        }
 
         private IPicture LoadImage(int idGatherer)
         {
@@ -196,6 +273,10 @@ namespace MagicPictureSetDownloader.Db
         private void InsertInReferential(IPicture picture)
         {
             _pictures.Add(picture.IdGatherer, picture);
+        }
+        private void InsertInReferential(ITreePicture treepicture)
+        {
+            _treePictures.Add(treepicture.Name, treepicture);
         }
         private void InsertInReferential(IRarity rarity)
         {

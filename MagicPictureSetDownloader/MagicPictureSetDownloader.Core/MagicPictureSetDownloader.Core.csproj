@@ -46,11 +46,13 @@
     <Compile Include="CardInfo\RowWorker.cs" />
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
-    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
+    <Compile Include="HierarchicalAnalysing\MethodHierarchicalInfoAnalyser.cs" />
+    <Compile Include="HierarchicalAnalysing\PropertyHierarchicalInfoAnalyser.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
     <Compile Include="MagicDatabaseManager.cs" />
+    <Compile Include="HierarchicalAnalysing\MagicRules.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />

@@ -27,7 +27,7 @@
 
         public IEnumerable<CardWithExtraInfo> Parse(string text)
         {
-            //ALERT: Manage double face card???
+            //TODO: Manage double face card???
             text = Parser.ExtractContent(text, Start, End, false);
 
             IDictionary<string, string> infos = new Dictionary<string, string>();

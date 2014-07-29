@@ -35,8 +35,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITreePicture.cs" />
     <Compile Include="IBlock.cs" />
     <Compile Include="ICard.cs" />
+    <Compile Include="ICardAllDbInfo.cs" />
     <Compile Include="ICardEdition.cs" />
     <Compile Include="IEdition.cs" />
     <Compile Include="IPicture.cs" />

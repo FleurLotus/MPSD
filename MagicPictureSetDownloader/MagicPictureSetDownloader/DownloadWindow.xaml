@@ -11,7 +11,7 @@
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         d:DataContext="{d:DesignInstance Type=vm:DownloadViewModel}"
         mc:Ignorable="d"
-        Width="500" SizeToContent="Height" Title="MagicPictureSetDownloader">
+        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader">
     <Window.Resources>
         <Style TargetType="wpfui:ProgressBar">
             <Setter Property="Foreground" Value="#FF011ED3"/>

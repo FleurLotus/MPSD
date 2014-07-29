@@ -2,11 +2,11 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
 {
     using System.Reflection;
 
-    public class HierarchicalInfoAnalyser: IHierarchicalInfoAnalyser
+    public class PropertyHierarchicalInfoAnalyser: IHierarchicalInfoAnalyser
     {
         private readonly PropertyInfo _propertyInfo;
 
-        internal HierarchicalInfoAnalyser(PropertyInfo propertyInfo)
+        internal PropertyHierarchicalInfoAnalyser(PropertyInfo propertyInfo)
         {
             _propertyInfo = propertyInfo;
         }
