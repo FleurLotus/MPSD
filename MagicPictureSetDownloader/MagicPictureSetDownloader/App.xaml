@@ -7,7 +7,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Resources.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/TreeViewStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             
             <Style TargetType="GridSplitter">
@@ -16,11 +15,6 @@
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Stretch" />
             </Style>
-            <Style TargetType="Border">
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="BorderThickness" Value="1"/>
-            </Style>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

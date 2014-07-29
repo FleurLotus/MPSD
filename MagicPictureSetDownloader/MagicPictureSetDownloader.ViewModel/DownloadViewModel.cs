@@ -10,7 +10,7 @@
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core;
 
-    public class DownloadViewModel: NotifyPropertyChangedBase
+    public class DownloadViewModel : NotifyPropertyChangedBase
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
 
@@ -21,12 +21,12 @@
         private int _countDown;
         private readonly DownloadManager _downloadManager;
         private readonly IDispatcherInvoker _dispatcherInvoker;
-        
+
         public DownloadViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             _dispatcherInvoker = dispatcherInvoker;
             BaseSetUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
-            
+
             Sets = new AsyncObservableCollection<SetInfoViewModel>();
             GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
             FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
@@ -41,10 +41,7 @@
         public DownloadReporterViewModel DownloadReporter { get; private set; }
         public bool IsBusy
         {
-            get
-            {
-                return _isBusy;
-            }
+            get { return _isBusy; }
             set
             {
                 if (value != _isBusy)
@@ -56,10 +53,7 @@
         }
         public bool HasJob
         {
-            get
-            {
-                return _hasJob;
-            }
+            get { return _hasJob; }
             set
             {
                 if (value != _hasJob)
@@ -71,10 +65,7 @@
         }
         public string BaseSetUrl
         {
-            get
-            {
-                return _baseSetUrl;
-            }
+            get { return _baseSetUrl; }
             set
             {
                 if (value != _baseSetUrl)
@@ -86,10 +77,7 @@
         }
         public string Message
         {
-            get
-            {
-                return _message;
-            }
+            get { return _message; }
             set
             {
                 if (value != _message)
@@ -99,8 +87,9 @@
                 }
             }
         }
-        
+
         #region Command
+
         private bool GetSetListCommandCanExecute(object o)
         {
             return !IsBusy && !string.IsNullOrWhiteSpace(BaseSetUrl);
@@ -120,8 +109,9 @@
             JobStarting();
             ThreadPool.QueueUserWorkItem(FeedSetsCallBack);
         }
-        
+
         #endregion
+
         private void GetSetListCallBack(object state)
         {
             try
@@ -131,7 +121,7 @@
                 foreach (SetInfoViewModel setInfoViewModel in Sets)
                     setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
                 Sets.Clear();
-                
+
                 foreach (SetInfoWithBlock setInfoWithBlock in _downloadManager.GetSetList(baseUrl))
                 {
                     SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
@@ -158,24 +148,24 @@
                 DownloadReporter.Total += cardInfos.Length;
 
                 SetInfoViewModel model = setInfoViewModel;
-                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] {model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s))});
+                ThreadPool.QueueUserWorkItem(
+                    RetrieveSetDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
             }
         }
-        
         private void RetrieveSetDataCallBack(object state)
         {
             object[] args = (object[])state;
             DownloadReporterViewModel setDownloadReporter = (DownloadReporterViewModel)args[0];
             int editionId = (int)args[1];
             IEnumerable<string> urls = (IEnumerable<string>)args[2];
-            
+
             foreach (string cardUrl in urls)
             {
                 _downloadManager.GetCardInfo(cardUrl, editionId);
                 setDownloadReporter.Progress();
                 DownloadReporter.Progress();
             }
-            
+
             setDownloadReporter.Finish();
             Interlocked.Decrement(ref _countDown);
             if (_countDown == 0)
@@ -184,13 +174,11 @@
                 IsBusy = false;
             }
         }
-        
         private void SetInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Active")
                 HasJob = Sets.Any(sivm => sivm.Active);
         }
-
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             var e = CredentialRequiered;
@@ -206,6 +194,5 @@
         {
             IsBusy = false;
         }
-
     }
 }

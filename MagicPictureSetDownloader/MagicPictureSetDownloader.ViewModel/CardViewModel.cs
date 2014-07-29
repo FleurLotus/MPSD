@@ -2,33 +2,25 @@
 {
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
+    using MagicPictureSetDownloader.Interface;
 
     class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
-        //ALERT: To be coded
-        public string Name
+        public CardViewModel(ICardAllDbInfo cardAllDbInfo)
         {
-            get { throw new System.NotImplementedException(); }
+            Name = cardAllDbInfo.Card.Name;
+            Edition = cardAllDbInfo.Edition.Name;
+            BlockName = cardAllDbInfo.Edition.BlockName;
+            Rarity = cardAllDbInfo.Rarity.Name;
+            Type = cardAllDbInfo.Card.Type;
+            CastingCost = cardAllDbInfo.Card.CastingCost;
         }
 
-        public string Edition
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public string BlockName
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-        
-        public string Color
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public string Type
-        {
-            get { throw new System.NotImplementedException(); }
-        }
+        public string Name { get; private set; }
+        public string BlockName { get; private set; }
+        public string Edition { get; private set; }
+        public string Rarity { get; private set; }
+        public string Type { get; private set; }
+        public string CastingCost { get; private set; }
     }
 }

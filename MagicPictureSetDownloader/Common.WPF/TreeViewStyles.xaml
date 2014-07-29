@@ -3,6 +3,7 @@
                     xmlns:converter="clr-namespace:Common.WPF.Converter">
 
     <!-- From  http://social.msdn.microsoft.com/Forums/vstudio/en-US/30cb182c-9419-40bd-946e-87971515fb95/show-treeview-nodes-connected-with-dotted-lines?forum=wpf -->
+    <!-- Give line to treeview -->
     <converter:TreeViewLineConverter x:Key="LineConverter"/>
 
     <SolidColorBrush x:Key="GlyphBrush" Color="#444" />

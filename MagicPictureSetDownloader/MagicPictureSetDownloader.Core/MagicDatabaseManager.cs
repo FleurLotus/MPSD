@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
     using System;
+    using System.Collections.Generic;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Db;
 
@@ -15,7 +16,10 @@
                 return _lazyIntance.Value;
             }
         }
-
+        public ICollection<ICardAllDbInfo> GetAllInfos()
+        {
+            return DbInstance.GetAllInfos();
+        }
         public ICard GetCard(string name)
         {
             return DbInstance.GetCard(name);

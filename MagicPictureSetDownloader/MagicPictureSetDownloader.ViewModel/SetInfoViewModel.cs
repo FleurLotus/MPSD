@@ -15,7 +15,7 @@
             _edition = setInfoWithBlock.Edition;
 
             string seachUrl = DownloadManager.ToAbsoluteUrl(baseSetUrl, setInfoWithBlock.BaseSearchUrl, true);
-            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Edition.Name);
+            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Edition.GathererName);
             DownloadReporter = new DownloadReporterViewModel();
         }
 

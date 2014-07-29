@@ -12,6 +12,12 @@
         d:DataContext="{d:DesignInstance Type=vm:DesignMainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="795.65" Width="869">
+    <Window.Resources>
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Window.Resources>
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="VersionRequested" SourceObject="{Binding}">
@@ -60,7 +66,15 @@
                     </i:Interaction.Behaviors>
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <TextBlock Text="{Binding Name}" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" Height="20" Width="20" />
+                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                            </Grid>
+                            
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>

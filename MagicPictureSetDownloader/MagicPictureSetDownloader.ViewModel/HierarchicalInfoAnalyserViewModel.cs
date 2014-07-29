@@ -3,7 +3,7 @@
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
-    class HierarchicalInfoAnalyserViewModel: NotifyPropertyChangedBase
+    public class HierarchicalInfoAnalyserViewModel: NotifyPropertyChangedBase
     {
         private bool _isActive;
 

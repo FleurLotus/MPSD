@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
+
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
@@ -27,7 +29,11 @@
                 }
             }
         }
-        public void MakeHierarchy(IEnumerable<IHierarchicalInfoAnalyser> analysers, IEnumerable<ICardInfo> cards)
+        public void MakeHierarchyAsync(IEnumerable<IHierarchicalInfoAnalyser> analysers, IEnumerable<ICardInfo> cards)
+        {
+            ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, cards));
+        }
+        private void MakeHierarchy(IEnumerable<IHierarchicalInfoAnalyser> analysers, IEnumerable<ICardInfo> cards)
         {
             IHierarchicalInfoAnalyser[] hierarchicalInfoAnalysers = analysers.ToArray();
             foreach (ICardInfo card in cards)
