@@ -1,7 +1,8 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
     using System.Threading;
+
     using Common.ViewModel;
 
     public class DownloadReporterViewModel : NotifyPropertyChangedBase, IDisposable

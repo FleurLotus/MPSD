@@ -3,7 +3,7 @@
     using Common.WPF;
     using Common.Libray;
     using MagicPictureSetDownloader.Core;
-    using MagicPictureSetDownloader.ViewModel;
+    using MagicPictureSetDownloader.ViewModel.Download;
 
     /// <summary>
     /// Interaction logic for DownloadWindow.xaml

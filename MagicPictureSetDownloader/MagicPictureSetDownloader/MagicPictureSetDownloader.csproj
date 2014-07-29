@@ -60,6 +60,7 @@
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Libraries\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Libraries\System.Windows.Interactivity.dll</HintPath>
@@ -94,6 +95,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\CardToImageConverter.cs" />
+    <Compile Include="Converter\ImageConverterBase.cs" />
+    <Compile Include="Converter\TreeToImageConverter.cs" />
     <Compile Include="VersionWindow.xaml.cs">
       <DependentUpon>VersionWindow.xaml</DependentUpon>
     </Compile>
@@ -159,6 +163,10 @@
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj">
       <Project>{1f2678d5-43d0-402e-aa40-2b0aa06c9292}</Project>
       <Name>MagicPictureSetDownloader.Db</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
+      <Project>{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}</Project>
+      <Name>MagicPictureSetDownloader.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj">
       <Project>{473562B3-1A2B-4F43-BA88-613C35D15AAC}</Project>

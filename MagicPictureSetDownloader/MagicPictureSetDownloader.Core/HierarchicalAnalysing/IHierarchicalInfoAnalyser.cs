@@ -1,7 +1,9 @@
 namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
 {
+    using System;
+
     public interface IHierarchicalInfoAnalyser
     {
-        string Analyse(ICardInfo cardVieModel);
+        IComparable Analyse(ICardInfo cardVieModel);
     }
 }

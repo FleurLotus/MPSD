@@ -1,7 +1,9 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
+
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
 

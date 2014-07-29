@@ -28,6 +28,14 @@
         {
             return DbInstance.GetPicture(idGatherer);
         }
+        public ITreePicture GetTreePicture(string key)
+        {
+            return DbInstance.GetTreePicture(key);
+        }
+        public IPicture GetDefaultPicture()
+        {
+            return DbInstance.GetDefaultPicture();
+        }
         public IEdition GetEdition(string sourceName)
         {
             return DbInstance.GetEdition(sourceName);
@@ -35,6 +43,10 @@
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
             DbInstance.InsertNewPicture(idGatherer, data);
+        }
+        public void InsertNewTreePicture(string key, byte[] data)
+        {
+            DbInstance.InsertNewTreePicture(key, data);
         }
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)
         {

@@ -2,41 +2,66 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
 
     internal static class MagicRules
     {
+        private enum Color
+        {
+            Colorless,
+            White,
+            Blue,
+            Black,
+            Red,
+            Green,
+            Multicolor
+        }
+        
         private const string White = "W";
         private const string Blue = "U";
         private const string Black = "B";
         private const string Red = "R";
         private const string Green = "G";
 
-        public static string GetColor(ICardInfo card)
+        public static IComparable GetName(ICardInfo card)
         {
-            string color = null;
+            return card.Name;
+        }
+        public static IComparable GetBlockName(ICardInfo card)
+        {
+            return card.BlockName;
+        }
+        public static IComparable GetEdition(ICardInfo card)
+        {
+            return card.Edition;
+        }
+        public static IComparable GetRarity(ICardInfo card)
+        {
+            return card.Rarity;
+        }
+
+        public static IComparable GetColor(ICardInfo card)
+        {
+            Color color = Color.Colorless;
             foreach (string shard in GetShards(card.CastingCost))
             {
-                string newColor = GetColor(shard);
-                if (!string.IsNullOrWhiteSpace(newColor))
+                Color newColor = GetColor(shard);
+                if (newColor != Color.Colorless)
                 {
-                    if (color != null && color != newColor) 
-                        return "Multicolor";
+                    if (color != Color.Colorless && color != newColor)
+                        return Color.Multicolor;
 
                     color = newColor;
                 }
             }
-            return color ?? "Incolor";
+            return color;
         }
-        public static string GetConvertedCastCost(ICardInfo card)
+        public static IComparable GetConvertedCastCost(ICardInfo card)
         {
             int ccm = 0;
-            bool hasvalue = false;
             foreach (string shard in GetShards(card.CastingCost))
             {
                 if (shard == White || shard == Blue || shard == Black || shard == Red || shard == Green)
                 {
-                    hasvalue = true;
                     ccm += 1;
                 }
                 else
@@ -45,25 +70,34 @@
                     if (int.TryParse(shard, out newccm))
                     {
                         ccm += newccm;
-                        hasvalue = true;
                     }
                     else if (shard.StartsWith("2"))
                     {
                         ccm += 2;
-                        hasvalue = true;
                     }
                     else
                     {
                         ccm ++;
-                        hasvalue = true;
                     }
                 }
             }
 
-            return hasvalue ? ccm.ToString(CultureInfo.InvariantCulture) : string.Empty;
+            return ccm;
         }
-        public static string GetCardType(ICardInfo card)
+        public static IComparable GetCardType(ICardInfo card)
         {
+            if (card.Type.Contains("Land"))
+                return "Land";
+
+            if (card.Type.Contains("Artifact"))
+                return "Artifact";
+
+            if (card.Type.Contains("Planeswalker"))
+                return "Planeswalker";
+            
+            if (card.Type.Contains("Enchantment"))
+                return "Enchantment";
+
             if (card.Type.Contains("Creature"))
                 return "Creature";
 
@@ -75,18 +109,18 @@
 
             return castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
-        private static string GetColor(string shard)
+        private static Color GetColor(string shard)
         {
-            if (string.IsNullOrWhiteSpace(shard)) return null;
+            if (string.IsNullOrWhiteSpace(shard)) return Color.Colorless;
 
             string shardup = shard.ToUpperInvariant();
-            if (shardup.Contains(White)) return "White";
-            if (shardup.Contains(Blue)) return "Blue";
-            if (shardup.Contains(Black)) return "Black";
-            if (shardup.Contains(Red)) return "Red";
-            if (shardup.Contains(Green)) return "Green";
+            if (shardup.Contains(White)) return Color.White;
+            if (shardup.Contains(Blue)) return Color.Blue;
+            if (shardup.Contains(Black)) return Color.Black;
+            if (shardup.Contains(Red)) return Color.Red;
+            if (shardup.Contains(Green)) return Color.Green;
             
-            return null;
+            return Color.Colorless;
         }
     }
 }

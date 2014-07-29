@@ -46,8 +46,7 @@
     <Compile Include="CardInfo\RowWorker.cs" />
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
-    <Compile Include="HierarchicalAnalysing\MethodHierarchicalInfoAnalyser.cs" />
-    <Compile Include="HierarchicalAnalysing\PropertyHierarchicalInfoAnalyser.cs" />
+    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
@@ -69,10 +68,6 @@
     <Compile Include="SetInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Drawing\Common.Drawing.csproj">
-      <Project>{4D3E434A-9B4E-441E-BA28-07E0385D801E}</Project>
-      <Name>Common.Drawing</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>

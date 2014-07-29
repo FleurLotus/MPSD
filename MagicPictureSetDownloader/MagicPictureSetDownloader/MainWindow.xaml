@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
 
-        d:DataContext="{d:DesignInstance Type=vm:DesignMainViewModel}"
+        d:DataContext="{d:DesignInstance Type=main:DesignMainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="795.65" Width="869">
     <Window.Resources>
@@ -71,8 +71,8 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" Height="20" Width="20" />
-                                <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                                <Image Grid.Column="0" Height="20" MaxWidth="20" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" />
                             </Grid>
                             
                         </HierarchicalDataTemplate>
@@ -87,8 +87,7 @@
             <GridSplitter Grid.Column="3" Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}"/>
             <Border Grid.Column="4" BorderBrush="Black" BorderThickness="1" 
                     Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" >
-                <Image >
-                </Image>
+                <Image Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="300"/>
             </Border>
         </Grid>
     </Grid>
