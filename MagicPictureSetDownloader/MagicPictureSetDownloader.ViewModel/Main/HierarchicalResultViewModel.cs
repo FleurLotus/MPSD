@@ -1,17 +1,20 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
+    using System;
     using System.Collections.ObjectModel;
+
     using Common.ViewModel;
 
     public class HierarchicalResultViewModel : NotifyPropertyChangedBase
     {
-        public HierarchicalResultViewModel(string name)
+        public HierarchicalResultViewModel(IComparable value)
         {
-            Name = name;
+            Value = value;
             Children = new ObservableCollection<HierarchicalResultViewModel>();
         }
 
-        public string Name { get; private set; }
+        public IComparable Value { get; private set; }
+        public string DisplayValue { get { return Value.ToString(); } }
         public ObservableCollection<HierarchicalResultViewModel> Children { get; private set; }
     }
 }

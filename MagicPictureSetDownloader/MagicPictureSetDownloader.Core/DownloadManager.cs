@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Net;
     using System.Text;
-    using Common.Drawing;
     using Common.Libray;
     using MagicPictureSetDownloader.Interface;
 
@@ -125,10 +124,9 @@
 
                 _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
             }
-            else // if (picture.Image == null)
+            else 
             {
                //TODO: manage update 
-                object o = Converter.BytesToImage(picture.Image);
             }
 
         }

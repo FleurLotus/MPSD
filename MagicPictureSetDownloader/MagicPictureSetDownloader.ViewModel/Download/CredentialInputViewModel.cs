@@ -1,7 +1,8 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
     using System.Windows.Input;
+
     using Common.ViewModel;
 
     public class CredentialInputViewModel : NotifyPropertyChangedBase

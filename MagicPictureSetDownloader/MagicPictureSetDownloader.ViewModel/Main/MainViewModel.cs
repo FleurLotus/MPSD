@@ -1,10 +1,12 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Input;
+
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
@@ -17,9 +19,10 @@
         private bool _showPicture;
         private readonly MagicDatabaseManager _magicDatabaseManager;
 
-        //TODO: TO BE CODED for display picture and text of selected node
-        //TODO: manage picture 
-        //TODO: manage treepicture
+        //TODO: display text of selected node
+        //TODO: manage filter
+        //TODO: manage picture size display
+        //TODO: manage treepicture + feed
         public MainViewModel() : this(false)
         {
         }
@@ -29,17 +32,26 @@
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             Hierarchical = new HierarchicalViewModel("Magic Cards");
-            Analysers = HierarchicalInfoAnalyserFactory.Instance.Names.Select(s=> new HierarchicalInfoAnalyserViewModel(s)).ToList();
+            Analysers = new ObservableCollection<HierarchicalInfoAnalyserViewModel>(HierarchicalInfoAnalyserFactory.Instance.Names.Select(s => new HierarchicalInfoAnalyserViewModel(s)));
+            
             if (!inDesign)
             {
                 _magicDatabaseManager = new MagicDatabaseManager();
-                Hierarchical.MakeHierarchyAsync(Analysers.Select(a => a.Analyser), _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
+                LoadCardsHierarchy();
             }
             ShowPicture = true;
         }
+        private void LoadCardsHierarchy()
+        {
+            HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.Where(a => a.IsActive).ToArray();
+
+            Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(), 
+                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray(),
+                                            _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
+        }
 
         public HierarchicalViewModel Hierarchical { get; private set; }
-        public List<HierarchicalInfoAnalyserViewModel> Analysers { get; private set; }
+        public ObservableCollection<HierarchicalInfoAnalyserViewModel> Analysers { get; private set; }
         public bool ShowPicture
         {
             get { return _showPicture; }
@@ -63,8 +75,6 @@
         public ICommand UpdateDatabaseCommand { get; private set; }
         public ICommand VersionCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
-        
-
 
         private void OnUpdateDatabaseRequested()
         {

@@ -8,5 +8,6 @@
         string Name { get; }
         string Type { get; }
         string CastingCost { get; }
+        int IdGatherer { get; }
     }
 }

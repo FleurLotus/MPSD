@@ -1,4 +1,4 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,10 @@
     using System.Linq;
     using System.Threading;
     using System.Windows.Input;
+
     using Common.Libray;
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Core;
 
     public class DownloadViewModel : NotifyPropertyChangedBase

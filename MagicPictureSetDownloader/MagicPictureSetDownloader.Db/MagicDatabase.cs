@@ -48,6 +48,10 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
             return _rarities[rarity].Id;
         }
+        public IPicture GetDefaultPicture()
+        {
+            return GetPicture(0);
+        }
         public IPicture GetPicture(int idGatherer)
         {
             IPicture picture;

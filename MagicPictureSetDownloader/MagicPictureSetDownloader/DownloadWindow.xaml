@@ -5,11 +5,11 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:wpfui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        d:DataContext="{d:DesignInstance Type=vm:DownloadViewModel}"
+        xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
+        d:DataContext="{d:DesignInstance Type=download:DownloadViewModel}"
         mc:Ignorable="d"
         Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader">
     <Window.Resources>
@@ -73,7 +73,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=vm:SetInfoViewModel}">
+                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=download:SetInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="170" />

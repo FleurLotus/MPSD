@@ -1,7 +1,7 @@
 ﻿namespace MagicPictureSetDownloader
 {
     using System;
-    using MagicPictureSetDownloader.ViewModel;
+    using MagicPictureSetDownloader.ViewModel.Main;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml

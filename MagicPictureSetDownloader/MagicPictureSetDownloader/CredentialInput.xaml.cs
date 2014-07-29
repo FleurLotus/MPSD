@@ -1,6 +1,6 @@
 ﻿namespace MagicPictureSetDownloader
 {
-    using MagicPictureSetDownloader.ViewModel;
+    using MagicPictureSetDownloader.ViewModel.Download;
 
     /// <summary>
     /// Interaction logic for CredentialInput.xaml

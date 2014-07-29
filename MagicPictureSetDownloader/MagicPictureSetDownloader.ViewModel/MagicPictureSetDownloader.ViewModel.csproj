@@ -36,17 +36,18 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardViewModel.cs" />
-    <Compile Include="DesignMainViewModel.cs" />
-    <Compile Include="HierarchicalInfoAnalyserViewModel.cs" />
-    <Compile Include="HierarchicalResultViewModel.cs" />
-    <Compile Include="HierarchicalViewModel.cs" />
-    <Compile Include="MainViewModel.cs" />
-    <Compile Include="CredentialInputViewModel.cs" />
-    <Compile Include="DownloadReporterViewModel.cs" />
-    <Compile Include="DownloadViewModel.cs" />
+    <Compile Include="Main\CardViewModel.cs" />
+    <Compile Include="Main\HierarchicalResultNodeViewModel.cs" />
+    <Compile Include="Main\DesignMainViewModel.cs" />
+    <Compile Include="Main\HierarchicalInfoAnalyserViewModel.cs" />
+    <Compile Include="Main\HierarchicalResultViewModel.cs" />
+    <Compile Include="Main\HierarchicalViewModel.cs" />
+    <Compile Include="Main\MainViewModel.cs" />
+    <Compile Include="Download\CredentialInputViewModel.cs" />
+    <Compile Include="Download\DownloadReporterViewModel.cs" />
+    <Compile Include="Download\DownloadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SetInfoViewModel.cs" />
+    <Compile Include="Download\SetInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">

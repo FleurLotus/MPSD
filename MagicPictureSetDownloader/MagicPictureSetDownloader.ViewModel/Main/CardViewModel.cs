@@ -1,10 +1,11 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
     using MagicPictureSetDownloader.Interface;
 
-    class CardViewModel: NotifyPropertyChangedBase, ICardInfo
+    public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
         public CardViewModel(ICardAllDbInfo cardAllDbInfo)
         {
@@ -14,6 +15,7 @@
             Rarity = cardAllDbInfo.Rarity.Name;
             Type = cardAllDbInfo.Card.Type;
             CastingCost = cardAllDbInfo.Card.CastingCost;
+            IdGatherer = cardAllDbInfo.IdGatherer;
         }
 
         public string Name { get; private set; }
@@ -22,5 +24,6 @@
         public string Rarity { get; private set; }
         public string Type { get; private set; }
         public string CastingCost { get; private set; }
+        public int IdGatherer { get; private set; }
     }
 }

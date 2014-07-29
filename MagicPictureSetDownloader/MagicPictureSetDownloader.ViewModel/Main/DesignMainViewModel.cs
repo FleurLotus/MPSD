@@ -1,4 +1,4 @@
-﻿namespace MagicPictureSetDownloader.ViewModel
+﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     public class DesignMainViewModel : MainViewModel
     {
