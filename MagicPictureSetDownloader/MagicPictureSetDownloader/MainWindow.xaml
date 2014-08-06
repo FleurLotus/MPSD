@@ -71,8 +71,8 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" Height="20" MaxWidth="20" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" />
+                                <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" />
+                                <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
                             </Grid>
                             
                         </HierarchicalDataTemplate>

@@ -73,22 +73,9 @@ namespace MagicPictureSetDownloader.Db
         }
         public ITreePicture GetTreePicture(string key)
         {
-            ITreePicture treepicture;
+            CheckReferentialLoaded();
 
-            if (!_treePictures.TryGetValue(key, out treepicture))
-            {
-                lock (_sync)
-                {
-                    if (!_treePictures.TryGetValue(key, out treepicture))
-                    {
-                        treepicture = LoadTreeImage(key);
-                        if (treepicture != null)
-                            _treePictures.Add(treepicture.Name, treepicture);
-                    }
-                }
-            }
-
-            return treepicture;
+            return _treePictures.GetOrDefault(key);
         }
         public IEdition GetEdition(string sourceName)
         {
@@ -220,16 +207,6 @@ namespace MagicPictureSetDownloader.Db
             lock (_sync)
                 addToReferential(value);
         }
-        private ITreePicture LoadTreeImage(string name)
-        {
-            TreePicture treePicture = new TreePicture { Name = name };
-
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
-            {
-                cnx.Open();
-                return Mapper<TreePicture>.Load(cnx, treePicture);
-            }
-        }
 
         private IPicture LoadImage(int idGatherer)
         {
@@ -272,6 +249,15 @@ namespace MagicPictureSetDownloader.Db
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                     InsertInReferential(cardEdition);
             }
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
+            {
+                cnx.Open();
+                _treePictures.Clear();
+
+                foreach (TreePicture treePicture in Mapper<TreePicture>.LoadAll(cnx))
+                    InsertInReferential(treePicture);
+            }
+
             _referentialLoaded = true;
         }
         private void InsertInReferential(IPicture picture)
