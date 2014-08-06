@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Windows.Input;
 
@@ -19,10 +20,14 @@
         private bool _showPicture;
         private readonly MagicDatabaseManager _magicDatabaseManager;
 
-        //TODO: display text of selected node
-        //TODO: manage filter
+        //TODO: display Card info of selected node
+        //TODO: manage filter display, order and activation
         //TODO: manage picture size display
         //TODO: manage treepicture + feed
+        //TODO: manage collection
+        //TODO: Import/export of collection
+        //TODO: manage Options with persistance 
+        //
         public MainViewModel() : this(false)
         {
         }
@@ -65,16 +70,11 @@
             }
         }
 
-/*
-     FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
-            DownloadReporter = new DownloadReporter();
-            _downloadManager = new DownloadManager();
-            _downloadManager.CredentialRequiered += OnCredentialRequiered;
-        }
-        */
         public ICommand UpdateDatabaseCommand { get; private set; }
         public ICommand VersionCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
+
+        #region Events
 
         private void OnUpdateDatabaseRequested()
         {
@@ -94,6 +94,8 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
+        
+        #endregion
 
         #region Command
         private void UpdateDatabaseCommandExecute(object o)
@@ -109,5 +111,6 @@
             OnCloseRequested();
         }
         #endregion
+
     }
 }
