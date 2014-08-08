@@ -173,7 +173,7 @@ namespace MagicPictureSetDownloader.Db
 
             AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
         }
-        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity)
+        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity, string url)
         {
             int idRarity = GetRarityId(rarity);
             int idCard = GetCard(name).Id;
@@ -189,7 +189,8 @@ namespace MagicPictureSetDownloader.Db
                 IdCard = idCard,
                 IdGatherer = idGatherer,
                 IdEdition = idEdition,
-                IdRarity = idRarity
+                IdRarity = idRarity,
+                Url = url
             };
 
             AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);

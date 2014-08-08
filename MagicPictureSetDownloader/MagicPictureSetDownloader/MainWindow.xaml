@@ -9,9 +9,9 @@
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
 
-        d:DataContext="{d:DesignInstance Type=main:DesignMainViewModel}"
+        d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="795.65" Width="869">
+        Title="MagicPictureSetDownloader" Height="795.65" Width="869">
     <Window.Resources>
         <Style TargetType="Border">
             <Setter Property="BorderBrush" Value="Black"/>
@@ -22,6 +22,9 @@
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="VersionRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="VersionRequested" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="UpdateImageDatabaseRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="UpdateImageDatabaseRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="UpdateDatabaseRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="UpdateDatabaseRequested" />
@@ -38,7 +41,10 @@
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Grid.Row="0">
             <MenuItem Header="_File" >
-                <MenuItem Header="_Update Database" Command="{Binding UpdateDatabaseCommand}"/>
+                <MenuItem Header="Update _Set Database" Command="{Binding UpdateDatabaseCommand}"/>
+                <MenuItem Header="Update _Image Database" Command="{Binding UpdateImageDatabaseCommand}"/>
+                <Separator/>
+
                 <Separator/>
                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
             </MenuItem>

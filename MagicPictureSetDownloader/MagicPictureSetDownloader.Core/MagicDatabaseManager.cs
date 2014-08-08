@@ -52,9 +52,9 @@
         {
             DbInstance.InsertNewCard(name, text, power, toughness, castingcost, loyalty, type);
         }
-        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity)
+        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity, string url)
         {
-            DbInstance.InsertNewCardEdition(idGatherer, idEdition, name, rarity);
+            DbInstance.InsertNewCardEdition(idGatherer, idEdition, name, rarity, url);
         }
     }
 }

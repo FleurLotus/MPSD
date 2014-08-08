@@ -6,13 +6,13 @@
     using MagicPictureSetDownloader.ViewModel.Download;
 
     /// <summary>
-    /// Interaction logic for DownloadWindow.xaml
+    /// Interaction logic for DownloadImageWindow.xaml
     /// </summary>
-    public partial class DownloadWindow
+    public partial class DownloadImageWindow
     {
-        public DownloadWindow()
+        public DownloadImageWindow()
         {
-            DataContext = new DownloadViewModel(new DispatcherInvoker(), false);
+            DataContext = new DownloadImageViewModel(new DispatcherInvoker());
             InitializeComponent();
         }
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
@@ -26,5 +26,7 @@
                 args.Data.Password = vm.Password;
             }
         }
+
+        //TODO: to be designed 
     }
 }

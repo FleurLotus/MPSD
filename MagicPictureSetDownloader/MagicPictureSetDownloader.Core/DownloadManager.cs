@@ -41,7 +41,26 @@
             if (relativeurl.StartsWith("/"))
                 relativeurl = relativeurl.Substring(1);
 
-            return baseurl + relativeurl;
+            return RemovePathBack(baseurl + relativeurl);
+        }
+
+        private static string RemovePathBack(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+                return url;
+
+            const string pathBack = "/../";
+            int index;
+            while ((index = url.IndexOf(pathBack, StringComparison.InvariantCultureIgnoreCase)) >= 0)
+            {
+                int start = url.LastIndexOf('/', index - 1);
+                if (start < 0)
+                    continue;
+
+                url = url.Substring(0, start + 1) + url.Substring(index + pathBack.Length);
+            }
+            return url;
+
         }
         private static string ExtractBaseUrl(string url)
         {
@@ -83,16 +102,35 @@
             CardWithExtraInfo cardWithExtraInfo = Parser.ParseCardInfo(htmltext);
 
             string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
-            InsertPictureInDb(pictureUrl);
+
+            //InsertPictureInDb(pictureUrl);
             InsertCardInDb(cardWithExtraInfo);
-            InsertCardSetInDb(editionId, cardWithExtraInfo);
+            InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
+        }
+        public void InsertPictureInDb(string pictureUrl)
+        {
+            int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
+
+            IPicture picture = _magicDatabaseManager.GetPicture(idGatherer);
+            if (picture == null)
+            {
+                //No id found try insert
+                byte[] pictureData = GetFile(pictureUrl);
+
+                _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
+            }
+            else
+            {
+                //TODO: manage update 
+            }
+
         }
 
-        private void InsertCardSetInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo)
+        private void InsertCardSetInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
-            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
+            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, pictureUrl);
         }
         private bool OnCredentialRequiered()
         {
@@ -112,24 +150,7 @@
 
             return false;
         }
-        private void InsertPictureInDb(string pictureUrl)
-        {
-            int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
 
-            IPicture picture = _magicDatabaseManager.GetPicture(idGatherer);
-            if (picture == null)
-            {
-                //No id found try insert
-                byte[] pictureData = GetFile(pictureUrl);
-
-                _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
-            }
-            else 
-            {
-               //TODO: manage update 
-            }
-
-        }
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
             _magicDatabaseManager.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
