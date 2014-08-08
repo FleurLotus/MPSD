@@ -79,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="DownloadImageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="VersionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -98,6 +102,9 @@
     <Compile Include="Converter\CardToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToImageConverter.cs" />
+    <Compile Include="DownloadImageWindow.xaml.cs">
+      <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VersionWindow.xaml.cs">
       <DependentUpon>VersionWindow.xaml</DependentUpon>
     </Compile>

@@ -14,6 +14,7 @@
     public class MainViewModel : NotifyPropertyChangedBase
     {
         public event EventHandler UpdateDatabaseRequested;
+        public event EventHandler UpdateImageDatabaseRequested;
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
 
@@ -23,27 +24,30 @@
         //TODO: display Card info of selected node
         //TODO: manage filter display, order and activation
         //TODO: manage picture size display
-        //TODO: manage treepicture + feed
+        //TODO: manage treepicture + feed (still some picture to find)
         //TODO: manage collection
         //TODO: Import/export of collection
         //TODO: manage Options with persistance 
-        //
-        public MainViewModel() : this(false)
-        {
-        }
-        protected MainViewModel(bool inDesign)
+        //TODO: Manage Download image in a other pool
+        public MainViewModel()
         {
             UpdateDatabaseCommand = new RelayCommand(UpdateDatabaseCommandExecute);
+            UpdateImageDatabaseCommand = new RelayCommand(UpdateImageDatabaseCommandExecute);
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             Hierarchical = new HierarchicalViewModel("Magic Cards");
             Analysers = new ObservableCollection<HierarchicalInfoAnalyserViewModel>(HierarchicalInfoAnalyserFactory.Instance.Names.Select(s => new HierarchicalInfoAnalyserViewModel(s)));
-            
-            if (!inDesign)
-            {
-                _magicDatabaseManager = new MagicDatabaseManager();
-                LoadCardsHierarchy();
-            }
+
+            _magicDatabaseManager = new MagicDatabaseManager();
+            //ALERT: Load file to tree picture 
+            /*
+                foreach (string file in Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Rarity"))
+                {
+                    _magicDatabaseManager.InsertNewTreePicture(Path.GetFileNameWithoutExtension(file), File.ReadAllBytes(file));
+                }
+                */
+            LoadCardsHierarchy();
+
             ShowPicture = true;
         }
         private void LoadCardsHierarchy()
@@ -71,6 +75,7 @@
         }
 
         public ICommand UpdateDatabaseCommand { get; private set; }
+        public ICommand UpdateImageDatabaseCommand { get; private set; }
         public ICommand VersionCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
 
@@ -82,6 +87,13 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
+        private void OnUpdateImageDatabaseRequested()
+        {
+            EventHandler e = UpdateImageDatabaseRequested;
+            if (e != null)
+                e(this, EventArgs.Empty);
+        }
+
         private void OnVersionRequested()
         {
             EventHandler e = VersionRequested;
@@ -101,6 +113,10 @@
         private void UpdateDatabaseCommandExecute(object o)
         {
             OnUpdateDatabaseRequested();
+        }
+        private void UpdateImageDatabaseCommandExecute(object o)
+        {
+            OnUpdateImageDatabaseRequested();
         }
         private void VersionCommandExecute(object o)
         {

@@ -14,6 +14,10 @@
             InitializeComponent();
         }
 
+        public void UpdateImageDatabaseRequested(object sender, EventArgs args)
+        {
+            new DownloadImageWindow().ShowDialog();
+        }
         public void UpdateDatabaseRequested(object sender, EventArgs args)
         {
             new DownloadWindow().ShowDialog();

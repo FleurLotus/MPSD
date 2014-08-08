@@ -36,9 +36,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Download\DownloadImageViewModel.cs" />
+    <Compile Include="Download\DownloadViewModelBase.cs" />
     <Compile Include="Main\CardViewModel.cs" />
     <Compile Include="Main\HierarchicalResultNodeViewModel.cs" />
-    <Compile Include="Main\DesignMainViewModel.cs" />
     <Compile Include="Main\HierarchicalInfoAnalyserViewModel.cs" />
     <Compile Include="Main\HierarchicalResultViewModel.cs" />
     <Compile Include="Main\HierarchicalViewModel.cs" />

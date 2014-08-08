@@ -12,35 +12,32 @@
 
     using MagicPictureSetDownloader.Core;
 
-    public class DownloadViewModel : NotifyPropertyChangedBase
+    public class DownloadViewModel : DownloadViewModelBase
     {
-        public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
-
         private string _baseSetUrl;
         private string _message;
         private bool _isBusy;
         private bool _hasJob;
         private int _countDown;
-        private readonly DownloadManager _downloadManager;
-        private readonly IDispatcherInvoker _dispatcherInvoker;
 
-        public DownloadViewModel(IDispatcherInvoker dispatcherInvoker)
+        public DownloadViewModel(IDispatcherInvoker dispatcherInvoker, bool showConfig)
+            : base(dispatcherInvoker)
         {
-            _dispatcherInvoker = dispatcherInvoker;
             BaseSetUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
 
+            ShowConfig = showConfig;
             Sets = new AsyncObservableCollection<SetInfoViewModel>();
             GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
             FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
-            DownloadReporter = new DownloadReporterViewModel();
-            _downloadManager = new DownloadManager();
-            _downloadManager.CredentialRequiered += OnCredentialRequiered;
+
+            if (!ShowConfig)
+                GetSetListCommand.Execute(null);
         }
 
         public AsyncObservableCollection<SetInfoViewModel> Sets { get; private set; }
         public ICommand GetSetListCommand { get; private set; }
         public ICommand FeedSetsCommand { get; private set; }
-        public DownloadReporterViewModel DownloadReporter { get; private set; }
+        public bool ShowConfig { get; private set; }
         public bool IsBusy
         {
             get { return _isBusy; }
@@ -124,7 +121,7 @@
                     setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
                 Sets.Clear();
 
-                foreach (SetInfoWithBlock setInfoWithBlock in _downloadManager.GetSetList(baseUrl))
+                foreach (SetInfoWithBlock setInfoWithBlock in DownloadManager.GetSetList(baseUrl))
                 {
                     SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
                     setInfoViewModel.PropertyChanged += SetInfoViewModelPropertyChanged;
@@ -144,7 +141,7 @@
             foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
             {
                 Interlocked.Increment(ref _countDown);
-                string[] cardInfos = _downloadManager.GetCardUrls(setInfoViewModel.Url);
+                string[] cardInfos = DownloadManager.GetCardUrls(setInfoViewModel.Url);
 
                 setInfoViewModel.DownloadReporter.Total = cardInfos.Length;
                 DownloadReporter.Total += cardInfos.Length;
@@ -163,7 +160,7 @@
 
             foreach (string cardUrl in urls)
             {
-                _downloadManager.GetCardInfo(cardUrl, editionId);
+                DownloadManager.GetCardInfo(cardUrl, editionId);
                 setDownloadReporter.Progress();
                 DownloadReporter.Progress();
             }
@@ -180,12 +177,6 @@
         {
             if (e.PropertyName == "Active")
                 HasJob = Sets.Any(sivm => sivm.Active);
-        }
-        private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
-        {
-            var e = CredentialRequiered;
-            if (e != null)
-                _dispatcherInvoker.Invoke(() => e(sender, args));
         }
         private void JobStarting()
         {
