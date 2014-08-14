@@ -6,11 +6,9 @@ namespace MagicPictureSetDownloader.Db.DAO
 
     [DebuggerDisplay("{IdGatherer}")]
     [DbTable]
-    internal class Picture : IPicture
+    internal class Picture : PictureKey, IPicture
     {
         private byte[] _image;
-        [DbColumn, DbKeyColumn(false)]
-        public int IdGatherer { get; set; }
         [DbColumn]
         public byte[] Image
         {

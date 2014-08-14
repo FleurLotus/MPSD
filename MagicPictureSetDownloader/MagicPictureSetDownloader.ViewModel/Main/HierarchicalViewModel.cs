@@ -11,9 +11,11 @@
     public class HierarchicalViewModel: NotifyPropertyChangedBase
     {
         private HierarchicalResultViewModel _selected;
+        private readonly string _name;
 
         public HierarchicalViewModel(string name)
         {
+            _name = name;
             Root = (new List<HierarchicalResultViewModel>{ new HierarchicalResultViewModel(name)}).AsReadOnly();
         }
 
@@ -36,12 +38,13 @@
         }
         private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<ICardInfo> cards)
         {
-            Root[0].Children.Clear();
+            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(_name) }).AsReadOnly();
 
             foreach (ICardInfo card in cards)
             {
                 MakeHierarchy(analysers, orders, card);
             }
+            OnNotifyPropertyChanged(() => Root);
         }
         private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, ICardInfo card)
         {

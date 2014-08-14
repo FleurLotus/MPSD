@@ -1,8 +1,7 @@
 namespace MagicPictureSetDownloader.Interface
 {
-    public interface IPicture
+    public interface IPicture : IPictureKey
     {
-        int IdGatherer { get; }
         byte[] Image { get; }
     }
 }

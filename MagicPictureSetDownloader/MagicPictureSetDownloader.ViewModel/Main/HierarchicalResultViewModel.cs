@@ -10,11 +10,11 @@
         public HierarchicalResultViewModel(IComparable value)
         {
             Value = value;
-            Children = new ObservableCollection<HierarchicalResultViewModel>();
+            Children = new Collection<HierarchicalResultViewModel>();
         }
 
         public IComparable Value { get; private set; }
         public string DisplayValue { get { return Value.ToString(); } }
-        public ObservableCollection<HierarchicalResultViewModel> Children { get; private set; }
+        public Collection<HierarchicalResultViewModel> Children { get; private set; }
     }
 }

@@ -15,11 +15,8 @@
     public class DownloadViewModel : DownloadViewModelBase
     {
         private string _baseSetUrl;
-        private string _message;
-        private bool _isBusy;
         private bool _hasJob;
-        private int _countDown;
-
+        
         public DownloadViewModel(IDispatcherInvoker dispatcherInvoker, bool showConfig)
             : base(dispatcherInvoker)
         {
@@ -38,18 +35,6 @@
         public ICommand GetSetListCommand { get; private set; }
         public ICommand FeedSetsCommand { get; private set; }
         public bool ShowConfig { get; private set; }
-        public bool IsBusy
-        {
-            get { return _isBusy; }
-            set
-            {
-                if (value != _isBusy)
-                {
-                    _isBusy = value;
-                    OnNotifyPropertyChanged(() => IsBusy);
-                }
-            }
-        }
         public bool HasJob
         {
             get { return _hasJob; }
@@ -71,18 +56,6 @@
                 {
                     _baseSetUrl = value;
                     OnNotifyPropertyChanged(() => BaseSetUrl);
-                }
-            }
-        }
-        public string Message
-        {
-            get { return _message; }
-            set
-            {
-                if (value != _message)
-                {
-                    _message = value;
-                    OnNotifyPropertyChanged(() => Message);
                 }
             }
         }
@@ -140,15 +113,14 @@
 
             foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
             {
-                Interlocked.Increment(ref _countDown);
+                Interlocked.Increment(ref CountDown);
                 string[] cardInfos = DownloadManager.GetCardUrls(setInfoViewModel.Url);
 
                 setInfoViewModel.DownloadReporter.Total = cardInfos.Length;
                 DownloadReporter.Total += cardInfos.Length;
 
                 SetInfoViewModel model = setInfoViewModel;
-                ThreadPool.QueueUserWorkItem(
-                    RetrieveSetDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
+                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
             }
         }
         private void RetrieveSetDataCallBack(object state)
@@ -158,34 +130,34 @@
             int editionId = (int)args[1];
             IEnumerable<string> urls = (IEnumerable<string>)args[2];
 
-            foreach (string cardUrl in urls)
+            try
             {
-                DownloadManager.GetCardInfo(cardUrl, editionId);
-                setDownloadReporter.Progress();
-                DownloadReporter.Progress();
+                foreach (string cardUrl in urls)
+                {
+                    if (IsStopping)
+                        break;
+                    DownloadManager.GetCardInfo(cardUrl, editionId);
+                    setDownloadReporter.Progress();
+                    DownloadReporter.Progress();
+                }
+            }
+            catch (Exception ex)
+            {
+                Message += ex.Message;
             }
 
             setDownloadReporter.Finish();
-            Interlocked.Decrement(ref _countDown);
-            if (_countDown == 0)
+            Interlocked.Decrement(ref CountDown);
+            if (CountDown == 0)
             {
                 DownloadReporter.Finish();
-                IsBusy = false;
+                JobFinished();
             }
         }
         private void SetInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Active")
                 HasJob = Sets.Any(sivm => sivm.Active);
-        }
-        private void JobStarting()
-        {
-            Message = null;
-            IsBusy = true;
-        }
-        private void JobFinished()
-        {
-            IsBusy = false;
         }
     }
 }

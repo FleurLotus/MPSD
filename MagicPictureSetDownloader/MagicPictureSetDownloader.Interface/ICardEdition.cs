@@ -6,5 +6,6 @@
         int IdCard { get; }
         int IdRarity { get; }
         int IdGatherer { get; }
+        string Url { get; }
     }
 }

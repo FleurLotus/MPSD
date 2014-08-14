@@ -103,7 +103,6 @@
 
             string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
 
-            //InsertPictureInDb(pictureUrl);
             InsertCardInDb(cardWithExtraInfo);
             InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
         }
@@ -124,6 +123,10 @@
                 //TODO: manage update 
             }
 
+        }
+        public string[] GetMissingPictureUrls()
+        {
+            return _magicDatabaseManager.GetMissingPictureUrls();
         }
 
         private void InsertCardSetInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)

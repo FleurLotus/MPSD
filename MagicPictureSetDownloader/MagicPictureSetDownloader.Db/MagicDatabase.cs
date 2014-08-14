@@ -137,7 +137,7 @@ namespace MagicPictureSetDownloader.Db
         //Insert one new 
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
-            if (GetPicture(idGatherer) != null)
+            if (GetPicture(idGatherer) != null || data == null || data.Length == 0)
                 return;
 
             Picture picture = new Picture {IdGatherer = idGatherer, Image = data};
@@ -145,7 +145,7 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewTreePicture(string name, byte[] data)
         {
-            if (GetTreePicture(name) != null)
+            if (GetTreePicture(name) != null || data == null || data.Length == 0)
                 return;
 
             TreePicture treepicture = new TreePicture { Name = name, Image = data };
@@ -194,6 +194,19 @@ namespace MagicPictureSetDownloader.Db
             };
 
             AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);
+        }
+
+        public string[] GetMissingPictureUrls()
+        {
+            IList<int> idGatherers;
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
+            {
+                cnx.Open();
+                idGatherers = Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
+            }
+
+            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
+                                    .Select(ce => ce.Url).ToArray();
         }
 
         private void AddToDbAndUpdateReferential<T>(string connectionString, T value, Action<T> addToReferential)

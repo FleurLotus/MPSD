@@ -5,7 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
 
@@ -35,6 +34,7 @@
     </i:Interaction.Triggers>
 
     <Grid>
+        <!-- Split Menu/Others -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -43,8 +43,6 @@
             <MenuItem Header="_File" >
                 <MenuItem Header="Update _Set Database" Command="{Binding UpdateDatabaseCommand}"/>
                 <MenuItem Header="Update _Image Database" Command="{Binding UpdateImageDatabaseCommand}"/>
-                <Separator/>
-
                 <Separator/>
                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
             </MenuItem>
@@ -55,46 +53,50 @@
                 <MenuItem Header="_Version" Command="{Binding VersionCommand}"/>
             </MenuItem>
         </Menu>
-
         <Grid Margin="5" Grid.Row="1">
+            <!-- Split Filter/Others -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="25" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            <Border Grid.Column="0" >
-                <TreeView ItemsSource="{Binding Hierarchical.Root}">
-                    <i:Interaction.Behaviors>
-                        <wpf:BindableSelectedItemBehavior SelectedItem="{Binding Hierarchical.Selected, Mode=OneWayToSource}" />
-                    </i:Interaction.Behaviors>
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" />
-                                <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
-                            </Grid>
-                            
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-            </Border>
-            <GridSplitter Grid.Column="1"/>
-            <Border Grid.Column="2">
-                
+            
+            <Border Grid.Column="0">
+                <StackPanel Margin="0,25">
+                    <ToggleButton Content=">>" Height="25" IsChecked="{wpfbinding:TwoWayBinding ShowFilterConfig}" />
+                </StackPanel>
             </Border>
 
-            <GridSplitter Grid.Column="3" Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}"/>
-            <Border Grid.Column="4" BorderBrush="Black" BorderThickness="1" 
-                    Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" >
-                <Image Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="300"/>
-            </Border>
+            <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={StaticResource nbConv}}">
+                <!-- Split Tree/Text/Image -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" >
+                    <ContentControl Content="{Binding Hierarchical}" />
+                </Border>
+                <GridSplitter Grid.Column="1"/>
+                <Border Grid.Column="2">
+
+                </Border>
+
+                <Grid Grid.Column="3" Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}">
+                    <!-- Split Image/Others -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Image Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="200" Grid.Row="0"/>
+                </Grid>
+            </Grid>
+
+            <!-- Analysers control -->
+            <ContentControl Grid.Column="1" Margin="2" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"
+                            Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
     </Grid>
 </Window>

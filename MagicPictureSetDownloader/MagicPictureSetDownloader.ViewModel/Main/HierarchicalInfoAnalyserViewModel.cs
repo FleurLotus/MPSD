@@ -4,7 +4,7 @@
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
-    public class HierarchicalInfoAnalyserViewModel: NotifyPropertyChangedBase
+    public class HierarchicalInfoAnalyserViewModel : NotifyPropertyChangedBase
     {
         private bool _isActive;
         private bool _isAscendingOrder;
@@ -19,7 +19,7 @@
 
         public string Name { get; private set; }
         public IHierarchicalInfoAnalyser Analyser { get; private set; }
-        
+
         public bool IsAscendingOrder
         {
             get { return _isAscendingOrder; }

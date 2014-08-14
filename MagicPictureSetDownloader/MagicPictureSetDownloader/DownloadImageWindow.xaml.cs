@@ -1,5 +1,7 @@
 ﻿namespace MagicPictureSetDownloader
 {
+    using System;
+
     using Common.WPF;
     using Common.Libray;
     using MagicPictureSetDownloader.Core;
@@ -27,6 +29,12 @@
             }
         }
 
-        //TODO: to be designed 
+        protected override void OnClosed(EventArgs e)
+        {
+            IDisposable disposable = DataContext as IDisposable;
+            if (disposable != null)
+                disposable.Dispose();
+            base.OnClosed(e);
+        }
     }
 }

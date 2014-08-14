@@ -11,7 +11,7 @@
         xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
         d:DataContext="{d:DesignInstance Type=download:DownloadViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader - Sets">
+        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader - Sets" ResizeMode="NoResize">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
