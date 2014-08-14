@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}</ProjectGuid>
+    <ProjectGuid>{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.Interface</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.Interface</AssemblyName>
+    <RootNamespace>Common.Drawing</RootNamespace>
+    <AssemblyName>Common.Drawing</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -33,17 +33,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPictureKey.cs" />
-    <Compile Include="ITreePicture.cs" />
-    <Compile Include="IBlock.cs" />
-    <Compile Include="ICard.cs" />
-    <Compile Include="ICardAllDbInfo.cs" />
-    <Compile Include="ICardEdition.cs" />
-    <Compile Include="IEdition.cs" />
-    <Compile Include="IPicture.cs" />
-    <Compile Include="IRarity.cs" />
+    <Compile Include="Conversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

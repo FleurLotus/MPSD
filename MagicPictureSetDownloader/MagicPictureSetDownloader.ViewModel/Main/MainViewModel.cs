@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.IO;
     using System.Linq;
     using System.Windows.Input;
 
@@ -19,16 +18,14 @@
         public event EventHandler CloseRequested;
 
         private bool _showPicture;
+        private bool _showFilterConfig;
         private readonly MagicDatabaseManager _magicDatabaseManager;
 
         //TODO: display Card info of selected node
-        //TODO: manage filter display, order and activation
-        //TODO: manage picture size display
-        //TODO: manage treepicture + feed (still some picture to find)
+        //TODO: Up/Down picture for filter order
         //TODO: manage collection
         //TODO: Import/export of collection
         //TODO: manage Options with persistance 
-        //TODO: Manage Download image in a other pool
         public MainViewModel()
         {
             UpdateDatabaseCommand = new RelayCommand(UpdateDatabaseCommandExecute);
@@ -36,23 +33,23 @@
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             Hierarchical = new HierarchicalViewModel("Magic Cards");
-            Analysers = new ObservableCollection<HierarchicalInfoAnalyserViewModel>(HierarchicalInfoAnalyserFactory.Instance.Names.Select(s => new HierarchicalInfoAnalyserViewModel(s)));
-
+            Analysers = new HierarchicalInfoAnalysersViewModel();
+            
             _magicDatabaseManager = new MagicDatabaseManager();
-            //ALERT: Load file to tree picture 
+            //ALERT: Temp for helping load file to tree picture 
             /*
-                foreach (string file in Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Rarity"))
-                {
-                    _magicDatabaseManager.InsertNewTreePicture(Path.GetFileNameWithoutExtension(file), File.ReadAllBytes(file));
-                }
-                */
+            foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Others"))
+            {
+                _magicDatabaseManager.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
+            }
+            */
             LoadCardsHierarchy();
 
             ShowPicture = true;
         }
         private void LoadCardsHierarchy()
         {
-            HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.Where(a => a.IsActive).ToArray();
+            HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
 
             Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(), 
                                             selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray(),
@@ -60,7 +57,28 @@
         }
 
         public HierarchicalViewModel Hierarchical { get; private set; }
-        public ObservableCollection<HierarchicalInfoAnalyserViewModel> Analysers { get; private set; }
+        public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
+
+        public ICommand UpdateDatabaseCommand { get; private set; }
+        public ICommand UpdateImageDatabaseCommand { get; private set; }
+        public ICommand VersionCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
+
+        public bool ShowFilterConfig
+        {
+            get { return _showFilterConfig; }
+            set
+            {
+                if (value != _showFilterConfig)
+                {
+                    _showFilterConfig = value;
+                    OnNotifyPropertyChanged(() => ShowFilterConfig);
+                    if (!_showFilterConfig)
+                        LoadCardsHierarchy();
+
+                }
+            }
+        }
         public bool ShowPicture
         {
             get { return _showPicture; }
@@ -73,12 +91,7 @@
                 }
             }
         }
-
-        public ICommand UpdateDatabaseCommand { get; private set; }
-        public ICommand UpdateImageDatabaseCommand { get; private set; }
-        public ICommand VersionCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
-
+        
         #region Events
 
         private void OnUpdateDatabaseRequested()
@@ -110,9 +123,11 @@
         #endregion
 
         #region Command
+
         private void UpdateDatabaseCommandExecute(object o)
         {
             OnUpdateDatabaseRequested();
+            LoadCardsHierarchy();
         }
         private void UpdateImageDatabaseCommandExecute(object o)
         {
@@ -126,6 +141,7 @@
         {
             OnCloseRequested();
         }
+
         #endregion
 
     }

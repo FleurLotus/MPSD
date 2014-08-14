@@ -6,6 +6,7 @@
     <BooleanToVisibilityConverter x:Key="b2vConv"/>
     <converter:EnumMatchToBooleanConverter x:Key="e2bConv"/>
     <converter:ImageSourceConverter x:Key="imgConv" />
+    <converter:BoolInvertConverter x:Key="nbConv"/>
 
     <converter:AggregateConverter x:Key="no2bConv">
         <converter:ObjectNullToBoolConverter/>
@@ -21,7 +22,6 @@
         <converter:BoolInvertConverter/>
         <BooleanToVisibilityConverter/>
     </converter:AggregateConverter>
-
 
     <converter:ProgressBarFillToRectConverter x:Key="pbf2rectConv"/>
 </ResourceDictionary>

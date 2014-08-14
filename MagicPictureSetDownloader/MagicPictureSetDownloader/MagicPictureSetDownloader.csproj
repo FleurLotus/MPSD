@@ -100,6 +100,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converter\CardToImageConverter.cs" />
+    <Compile Include="Converter\BoolToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToImageConverter.cs" />
     <Compile Include="DownloadImageWindow.xaml.cs">
@@ -179,6 +180,12 @@
       <Project>{473562B3-1A2B-4F43-BA88-613C35D15AAC}</Project>
       <Name>MagicPictureSetDownloader.ViewModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Down.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -40,6 +40,10 @@
         {
             return DbInstance.GetEdition(sourceName);
         }
+        public string[] GetMissingPictureUrls()
+        {
+            return DbInstance.GetMissingPictureUrls();
+        }
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
             DbInstance.InsertNewPicture(idGatherer, data);
