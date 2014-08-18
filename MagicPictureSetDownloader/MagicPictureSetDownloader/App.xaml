@@ -3,10 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converter="clr-namespace:MagicPictureSetDownloader.Converter"
              xmlns:ui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
-             xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
-             xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
              StartupUri="MainWindow.xaml">
 
     <Application.Resources>
@@ -14,11 +10,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Resources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+          
             
             <!--Converter -->
             <converter:CardToImageConverter x:Key="c2iConv" />
             <converter:TreeToImageConverter x:Key="t2iConv" />
             <converter:BoolToImageConverter x:Key="b2iConv" />
+            <converter:BitmapToImageConverter x:Key="bm2iConv" />
+            <converter:StringToImageConverter x:Key="s2iConv" />
+            <converter:TextToInlinesConverter x:Key="t2inConv" />
 
             <!-- Style  -->
             <Style TargetType="ui:ProgressBar">
@@ -33,78 +33,6 @@
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Stretch" />
             </Style>
-            
-            <!-- Template -->
-            <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
-                <TreeView ItemsSource="{Binding Root}">
-                    <i:Interaction.Behaviors>
-                        <wpf:BindableSelectedItemBehavior SelectedItem="{Binding Selected, Mode=OneWayToSource}" />
-                    </i:Interaction.Behaviors>
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" />
-                                <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
-                            </Grid>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type main:HierarchicalInfoAnalysersViewModel}">
-                <Grid Background="White">
-                    <!-- Split Tools/List -->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="25"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Tree" Padding="5,0" VerticalAlignment="Center" FontWeight="Bold"  />
-                    <Button Grid.Column="1" Grid.Row="0" Content="U" Command="{Binding UpCommand}" />
-                    <Button Grid.Column="2" Grid.Row="0" Content="D" Command="{Binding DownCommand}" />
-                    <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding All}" SelectedIndex="{binding:TwoWayBinding SelectedIndex}">
-                        <ListBox.ItemContainerStyle>
-                            <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ContentControl Content="{Binding}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            </DataTemplate>
-            
-            <DataTemplate DataType="{x:Type main:HierarchicalInfoAnalyserViewModel}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-
-                    <CheckBox Grid.Column="0" Padding="5,0" VerticalAlignment="Center" IsChecked="{Binding IsActive}"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding Name}"/>
-                    <CheckBox Grid.Column="2" Padding="5,0" VerticalAlignment="Center" IsChecked="{Binding IsAscendingOrder}">
-                        <CheckBox.Template>
-                            <ControlTemplate TargetType="{x:Type CheckBox}">
-                                <Image Source="{Binding IsAscendingOrder, Converter={StaticResource b2iConv}}"/>
-                            </ControlTemplate>
-                        </CheckBox.Template>
-                    </CheckBox>
-                </Grid>
-            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -2,28 +2,35 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Windows.Input;
 
     using Common.ViewModel;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
+    using MagicPictureSetDownloader.Interface;
 
     public class HierarchicalInfoAnalysersViewModel : NotifyPropertyChangedBase
     {
+        private readonly MagicDatabaseManager _magicDatabaseManager;
         private int _selectedIndex;
         private List<HierarchicalInfoAnalyserViewModel> _all;
         private readonly int _allCount;
 
-        public HierarchicalInfoAnalysersViewModel()
+        public HierarchicalInfoAnalysersViewModel(MagicDatabaseManager magicDatabaseManager)
         {
+            _magicDatabaseManager = magicDatabaseManager;
             UpCommand = new RelayCommand(UpCommandExecute, UpCommandCanExecute);
             DownCommand = new RelayCommand(DownCommandExecute, DownCommandCanExecute);
-            _all = new List<HierarchicalInfoAnalyserViewModel>(HierarchicalInfoAnalyserFactory.Instance.Names.Select(s => new HierarchicalInfoAnalyserViewModel(s)));
+
+            CreateHierarchy(_magicDatabaseManager.GetOptions(TypeOfOption.Hierarchy));
+            
             _allCount = _all.Count;
             SelectedIndex = -1;
         }
 
-        public ICollection<HierarchicalInfoAnalyserViewModel> All
+        public IList<HierarchicalInfoAnalyserViewModel> All
         {
             get { return _all.AsReadOnly(); }
         }
@@ -44,6 +51,37 @@
             }
         }
 
+        public void Save()
+        {
+            IList<HierarchicalInfoAnalyserViewModel> all = All;
+            for (int i = 0; i < all.Count; i++)
+            {
+                HierarchicalInfoAnalyserViewModel vm = all[i];
+                _magicDatabaseManager.InsertNewOption(TypeOfOption.Hierarchy, vm.Name, vm.SaveInfo(i));
+            }
+        }
+
+        private void CreateHierarchy(ICollection<IOption> options)
+        {
+            if (options == null || options.Count == 0)
+            {
+                _all = new List<HierarchicalInfoAnalyserViewModel>(HierarchicalInfoAnalyserFactory.Instance.Names.Select(s => new HierarchicalInfoAnalyserViewModel(s)));
+                return;
+            }
+
+            _all = new List<HierarchicalInfoAnalyserViewModel>();
+
+            SortedDictionary<int, HierarchicalInfoAnalyserViewModel> dic = new SortedDictionary<int, HierarchicalInfoAnalyserViewModel>();
+            foreach (IOption option in options)
+            {
+                HierarchicalInfoAnalyserViewModel vm = new HierarchicalInfoAnalyserViewModel(option.Key);
+                int pos = vm.LoadInfo(option.Value);
+                dic.Add(pos, vm);
+            }
+
+            _all.AddRange(dic.Values);
+        }
+        
         #region Command
 
         private void UpCommandExecute(object o)

@@ -15,7 +15,7 @@ namespace MagicPictureSetDownloader.Converter
             if (node == null)
                 return null;
 
-            IPicture picture = MagicDatabaseManager.GetPicture(node.IdGatherer);
+            IPicture picture = MagicDatabaseManager.GetPicture(node.Card.IdGatherer);
             if (null == picture || picture.Image.Length == 0)
                 picture = MagicDatabaseManager.GetDefaultPicture();
 

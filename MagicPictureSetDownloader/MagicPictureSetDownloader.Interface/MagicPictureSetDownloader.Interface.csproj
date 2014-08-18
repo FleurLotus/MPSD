@@ -35,6 +35,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IOption.cs" />
     <Compile Include="IPictureKey.cs" />
     <Compile Include="ITreePicture.cs" />
     <Compile Include="IBlock.cs" />
@@ -45,6 +46,7 @@
     <Compile Include="IPicture.cs" />
     <Compile Include="IRarity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeOfOption.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

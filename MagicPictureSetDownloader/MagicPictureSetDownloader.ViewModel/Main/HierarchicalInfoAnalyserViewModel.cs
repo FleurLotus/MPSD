@@ -47,5 +47,18 @@
                 }
             }
         }
+
+        public string SaveInfo(int position)
+        {
+            return string.Format("{0},{1},{2}", IsAscendingOrder, IsActive, position);
+        }
+        public int LoadInfo(string value)
+        {
+            string[] data = value.Split(',');
+
+            IsAscendingOrder = bool.Parse(data[0]);
+            IsActive = bool.Parse(data[1]);
+            return int.Parse(data[2]);
+        }
     }
 }

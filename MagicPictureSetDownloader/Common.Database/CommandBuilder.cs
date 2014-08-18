@@ -13,6 +13,7 @@
         private readonly TypeDbInfo _typeDbInfo;
         private string _selectQuery;
         private string _updateQuery;
+        private string _deleteQuery;
         private string _insertQuery;
         private string[] _notKeycolumns;
         private string[] _canInsertColumns;
@@ -35,6 +36,11 @@
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
         }
+        public void BuildDeleteAllCommand(DbCommand cmd)
+        {
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = _deleteQuery;
+        }
         public void BuildUpdateOneCommand(DbCommand cmd, object input)
         {
             if (input == null)
@@ -49,6 +55,18 @@
             {
                 AddParameter(cmd, input, col);
             }
+
+            AppendWhereCriteriaCommand(cmd, input);
+        }
+        public void BuildDeleteOneCommand(DbCommand cmd, object input)
+        {
+            if (input == null)
+                throw new ArgumentNullException("input");
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
+            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = _deleteQuery;
 
             AppendWhereCriteriaCommand(cmd, input);
         }
@@ -85,17 +103,21 @@
             sbSelect.Append("SELECT ");
 
             StringBuilder sbUpdate = new StringBuilder();
-            sbUpdate.Append("UPDATE ");
+            sbUpdate.Append("UPDATE [");
             sbUpdate.Append(_typeDbInfo.TableName);
-            sbUpdate.Append(" SET ");
+            sbUpdate.Append("] SET ");
 
             StringBuilder sbInsert = new StringBuilder();
             StringBuilder sbInsertValues = new StringBuilder();
-            sbInsert.Append("INSERT INTO ");
+            sbInsert.Append("INSERT INTO [");
             sbInsert.Append(_typeDbInfo.TableName);
-            sbInsert.Append(" (");
+            sbInsert.Append("] (");
 
-            
+            StringBuilder sbDelete = new StringBuilder();
+            sbDelete.Append("DELETE [");
+            sbDelete.Append(_typeDbInfo.TableName);
+            sbDelete.Append("] ");
+
             string[] allColums = _typeDbInfo.Columns.Keys.ToArray();
             _notKeycolumns = _typeDbInfo.Columns.Keys.Where(s => !_typeDbInfo.Keys.Contains(s)).ToArray();
             _canInsertColumns = _typeDbInfo.Columns.Keys.Where(s => s != _typeDbInfo.Identity).ToArray();
@@ -105,14 +127,14 @@
                 if (i != 0)
                     sbSelect.Append(", ");
 
-                sbSelect.Append(allColums[i]);
+                sbSelect.Append("[" + allColums[i] + "]");
             }
 
-            sbSelect.Append(" FROM ");
+            sbSelect.Append(" FROM [");
             sbSelect.Append(_typeDbInfo.TableName);
+            sbSelect.Append("] ");
 
             _selectQuery = sbSelect.ToString();
-
 
             for (int i = 0; i < _notKeycolumns.Length; i++)
             {
@@ -121,7 +143,7 @@
                 {
                     sbUpdate.Append(", ");
                 }
-                sbUpdate.AppendFormat("{0} = @{0}", col);
+                sbUpdate.AppendFormat("[{0}] = @{0}", col);
             }
             _updateQuery = sbUpdate.ToString();
 
@@ -134,13 +156,14 @@
                     sbInsertValues.Append(", ");
 
                 }
-                sbInsert.Append(col);
+                sbInsert.Append("[" + col + "]");
                 sbInsertValues.AppendFormat("@{0}", col);
             }
             sbInsert.AppendFormat(") VALUES ({0})", sbInsertValues);
 
             _insertQuery = sbInsert.ToString();
 
+            _deleteQuery = sbDelete.ToString();
         }
         private void AppendWhereCriteriaCommand(DbCommand cmd, object input)
         {
@@ -157,7 +180,7 @@
                 string key = _typeDbInfo.Keys[i];
                 if (i != 0)
                     sb.Append(" AND ");
-                sb.AppendFormat("({0} = @{0})", key);
+                sb.AppendFormat("([{0}] = @{0})", key);
                 AddParameter(cmd, input, key);
             }
 

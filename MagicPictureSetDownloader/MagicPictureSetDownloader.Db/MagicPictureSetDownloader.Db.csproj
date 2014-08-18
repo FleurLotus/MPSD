@@ -56,6 +56,7 @@
     <Compile Include="DAO\Card.cs" />
     <Compile Include="DAO\CardEdition.cs" />
     <Compile Include="DAO\CardAllDbInfo.cs" />
+    <Compile Include="DAO\Option.cs" />
     <Compile Include="DAO\PictureKey.cs" />
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />

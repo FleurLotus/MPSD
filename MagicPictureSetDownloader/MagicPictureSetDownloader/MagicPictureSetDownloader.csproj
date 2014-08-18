@@ -79,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Template.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="DownloadImageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,11 +105,15 @@
     </Compile>
     <Compile Include="Converter\CardToImageConverter.cs" />
     <Compile Include="Converter\BoolToImageConverter.cs" />
+    <Compile Include="Converter\BitmapToImageConverter.cs" />
+    <Compile Include="Converter\TextToInlinesConverter.cs" />
+    <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToImageConverter.cs" />
     <Compile Include="DownloadImageWindow.xaml.cs">
       <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PicturedTextBlock.cs" />
     <Compile Include="VersionWindow.xaml.cs">
       <DependentUpon>VersionWindow.xaml</DependentUpon>
     </Compile>
@@ -139,8 +147,9 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResxFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -186,6 +195,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Asc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Desc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

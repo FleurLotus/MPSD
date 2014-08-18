@@ -21,11 +21,8 @@
         private bool _showFilterConfig;
         private readonly MagicDatabaseManager _magicDatabaseManager;
 
-        //TODO: display Card info of selected node
-        //TODO: Up/Down picture for filter order
         //TODO: manage collection
         //TODO: Import/export of collection
-        //TODO: manage Options with persistance 
         public MainViewModel()
         {
             UpdateDatabaseCommand = new RelayCommand(UpdateDatabaseCommandExecute);
@@ -33,9 +30,9 @@
             VersionCommand = new RelayCommand(VersionCommandExecute);
             CloseCommand = new RelayCommand(CloseCommandExecute);
             Hierarchical = new HierarchicalViewModel("Magic Cards");
-            Analysers = new HierarchicalInfoAnalysersViewModel();
-            
             _magicDatabaseManager = new MagicDatabaseManager();
+            Analysers = new HierarchicalInfoAnalysersViewModel(_magicDatabaseManager);
+            
             //ALERT: Temp for helping load file to tree picture 
             /*
             foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Others"))
@@ -47,15 +44,7 @@
 
             ShowPicture = true;
         }
-        private void LoadCardsHierarchy()
-        {
-            HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
-
-            Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(), 
-                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray(),
-                                            _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
-        }
-
+        
         public HierarchicalViewModel Hierarchical { get; private set; }
         public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
 
@@ -74,8 +63,10 @@
                     _showFilterConfig = value;
                     OnNotifyPropertyChanged(() => ShowFilterConfig);
                     if (!_showFilterConfig)
+                    {
+                        Analysers.Save();
                         LoadCardsHierarchy();
-
+                    }
                 }
             }
         }
@@ -106,7 +97,6 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
-
         private void OnVersionRequested()
         {
             EventHandler e = VersionRequested;
@@ -143,6 +133,15 @@
         }
 
         #endregion
+
+        private void LoadCardsHierarchy()
+        {
+            HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
+
+            Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
+                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray(),
+                                            _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
+        }
 
     }
 }
