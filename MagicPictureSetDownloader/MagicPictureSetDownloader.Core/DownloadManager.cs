@@ -120,9 +120,8 @@
             }
             else
             {
-                //TODO: manage update 
+                //ALERT: see if we update the data
             }
-
         }
         public string[] GetMissingPictureUrls()
         {

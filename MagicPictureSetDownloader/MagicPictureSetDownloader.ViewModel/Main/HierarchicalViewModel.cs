@@ -32,21 +32,21 @@
                 }
             }
         }
-        public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<ICardInfo> cards)
+        public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<CardViewModel> cards)
         {
             ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, orders, cards));
         }
-        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<ICardInfo> cards)
+        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<CardViewModel> cards)
         {
             Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(_name) }).AsReadOnly();
 
-            foreach (ICardInfo card in cards)
+            foreach (CardViewModel card in cards)
             {
                 MakeHierarchy(analysers, orders, card);
             }
             OnNotifyPropertyChanged(() => Root);
         }
-        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, ICardInfo card)
+        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, CardViewModel card)
         {
             HierarchicalResultViewModel current = Root[0];
 
@@ -77,7 +77,7 @@
 
                 if (next == null)
                 {
-                    next = index < analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value, card.IdGatherer);
+                    next = index < analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value, card);
                     current.Children.Insert(i, next);
                 }
 

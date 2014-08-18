@@ -10,12 +10,18 @@
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="MagicPictureSetDownloader" Height="795.65" Width="869">
+        Title="MagicPictureSetDownloader" Height="800" Width="900">
     <Window.Resources>
-        <Style TargetType="Border">
-            <Setter Property="BorderBrush" Value="Black"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
 
     <i:Interaction.Triggers>
@@ -69,33 +75,33 @@
             <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={StaticResource nbConv}}">
                 <!-- Split Tree/Text/Image -->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >
                     <ContentControl Content="{Binding Hierarchical}" />
                 </Border>
                 <GridSplitter Grid.Column="1"/>
+                
                 <Border Grid.Column="2">
-
+                    <Grid>
+                        <!-- Split Card/Image -->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
+                        <Image Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                               Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="200" 
+                               Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}"/>
+                    </Grid>
                 </Border>
-
-                <Grid Grid.Column="3" Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}">
-                    <!-- Split Image/Others -->
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <Image Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="200" Grid.Row="0"/>
-                </Grid>
             </Grid>
 
             <!-- Analysers control -->
-            <ContentControl Grid.Column="1" Margin="2" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"
+            <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"
                             Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
     </Grid>

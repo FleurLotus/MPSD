@@ -24,6 +24,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
+        private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();  
 
         public MagicDatabase(string fileName, string pictureFileName)
         {
@@ -90,6 +91,11 @@ namespace MagicPictureSetDownloader.Db
 
             return edition;
         }
+        public IOption GetOption(TypeOfOption type, string key)
+        {
+            IList<IOption> options = GetOptions(type);
+            return options == null ? null : options.FirstOrDefault(o => o.Key == key);
+        }
 
         //Ensembly Get 
         public ICollection<ICardAllDbInfo> GetAllInfos()
@@ -106,6 +112,14 @@ namespace MagicPictureSetDownloader.Db
                          })).ToList();
 
             return ret.AsReadOnly();
+        }
+        public IList<IOption> GetOptions(TypeOfOption type)
+        {
+            CheckReferentialLoaded();
+            IList<IOption> options;
+            if (!_allOptions.TryGetValue(type, out options))
+                return null;
+            return new List<IOption>(options).AsReadOnly();
         }
 
         public ICollection<IEdition> AllEditions()
@@ -128,7 +142,7 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
             return new List<ICard>(_cards.Values).AsReadOnly();
         }
-        public ICollection<ICardEdition> AllCardEditions() 
+        public ICollection<ICardEdition> AllCardEditions()
         {
             CheckReferentialLoaded();
             return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
@@ -195,6 +209,26 @@ namespace MagicPictureSetDownloader.Db
 
             AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);
         }
+        public void InsertNewOption(TypeOfOption type, string key, string value)
+        {
+            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+                throw new ApplicationDbException("Data are not filled correctedly");
+            
+            IOption option = GetOption(type, key);
+
+            if (option == null)
+            {
+                Option newoption = new Option { Type = type, Key = key, Value = value };
+                AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+            }
+            else if (option.Value != value)
+            {
+                RemoveFromDbAndUpdateReferential(_connectionString, option as Option, RemoveFromReferential);
+
+                Option newoption = new Option { Type = type, Key = key, Value = value };
+                AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+            }
+        }
 
         public string[] GetMissingPictureUrls()
         {
@@ -212,6 +246,9 @@ namespace MagicPictureSetDownloader.Db
         private void AddToDbAndUpdateReferential<T>(string connectionString, T value, Action<T> addToReferential)
             where T : class, new()
         {
+            if (value == null)
+                return;
+
             using (SqlCeConnection cnx = new SqlCeConnection(connectionString))
             {
                 cnx.Open();
@@ -220,6 +257,21 @@ namespace MagicPictureSetDownloader.Db
 
             lock (_sync)
                 addToReferential(value);
+        }
+        private void RemoveFromDbAndUpdateReferential<T>(string connectionString, T value, Action<T> removeFromReferential)
+            where T : class, new()
+        {
+            if (value == null)
+                return;
+
+            using (SqlCeConnection cnx = new SqlCeConnection(connectionString))
+            {
+                cnx.Open();
+                Mapper<T>.DeleteOne(cnx, value);
+            }
+
+            lock (_sync)
+                removeFromReferential(value);
         }
 
         private IPicture LoadImage(int idGatherer)
@@ -238,12 +290,16 @@ namespace MagicPictureSetDownloader.Db
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
+                _allOptions.Clear();
                 _rarities.Clear();
                 _blocks.Clear();
                 _editions.Clear();
                 _cards.Clear();
                 _cardEditions.Clear();
 
+                foreach (Option option in Mapper<Option>.LoadAll(cnx))
+                    InsertInReferential(option);
+                
                 foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
                     InsertInReferential(rarity);
 
@@ -298,6 +354,26 @@ namespace MagicPictureSetDownloader.Db
         {
             _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
         }
+        private void InsertInReferential(IOption option)
+        {
+            IList<IOption> options;
+            if (!_allOptions.TryGetValue(option.Type, out options))
+            {
+                options = new List<IOption>();
+                _allOptions.Add(option.Type, options);
+            }
+
+            options.Add(option);
+        }
+
+        private void RemoveFromReferential(IOption option)
+        {
+            IList<IOption> options = _allOptions[option.Type];
+            options.Remove(option);
+            if (options.Count == 0)
+                _allOptions.Remove(option.Type);
+        }
+
         private void CheckReferentialLoaded()
         {
             if (!_referentialLoaded)

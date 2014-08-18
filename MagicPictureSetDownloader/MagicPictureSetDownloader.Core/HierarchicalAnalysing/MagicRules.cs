@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+
+    using MagicPictureSetDownloader.Core.CardInfo;
 
     internal static class MagicRules
     {
@@ -107,7 +110,9 @@
         {
             if (string.IsNullOrWhiteSpace(castingCost)) return new string[0];
 
-            return castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            return
+                castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                           .Select(s => s.StartsWith(SymbolParser.Prefix) ? s.Substring(SymbolParser.Prefix.Length):s);
         }
         private static Color GetColor(string shard)
         {

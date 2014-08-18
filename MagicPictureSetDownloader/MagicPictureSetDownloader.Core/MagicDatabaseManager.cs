@@ -20,6 +20,11 @@
         {
             return DbInstance.GetAllInfos();
         }
+        public IList<IOption> GetOptions(TypeOfOption type)
+        {
+            return DbInstance.GetOptions(type);
+        }
+        
         public ICard GetCard(string name)
         {
             return DbInstance.GetCard(name);
@@ -40,6 +45,11 @@
         {
             return DbInstance.GetEdition(sourceName);
         }
+        public IOption GetOption(TypeOfOption type, string key)
+        {
+            return DbInstance.GetOption(type, key);
+        }
+
         public string[] GetMissingPictureUrls()
         {
             return DbInstance.GetMissingPictureUrls();
@@ -59,6 +69,10 @@
         public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity, string url)
         {
             DbInstance.InsertNewCardEdition(idGatherer, idEdition, name, rarity, url);
+        }
+        public void InsertNewOption(TypeOfOption type, string key, string value)
+        {
+            DbInstance.InsertNewOption(type, key, value);
         }
     }
 }

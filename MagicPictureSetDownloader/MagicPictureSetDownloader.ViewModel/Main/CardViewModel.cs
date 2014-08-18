@@ -1,5 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
+    using System;
+    using System.Globalization;
+
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
@@ -9,13 +12,31 @@
     {
         public CardViewModel(ICardAllDbInfo cardAllDbInfo)
         {
-            Name = cardAllDbInfo.Card.Name;
-            Edition = cardAllDbInfo.Edition.Name;
-            BlockName = cardAllDbInfo.Edition.BlockName;
+            ICard card = cardAllDbInfo.Card;
+            IEdition edition = cardAllDbInfo.Edition;
+            
+            Name = card.Name;
+            Edition = edition.Name;
+            BlockName = edition.BlockName;
             Rarity = cardAllDbInfo.Rarity.Name;
-            Type = cardAllDbInfo.Card.Type;
-            CastingCost = cardAllDbInfo.Card.CastingCost;
+            Type = card.Type;
+            CastingCost = card.CastingCost;
             IdGatherer = cardAllDbInfo.IdGatherer;
+
+            Text = card.Text;
+            if (!string.IsNullOrWhiteSpace(card.Power) && !string.IsNullOrWhiteSpace(card.Toughness))
+            {
+                PowerToughnessLoyalty = string.Format("{0}/{1}", card.Power, card.Toughness);
+                PowerToughnessLoyaltyText= "Power/Toughness";
+            }
+            else if (card.Loyalty.HasValue)
+            {
+                PowerToughnessLoyalty = card.Loyalty.Value.ToString(CultureInfo.InvariantCulture);
+                PowerToughnessLoyaltyText= "Loyalty";
+            }
+
+            if (!string.IsNullOrWhiteSpace(CastingCost))
+                DisplayedCastingCost = CastingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         public string Name { get; private set; }
@@ -25,5 +46,11 @@
         public string Type { get; private set; }
         public string CastingCost { get; private set; }
         public int IdGatherer { get; private set; }
+
+
+        public string Text { get; private set; }
+        public string PowerToughnessLoyalty { get; private set; }
+        public string PowerToughnessLoyaltyText { get; private set; }
+        public string[] DisplayedCastingCost { get; private set; }
     }
 }

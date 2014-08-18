@@ -6,10 +6,11 @@
     using System.Data.Common;
     using System.Reflection;
 
-    public static class Mapper<T> where T : class, new()
+    public static class Mapper<T>
+        where T : class, new()
     {
         private static readonly CommandBuilder _commandBuilder;
-        
+
         static Mapper()
         {
             _commandBuilder = new CommandBuilder(DbAttributAnalyser.Analyse(typeof(T)));
@@ -50,7 +51,7 @@
                 using (DbDataReader reader = cmd.ExecuteReader())
                 {
                     IDictionary<int, PropertyInfo> map = _commandBuilder.GenerateReaderMap(reader);
-                    
+
                     while (reader.Read())
                     {
                         //Don't care about internal or private because it is a call to Activator.CreateInstance<T>()
@@ -67,10 +68,17 @@
             }
             return ret;
         }
+        public static void DeleteAll(DbConnection cnx)
+        {
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildDeleteAllCommand(cmd));
+        }
+        public static void DeleteOne(DbConnection cnx, T value)
+        {
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildDeleteOneCommand(cmd, value));
+        }
         public static void InsertOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildInsertOneCommand(cmd, value),
-                                        cmd => GetIdentity(cmd, value));
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildInsertOneCommand(cmd, value), cmd => GetIdentity(cmd, value));
         }
         private static void GetIdentity(DbCommand cmd, T value)
         {
@@ -83,16 +91,16 @@
                 cmd.CommandText = "SELECT @@IDENTITY";
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.Clear();
-                int id = (int) (decimal) cmd.ExecuteScalar();
+                int id = (int)(decimal)cmd.ExecuteScalar();
                 SetValue(value, idKeyPropertyInfo, id);
             }
         }
         public static void UpdateOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildUpdateOneCommand(cmd, value), null);
+            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildUpdateOneCommand(cmd, value));
         }
 
-        private static void ExecuteWithTransaction(DbConnection cnx, Action<DbCommand> prepareCommand, Action<DbCommand> doPostExecuteAction)
+        private static void ExecuteWithTransaction(DbConnection cnx, Action<DbCommand> prepareCommand, Action<DbCommand> doPostExecuteAction = null)
         {
             using (DbTransaction transaction = cnx.BeginTransaction())
             {
@@ -123,7 +131,19 @@
         {
             Type wantedType = Nullable.GetUnderlyingType(pi.PropertyType) ?? pi.PropertyType;
 
-            object safeValue = value == null || value == DBNull.Value ? null : Convert.ChangeType(value, wantedType);
+            object safeValue;
+            if (value == null || value == DBNull.Value)
+            {
+                safeValue = null;
+            }
+            else if (wantedType.IsEnum)
+            {
+                safeValue = Enum.Parse(wantedType, value.ToString());
+            }
+            else 
+            {
+                safeValue = Convert.ChangeType(value, wantedType);
+            }
             pi.SetValue(t, safeValue, null);
         }
     }

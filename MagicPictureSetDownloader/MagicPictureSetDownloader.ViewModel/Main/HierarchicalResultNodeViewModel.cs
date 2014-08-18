@@ -4,11 +4,11 @@
 
     public class HierarchicalResultNodeViewModel : HierarchicalResultViewModel
     {
-        public HierarchicalResultNodeViewModel(IComparable value, int idGatherer)
+        public HierarchicalResultNodeViewModel(IComparable value, CardViewModel card)
             : base(value)
         {
-            IdGatherer = idGatherer;
+            Card = card;
         }
-        public int IdGatherer { get; private set; }
+        public CardViewModel Card { get; private set; }
     }
 }
