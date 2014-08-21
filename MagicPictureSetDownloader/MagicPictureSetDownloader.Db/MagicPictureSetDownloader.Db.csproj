@@ -74,18 +74,14 @@
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj">
+      <Project>{dac42afe-dcfb-4fec-90c9-1c26f6d4aab9}</Project>
+      <Name>MagicPictureSetDownloader.DbGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
       <Project>{eddebc12-cd36-49ce-a47d-ac5e903ab47b}</Project>
       <Name>MagicPictureSetDownloader.Interface</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="MagicData.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="MagicPicture.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
