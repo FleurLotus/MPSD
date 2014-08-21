@@ -16,8 +16,11 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
 
             IPicture picture = MagicDatabaseManager.GetPicture(node.Card.IdGatherer);
-            if (null == picture || picture.Image.Length == 0)
+            if (null == picture || picture.Image == null || picture.Image.Length == 0)
                 picture = MagicDatabaseManager.GetDefaultPicture();
+
+            if (null == picture || picture.Image == null || picture.Image.Length == 0)
+                return null;
 
             return BytesToImage(picture.Image);
         }

@@ -9,6 +9,7 @@ namespace MagicPictureSetDownloader.Db
     using Common.Database;
     using Common.Libray;
     using MagicPictureSetDownloader.Db.DAO;
+    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     public class MagicDatabase
@@ -28,10 +29,19 @@ namespace MagicPictureSetDownloader.Db
 
         public MagicDatabase(string fileName, string pictureFileName)
         {
-            _connectionString = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
-            _connectionStringForPictureDb = "datasource=" + Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
-        }
+            string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
+            _connectionString = "datasource=" + mainDbPath;
+            if (!File.Exists(mainDbPath))
+                DatabaseGenerator.GenerateMagicData(_connectionString);
+            
 
+            string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
+            _connectionStringForPictureDb = "datasource=" + pictureDbPath;
+            if (!File.Exists(pictureDbPath))
+                DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
+                
+        }
+        
         //Unitary Get 
         public ICard GetCard(string name)
         {
@@ -277,7 +287,7 @@ namespace MagicPictureSetDownloader.Db
         private IPicture LoadImage(int idGatherer)
         {
             Picture picture = new Picture { IdGatherer = idGatherer };
-
+            
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
             {
                 cnx.Open();
@@ -299,7 +309,7 @@ namespace MagicPictureSetDownloader.Db
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
                     InsertInReferential(option);
-                
+
                 foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
                     InsertInReferential(rarity);
 
@@ -327,7 +337,6 @@ namespace MagicPictureSetDownloader.Db
                 foreach (TreePicture treePicture in Mapper<TreePicture>.LoadAll(cnx))
                     InsertInReferential(treePicture);
             }
-
             _referentialLoaded = true;
         }
         private void InsertInReferential(IPicture picture)
