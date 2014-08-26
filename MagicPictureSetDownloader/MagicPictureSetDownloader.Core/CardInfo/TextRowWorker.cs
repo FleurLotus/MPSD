@@ -6,6 +6,10 @@ namespace MagicPictureSetDownloader.Core.CardInfo
 
     internal class TextRowWorker : ICardInfoParserWorker
     {
+        public bool WorkOnCurrentAtStart
+        {
+            get { return false; }
+        }
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)
         {
             if (xmlReader.Name == "div" && xmlReader.GetAttribute("class") == "value")

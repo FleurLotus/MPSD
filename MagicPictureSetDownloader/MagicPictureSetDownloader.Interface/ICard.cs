@@ -10,5 +10,11 @@
         string CastingCost { get; set; }
         int? Loyalty { get; set; }
         string Type { get; set; }
+        string PartName { get; set; }
+        string OtherPartName { get; set; }
+
+        bool IsMultiPart { get; }
+        bool IsReverseSide { get; }
+        bool IsSplitted { get; }
     }
 }

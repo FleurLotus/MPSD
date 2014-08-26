@@ -20,7 +20,7 @@
 
             string url = match.Groups["url"].Value;
 
-            string content = Parser.ExtractContent(text, Start, End, true);
+            string content = Parser.ExtractContent(text, Start, End, true, false);
 
             return _setRegex.Matches(content).Cast<Match>()
                 .Select(m => new SetInfo(m.Groups["setname"].Value, url));

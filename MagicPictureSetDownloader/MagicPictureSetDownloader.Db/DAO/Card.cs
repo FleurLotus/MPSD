@@ -8,7 +8,8 @@
     [DbTable]
     internal class Card : ICard
     {
-        [DbColumn, DbKeyColumn(true)]
+        [DbColumn]
+        [DbKeyColumn(true)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
@@ -24,5 +25,22 @@
         public int? Loyalty { get; set; }
         [DbColumn]
         public string Type { get; set; }
+        [DbColumn]
+        public string PartName { get; set; }
+        [DbColumn]
+        public string OtherPartName { get; set; }
+
+        public bool IsMultiPart
+        {
+            get { return OtherPartName != null; }
+        }
+        public bool IsReverseSide
+        {
+            get { return IsMultiPart && CastingCost == null; }
+        }
+        public bool IsSplitted
+        {
+            get { return IsMultiPart && PartName != Name && OtherPartName != Name; }
+        }
     }
 }

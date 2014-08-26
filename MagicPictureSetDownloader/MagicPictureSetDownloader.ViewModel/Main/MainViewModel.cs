@@ -1,14 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Input;
 
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
-    using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
     public class MainViewModel : NotifyPropertyChangedBase
     {
@@ -33,6 +31,7 @@
             _magicDatabaseManager = new MagicDatabaseManager();
             Analysers = new HierarchicalInfoAnalysersViewModel(_magicDatabaseManager);
             
+
             //ALERT: Temp for helping load file to tree picture 
             /*
             foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Others"))

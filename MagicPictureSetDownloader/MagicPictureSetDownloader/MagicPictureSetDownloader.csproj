@@ -106,6 +106,7 @@
     <Compile Include="Converter\CardToImageConverter.cs" />
     <Compile Include="Converter\BoolToImageConverter.cs" />
     <Compile Include="Converter\BitmapToImageConverter.cs" />
+    <Compile Include="Converter\CardToAngleConverter.cs" />
     <Compile Include="Converter\TextToInlinesConverter.cs" />
     <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />

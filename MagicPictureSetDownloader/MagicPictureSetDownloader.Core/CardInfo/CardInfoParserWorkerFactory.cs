@@ -6,13 +6,12 @@
         {
             string classValue = xmlReader.GetAttribute("class");
             if (classValue == null)
-                return null;
+            {
+                return ImageWorker.IsWorkingInfo(xmlReader.GetAttribute("id")) ? new ImageWorker() : null;
+            }
 
             switch (classValue.ToLowerInvariant())
             {
-                case "cardimage":
-                    return new ImageWorker();
-
                 case "communityratings":
                 case "variations":
                     return new SkipWorker();
@@ -30,27 +29,37 @@
             if (classValue == null)
                 return null;
 
-            switch (classValue.ToLowerInvariant())
+            string lowerClassValue = classValue.ToLowerInvariant();
+            if (!lowerClassValue.StartsWith("ctl00_ctl00_ctl00_maincontent_subcontent_subcontent"))
+                return null;
+
+            string infoType = lowerClassValue.Substring(lowerClassValue.LastIndexOf('_') + 1);
+            //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_* for normalcard
+            //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl03_* for part A off multi part card
+            //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl04_* for part B off multi part card
+
+            switch (infoType)
             {
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_namerow":
+                case "namerow":
                     return new SimpleValueRowWorker(CardParser.NameKey);
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_manarow":
+                case "manarow":
                     return new ManaRowWorker();
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_cmcrow":
+                case "cmcrow":
                     return new SimpleValueRowWorker(CardParser.CmcKey);
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ptrow":
+                case "ptrow":
                     return new SimpleValueRowWorker(CardParser.PTKey);
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_typerow":
+                case "typerow":
                     return new SimpleValueRowWorker(CardParser.TypeKey);
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_rarityrow":
+                case "rarityrow":
                     return new SimpleValueRowWorker(CardParser.RarityKey);
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_textrow":
+                case "textrow":
                     return new TextRowWorker();
 
                 //Not used
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_setrow":
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_numberrow":
-                case "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_artistrow":
+                case "setrow":
+                case "numberrow":
+                case "artistrow":
+                case "flavorRow":
                     return null;
                 default:
                     return null;

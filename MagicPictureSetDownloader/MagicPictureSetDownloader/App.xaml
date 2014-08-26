@@ -14,6 +14,7 @@
             
             <!--Converter -->
             <converter:CardToImageConverter x:Key="c2iConv" />
+            <converter:CardToAngleConverter x:Key="c2aConv" />
             <converter:TreeToImageConverter x:Key="t2iConv" />
             <converter:BoolToImageConverter x:Key="b2iConv" />
             <converter:BitmapToImageConverter x:Key="bm2iConv" />

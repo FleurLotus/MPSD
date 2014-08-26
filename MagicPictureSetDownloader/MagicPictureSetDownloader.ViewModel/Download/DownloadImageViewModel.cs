@@ -9,7 +9,7 @@
     {
         private readonly string[] _missingImages;
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private int _nextJob = 0;
+        private int _nextJob;
         private const int NbThread = 5;
         private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
 

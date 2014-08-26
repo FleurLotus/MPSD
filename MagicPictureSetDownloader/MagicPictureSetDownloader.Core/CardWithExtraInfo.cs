@@ -11,5 +11,7 @@
         public string Type { get; set; }
         public string PictureUrl { get; set; }
         public string Rarity { get; set; }
+        public string PartName { get; set; }
+        public string OtherPathName { get; set; }
     }
 }

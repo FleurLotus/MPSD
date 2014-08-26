@@ -4,6 +4,7 @@
 
     internal interface ICardInfoParserWorker
     {
+        bool WorkOnCurrentAtStart { get; }
         IDictionary<string, string> WorkOnElement(IAwareXmlTextReader awareXmlReader);
     }
 }

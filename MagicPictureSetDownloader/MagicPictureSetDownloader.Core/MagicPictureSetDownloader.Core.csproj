@@ -57,6 +57,7 @@
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
     <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
     <Compile Include="CardWithExtraInfo.cs" />
+    <Compile Include="Parser\CardNameParser.cs" />
     <Compile Include="Parser\SetParser.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="SetInfoWithBlock.cs" />

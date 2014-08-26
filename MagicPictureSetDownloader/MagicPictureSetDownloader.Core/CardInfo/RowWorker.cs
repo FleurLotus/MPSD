@@ -10,6 +10,10 @@ namespace MagicPictureSetDownloader.Core.CardInfo
         {
             _innerWorker = CardInfoParserWorkerFactory.CreateParserRowSubWorker(xmlReader);
         }
+        public bool WorkOnCurrentAtStart
+        {
+            get { return false; }
+        }
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)
         {
             if (_innerWorker == null) 

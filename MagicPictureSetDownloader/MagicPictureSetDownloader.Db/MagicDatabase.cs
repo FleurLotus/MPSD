@@ -43,11 +43,15 @@ namespace MagicPictureSetDownloader.Db
         }
         
         //Unitary Get 
-        public ICard GetCard(string name)
+        public ICard GetCard(string name, string partName)
         {
             CheckReferentialLoaded();
-            return _cards.GetOrDefault(name);
+            if (partName == null || partName == name)
+                return _cards.GetOrDefault(name);
+
+            return _cards.GetOrDefault(name + partName);
         }
+
         private ICardEdition GetCardEdition(int idGatherer)
         {
             CheckReferentialLoaded();
@@ -112,14 +116,37 @@ namespace MagicPictureSetDownloader.Db
         {
 
             CheckReferentialLoaded();
-            List<ICardAllDbInfo> ret = _cardEditions.Values.Select(
-                    cardEdition => (ICardAllDbInfo) (new CardAllDbInfo
-                         {
-                             Card = _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard),
-                             Edition = _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition),
-                             Rarity = _rarities.Values.FirstOrDefault(r => r.Id == cardEdition.IdRarity),
-                             IdGatherer = cardEdition.IdGatherer
-                         })).ToList();
+            List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
+            foreach (ICardEdition cardEdition in _cardEditions.Values)
+            {
+                CardAllDbInfo cardAllDbInfo = new CardAllDbInfo();
+                ICard card = _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard);
+                cardAllDbInfo.Card = card;
+                cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
+                cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == cardEdition.IdRarity);
+                cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
+                cardAllDbInfo.IdGathererPart2 = -1;
+
+                //For Multipart card
+                if (card.IsMultiPart)
+                {
+                    if (card.IsReverseSide)
+                        continue;
+
+                    ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
+                    cardAllDbInfo.CardPart2 = cardPart2;
+
+                     ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == cardEdition.IdEdition && ce.IdCard == cardPart2.Id);
+                    //Verso of Reserse Card
+                    if (cardEdition2 != null)
+                    {
+                        if (cardEdition2.IdGatherer != cardEdition.IdGatherer)
+                            cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
+                    }
+                }
+
+                ret.Add(cardAllDbInfo);
+            }
 
             return ret.AsReadOnly();
         }
@@ -175,32 +202,34 @@ namespace MagicPictureSetDownloader.Db
             TreePicture treepicture = new TreePicture { Name = name, Image = data };
             AddToDbAndUpdateReferential(_connectionStringForPictureDb, treepicture, InsertInReferential);
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName)
         {
 
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            if (GetCard(name) != null)
+            if (GetCard(name, partName) != null)
                 return;
 
             Card card = new Card
             {
+                PartName = partName??name,
                 Name = name,
                 Text = text,
                 Power = power,
                 Toughness = toughness,
                 CastingCost = castingcost,
                 Loyalty = loyalty,
-                Type = type
+                Type = type,
+                OtherPartName = otherPartName
             };
 
             AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
         }
-        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity, string url)
+        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url)
         {
             int idRarity = GetRarityId(rarity);
-            int idCard = GetCard(name).Id;
+            int idCard = GetCard(name, partName).Id;
             
             if (idGatherer <= 0 || idEdition <= 0)
                 throw new ApplicationDbException("Data are not filled correctedly");
@@ -357,7 +386,11 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICard card)
         {
-            _cards.Add(card.Name, card);
+            if (card.PartName == null || card.Name == card.PartName)
+                _cards.Add(card.Name, card);
+            else
+                _cards.Add(card.Name + card.PartName, card);
+                
         }
         private void InsertInReferential(ICardEdition cardEdition)
         {
