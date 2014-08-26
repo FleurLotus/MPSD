@@ -36,7 +36,7 @@
                 baseurl = ExtractBaseUrl(baseurl);
 
             if (!baseurl.EndsWith("/"))
-                baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
 
             if (relativeurl.StartsWith("/"))
                 relativeurl = relativeurl.Substring(1);
@@ -70,7 +70,7 @@
                 return url;
 
 
-            int startIndex = url.IndexOf(postfixProtocol, StringComparison.Ordinal);
+            int startIndex = url.IndexOf(postfixProtocol, StringComparison.InvariantCulture);
             if (startIndex < 0)
                 return url;
 
@@ -99,12 +99,13 @@
         {
             string htmltext = GetHtml(url);
 
-            CardWithExtraInfo cardWithExtraInfo = Parser.ParseCardInfo(htmltext);
+            foreach (CardWithExtraInfo cardWithExtraInfo in Parser.ParseCardInfo(htmltext))
+            {
+                string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
 
-            string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
-
-            InsertCardInDb(cardWithExtraInfo);
-            InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
+                InsertCardInDb(cardWithExtraInfo);
+                InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
+            }
         }
         public void InsertPictureInDb(string pictureUrl)
         {
@@ -132,7 +133,7 @@
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
-            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, pictureUrl);
+            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
         }
         private bool OnCredentialRequiered()
         {
@@ -156,7 +157,8 @@
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
             _magicDatabaseManager.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
-                                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type);
+                                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type, 
+                                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName);
         }
         private WebClient GetWebClient()
         {

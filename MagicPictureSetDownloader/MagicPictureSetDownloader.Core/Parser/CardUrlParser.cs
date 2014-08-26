@@ -15,7 +15,7 @@
 
         public IEnumerable<string> Parse(string text)
         {
-            text = Parser.ExtractContent(text, Start, End, true);
+            text = Parser.ExtractContent(text, Start, End, true, false);
 
             IList<string> cardUrls = new List<string>();
             int maxIndexNumber = -1;
@@ -39,8 +39,8 @@
                 cardUrls.Add(m.Groups["url"].Value);
             }
 
-            if (maxIndexNumber!=-1  && maxIndexNumber != cardUrls.Count)
-                throw new ParserException("Error while parsing, number of card info doesn't match max card id for set");
+            if (maxIndexNumber != -1 && maxIndexNumber > cardUrls.Count) //Can't check egality because of mutlipart card and conspiracy
+                throw new ParserException("Error while parsing, number of card info is less than max card id for set");
 
             return cardUrls;
         }

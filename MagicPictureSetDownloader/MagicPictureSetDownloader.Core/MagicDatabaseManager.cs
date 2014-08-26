@@ -24,10 +24,9 @@
         {
             return DbInstance.GetOptions(type);
         }
-        
-        public ICard GetCard(string name)
+        public ICard GetCard(string name, string partName)
         {
-            return DbInstance.GetCard(name);
+            return DbInstance.GetCard(name, partName);
         }
         public IPicture GetPicture(int idGatherer)
         {
@@ -62,13 +61,13 @@
         {
             DbInstance.InsertNewTreePicture(key, data);
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type)
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName)
         {
-            DbInstance.InsertNewCard(name, text, power, toughness, castingcost, loyalty, type);
+            DbInstance.InsertNewCard(name, text, power, toughness, castingcost, loyalty, type, partName, otherPartName);
         }
-        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string rarity, string url)
+        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url)
         {
-            DbInstance.InsertNewCardEdition(idGatherer, idEdition, name, rarity, url);
+            DbInstance.InsertNewCardEdition(idGatherer, idEdition, name, partName, rarity, url);
         }
         public void InsertNewOption(TypeOfOption type, string key, string value)
         {

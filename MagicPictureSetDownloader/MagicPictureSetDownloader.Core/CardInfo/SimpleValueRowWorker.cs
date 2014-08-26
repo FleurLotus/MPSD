@@ -8,6 +8,11 @@ namespace MagicPictureSetDownloader.Core.CardInfo
     {
         private readonly string _key;
 
+        public bool WorkOnCurrentAtStart
+        {
+            get { return false; }
+        }
+
         public SimpleValueRowWorker(string key)
         {
             _key = key;

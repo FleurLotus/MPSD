@@ -65,7 +65,7 @@
                 <ColumnDefinition Width="25" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            
+
             <Border Grid.Column="0">
                 <StackPanel Margin="0,25">
                     <ToggleButton Content=">>" Height="25" IsChecked="{wpfbinding:TwoWayBinding ShowFilterConfig}" />
@@ -84,7 +84,7 @@
                     <ContentControl Content="{Binding Hierarchical}" />
                 </Border>
                 <GridSplitter Grid.Column="1"/>
-                
+
                 <Border Grid.Column="2">
                     <Grid>
                         <!-- Split Card/Image -->
@@ -93,9 +93,18 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
-                        <Image Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                               Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}}" MaxWidth="200" 
-                               Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}"/>
+                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="10">
+                            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
+                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
+                            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" 
+                               Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
+                                <Image.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
+                                    </TransformGroup>
+                                </Image.RenderTransform>
+                            </Image>
+                        </StackPanel>
                     </Grid>
                 </Border>
             </Grid>

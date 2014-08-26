@@ -4,6 +4,10 @@ namespace MagicPictureSetDownloader.Core.CardInfo
 
     internal class SkipWorker : ICardInfoParserWorker
     {
+        public bool WorkOnCurrentAtStart
+        {
+            get { return false; }
+        }
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)
         {
             //Do nothing only skip elements
