@@ -36,6 +36,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Copyright.cs">
+      <Link>Properties\Copyright.cs</Link>
+    </Compile>
     <Compile Include="GenericConfigurationElementCollection.cs" />
     <Compile Include="IHasKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

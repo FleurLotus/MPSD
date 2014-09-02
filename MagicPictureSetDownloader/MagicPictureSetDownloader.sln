@@ -27,9 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.I
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D00700D7-C608-4B74-B712-CF8C773A975C}"
 	ProjectSection(SolutionItems) = preProject
+		Copyright.cs = Copyright.cs
 		MagicData.sdf = MagicData.sdf
 		MagicPicture.sdf = MagicPicture.sdf
 		Settings.StyleCop = Settings.StyleCop
+		Version.cs = Version.cs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Drawing", "Common.Drawing\Common.Drawing.csproj", "{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174}"

@@ -12,7 +12,7 @@ namespace MagicPictureSetDownloader.Converter
         {
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 
-            if (node == null || node.Card.OtherCardPart == null ||  !node.Card.OtherCardPart.IsDownSide )
+            if (node == null || node.Card.OtherCardPart == null || !node.Card.OtherCardPart.IsDownSide)
                 return 0;
 
             return 180;

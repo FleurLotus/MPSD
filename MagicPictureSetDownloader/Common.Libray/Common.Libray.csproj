@@ -35,6 +35,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Copyright.cs">
+      <Link>Properties\Copyright.cs</Link>
+    </Compile>
     <Compile Include="HashHelper.cs" />
     <Compile Include="ReadOnlyDictionary.cs" />
     <Compile Include="Extension.cs" />

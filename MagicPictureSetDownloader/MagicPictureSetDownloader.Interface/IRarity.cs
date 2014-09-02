@@ -1,9 +1,7 @@
 namespace MagicPictureSetDownloader.Interface
 {
-    public interface IRarity
+    public interface IRarity: IIdName
     {
-        int Id { get;  }
-        string Name { get; }
         string Code { get; }
     }
 }
