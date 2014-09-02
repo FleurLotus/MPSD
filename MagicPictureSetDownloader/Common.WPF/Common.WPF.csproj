@@ -41,6 +41,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Copyright.cs">
+      <Link>Properties\Copyright.cs</Link>
+    </Compile>
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="BindableSelectedItemBehavior.cs" />
     <Compile Include="Converter\TreeViewLineConverter.cs" />

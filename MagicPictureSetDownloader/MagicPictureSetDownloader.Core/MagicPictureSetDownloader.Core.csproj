@@ -37,6 +37,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Copyright.cs">
+      <Link>Properties\Copyright.cs</Link>
+    </Compile>
+    <Compile Include="..\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="CardInfo\AwareXmlTextReader.cs" />
     <Compile Include="CardInfo\SymbolParser.cs" />
     <Compile Include="CardInfo\TextRowWorker.cs" />

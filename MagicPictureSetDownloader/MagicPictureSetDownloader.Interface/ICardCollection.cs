@@ -1,6 +1,6 @@
 namespace MagicPictureSetDownloader.Interface
 {
-    public interface IBlock : IIdName
+    public interface ICardCollection : IIdName
     {
     }
 }

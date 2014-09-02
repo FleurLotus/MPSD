@@ -48,6 +48,15 @@
         {
             return DbInstance.GetOption(type, key);
         }
+        public ICardCollection GetCollection(string name)
+        {
+            return DbInstance.GetCollection(name);
+        }
+        public IList<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
+        {
+            return DbInstance.GetCardCollection(cardCollection);
+        }
+
 
         public string[] GetMissingPictureUrls()
         {
@@ -72,6 +81,32 @@
         public void InsertNewOption(TypeOfOption type, string key, string value)
         {
             DbInstance.InsertNewOption(type, key, value);
+        }
+        public void InsertNewCollection(string name)
+        {
+            DbInstance.InsertNewCollection(name);
+        }
+        public void InsertNewCardInCollection(int idCollection, int idGatherer, int count, int foilCount = 0)
+        {
+            DbInstance.InsertNewCardInCollection(idCollection, idGatherer, count, foilCount);
+        }
+        
+        public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
+        {
+            return DbInstance.UpdateCollectionName(collection, name);
+        }
+        public ICardInCollectionCount UpdateCardCollectionCount(ICardInCollectionCount cardInCollection, int count, int countFoil = 0)
+        {
+            return DbInstance.UpdateCardCollectionCount(cardInCollection, count, countFoil);
+        }
+
+        public void DeleteCardInCollection(int idCollection, int idGatherer)
+        {
+            DbInstance.DeleteCardInCollection(idCollection, idGatherer);
+        }
+        public void DeleteCollection(string name)
+        {
+            DbInstance.DeleteCollection(name);
         }
     }
 }

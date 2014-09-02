@@ -12,12 +12,13 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
-    public class MagicDatabase
+    public partial class MagicDatabase
     {
         private readonly object _sync = new object();
         private bool _referentialLoaded;
         private readonly string _connectionString;
         private readonly string _connectionStringForPictureDb;
+
         private readonly IList<IEdition> _editions = new List<IEdition>();
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
@@ -25,7 +26,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
-        private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();  
+        private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
         public MagicDatabase(string fileName, string pictureFileName)
         {
@@ -33,15 +34,13 @@ namespace MagicPictureSetDownloader.Db
             _connectionString = "datasource=" + mainDbPath;
             if (!File.Exists(mainDbPath))
                 DatabaseGenerator.GenerateMagicData(_connectionString);
-            
 
             string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
             _connectionStringForPictureDb = "datasource=" + pictureDbPath;
             if (!File.Exists(pictureDbPath))
                 DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
-                
         }
-        
+
         //Unitary Get 
         public ICard GetCard(string name, string partName)
         {
@@ -114,7 +113,6 @@ namespace MagicPictureSetDownloader.Db
         //Ensembly Get 
         public ICollection<ICardAllDbInfo> GetAllInfos()
         {
-
             CheckReferentialLoaded();
             List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
             foreach (ICardEdition cardEdition in _cardEditions.Values)
@@ -322,7 +320,6 @@ namespace MagicPictureSetDownloader.Db
                 cnx.Open();
                 return Mapper<Picture>.Load(cnx, picture);
             }
-
         }
         private void LoadReferentials()
         {
@@ -335,6 +332,8 @@ namespace MagicPictureSetDownloader.Db
                 _editions.Clear();
                 _cards.Clear();
                 _cardEditions.Clear();
+                _collections.Clear();
+                _allCardInCollectionCount.Clear();
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
                     InsertInReferential(option);
@@ -357,6 +356,13 @@ namespace MagicPictureSetDownloader.Db
 
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                     InsertInReferential(cardEdition);
+
+                foreach (CardCollection cardCollection in Mapper<CardCollection>.LoadAll(cnx))
+                    InsertInReferential(cardCollection);
+
+                foreach (CardInCollectionCount cardInCollectionCount in Mapper<CardInCollectionCount>.LoadAll(cnx))
+                    InsertInReferential(cardInCollectionCount);
+
             }
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
             {

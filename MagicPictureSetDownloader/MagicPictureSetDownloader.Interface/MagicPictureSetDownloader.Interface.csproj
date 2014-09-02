@@ -35,6 +35,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Copyright.cs">
+      <Link>Properties\Copyright.cs</Link>
+    </Compile>
+    <Compile Include="..\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
+    <Compile Include="ICardInCollectionCount.cs" />
+    <Compile Include="ICardCollection.cs" />
+    <Compile Include="IIdName.cs" />
     <Compile Include="IOption.cs" />
     <Compile Include="IPictureKey.cs" />
     <Compile Include="ITreePicture.cs" />
