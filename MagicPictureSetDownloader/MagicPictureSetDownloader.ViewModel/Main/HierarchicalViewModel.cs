@@ -11,14 +11,16 @@
     public class HierarchicalViewModel: NotifyPropertyChangedBase
     {
         private HierarchicalResultViewModel _selected;
-        private readonly string _name;
+        private readonly Func<string, IEnumerable<CardViewModel>> _getCardViewModels;
 
-        public HierarchicalViewModel(string name)
+        public HierarchicalViewModel(string name, Func<string, IEnumerable<CardViewModel>> getCardViewModels)
         {
-            _name = name;
-            Root = (new List<HierarchicalResultViewModel>{ new HierarchicalResultViewModel(name)}).AsReadOnly();
+            Name = name;
+            _getCardViewModels = getCardViewModels;
+            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(name) }).AsReadOnly();
         }
 
+        public string Name { get; private set; }
         public IList<HierarchicalResultViewModel> Root { get; private set; }
         public HierarchicalResultViewModel Selected
         {
@@ -32,15 +34,15 @@
                 }
             }
         }
-        public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<CardViewModel> cards)
+        public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
-            ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, orders, cards));
+            ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, orders));
         }
-        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, IEnumerable<CardViewModel> cards)
+        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
-            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(_name) }).AsReadOnly();
+            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(Name) }).AsReadOnly();
 
-            foreach (CardViewModel card in cards)
+            foreach (CardViewModel card in _getCardViewModels(Name))
             {
                 MakeHierarchy(analysers, orders, card);
             }

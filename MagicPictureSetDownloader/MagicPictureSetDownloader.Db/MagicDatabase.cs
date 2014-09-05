@@ -97,7 +97,7 @@ namespace MagicPictureSetDownloader.Db
             IEdition edition = _editions.FirstOrDefault(ed => String.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
             if (edition == null)
             {
-                Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName };
+                Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false };
                 AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
                 edition = realEdition;
             }
@@ -111,17 +111,30 @@ namespace MagicPictureSetDownloader.Db
         }
 
         //Ensembly Get 
-        public ICollection<ICardAllDbInfo> GetAllInfos()
+        public ICollection<ICardAllDbInfo> GetAllInfos(bool withCollectionInfo, int onlyInCollectionId)
         {
             CheckReferentialLoaded();
             List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
             foreach (ICardEdition cardEdition in _cardEditions.Values)
             {
                 CardAllDbInfo cardAllDbInfo = new CardAllDbInfo();
-                ICard card = _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard);
+                if (withCollectionInfo)
+                {
+                    bool inWantedCollection = false;
+                    foreach (ICardInCollectionCount cardInCollectionCount in _allCardInCollectionCount.Values.SelectMany(a => a))
+                    {
+                        inWantedCollection = inWantedCollection || cardInCollectionCount.IdCollection == onlyInCollectionId;
+                        cardAllDbInfo.Add(cardInCollectionCount);
+                    }
+                    if (!inWantedCollection)
+                        continue;
+                }
+
+                ICardEdition edition = cardEdition;
+                ICard card = _cards.Values.FirstOrDefault(c => c.Id == edition.IdCard);
                 cardAllDbInfo.Card = card;
-                cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
-                cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == cardEdition.IdRarity);
+                cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
+                cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
                 cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
                 cardAllDbInfo.IdGathererPart2 = -1;
 
@@ -134,7 +147,7 @@ namespace MagicPictureSetDownloader.Db
                     ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
                     cardAllDbInfo.CardPart2 = cardPart2;
 
-                     ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == cardEdition.IdEdition && ce.IdCard == cardPart2.Id);
+                    ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id);
                     //Verso of Reserse Card
                     if (cardEdition2 != null)
                     {
@@ -266,6 +279,27 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
             }
         }
+
+        public void EditionCompleted(int editionId)
+        {
+            Edition newEdition = _editions.FirstOrDefault(e=>e.Id == editionId) as Edition;
+            if (newEdition == null || newEdition.Completed)
+                return;
+
+            lock (_sync)
+            {
+                newEdition.Completed = true;
+
+                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                {
+                    cnx.Open();
+                    Mapper<Edition>.UpdateOne(cnx, newEdition);
+                }
+            }
+
+        }
+
+
 
         public string[] GetMissingPictureUrls()
         {

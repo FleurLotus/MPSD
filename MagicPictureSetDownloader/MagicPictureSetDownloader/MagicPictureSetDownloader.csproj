@@ -87,10 +87,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="VersionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="CredentialInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,9 +117,6 @@
       <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PicturedTextBlock.cs" />
-    <Compile Include="VersionWindow.xaml.cs">
-      <DependentUpon>VersionWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="CredentialInput.xaml.cs">
       <DependentUpon>CredentialInput.xaml</DependentUpon>
     </Compile>

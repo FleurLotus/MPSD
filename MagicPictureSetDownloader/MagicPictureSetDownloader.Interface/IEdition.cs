@@ -11,5 +11,6 @@ namespace MagicPictureSetDownloader.Interface
         string GathererName { get; }
         DateTime? ReleaseDate { get; }
         int? CardNumber { get; }
+        bool Completed { get; }
     }
 }

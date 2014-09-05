@@ -18,6 +18,11 @@ namespace MagicPictureSetDownloader.Db
         {
             return _collections.FirstOrDefault(c => c.Name == name);
         }
+        public ICollection<ICardCollection> GetAllCollections()
+        {
+            return (new List<ICardCollection>(_collections).AsReadOnly());
+        }
+
         public IList<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
         {
             List<ICardInCollectionCount> ret;
@@ -37,7 +42,7 @@ namespace MagicPictureSetDownloader.Db
                 return;
 
             CardCollection collection = new CardCollection { Name = name };
-            AddToDbAndUpdateReferential(_connectionStringForPictureDb, collection, InsertInReferential);
+            AddToDbAndUpdateReferential(_connectionString, collection, InsertInReferential);
         }
         public void InsertNewCardInCollection(int idCollection, int idGatherer, int count, int foilCount)
         {
@@ -53,7 +58,7 @@ namespace MagicPictureSetDownloader.Db
                 return;
 
             CardInCollectionCount cardInCollection = new CardInCollectionCount{IdCollection = idCollection, IdGatherer = idGatherer, Number = count, FoilNumber = foilCount};
-            AddToDbAndUpdateReferential(_connectionStringForPictureDb, cardInCollection, InsertInReferential);
+            AddToDbAndUpdateReferential(_connectionString, cardInCollection, InsertInReferential);
         }
 
         public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
@@ -120,7 +125,7 @@ namespace MagicPictureSetDownloader.Db
             if (cardInCollectionCount == null)
                 return;
 
-            RemoveFromDbAndUpdateReferential(_connectionStringForPictureDb, cardInCollectionCount as CardInCollectionCount, RemoveFromReferential);
+            RemoveFromDbAndUpdateReferential(_connectionString, cardInCollectionCount as CardInCollectionCount, RemoveFromReferential);
         }
         public void DeleteCollection(string name)
         {
@@ -128,7 +133,7 @@ namespace MagicPictureSetDownloader.Db
             if (cardCollection == null)
                 return;
 
-            RemoveFromDbAndUpdateReferential(_connectionStringForPictureDb, cardCollection as CardCollection, RemoveFromReferential);
+            RemoveFromDbAndUpdateReferential(_connectionString, cardCollection as CardCollection, RemoveFromReferential);
         }
 
         private void InsertInReferential(ICardCollection cardCollection)

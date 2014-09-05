@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Libray", "Common.Libray\Common.Libray.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{F42F032C-75B0-4B96-8936-09566943FE17}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Database", "Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Db", "MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj", "{1F2678D5-43D0-402E-AA40-2B0AA06C9292}"
@@ -37,6 +35,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Drawing", "Common.Drawing\Common.Drawing.csproj", "{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalReference", "ExternalReference", "{F454124A-EFDC-466A-AB43-99F0CE9B642A}"
+	ProjectSection(SolutionItems) = preProject
+		ExternalReference\ExportSqlCE40.exe = ExternalReference\ExportSqlCE40.exe
+		ExternalReference\ICSharpCode.SharpZipLib.dll = ExternalReference\ICSharpCode.SharpZipLib.dll
+		ExternalReference\ICSharpCode.SharpZipLib.xml = ExternalReference\ICSharpCode.SharpZipLib.xml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.DbGenerator", "MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj", "{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}"
 EndProject
@@ -72,10 +75,6 @@ Global
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F42F032C-75B0-4B96-8936-09566943FE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F42F032C-75B0-4B96-8936-09566943FE17}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -112,7 +111,6 @@ Global
 		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{770CD409-408D-44B1-84AE-B96513D9D7C7} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{F42F032C-75B0-4B96-8936-09566943FE17} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{C695020A-1108-41BF-8494-34BDEFC30581} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}

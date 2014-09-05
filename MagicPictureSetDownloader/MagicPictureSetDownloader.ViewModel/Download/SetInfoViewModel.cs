@@ -43,7 +43,6 @@
         {
             get { return _edition.BlockName; }
         }
-        
         public bool Active
         {
             get { return _active; }

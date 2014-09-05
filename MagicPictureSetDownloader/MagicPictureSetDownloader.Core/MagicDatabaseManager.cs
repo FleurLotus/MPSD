@@ -16,9 +16,9 @@
                 return _lazyIntance.Value;
             }
         }
-        public ICollection<ICardAllDbInfo> GetAllInfos()
+        public ICollection<ICardAllDbInfo> GetAllInfos(bool withCollectionInfo, int onlyInCollectionId)
         {
-            return DbInstance.GetAllInfos();
+            return DbInstance.GetAllInfos(withCollectionInfo, onlyInCollectionId);
         }
         public IList<IOption> GetOptions(TypeOfOption type)
         {
@@ -52,12 +52,16 @@
         {
             return DbInstance.GetCollection(name);
         }
+        public ICollection<ICardCollection> GetAllCollections()
+        {
+            return DbInstance.GetAllCollections();
+        }
+
         public IList<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
         {
             return DbInstance.GetCardCollection(cardCollection);
         }
-
-
+        
         public string[] GetMissingPictureUrls()
         {
             return DbInstance.GetMissingPictureUrls();
@@ -90,7 +94,11 @@
         {
             DbInstance.InsertNewCardInCollection(idCollection, idGatherer, count, foilCount);
         }
-        
+
+        public void EditionCompleted(int editionId)
+        {
+            DbInstance.EditionCompleted(editionId);
+        }
         public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
         {
             return DbInstance.UpdateCollectionName(collection, name);

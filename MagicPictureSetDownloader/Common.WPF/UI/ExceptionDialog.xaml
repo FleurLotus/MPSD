@@ -1,0 +1,28 @@
+﻿<Window x:Class="Common.WPF.UI.ExceptionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=viewModel:ExceptionViewModel}"
+        Title="Error" 
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" 
+        WindowStartupLocation="CenterOwner">
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
+            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontWeight="Bold" Content="{Binding ExceptionText}" />
+        <Button  Grid.Row="1"  Content="Ok" Width="70" Margin="10" IsDefault="True" Command="{Binding OkCommand}"/>
+    </Grid>
+</Window>
