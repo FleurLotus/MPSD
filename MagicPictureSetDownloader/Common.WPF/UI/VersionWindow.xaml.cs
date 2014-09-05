@@ -1,4 +1,4 @@
-﻿namespace MagicPictureSetDownloader
+﻿namespace Common.WPF.UI
 {
     using Common.ViewModel;
 

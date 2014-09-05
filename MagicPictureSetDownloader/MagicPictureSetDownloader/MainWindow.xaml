@@ -7,16 +7,18 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="MagicPictureSetDownloader" Height="800" Width="900">
+        Title="{Binding Title}" Height="800" Width="900">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>
                 <Setter Property="BorderThickness" Value="1"/>
@@ -37,6 +39,9 @@
         <i:EventTrigger EventName="CloseRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="Close" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="NameRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="NameRequested" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
@@ -45,20 +50,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu IsMainMenu="True" Grid.Row="0">
-            <MenuItem Header="_File" >
-                <MenuItem Header="Update _Set Database" Command="{Binding UpdateDatabaseCommand}"/>
-                <MenuItem Header="Update _Image Database" Command="{Binding UpdateImageDatabaseCommand}"/>
-                <Separator/>
-                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
-            </MenuItem>
-            <MenuItem Header="_View">
-                <MenuItem Header="_Show Picture" IsCheckable="True" IsChecked="{wpfbinding:TwoWayBinding ShowPicture}"/>
-            </MenuItem>
-            <MenuItem Header="?">
-                <MenuItem Header="_Version" Command="{Binding VersionCommand}"/>
-            </MenuItem>
-        </Menu>
+        <Menu IsMainMenu="True" Grid.Row="0" ItemsSource="{Binding Menus}" 
+              ItemContainerStyleSelector="{StaticResource separatorStyleSelector}"/>
         <Grid Margin="5" Grid.Row="1">
             <!-- Split Filter/Others -->
             <Grid.ColumnDefinitions>

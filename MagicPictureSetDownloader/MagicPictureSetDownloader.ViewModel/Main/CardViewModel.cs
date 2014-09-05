@@ -31,6 +31,7 @@
             IsMultiPart = card.IsMultiPart;
             IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
 
+
             Text = card.Text;
             if (!string.IsNullOrWhiteSpace(card.Power) && !string.IsNullOrWhiteSpace(card.Toughness))
             {

@@ -135,6 +135,11 @@
 
             _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
         }
+        public void EditionCompleted(int editionId)
+        {
+            _magicDatabaseManager.EditionCompleted(editionId);
+        }
+
         private bool OnCredentialRequiered()
         {
             var e = CredentialRequiered;

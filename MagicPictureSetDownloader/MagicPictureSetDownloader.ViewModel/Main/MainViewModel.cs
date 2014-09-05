@@ -1,36 +1,39 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Input;
 
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Interface;
 
-    public class MainViewModel : NotifyPropertyChangedBase
+    public partial class MainViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
     {
-        public event EventHandler UpdateDatabaseRequested;
-        public event EventHandler UpdateImageDatabaseRequested;
-        public event EventHandler VersionRequested;
-        public event EventHandler CloseRequested;
+        private const string MagicCards = "Magic Cards";
 
-        private bool _showPicture;
         private bool _showFilterConfig;
+
+        private readonly HierarchicalViewModel _allhierarchical;
+        private HierarchicalViewModel _hierarchical;
         private readonly MagicDatabaseManager _magicDatabaseManager;
+        
 
         //TODO: manage collection
-        //TODO: Import/export of collection
+        //          - Change Name
+        //          - Delete Collection
+        //          - Import/export of collection
+        //          - Add remove/card in collection
+        //          - Move card
         public MainViewModel()
         {
-            UpdateDatabaseCommand = new RelayCommand(UpdateDatabaseCommandExecute);
-            UpdateImageDatabaseCommand = new RelayCommand(UpdateImageDatabaseCommandExecute);
-            VersionCommand = new RelayCommand(VersionCommandExecute);
-            CloseCommand = new RelayCommand(CloseCommandExecute);
-            Hierarchical = new HierarchicalViewModel("Magic Cards");
+            AddLinkedProperty(() => Hierarchical, () => Title);
+
+            _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
+
             _magicDatabaseManager = new MagicDatabaseManager();
             Analysers = new HierarchicalInfoAnalysersViewModel(_magicDatabaseManager);
-            
+            CreateMenu();
 
             //ALERT: Temp for helping load file to tree picture 
             /*
@@ -39,19 +42,12 @@
                 _magicDatabaseManager.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
             */
-            LoadCardsHierarchy();
-
-            ShowPicture = true;
+            
+            LoadAllCards();
         }
-        
-        public HierarchicalViewModel Hierarchical { get; private set; }
+
         public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
-
-        public ICommand UpdateDatabaseCommand { get; private set; }
-        public ICommand UpdateImageDatabaseCommand { get; private set; }
-        public ICommand VersionCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
-
+        
         public bool ShowFilterConfig
         {
             get { return _showFilterConfig; }
@@ -69,78 +65,49 @@
                 }
             }
         }
-        public bool ShowPicture
+        public string Title
         {
-            get { return _showPicture; }
-            set
+            get { return "MagicPictureSetDownloader - " + Hierarchical.Name; }
+        }
+        public HierarchicalViewModel Hierarchical
+        {
+            get { return _hierarchical; }
+            private set
             {
-                if (value != _showPicture)
+                if (value != _hierarchical)
                 {
-                    _showPicture = value;
-                    OnNotifyPropertyChanged(() => ShowPicture);
+                    _hierarchical = value;
+                    OnNotifyPropertyChanged(() => Hierarchical);
                 }
             }
         }
-        
-        #region Events
 
-        private void OnUpdateDatabaseRequested()
+        public void LoadCollection(string collectionName)
         {
-            EventHandler e = UpdateDatabaseRequested;
-            if (e != null)
-                e(this, EventArgs.Empty);
-        }
-        private void OnUpdateImageDatabaseRequested()
-        {
-            EventHandler e = UpdateImageDatabaseRequested;
-            if (e != null)
-                e(this, EventArgs.Empty);
-        }
-        private void OnVersionRequested()
-        {
-            EventHandler e = VersionRequested;
-            if (e != null)
-                e(this, EventArgs.Empty);
-        }
-        private void OnCloseRequested()
-        {
-            EventHandler e = CloseRequested;
-            if (e != null)
-                e(this, EventArgs.Empty);
-        }
-        
-        #endregion
-
-        #region Command
-
-        private void UpdateDatabaseCommandExecute(object o)
-        {
-            OnUpdateDatabaseRequested();
+            Hierarchical = new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
             LoadCardsHierarchy();
         }
-        private void UpdateImageDatabaseCommandExecute(object o)
+        public void LoadAllCards()
         {
-            OnUpdateImageDatabaseRequested();
+            Hierarchical = _allhierarchical;
+            LoadCardsHierarchy();
         }
-        private void VersionCommandExecute(object o)
-        {
-            OnVersionRequested();
-        }
-        private void CloseCommandExecute(object o)
-        {
-            OnCloseRequested();
-        }
-
-        #endregion
-
+        
         private void LoadCardsHierarchy()
         {
             HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
 
             Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
-                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray(),
-                                            _magicDatabaseManager.GetAllInfos().Select(cai => new CardViewModel(cai)));
+                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray());
         }
-
+        private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
+        {
+            return _magicDatabaseManager.GetAllInfos(false, -1).Select(cai => new CardViewModel(cai));
+        }
+        private IEnumerable<CardViewModel> CardCollectionAsViewModel(string collectionName)
+        {
+            ICardCollection cardCollection = _magicDatabaseManager.GetCollection(collectionName);
+            return _magicDatabaseManager.GetAllInfos(true, cardCollection.Id).Select(cai => new CardViewModel(cai));
+        }
     }
 }

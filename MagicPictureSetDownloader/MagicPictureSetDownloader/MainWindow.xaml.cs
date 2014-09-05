@@ -1,6 +1,11 @@
 ﻿namespace MagicPictureSetDownloader
 {
     using System;
+
+    using Common.Libray;
+    using Common.ViewModel;
+    using Common.WPF.UI;
+
     using MagicPictureSetDownloader.ViewModel.Main;
 
     /// <summary>
@@ -26,5 +31,10 @@
         {
             new VersionWindow().ShowDialog();
         }
+        public void NameRequested(object sender, EventArgs<InputTextViewModel> args)
+        {
+            new InputTextDialog(args.Data) { Owner = this }.ShowDialog();;
+        }
+
     }
 }

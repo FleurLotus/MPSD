@@ -94,7 +94,7 @@
                     setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
                 Sets.Clear();
 
-                foreach (SetInfoWithBlock setInfoWithBlock in DownloadManager.GetSetList(baseUrl))
+                foreach (SetInfoWithBlock setInfoWithBlock in DownloadManager.GetSetList(baseUrl).Where(s=> !s.Edition.Completed))
                 {
                     SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
                     setInfoViewModel.PropertyChanged += SetInfoViewModelPropertyChanged;
@@ -140,6 +140,8 @@
                     setDownloadReporter.Progress();
                     DownloadReporter.Progress();
                 }
+                if (!IsStopping)
+                    DownloadManager.EditionCompleted(editionId);
             }
             catch (Exception ex)
             {

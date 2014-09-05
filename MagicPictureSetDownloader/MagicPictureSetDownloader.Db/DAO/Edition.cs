@@ -26,5 +26,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         public DateTime? ReleaseDate { get; set; }
         [DbColumn]
         public int? CardNumber { get; set; }
+        [DbColumn]
+        public bool Completed { get; set; }
     }
 }

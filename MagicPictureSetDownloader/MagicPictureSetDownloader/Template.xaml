@@ -8,6 +8,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:l="clr-namespace:MagicPictureSetDownloader"
+                    xmlns:self="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
                     mc:Ignorable="d"
                     >
 
@@ -75,7 +76,9 @@
     </ControlTemplate>
     
     <!-- Data Template -->
-    
+    <!-- Menu -->
+    <HierarchicalDataTemplate DataType="{x:Type self:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
+
     <!-- TreeView -->
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
         <TreeView ItemsSource="{Binding Root}">
