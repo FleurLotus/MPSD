@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
     using Common.Libray;
     using Common.ViewModel;
@@ -15,7 +16,7 @@
         public event EventHandler UpdateImageDatabaseRequested;
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
-        public event EventHandler<EventArgs<InputTextViewModel>> NameRequested;
+        public event EventHandler<EventArgs<InputViewModel>> InputRequested;
 
         private MenuViewModel _showPictureViewModel;
         private MenuViewModel _collectionViewModel;
@@ -52,19 +53,11 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
-        private string OnNameRequested(string title, string label)
+        private void OnInputRequestedRequested(InputViewModel vm)
         {
-            var e = NameRequested;
-            if (e != null)
-            {
-                InputTextViewModel vm = new InputTextViewModel(title, label);
-                e(this, new EventArgs<InputTextViewModel>(vm));
-                if (vm.Result.HasValue && vm.Result.Value)
-                {
-                    return vm.Text;
-                }
-            }
-            return null;
+            var e = InputRequested;
+            if (e != null && vm != null)
+                e(this, new EventArgs<InputViewModel>(vm));
         }
 
         #endregion
@@ -102,14 +95,44 @@
         }
         private void CreateCollectionCommandExecute(object o)
         {
-            string newName = OnNameRequested("New Collection", "Input new collection name");
-            if (!string.IsNullOrWhiteSpace(newName))
+            InputViewModel vm = InputViewModelFactory.Instance.CreateTextViewModel("New Collection", "Input new collection name");
+            OnInputRequestedRequested(vm);
+            if (vm.Result.HasValue && vm.Result.Value)
             {
-                if (_magicDatabaseManager.GetCollection(newName) != null)
-                    throw new ApplicationException("Name is already used for a other collection");
+                string newName = vm.Text;
+                
+                if (!string.IsNullOrWhiteSpace(newName))
+                {
+                    if (_magicDatabaseManager.GetCollection(newName) != null)
+                        throw new ApplicationException("Name is already used for a other collection");
 
-                _magicDatabaseManager.InsertNewCollection(newName);
-                GenerateCollectionMenu();
+                    _magicDatabaseManager.InsertNewCollection(newName);
+                    GenerateCollectionMenu();
+                }
+            }
+        }
+        private void DeleteCollectionCommandExecute(object o)
+        {
+            const string none = "--- None ---";
+            ICollection<string> cardCollections = _magicDatabaseManager.GetAllCollections().Select(cc=>cc.Name).ToList();
+            List<string> source = new List<string>(cardCollections);
+            List<string> dest = new List<string>(cardCollections);
+            
+            dest.Insert(0, none);
+
+            InputViewModel vm = InputViewModelFactory.Instance.CreateMoveFromListToOtherViewModel("Delete Collection", "Choose collection to delete", source, "Move card to: ('None' to remove them)", dest);
+            
+            OnInputRequestedRequested(vm);
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                string toBeDeleted = vm.Selected;
+                string toMove = vm.Selected2;
+
+                if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toMove))
+                {
+                    //TODO: delete collection with move card if needed
+                    GenerateCollectionMenu();
+                }
             }
         }
 
@@ -120,8 +143,8 @@
             Menus = new ObservableCollection<MenuViewModel>();
 
             MenuViewModel fileMenu = new MenuViewModel("_File");
-            fileMenu.Children.Add(new MenuViewModel("Update _Set Database", new RelayCommand(UpdateDatabaseCommandExecute)));
-            fileMenu.Children.Add(new MenuViewModel("Update _Image Database",new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            fileMenu.Children.Add(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.Children.Add(new MenuViewModel("Update _Image Database..",new RelayCommand(UpdateImageDatabaseCommandExecute)));
             fileMenu.Children.Add(MenuViewModel.Separator);
             fileMenu.Children.Add(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
             Menus.Add(fileMenu);
@@ -142,18 +165,27 @@
         
         private void GenerateCollectionMenu()
         {
-            _collectionViewModel.Children.Clear();
-            _collectionViewModel.Children.Add(new MenuViewModel("New Collection", new RelayCommand(CreateCollectionCommandExecute)));
-            _collectionViewModel.Children.Add(MenuViewModel.Separator);
-            _collectionViewModel.Children.Add(new MenuViewModel("All Cards", new RelayCommand(ShowAllCollectionCommandExecute)));
             ICollection<ICardCollection> cardCollections = _magicDatabaseManager.GetAllCollections();
-            if (cardCollections != null && cardCollections.Count > 0)
+            bool hasCollection = cardCollections != null && cardCollections.Count > 0;
+
+            _collectionViewModel.Children.Clear();
+            _collectionViewModel.Children.Add(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
+            if (hasCollection)
+            {
+                _collectionViewModel.Children.Add(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
+            }
+
+            _collectionViewModel.Children.Add(MenuViewModel.Separator);
+            _collectionViewModel.Children.Add(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));
+
+            if (hasCollection)
             {
                 _collectionViewModel.Children.Add(MenuViewModel.Separator);
                 foreach (ICardCollection cardCollection in cardCollections)
                 {
                     _collectionViewModel.Children.Add(new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name));
                 }
+                
             }
         }
     }

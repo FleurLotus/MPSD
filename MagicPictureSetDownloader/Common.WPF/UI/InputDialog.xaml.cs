@@ -3,11 +3,11 @@
     using Common.ViewModel;
 
     /// <summary>
-    /// Interaction logic for InputTextDialog.xaml
+    /// Interaction logic for InputDialog.xaml
     /// </summary>
-    public partial class InputTextDialog 
+    public partial class InputDialog 
     {
-        public InputTextDialog(InputTextViewModel vm)
+        public InputDialog(InputViewModel vm)
         {
             DataContext = vm;
             InitializeComponent();

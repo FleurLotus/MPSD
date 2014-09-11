@@ -9,8 +9,8 @@
         
         protected DialogViewModelBase()
         {
-            OkCommand = new RelayCommand(OkCommandExecute);
-            CancelCommand = new RelayCommand(CancelCommandExecute);
+            OkCommand = new RelayCommand(OkCommandExecute, OkCommandCanExecute);
+            CancelCommand = new RelayCommand(CancelCommandExecute, CancelCommandCanExecute);
         }
 
         public ICommand OkCommand { get; private set; }
@@ -26,6 +26,15 @@
         {
             Result = false;
             OnClosing();
+        }
+
+        protected virtual bool OkCommandCanExecute(object o)
+        {
+            return true;
+        }
+        protected virtual bool CancelCommandCanExecute(object o)
+        {
+            return true;
         }
 
         private void OnClosing()

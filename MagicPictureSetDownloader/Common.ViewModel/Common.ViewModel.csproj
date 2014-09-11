@@ -43,7 +43,8 @@
     <Compile Include="AsyncObservableCollection.cs" />
     <Compile Include="ExceptionViewModel.cs" />
     <Compile Include="DialogViewModelBase.cs" />
-    <Compile Include="InputTextViewModel.cs" />
+    <Compile Include="InputViewModel.cs" />
+    <Compile Include="InputViewModelFactory.cs" />
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="Extension.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
