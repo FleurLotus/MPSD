@@ -39,8 +39,8 @@
         <i:EventTrigger EventName="CloseRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="Close" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="NameRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="NameRequested" />
+        <i:EventTrigger EventName="InputRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="InputRequested" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

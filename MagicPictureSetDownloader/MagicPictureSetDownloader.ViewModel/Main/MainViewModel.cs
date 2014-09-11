@@ -24,7 +24,9 @@
         //          - Delete Collection
         //          - Import/export of collection
         //          - Add remove/card in collection
-        //          - Move card
+        //          - Change card : Foil / Not Foil
+        //                          Edition
+        //                          Move to other collection
         public MainViewModel()
         {
             AddLinkedProperty(() => Hierarchical, () => Title);

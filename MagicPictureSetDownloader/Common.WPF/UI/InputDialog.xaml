@@ -1,4 +1,4 @@
-﻿<Window x:Class="Common.WPF.UI.InputTextDialog"
+﻿<Window x:Class="Common.WPF.UI.InputDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
@@ -7,10 +7,17 @@
         xmlns:viewModel="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:converter="clr-namespace:Common.WPF.Converter"
         mc:Ignorable="d" 
-        d:DataContext="{d:DesignInstance Type=viewModel:InputTextViewModel}"
+        d:DataContext="{d:DesignInstance Type=viewModel:InputViewModel}"
         Title="{Binding Title}" 
         ResizeMode="NoResize" SizeToContent="Height" Width="277" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <converter:AggregateConverter x:Key="e2vConv">
+            <converter:EnumMatchToBooleanConverter/>
+            <BooleanToVisibilityConverter/>
+        </converter:AggregateConverter>
+    </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
             <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
@@ -22,10 +29,19 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" FontWeight="Bold" Content="{Binding Label}" />
-        <TextBox Grid.Row="1" Margin="5,0"  Text="{binding:TwoWayBinding Text}" />
-        <StackPanel Grid.Row ="2" Orientation="Horizontal" HorizontalAlignment="Center">
+        <TextBox Grid.Row="1" Margin="5,0"  Text="{binding:TwoWayBinding Text}" 
+                 Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=TextNeed}"/>
+        <ComboBox Grid.Row="2" Margin="5,0" ItemsSource="{Binding List}" SelectedItem="{binding:TwoWayBinding Selected}" 
+                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ChooseInList@MoveFromListToOther}"/>
+        <Label Grid.Row="3" FontWeight="Bold" Content="{Binding Label2}"  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
+        <ComboBox Grid.Row="4" Margin="5,0" ItemsSource="{Binding List2}" SelectedItem="{binding:TwoWayBinding Selected2}" 
+                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Ok" Width="70" Margin="10" IsDefault="True" Command="{Binding OkCommand}"/>
             <Button Content="Cancel" Width="70" Margin="10" IsCancel="True"  Command="{Binding CancelCommand}"/>
         </StackPanel>

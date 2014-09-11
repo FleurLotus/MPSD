@@ -31,9 +31,9 @@
         {
             new VersionWindow().ShowDialog();
         }
-        public void NameRequested(object sender, EventArgs<InputTextViewModel> args)
+        public void InputRequested(object sender, EventArgs<InputViewModel> args)
         {
-            new InputTextDialog(args.Data) { Owner = this }.ShowDialog();;
+            new InputDialog(args.Data) { Owner = this }.ShowDialog();;
         }
 
     }
