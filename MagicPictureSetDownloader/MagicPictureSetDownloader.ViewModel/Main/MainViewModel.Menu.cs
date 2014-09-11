@@ -22,6 +22,7 @@
         private MenuViewModel _collectionViewModel;
 
         public ObservableCollection<MenuViewModel> Menus { get; private set; }
+        public ObservableCollection<MenuViewModel> ContextMenus { get; private set; }
         public bool ShowPicture
         {
             get { return _showPictureViewModel.IsChecked; }
@@ -103,8 +104,7 @@
                 
                 if (!string.IsNullOrWhiteSpace(newName))
                 {
-                    if (_magicDatabaseManager.GetCollection(newName) != null)
-                        throw new ApplicationException("Name is already used for a other collection");
+                    CheckCollectionNameNotAlreadyExists(newName);
 
                     _magicDatabaseManager.InsertNewCollection(newName);
                     GenerateCollectionMenu();
@@ -126,25 +126,74 @@
             if (vm.Result.HasValue && vm.Result.Value)
             {
                 string toBeDeleted = vm.Selected;
-                string toMove = vm.Selected2;
+                string toAdd = vm.Selected2;
 
-                if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toMove))
+                if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
                 {
-                    //TODO: delete collection with move card if needed
+                    if (toAdd == none)
+                        _magicDatabaseManager.DeleteAllCardInCollection(toBeDeleted);
+                    else
+                        _magicDatabaseManager.MoveCollection(toBeDeleted, toAdd);
+
+                    _magicDatabaseManager.DeleteCollection(toBeDeleted);
+                    GenerateCollectionMenu();
+                }
+            }
+        }
+        private void RenameCollectionCommandExecute(object o)
+        {
+            ICollection<string> cardCollections = _magicDatabaseManager.GetAllCollections().Select(cc => cc.Name).ToList();
+            List<string> source = new List<string>(cardCollections);
+
+            InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListAndTextViewModel("Rename Collection", "Choose collection to rename and input new name", source);
+
+            OnInputRequestedRequested(vm);
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                string toBeRenamed = vm.Selected;
+                string newName = vm.Text;
+
+                if (!string.IsNullOrWhiteSpace(toBeRenamed) && !string.IsNullOrWhiteSpace(newName))
+                {
+                    CheckCollectionNameNotAlreadyExists(newName);
+                    _magicDatabaseManager.UpdateCollectionName(_magicDatabaseManager.GetCollection(toBeRenamed), newName);
                     GenerateCollectionMenu();
                 }
             }
         }
 
+        private void ImportExportCommandExecute(object o)
+        {
+            //TODO: Import/export of collection
+            throw new NotImplementedException();
+        }
+        private void CardInputCommandExecute(object o)
+        {
+            //TODO: Add remove/card in collection
+            throw new NotImplementedException();
+        }
+        private void ChangeCardCommandExecute(object o)
+        {
+            //TODO: Change card : Foil / Not Foil, Edition, Move to other collection
+            throw new NotImplementedException();
+        }
+        private void MoveCardCommandExecute(object o)
+        {
+            //TODO: Change card : Foil / Not Foil, Edition, Move to other collection
+            throw new NotImplementedException();
+        }
         #endregion
 
         private void CreateMenu()
         {
             Menus = new ObservableCollection<MenuViewModel>();
+            ContextMenus = new ObservableCollection<MenuViewModel>();
 
             MenuViewModel fileMenu = new MenuViewModel("_File");
             fileMenu.Children.Add(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.Children.Add(new MenuViewModel("Update _Image Database..",new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            fileMenu.Children.Add(MenuViewModel.Separator);
+            fileMenu.Children.Add(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             fileMenu.Children.Add(MenuViewModel.Separator);
             fileMenu.Children.Add(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
             Menus.Add(fileMenu);
@@ -161,18 +210,35 @@
             MenuViewModel aboutMenu = new MenuViewModel("?");
             aboutMenu.Children.Add(new MenuViewModel("_Version", new RelayCommand(VersionCommandExecute)));
             Menus.Add(aboutMenu);
+
+            GenerateContextMenu();
         }
-        
+        private void GenerateContextMenu()
+        {
+            ContextMenus.Clear();
+            if (Hierarchical == null || Hierarchical == _allhierarchical)
+                return;
+
+            ContextMenus.Add(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
+
+            if (Hierarchical.Selected is HierarchicalResultNodeViewModel)
+            {
+                ContextMenus.Add(new MenuViewModel("Change edition/Foil", new RelayCommand(ChangeCardCommandExecute)));
+                ContextMenus.Add(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute)));
+            }
+        }
         private void GenerateCollectionMenu()
         {
-            ICollection<ICardCollection> cardCollections = _magicDatabaseManager.GetAllCollections();
-            bool hasCollection = cardCollections != null && cardCollections.Count > 0;
+            List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabaseManager.GetAllCollections());
+
+            bool hasCollection = cardCollections.Count > 0;
 
             _collectionViewModel.Children.Clear();
             _collectionViewModel.Children.Add(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
             if (hasCollection)
             {
                 _collectionViewModel.Children.Add(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
+                _collectionViewModel.Children.Add(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
             }
 
             _collectionViewModel.Children.Add(MenuViewModel.Separator);
@@ -181,11 +247,14 @@
             if (hasCollection)
             {
                 _collectionViewModel.Children.Add(MenuViewModel.Separator);
+                cardCollections.Sort((c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
                 foreach (ICardCollection cardCollection in cardCollections)
                 {
-                    _collectionViewModel.Children.Add(new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name));
+                    MenuViewModel menuViewModel = new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name);
+                    menuViewModel.IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name;
+
+                    _collectionViewModel.Children.Add(menuViewModel);
                 }
-                
             }
         }
     }

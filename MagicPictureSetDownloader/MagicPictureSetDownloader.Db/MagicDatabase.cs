@@ -298,9 +298,7 @@ namespace MagicPictureSetDownloader.Db
             }
 
         }
-
-
-
+        
         public string[] GetMissingPictureUrls()
         {
             IList<int> idGatherers;

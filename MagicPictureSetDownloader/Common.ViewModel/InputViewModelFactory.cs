@@ -27,7 +27,11 @@ namespace Common.ViewModel
         }
         public InputViewModel CreateChooseInListViewModel(string title, string label, List<string> list)
         {
-            return new InputViewModel(title, label, list);
+            return new InputViewModel(InputMode.ChooseInList, title, label, list);
+        }
+        public InputViewModel CreateChooseInListAndTextViewModel(string title, string label, List<string> list)
+        {
+            return new InputViewModel(InputMode.ChooseInListAndTextNeed, title, label, list);
         }
         public InputViewModel CreateMoveFromListToOtherViewModel(string title, string label, List<string> list, string label2, List<string> list2)
         {

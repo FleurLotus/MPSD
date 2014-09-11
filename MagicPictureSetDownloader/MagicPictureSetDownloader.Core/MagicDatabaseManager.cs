@@ -103,11 +103,24 @@
         {
             return DbInstance.UpdateCollectionName(collection, name);
         }
+        public ICardCollection UpdateCollectionName(string oldName, string name)
+        {
+            return DbInstance.UpdateCollectionName(oldName, name);
+        }
+
         public ICardInCollectionCount UpdateCardCollectionCount(ICardInCollectionCount cardInCollection, int count, int countFoil = 0)
         {
             return DbInstance.UpdateCardCollectionCount(cardInCollection, count, countFoil);
         }
 
+        public void DeleteAllCardInCollection(string name)
+        {
+            DbInstance.DeleteAllCardInCollection(name);
+        }
+        public void MoveCollection(string toBeDeletedCollectionName, string toAddCollectionName)
+        {
+            DbInstance.MoveCollection(toBeDeletedCollectionName, toAddCollectionName);
+        }
         public void DeleteCardInCollection(int idCollection, int idGatherer)
         {
             DbInstance.DeleteCardInCollection(idCollection, idGatherer);

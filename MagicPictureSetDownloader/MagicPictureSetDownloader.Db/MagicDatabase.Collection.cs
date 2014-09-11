@@ -35,7 +35,18 @@ namespace MagicPictureSetDownloader.Db
 
             return ret.AsReadOnly();
         }
-        
+        private ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer)
+        {
+            List<ICardInCollectionCount> ret;
+
+            if (cardCollection == null)
+                return null;
+
+            if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out ret))
+                return null;
+
+            return ret.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer);
+        }
         public void InsertNewCollection(string name)
         {
             if (GetCollection(name) != null || string.IsNullOrWhiteSpace(name))
@@ -61,6 +72,10 @@ namespace MagicPictureSetDownloader.Db
             AddToDbAndUpdateReferential(_connectionString, cardInCollection, InsertInReferential);
         }
 
+        public ICardCollection UpdateCollectionName(string oldName, string name)
+        {
+            return UpdateCollectionName(GetCollection(oldName), name);
+        }
         public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
         {
             if (collection == null || string.IsNullOrWhiteSpace(name) || GetCollection(name) != null)
@@ -114,6 +129,53 @@ namespace MagicPictureSetDownloader.Db
             return newCardInCollectionCount;
         }
 
+        public void MoveCollection(string toBeDeletedCollectionName, string toAddCollectionName)
+        {
+            ICardCollection toBeDeletedCollection = GetCollection(toBeDeletedCollectionName);
+            if (toBeDeletedCollection == null)
+                return;
+
+            List<ICardInCollectionCount> collectionToRemove;
+            if (!_allCardInCollectionCount.TryGetValue(toBeDeletedCollection.Id, out collectionToRemove) || collectionToRemove.Count == 0)
+                return;
+
+
+            ICardCollection toAddCollection = GetCollection(toAddCollectionName);
+            if (toAddCollection == null)
+                return;
+
+            foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
+            {
+                ICardInCollectionCount cicc = GetCardCollection(toAddCollection, cardInCollectionCount.IdGatherer);
+                if (cicc == null)
+                    InsertNewCardInCollection(toAddCollection.Id, cardInCollectionCount.IdGatherer, cardInCollectionCount.Number, cardInCollectionCount.FoilNumber);
+                else
+                    UpdateCardCollectionCount(cicc, cicc.Number + cardInCollectionCount.Number, cicc.FoilNumber + cardInCollectionCount.FoilNumber);
+            }
+
+            DeleteAllCardInCollection(toBeDeletedCollectionName);
+        }
+
+        public void DeleteAllCardInCollection(string name)
+        {
+            ICardCollection cardCollection = GetCollection(name);
+            if (cardCollection == null)
+                return;
+
+            List<ICardInCollectionCount> collection;
+
+            if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out collection) || collection.Count == 0)
+                return;
+
+            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            {
+                cnx.Open();
+               Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Cast<CardInCollectionCount>());
+            }
+
+            lock (_sync)
+                _allCardInCollectionCount.Remove(cardCollection.Id);
+        }
         public void DeleteCardInCollection(int idCollection, int idGatherer)
         {
             List<ICardInCollectionCount> collection;

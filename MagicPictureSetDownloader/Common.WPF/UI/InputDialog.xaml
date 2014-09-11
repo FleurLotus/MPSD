@@ -11,12 +11,27 @@
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=viewModel:InputViewModel}"
         Title="{Binding Title}" 
-        ResizeMode="NoResize" SizeToContent="Height" Width="277" WindowStartupLocation="CenterOwner">
+        ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <converter:AggregateConverter x:Key="e2vConv">
             <converter:EnumMatchToBooleanConverter/>
             <BooleanToVisibilityConverter/>
         </converter:AggregateConverter>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5,5,5,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5,5,5,0"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Width" Value="70"/>
+        </Style>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
@@ -33,17 +48,17 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontWeight="Bold" Content="{Binding Label}" />
-        <TextBox Grid.Row="1" Margin="5,0"  Text="{binding:TwoWayBinding Text}" 
-                 Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=TextNeed}"/>
-        <ComboBox Grid.Row="2" Margin="5,0" ItemsSource="{Binding List}" SelectedItem="{binding:TwoWayBinding Selected}" 
-                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ChooseInList@MoveFromListToOther}"/>
-        <Label Grid.Row="3" FontWeight="Bold" Content="{Binding Label2}"  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
-        <ComboBox Grid.Row="4" Margin="5,0" ItemsSource="{Binding List2}" SelectedItem="{binding:TwoWayBinding Selected2}" 
+        <Label Grid.Row="0" Content="{Binding Label}" />
+        <ComboBox Grid.Row="1" ItemsSource="{Binding List}" SelectedItem="{binding:TwoWayBinding Selected}" 
+                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ChooseInList@MoveFromListToOther@ChooseInListAndTextNeed}"/>
+        <TextBox Grid.Row="2" Text="{binding:TwoWayBinding Text}" 
+                 Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=TextNeed@ChooseInListAndTextNeed}"/>
+        <Label Grid.Row="3" Content="{Binding Label2}"  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
+        <ComboBox Grid.Row="4" ItemsSource="{Binding List2}" SelectedItem="{binding:TwoWayBinding Selected2}" 
                   Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Ok" Width="70" Margin="10" IsDefault="True" Command="{Binding OkCommand}"/>
-            <Button Content="Cancel" Width="70" Margin="10" IsCancel="True"  Command="{Binding CancelCommand}"/>
+            <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}"/>
+            <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}"/>
         </StackPanel>
     </Grid>
 </Window>
