@@ -13,6 +13,10 @@
         <converter:ObjectNullToBoolConverter/>
         <converter:BoolInvertConverter/>
     </converter:AggregateConverter>
+    <converter:AggregateConverter x:Key="nz2bConv">
+        <converter:ValueIsZeroToBoolConverter/>
+        <converter:BoolInvertConverter/>
+    </converter:AggregateConverter>
     <converter:AggregateConverter x:Key="nz2vConv">
         <converter:ValueIsZeroToBoolConverter/>
         <converter:BoolInvertConverter/>

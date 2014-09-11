@@ -68,18 +68,24 @@
             }
             return ret;
         }
-        public static void DeleteAll(DbConnection cnx)
-        {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildDeleteAllCommand(cmd));
-        }
+
         public static void DeleteOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildDeleteOneCommand(cmd, value));
+            DeleteMulti(cnx, new[] { value });
+        }
+        public static void DeleteMulti(DbConnection cnx, IEnumerable<T> values)
+        {
+            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildDeleteOneCommand);
         }
         public static void InsertOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildInsertOneCommand(cmd, value), cmd => GetIdentity(cmd, value));
+            InsertMulti(cnx, new[] { value });
         }
+        public static void InsertMulti(DbConnection cnx, IEnumerable<T> values)
+        {
+            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildInsertOneCommand, GetIdentity);
+        }
+
         private static void GetIdentity(DbCommand cmd, T value)
         {
             PropertyInfo idKeyPropertyInfo = _commandBuilder.GetIdKeyPropertyInfo();
@@ -97,28 +103,37 @@
         }
         public static void UpdateOne(DbConnection cnx, T value)
         {
-            ExecuteWithTransaction(cnx, cmd => _commandBuilder.BuildUpdateOneCommand(cmd, value));
+            UpdateMulti(cnx, new[] { value });
+        }
+        public static void UpdateMulti(DbConnection cnx, IEnumerable<T> values)
+        {
+            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildUpdateOneCommand);
         }
 
-        private static void ExecuteWithTransaction(DbConnection cnx, Action<DbCommand> prepareCommand, Action<DbCommand> doPostExecuteAction = null)
+        private static void ExecuteWithTransaction(DbConnection cnx, IEnumerable<T> values,
+                                                   Action<DbCommand,T> prepareCommand, Action<DbCommand,T> doPostExecuteAction = null)
         {
             using (DbTransaction transaction = cnx.BeginTransaction())
             {
                 try
                 {
-                    using (DbCommand cmd = cnx.CreateCommand())
+                    foreach (T value in values)
                     {
-                        cmd.Transaction = transaction;
-                        prepareCommand(cmd);
-                        if (cmd.ExecuteNonQuery() != 1)
-                            throw new ApplicationDbException("Wrong number of row affected. Rollback");
-
-                        if (doPostExecuteAction != null)
+                        using (DbCommand cmd = cnx.CreateCommand())
                         {
-                            doPostExecuteAction(cmd);
+                            cmd.Transaction = transaction;
+                            prepareCommand(cmd, value);
+                            if (cmd.ExecuteNonQuery() != 1)
+                                throw new ApplicationDbException("Wrong number of row affected. Rollback");
+
+                            if (doPostExecuteAction != null)
+                            {
+                                doPostExecuteAction(cmd, value);
+                            }
                         }
-                        transaction.Commit();
+
                     }
+                    transaction.Commit();
                 }
                 catch (Exception)
                 {

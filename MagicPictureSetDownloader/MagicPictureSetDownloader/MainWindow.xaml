@@ -50,8 +50,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu IsMainMenu="True" Grid.Row="0" ItemsSource="{Binding Menus}" 
-              ItemContainerStyleSelector="{StaticResource separatorStyleSelector}"/>
+        <Menu IsMainMenu="True" Grid.Row="0" ItemsSource="{Binding Menus}" ItemContainerStyleSelector="{StaticResource separatorStyleSelector}"/>
         <Grid Margin="5" Grid.Row="1">
             <!-- Split Filter/Others -->
             <Grid.ColumnDefinitions>
@@ -74,7 +73,12 @@
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >
-                    <ContentControl Content="{Binding Hierarchical}" />
+                    <ContentControl Content="{Binding Hierarchical}" ContextMenuService.IsEnabled="{Binding ContextMenus.Count, Converter={StaticResource nz2bConv}}">
+                        <ContentControl.ContextMenu>
+                            <ContextMenu ItemsSource="{Binding ContextMenus}"
+                                         ItemContainerStyleSelector="{StaticResource separatorStyleSelector}"/>
+                        </ContentControl.ContextMenu>
+                    </ContentControl>
                 </Border>
                 <GridSplitter Grid.Column="1"/>
 

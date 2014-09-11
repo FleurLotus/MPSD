@@ -7,7 +7,8 @@
         Question,
         TextNeed,
         ChooseInList,
-        MoveFromListToOther
+        ChooseInListAndTextNeed,
+        MoveFromListToOther,
     }
     
     public class InputViewModel : DialogViewModelBase
@@ -20,8 +21,8 @@
             this(inputMode, title, label, null, null, null)
         {
         }
-        internal InputViewModel(string title, string label, IList<string> list) :
-            this(InputMode.ChooseInList, title, label, list, null, null)
+        internal InputViewModel(InputMode inputMode, string title, string label, IList<string> list) :
+            this(inputMode, title, label, list, null, null)
         {
         }
         internal InputViewModel(string title, string label, IList<string> list, string label2, IList<string> list2) :
@@ -97,6 +98,9 @@
                 case InputMode.TextNeed:
                     return !string.IsNullOrWhiteSpace(Text);
 
+                case InputMode.ChooseInListAndTextNeed:
+                    return Selected != null && !string.IsNullOrWhiteSpace(Text) && Selected != Text;
+                    
                 default:
                     return true;
             }

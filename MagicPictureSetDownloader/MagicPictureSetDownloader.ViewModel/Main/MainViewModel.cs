@@ -1,6 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
 
     using Common.ViewModel;
@@ -17,16 +19,9 @@
         private readonly HierarchicalViewModel _allhierarchical;
         private HierarchicalViewModel _hierarchical;
         private readonly MagicDatabaseManager _magicDatabaseManager;
-        
 
-        //TODO: manage collection
-        //          - Change Name
-        //          - Delete Collection
-        //          - Import/export of collection
-        //          - Add remove/card in collection
-        //          - Change card : Foil / Not Foil
-        //                          Edition
-        //                          Move to other collection
+        //TODO: Test delete with card in collection + same with move 
+
         public MainViewModel()
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -78,6 +73,11 @@
             {
                 if (value != _hierarchical)
                 {
+                    //Need Listen to Selected modification for ContextMenu recreation
+                    if (_hierarchical != null)
+                        _hierarchical.PropertyChanged -= HierarchicalPropertyChanged;
+                    if (value != null)
+                        value.PropertyChanged += HierarchicalPropertyChanged;
                     _hierarchical = value;
                     OnNotifyPropertyChanged(() => Hierarchical);
                 }
@@ -94,13 +94,20 @@
             Hierarchical = _allhierarchical;
             LoadCardsHierarchy();
         }
-        
+        private void HierarchicalPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Selected")
+                GenerateContextMenu();
+        }
+
         private void LoadCardsHierarchy()
         {
             HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
 
             Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
                                             selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray());
+            GenerateCollectionMenu();
+            GenerateContextMenu();
         }
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
         {
@@ -110,6 +117,13 @@
         {
             ICardCollection cardCollection = _magicDatabaseManager.GetCollection(collectionName);
             return _magicDatabaseManager.GetAllInfos(true, cardCollection.Id).Select(cai => new CardViewModel(cai));
+        }
+        private void CheckCollectionNameNotAlreadyExists(string name)
+        {
+            if (_magicDatabaseManager.GetCollection(name) != null)
+            {
+                throw new ApplicationException("Name is already used for an other collection");
+            }
         }
     }
 }
