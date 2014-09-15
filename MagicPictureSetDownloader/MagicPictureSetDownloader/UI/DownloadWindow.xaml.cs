@@ -1,9 +1,10 @@
-﻿namespace MagicPictureSetDownloader
+﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
 
-    using Common.WPF;
     using Common.Libray;
+    using Common.WPF;
+
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.ViewModel.Download;
 
@@ -20,7 +21,7 @@
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             CredentialInputViewModel vm = new CredentialInputViewModel();
-            CredentialInput f = new CredentialInput(vm) {Owner = this};
+            CredentialInputWindow f = new CredentialInputWindow(vm) { Owner = this };
             f.ShowDialog();
             if (vm.Result.HasValue && vm.Result.Value)
             {

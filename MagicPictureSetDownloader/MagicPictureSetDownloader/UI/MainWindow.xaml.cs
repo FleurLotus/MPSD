@@ -1,4 +1,4 @@
-﻿namespace MagicPictureSetDownloader
+﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
 
@@ -33,7 +33,11 @@
         }
         public void InputRequested(object sender, EventArgs<InputViewModel> args)
         {
-            new InputDialog(args.Data) { Owner = this }.ShowDialog();;
+            new InputDialog(args.Data) { Owner = this }.ShowDialog();
+        }
+        public void ImportExportWanted(object sender, EventArgs args)
+        {
+            new ImportExportWindow().ShowDialog();
         }
 
     }

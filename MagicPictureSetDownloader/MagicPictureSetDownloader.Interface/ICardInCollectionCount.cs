@@ -1,10 +1,7 @@
 namespace MagicPictureSetDownloader.Interface
 {
-    public interface ICardInCollectionCount 
+    public interface ICardInCollectionCount : IImportExportCardCount
     {
         int IdCollection { get; }
-        int IdGatherer { get; }
-        int Number { get; }
-        int FoilNumber { get; }
     }
 }

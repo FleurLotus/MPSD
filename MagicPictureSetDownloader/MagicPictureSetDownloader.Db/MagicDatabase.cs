@@ -12,8 +12,14 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
-    public partial class MagicDatabase
+    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollection, 
+                                           IMagicDatabaseReadAndWriteReference,
+                                           IMagicDatabaseReadAndWriteOption,
+                                           IMagicDatabaseReadAndWriteCardInCollection,
+                                           IMagicDatabaseReadOnly
     {
+        private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase("MagicData.sdf", "MagicPicture.sdf"));
+
         private readonly object _sync = new object();
         private bool _referentialLoaded;
         private readonly string _connectionString;
@@ -28,7 +34,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
-        public MagicDatabase(string fileName, string pictureFileName)
+        private MagicDatabase(string fileName, string pictureFileName)
         {
             string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             _connectionString = "datasource=" + mainDbPath;
@@ -41,6 +47,14 @@ namespace MagicPictureSetDownloader.Db
                 DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
         }
 
+        internal static MagicDatabase DbInstance
+        {
+            get
+            {
+                return _lazyIntance.Value;
+            }
+        }
+
         //Unitary Get 
         public ICard GetCard(string name, string partName)
         {
@@ -51,17 +65,6 @@ namespace MagicPictureSetDownloader.Db
             return _cards.GetOrDefault(name + partName);
         }
 
-        private ICardEdition GetCardEdition(int idGatherer)
-        {
-            CheckReferentialLoaded();
-
-            return _cardEditions.GetOrDefault(idGatherer);
-        }
-        public int GetRarityId(string rarity)
-        {
-            CheckReferentialLoaded();
-            return _rarities[rarity].Id;
-        }
         public IPicture GetDefaultPicture()
         {
             return GetPicture(0);
@@ -170,27 +173,39 @@ namespace MagicPictureSetDownloader.Db
             return new List<IOption>(options).AsReadOnly();
         }
 
-        public ICollection<IEdition> AllEditions()
+        private ICardEdition GetCardEdition(int idGatherer)
+        {
+            CheckReferentialLoaded();
+
+            return _cardEditions.GetOrDefault(idGatherer);
+        }
+        private int GetRarityId(string rarity)
+        {
+            CheckReferentialLoaded();
+            return _rarities[rarity].Id;
+        }
+
+        private ICollection<IEdition> AllEditions()
         {
             CheckReferentialLoaded();
             return new List<IEdition>(_editions).AsReadOnly();
         }
-        public ICollection<IRarity> AllRarities()
+        private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
             return new List<IRarity>(_rarities.Values).AsReadOnly();
         }
-        public ICollection<IBlock> AllBlocks()
+        private ICollection<IBlock> AllBlocks()
         {
             CheckReferentialLoaded();
             return new List<IBlock>(_blocks.Values).AsReadOnly();
         }
-        public ICollection<ICard> AllCards()
+        private ICollection<ICard> AllCards()
         {
             CheckReferentialLoaded();
             return new List<ICard>(_cards.Values).AsReadOnly();
         }
-        public ICollection<ICardEdition> AllCardEditions()
+        private ICollection<ICardEdition> AllCardEditions()
         {
             CheckReferentialLoaded();
             return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();

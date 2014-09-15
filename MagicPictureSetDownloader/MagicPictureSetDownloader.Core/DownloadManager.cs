@@ -6,6 +6,8 @@
     using System.Net;
     using System.Text;
     using Common.Libray;
+
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
     public class DownloadManager
@@ -13,11 +15,11 @@
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
         private ICredentials _credentials;
         private readonly IDictionary<string, string> _htmlCache;
-        private readonly MagicDatabaseManager _magicDatabaseManager;
+        private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
 
         public DownloadManager()
         {
-            _magicDatabaseManager = new MagicDatabaseManager();
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
             _htmlCache = new Dictionary<string, string>();
         }
         
@@ -86,7 +88,7 @@
             string htmltext = GetHtml(url);
             foreach (SetInfo setInfo in Parser.ParseSetsList(htmltext))
             {
-                IEdition edition = _magicDatabaseManager.GetEdition(setInfo.Name);
+                IEdition edition = _magicDatabase.GetEdition(setInfo.Name);
                 yield return new SetInfoWithBlock(setInfo, edition);
             }
         }
@@ -111,13 +113,13 @@
         {
             int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
 
-            IPicture picture = _magicDatabaseManager.GetPicture(idGatherer);
+            IPicture picture = _magicDatabase.GetPicture(idGatherer);
             if (picture == null)
             {
                 //No id found try insert
                 byte[] pictureData = GetFile(pictureUrl);
 
-                _magicDatabaseManager.InsertNewPicture(idGatherer, pictureData);
+                _magicDatabase.InsertNewPicture(idGatherer, pictureData);
             }
             else
             {
@@ -126,18 +128,18 @@
         }
         public string[] GetMissingPictureUrls()
         {
-            return _magicDatabaseManager.GetMissingPictureUrls();
+            return _magicDatabase.GetMissingPictureUrls();
         }
 
         private void InsertCardSetInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
-            _magicDatabaseManager.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
+            _magicDatabase.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
         }
         public void EditionCompleted(int editionId)
         {
-            _magicDatabaseManager.EditionCompleted(editionId);
+            _magicDatabase.EditionCompleted(editionId);
         }
 
         private bool OnCredentialRequiered()
@@ -161,7 +163,7 @@
 
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
-            _magicDatabaseManager.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
+            _magicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type, 
                                                         cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName);
         }

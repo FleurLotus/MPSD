@@ -1,13 +1,13 @@
-﻿namespace MagicPictureSetDownloader
+﻿namespace MagicPictureSetDownloader.UI
 {
     using MagicPictureSetDownloader.ViewModel.Download;
 
     /// <summary>
     /// Interaction logic for CredentialInput.xaml
     /// </summary>
-    public partial class CredentialInput
+    public partial class CredentialInputWindow
     {
-        public CredentialInput(CredentialInputViewModel vm)
+        public CredentialInputWindow(CredentialInputViewModel vm)
         {
             DataContext = vm;
             InitializeComponent();

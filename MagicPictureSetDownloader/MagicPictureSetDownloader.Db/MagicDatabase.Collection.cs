@@ -1,5 +1,6 @@
 namespace MagicPictureSetDownloader.Db
 {
+    using System;
     using System.Collections.Generic;
     using System.Data.SqlServerCe;
     using System.Linq;
@@ -9,10 +10,41 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;
 
-    public partial class MagicDatabase
+    internal partial class MagicDatabase
     {
         private readonly IDictionary<int, List<ICardInCollectionCount>> _allCardInCollectionCount = new Dictionary<int, List<ICardInCollectionCount>>();
         private readonly IList<ICardCollection> _collections = new List<ICardCollection>();
+
+        public Tuple<ICard, IEdition> GetCardxEdition(int idGatherer)
+        {
+            CheckReferentialLoaded();
+            ICardEdition cardEdition = GetCardEdition(idGatherer);
+            if (null == cardEdition)
+                return null;
+
+            ICard card = _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard);
+            IEdition edition = _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
+
+            if (null == card || null == edition)
+                return null;
+
+            return new Tuple<ICard, IEdition>(card, edition);
+        }
+        public int GetGathererId(ICard card, IEdition edition)
+        {
+            CheckReferentialLoaded();
+            if (card == null || edition == null)
+                return 0;
+
+            ICardEdition cardEdition = _cardEditions.Values.FirstOrDefault(ce => ce.IdCard == card.Id && ce.IdEdition == edition.Id);
+            return cardEdition == null ? 0 : cardEdition.IdGatherer;
+        }
+        public IEdition GetEditionFromCode(string code)
+        {
+            CheckReferentialLoaded();
+            return _editions.FirstOrDefault(ed => String.Equals(ed.Code, code, StringComparison.InvariantCultureIgnoreCase)) ??
+                   _editions.FirstOrDefault(ed => String.Equals(ed.AlternativeCode, code, StringComparison.InvariantCultureIgnoreCase));
+        }
 
         public ICardCollection GetCollection(string name)
         {

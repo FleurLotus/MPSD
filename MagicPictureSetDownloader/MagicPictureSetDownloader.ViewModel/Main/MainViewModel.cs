@@ -7,7 +7,7 @@
 
     using Common.ViewModel;
 
-    using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
     public partial class MainViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
@@ -18,7 +18,7 @@
 
         private readonly HierarchicalViewModel _allhierarchical;
         private HierarchicalViewModel _hierarchical;
-        private readonly MagicDatabaseManager _magicDatabaseManager;
+        private readonly IMagicDatabaseReadAndWriteCollection _magicDatabase;
 
         //TODO: Test delete with card in collection + same with move 
 
@@ -28,8 +28,8 @@
 
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
-            _magicDatabaseManager = new MagicDatabaseManager();
-            Analysers = new HierarchicalInfoAnalysersViewModel(_magicDatabaseManager);
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteCollection;
+            Analysers = new HierarchicalInfoAnalysersViewModel();
             CreateMenu();
 
             //ALERT: Temp for helping load file to tree picture 
@@ -111,16 +111,16 @@
         }
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
         {
-            return _magicDatabaseManager.GetAllInfos(false, -1).Select(cai => new CardViewModel(cai));
+            return _magicDatabase.GetAllInfos(false, -1).Select(cai => new CardViewModel(cai));
         }
         private IEnumerable<CardViewModel> CardCollectionAsViewModel(string collectionName)
         {
-            ICardCollection cardCollection = _magicDatabaseManager.GetCollection(collectionName);
-            return _magicDatabaseManager.GetAllInfos(true, cardCollection.Id).Select(cai => new CardViewModel(cai));
+            ICardCollection cardCollection = _magicDatabase.GetCollection(collectionName);
+            return _magicDatabase.GetAllInfos(true, cardCollection.Id).Select(cai => new CardViewModel(cai));
         }
         private void CheckCollectionNameNotAlreadyExists(string name)
         {
-            if (_magicDatabaseManager.GetCollection(name) != null)
+            if (_magicDatabase.GetCollection(name) != null)
             {
                 throw new ApplicationException("Name is already used for an other collection");
             }

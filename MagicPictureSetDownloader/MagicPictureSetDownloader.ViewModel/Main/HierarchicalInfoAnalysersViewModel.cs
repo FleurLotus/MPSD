@@ -6,24 +6,24 @@
 
     using Common.ViewModel;
 
-    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
     public class HierarchicalInfoAnalysersViewModel : NotifyPropertyChangedBase
     {
-        private readonly MagicDatabaseManager _magicDatabaseManager;
+        private readonly IMagicDatabaseReadAndWriteOption _magicDatabase;
         private int _selectedIndex;
         private List<HierarchicalInfoAnalyserViewModel> _all;
         private readonly int _allCount;
 
-        public HierarchicalInfoAnalysersViewModel(MagicDatabaseManager magicDatabaseManager)
+        public HierarchicalInfoAnalysersViewModel()
         {
-            _magicDatabaseManager = magicDatabaseManager;
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteOption;
             UpCommand = new RelayCommand(UpCommandExecute, UpCommandCanExecute);
             DownCommand = new RelayCommand(DownCommandExecute, DownCommandCanExecute);
 
-            CreateHierarchy(_magicDatabaseManager.GetOptions(TypeOfOption.Hierarchy));
+            CreateHierarchy(_magicDatabase.GetOptions(TypeOfOption.Hierarchy));
             
             _allCount = _all.Count;
             SelectedIndex = -1;
@@ -56,7 +56,7 @@
             for (int i = 0; i < all.Count; i++)
             {
                 HierarchicalInfoAnalyserViewModel vm = all[i];
-                _magicDatabaseManager.InsertNewOption(TypeOfOption.Hierarchy, vm.Name, vm.SaveInfo(i));
+                _magicDatabase.InsertNewOption(TypeOfOption.Hierarchy, vm.Name, vm.SaveInfo(i));
             }
         }
 

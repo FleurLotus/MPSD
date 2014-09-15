@@ -56,7 +56,12 @@
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
-    <Compile Include="MagicDatabaseManager.cs" />
+    <Compile Include="IO\FormatterBase.cs" />
+    <Compile Include="IO\ImportExportCardInfo.cs" />
+    <Compile Include="IO\MtgmFormatter.cs" />
+    <Compile Include="IO\ImportExportFormatterFactory.cs" />
+    <Compile Include="IO\ImportExportWorker.cs" />
+    <Compile Include="IO\MpsdFormatter.cs" />
     <Compile Include="HierarchicalAnalysing\MagicRules.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />

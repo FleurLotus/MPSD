@@ -41,9 +41,17 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteOption.cs" />
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCardInCollection.cs" />
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteReference.cs" />
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCollection.cs" />
+    <Compile Include="IImportExportCardInCollectionCount.cs" />
+    <Compile Include="Enum.cs" />
     <Compile Include="ICardInCollectionCount.cs" />
     <Compile Include="ICardCollection.cs" />
     <Compile Include="IIdName.cs" />
+    <Compile Include="IImportExportFormatter.cs" />
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadOnly.cs" />
     <Compile Include="IOption.cs" />
     <Compile Include="IPictureKey.cs" />
     <Compile Include="ITreePicture.cs" />
@@ -55,8 +63,8 @@
     <Compile Include="IPicture.cs" />
     <Compile Include="IRarity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeOfOption.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

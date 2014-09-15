@@ -16,6 +16,7 @@
         public event EventHandler UpdateImageDatabaseRequested;
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
+        public event EventHandler ImportExportWanted;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
 
         private MenuViewModel _showPictureViewModel;
@@ -51,6 +52,12 @@
         private void OnCloseRequested()
         {
             EventHandler e = CloseRequested;
+            if (e != null)
+                e(this, EventArgs.Empty);
+        }
+        private void OnImportExportWanted()
+        {
+            EventHandler e = ImportExportWanted;
             if (e != null)
                 e(this, EventArgs.Empty);
         }
@@ -106,7 +113,7 @@
                 {
                     CheckCollectionNameNotAlreadyExists(newName);
 
-                    _magicDatabaseManager.InsertNewCollection(newName);
+                    _magicDatabase.InsertNewCollection(newName);
                     GenerateCollectionMenu();
                 }
             }
@@ -114,7 +121,7 @@
         private void DeleteCollectionCommandExecute(object o)
         {
             const string none = "--- None ---";
-            ICollection<string> cardCollections = _magicDatabaseManager.GetAllCollections().Select(cc=>cc.Name).ToList();
+            ICollection<string> cardCollections = _magicDatabase.GetAllCollections().Select(cc=>cc.Name).ToList();
             List<string> source = new List<string>(cardCollections);
             List<string> dest = new List<string>(cardCollections);
             
@@ -131,18 +138,18 @@
                 if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
                 {
                     if (toAdd == none)
-                        _magicDatabaseManager.DeleteAllCardInCollection(toBeDeleted);
+                        _magicDatabase.DeleteAllCardInCollection(toBeDeleted);
                     else
-                        _magicDatabaseManager.MoveCollection(toBeDeleted, toAdd);
+                        _magicDatabase.MoveCollection(toBeDeleted, toAdd);
 
-                    _magicDatabaseManager.DeleteCollection(toBeDeleted);
+                    _magicDatabase.DeleteCollection(toBeDeleted);
                     GenerateCollectionMenu();
                 }
             }
         }
         private void RenameCollectionCommandExecute(object o)
         {
-            ICollection<string> cardCollections = _magicDatabaseManager.GetAllCollections().Select(cc => cc.Name).ToList();
+            ICollection<string> cardCollections = _magicDatabase.GetAllCollections().Select(cc => cc.Name).ToList();
             List<string> source = new List<string>(cardCollections);
 
             InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListAndTextViewModel("Rename Collection", "Choose collection to rename and input new name", source);
@@ -156,16 +163,14 @@
                 if (!string.IsNullOrWhiteSpace(toBeRenamed) && !string.IsNullOrWhiteSpace(newName))
                 {
                     CheckCollectionNameNotAlreadyExists(newName);
-                    _magicDatabaseManager.UpdateCollectionName(_magicDatabaseManager.GetCollection(toBeRenamed), newName);
+                    _magicDatabase.UpdateCollectionName(_magicDatabase.GetCollection(toBeRenamed), newName);
                     GenerateCollectionMenu();
                 }
             }
         }
-
         private void ImportExportCommandExecute(object o)
         {
-            //TODO: Import/export of collection
-            throw new NotImplementedException();
+            OnImportExportWanted();
         }
         private void CardInputCommandExecute(object o)
         {
@@ -182,6 +187,7 @@
             //TODO: Change card : Foil / Not Foil, Edition, Move to other collection
             throw new NotImplementedException();
         }
+
         #endregion
 
         private void CreateMenu()
@@ -192,8 +198,6 @@
             MenuViewModel fileMenu = new MenuViewModel("_File");
             fileMenu.Children.Add(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.Children.Add(new MenuViewModel("Update _Image Database..",new RelayCommand(UpdateImageDatabaseCommandExecute)));
-            fileMenu.Children.Add(MenuViewModel.Separator);
-            fileMenu.Children.Add(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             fileMenu.Children.Add(MenuViewModel.Separator);
             fileMenu.Children.Add(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
             Menus.Add(fileMenu);
@@ -229,7 +233,7 @@
         }
         private void GenerateCollectionMenu()
         {
-            List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabaseManager.GetAllCollections());
+            List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabase.GetAllCollections());
 
             bool hasCollection = cardCollections.Count > 0;
 
@@ -239,6 +243,8 @@
             {
                 _collectionViewModel.Children.Add(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
                 _collectionViewModel.Children.Add(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
+                _collectionViewModel.Children.Add(MenuViewModel.Separator);
+                _collectionViewModel.Children.Add(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             }
 
             _collectionViewModel.Children.Add(MenuViewModel.Separator);
