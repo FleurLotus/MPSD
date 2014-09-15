@@ -16,6 +16,8 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public string Code { get; set; }
         [DbColumn]
+        public string AlternativeCode { get; set; }
+        [DbColumn]
         public int? IdBlock { get; set; }
         public string BlockName { get; set; }
         [DbColumn]

@@ -43,7 +43,5 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
-
-
     }
 }

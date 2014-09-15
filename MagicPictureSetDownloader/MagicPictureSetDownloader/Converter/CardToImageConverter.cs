@@ -29,9 +29,9 @@ namespace MagicPictureSetDownloader.Converter
             if (idGatherer == -1)
                 return null;
 
-            IPicture picture = MagicDatabaseManager.GetPicture(idGatherer);
+            IPicture picture = MagicDatabase.GetPicture(idGatherer);
             if (null == picture || picture.Image == null || picture.Image.Length == 0)
-                picture = MagicDatabaseManager.GetDefaultPicture();
+                picture = MagicDatabase.GetDefaultPicture();
 
             if (null == picture || picture.Image == null || picture.Image.Length == 0)
                 return null;

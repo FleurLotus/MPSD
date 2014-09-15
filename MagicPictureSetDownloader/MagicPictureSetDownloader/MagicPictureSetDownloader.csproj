@@ -83,15 +83,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DownloadImageWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="CredentialInput.xaml">
+    <Page Include="UI\CardInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DownloadWindow.xaml">
+    <Page Include="UI\DownloadImageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\CredentialInputWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\DownloadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -113,24 +117,34 @@
     <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToImageConverter.cs" />
-    <Compile Include="DownloadImageWindow.xaml.cs">
+    <Compile Include="UI\CardInputWindow.xaml.cs">
+      <DependentUpon>CardInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\DownloadImageWindow.xaml.cs">
       <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PicturedTextBlock.cs" />
-    <Compile Include="CredentialInput.xaml.cs">
-      <DependentUpon>CredentialInput.xaml</DependentUpon>
+    <Compile Include="UI\CredentialInputWindow.xaml.cs">
+      <DependentUpon>CredentialInputWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DownloadWindow.xaml.cs">
+    <Compile Include="UI\DownloadWindow.xaml.cs">
       <DependentUpon>DownloadWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MainWindow.xaml">
+    <Page Include="UI\ImportExportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="UI\ImportExportWindow.xaml.cs">
+      <DependentUpon>ImportExportWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
