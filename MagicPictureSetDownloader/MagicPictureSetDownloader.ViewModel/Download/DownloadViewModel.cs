@@ -153,6 +153,7 @@
             if (CountDown == 0)
             {
                 DownloadReporter.Finish();
+                GetSetListCommand.Execute(null);
                 JobFinished();
             }
         }

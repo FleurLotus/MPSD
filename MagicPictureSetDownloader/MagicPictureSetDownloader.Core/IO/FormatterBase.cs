@@ -2,6 +2,7 @@
 namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -27,9 +28,35 @@ namespace MagicPictureSetDownloader.Core.IO
 
         public IImportExportCardCount[] Parse(string input)
         {
-            return input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(ParseLine).ToArray();
+            IDictionary<int, ImportExportCardInfo> ret = new Dictionary<int, ImportExportCardInfo>();
+            IEnumerable<IImportExportCardCount> enumerable = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(ParseLine);
+
+            //Merge if multiple lines from file like in mtgm format
+            foreach (IImportExportCardCount importExportCardCount in enumerable)
+            {
+                ImportExportCardInfo cardInfo;
+                if (ret.TryGetValue(importExportCardCount.IdGatherer, out cardInfo))
+                {
+                    if (importExportCardCount.FoilNumber > 0)
+                        cardInfo.AddFoil(importExportCardCount.FoilNumber);
+
+                    if (importExportCardCount.Number > 0)
+                        cardInfo.Add(importExportCardCount.Number);
+                }
+                else
+                {
+                    cardInfo = importExportCardCount as ImportExportCardInfo;
+                    if (null == cardInfo)
+                        continue;
+
+                    ret.Add(cardInfo.IdGatherer, cardInfo);
+                }
+            }
+
+            return ret.Values.Cast<IImportExportCardCount>().ToArray();
+
         }
-        public string ToFile(IImportExportCardCount[] cardCount)
+        public string ToFile(IEnumerable<IImportExportCardCount> cardCount)
         {
             StringBuilder sb = new StringBuilder();
             foreach (IImportExportCardCount card in cardCount.Where(cic => cic != null))

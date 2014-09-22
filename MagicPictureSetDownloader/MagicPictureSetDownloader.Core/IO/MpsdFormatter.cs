@@ -13,6 +13,7 @@ namespace MagicPictureSetDownloader.Core.IO
             : base(ExportFormat.MPSD, ".mpsd")
         {
         }
+
         protected override IImportExportCardCount ParseLine(string line)
         {
             Match m =  _regLine.Match(line);

@@ -18,7 +18,8 @@
         IOption GetOption(TypeOfOption type, string key);
         ICardCollection GetCollection(string name);
         ICollection<ICardCollection> GetAllCollections();
-        IList<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
+        IEnumerable<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
+        ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer);
         string[] GetMissingPictureUrls();
     }
 }

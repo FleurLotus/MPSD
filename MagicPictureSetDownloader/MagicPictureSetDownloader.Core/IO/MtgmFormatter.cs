@@ -56,9 +56,9 @@ namespace MagicPictureSetDownloader.Core.IO
             
             string ret = string.Empty;
             if (cardCount.Number>0)
-                ret += string.Format("{0}#{1}#{2}#False\n", cardxedition.Item1.Name,cardxedition.Item2.AlternativeCode, cardCount.Number);
+                ret += string.Format("{0}#{1}#{2}#False\n", cardxedition.Item1.Name,cardxedition.Item2.AlternativeCode(Format), cardCount.Number);
             if (cardCount.FoilNumber > 0)
-                ret += string.Format("{0}#{1}#{2}#True\n", cardxedition.Item1.Name, cardxedition.Item2.AlternativeCode, cardCount.FoilNumber);
+                ret += string.Format("{0}#{1}#{2}#True\n", cardxedition.Item1.Name, cardxedition.Item2.AlternativeCode(Format), cardCount.FoilNumber);
 
             return ret;
         }

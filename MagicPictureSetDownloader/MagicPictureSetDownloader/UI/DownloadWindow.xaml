@@ -58,7 +58,9 @@
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
-                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource sets}}">
+                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500"
+                         IsEnabled="{Binding IsBusy, Converter={StaticResource nbConv}}"
+                         ItemsSource="{Binding Source={StaticResource sets}}">
                     <ListBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />

@@ -12,7 +12,7 @@ namespace MagicPictureSetDownloader.Db
 
     internal partial class MagicDatabase
     {
-        private readonly IDictionary<int, List<ICardInCollectionCount>> _allCardInCollectionCount = new Dictionary<int, List<ICardInCollectionCount>>();
+        private readonly IDictionary<int, Dictionary<int, ICardInCollectionCount>> _allCardInCollectionCount = new Dictionary<int, Dictionary<int,ICardInCollectionCount>>();
         private readonly IList<ICardCollection> _collections = new List<ICardCollection>();
 
         public Tuple<ICard, IEdition> GetCardxEdition(int idGatherer)
@@ -42,8 +42,7 @@ namespace MagicPictureSetDownloader.Db
         public IEdition GetEditionFromCode(string code)
         {
             CheckReferentialLoaded();
-            return _editions.FirstOrDefault(ed => String.Equals(ed.Code, code, StringComparison.InvariantCultureIgnoreCase)) ??
-                   _editions.FirstOrDefault(ed => String.Equals(ed.AlternativeCode, code, StringComparison.InvariantCultureIgnoreCase));
+            return _editions.FirstOrDefault(ed => ed.IsCode(code));
         }
 
         public ICardCollection GetCollection(string name)
@@ -55,9 +54,9 @@ namespace MagicPictureSetDownloader.Db
             return (new List<ICardCollection>(_collections).AsReadOnly());
         }
 
-        public IList<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
+        public IEnumerable<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
         {
-            List<ICardInCollectionCount> ret;
+            Dictionary<int, ICardInCollectionCount> ret;
 
             if (cardCollection == null)
                 return null;
@@ -65,31 +64,36 @@ namespace MagicPictureSetDownloader.Db
             if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out ret))
                 return null;
 
-            return ret.AsReadOnly();
+            return ret.Values;
         }
-        private ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer)
+        public ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer)
         {
-            List<ICardInCollectionCount> ret;
+            Dictionary<int, ICardInCollectionCount> dic;
 
             if (cardCollection == null)
                 return null;
 
-            if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out ret))
+            if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out dic))
                 return null;
 
-            return ret.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer);
+            ICardInCollectionCount ret;
+            if (!dic.TryGetValue(idGatherer, out ret))
+                return null;
+
+            return ret;
         }
-        public void InsertNewCollection(string name)
+        public ICardCollection InsertNewCollection(string name)
         {
             if (GetCollection(name) != null || string.IsNullOrWhiteSpace(name))
-                return;
+                return null;
 
             CardCollection collection = new CardCollection { Name = name };
             AddToDbAndUpdateReferential(_connectionString, collection, InsertInReferential);
+            return collection;
         }
         public void InsertNewCardInCollection(int idCollection, int idGatherer, int count, int foilCount)
         {
-            List<ICardInCollectionCount> collection;
+            Dictionary<int, ICardInCollectionCount> collection;
 
             if (count < 0 || foilCount < 0 || count + foilCount == 0)
                 return;
@@ -97,7 +101,7 @@ namespace MagicPictureSetDownloader.Db
             if (!_allCardInCollectionCount.TryGetValue(idCollection, out collection))
                 return;
 
-            if (collection.FirstOrDefault(c => c.IdGatherer == idGatherer) != null)
+            if (collection.ContainsKey(idGatherer))
                 return;
 
             CardInCollectionCount cardInCollection = new CardInCollectionCount{IdCollection = idCollection, IdGatherer = idGatherer, Number = count, FoilNumber = foilCount};
@@ -167,7 +171,7 @@ namespace MagicPictureSetDownloader.Db
             if (toBeDeletedCollection == null)
                 return;
 
-            List<ICardInCollectionCount> collectionToRemove;
+            Dictionary<int, ICardInCollectionCount> collectionToRemove;
             if (!_allCardInCollectionCount.TryGetValue(toBeDeletedCollection.Id, out collectionToRemove) || collectionToRemove.Count == 0)
                 return;
 
@@ -176,7 +180,7 @@ namespace MagicPictureSetDownloader.Db
             if (toAddCollection == null)
                 return;
 
-            foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
+            foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove.Values)
             {
                 ICardInCollectionCount cicc = GetCardCollection(toAddCollection, cardInCollectionCount.IdGatherer);
                 if (cicc == null)
@@ -194,7 +198,7 @@ namespace MagicPictureSetDownloader.Db
             if (cardCollection == null)
                 return;
 
-            List<ICardInCollectionCount> collection;
+            Dictionary<int, ICardInCollectionCount> collection;
 
             if (!_allCardInCollectionCount.TryGetValue(cardCollection.Id, out collection) || collection.Count == 0)
                 return;
@@ -202,7 +206,7 @@ namespace MagicPictureSetDownloader.Db
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
-               Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Cast<CardInCollectionCount>());
+               Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Values.Cast<CardInCollectionCount>());
             }
 
             lock (_sync)
@@ -210,13 +214,13 @@ namespace MagicPictureSetDownloader.Db
         }
         public void DeleteCardInCollection(int idCollection, int idGatherer)
         {
-            List<ICardInCollectionCount> collection;
+            Dictionary<int, ICardInCollectionCount> collection;
 
             if (!_allCardInCollectionCount.TryGetValue(idCollection, out collection))
                 return;
 
-            ICardInCollectionCount cardInCollectionCount = collection.FirstOrDefault(c => c.IdGatherer == idGatherer);
-            if (cardInCollectionCount == null)
+            ICardInCollectionCount cardInCollectionCount;
+            if (!collection.TryGetValue(idGatherer, out cardInCollectionCount))
                 return;
 
             RemoveFromDbAndUpdateReferential(_connectionString, cardInCollectionCount as CardInCollectionCount, RemoveFromReferential);
@@ -236,14 +240,14 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICardInCollectionCount cardInCollectionCount)
         {
-            List<ICardInCollectionCount> list;
-            if (!_allCardInCollectionCount.TryGetValue(cardInCollectionCount.IdCollection, out list))
+            Dictionary<int, ICardInCollectionCount> dic;
+            if (!_allCardInCollectionCount.TryGetValue(cardInCollectionCount.IdCollection, out dic))
             {
-                list = new List<ICardInCollectionCount>();
-                _allCardInCollectionCount.Add(cardInCollectionCount.IdCollection, list);
+                dic = new Dictionary<int, ICardInCollectionCount>();
+                _allCardInCollectionCount.Add(cardInCollectionCount.IdCollection, dic);
             }
 
-            list.Add(cardInCollectionCount);
+            dic[cardInCollectionCount.IdGatherer] = cardInCollectionCount;
         }
 
         private void RemoveFromReferential(ICardCollection cardCollection)
@@ -252,7 +256,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void RemoveFromReferential(ICardInCollectionCount cardInCollectionCount)
         {
-            _allCardInCollectionCount[cardInCollectionCount.IdCollection].Remove(cardInCollectionCount);
+            _allCardInCollectionCount[cardInCollectionCount.IdCollection].Remove(cardInCollectionCount.IdGatherer);
         }
     }
 }
