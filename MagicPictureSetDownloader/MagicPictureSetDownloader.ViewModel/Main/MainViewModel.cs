@@ -21,6 +21,8 @@
         private readonly IMagicDatabaseReadAndWriteCollection _magicDatabase;
 
         //TODO: Test delete with card in collection + same with move 
+        //TODO: Test import/export
+        //ALERT: Feed Alternative Code for Set
 
         public MainViewModel()
         {

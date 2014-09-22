@@ -7,8 +7,8 @@
 
     public enum ExportFormat
     {
-        MPSD,
-        MTGM,
+        MPSD = -1,
+        MTGM = 0,
     }
 
     public enum ImportOption

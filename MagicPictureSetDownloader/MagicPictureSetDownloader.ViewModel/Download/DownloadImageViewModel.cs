@@ -40,7 +40,7 @@
                     _nextJob++;
                     _lock.ExitWriteLock();
 
-                    if (currentJob >= _missingImages.Length)
+                    if (currentJob >= _missingImages.Length || IsStopping)
                         break;
 
                     if (currentJob == 0 || _manualResetEvent.WaitOne())
@@ -63,7 +63,7 @@
                 Interlocked.Decrement(ref CountDown);
             }
 
-            if (CountDown == 0)
+            if (CountDown == 0 || IsStopping)
             {
                 DownloadReporter.Finish();
                 JobFinished();

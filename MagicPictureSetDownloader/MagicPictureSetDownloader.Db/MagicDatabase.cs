@@ -124,7 +124,7 @@ namespace MagicPictureSetDownloader.Db
                 if (withCollectionInfo)
                 {
                     bool inWantedCollection = false;
-                    foreach (ICardInCollectionCount cardInCollectionCount in _allCardInCollectionCount.Values.SelectMany(a => a))
+                    foreach (ICardInCollectionCount cardInCollectionCount in _allCardInCollectionCount.Values.SelectMany(a => a.Values))
                     {
                         inWantedCollection = inWantedCollection || cardInCollectionCount.IdCollection == onlyInCollectionId;
                         cardAllDbInfo.Add(cardInCollectionCount);

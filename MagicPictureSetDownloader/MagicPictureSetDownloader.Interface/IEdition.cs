@@ -5,7 +5,6 @@ namespace MagicPictureSetDownloader.Interface
     public interface IEdition : IIdName
     {
         string Code { get; }
-        string AlternativeCode { get; }
         int? IdBlock { get; }
         string BlockName { get; }
         int? BlockPosition { get; }
@@ -13,5 +12,7 @@ namespace MagicPictureSetDownloader.Interface
         DateTime? ReleaseDate { get; }
         int? CardNumber { get; }
         bool Completed { get; }
+        bool IsCode(string code);
+        string AlternativeCode(ExportFormat format);
     }
 }
