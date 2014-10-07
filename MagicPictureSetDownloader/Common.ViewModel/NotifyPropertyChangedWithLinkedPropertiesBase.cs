@@ -67,7 +67,7 @@
             }
         }
 
-        private void OnNotifyPropertyChangedWithLinked(string propertyName, HashSet<string> firedPropertyChanged)
+        private void OnNotifyPropertyChangedWithLinked(string propertyName, ISet<string> firedPropertyChanged)
         {
             if (!firedPropertyChanged.Contains(propertyName))
             {

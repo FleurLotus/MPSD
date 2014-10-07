@@ -10,7 +10,7 @@
         ChooseInListAndTextNeed,
         MoveFromListToOther,
     }
-    
+
     public class InputViewModel : DialogViewModelBase
     {
         private string _text;
@@ -29,7 +29,6 @@
             this(InputMode.MoveFromListToOther, title, label, list, label2, list2)
         {
         }
-
 
         private InputViewModel(InputMode inputMode, string title, string label, IList<string> list, string label2, IList<string> list2)
         {

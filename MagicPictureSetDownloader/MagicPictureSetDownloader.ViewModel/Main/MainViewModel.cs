@@ -19,11 +19,11 @@
         private readonly HierarchicalViewModel _allhierarchical;
         private HierarchicalViewModel _hierarchical;
         private readonly IMagicDatabaseReadAndWriteCollection _magicDatabase;
+        private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseOption;
 
         //TODO: Test delete with card in collection + same with move 
         //TODO: Test import/export
-        //ALERT: Feed Alternative Code for Set
-
+        //TODO: test add/remove splitted card and statistics
         public MainViewModel()
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -31,6 +31,7 @@
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCollection;
+            _magicDatabaseOption = MagicDatabaseManager.ReadAndWriteOption;
             Analysers = new HierarchicalInfoAnalysersViewModel();
             CreateMenu();
 
@@ -41,8 +42,13 @@
                 _magicDatabaseManager.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
             */
-            
-            LoadAllCards();
+
+            //Reload last chosen option
+            IOption option = _magicDatabaseOption.GetOption(TypeOfOption.SelectedCollection, "Name");
+            if (option != null)
+                LoadCollection(option.Value);
+            else
+                LoadCollection();
         }
 
         public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
@@ -81,19 +87,18 @@
                     if (value != null)
                         value.PropertyChanged += HierarchicalPropertyChanged;
                     _hierarchical = value;
+
                     OnNotifyPropertyChanged(() => Hierarchical);
                 }
             }
         }
 
-        public void LoadCollection(string collectionName)
+        public void LoadCollection(string collectionName = "")
         {
-            Hierarchical = new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
-            LoadCardsHierarchy();
-        }
-        public void LoadAllCards()
-        {
-            Hierarchical = _allhierarchical;
+            //Save the chosen option
+            _magicDatabaseOption.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
+
+            Hierarchical = string.IsNullOrEmpty(collectionName) ? _allhierarchical : new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
             LoadCardsHierarchy();
         }
         private void HierarchicalPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -113,12 +118,12 @@
         }
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
         {
-            return _magicDatabase.GetAllInfos(false, -1).Select(cai => new CardViewModel(cai));
+            return _magicDatabase.GetAllInfos().Select(cai => new CardViewModel(cai));
         }
         private IEnumerable<CardViewModel> CardCollectionAsViewModel(string collectionName)
         {
             ICardCollection cardCollection = _magicDatabase.GetCollection(collectionName);
-            return _magicDatabase.GetAllInfos(true, cardCollection.Id).Select(cai => new CardViewModel(cai));
+            return _magicDatabase.GetAllInfos(cardCollection.Id).Select(cai => new CardViewModel(cai));
         }
         private void CheckCollectionNameNotAlreadyExists(string name)
         {

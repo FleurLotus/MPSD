@@ -3,7 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-
+    
+    //From framework 4.5 with ILSpy
     public class ReadOnlyDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         internal class KeyCollection : ICollection<TKey>

@@ -90,9 +90,13 @@
             {
                 string baseUrl = (string)state;
                 HasJob = false;
-                foreach (SetInfoViewModel setInfoViewModel in Sets)
+
+                while (Sets.Count > 0)
+                {
+                    SetInfoViewModel setInfoViewModel = Sets[0];
                     setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
-                Sets.Clear();
+                    Sets.Remove(setInfoViewModel);
+                }
 
                 foreach (SetInfoWithBlock setInfoWithBlock in DownloadManager.GetSetList(baseUrl).Where(s=> !s.Edition.Completed))
                 {

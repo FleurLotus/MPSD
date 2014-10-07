@@ -2,7 +2,9 @@
 {
     public interface IMagicDatabaseReadAndWriteCardInCollection : IMagicDatabaseReadOnly
     {
-        void InsertNewCardInCollection(int idCollection, int idGatherer, int count, int foilCount = 0);
-        ICardInCollectionCount UpdateCardCollectionCount(ICardInCollectionCount cardInCollection, int count, int countFoil = 0);
+        ICardInCollectionCount InsertOrUpdateCardInCollection(int idCollection, int idGatherer, int countToAdd, int foilCountToAdd);
+        void MoveCardToOtherCollection(int idCollection, int idGatherer, int countToMove, bool isFoil,int idDestinationCollection);
+        void ChangeCardFoil(int idCollection, int idGatherer, int countToChange, bool toFoil);
+        void ChangeCardEdition(int idCollection, int idGatherer, int countToChange, bool isFoil, int idEdition);
     }
 }

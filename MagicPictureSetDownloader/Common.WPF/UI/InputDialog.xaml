@@ -8,8 +8,10 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:converter="clr-namespace:Common.WPF.Converter"
+        xmlns:wpf="clr-namespace:Common.WPF"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=viewModel:InputViewModel}"
+        wpf:FocusBehavior.FocusFirst="True"
         Title="{Binding Title}" 
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" WindowStartupLocation="CenterOwner">
     <Window.Resources>

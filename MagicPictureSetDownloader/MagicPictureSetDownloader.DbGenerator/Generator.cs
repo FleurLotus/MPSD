@@ -7,20 +7,21 @@
 
     using Common.Zip;
 
-    internal class GeneratorBase
+    internal class Generator
     {
         private readonly string _connectionString;
+        private readonly DbType _data;
 
-        internal GeneratorBase(string connectionString)
+        internal Generator(string connectionString, DbType data)
         {
             _connectionString = connectionString;
+            _data = data;
             SqlCeEngine engine = new SqlCeEngine(connectionString);
             engine.CreateDatabase();
-
         }
-        internal void Generate(byte[] stream)
+        internal void Generate()
         {
-            StreamReader sr = new StreamReader(Zipper.UnZipOneFile(stream));
+            StreamReader sr = new StreamReader(Zipper.UnZipOneFile(GetStream()));
             string sqlcommand = sr.ReadToEnd();
             string[] commands = sqlcommand.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -41,6 +42,18 @@
                     }
                 }
             }
+        }
+        private byte[] GetStream()
+        {
+            switch (_data)
+            {
+                case DbType.Data:
+                    return Properties.Resource.MagicData;
+                case DbType.Picture:
+                    return Properties.Resource.MagicPicture;
+            }
+
+            return null;
         }
     }
 }

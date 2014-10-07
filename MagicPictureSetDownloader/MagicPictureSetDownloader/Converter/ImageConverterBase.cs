@@ -6,12 +6,14 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
 
+    using Common.WPF;
+
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
     public abstract class ImageConverterBase : IValueConverter
     {
-        protected readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
+        protected readonly IMagicDatabaseReadOnly MagicDatabase = Lib.IsInDesignMode() ? null : MagicDatabaseManager.ReadOnly;
         
         protected static BitmapImage BytesToImage(byte[] bytes)
         {

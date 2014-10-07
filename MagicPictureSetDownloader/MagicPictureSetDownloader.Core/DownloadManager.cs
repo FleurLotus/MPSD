@@ -121,10 +121,12 @@
 
                 _magicDatabase.InsertNewPicture(idGatherer, pictureData);
             }
+            //ALERT: see if we update the data
+            /*
             else
             {
-                //ALERT: see if we update the data
             }
+            */
         }
         public string[] GetMissingPictureUrls()
         {

@@ -43,7 +43,8 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="GeneratorBase.cs" />
+    <Compile Include="Enum.cs" />
+    <Compile Include="Generator.cs" />
     <Compile Include="DatabaseGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
@@ -51,6 +52,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Upgrader.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resource.resx">
@@ -71,8 +73,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>copy /Y "$(SolutionDir)MagicData.sdf"  "%25temp%25
-copy /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
+    <PreBuildEvent>xcopy /R /Y "$(SolutionDir)MagicData.sdf" "%25temp%25"
+xcopy /R /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
 "$(SolutionDir)ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicData.sdf" "%25temp%25/MagicData.sql"
 "$(SolutionDir)ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf" "%25temp%25/MagicPicture.sql"
 zip -9 "$(ProjectDir)MagicData.zip" "%25temp%25/MagicData.sql"

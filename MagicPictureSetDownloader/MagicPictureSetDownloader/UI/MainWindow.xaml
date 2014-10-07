@@ -8,10 +8,11 @@
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
+        xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="800" Width="900">
+        Title="{Binding Title}" Height="800" Width="900" Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -44,6 +45,9 @@
         </i:EventTrigger>
         <i:EventTrigger EventName="ImportExportWanted" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="ImportExportWanted" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="AddCardWanted" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="AddCardWanted" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

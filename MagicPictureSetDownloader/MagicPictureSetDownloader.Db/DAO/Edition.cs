@@ -1,13 +1,11 @@
 namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
 
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{Name}")]
     [DbTable]
     internal class Edition : IEdition
     {
@@ -53,6 +51,11 @@ namespace MagicPictureSetDownloader.Db.DAO
                 return code;
 
             return codes[pos].Trim();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

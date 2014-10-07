@@ -49,7 +49,7 @@ namespace MagicPictureSetDownloader.Converter
 
                 int end = text.IndexOf(' ', pos);
                 if (end < 0)
-                    throw new ApplicationException("Error in parsing text for display");
+                    end = text.Length;
 
                 string symbol = text.Substring(pos, end - pos);
                 BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
@@ -62,7 +62,10 @@ namespace MagicPictureSetDownloader.Converter
                     
                     Image image = new Image { Source = source, Width = 12, Height = 12, Visibility = Visibility.Visible };
                     newList.Add(new InlineUIContainer(image));
-                    text = text.Substring(end + 1);
+                    if (text.Length > end)
+                        text = text.Substring(end + 1);
+                    else
+                        text = string.Empty;
                     previousIsPicture = true;
                 }
 

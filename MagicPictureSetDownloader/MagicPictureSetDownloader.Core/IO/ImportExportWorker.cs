@@ -63,16 +63,7 @@ namespace MagicPictureSetDownloader.Core.IO
 
             foreach (IImportExportCardCount importExportCardCount in cardToImport)
             {
-                ICardInCollectionCount cardInCollectionCount = magicDatabase.GetCardCollection(collection, importExportCardCount.IdGatherer);
-                if (cardInCollectionCount != null)
-                {
-                    magicDatabase.UpdateCardCollectionCount(cardInCollectionCount, cardInCollectionCount.Number + importExportCardCount.Number,
-                        cardInCollectionCount.FoilNumber + importExportCardCount.FoilNumber);
-                }
-                else
-                {
-                    magicDatabase.InsertNewCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.Number, importExportCardCount.FoilNumber);
-                }
+                magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.Number, importExportCardCount.FoilNumber);
             }
         }
         private IEnumerable<IImportExportCardCount> GetImport(string importFilePath)
