@@ -6,6 +6,7 @@
     using Common.ViewModel;
     using Common.WPF.UI;
 
+    using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.Main;
 
     /// <summary>
@@ -21,15 +22,15 @@
 
         public void UpdateImageDatabaseRequested(object sender, EventArgs args)
         {
-            new DownloadImageWindow().ShowDialog();
+            new DownloadImageWindow { Owner = this }.ShowDialog();
         }
         public void UpdateDatabaseRequested(object sender, EventArgs args)
         {
-            new DownloadWindow().ShowDialog();
+            new DownloadWindow { Owner = this }.ShowDialog();
         }
         public void VersionRequested(object sender, EventArgs args)
         {
-            new VersionWindow().ShowDialog();
+            new VersionWindow { Owner = this }.ShowDialog();
         }
         public void InputRequested(object sender, EventArgs<InputViewModel> args)
         {
@@ -37,8 +38,11 @@
         }
         public void ImportExportWanted(object sender, EventArgs args)
         {
-            new ImportExportWindow().ShowDialog();
+            new ImportExportWindow { Owner = this }.ShowDialog();
         }
-
+        public void AddCardWanted(object sender, EventArgs<CardInputViewModel> args)
+        {
+            new CardInputWindow(args.Data) { Owner = this }.ShowDialog();
+        }
     }
 }

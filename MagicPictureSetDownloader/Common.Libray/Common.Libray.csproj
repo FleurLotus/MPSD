@@ -38,6 +38,8 @@
     <Compile Include="..\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="Threading\WriterLock.cs" />
+    <Compile Include="Threading\ReaderLock.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="ReadOnlyDictionary.cs" />
     <Compile Include="Extension.cs" />

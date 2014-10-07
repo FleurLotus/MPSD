@@ -9,10 +9,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Resources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
           
             
             <!--Converter -->
+            <converter:ModeToRowConverter x:Key="m2rConv" />
             <converter:CardToImageConverter x:Key="c2iConv" />
             <converter:CardToAngleConverter x:Key="c2aConv" />
             <converter:TreeToImageConverter x:Key="t2iConv" />
@@ -33,6 +35,20 @@
                 <Setter Property="Width" Value="5" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Stretch" />
+            </Style>
+
+            <Style x:Key="BorderedTextBox" TargetType="TextBox">
+                <Setter Property="BorderBrush" Value="Black"/>
+            </Style>
+
+            <Style x:Key="BottomButton"  TargetType="Button">
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="Width" Value="70"/>
+            </Style>
+            
+            <Style TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

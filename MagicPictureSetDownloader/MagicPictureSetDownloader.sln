@@ -39,6 +39,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalReference", "Extern
 		ExternalReference\ExportSqlCE40.exe = ExternalReference\ExportSqlCE40.exe
 		ExternalReference\ICSharpCode.SharpZipLib.dll = ExternalReference\ICSharpCode.SharpZipLib.dll
 		ExternalReference\ICSharpCode.SharpZipLib.xml = ExternalReference\ICSharpCode.SharpZipLib.xml
+		ExternalReference\Xceed.Wpf.Toolkit.dll = ExternalReference\Xceed.Wpf.Toolkit.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.DbGenerator", "MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj", "{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}"

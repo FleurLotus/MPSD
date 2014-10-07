@@ -1,10 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
-    using System.Diagnostics;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{Name}")]
     [DbTable]
     internal class Card : ICard
     {
@@ -41,6 +39,10 @@
         public bool IsSplitted
         {
             get { return IsMultiPart && PartName != Name && OtherPartName != Name; }
+        }
+        public override string ToString()
+        {
+            return IsSplitted ? Name + PartName : Name;
         }
     }
 }

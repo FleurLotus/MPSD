@@ -5,7 +5,8 @@
 
     public interface IMagicDatabaseReadOnly
     {
-        ICollection<ICardAllDbInfo> GetAllInfos(bool withCollectionInfo, int onlyInCollectionId);
+        ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1);
+        ICollection<IEdition> AllEditions();
         IList<IOption> GetOptions(TypeOfOption type);
         ICard GetCard(string name, string partName);
         Tuple<ICard, IEdition> GetCardxEdition(int idGatherer);
@@ -15,11 +16,14 @@
         ITreePicture GetTreePicture(string key);
         IPicture GetDefaultPicture();
         IEdition GetEdition(string sourceName);
+        IEdition GetEdition(int idGatherer);
         IOption GetOption(TypeOfOption type, string key);
+        ICardCollection GetCollection(int collectionId);
         ICardCollection GetCollection(string name);
         ICollection<ICardCollection> GetAllCollections();
-        IEnumerable<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
+        ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer);
+        ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
         string[] GetMissingPictureUrls();
     }
 }

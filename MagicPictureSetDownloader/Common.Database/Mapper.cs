@@ -9,7 +9,9 @@
     public static class Mapper<T>
         where T : class, new()
     {
+// ReSharper disable StaticFieldInGenericType
         private static readonly CommandBuilder _commandBuilder;
+// ReSharper restore StaticFieldInGenericType
 
         static Mapper()
         {

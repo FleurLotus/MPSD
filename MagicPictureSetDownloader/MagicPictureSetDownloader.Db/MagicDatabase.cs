@@ -6,8 +6,12 @@ namespace MagicPictureSetDownloader.Db
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Threading;
+
     using Common.Database;
     using Common.Libray;
+    using Common.Libray.Threading;
+
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
@@ -20,7 +24,7 @@ namespace MagicPictureSetDownloader.Db
     {
         private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase("MagicData.sdf", "MagicPicture.sdf"));
 
-        private readonly object _sync = new object();
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private bool _referentialLoaded;
         private readonly string _connectionString;
         private readonly string _connectionStringForPictureDb;
@@ -38,12 +42,16 @@ namespace MagicPictureSetDownloader.Db
         {
             string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             _connectionString = "datasource=" + mainDbPath;
-            if (!File.Exists(mainDbPath))
+            if (File.Exists(mainDbPath))
+                DatabaseGenerator.VersionVerifyMagicData(_connectionString);
+            else
                 DatabaseGenerator.GenerateMagicData(_connectionString);
 
             string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
             _connectionStringForPictureDb = "datasource=" + pictureDbPath;
-            if (!File.Exists(pictureDbPath))
+            if (File.Exists(pictureDbPath))
+                DatabaseGenerator.VersionVerifyMagicPicture(_connectionStringForPictureDb);
+            else
                 DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
         }
 
@@ -59,12 +67,14 @@ namespace MagicPictureSetDownloader.Db
         public ICard GetCard(string name, string partName)
         {
             CheckReferentialLoaded();
-            if (partName == null || partName == name)
-                return _cards.GetOrDefault(name);
+            using (new ReaderLock(_lock))
+            {
+                if (partName == null || partName == name)
+                    return _cards.GetOrDefault(name);
 
-            return _cards.GetOrDefault(name + partName);
+                return _cards.GetOrDefault(name + partName);
+            }
         }
-
         public IPicture GetDefaultPicture()
         {
             return GetPicture(0);
@@ -75,7 +85,7 @@ namespace MagicPictureSetDownloader.Db
 
             if (!_pictures.TryGetValue(idGatherer, out picture))
             {
-                lock (_sync)
+                using (new WriterLock(_lock))
                 {
                     if (!_pictures.TryGetValue(idGatherer, out picture))
                     {
@@ -92,20 +102,36 @@ namespace MagicPictureSetDownloader.Db
         {
             CheckReferentialLoaded();
 
-            return _treePictures.GetOrDefault(key);
+            using (new ReaderLock(_lock))
+                return _treePictures.GetOrDefault(key);
         }
         public IEdition GetEdition(string sourceName)
         {
             CheckReferentialLoaded();
-            IEdition edition = _editions.FirstOrDefault(ed => String.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
-            if (edition == null)
-            {
-                Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false };
-                AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
-                edition = realEdition;
-            }
 
-            return edition;
+            using (new WriterLock(_lock))
+            {
+                IEdition edition = _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
+                if (edition == null)
+                {
+                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false };
+                    AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
+                    edition = realEdition;
+                }
+
+                return edition;
+            }
+        }
+        public IEdition GetEdition(int idGatherer)
+        {
+            using (new ReaderLock(_lock))
+            {
+                ICardEdition cardEdition = GetCardEdition(idGatherer);
+                if (cardEdition == null)
+                    return null;
+
+                return _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
+            }
         }
         public IOption GetOption(TypeOfOption type, string key)
         {
@@ -114,195 +140,218 @@ namespace MagicPictureSetDownloader.Db
         }
 
         //Ensembly Get 
-        public ICollection<ICardAllDbInfo> GetAllInfos(bool withCollectionInfo, int onlyInCollectionId)
+        public ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1)
         {
             CheckReferentialLoaded();
-            List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
-            foreach (ICardEdition cardEdition in _cardEditions.Values)
+
+            using (new ReaderLock(_lock))
             {
-                CardAllDbInfo cardAllDbInfo = new CardAllDbInfo();
-                if (withCollectionInfo)
+                ICollection<ICardInCollectionCount> collection = null;
+                if (onlyInCollectionId != -1)
                 {
-                    bool inWantedCollection = false;
-                    foreach (ICardInCollectionCount cardInCollectionCount in _allCardInCollectionCount.Values.SelectMany(a => a.Values))
-                    {
-                        inWantedCollection = inWantedCollection || cardInCollectionCount.IdCollection == onlyInCollectionId;
-                        cardAllDbInfo.Add(cardInCollectionCount);
-                    }
-                    if (!inWantedCollection)
-                        continue;
+                    collection = GetCardCollection(onlyInCollectionId);
                 }
 
-                ICardEdition edition = cardEdition;
-                ICard card = _cards.Values.FirstOrDefault(c => c.Id == edition.IdCard);
-                cardAllDbInfo.Card = card;
-                cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
-                cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
-                cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
-                cardAllDbInfo.IdGathererPart2 = -1;
-
-                //For Multipart card
-                if (card.IsMultiPart)
+                List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
+                foreach (ICardEdition cardEdition in _cardEditions.Values)
                 {
-                    if (card.IsReverseSide)
-                        continue;
-
-                    ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
-                    cardAllDbInfo.CardPart2 = cardPart2;
-
-                    ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id);
-                    //Verso of Reserse Card
-                    if (cardEdition2 != null)
+                    CardAllDbInfo cardAllDbInfo = new CardAllDbInfo();
+                    if (collection != null)
                     {
-                        if (cardEdition2.IdGatherer != cardEdition.IdGatherer)
-                            cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
+                        if (collection.All(cicc => cicc.IdGatherer != cardEdition.IdGatherer))
+                            continue;
                     }
-                }
 
-                ret.Add(cardAllDbInfo);
+                    ICardEdition edition = cardEdition;
+                    ICard card = _cards.Values.FirstOrDefault(c => c.Id == edition.IdCard);
+                    cardAllDbInfo.Card = card;
+                    cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
+                    cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
+                    cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
+                    cardAllDbInfo.IdGathererPart2 = -1;
+                    cardAllDbInfo.Statistics = GetCardCollectionStatistics(card);
+
+                    //For Multipart card
+                    if (card.IsMultiPart)
+                    {
+                        if (card.IsReverseSide)
+                            continue;
+
+                        ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
+                        cardAllDbInfo.CardPart2 = cardPart2;
+
+                        ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id);
+                        //Verso of Reserse Card
+                        if (cardEdition2 != null)
+                        {
+                            if (cardEdition2.IdGatherer != cardEdition.IdGatherer)
+                                cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
+                        }
+                    }
+
+                    ret.Add(cardAllDbInfo);
+                }
+                return ret.AsReadOnly();
             }
-
-            return ret.AsReadOnly();
         }
         public IList<IOption> GetOptions(TypeOfOption type)
         {
             CheckReferentialLoaded();
-            IList<IOption> options;
-            if (!_allOptions.TryGetValue(type, out options))
-                return null;
-            return new List<IOption>(options).AsReadOnly();
+
+            using (new ReaderLock(_lock))
+            {
+                IList<IOption> options;
+                if (!_allOptions.TryGetValue(type, out options))
+                    return null;
+                return new List<IOption>(options).AsReadOnly();
+            }
         }
 
         private ICardEdition GetCardEdition(int idGatherer)
         {
             CheckReferentialLoaded();
 
-            return _cardEditions.GetOrDefault(idGatherer);
+            using (new ReaderLock(_lock))
+                return _cardEditions.GetOrDefault(idGatherer);
         }
         private int GetRarityId(string rarity)
         {
             CheckReferentialLoaded();
-            return _rarities[rarity].Id;
+            using (new ReaderLock(_lock))
+                return _rarities[rarity].Id;
         }
 
-        private ICollection<IEdition> AllEditions()
+        public ICollection<IEdition> AllEditions()
         {
             CheckReferentialLoaded();
-            return new List<IEdition>(_editions).AsReadOnly();
+            using (new ReaderLock(_lock))
+                return new List<IEdition>(_editions).AsReadOnly();
         }
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
-            return new List<IRarity>(_rarities.Values).AsReadOnly();
+            using (new ReaderLock(_lock))
+                return new List<IRarity>(_rarities.Values).AsReadOnly();
         }
         private ICollection<IBlock> AllBlocks()
         {
             CheckReferentialLoaded();
-            return new List<IBlock>(_blocks.Values).AsReadOnly();
-        }
-        private ICollection<ICard> AllCards()
-        {
-            CheckReferentialLoaded();
-            return new List<ICard>(_cards.Values).AsReadOnly();
+            using (new ReaderLock(_lock))
+                return new List<IBlock>(_blocks.Values).AsReadOnly();
         }
         private ICollection<ICardEdition> AllCardEditions()
         {
             CheckReferentialLoaded();
-            return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
+            using (new ReaderLock(_lock))
+                return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
         }
 
         //Insert one new 
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
-            if (GetPicture(idGatherer) != null || data == null || data.Length == 0)
-                return;
+            using (new WriterLock(_lock))
+            {
+                if (GetPicture(idGatherer) != null || data == null || data.Length == 0)
+                    return;
 
-            Picture picture = new Picture {IdGatherer = idGatherer, Image = data};
-            AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, InsertInReferential);
+                Picture picture = new Picture { IdGatherer = idGatherer, Image = data };
+                AddToDbAndUpdateReferential(_connectionStringForPictureDb, picture, InsertInReferential);
+            }
         }
         public void InsertNewTreePicture(string name, byte[] data)
         {
-            if (GetTreePicture(name) != null || data == null || data.Length == 0)
-                return;
+            using (new WriterLock(_lock))
+            {
+                if (GetTreePicture(name) != null || data == null || data.Length == 0)
+                    return;
 
-            TreePicture treepicture = new TreePicture { Name = name, Image = data };
-            AddToDbAndUpdateReferential(_connectionStringForPictureDb, treepicture, InsertInReferential);
+                TreePicture treepicture = new TreePicture { Name = name, Image = data };
+                AddToDbAndUpdateReferential(_connectionStringForPictureDb, treepicture, InsertInReferential);
+            }
         }
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName)
         {
-
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
-            if (GetCard(name, partName) != null)
-                return;
-
-            Card card = new Card
+            using (new WriterLock(_lock))
             {
-                PartName = partName??name,
-                Name = name,
-                Text = text,
-                Power = power,
-                Toughness = toughness,
-                CastingCost = castingcost,
-                Loyalty = loyalty,
-                Type = type,
-                OtherPartName = otherPartName
-            };
+                if (GetCard(name, partName) != null)
+                    return;
 
-            AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
+                Card card = new Card
+                                {
+                                    PartName = partName ?? name,
+                                    Name = name,
+                                    Text = text,
+                                    Power = power,
+                                    Toughness = toughness,
+                                    CastingCost = castingcost,
+                                    Loyalty = loyalty,
+                                    Type = type,
+                                    OtherPartName = otherPartName
+                                };
+
+                AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
+            }
         }
         public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url)
         {
-            int idRarity = GetRarityId(rarity);
-            int idCard = GetCard(name, partName).Id;
-            
-            if (idGatherer <= 0 || idEdition <= 0)
-                throw new ApplicationDbException("Data are not filled correctedly");
-
-            if (GetCardEdition(idGatherer) != null)
-                return;
-
-            CardEdition cardEdition = new CardEdition
+            using (new WriterLock(_lock))
             {
-                IdCard = idCard,
-                IdGatherer = idGatherer,
-                IdEdition = idEdition,
-                IdRarity = idRarity,
-                Url = url
-            };
+                int idRarity = GetRarityId(rarity);
+                int idCard = GetCard(name, partName).Id;
 
-            AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);
+                if (idGatherer <= 0 || idEdition <= 0)
+                    throw new ApplicationDbException("Data are not filled correctedly");
+
+                if (GetCardEdition(idGatherer) != null)
+                    return;
+
+                CardEdition cardEdition = new CardEdition
+                                              {
+                                                  IdCard = idCard,
+                                                  IdGatherer = idGatherer,
+                                                  IdEdition = idEdition,
+                                                  IdRarity = idRarity,
+                                                  Url = url
+                                              };
+
+                AddToDbAndUpdateReferential(_connectionString, cardEdition, InsertInReferential);
+            }
         }
         public void InsertNewOption(TypeOfOption type, string key, string value)
         {
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(key))
                 throw new ApplicationDbException("Data are not filled correctedly");
-            
-            IOption option = GetOption(type, key);
 
-            if (option == null)
+            using (new WriterLock(_lock))
             {
-                Option newoption = new Option { Type = type, Key = key, Value = value };
-                AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
-            }
-            else if (option.Value != value)
-            {
-                RemoveFromDbAndUpdateReferential(_connectionString, option as Option, RemoveFromReferential);
+                IOption option = GetOption(type, key);
 
-                Option newoption = new Option { Type = type, Key = key, Value = value };
-                AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+                if (option == null)
+                {
+                    Option newoption = new Option { Type = type, Key = key, Value = value };
+                    AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+                }
+                else if (option.Value != value)
+                {
+                    RemoveFromDbAndUpdateReferential(_connectionString, option as Option, RemoveFromReferential);
+
+                    Option newoption = new Option { Type = type, Key = key, Value = value };
+                    AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+                }
             }
         }
 
         public void EditionCompleted(int editionId)
         {
-            Edition newEdition = _editions.FirstOrDefault(e=>e.Id == editionId) as Edition;
-            if (newEdition == null || newEdition.Completed)
-                return;
-
-            lock (_sync)
+            using (new WriterLock(_lock))
             {
+                Edition newEdition = _editions.FirstOrDefault(e => e.Id == editionId) as Edition;
+                if (newEdition == null || newEdition.Completed)
+                    return;
+
                 newEdition.Completed = true;
 
                 using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
@@ -311,7 +360,6 @@ namespace MagicPictureSetDownloader.Db
                     Mapper<Edition>.UpdateOne(cnx, newEdition);
                 }
             }
-
         }
         
         public string[] GetMissingPictureUrls()
@@ -330,6 +378,7 @@ namespace MagicPictureSetDownloader.Db
         private void AddToDbAndUpdateReferential<T>(string connectionString, T value, Action<T> addToReferential)
             where T : class, new()
         {
+            //Lock write on calling
             if (value == null)
                 return;
 
@@ -339,12 +388,12 @@ namespace MagicPictureSetDownloader.Db
                 Mapper<T>.InsertOne(cnx, value);
             }
 
-            lock (_sync)
-                addToReferential(value);
+            addToReferential(value);
         }
         private void RemoveFromDbAndUpdateReferential<T>(string connectionString, T value, Action<T> removeFromReferential)
             where T : class, new()
         {
+            //Lock write on calling
             if (value == null)
                 return;
 
@@ -354,8 +403,7 @@ namespace MagicPictureSetDownloader.Db
                 Mapper<T>.DeleteOne(cnx, value);
             }
 
-            lock (_sync)
-                removeFromReferential(value);
+            removeFromReferential(value);
         }
 
         private IPicture LoadImage(int idGatherer)
@@ -370,6 +418,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void LoadReferentials()
         {
+            //Lock Write on calling
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
@@ -419,6 +468,7 @@ namespace MagicPictureSetDownloader.Db
                 foreach (TreePicture treePicture in Mapper<TreePicture>.LoadAll(cnx))
                     InsertInReferential(treePicture);
             }
+
             _referentialLoaded = true;
         }
         private void InsertInReferential(IPicture picture)
@@ -473,7 +523,7 @@ namespace MagicPictureSetDownloader.Db
         {
             if (!_referentialLoaded)
             {
-                lock (_sync)
+                using (new WriterLock(_lock))
                 {
                     if (!_referentialLoaded)
                     {

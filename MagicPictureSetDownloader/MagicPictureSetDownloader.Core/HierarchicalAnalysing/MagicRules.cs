@@ -35,7 +35,7 @@
         }
         public static IComparable GetEdition(ICardInfo card)
         {
-            return card.Edition;
+            return card.Edition.Name;
         }
         public static IComparable GetRarity(ICardInfo card)
         {

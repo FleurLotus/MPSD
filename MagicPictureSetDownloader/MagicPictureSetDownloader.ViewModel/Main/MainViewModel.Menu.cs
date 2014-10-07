@@ -9,6 +9,7 @@
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.ViewModel.Input;
 
     public partial class MainViewModel
     {
@@ -17,6 +18,7 @@
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
         public event EventHandler ImportExportWanted;
+        public event EventHandler<EventArgs<CardInputViewModel>>  AddCardWanted;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
 
         private MenuViewModel _showPictureViewModel;
@@ -61,6 +63,12 @@
             if (e != null)
                 e(this, EventArgs.Empty);
         }
+        private void OnAddCardWanted(string name)
+        {
+            var e = AddCardWanted;
+            if (e != null)
+                e(this, new EventArgs<CardInputViewModel>(new CardInputViewModel(name)));
+        }
         private void OnInputRequestedRequested(InputViewModel vm)
         {
             var e = InputRequested;
@@ -95,7 +103,7 @@
         }
         private void ShowAllCollectionCommandExecute(object o)
         {
-            LoadAllCards();
+            LoadCollection();
         }
         private void ShowCollectionCommandExecute(object o)
         {
@@ -143,6 +151,10 @@
                         _magicDatabase.MoveCollection(toBeDeleted, toAdd);
 
                     _magicDatabase.DeleteCollection(toBeDeleted);
+                    
+                    //Delete current collection -> reset display to default
+                    if (Hierarchical.Name == toBeDeleted)
+                        LoadCollection();
                     GenerateCollectionMenu();
                 }
             }
@@ -174,8 +186,8 @@
         }
         private void CardInputCommandExecute(object o)
         {
-            //TODO: Add remove/card in collection
-            throw new NotImplementedException();
+            OnAddCardWanted(Hierarchical.Name);
+            LoadCardsHierarchy();
         }
         private void ChangeCardCommandExecute(object o)
         {
@@ -225,10 +237,11 @@
 
             ContextMenus.Add(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
 
-            if (Hierarchical.Selected is HierarchicalResultNodeViewModel)
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel != null)
             {
-                ContextMenus.Add(new MenuViewModel("Change edition/Foil", new RelayCommand(ChangeCardCommandExecute)));
-                ContextMenus.Add(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute)));
+                ContextMenus.Add(new MenuViewModel("Change edition/Foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
+                ContextMenus.Add(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
             }
         }
         private void GenerateCollectionMenu()

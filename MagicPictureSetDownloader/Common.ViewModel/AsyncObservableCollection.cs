@@ -6,6 +6,7 @@
     using System.ComponentModel;
     using System.Threading;
 
+    //From http://www.thomaslevesque.com/2009/04/17/wpf-binding-to-an-asynchronous-collection/
     public class AsyncObservableCollection<T> : ObservableCollection<T>
     {
         private readonly SynchronizationContext _synchronizationContext = SynchronizationContext.Current;
