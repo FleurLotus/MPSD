@@ -44,5 +44,9 @@
         {
             new CardInputWindow(args.Data) { Owner = this }.ShowDialog();
         }
+        public void UpdateCardWanted(object sender, EventArgs<CardUpdateViewModel> args)
+        {
+            new CardUpdateWindow(args.Data) { Owner = this }.ShowDialog();
+        }
     }
 }

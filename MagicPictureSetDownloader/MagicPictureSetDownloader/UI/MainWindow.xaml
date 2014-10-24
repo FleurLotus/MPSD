@@ -49,6 +49,9 @@
         <i:EventTrigger EventName="AddCardWanted" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="AddCardWanted" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="UpdateCardWanted" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="UpdateCardWanted" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
@@ -94,10 +97,25 @@
                         <!-- Split Card/Image -->
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
-                        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="10">
+                        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding ShowStatistics, Converter={StaticResource b2vConv}}">
+                            <ListView ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2vConv}}">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
+                                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
+                                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
+                                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="10">
                             <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
                                    Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
                             <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" 

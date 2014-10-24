@@ -8,6 +8,11 @@
     <converter:ImageSourceConverter x:Key="imgConv" />
     <converter:BoolInvertConverter x:Key="nbConv"/>
 
+    <converter:AggregateConverter x:Key="nb2vConv">
+        <converter:BoolInvertConverter/>
+        <BooleanToVisibilityConverter/>
+    </converter:AggregateConverter>
+
     <converter:AggregateConverter x:Key="e2vConv">
         <converter:EnumMatchToBooleanConverter/>
         <BooleanToVisibilityConverter/>

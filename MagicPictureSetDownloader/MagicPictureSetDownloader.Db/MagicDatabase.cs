@@ -16,11 +16,7 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
-    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollection, 
-                                           IMagicDatabaseReadAndWriteReference,
-                                           IMagicDatabaseReadAndWriteOption,
-                                           IMagicDatabaseReadAndWriteCardInCollection,
-                                           IMagicDatabaseReadOnly
+    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteFull
     {
         private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase("MagicData.sdf", "MagicPicture.sdf"));
 

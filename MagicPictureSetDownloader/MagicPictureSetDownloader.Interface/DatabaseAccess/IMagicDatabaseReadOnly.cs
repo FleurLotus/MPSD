@@ -11,7 +11,7 @@
         ICard GetCard(string name, string partName);
         Tuple<ICard, IEdition> GetCardxEdition(int idGatherer);
         IEdition GetEditionFromCode(string code);
-        int GetGathererId(ICard card, IEdition edition);
+        int GetIdGatherer(ICard card, IEdition edition);
         IPicture GetPicture(int idGatherer);
         ITreePicture GetTreePicture(string key);
         IPicture GetDefaultPicture();

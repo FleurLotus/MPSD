@@ -90,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\CardUpdateWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\CardInputWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +120,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\CardToStatisticsVisibleConverter.cs" />
+    <Compile Include="Converter\CardToStatisticsConverter.cs" />
     <Compile Include="Converter\CardToImageConverter.cs" />
     <Compile Include="Converter\BoolToImageConverter.cs" />
     <Compile Include="Converter\BitmapToImageConverter.cs" />
@@ -125,6 +131,9 @@
     <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToImageConverter.cs" />
+    <Compile Include="UI\CardUpdateWindow.xaml.cs">
+      <DependentUpon>CardUpdateWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\CardInputWindow.xaml.cs">
       <DependentUpon>CardInputWindow.xaml</DependentUpon>
     </Compile>

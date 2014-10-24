@@ -24,5 +24,10 @@
         {
             get { return MagicDatabase.DbInstance; }
         }
+        public static IMagicDatabaseReadAndWriteFull ReadAndWriteFull
+        {
+            get { return MagicDatabase.DbInstance; }
+        }
+
     }
 }

@@ -16,6 +16,8 @@
             <!--Converter -->
             <converter:ModeToRowConverter x:Key="m2rConv" />
             <converter:CardToImageConverter x:Key="c2iConv" />
+            <converter:CardToStatisticsConverter x:Key="c2sConv" />
+            <converter:CardToStatisticsVisibleConverter x:Key="c2vConv" />
             <converter:CardToAngleConverter x:Key="c2aConv" />
             <converter:TreeToImageConverter x:Key="t2iConv" />
             <converter:BoolToImageConverter x:Key="b2iConv" />
