@@ -41,8 +41,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="10"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Part Name" FontSize="15" HorizontalAlignment="Right" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}" />
@@ -76,18 +74,6 @@
 
             <Label Grid.Column="0" Grid.Row="5" Content="Text"/>
             <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
-            
-            <ListView Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="3" ItemsSource="{Binding Statistics}" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="{Binding Statistics.Length, Converter={StaticResource nz2vConv}}">
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
-                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
-                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
-                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-
         </Grid>
     </ControlTemplate>
     

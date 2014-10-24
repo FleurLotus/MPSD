@@ -35,11 +35,12 @@ namespace MagicPictureSetDownloader.Db
                 return new Tuple<ICard, IEdition>(card, edition);
             }
         }
-        public int GetGathererId(ICard card, IEdition edition)
+        public int GetIdGatherer(ICard card, IEdition edition)
         {
-            CheckReferentialLoaded();
             if (card == null || edition == null)
                 return 0;
+
+            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 ICardEdition cardEdition = _cardEditions.Values.FirstOrDefault(ce => ce.IdCard == card.Id && ce.IdEdition == edition.Id);
@@ -176,20 +177,84 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void MoveCardToOtherCollection(int idCollection, int idGatherer, int countToMove, bool isFoil, int idDestinationCollection)
+        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, int countToMove, bool isFoil, ICardCollection collectionDestination)
         {
-            //TODO: to be coded
-            throw new NotImplementedException();
+            if (countToMove <= 0)
+                return;
+
+            using (new WriterLock(_lock))
+            {
+
+                int idGatherer = GetIdGatherer(card, edition);
+                ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGatherer);
+                if (cardInCollectionCount == null)
+                    return;
+
+                int count = 0;
+                int foilCount = 0;
+
+                if (isFoil)
+                {
+                    foilCount = countToMove;
+
+                    if (cardInCollectionCount.FoilNumber < countToMove)
+                        return;
+                }
+                else
+                {
+                    count = countToMove;
+
+                    if (cardInCollectionCount.Number < countToMove)
+                        return;
+                }
+
+                InsertOrUpdateCardInCollection(collection.Id, idGatherer, -count, -foilCount);
+                InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, count, foilCount);
+            }
         }
-        public void ChangeCardFoil(int idCollection, int idGatherer, int countToChange, bool toFoil)
+        public void ChangeCardEditionFoil(ICardCollection collection, ICard card, int countToChange, IEdition editionSource, bool isFoilSource, IEdition editionDestination, bool isFoilDestination)
         {
-            //TODO: to be coded
-            throw new NotImplementedException();
-        }
-        public void ChangeCardEdition(int idCollection, int idGatherer, int countToChange, bool isFoil, int idEdition)
-        {
-            //TODO: to be coded
-            throw new NotImplementedException();
+            if (countToChange <= 0)
+                return;
+
+            using (new WriterLock(_lock))
+            {
+
+                int idGathererSource = GetIdGatherer(card, editionSource);
+                int idGathererDestination = GetIdGatherer(card, editionDestination);
+                ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGathererSource);
+                if (cardInCollectionCount == null || idGathererDestination <=0)
+                    return;
+
+                int count = 0;
+                int foilCount = 0;
+                int countDestination = 0;
+                int foilCountDestination = 0;
+
+                if (isFoilSource)
+                {
+                    foilCount = -countToChange;
+
+                    if (cardInCollectionCount.FoilNumber < countToChange)
+                        return;
+                }
+                else
+                {
+                    count = -countToChange;
+
+                    if (cardInCollectionCount.Number < countToChange)
+                        return;
+                }
+
+                if (isFoilDestination)
+                    foilCountDestination = countToChange;
+                else
+                    countDestination = countToChange;
+
+
+                InsertOrUpdateCardInCollection(collection.Id, idGathererSource, count, foilCount);
+                InsertOrUpdateCardInCollection(collection.Id, idGathererDestination, countDestination, foilCountDestination);
+            }
         }
         
         public ICardCollection UpdateCollectionName(string oldName, string name)

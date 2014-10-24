@@ -41,6 +41,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteFull.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteOption.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCardInCollection.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteReference.cs" />

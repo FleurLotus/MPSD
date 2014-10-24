@@ -18,20 +18,19 @@
 
         private readonly HierarchicalViewModel _allhierarchical;
         private HierarchicalViewModel _hierarchical;
-        private readonly IMagicDatabaseReadAndWriteCollection _magicDatabase;
-        private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseOption;
+        private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
 
         //TODO: Test delete with card in collection + same with move 
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
+        //TODO: On refresh try to keep previous card selection
         public MainViewModel()
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
 
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
-            _magicDatabase = MagicDatabaseManager.ReadAndWriteCollection;
-            _magicDatabaseOption = MagicDatabaseManager.ReadAndWriteOption;
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteFull;
             Analysers = new HierarchicalInfoAnalysersViewModel();
             CreateMenu();
 
@@ -44,7 +43,7 @@
             */
 
             //Reload last chosen option
-            IOption option = _magicDatabaseOption.GetOption(TypeOfOption.SelectedCollection, "Name");
+            IOption option = _magicDatabase.GetOption(TypeOfOption.SelectedCollection, "Name");
             if (option != null)
                 LoadCollection(option.Value);
             else
@@ -96,7 +95,7 @@
         public void LoadCollection(string collectionName = "")
         {
             //Save the chosen option
-            _magicDatabaseOption.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
+            _magicDatabase.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
 
             Hierarchical = string.IsNullOrEmpty(collectionName) ? _allhierarchical : new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
             LoadCardsHierarchy();

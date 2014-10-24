@@ -39,7 +39,7 @@ namespace MagicPictureSetDownloader.Core.IO
             if (edition == null)
                 return null;
 
-            int idGatherer = MagicDatabase.GetGathererId(card, edition);
+            int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
             if (idGatherer <= 0)
                 return null;
 

@@ -20,8 +20,10 @@
         public event EventHandler ImportExportWanted;
         public event EventHandler<EventArgs<CardInputViewModel>>  AddCardWanted;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
+        public event EventHandler<EventArgs<CardUpdateViewModel>> UpdateCardWanted;
 
         private MenuViewModel _showPictureViewModel;
+        private MenuViewModel _showStatisticsViewModel;
         private MenuViewModel _collectionViewModel;
 
         public ObservableCollection<MenuViewModel> Menus { get; private set; }
@@ -29,6 +31,10 @@
         public bool ShowPicture
         {
             get { return _showPictureViewModel.IsChecked; }
+        }
+        public bool ShowStatistics
+        {
+            get { return _showStatisticsViewModel.IsChecked; }
         }
         
         #region Events
@@ -75,7 +81,12 @@
             if (e != null && vm != null)
                 e(this, new EventArgs<InputViewModel>(vm));
         }
-
+        private void OnUpdateCardWanted(CardUpdateViewModel vm)
+        {
+            var e = UpdateCardWanted;
+            if (e != null && vm != null)
+                e(this, new EventArgs<CardUpdateViewModel>(vm));
+        }
         #endregion
 
         #region Command
@@ -100,6 +111,10 @@
         private void ShowPictureCommandExecute(object o)
         {
             OnNotifyPropertyChanged(() => ShowPicture);
+        }
+        private void ShowStatisticsCommandExecute(object o)
+        {
+            OnNotifyPropertyChanged(() => ShowStatistics);
         }
         private void ShowAllCollectionCommandExecute(object o)
         {
@@ -191,13 +206,24 @@
         }
         private void ChangeCardCommandExecute(object o)
         {
-            //TODO: Change card : Foil / Not Foil, Edition, Move to other collection
-            throw new NotImplementedException();
+            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card, false);
+            OnUpdateCardWanted(vm);
+
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                _magicDatabase.ChangeCardEditionFoil(vm.SourceCardCollection, vm.Card, vm.Count, vm.SourceEditionSelected, vm.SourceIsFoil, vm.DestinationEditionSelected, vm.DestinationIsFoil);
+                LoadCardsHierarchy();
+            }
         }
         private void MoveCardCommandExecute(object o)
         {
-            //TODO: Change card : Foil / Not Foil, Edition, Move to other collection
-            throw new NotImplementedException();
+            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card, true);
+            OnUpdateCardWanted(vm);
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected, vm.Count, vm.SourceIsFoil, vm.DestinationCardCollectionSelected);
+                LoadCardsHierarchy();
+            }
         }
 
         #endregion
@@ -215,7 +241,9 @@
             Menus.Add(fileMenu);
 
             MenuViewModel viewMenu = new MenuViewModel("_View");
-            _showPictureViewModel = new MenuViewModel("_Show Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = true };
+            _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = true };
+            _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = true };
+            viewMenu.Children.Add(_showStatisticsViewModel);
             viewMenu.Children.Add(_showPictureViewModel);
             Menus.Add(viewMenu);
 
