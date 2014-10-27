@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Windows.Data;
 
+    [ValueConversion(typeof(Enum), typeof(bool))]
     public class EnumMatchToBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

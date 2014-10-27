@@ -85,8 +85,12 @@
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
         <TreeView ItemsSource="{Binding Root}">
             <i:Interaction.Behaviors>
-                <wpf:BindableSelectedItemBehavior SelectedItem="{Binding Selected, Mode=OneWayToSource}" />
+                <wpf:BindableSelectedItemBehavior SelectedItem="{binding:TwoWayBinding Selected}" />
             </i:Interaction.Behaviors>
+            <!-- Keep color when treeview hasn't the focus -->
+            <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{x:Static SystemColors.HighlightColor}" />
+            </TreeView.Resources>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <Grid>

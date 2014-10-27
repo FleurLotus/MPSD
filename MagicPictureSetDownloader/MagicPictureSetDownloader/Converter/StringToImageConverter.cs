@@ -2,9 +2,12 @@ namespace MagicPictureSetDownloader.Converter
 {
     using System;
     using System.Globalization;
+    using System.Windows.Data;
+    using System.Windows.Media.Imaging;
 
     using MagicPictureSetDownloader.Interface;
 
+    [ValueConversion(typeof(string), typeof(BitmapImage))]
     public class StringToImageConverter : ImageConverterBase
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -17,7 +20,7 @@ namespace MagicPictureSetDownloader.Converter
             ITreePicture treepicture = MagicDatabase.GetTreePicture(data.ToUpper());
             if (null != treepicture && treepicture.Image.Length > 0)
             {
-                System.Windows.Media.Imaging.BitmapImage image = BytesToImage(treepicture.Image);
+                BitmapImage image = BytesToImage(treepicture.Image);
                 return image;
             }
 

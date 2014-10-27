@@ -4,15 +4,14 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
 
+    using Common.WPF.Converter;
+
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    public class CardToStatisticsConverter : IValueConverter
+    [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(StatisticViewModel[]))]
+    public class CardToStatisticsConverter : NoConvertBackConverter
     {
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 

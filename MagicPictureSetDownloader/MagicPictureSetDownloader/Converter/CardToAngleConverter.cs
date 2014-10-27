@@ -4,11 +4,14 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
 
+    using Common.WPF.Converter;
+
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    public class CardToAngleConverter : IValueConverter
+    [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(int))]
+    public class CardToAngleConverter : NoConvertBackConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 
@@ -16,11 +19,6 @@ namespace MagicPictureSetDownloader.Converter
                 return 0;
 
             return 180;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

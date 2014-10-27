@@ -3,7 +3,8 @@
     public enum TypeOfOption
     {
         Hierarchy,
-        SelectedCollection
+        SelectedCollection,
+        Display
     }
 
     public enum ExportFormat

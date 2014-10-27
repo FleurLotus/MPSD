@@ -23,7 +23,6 @@
         //TODO: Test delete with card in collection + same with move 
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
-        //TODO: On refresh try to keep previous card selection
         public MainViewModel()
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -38,7 +37,7 @@
             /*
             foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Others"))
             {
-                _magicDatabaseManager.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
+                _magicDatabase.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
             */
 
@@ -110,11 +109,13 @@
         {
             HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
 
-            Hierarchical.MakeHierarchyAsync(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
-                                            selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray());
+            Hierarchical.MakeHierarchy(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
+                                       selectedAnalysers.Select(hiav => hiav.IsAscendingOrder).ToArray());
+
             GenerateCollectionMenu();
             GenerateContextMenu();
         }
+
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
         {
             return _magicDatabase.GetAllInfos().Select(cai => new CardViewModel(cai));

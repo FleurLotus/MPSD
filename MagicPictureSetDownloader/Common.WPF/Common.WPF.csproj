@@ -47,6 +47,7 @@
     </Compile>
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="BindableSelectedItemBehavior.cs" />
+    <Compile Include="Converter\NoConvertBackConverter.cs" />
     <Compile Include="FocusBehavior.cs" />
     <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Converter\ImageSourceConverter.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="UI\VersionWindow.xaml.cs">
       <DependentUpon>VersionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VisualTreeExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Resources.xaml">
