@@ -195,39 +195,42 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private void InitWindow()
         {
-            if (InputMode == InputMode.ByCard)
+            switch (InputMode)
             {
-                Cards.Clear();
-                foreach (ICard card in _cards)
-                {
-                    Cards.Add(card);
-                }
+                case InputMode.ByCard:
 
-                Editions.Clear();
+                    Cards.Clear();
 
-                EditionSelected = null;
-                CardSelected = null;
-            }
-            else if (InputMode == InputMode.ByEdition)
-            {
-                Cards.Clear();
+                    foreach (ICard card in _cards)
+                        Cards.Add(card);
+                    
+                    Editions.Clear();
+                    EditionSelected = null;
+                    CardSelected = null;
+                    break;
 
-                IEdition save = EditionSelected;
-                Editions.Clear();
-                foreach (IEdition editions in _editions)
-                {
-                    Editions.Add(editions);
-                }
+                case InputMode.ByEdition:
 
-                CardSelected = null;
-                EditionSelected = save;
-            }
-            else if (InputMode == InputMode.None)
-            {
-                Cards.Clear();
-                Cards.Clear();
-                EditionSelected = null;
-                CardSelected = null;
+                    Cards.Clear();
+
+                    IEdition save = EditionSelected;
+                    Editions.Clear();
+                    
+                    foreach (IEdition editions in _editions)
+                        Editions.Add(editions);
+                    
+
+                    CardSelected = null;
+                    EditionSelected = save;
+                    break;
+
+                case InputMode.None:
+
+                    Cards.Clear();
+                    Cards.Clear();
+                    EditionSelected = null;
+                    CardSelected = null;
+                    break;
             }
 
             CurrentCollectionDetail = null;
@@ -263,27 +266,33 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             if (InputMode != modifyData)
                 return;
 
-            if (InputMode == InputMode.ByEdition)
+            switch (InputMode)
             {
-                IEdition editionSelected = EditionSelected;
-                Cards.Clear();
-                if (editionSelected == null)
-                    return;
+                case InputMode.ByEdition:
 
-                foreach (ICard card in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()))
-                    Cards.Add(card);
+                    IEdition editionSelected = EditionSelected;
+                    Cards.Clear();
+                    if (editionSelected == null)
+                        return;
 
+                    foreach (ICard card in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()))
+                        Cards.Add(card);
+
+                    break;
+
+                case InputMode.ByCard:
+
+                    ICard cardNameSelected = CardSelected;
+                    Editions.Clear();
+                    if (cardNameSelected == null)
+                        return;
+
+                    foreach (IEdition edition in _allCardInfos.Where(cadi => cadi.Card == cardNameSelected).Select(cadi => cadi.Edition).OrderByDescending(ed => ed.ReleaseDate))
+                        Editions.Add(edition);
+
+                    break;
             }
-            else if (InputMode == InputMode.ByCard)
-            {
-                ICard cardNameSelected = CardSelected;
-                Editions.Clear();
-                if (cardNameSelected == null)
-                    return;
 
-                foreach (IEdition edition in _allCardInfos.Where(cadi => cadi.Card == cardNameSelected).Select(cadi => cadi.Edition).OrderByDescending(ed => ed.ReleaseDate))
-                    Editions.Add(edition);
-            }
         }
         private void UpdateCurrentCollectionDetail()
         {

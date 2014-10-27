@@ -5,16 +5,11 @@
     using System.Windows.Data;
 
     [ValueConversion(typeof (object), typeof (bool))]
-    public class ObjectNullToBoolConverter : IValueConverter
+    public class ObjectNullToBoolConverter : NoConvertBackConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value == null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

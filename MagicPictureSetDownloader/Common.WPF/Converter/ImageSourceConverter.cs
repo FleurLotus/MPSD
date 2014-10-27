@@ -6,9 +6,10 @@ namespace Common.WPF.Converter
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
-    public class ImageSourceConverter : IValueConverter
+    [ValueConversion(typeof(string), typeof(ImageSource))]
+    public class ImageSourceConverter : NoConvertBackConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (targetType == typeof(ImageSource))
             {
@@ -21,10 +22,6 @@ namespace Common.WPF.Converter
                     return new BitmapImage(uri);
             }
             return value;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

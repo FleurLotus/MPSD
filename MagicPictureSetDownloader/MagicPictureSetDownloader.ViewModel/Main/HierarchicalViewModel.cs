@@ -4,12 +4,20 @@
     using System.Collections.Generic;
     using System.Threading;
 
+    using Common.Libray;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
     public class HierarchicalViewModel: NotifyPropertyChangedBase
     {
+        private enum Matching
+        {
+            None,
+            Name,
+            Full,
+        }
+
         private HierarchicalResultViewModel _selected;
         private readonly Func<string, IEnumerable<CardViewModel>> _getCardViewModels;
 
@@ -34,12 +42,18 @@
                 }
             }
         }
-        public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
+        //Synchronous because property change are done before all the reste is done
+        /*public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
             ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, orders));
-        }
-        private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
+        }*/
+        public void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
+            CardViewModel saveSelected = null;
+            HierarchicalResultNodeViewModel selected = Selected as HierarchicalResultNodeViewModel;
+            if (selected != null)
+                saveSelected = selected.Card;
+            
             Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(Name) }).AsReadOnly();
 
             foreach (CardViewModel card in _getCardViewModels(Name))
@@ -47,6 +61,13 @@
                 MakeHierarchy(analysers, orders, card);
             }
             OnNotifyPropertyChanged(() => Root);
+
+            if (saveSelected != null)
+            {
+                HierarchicalResultNodeViewModel bestmatch = FindBestName(Root[0], saveSelected);
+                if (bestmatch != null)
+                    Selected = bestmatch;
+            }
         }
         private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, CardViewModel card)
         {
@@ -97,5 +118,47 @@
                 current = next;
             }
         }
+        private Matching FindBestMatch(HierarchicalResultNodeViewModel hrnvm, CardViewModel saveSelected)
+        {
+            if (hrnvm == null || hrnvm.Card == null)
+                return Matching.None;
+
+            CardViewModel card = hrnvm.Card;
+
+            if (card.Name != saveSelected.Name)
+                return Matching.None;
+
+            return card.IdGatherer == saveSelected.IdGatherer ? Matching.Full : Matching.Name;
+        }
+        private HierarchicalResultNodeViewModel FindBestName(HierarchicalResultViewModel toInspect, CardViewModel saveSelected)
+        {
+            if (toInspect == null || saveSelected == null)
+                return null;
+
+            HierarchicalResultNodeViewModel res = null;
+            HierarchicalResultNodeViewModel nodevm = toInspect as HierarchicalResultNodeViewModel;
+            Matching resMatch = FindBestMatch(nodevm, saveSelected);
+            if (resMatch == Matching.Full)
+                return nodevm;
+
+
+            if (resMatch == Matching.Name)
+                res = nodevm;
+
+            foreach (HierarchicalResultViewModel child in toInspect.Children)
+            {
+                nodevm = FindBestName(child, saveSelected);
+
+                resMatch = FindBestMatch(nodevm, saveSelected);
+                if (resMatch == Matching.Full)
+                    return nodevm;
+
+                if (resMatch == Matching.Name && res == null)
+                    res = nodevm;
+            }
+
+            return res;
+        }
+
     }
 }

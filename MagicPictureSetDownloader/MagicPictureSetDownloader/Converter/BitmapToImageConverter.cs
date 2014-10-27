@@ -7,19 +7,18 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
 
-    public class BitmapToImageConverter : IValueConverter
+    using Common.WPF.Converter;
+
+    [ValueConversion(typeof(Bitmap), typeof(BitmapSource))]
+    public class BitmapToImageConverter : NoConvertBackConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Bitmap bitmap = value as Bitmap;
             if (bitmap == null)
                 return null;
 
             return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

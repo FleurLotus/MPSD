@@ -111,10 +111,12 @@
         private void ShowPictureCommandExecute(object o)
         {
             OnNotifyPropertyChanged(() => ShowPicture);
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowPicture", ShowPicture.ToString());
         }
         private void ShowStatisticsCommandExecute(object o)
         {
             OnNotifyPropertyChanged(() => ShowStatistics);
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowStatistics", ShowStatistics.ToString());
         }
         private void ShowAllCollectionCommandExecute(object o)
         {
@@ -241,9 +243,20 @@
             Menus.Add(fileMenu);
 
             MenuViewModel viewMenu = new MenuViewModel("_View");
-            _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = true };
-            _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = true };
+
+            bool isShowStatisticsChecked = true;
+            IOption option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowStatistics");
+            if (option != null)
+                isShowStatisticsChecked = bool.Parse(option.Value);
+            _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = isShowStatisticsChecked };
             viewMenu.Children.Add(_showStatisticsViewModel);
+
+            bool isShowPictureChecked = true;
+            option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowPicture");
+            if (option != null)
+                isShowPictureChecked = bool.Parse(option.Value);
+
+            _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = isShowPictureChecked };
             viewMenu.Children.Add(_showPictureViewModel);
             Menus.Add(viewMenu);
 
@@ -297,8 +310,10 @@
                 cardCollections.Sort((c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
                 foreach (ICardCollection cardCollection in cardCollections)
                 {
-                    MenuViewModel menuViewModel = new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name);
-                    menuViewModel.IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name;
+                    MenuViewModel menuViewModel = new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name)
+                                                      {
+                                                          IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name
+                                                      };
 
                     _collectionViewModel.Children.Add(menuViewModel);
                 }

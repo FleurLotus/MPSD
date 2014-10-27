@@ -9,13 +9,16 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Documents;
     using System.Windows.Media.Imaging;
 
+    using Common.WPF.Converter;
+
     using MagicPictureSetDownloader.Core.CardInfo;
 
-    public class TextToInlinesConverter : IValueConverter
+    [ValueConversion(typeof(string), typeof(List<Inline>))]
+    public class TextToInlinesConverter : NoConvertBackConverter
     {
         private static readonly StringToImageConverter _conv = new StringToImageConverter();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
                 return null;
@@ -76,11 +79,6 @@ namespace MagicPictureSetDownloader.Converter
                 newList.Add(new Run(" " + text));
             
             return newList;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -4,20 +4,20 @@ namespace MagicPictureSetDownloader.Converter
     using System.Drawing;
     using System.Globalization;
     using System.Windows.Data;
+    using System.Windows.Media.Imaging;
 
-    public class BoolToImageConverter : IValueConverter
+    using Common.WPF.Converter;
+
+    [ValueConversion(typeof(bool), typeof(BitmapSource))]
+    public class BoolToImageConverter : NoConvertBackConverter 
     {
         private static readonly BitmapToImageConverter _bitmapToImageConverter = new BitmapToImageConverter();
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             Bitmap bitmap = (bool)value ? Properties.Resources.Asc : Properties.Resources.Desc;
 
             return _bitmapToImageConverter.Convert(bitmap, targetType, parameter, culture);
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

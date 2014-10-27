@@ -2,10 +2,13 @@ namespace MagicPictureSetDownloader.Converter
 {
     using System;
     using System.Globalization;
+    using System.Windows.Data;
+    using System.Windows.Media.Imaging;
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
+    [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(BitmapImage))]
     public class CardToImageConverter : ImageConverterBase
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
