@@ -112,6 +112,9 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     _editionSelected = value;
                     OnNotifyPropertyChanged(() => EditionSelected);
                     RefreshDisplayedData(InputMode.ByEdition);
+                    if (_editionSelected != null && !_editionSelected.HasFoil)
+                        IsFoil = false;
+
                 }
             }
         }
@@ -165,7 +168,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private bool AddCommandCanExecute(object o)
         {
-            return Count != 0 && EditionSelected != null && CardSelected != null;
+            return Count != 0 && EditionSelected != null && CardSelected != null && (EditionSelected.HasFoil || !IsFoil);
         }
         private void ChangeCollectionCommandExecute(object obj)
         {
@@ -250,7 +253,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private bool CheckDetail()
         {
-            //TODO: check foil available , language available
+            //TODO: Check langage
             return true;
         }
         private void SelectCardCollection(string name)

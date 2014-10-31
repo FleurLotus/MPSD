@@ -14,5 +14,6 @@ namespace MagicPictureSetDownloader.Interface
         bool Completed { get; }
         bool IsCode(string code);
         string AlternativeCode(ExportFormat format);
+        bool HasFoil { get; }
     }
 }
