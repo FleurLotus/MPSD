@@ -110,7 +110,7 @@ namespace MagicPictureSetDownloader.Db
                 IEdition edition = _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
                 if (edition == null)
                 {
-                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false };
+                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
                     AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
                     edition = realEdition;
                 }

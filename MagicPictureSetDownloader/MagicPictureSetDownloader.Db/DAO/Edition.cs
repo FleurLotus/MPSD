@@ -30,6 +30,8 @@ namespace MagicPictureSetDownloader.Db.DAO
         public int? CardNumber { get; set; }
         [DbColumn]
         public bool Completed { get; set; }
+        [DbColumn]
+        public bool HasFoil { get; set; }
         public bool IsCode(string code)
         {
             string tmp = Code + ";" + AlternativeCode;

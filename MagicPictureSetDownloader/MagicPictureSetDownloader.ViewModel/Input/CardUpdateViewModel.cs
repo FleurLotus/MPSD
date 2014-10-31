@@ -118,6 +118,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 {
                     _destinationEditionSelected = value;
                     OnNotifyPropertyChanged(() => DestinationEditionSelected);
+                    if (_destinationEditionSelected != null && !_destinationEditionSelected.HasFoil)
+                        DestinationIsFoil = false;
                 }
             }
         }
@@ -192,7 +194,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             if (ForMoving)
                 return DestinationCardCollectionSelected != null && DestinationCardCollectionSelected != SourceCardCollection;
 
-            return DestinationEditionSelected != null && (DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil);
+            return DestinationEditionSelected != null && (DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil) && (DestinationEditionSelected.HasFoil || !DestinationIsFoil);
         }
         private void OnClosing()
         {
