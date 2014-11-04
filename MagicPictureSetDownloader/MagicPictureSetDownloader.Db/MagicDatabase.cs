@@ -38,17 +38,17 @@ namespace MagicPictureSetDownloader.Db
         {
             string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             _connectionString = "datasource=" + mainDbPath;
-            if (File.Exists(mainDbPath))
-                DatabaseGenerator.VersionVerifyMagicData(_connectionString);
-            else
+            if (!File.Exists(mainDbPath))
                 DatabaseGenerator.GenerateMagicData(_connectionString);
+
+            DatabaseGenerator.VersionVerifyMagicData(_connectionString);
 
             string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
             _connectionStringForPictureDb = "datasource=" + pictureDbPath;
-            if (File.Exists(pictureDbPath))
-                DatabaseGenerator.VersionVerifyMagicPicture(_connectionStringForPictureDb);
-            else
+            if (!File.Exists(pictureDbPath))
                 DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
+
+            DatabaseGenerator.VersionVerifyMagicPicture(_connectionStringForPictureDb);
         }
 
         internal static MagicDatabase DbInstance

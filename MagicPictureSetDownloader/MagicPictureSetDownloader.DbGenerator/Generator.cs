@@ -5,6 +5,7 @@
     using System.Data.SqlServerCe;
     using System.IO;
 
+    using Common.SQLCE;
     using Common.Zip;
 
     internal class Generator
@@ -22,26 +23,7 @@
         internal void Generate()
         {
             StreamReader sr = new StreamReader(Zipper.UnZipOneFile(GetStream()));
-            string sqlcommand = sr.ReadToEnd();
-            string[] commands = sqlcommand.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
-
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
-            {
-                cnx.Open();
-                using (SqlCeCommand cmd = cnx.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    foreach (string command in commands)
-                    {
-                        string trimcommand = command.TrimEnd(new[] { '\r', '\n' });
-                        if (!string.IsNullOrWhiteSpace(trimcommand))
-                        {
-                            cmd.CommandText = trimcommand;
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-                }
-            }
+            new Repository(_connectionString).ExecuteBatch(sr.ReadToEnd());
         }
         private byte[] GetStream()
         {

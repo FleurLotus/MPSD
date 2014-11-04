@@ -7,6 +7,8 @@
     using System.Linq;
     using System.Reflection;
 
+    using Common.SQLCE;
+
     public class Upgrader
     {
         private const string VersionQuery = "SELECT Major FROM Version";
@@ -29,6 +31,7 @@
 
         internal void Upgrade()
         {
+            int version = -1;
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
@@ -37,55 +40,89 @@
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = VersionQuery;
 
-                    int version = (int)(cmd.ExecuteScalar());
-                    foreach (string command in GetUpgradeCommands(version))
-                    {
-                        string trimcommand = command.TrimEnd(new[] { '\r', '\n' });
-                        if (!string.IsNullOrWhiteSpace(trimcommand))
-                        {
-                            cmd.CommandText = trimcommand;
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
+                    version = (int)(cmd.ExecuteScalar());
                 }
             }
+            try
+            {
+                ExecuteUpgradeCommands(version);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while upgrading database", ex);
+            }
+
         }
 
-        private IEnumerable<string> GetUpgradeCommands(int version)
+        private void ExecuteUpgradeCommands(int version)
         {
             if (_expectedVersion < version)
                 throw new Exception("Db is newer that application");
 
             if (_expectedVersion == version)
-                return Enumerable.Empty<string>();
+                return;
 
+            Repository repo = new Repository(_connectionString);
             switch (_data)
             {
                 case DbType.Data:
-                    return GetUpgradeCommandsForData(version);
+                    ExecuteUpgradeCommandsForData(repo, version);
+                    break;
                 case DbType.Picture:
-                    return GetUpgradeCommandsForPicture(version);
+                    ExecuteUpgradeCommandsForPicture(repo, version);
+                    break;
             }
 
-            return Enumerable.Empty<string>();
+            repo.ExecuteBatch(UpdateVersionQuery + _expectedVersion);
         }
-        private IEnumerable<string> GetUpgradeCommandsForData(int version)
+        private void ExecuteUpgradeCommandsForData(Repository repo, int version)
         {
-            if (version < 1)
+            if (version <= 2)
+            {
+                if (!repo.TableExists("Language"))
+                {
+                    repo.ExecuteBatch(@"
+CREATE TABLE [Language] (
+  [Id] int NOT NULL
+, [Name] nvarchar(50) NOT NULL
+);
+GO
+ALTER TABLE [Language] ADD CONSTRAINT [PK_Language] PRIMARY KEY ([Id]);
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (1,N'English');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (2,N'Italian');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (4,N'French');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (8,N'German');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (16,N'Portuguese');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (32,N'Spanish');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (64,N'Japanese');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (128,N'Korean');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (256,N'Traditional Chinese');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (512,N'Simplified Chinese');
+GO
+INSERT INTO [Language] ([Id],[Name]) VALUES (1024,N'Russian');
+GO"
+                        );
+                }
+                //Update queries
+
+            }
+        }
+        private void ExecuteUpgradeCommandsForPicture(Repository repo, int version)
+        {
+            if (version <= 1)
             {
                 //Update queries
             }
-
-            yield return UpdateVersionQuery + _expectedVersion;
-        }
-        private IEnumerable<string> GetUpgradeCommandsForPicture(int version)
-        {
-            if (version < 1)
-            {
-                //Update queries
-            }
-
-            yield return UpdateVersionQuery + _expectedVersion;
         }
     }
 }
