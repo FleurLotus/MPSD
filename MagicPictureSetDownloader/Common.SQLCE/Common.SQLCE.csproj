@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}</ProjectGuid>
+    <ProjectGuid>{82CA2E59-9896-4B66-8840-63CCE3006989}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Database</RootNamespace>
-    <AssemblyName>Common.Database</AssemblyName>
+    <RootNamespace>Common.SQLCE</RootNamespace>
+    <AssemblyName>Common.SQLCE</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -34,28 +34,28 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\System.Data.SqlServerCe\4.0.0.0__89845dcd8080cc91\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
-    <Compile Include="CommandBuilder.cs" />
-    <Compile Include="DbAttributAnalyser.cs" />
-    <Compile Include="Exception\AttributedTypeException.cs" />
-    <Compile Include="Attribute\DbTableAttribute.cs" />
-    <Compile Include="Attribute\DbKeyColumnAttribute.cs" />
-    <Compile Include="Attribute\DbColumnAttribute.cs" />
-    <Compile Include="Exception\ApplicationDbException.cs" />
-    <Compile Include="Mapper.cs" />
+    <Compile Include="Column.cs" />
+    <Compile Include="IColumn.cs" />
+    <Compile Include="ITable.cs" />
+    <Compile Include="PrimaryKey.cs" />
+    <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataRecordExt.cs" />
-    <Compile Include="SQLQueryTools.cs" />
-    <Compile Include="TypeDbInfo.cs" />
+    <Compile Include="Table.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
-      <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
-      <Name>Common.Libray</Name>
+    <ProjectReference Include="..\Common.Database\Common.Database.csproj">
+      <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
+      <Name>Common.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

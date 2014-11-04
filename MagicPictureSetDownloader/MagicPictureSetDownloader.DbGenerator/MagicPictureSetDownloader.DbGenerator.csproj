@@ -66,6 +66,10 @@
     <None Include="MagicPicture.zip" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.SQLCE\Common.SQLCE.csproj">
+      <Project>{82CA2E59-9896-4B66-8840-63CCE3006989}</Project>
+      <Name>Common.SQLCE</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common.Zip\Common.Zip.csproj">
       <Project>{ff762f87-3489-497f-b350-bc58a6abc48e}</Project>
       <Name>Common.Zip</Name>
