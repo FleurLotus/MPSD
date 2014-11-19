@@ -138,7 +138,9 @@
             if (IsPlaneswalker(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
-                cardWithExtraInfo.Loyalty = int.Parse(htmlTrim);
+                //Possible see CheckInfos for more info
+                if (!string.IsNullOrWhiteSpace(htmlTrim))
+                    cardWithExtraInfo.Loyalty = int.Parse(htmlTrim);
             }
 
             cardWithExtraInfo.Type = infos.GetOrDefault(TypeKey);
@@ -174,11 +176,12 @@
             if (!infos.ContainsKey(TypeKey))
                 throw new ParserException("No type found");
             if (!infos.ContainsKey(RarityKey))
-                throw new ParserException("No ratiry found");
+                throw new ParserException("No rarity found");
             
             string type = infos.GetOrDefault(TypeKey);
-
-            if ((IsCreature(type) || IsPlaneswalker(type)) && !infos.ContainsKey(PTKey))
+            string castingcost = infos.GetOrDefault(ManaCostKey);
+            //Add check on casting cost because of second face of Garruk, the Veil-Cursed which has no loyalty counter
+            if ((IsCreature(type) || IsPlaneswalker(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
                 throw new ParserException("No PT/Loyalty found");
         }
         private string GetPower(string text)

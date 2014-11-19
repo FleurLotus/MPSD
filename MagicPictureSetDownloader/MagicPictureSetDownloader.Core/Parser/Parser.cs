@@ -21,6 +21,10 @@
         {
             return new CardParser().Parse(htmltext);
         }
+        internal static IEnumerable<CardLanguageInfo> ParseCardLanguage(string htmltext)
+        {
+            return new CardLanguageParser().Parse(htmltext);
+        }
         public static int ExtractIdGatherer(string pictureUrl)
         {
             Match m = _idRegex.Match(pictureUrl);

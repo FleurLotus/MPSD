@@ -45,7 +45,7 @@ namespace MagicPictureSetDownloader.Core.IO
 
             ImportToColletion(importFilePath, collection);
         }
-        
+
         public void ImportToExistingColletion(string importFilePath, string collectionToCompletName)
         {
 
@@ -63,7 +63,8 @@ namespace MagicPictureSetDownloader.Core.IO
 
             foreach (IImportExportCardCount importExportCardCount in cardToImport)
             {
-                magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.Number, importExportCardCount.FoilNumber);
+                magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.Number,
+                    importExportCardCount.FoilNumber);
             }
         }
         private IEnumerable<IImportExportCardCount> GetImport(string importFilePath)

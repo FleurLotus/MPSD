@@ -26,6 +26,8 @@ namespace MagicPictureSetDownloader.Db
         private readonly string _connectionStringForPictureDb;
 
         private readonly IList<IEdition> _editions = new List<IEdition>();
+        private readonly IDictionary<string, ILanguage> _languages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, ITranslate> _translates = new Dictionary<int, ITranslate>();
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
@@ -105,18 +107,8 @@ namespace MagicPictureSetDownloader.Db
         {
             CheckReferentialLoaded();
 
-            using (new WriterLock(_lock))
-            {
-                IEdition edition = _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
-                if (edition == null)
-                {
-                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
-                    AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
-                    edition = realEdition;
-                }
-
-                return edition;
-            }
+            using (new ReaderLock(_lock))
+                return _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
         }
         public IEdition GetEdition(int idGatherer)
         {
@@ -129,12 +121,60 @@ namespace MagicPictureSetDownloader.Db
                 return _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
             }
         }
+        public ICard GetCard(int idGatherer)
+        {
+            using (new ReaderLock(_lock))
+            {
+                ICardEdition cardEdition = GetCardEdition(idGatherer);
+                if (cardEdition == null)
+                    return null;
+
+                return _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard);
+            }
+        }
+        public ILanguage GetLanguage(int idLanguage)
+        {
+            CheckReferentialLoaded();
+
+            using (new ReaderLock(_lock))
+                return _languages.Values.FirstOrDefault(l => l.Id == idLanguage);
+        }
+        
+        public IList<ILanguage> GetLanguages(int idGatherer)
+        {
+            CheckReferentialLoaded();
+           
+            using (new ReaderLock(_lock))
+            {
+                ICard card = GetCard(idGatherer);
+                if (card == null)
+                    return null;
+
+                IList<ILanguage> languages = new List<ILanguage> { GetLanguage(Constants.Unknown) };
+                foreach ( ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && GetTranslate(card, l.Id) != null))
+                    languages.Add(language);
+                return languages;
+            }
+        }
+
         public IOption GetOption(TypeOfOption type, string key)
         {
             IList<IOption> options = GetOptions(type);
             return options == null ? null : options.FirstOrDefault(o => o.Key == key);
         }
+        public ITranslate GetTranslate(ICard card, int idLanguage)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                if (card == null)
+                    return null;
 
+                int key = TranslateKey(card.Id, idLanguage);
+                return _translates.GetOrDefault(key);
+            }
+        }
+        
         //Ensembly Get 
         public ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1)
         {
@@ -216,6 +256,18 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
                 return _rarities[rarity].Id;
         }
+        private int GetLanguageId(string language)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+                return _languages[language].Id;
+        }
+        private ILanguage GetLanguage(string language)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+                return _languages[language];
+        }
 
         public ICollection<IEdition> AllEditions()
         {
@@ -243,6 +295,22 @@ namespace MagicPictureSetDownloader.Db
         }
 
         //Insert one new 
+        public IEdition CreateNewEdition(string sourceName)
+        {
+            using (new WriterLock(_lock))
+            {
+                IEdition edition = GetEdition(sourceName);
+                if (edition == null)
+                {
+                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
+                    AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
+                    edition = realEdition;
+                }
+
+                return edition;
+            }
+        }
+
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
             using (new WriterLock(_lock))
@@ -265,30 +333,39 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(_connectionStringForPictureDb, treepicture, InsertInReferential);
             }
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName)
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
 
             using (new WriterLock(_lock))
             {
-                if (GetCard(name, partName) != null)
-                    return;
+                ICard refCard = GetCard(name, partName);
+                if (null == refCard)
+                {
 
-                Card card = new Card
-                                {
-                                    PartName = partName ?? name,
-                                    Name = name,
-                                    Text = text,
-                                    Power = power,
-                                    Toughness = toughness,
-                                    CastingCost = castingcost,
-                                    Loyalty = loyalty,
-                                    Type = type,
-                                    OtherPartName = otherPartName
-                                };
+                    Card card = new Card
+                                    {
+                                        PartName = partName ?? name,
+                                        Name = name,
+                                        Text = text,
+                                        Power = power,
+                                        Toughness = toughness,
+                                        CastingCost = castingcost,
+                                        Loyalty = loyalty,
+                                        Type = type,
+                                        OtherPartName = otherPartName
+                                    };
 
-                AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
+                    AddToDbAndUpdateReferential(_connectionString, card, InsertInReferential);
+                    refCard = card;
+                }
+
+                foreach (KeyValuePair<string,string> kv in languages)
+                {
+                    int idlanguage = GetLanguageId(kv.Key);
+                    InsertNewTranslate(refCard, idlanguage, kv.Value);
+                }
             }
         }
         public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url)
@@ -336,6 +413,20 @@ namespace MagicPictureSetDownloader.Db
 
                     Option newoption = new Option { Type = type, Key = key, Value = value };
                     AddToDbAndUpdateReferential(_connectionString, newoption, InsertInReferential);
+                }
+            }
+        }
+        private void InsertNewTranslate(ICard card, int idLanguage, string name)
+        {
+            if (card == null)
+                return;
+
+            using (new WriterLock(_lock))
+            {
+                if (GetTranslate(card, idLanguage) == null)
+                {
+                    Translate translate = new Translate { IdCard = card.Id, IdLanguage = idLanguage, Name = name };
+                    AddToDbAndUpdateReferential(_connectionString, translate, InsertInReferential);
                 }
             }
         }
@@ -422,6 +513,8 @@ namespace MagicPictureSetDownloader.Db
                 _rarities.Clear();
                 _blocks.Clear();
                 _editions.Clear();
+                _languages.Clear();
+                _translates.Clear();
                 _cards.Clear();
                 _cardEditions.Clear();
                 _collections.Clear();
@@ -436,6 +529,9 @@ namespace MagicPictureSetDownloader.Db
                 foreach (Block block in Mapper<Block>.LoadAll(cnx))
                     _blocks.Add(block.Id, block);
 
+                foreach (Language language in Mapper<Language>.LoadAll(cnx))
+                    InsertInReferential(language);
+
                 foreach (Edition edition in Mapper<Edition>.LoadAll(cnx))
                 {
                     if (edition.IdBlock.HasValue)
@@ -446,6 +542,9 @@ namespace MagicPictureSetDownloader.Db
                 foreach (Card card in Mapper<Card>.LoadAll(cnx))
                     InsertInReferential(card);
 
+                foreach (Translate translate in Mapper<Translate>.LoadAll(cnx))
+                    InsertInReferential(translate);
+                
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                     InsertInReferential(cardEdition);
 
@@ -505,6 +604,26 @@ namespace MagicPictureSetDownloader.Db
             }
 
             options.Add(option);
+        }
+        private void InsertInReferential(ITranslate translate)
+        {
+            int key = TranslateKey(translate.IdCard, translate.IdLanguage);
+            _translates.Add(key, translate);
+        }
+        private void InsertInReferential(ILanguage language)
+        {
+            _languages.Add(language.Name, language);
+            if (!string.IsNullOrWhiteSpace(language.AlternativeName))
+            {
+                foreach (string name in language.AlternativeName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    _languages.Add(name, language);
+                }
+            }
+        }
+        private int TranslateKey(int idCard, int idLanguage)
+        {
+            return idCard * 100 + idLanguage;
         }
 
         private void RemoveFromReferential(IOption option)

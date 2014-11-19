@@ -13,6 +13,7 @@
     public class DownloadManager
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
+        public event EventHandler<EventArgs<string>> NewEditionCreated;
         private ICredentials _credentials;
         private readonly IDictionary<string, string> _htmlCache;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
@@ -89,6 +90,11 @@
             foreach (SetInfo setInfo in Parser.ParseSetsList(htmltext))
             {
                 IEdition edition = _magicDatabase.GetEdition(setInfo.Name);
+                if (edition == null)
+                {
+                    OnNewEditionCreated(setInfo.Name);
+                    edition = _magicDatabase.CreateNewEdition(setInfo.Name);
+                }
                 yield return new SetInfoWithBlock(setInfo, edition);
             }
         }
@@ -104,6 +110,37 @@
             foreach (CardWithExtraInfo cardWithExtraInfo in Parser.ParseCardInfo(htmltext))
             {
                 string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
+                int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
+
+                int page = 0;
+                bool hasnextpage;
+                do
+                {
+                    hasnextpage = false;
+                    string languageUrl = ToAbsoluteUrl(url, string.Format("Languages.aspx?page={0}&multiverseid={1}", page, idGatherer));
+                    string html = GetHtml(languageUrl);
+                    try
+                    {
+                        foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
+                            cardWithExtraInfo.Add(language);
+                    }
+                    catch (NextPageException ex)
+                    {
+                        int index;
+                        int[] pages = ex.Pages;
+                        for (index = 0; index < pages.Length; index++)
+                        {
+                            if (page == pages[index])
+                                break;
+                        }
+
+                        hasnextpage = (index + 1 < pages.Length);
+                        if (hasnextpage)
+                            page = pages[index + 1];
+                    }
+                }
+                while (hasnextpage);
+
 
                 InsertCardInDb(cardWithExtraInfo);
                 InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
@@ -162,12 +199,18 @@
 
             return false;
         }
+        private void OnNewEditionCreated(string edition)
+        {
+            var e = NewEditionCreated;
+            if (e != null)
+                e(this, new EventArgs<string>(edition));
+        }
 
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
             _magicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type, 
-                                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName);
+                                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName, cardWithExtraInfo.Languages);
         }
         private WebClient GetWebClient()
         {

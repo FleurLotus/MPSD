@@ -30,6 +30,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private ICard _cardSelected;
         private readonly ICard[] _cards;
         private IEdition _editionSelected;
+        private ILanguage _languageSelected;
         private string _currentCollectionDetail;
         private readonly IEdition[] _editions;
         private ICardCollection _cardCollection;
@@ -38,7 +39,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
         private readonly ICardAllDbInfo[] _allCardInfos;
 
-        //ALERT: language + CHECK input  foil x edition x language ?
         public CardInputViewModel(string name)
         {
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
@@ -57,13 +57,30 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             _editions = _magicDatabase.AllEditions().OrderByDescending(ed => ed.ReleaseDate).ToArray();
             Editions = new ObservableCollection<IEdition>();
 
+            Languages = new ObservableCollection<ILanguage>();
+
             InitWindow();
         }
         public ICommand AddCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
         public ICommand ChangeCollectionCommand { get; private set; }
         public ObservableCollection<IEdition> Editions { get; private set; }
+        public ObservableCollection<ILanguage> Languages { get; private set; }
         public ObservableCollection<ICard> Cards { get; private set; }
+
+        public ILanguage LanguageSelected
+        {
+            get { return _languageSelected; }
+            set
+            {
+                if (value != _languageSelected)
+                {
+                    _languageSelected = value;
+                    OnNotifyPropertyChanged(() => LanguageSelected);
+                    RefreshDisplayedData(InputMode.None);
+                }
+            }
+        }
 
         public ICardCollection CardCollection
         {
@@ -168,7 +185,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private bool AddCommandCanExecute(object o)
         {
-            return Count != 0 && EditionSelected != null && CardSelected != null && (EditionSelected.HasFoil || !IsFoil);
+            return Count != 0 && EditionSelected != null && CardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil);
         }
         private void ChangeCollectionCommandExecute(object obj)
         {
@@ -210,6 +227,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     Editions.Clear();
                     EditionSelected = null;
                     CardSelected = null;
+
                     break;
 
                 case InputMode.ByEdition:
@@ -221,7 +239,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     
                     foreach (IEdition editions in _editions)
                         Editions.Add(editions);
-                    
 
                     CardSelected = null;
                     EditionSelected = save;
@@ -230,31 +247,25 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 case InputMode.None:
 
                     Cards.Clear();
-                    Cards.Clear();
+                    Editions.Clear();
                     EditionSelected = null;
                     CardSelected = null;
                     break;
             }
 
+            Languages.Clear();
             CurrentCollectionDetail = null;
+            LanguageSelected = null;
             Count = 1;
             IsFoil = false;
         }
         private void AddNewCard()
         {
-            if (CheckDetail())
-            {
-                int count = IsFoil ? 0 : Count;
-                int foilCount = IsFoil ? Count: 0;
+            int count = IsFoil ? 0 : Count;
+            int foilCount = IsFoil ? Count: 0;
 
-                ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == CardSelected);
-                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, count, foilCount);
-            }
-        }
-        private bool CheckDetail()
-        {
-            //TODO: Check langage
-            return true;
+            ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == CardSelected);
+            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, count, foilCount);
         }
         private void SelectCardCollection(string name)
         {
@@ -265,41 +276,65 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         {
             UpdateCurrentCollectionDetail();
 
-            //Not the reference info changed, nothing to recompute
-            if (InputMode != modifyData)
+            //None one the key changed, nothing to recompute
+            if (modifyData == InputMode.None)
                 return;
 
-            switch (InputMode)
+            //Change one of the key but no the reference one
+            if (InputMode != modifyData)
             {
-                case InputMode.ByEdition:
+                Languages.Clear();
+                IEdition editionSelected = EditionSelected;
+                ICard cardNameSelected = CardSelected;
+                if (editionSelected == null || cardNameSelected == null)
+                    return;
 
-                    IEdition editionSelected = EditionSelected;
-                    Cards.Clear();
-                    if (editionSelected == null)
-                        return;
+                ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == editionSelected && cadi.Card == cardNameSelected);
+                if (cardAllDbInfo == null)
+                    return;
 
-                    foreach (ICard card in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()))
-                        Cards.Add(card);
+                foreach (ILanguage language in _magicDatabase.GetLanguages(cardAllDbInfo.IdGatherer))
+                    Languages.Add(language);
 
-                    break;
-
-                case InputMode.ByCard:
-
-                    ICard cardNameSelected = CardSelected;
-                    Editions.Clear();
-                    if (cardNameSelected == null)
-                        return;
-
-                    foreach (IEdition edition in _allCardInfos.Where(cadi => cadi.Card == cardNameSelected).Select(cadi => cadi.Edition).OrderByDescending(ed => ed.ReleaseDate))
-                        Editions.Add(edition);
-
-                    break;
+                if (Languages.Count > 0)
+                    LanguageSelected = Languages[0];
             }
+            else
+            {
+                //Change the reference
+                switch (InputMode)
+                {
+                    case InputMode.ByEdition:
 
+                        IEdition editionSelected = EditionSelected;
+                        Cards.Clear();
+                        Languages.Clear();
+                        if (editionSelected == null)
+                            return;
+
+                        foreach (ICard card in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()))
+                            Cards.Add(card);
+
+                        break;
+
+                    case InputMode.ByCard:
+
+                        ICard cardNameSelected = CardSelected;
+                        Editions.Clear();
+                        Languages.Clear();
+                        if (cardNameSelected == null)
+                            return;
+
+                        foreach (IEdition edition in _allCardInfos.Where(cadi => cadi.Card == cardNameSelected).Select(cadi => cadi.Edition).OrderByDescending(ed => ed.ReleaseDate))
+                            Editions.Add(edition);
+
+                        break;
+                }
+            }
         }
         private void UpdateCurrentCollectionDetail()
         {
-            if (EditionSelected == null || CardSelected == null)
+            if (EditionSelected == null || CardSelected == null || LanguageSelected == null)
             {
                 CurrentCollectionDetail = null;
                 return;
@@ -307,15 +342,27 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;
+            int totalInEditionAndLanguageInCollection = 0;
+            int totalOfthis = 0;
             
             foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCardCollectionStatistics(CardSelected).Where(cicc => cicc.IdCollection == CardCollection.Id))
             {
-                totalInCollection += cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
+                int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
+                totalInCollection += inCollection;
                 if (_magicDatabase.GetEdition(cardInCollectionCount.IdGatherer) == EditionSelected)
-                    totalInEditionInCollection += IsFoil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
+                {
+                    totalInEditionInCollection += inCollection;
+                    if (cardInCollectionCount.IdLanguage == LanguageSelected.Id)
+                    {
+                        totalInEditionAndLanguageInCollection += inCollection;
+
+                        totalOfthis += IsFoil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
+                    }
+                }
             }
 
-            CurrentCollectionDetail = string.Format("{0} {2}{3}/ {1}", totalInEditionInCollection, totalInCollection, EditionSelected.Code, IsFoil ? "(Foil)" : string.Empty);
+            CurrentCollectionDetail = string.Format("{0} {1}{2} {3} /{4}/{5}/{6}", totalOfthis, EditionSelected.Code, IsFoil ? "(Foil)" : string.Empty, LanguageSelected.Name,
+                                                                                  totalInEditionAndLanguageInCollection, totalInEditionInCollection, totalInCollection);
         }
     }
 }

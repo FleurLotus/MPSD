@@ -59,11 +59,13 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="DAO\Block.cs" />
+    <Compile Include="DAO\Translate.cs" />
     <Compile Include="DAO\Card.cs" />
     <Compile Include="DAO\CardEdition.cs" />
     <Compile Include="DAO\CardAllDbInfo.cs" />
     <Compile Include="DAO\CardCollection.cs" />
     <Compile Include="DAO\CardInCollectionCount.cs" />
+    <Compile Include="DAO\Language.cs" />
     <Compile Include="DAO\Option.cs" />
     <Compile Include="DAO\PictureKey.cs" />
     <Compile Include="DAO\TreePicture.cs" />

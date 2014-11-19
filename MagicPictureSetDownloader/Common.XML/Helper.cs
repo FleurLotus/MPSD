@@ -27,6 +27,9 @@
         }
         public static string HtmlTrim(this string source)
         {
+            if (source == null)
+                return null;
+
             return source.Replace("&nbsp;"," ").Trim(new[] {' ', '\t', '\n', '\r'});
         }
     }

@@ -52,6 +52,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
+    <Compile Include="UpdateQueries.cs" />
     <Compile Include="Upgrader.cs" />
   </ItemGroup>
   <ItemGroup>

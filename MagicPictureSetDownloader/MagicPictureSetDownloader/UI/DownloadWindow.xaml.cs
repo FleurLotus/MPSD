@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
+    using System.Windows;
 
     using Common.Libray;
     using Common.WPF;
@@ -29,6 +30,11 @@
                 args.Data.Password = vm.Password;
             }
         }
+        public void NewEditionCreated(object sender, EventArgs<string> args)
+        {
+            MessageBox.Show("New Edition created :" + args.Data);
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             IDisposable disposable = DataContext as IDisposable;
