@@ -19,6 +19,11 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private readonly ICardCollection[] _collections;
         private IEdition _sourceEditionSelected;
         private IEdition _destinationEditionSelected;
+        private ILanguage _sourceLanguageSelected;
+        private ILanguage _destinationLanguageSelected;
+        private ILanguage[] _sourceLanguages;
+        private ILanguage[] _destinationLanguages;
+
         private bool _sourceIsFoil;
         private bool _destinationIsFoil;
         private int _count;
@@ -65,11 +70,41 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         {
             get { return _editions; }
         }
+
         public ICardCollection[] Collections
         {
             get { return _collections; }
         }
         public ICardCollection SourceCardCollection { get; private set; }
+
+        public ILanguage[] DestinationLanguages
+        {
+            get { return _destinationLanguages; }
+            private set
+            {
+                if (value != _destinationLanguages)
+                {
+                    _destinationLanguages = value;
+                    OnNotifyPropertyChanged(() => DestinationLanguages);
+                    if (_destinationLanguages != null && _destinationLanguages.Length > 0)
+                        DestinationLanguageSelected = _destinationLanguages[0];
+                }
+            }
+        }
+        public ILanguage[] SourceLanguages
+        {
+            get { return _sourceLanguages; }
+            private set
+            {
+                if (value != _sourceLanguages)
+                {
+                    _sourceLanguages = value;
+                    OnNotifyPropertyChanged(() => SourceLanguages);
+                    if (_sourceLanguages != null && _sourceLanguages.Length > 0)
+                        SourceLanguageSelected = _sourceLanguages[0];
+                }
+            }
+        }
 
         public bool SourceIsFoil
         {
@@ -93,6 +128,20 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 {
                     _sourceEditionSelected = value;
                     OnNotifyPropertyChanged(() => SourceEditionSelected);
+                    ChangeSourceLanguage();
+                    UpdateMaxCount();
+                }
+            }
+        }
+        public ILanguage SourceLanguageSelected
+        {
+            get { return _sourceLanguageSelected; }
+            set
+            {
+                if (value != _sourceLanguageSelected)
+                {
+                    _sourceLanguageSelected = value;
+                    OnNotifyPropertyChanged(() => SourceLanguageSelected);
                     UpdateMaxCount();
                 }
             }
@@ -118,8 +167,21 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 {
                     _destinationEditionSelected = value;
                     OnNotifyPropertyChanged(() => DestinationEditionSelected);
+                    ChangeDestinationLanguage();
                     if (_destinationEditionSelected != null && !_destinationEditionSelected.HasFoil)
                         DestinationIsFoil = false;
+                }
+            }
+        }
+        public ILanguage DestinationLanguageSelected
+        {
+            get { return _destinationLanguageSelected; }
+            set
+            {
+                if (value != _destinationLanguageSelected)
+                {
+                    _destinationLanguageSelected = value;
+                    OnNotifyPropertyChanged(() => DestinationLanguageSelected);
                 }
             }
         }
@@ -165,17 +227,28 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
         private void UpdateMaxCount()
         {
-
             int idGatherer = _magicDatabase.GetIdGatherer(Card, SourceEditionSelected);
-            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer);
+            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer && cicc.IdLanguage == SourceLanguageSelected.Id);
+          
             if (cardInCollectionCount == null)
             {
                 MaxCount = 0;
                 return;
             }
+
             MaxCount = SourceIsFoil? cardInCollectionCount.FoilNumber: cardInCollectionCount.Number;
         }
 
+        private void ChangeSourceLanguage()
+        {
+            int idGatherer = _magicDatabase.GetIdGatherer(Card, SourceEditionSelected);
+            SourceLanguages = _magicDatabase.GetLanguages(idGatherer).ToArray();
+        }
+        private void ChangeDestinationLanguage()
+        {
+            int idGatherer = _magicDatabase.GetIdGatherer(Card, DestinationEditionSelected);
+            DestinationLanguages = _magicDatabase.GetLanguages(idGatherer).ToArray();
+        }
         private void UpdateCommandExecute(object o)
         {
             Result = true;

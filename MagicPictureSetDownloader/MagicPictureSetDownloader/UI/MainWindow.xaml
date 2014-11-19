@@ -108,6 +108,7 @@
                                     <GridView AllowsColumnReorder="False">
                                         <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
                                         <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
+                                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
                                         <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
                                         <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
                                     </GridView>

@@ -213,7 +213,7 @@
 
             if (vm.Result.HasValue && vm.Result.Value)
             {
-                _magicDatabase.ChangeCardEditionFoil(vm.SourceCardCollection, vm.Card, vm.Count, vm.SourceEditionSelected, vm.SourceIsFoil, vm.DestinationEditionSelected, vm.DestinationIsFoil);
+                _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCardCollection, vm.Card, vm.Count, vm.SourceEditionSelected, vm.SourceIsFoil,vm.SourceLanguageSelected, vm.DestinationEditionSelected, vm.DestinationIsFoil, vm.DestinationLanguageSelected);
                 LoadCardsHierarchy();
             }
         }
@@ -223,7 +223,7 @@
             OnUpdateCardWanted(vm);
             if (vm.Result.HasValue && vm.Result.Value)
             {
-                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected, vm.Count, vm.SourceIsFoil, vm.DestinationCardCollectionSelected);
+                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected,vm.SourceLanguageSelected, vm.Count, vm.SourceIsFoil, vm.DestinationCardCollectionSelected);
                 LoadCardsHierarchy();
             }
         }
@@ -281,7 +281,7 @@
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel != null)
             {
-                ContextMenus.Add(new MenuViewModel("Change edition/Foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
+                ContextMenus.Add(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
                 ContextMenus.Add(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
             }
         }

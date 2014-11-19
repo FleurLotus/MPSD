@@ -40,6 +40,17 @@
             return GetTable(schemaName, name) != null;
         }
 
+        public bool ColumnExists(string tableName, string name)
+        {
+            ITable table = GetTable(tableName);
+            return table != null && table.HasColumn(name);
+        }
+        public bool ColumnExists(string schemaName, string tableName, string name)
+        {
+            ITable table = GetTable(schemaName, tableName);
+            return table != null && table.HasColumn(name);
+        }
+        
         public ITable GetTable(string name)
         {
             return GetTable(null, name);

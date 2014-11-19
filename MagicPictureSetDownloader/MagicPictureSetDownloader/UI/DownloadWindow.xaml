@@ -19,6 +19,9 @@
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="CredentialRequiered" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="NewEditionCreated" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="NewEditionCreated" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
@@ -60,9 +63,7 @@
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
-                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500"
-                         IsEnabled="{Binding IsBusy, Converter={StaticResource nbConv}}"
-                         ItemsSource="{Binding Source={StaticResource sets}}">
+                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource sets}}">
                     <ListBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -75,12 +76,13 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="170" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"/> 
+                                <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center" 
+                                          IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource nbConv}}"/> 
                                 <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Center" />
                                 <Label Grid.Row="0" Grid.Column="2" Content="{Binding BlockName}" VerticalAlignment="Center" />
-                                <Border Grid.Row="0" Grid.Column="3" Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
+                                <Border Grid.Row="0" Grid.Column="3" Width="200"  Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
                                     <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
                                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>

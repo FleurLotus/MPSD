@@ -1,7 +1,5 @@
-﻿
-namespace MagicPictureSetDownloader.Core.IO
+﻿namespace MagicPictureSetDownloader.Core.IO
 {
-    using System;
     using System.Text.RegularExpressions;
 
     using MagicPictureSetDownloader.Interface;
@@ -50,15 +48,17 @@ namespace MagicPictureSetDownloader.Core.IO
             if (cardCount == null || (cardCount.FoilNumber == 0 && cardCount.Number == 0))
                 return null;
 
-            Tuple<ICard, IEdition> cardxedition = MagicDatabase.GetCardxEdition(cardCount.IdGatherer);
-            if (cardxedition == null || cardxedition.Item1 == null || cardxedition.Item2 == null)
+
+            ICard card = MagicDatabase.GetCard(cardCount.IdGatherer);
+            IEdition edition = MagicDatabase.GetEdition(cardCount.IdGatherer);
+            if (card == null || edition == null)
                 return null;
-            
+
             string ret = string.Empty;
-            if (cardCount.Number>0)
-                ret += string.Format("{0}#{1}#{2}#False\n", cardxedition.Item1.Name,cardxedition.Item2.AlternativeCode(Format), cardCount.Number);
+            if (cardCount.Number > 0)
+                ret += string.Format("{0}#{1}#{2}#False\n", card, edition.AlternativeCode(Format), cardCount.Number);
             if (cardCount.FoilNumber > 0)
-                ret += string.Format("{0}#{1}#{2}#True\n", cardxedition.Item1.Name, cardxedition.Item2.AlternativeCode(Format), cardCount.FoilNumber);
+                ret += string.Format("{0}#{1}#{2}#True\n", card, edition.AlternativeCode(Format), cardCount.FoilNumber);
 
             return ret;
         }

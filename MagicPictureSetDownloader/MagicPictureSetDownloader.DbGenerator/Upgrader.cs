@@ -1,10 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     using System;
-    using System.Collections.Generic;
     using System.Data;
     using System.Data.SqlServerCe;
-    using System.Linq;
     using System.Reflection;
 
     using Common.SQLCE;
@@ -72,54 +70,28 @@
                     ExecuteUpgradeCommandsForPicture(repo, version);
                     break;
             }
-
             repo.ExecuteBatch(UpdateVersionQuery + _expectedVersion);
         }
         private void ExecuteUpgradeCommandsForData(Repository repo, int version)
         {
-            if (version <= 2)
+            if (version < 2)
             {
-                if (!repo.TableExists("Language"))
-                {
-                    repo.ExecuteBatch(@"
-CREATE TABLE [Language] (
-  [Id] int NOT NULL
-, [Name] nvarchar(50) NOT NULL
-);
-GO
-ALTER TABLE [Language] ADD CONSTRAINT [PK_Language] PRIMARY KEY ([Id]);
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (1,N'English');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (2,N'Italian');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (4,N'French');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (8,N'German');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (16,N'Portuguese');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (32,N'Spanish');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (64,N'Japanese');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (128,N'Korean');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (256,N'Traditional Chinese');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (512,N'Simplified Chinese');
-GO
-INSERT INTO [Language] ([Id],[Name]) VALUES (1024,N'Russian');
-GO"
-                        );
-                }
                 //Update queries
+                if (!repo.TableExists("Language"))
+                    repo.ExecuteBatch(UpdateQueries.CreateLanguageTable);
 
+                if (!repo.TableExists("Translate"))
+                    repo.ExecuteBatch(UpdateQueries.CreateTranslateTable);
+
+                if (!repo.ColumnExists("CardEditionsInCollection", "IdLanguage"))
+                    repo.ExecuteBatch(UpdateQueries.AddColumnLanguageToCardEditionsInCollectionQuery);
+                
+                repo.ExecuteBatch(UpdateQueries.RemoveCompleteSetQuery);
             }
         }
         private void ExecuteUpgradeCommandsForPicture(Repository repo, int version)
         {
-            if (version <= 1)
+            if (version < 2)
             {
                 //Update queries
             }

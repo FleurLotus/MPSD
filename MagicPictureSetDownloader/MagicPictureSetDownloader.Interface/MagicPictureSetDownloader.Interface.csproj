@@ -46,6 +46,7 @@
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCardInCollection.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteReference.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCollection.cs" />
+    <Compile Include="ITranslate.cs" />
     <Compile Include="IImportExportCardInCollectionCount.cs" />
     <Compile Include="Enum.cs" />
     <Compile Include="ICardInCollectionCount.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="DatabaseAccess\IMagicDatabaseReadOnly.cs" />
     <Compile Include="IOption.cs" />
     <Compile Include="IPictureKey.cs" />
+    <Compile Include="ILanguage.cs" />
     <Compile Include="ITreePicture.cs" />
     <Compile Include="IBlock.cs" />
     <Compile Include="ICard.cs" />
