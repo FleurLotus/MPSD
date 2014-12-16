@@ -98,6 +98,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\EditionInfosWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\DownloadImageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -136,6 +140,9 @@
     </Compile>
     <Compile Include="UI\CardInputWindow.xaml.cs">
       <DependentUpon>CardInputWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\EditionInfosWindow.xaml.cs">
+      <DependentUpon>EditionInfosWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\DownloadImageWindow.xaml.cs">
       <DependentUpon>DownloadImageWindow.xaml</DependentUpon>

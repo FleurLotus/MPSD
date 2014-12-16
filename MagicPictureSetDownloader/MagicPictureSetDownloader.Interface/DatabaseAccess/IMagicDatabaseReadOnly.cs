@@ -22,6 +22,7 @@
         ICardCollection GetCollection(int collectionId);
         ICardCollection GetCollection(string name);
         ICollection<ICardCollection> GetAllCollections();
+        ICollection<IBlock> GetAllBlocks();
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, int idGatherer);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage);

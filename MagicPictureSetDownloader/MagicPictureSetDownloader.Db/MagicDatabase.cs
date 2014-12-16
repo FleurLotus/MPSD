@@ -275,17 +275,17 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
                 return new List<IEdition>(_editions).AsReadOnly();
         }
+        public ICollection<IBlock> GetAllBlocks()
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+                return new List<IBlock>(_blocks.Values).AsReadOnly();
+        }
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
                 return new List<IRarity>(_rarities.Values).AsReadOnly();
-        }
-        private ICollection<IBlock> AllBlocks()
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-                return new List<IBlock>(_blocks.Values).AsReadOnly();
         }
         private ICollection<ICardEdition> AllCardEditions()
         {
@@ -295,7 +295,7 @@ namespace MagicPictureSetDownloader.Db
         }
 
         //Insert one new 
-        public IEdition CreateNewEdition(string sourceName)
+        public void CreateNewEdition(string sourceName)
         {
             using (new WriterLock(_lock))
             {
@@ -304,10 +304,33 @@ namespace MagicPictureSetDownloader.Db
                 {
                     Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
                     AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
-                    edition = realEdition;
                 }
+            }
+        }
+        public void CreateNewEdition(string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate)
+        {
+            using (new WriterLock(_lock))
+            {
+                IEdition edition = GetEdition(sourceName);
+                if (edition == null)
+                {
+                    Edition realEdition = new Edition
+                                              {
+                                                  Name = name,
+                                                  GathererName = sourceName,
+                                                  Completed = false,
+                                                  HasFoil = hasFoil,
+                                                  Code = code,
+                                                  IdBlock = idBlock,
+                                                  BlockPosition = idBlock.HasValue ? blockPosition : null,
+                                                  CardNumber = cardNumber,
+                                                  ReleaseDate = releaseDate
+                                              };
+                    if (realEdition.IdBlock.HasValue)
+                        realEdition.BlockName = _blocks.GetOrDefault(realEdition.IdBlock.Value).Name;
 
-                return edition;
+                    AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
+                }
             }
         }
 

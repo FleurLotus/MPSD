@@ -17,7 +17,11 @@
             <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </Window.Resources>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
