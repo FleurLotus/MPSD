@@ -93,7 +93,7 @@
                 if (edition == null)
                 {
                     OnNewEditionCreated(setInfo.Name);
-                    edition = _magicDatabase.CreateNewEdition(setInfo.Name);
+                    edition = _magicDatabase.GetEdition(setInfo.Name);
                 }
                 yield return new SetInfoWithBlock(setInfo, edition);
             }
@@ -199,11 +199,11 @@
 
             return false;
         }
-        private void OnNewEditionCreated(string edition)
+        private void OnNewEditionCreated(string name)
         {
             var e = NewEditionCreated;
             if (e != null)
-                e(this, new EventArgs<string>(edition));
+                e(this, new EventArgs<string>(name));
         }
 
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)

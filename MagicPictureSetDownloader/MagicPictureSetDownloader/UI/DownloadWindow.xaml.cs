@@ -1,7 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
-    using System.Windows;
 
     using Common.Libray;
     using Common.WPF;
@@ -32,9 +31,19 @@
         }
         public void NewEditionCreated(object sender, EventArgs<string> args)
         {
-            MessageBox.Show("New Edition created :" + args.Data);
-        }
+            EditionInfosViewModel vm = new EditionInfosViewModel(args.Data);
+            EditionInfosWindow f = new EditionInfosWindow(vm) { Owner = this };
+            f.ShowDialog();
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                vm.Save();
+            }
+            else
+            {
+                vm.SaveDefault();
+            }
 
+        }
         protected override void OnClosed(EventArgs e)
         {
             IDisposable disposable = DataContext as IDisposable;
