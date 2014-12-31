@@ -7,6 +7,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using System.Windows.Input;
 
     using Common.Libray;
+    using Common.Libray.Notify;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Db;

@@ -3,6 +3,7 @@
     using System;
 
     using Common.Libray;
+    using Common.Libray.Notify;
     using Common.WPF;
 
     using MagicPictureSetDownloader.Core;

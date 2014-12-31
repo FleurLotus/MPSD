@@ -4,6 +4,7 @@
     using System.Threading;
 
     using Common.Libray;
+    using Common.Libray.Notify;
     using Common.ViewModel;
     using MagicPictureSetDownloader.Core;
 

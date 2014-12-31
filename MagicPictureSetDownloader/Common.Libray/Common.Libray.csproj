@@ -38,12 +38,17 @@
     <Compile Include="..\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="Exception\HandlerNotKnownException.cs" />
+    <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
+    <Compile Include="Notify\EventDispatcher.cs" />
+    <Compile Include="Notify\IEventDispatcher.cs" />
+    <Compile Include="Notify\EventHandlers.cs" />
     <Compile Include="Threading\WriterLock.cs" />
     <Compile Include="Threading\ReaderLock.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="ReadOnlyDictionary.cs" />
     <Compile Include="Extension.cs" />
-    <Compile Include="EventArgs.cs" />
+    <Compile Include="Notify\EventArgs.cs" />
     <Compile Include="IDispatcherInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
