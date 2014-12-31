@@ -1,4 +1,4 @@
-﻿namespace Common.Libray
+﻿namespace Common.Libray.Notify
 {
     using System;
 

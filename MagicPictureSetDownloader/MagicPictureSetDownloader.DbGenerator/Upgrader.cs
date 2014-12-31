@@ -85,7 +85,9 @@
 
                 if (!repo.ColumnExists("CardEditionsInCollection", "IdLanguage"))
                     repo.ExecuteBatch(UpdateQueries.AddColumnLanguageToCardEditionsInCollectionQuery);
+
                 
+                repo.ExecuteBatch(UpdateQueries.UpdateAlaraBlockReleaseDateQuery);
                 repo.ExecuteBatch(UpdateQueries.RemoveCompleteSetQuery);
             }
         }

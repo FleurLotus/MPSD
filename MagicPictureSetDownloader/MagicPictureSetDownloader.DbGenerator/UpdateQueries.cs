@@ -67,5 +67,22 @@ ALTER TABLE [CardEditionsInCollection] ADD [IdLanguage] int DEFAULT 0 NOT NULL;
 GO";
         #endregion
 
+        #region UpdateAlaraBlockReleaseDateQuery
+        internal const string UpdateAlaraBlockReleaseDateQuery =
+            @"
+UPDATE Edition 
+SET [ReleaseDate] = '20081003'
+WHERE  [GathererName] = 'Shards of Alara'
+GO
+UPDATE Edition 
+SET [ReleaseDate] = '20090206'
+WHERE  [GathererName] = 'Conflux'
+GO
+UPDATE Edition 
+SET [ReleaseDate] = '20090430'
+WHERE  [GathererName] = 'Alara Reborn'
+GO";
+        #endregion
+
     }
 }
