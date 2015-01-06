@@ -2,9 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading;
 
-    using Common.Libray;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
@@ -20,16 +18,31 @@
 
         private HierarchicalResultViewModel _selected;
         private readonly Func<string, IEnumerable<CardViewModel>> _getCardViewModels;
+        //Use temporary to notify change only after build because of asynchronous call
+        private readonly HierarchicalResultViewModel _buildingRoot;
+        private IList<HierarchicalResultViewModel> _root;
 
         public HierarchicalViewModel(string name, Func<string, IEnumerable<CardViewModel>> getCardViewModels)
         {
             Name = name;
             _getCardViewModels = getCardViewModels;
-            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(name) }).AsReadOnly();
+            _buildingRoot = new HierarchicalResultViewModel(name);
+            Root = new List<HierarchicalResultViewModel>();
         }
 
         public string Name { get; private set; }
-        public IList<HierarchicalResultViewModel> Root { get; private set; }
+        public IList<HierarchicalResultViewModel> Root
+        {
+            get { return _root; }
+            private set
+            {
+                if (value != _root)
+                {
+                    _root = value;
+                    OnNotifyPropertyChanged(() => Root);
+                }
+            }
+        }
         public HierarchicalResultViewModel Selected
         {
             get { return _selected; }
@@ -42,36 +55,33 @@
                 }
             }
         }
-        //Synchronous because property change are done before all the reste is done
-        /*public void MakeHierarchyAsync(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
-        {
-            ThreadPool.QueueUserWorkItem(o => MakeHierarchy(analysers, orders));
-        }*/
         public void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
             CardViewModel saveSelected = null;
             HierarchicalResultNodeViewModel selected = Selected as HierarchicalResultNodeViewModel;
             if (selected != null)
                 saveSelected = selected.Card;
-            
-            Root = (new List<HierarchicalResultViewModel> { new HierarchicalResultViewModel(Name) }).AsReadOnly();
+
+            _buildingRoot.Children.Clear();
 
             foreach (CardViewModel card in _getCardViewModels(Name))
             {
                 MakeHierarchy(analysers, orders, card);
             }
-            OnNotifyPropertyChanged(() => Root);
+            
+            Root = (new List<HierarchicalResultViewModel> { _buildingRoot });
 
             if (saveSelected != null)
             {
-                HierarchicalResultNodeViewModel bestmatch = FindBestName(Root[0], saveSelected);
+                HierarchicalResultNodeViewModel bestmatch = FindBestName(_buildingRoot, saveSelected);
                 if (bestmatch != null)
                     Selected = bestmatch;
             }
         }
         private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, CardViewModel card)
         {
-            HierarchicalResultViewModel current = Root[0];
+
+            HierarchicalResultViewModel current = _buildingRoot;
 
             for (int index = 0; index <= analysers.Length; index++)
             {
@@ -159,6 +169,5 @@
 
             return res;
         }
-
     }
 }

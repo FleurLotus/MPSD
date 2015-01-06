@@ -267,7 +267,9 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             if (ForMoving)
                 return DestinationCardCollectionSelected != null && DestinationCardCollectionSelected != SourceCardCollection;
 
-            return DestinationEditionSelected != null && (DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil) && (DestinationEditionSelected.HasFoil || !DestinationIsFoil);
+            return DestinationEditionSelected != null && DestinationLanguageSelected!= null && 
+                   (DestinationLanguageSelected != SourceLanguageSelected || DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil) && 
+                   (DestinationEditionSelected.HasFoil || !DestinationIsFoil);
         }
         private void OnClosing()
         {

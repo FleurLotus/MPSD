@@ -42,6 +42,9 @@
         private static void ComboLoaded(object sender, RoutedEventArgs e)
         {
             ComboBox combo = sender as ComboBox;
+            if (combo == null)
+                return;
+
             combo.Loaded -= ComboLoaded;
             if (combo.Template != null)
                 SetTextChangedHandler(combo);
@@ -70,9 +73,13 @@
         private static void TextBoxTextChanged(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
+            if (textBox == null)
+                return;
+
             ComboBox combo = textBox.TemplatedParent as ComboBox;
             //combo.IsDropDownOpen = true;
-
+            if (combo == null)
+                return;
             if (combo.IsTextSearchEnabled && textBox.SelectionStart == 0 && !string.IsNullOrEmpty(textBox.Text))
                 return;
             string text = combo.IsTextSearchEnabled ? textBox.Text.Substring(0, textBox.SelectionStart) : textBox.Text;

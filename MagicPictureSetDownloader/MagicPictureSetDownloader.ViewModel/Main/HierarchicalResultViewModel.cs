@@ -1,7 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
-    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
+//    using System.Collections.ObjectModel;
 
     using Common.ViewModel;
 
@@ -10,11 +11,11 @@
         public HierarchicalResultViewModel(IComparable value)
         {
             Value = value;
-            Children = new Collection<HierarchicalResultViewModel>();
+            Children = new List<HierarchicalResultViewModel>();
         }
 
         public IComparable Value { get; private set; }
         public string DisplayValue { get { return Value.ToString(); } }
-        public Collection<HierarchicalResultViewModel> Children { get; private set; }
+        public IList<HierarchicalResultViewModel> Children { get; private set; }
     }
 }

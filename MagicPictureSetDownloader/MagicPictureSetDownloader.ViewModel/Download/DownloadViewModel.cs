@@ -31,7 +31,7 @@
                 GetSetListCommand.Execute(null);
         }
 
-        public AsyncObservableCollection<SetInfoViewModel> Sets { get; private set; }
+        public IList<SetInfoViewModel> Sets { get; private set; }
         public ICommand GetSetListCommand { get; private set; }
         public ICommand FeedSetsCommand { get; private set; }
         public bool ShowConfig { get; private set; }

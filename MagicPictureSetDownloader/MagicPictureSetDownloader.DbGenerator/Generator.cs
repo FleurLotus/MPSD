@@ -1,7 +1,5 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
-    using System;
-    using System.Data;
     using System.Data.SqlServerCe;
     using System.IO;
 

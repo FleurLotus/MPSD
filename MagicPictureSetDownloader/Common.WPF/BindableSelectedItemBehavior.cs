@@ -93,7 +93,9 @@ namespace Common.WPF
 
                 // Ensure that the generator for this panel has been created.
 #pragma warning disable 168
+                // ReSharper disable UnusedVariable
                 UIElementCollection children = itemsHostPanel.Children;
+                // ReSharper restore UnusedVariable
 #pragma warning restore 168
 
                 Action<int> bringIndexIntoView = GetBringIndexIntoView(itemsHostPanel);
@@ -153,6 +155,10 @@ namespace Common.WPF
                 // at designtime the AssociatedObject sometimes seems to be null
                 return;
             }
+
+            if (treeView.SelectedItem == e.NewValue)
+                return;
+
 
             item = GetTreeViewItem(treeView, e.NewValue);
             if (item != null)

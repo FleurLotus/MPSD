@@ -1,10 +1,11 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
+    using System.Windows;
 
-    using Common.Libray;
     using Common.Libray.Notify;
     using Common.ViewModel;
+    using Common.WPF;
     using Common.WPF.UI;
 
     using MagicPictureSetDownloader.ViewModel.Input;
@@ -17,7 +18,7 @@
     {
         public MainWindow()
         {
-            DataContext = new MainViewModel();
+            DataContext = new MainViewModel(new DispatcherInvoker(Application.Current.Dispatcher));
             InitializeComponent();
         }
 

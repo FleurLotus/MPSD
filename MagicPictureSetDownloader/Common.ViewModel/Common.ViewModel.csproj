@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -46,6 +47,7 @@
     <Compile Include="InputViewModelFactory.cs" />
     <Compile Include="MenuViewModel.cs" />
     <Compile Include="Extension.cs" />
+    <Compile Include="MultiThreadedObservableCollection.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
     <Compile Include="NotifyPropertyChangedWithLinkedPropertiesBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

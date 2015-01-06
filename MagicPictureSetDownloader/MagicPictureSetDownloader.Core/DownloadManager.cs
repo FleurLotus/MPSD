@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Net;
     using System.Text;
-    using Common.Libray;
     using Common.Libray.Notify;
 
     using MagicPictureSetDownloader.Db;
