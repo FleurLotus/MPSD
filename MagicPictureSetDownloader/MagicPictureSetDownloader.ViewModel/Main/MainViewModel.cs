@@ -4,7 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
+    using System.Threading;
 
+    using Common.Libray;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Db;
@@ -12,30 +14,38 @@
 
     public partial class MainViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
     {
+  
         private const string MagicCards = "Magic Cards";
 
         private bool _showFilterConfig;
+        private bool _loading;
 
         private readonly HierarchicalViewModel _allhierarchical;
-        private HierarchicalViewModel _hierarchical;
+        private readonly IDispatcherInvoker _dispatcherInvoker;
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
+        private HierarchicalViewModel _hierarchical;
+        
 
         //TODO: Test delete with card in collection + same with move 
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
-        public MainViewModel()
+        public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
 
+            _dispatcherInvoker = dispatcherInvoker;
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
             _magicDatabase = MagicDatabaseManager.ReadAndWriteFull;
             Analysers = new HierarchicalInfoAnalysersViewModel();
+            _menuRoot = new MenuViewModel();
+            _contextMenuRoot = new MenuViewModel();
+
             CreateMenu();
 
             //ALERT: Temp for helping load file to tree picture 
             /*
-            foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214.ASI\Documents\Visual Studio 2012\Projects\MagicPictureSetDownloader\Sample\Others"))
+            foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample"))
             {
                 _magicDatabase.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
@@ -50,7 +60,19 @@
         }
 
         public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
-        
+
+        public bool Loading
+        {
+            get { return _loading; }
+            set
+            {
+                if (value != _loading)
+                {
+                    _loading = value;
+                    OnNotifyPropertyChanged(() => Loading);
+                }
+            }
+        }
         public bool ShowFilterConfig
         {
             get { return _showFilterConfig; }
@@ -63,7 +85,7 @@
                     if (!_showFilterConfig)
                     {
                         Analysers.Save();
-                        LoadCardsHierarchy();
+                        LoadCardsHierarchyAsync();
                     }
                 }
             }
@@ -97,16 +119,21 @@
             _magicDatabase.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
 
             Hierarchical = string.IsNullOrEmpty(collectionName) ? _allhierarchical : new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
-            LoadCardsHierarchy();
+            LoadCardsHierarchyAsync();
         }
         private void HierarchicalPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Selected")
                 GenerateContextMenu();
         }
+        private void LoadCardsHierarchyAsync()
+        {
+            ThreadPool.QueueUserWorkItem(o => LoadCardsHierarchy());
+        }
 
         private void LoadCardsHierarchy()
         {
+            Loading = true;
             HierarchicalInfoAnalyserViewModel[] selectedAnalysers = Analysers.All.Where(a => a.IsActive).ToArray();
 
             Hierarchical.MakeHierarchy(selectedAnalysers.Select(hiav => hiav.Analyser).ToArray(),
@@ -114,6 +141,7 @@
 
             GenerateCollectionMenu();
             GenerateContextMenu();
+            Loading = false;
         }
 
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)

@@ -2,10 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
+    using System.Threading;
 
-    using Common.Libray;
     using Common.Libray.Notify;
     using Common.ViewModel;
 
@@ -14,6 +13,8 @@
 
     public partial class MainViewModel
     {
+        const string None = "--- None ---";
+
         public event EventHandler UpdateDatabaseRequested;
         public event EventHandler UpdateImageDatabaseRequested;
         public event EventHandler VersionRequested;
@@ -23,12 +24,22 @@
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<CardUpdateViewModel>> UpdateCardWanted;
 
+        private readonly MenuViewModel _menuRoot;
+        private readonly MenuViewModel _contextMenuRoot;
+
+
         private MenuViewModel _showPictureViewModel;
         private MenuViewModel _showStatisticsViewModel;
         private MenuViewModel _collectionViewModel;
 
-        public ObservableCollection<MenuViewModel> Menus { get; private set; }
-        public ObservableCollection<MenuViewModel> ContextMenus { get; private set; }
+        public MenuViewModel MenuRoot
+        {
+            get { return _menuRoot; }
+        }
+        public MenuViewModel ContextMenuRoot
+        {
+            get { return _contextMenuRoot; }
+        }
         public bool ShowPicture
         {
             get { return _showPictureViewModel.IsChecked; }
@@ -146,12 +157,11 @@
         }
         private void DeleteCollectionCommandExecute(object o)
         {
-            const string none = "--- None ---";
-            ICollection<string> cardCollections = _magicDatabase.GetAllCollections().Select(cc=>cc.Name).ToList();
+            ICollection<string> cardCollections = _magicDatabase.GetAllCollections().Select(cc => cc.Name).ToList();
             List<string> source = new List<string>(cardCollections);
             List<string> dest = new List<string>(cardCollections);
             
-            dest.Insert(0, none);
+            dest.Insert(0, None);
 
             InputViewModel vm = InputViewModelFactory.Instance.CreateMoveFromListToOtherViewModel("Delete Collection", "Choose collection to delete", source, "Move card to: ('None' to remove them)", dest);
             
@@ -163,17 +173,9 @@
 
                 if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
                 {
-                    if (toAdd == none)
-                        _magicDatabase.DeleteAllCardInCollection(toBeDeleted);
-                    else
-                        _magicDatabase.MoveCollection(toBeDeleted, toAdd);
+                    Loading = true;
 
-                    _magicDatabase.DeleteCollection(toBeDeleted);
-                    
-                    //Delete current collection -> reset display to default
-                    if (Hierarchical.Name == toBeDeleted)
-                        LoadCollection();
-                    GenerateCollectionMenu();
+                    ThreadPool.QueueUserWorkItem(DeleteCollectionAsync, vm);
                 }
             }
         }
@@ -233,15 +235,12 @@
 
         private void CreateMenu()
         {
-            Menus = new ObservableCollection<MenuViewModel>();
-            ContextMenus = new ObservableCollection<MenuViewModel>();
-
             MenuViewModel fileMenu = new MenuViewModel("_File");
-            fileMenu.Children.Add(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
-            fileMenu.Children.Add(new MenuViewModel("Update _Image Database..",new RelayCommand(UpdateImageDatabaseCommandExecute)));
-            fileMenu.Children.Add(MenuViewModel.Separator);
-            fileMenu.Children.Add(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
-            Menus.Add(fileMenu);
+            fileMenu.AddChild(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Image Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            fileMenu.AddChild(MenuViewModel.Separator);
+            fileMenu.AddChild(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
+            MenuRoot.AddChild(fileMenu);
 
             MenuViewModel viewMenu = new MenuViewModel("_View");
 
@@ -250,7 +249,7 @@
             if (option != null)
                 isShowStatisticsChecked = bool.Parse(option.Value);
             _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = isShowStatisticsChecked };
-            viewMenu.Children.Add(_showStatisticsViewModel);
+            viewMenu.AddChild(_showStatisticsViewModel);
 
             bool isShowPictureChecked = true;
             option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowPicture");
@@ -258,32 +257,32 @@
                 isShowPictureChecked = bool.Parse(option.Value);
 
             _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = isShowPictureChecked };
-            viewMenu.Children.Add(_showPictureViewModel);
-            Menus.Add(viewMenu);
+            viewMenu.AddChild(_showPictureViewModel);
+            MenuRoot.AddChild(viewMenu);
 
             _collectionViewModel = new MenuViewModel("_Collection");
             GenerateCollectionMenu();
-            Menus.Add(_collectionViewModel);
+            MenuRoot.AddChild(_collectionViewModel);
 
             MenuViewModel aboutMenu = new MenuViewModel("?");
-            aboutMenu.Children.Add(new MenuViewModel("_Version", new RelayCommand(VersionCommandExecute)));
-            Menus.Add(aboutMenu);
+            aboutMenu.AddChild(new MenuViewModel("_Version", new RelayCommand(VersionCommandExecute)));
+            MenuRoot.AddChild(aboutMenu);
 
             GenerateContextMenu();
         }
         private void GenerateContextMenu()
         {
-            ContextMenus.Clear();
+            ContextMenuRoot.RemoveAllChildren();
             if (Hierarchical == null || Hierarchical == _allhierarchical)
                 return;
 
-            ContextMenus.Add(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
+            ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
 
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel != null)
             {
-                ContextMenus.Add(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
-                ContextMenus.Add(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
             }
         }
         private void GenerateCollectionMenu()
@@ -292,22 +291,22 @@
 
             bool hasCollection = cardCollections.Count > 0;
 
-            _collectionViewModel.Children.Clear();
-            _collectionViewModel.Children.Add(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
+            _collectionViewModel.RemoveAllChildren();
+            _collectionViewModel.AddChild(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
             if (hasCollection)
             {
-                _collectionViewModel.Children.Add(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
-                _collectionViewModel.Children.Add(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
-                _collectionViewModel.Children.Add(MenuViewModel.Separator);
-                _collectionViewModel.Children.Add(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
+                _collectionViewModel.AddChild(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
+                _collectionViewModel.AddChild(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
+                _collectionViewModel.AddChild(MenuViewModel.Separator);
+                _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             }
 
-            _collectionViewModel.Children.Add(MenuViewModel.Separator);
-            _collectionViewModel.Children.Add(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));
+            _collectionViewModel.AddChild(MenuViewModel.Separator);
+            _collectionViewModel.AddChild(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));
 
             if (hasCollection)
             {
-                _collectionViewModel.Children.Add(MenuViewModel.Separator);
+                _collectionViewModel.AddChild(MenuViewModel.Separator);
                 cardCollections.Sort((c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
                 foreach (ICardCollection cardCollection in cardCollections)
                 {
@@ -316,9 +315,34 @@
                                                           IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name
                                                       };
 
-                    _collectionViewModel.Children.Add(menuViewModel);
+                    _collectionViewModel.AddChild(menuViewModel);
                 }
             }
+        }
+        private void DeleteCollectionAsync(object obj)
+        {
+            InputViewModel vm = obj as InputViewModel;
+
+            string toBeDeleted = vm.Selected;
+            string toAdd = vm.Selected2;
+
+            if (toAdd == None)
+                _magicDatabase.DeleteAllCardInCollection(toBeDeleted);
+            else
+                _magicDatabase.MoveCollection(toBeDeleted, toAdd);
+
+            _magicDatabase.DeleteCollection(toBeDeleted);
+            
+            Loading = false;
+
+            _dispatcherInvoker.Invoke(() =>
+                {
+                    //Delete current collection -> reset display to default
+                    if (Hierarchical.Name == toBeDeleted)
+                        LoadCollection();
+                    else
+                        GenerateCollectionMenu();
+                });
         }
     }
 }

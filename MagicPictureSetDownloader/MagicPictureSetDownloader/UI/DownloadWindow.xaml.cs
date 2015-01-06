@@ -1,8 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
+    using System.Windows;
 
-    using Common.Libray;
     using Common.Libray.Notify;
     using Common.WPF;
 
@@ -16,7 +16,7 @@
     {
         public DownloadWindow()
         {
-            DataContext = new DownloadViewModel(new DispatcherInvoker(), false);
+            DataContext = new DownloadViewModel(new DispatcherInvoker(Application.Current.Dispatcher), false);
             InitializeComponent();
         }
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)

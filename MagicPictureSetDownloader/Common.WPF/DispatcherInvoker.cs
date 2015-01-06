@@ -1,22 +1,27 @@
 ﻿namespace Common.WPF
 {
     using System;
-    using System.Windows;
     using System.Windows.Threading;
     using Common.Libray;
 
     public class DispatcherInvoker : IDispatcherInvoker
     {
+        private readonly Dispatcher _dispatchObject;
+
+        public DispatcherInvoker(Dispatcher dispatchObject)
+        {
+            _dispatchObject = dispatchObject;
+        }
+
         public void Invoke(Action action)
         {
-            Dispatcher dispatchObject = Application.Current.Dispatcher;
-            if (dispatchObject == null || dispatchObject.CheckAccess())
+            if (_dispatchObject == null || _dispatchObject.CheckAccess())
             {
                 action();
             }
             else
             {
-                dispatchObject.Invoke(action);
+                _dispatchObject.Invoke(action);
             }
         }
     }

@@ -31,9 +31,9 @@
         {
             OnNotifyPropertyChangedWithLinked(expression.GetMemberName(), new HashSet<string>());
         }
-        public void AddLinkedProperty(Expression<Func<object>> source, Expression<Func<object>> destination)
+        public void AddLinkedProperty<T1,T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
         {
-            string sourceName =source.GetMemberName();
+            string sourceName = source.GetMemberName();
             string destinationName = destination.GetMemberName();
 
             if (!_childPropertyNameSet.Contains(sourceName))
@@ -51,17 +51,17 @@
 
             linked.Add(destinationName);
         }
-        public void AddLinkedProperty(Expression<Func<object>>[] sources, Expression<Func<object>> destination)
+        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>>[] sources, Expression<Func<T2>> destination)
         {
-            foreach (Expression<Func<object>> source in sources)
+            foreach (Expression<Func<T1>> source in sources)
             {
                 AddLinkedProperty(source, destination);
             }
 
         }
-        public void AddLinkedProperty(Expression<Func<object>> source, Expression<Func<object>>[] destinations)
+        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>>[] destinations)
         {
-            foreach (Expression<Func<object>> destination in destinations)
+            foreach (Expression<Func<T2>> destination in destinations)
             {
                 AddLinkedProperty(source, destination);
             }

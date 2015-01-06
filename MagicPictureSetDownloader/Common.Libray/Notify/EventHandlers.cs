@@ -68,17 +68,18 @@ namespace Common.Libray.Notify
             {
                 foreach (var handler in _handlers)
                 {
+                    EventHandler<T> handler1 = handler;
                     Action a = () =>
                         {
                             try
                             {
-                                handler(sender, args);
+                                handler1(sender, args);
                             }
                             catch (Exception e)
                             {
                                 if (executeOnException != null)
                                 {
-                                    executeOnException(handler, e);
+                                    executeOnException(handler1, e);
                                 }
                             }
                         };

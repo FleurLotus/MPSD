@@ -29,7 +29,7 @@
 
         internal void Upgrade()
         {
-            int version = -1;
+            int version;
             using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
             {
                 cnx.Open();
@@ -49,7 +49,6 @@
             {
                 throw new Exception("Error while upgrading database", ex);
             }
-
         }
 
         private void ExecuteUpgradeCommands(int version)
