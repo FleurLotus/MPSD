@@ -157,7 +157,13 @@
             if (CountDown == 0)
             {
                 DownloadReporter.Finish();
+                
+                //Keep previous error
+                string msg = Message;
                 GetSetListCommand.Execute(null);
+                
+                if (!string.IsNullOrWhiteSpace(msg))
+                    Message = msg + Message;
                 JobFinished();
             }
         }

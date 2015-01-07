@@ -85,9 +85,23 @@
                 if (!repo.ColumnExists("CardEditionsInCollection", "IdLanguage"))
                     repo.ExecuteBatch(UpdateQueries.AddColumnLanguageToCardEditionsInCollectionQuery);
 
-                
                 repo.ExecuteBatch(UpdateQueries.UpdateAlaraBlockReleaseDateQuery);
                 repo.ExecuteBatch(UpdateQueries.RemoveCompleteSetQuery);
+            }
+            if (version < 3)
+            {
+                if (!repo.RowExists(null, "Rarity", new[] { "Name" }, new[] { "Promo" }))
+                    repo.ExecuteBatch(UpdateQueries.InsertPromoRarity);
+
+                if (repo.ColumnExists("Card", "CastingCost") && repo.GetTable("Card").GetColumn("CastingCost").CharacterMaxLength < 100)
+                    repo.ExecuteBatch(UpdateQueries.ExtendCardCastingCostLength);
+
+                if (repo.ColumnExists("Card", "Name") && repo.GetTable("Card").GetColumn("Name").CharacterMaxLength < 150)
+                    repo.ExecuteBatch(UpdateQueries.ExtendCardNameLength);
+
+                if (repo.ColumnExists("Translate", "Name") && repo.GetTable("Translate").GetColumn("Name").CharacterMaxLength < 150)
+                    repo.ExecuteBatch(UpdateQueries.ExtendTranslateNameLength);
+
             }
         }
         private void ExecuteUpgradeCommandsForPicture(Repository repo, int version)

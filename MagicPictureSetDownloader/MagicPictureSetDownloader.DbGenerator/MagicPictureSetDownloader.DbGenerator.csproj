@@ -78,11 +78,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /R /Y "$(SolutionDir)MagicData.sdf" "%25temp%25"
-xcopy /R /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
+    <PreBuildEvent>if exist "%25temp%25\Magic*.sql" (del /Q "%25temp%25\Magic*.sql")
+xcopy /R /Y "$(SolutionDir)MagicData.sdf" "%25temp%25"
 "$(SolutionDir)ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicData.sdf" "%25temp%25/MagicData.sql"
-"$(SolutionDir)ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf" "%25temp%25/MagicPicture.sql"
+if exist "%25temp%25\MagicData_*.sql" (copy "%25temp%25\MagicData_*.sql" "%25temp%25/MagicData.sql")
 zip -9 "$(ProjectDir)MagicData.zip" "%25temp%25/MagicData.sql"
+xcopy /R /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
+"$(SolutionDir)ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf" "%25temp%25/MagicPicture.sql"
+if exist "%25temp%25\MagicPicture_*.sql" (copy "%25temp%25\MagicPicture_*.sql" "%25temp%25/MagicPicture.sql")
 zip -9 "$(ProjectDir)MagicPicture.zip" "%25temp%25/MagicPicture.sql"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

@@ -63,9 +63,9 @@
             _tables.TryGetValue(tablekey, out table);
             return table;
         }
-        public bool RowExists(string schemaName, string name, string[] columnNames, object[] values)
+        public bool RowExists(string schemaName, string tableName, string[] columnNames, object[] values)
         {
-            ITable table = GetTable(schemaName, name);
+            ITable table = GetTable(schemaName, tableName);
             if (table == null)
                 throw new Exception("Unknown table");
 
