@@ -84,5 +84,36 @@ WHERE  [GathererName] = 'Alara Reborn'
 GO";
         #endregion
 
+        #region InsertPromoRarity
+        internal const string InsertPromoRarity =
+            @"
+INSERT INTO [Rarity] ([Name],[Code]) VALUES ('Promo', 'P')
+GO";
+        #endregion
+
+        #region ExtendCardCastingCostLength
+        internal const string ExtendCardCastingCostLength =
+            @"
+ALTER TABLE [Card] ALTER COLUMN [CastingCost] nvarchar(100) NULL
+GO";
+        #endregion        
+        
+        #region ExtendCardNameLength
+        internal const string ExtendCardNameLength =
+            @"
+ALTER TABLE [Card] ALTER COLUMN [Name] nvarchar(150) NOT NULL
+GO
+ALTER TABLE [Card] ALTER COLUMN [PartName] nvarchar(150) NOT NULL
+GO
+ALTER TABLE [Card] ALTER COLUMN [OtherPartName] nvarchar(150) NULL
+GO";
+        #endregion
+
+        #region ExtendTranslateNameLength
+        internal const string ExtendTranslateNameLength =
+            @"
+ALTER TABLE [Translate] ALTER COLUMN [Name] nvarchar(150) NOT NULL
+GO";
+        #endregion
     }
 }

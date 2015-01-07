@@ -194,7 +194,7 @@
         }
         private bool IsCreature(string type)
         {
-            return type.ToLowerInvariant().Contains("creature");
+            return type.ToLowerInvariant().Contains("creature") && !type.ToLowerInvariant().Contains("enchant creature");
         }
         private bool IsPlaneswalker(string type)
         {
@@ -205,15 +205,17 @@
             //Ensure unique root element because of fragment file
             text = "<root>" + text + "</root>";
 
+            //For XmlTextReader which doesn't support & caracter
+            text = text.Replace("&amp;", "&");
+            text = text.Replace("&", "&amp;");
+            text = text.Replace("<</i>", "&lt;</i>");
+
             //Known XML issues in file
             text = text.Replace("<div>", "<tr>");
             text = text.Replace("<i>", "");
             text = text.Replace("</i>", "");
             text = text.Replace("--->", "-->");
 
-            //For XmlTextReader which doesn't support & caracter
-            text = text.Replace("&amp;", "&");
-            text = text.Replace("&", "&amp;");
             return text;
         }
     }
