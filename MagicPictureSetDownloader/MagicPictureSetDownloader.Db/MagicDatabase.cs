@@ -39,14 +39,14 @@ namespace MagicPictureSetDownloader.Db
         private MagicDatabase(string fileName, string pictureFileName)
         {
             string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
-            _connectionString = "datasource=" + mainDbPath;
+            _connectionString = "datasource=" + mainDbPath + ";Max Database Size = 4091;";
             if (!File.Exists(mainDbPath))
                 DatabaseGenerator.GenerateMagicData(_connectionString);
 
             DatabaseGenerator.VersionVerifyMagicData(_connectionString);
 
             string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
-            _connectionStringForPictureDb = "datasource=" + pictureDbPath;
+            _connectionStringForPictureDb = "datasource=" + pictureDbPath + ";Max Database Size = 4091;";
             if (!File.Exists(pictureDbPath))
                 DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
 
