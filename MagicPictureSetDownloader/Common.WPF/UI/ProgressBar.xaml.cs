@@ -1,7 +1,11 @@
 namespace Common.WPF.UI
 {
+    using System;
     using System.ComponentModel;
+    using System.Text;
+    using System.Timers;
     using System.Windows;
+    using System.Windows.Threading;
 
     public partial class ProgressBar
     {
@@ -10,16 +14,23 @@ namespace Common.WPF.UI
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(ProgressBar), new PropertyMetadata(default(string), PropertyChangedCallback));
         public static readonly DependencyProperty MaximumProperty = DependencyProperty.Register("Maximum", typeof(double), typeof(ProgressBar), new PropertyMetadata(100.0, PropertyChangedCallback, CoerceMaximumCallback));
         public static readonly DependencyProperty ShowPerCentProperty = DependencyProperty.Register("ShowPerCent", typeof(bool), typeof(ProgressBar), new PropertyMetadata(false, PropertyChangedCallback));
+        public static readonly DependencyProperty ShowETAProperty = DependencyProperty.Register("ShowETA", typeof(bool), typeof(ProgressBar), new PropertyMetadata(false, PropertyChangedCallback));
         private static readonly DependencyPropertyKey _displayTextPropertyKey = DependencyProperty.RegisterReadOnly("DisplayText", typeof(string), typeof(ProgressBar), new PropertyMetadata(default(string)));
         public static readonly DependencyProperty DisplayTextProperty = _displayTextPropertyKey.DependencyProperty;
 
+        private readonly Timer _timer;
+        private DateTime? _startAt;
         #endregion
 
         #region Constructor/Destuctor
         public ProgressBar()
         {
+            _timer = new Timer { Interval = 1000, AutoReset = true, Enabled = false };
+            _timer.Elapsed += TimerOnElapsed;
+
             InitializeComponent();
         }
+
         #endregion
 
         #region Properties
@@ -46,6 +57,12 @@ namespace Common.WPF.UI
         {
             get { return (bool)GetValue(ShowPerCentProperty); }
             set { SetValue(ShowPerCentProperty, value); }
+        }
+        [Bindable(true), Category("Behavior")]
+        public bool ShowETA
+        {
+            get { return (bool)GetValue(ShowETAProperty); }
+            set { SetValue(ShowETAProperty, value); }
         }
         [Bindable(true), Category("Behavior")]
         public string DisplayText
@@ -83,27 +100,53 @@ namespace Common.WPF.UI
             if (null == pb) return;
             pb.SetDisplayText();
         }
+        // ReSharper disable CompareOfFloatsByEqualityOperator
         private void SetDisplayText()
         {
-            if (ShowPerCent)
+            lock (_timer)
             {
+                if (!Lib.IsInDesignMode() &&  !_timer.Enabled && ShowETA && Maximum!=Value && Value>0)
+                {
+                    _startAt = DateTime.Now;
+                    _timer.Enabled = true;
+                }
+                if (_timer.Enabled && (!ShowETA || Maximum == Value || Value ==0))
+                {
+                    _startAt = null;
+                    _timer.Enabled = false;
+                }
+
                 double max = Maximum;
                 double value = Value;
                 double percent;
-                // ReSharper disable CompareOfFloatsByEqualityOperator
+                string estimatedTime = null;
+
+
                 if (max == value)
-                    // ReSharper restore CompareOfFloatsByEqualityOperator
                     percent = 100;
                 else
                     percent = value / max * 100;
 
-                DisplayText = string.Format("{0} {1:0.00}%", Text, percent);
-            }
-            else
-            {
-                DisplayText = Text;
+                if (_startAt.HasValue && percent > 0)
+                    estimatedTime = TimeSpan.FromSeconds((DateTime.Now - _startAt.Value).TotalSeconds * (100.0 - percent) / percent).ToString(@"hh\:mm\:ss");
+
+                StringBuilder sb = new StringBuilder(Text);
+
+                if (ShowPerCent)
+                    sb.AppendFormat(" {0:0.00}%", percent);
+
+                if (!string.IsNullOrEmpty(estimatedTime))
+                    sb.Append(" ETA:" + estimatedTime);
+                
+                DisplayText = sb.ToString();
             }
         }
+        // ReSharper restore CompareOfFloatsByEqualityOperator
+        private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            Dispatcher.Invoke((Action)SetDisplayText);
+        }
+
         #endregion
     }
 }

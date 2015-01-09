@@ -9,7 +9,7 @@
         xmlns:ui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
         d:DataContext="{d:DesignInstance Type=download:DownloadImageViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="MagicPictureSetDownloader - Images" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="MagicPictureSetDownloader - Images" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" MinWidth="250">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
@@ -22,7 +22,7 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ui:ProgressBar Grid.Row="0" Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
+        <ui:ProgressBar Grid.Row="0" ShowETA="True" Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
         <Border Grid.Row="1" Visibility="{Binding Message, Converter={StaticResource no2vConv}}" BorderThickness="2" BorderBrush="Red">
             <TextBlock Text="{Binding Message}"/>
         </Border>

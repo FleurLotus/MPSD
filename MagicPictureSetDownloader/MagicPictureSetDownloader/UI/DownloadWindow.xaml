@@ -59,7 +59,7 @@
                 <Grid Grid.Row="0" Grid.Column="0">
                     <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedSetsCommand}" />
 
-                    <wpfui:ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
+                    <wpfui:ProgressBar ShowETA="True" Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
