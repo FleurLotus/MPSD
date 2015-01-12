@@ -10,7 +10,7 @@
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=input:CardUpdateViewModel, IsDesignTimeCreatable=False}"
-        mc:Ignorable="d" SizeToContent="Height" Width="361" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" SizeToContent="Height" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         >
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
@@ -45,8 +45,9 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
                 <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
-                <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding SourceEditionSelected}"  />
-                <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,0" ItemsSource="{Binding SourceLanguages}" SelectedItem="{binding:TwoWayBinding SourceLanguageSelected}"  />
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding SourceEditions}" SelectedItem="{binding:TwoWayBinding SourceEditionSelected}"  />
+                <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding SourceEditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding SourceLanguages}" SelectedItem="{binding:TwoWayBinding SourceLanguageSelected}"  />
                 <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding SourceIsFoil}"/>
             </Grid>
         </GroupBox>
@@ -69,7 +70,8 @@
                 <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center" Visibility="{Binding ForMoving, Converter={StaticResource nb2vConv}}"/>
 
 
-                <ComboBox Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding DestinationEditionSelected}" Visibility="{Binding ForMoving, Converter={StaticResource nb2vConv}}"/>
+                <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding DestinationEditions}" SelectedItem="{binding:TwoWayBinding DestinationEditionSelected}" Visibility="{Binding ForMoving, Converter={StaticResource nb2vConv}}"/>
+                <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding DestinationEditionSelected.Name, Converter={StaticResource t2iConv}}"/>
                 <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding DestinationLanguages}" SelectedItem="{binding:TwoWayBinding DestinationLanguageSelected}" Visibility="{Binding ForMoving, Converter={StaticResource nb2vConv}}"/>
                 <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding DestinationIsFoil}" Visibility="{Binding ForMoving, Converter={StaticResource nb2vConv}}"
                           IsEnabled="{Binding DestinationEditionSelected.HasFoil}"/>

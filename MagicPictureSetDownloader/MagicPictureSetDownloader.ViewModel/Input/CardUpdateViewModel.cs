@@ -2,11 +2,14 @@
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Input;
 
     using Common.ViewModel;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -28,7 +31,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private bool _destinationIsFoil;
         private int _count;
         private int _maxCount;
-        private readonly IEdition[] _editions;
+        private readonly IEdition[] _sourceEditions;
+        private readonly IEdition[] _destinationEditions;
         private readonly ICardInCollectionCount[] _cardInCollectionCounts;
         private readonly IMagicDatabaseReadOnly _magicDatabase;
 
@@ -44,13 +48,22 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             _magicDatabase = MagicDatabaseManager.ReadOnly;
 
             SourceCardCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == collectionName);
-            _collections = _magicDatabase.GetAllCollections().Where(c => c != SourceCardCollection).ToArray();
-            _cardInCollectionCounts = _magicDatabase.GetCardCollectionStatistics(Card).Where(cicc => cicc.IdCollection == SourceCardCollection.Id).ToArray();
-            _editions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEdition(cicc.IdGatherer)).ToArray();
+            _collections = _magicDatabase.GetAllCollections().Where(c => c != SourceCardCollection)
+                                                             .ToArray();
 
-            if (_editions.Length > 0)
+            _cardInCollectionCounts = _magicDatabase.GetCollectionStatisticsForCard(SourceCardCollection, Card)
+                                                    .ToArray();
+
+            _sourceEditions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEdition(cicc.IdGatherer))
+                                                     .Ordered()
+                                                     .ToArray();
+
+            _destinationEditions = _magicDatabase.GetAllEditionIncludingCardOrdered(card)
+                                                 .ToArray();
+
+            if (_sourceEditions.Length > 0)
             {
-                SourceEditionSelected = _editions[0];
+                SourceEditionSelected = _sourceEditions[0];
                 if (!ForMoving)
                     DestinationEditionSelected = SourceEditionSelected;
             }
@@ -66,9 +79,13 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         public bool? Result { get; private set; }
         public bool ForMoving { get; private set; }
         public ICard Card { get; private set; }
-        public IEdition[] Editions
+        public IEdition[] SourceEditions
         {
-            get { return _editions; }
+            get { return _sourceEditions; }
+        }
+        public IEdition[] DestinationEditions
+        {
+            get { return _destinationEditions; }
         }
 
         public ICardCollection[] Collections

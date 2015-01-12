@@ -2,6 +2,7 @@
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Windows.Input;
@@ -9,6 +10,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using Common.Libray.Notify;
     using Common.ViewModel;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -28,16 +30,19 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private bool _isFoil;
         private int _count;
         private ICard _cardSelected;
-        private readonly ICard[] _cards;
+        private readonly ICard[] _allCards;
         private IEdition _editionSelected;
         private ILanguage _languageSelected;
         private string _currentCollectionDetail;
-        private readonly IEdition[] _editions;
+        private readonly IEdition[] _allEditions;
         private ICardCollection _cardCollection;
         private readonly ICardCollection[] _collections;
 
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
         private readonly ICardAllDbInfo[] _allCardInfos;
+        private IList<ICard> _cards;
+        private IList<ILanguage> _languages;
+        private IList<IEdition> _editions;
 
         public CardInputViewModel(string name)
         {
@@ -51,10 +56,10 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             _collections = _magicDatabase.GetAllCollections().ToArray();
             SelectCardCollection(name);
 
-            _cards = _allCardInfos.Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()).ToArray();
+            _allCards = _allCardInfos.GetAllCardOrdered().ToArray();
             Cards = new ObservableCollection<ICard>();
 
-            _editions = _magicDatabase.AllEditions().OrderByDescending(ed => ed.ReleaseDate).ToArray();
+            _allEditions = _magicDatabase.GetAllEditionsOrdered();
             Editions = new ObservableCollection<IEdition>();
 
             Languages = new ObservableCollection<ILanguage>();
@@ -64,9 +69,43 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         public ICommand AddCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
         public ICommand ChangeCollectionCommand { get; private set; }
-        public ObservableCollection<IEdition> Editions { get; private set; }
-        public ObservableCollection<ILanguage> Languages { get; private set; }
-        public ObservableCollection<ICard> Cards { get; private set; }
+        public IList<IEdition> Editions
+        {
+            get { return _editions; }
+            private set
+            {
+                if (value != _editions)
+                {
+                    _editions = value;
+                    OnNotifyPropertyChanged(() => Editions);
+                }
+            }
+        }
+        public IList<ILanguage> Languages
+        {
+            get { return _languages; }
+            private set
+            {
+                if (value != _languages)
+                {
+                    _languages = value;
+                    OnNotifyPropertyChanged(() => Languages);
+                }
+            }
+
+        }
+        public IList<ICard> Cards
+        {
+            get { return _cards; }
+            private set
+            {
+                if (value != _cards)
+                {
+                    _cards = value;
+                    OnNotifyPropertyChanged(() => Cards);
+                }
+            }
+        }
 
         public ILanguage LanguageSelected
         {
@@ -218,31 +257,40 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             switch (InputMode)
             {
                 case InputMode.ByCard:
+                    {
+                        IList<ICard> temp = Cards;
+                        Cards = null;
+                        temp.Clear();
 
-                    Cards.Clear();
+                        foreach (ICard card in _allCards)
+                            temp.Add(card);
 
-                    foreach (ICard card in _cards)
-                        Cards.Add(card);
-                    
-                    Editions.Clear();
-                    EditionSelected = null;
-                    CardSelected = null;
+                        Cards = temp;
+                        Editions.Clear();
+                        EditionSelected = null;
+                        CardSelected = null;
 
-                    break;
+                        break;
+                    }
 
                 case InputMode.ByEdition:
+                    {
+                        Cards.Clear();
 
-                    Cards.Clear();
+                        IEdition save = EditionSelected;
+                        IList<IEdition> temp = Editions;
+                        Editions = null;
+                        temp.Clear();
 
-                    IEdition save = EditionSelected;
-                    Editions.Clear();
-                    
-                    foreach (IEdition editions in _editions)
-                        Editions.Add(editions);
+                        foreach (IEdition editions in _allEditions)
+                            temp.Add(editions);
 
-                    CardSelected = null;
-                    EditionSelected = save;
-                    break;
+                        Editions = temp;
+
+                        CardSelected = null;
+                        EditionSelected = save;
+                        break;
+                    }
 
                 case InputMode.None:
 
@@ -312,7 +360,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         if (editionSelected == null)
                             return;
 
-                        foreach (ICard card in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).Select(cadi => cadi.Card).Distinct().OrderBy(c => c.ToString()))
+                        foreach (ICard card in _allCardInfos.GetAllCardOrdered(editionSelected))
                             Cards.Add(card);
 
                         break;
@@ -325,7 +373,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         if (cardNameSelected == null)
                             return;
 
-                        foreach (IEdition edition in _allCardInfos.Where(cadi => cadi.Card == cardNameSelected).Select(cadi => cadi.Edition).OrderByDescending(ed => ed.ReleaseDate))
+                        foreach (IEdition edition in _allCardInfos.GetAllEditionIncludingCardOrdered(cardNameSelected))
                             Editions.Add(edition);
 
                         break;
@@ -344,8 +392,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             int totalInEditionInCollection = 0;
             int totalInEditionAndLanguageInCollection = 0;
             int totalOfthis = 0;
-            
-            foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCardCollectionStatistics(CardSelected).Where(cicc => cicc.IdCollection == CardCollection.Id))
+
+            foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, CardSelected))
             {
                 int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
                 totalInCollection += inCollection;
@@ -362,7 +410,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             }
 
             CurrentCollectionDetail = string.Format("{0} {1}{2} {3} /{4}/{5}/{6}", totalOfthis, EditionSelected.Code, IsFoil ? "(Foil)" : string.Empty, LanguageSelected.Name,
-                                                                                  totalInEditionAndLanguageInCollection, totalInEditionInCollection, totalInCollection);
+                                                                                   totalInEditionAndLanguageInCollection, totalInEditionInCollection, totalInCollection);
         }
     }
 }

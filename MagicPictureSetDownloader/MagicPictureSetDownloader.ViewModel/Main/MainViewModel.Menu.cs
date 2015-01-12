@@ -26,8 +26,7 @@
 
         private readonly MenuViewModel _menuRoot;
         private readonly MenuViewModel _contextMenuRoot;
-
-
+        
         private MenuViewModel _showPictureViewModel;
         private MenuViewModel _showStatisticsViewModel;
         private MenuViewModel _collectionViewModel;
