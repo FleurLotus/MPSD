@@ -52,11 +52,15 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Edition" Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}" />
             <ComboBox Grid.Column="1" IsEditable="True" wpf:AutoComplete.Enabled="True" wpf:AutoComplete.CaseInsensitive="True"
                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
                   SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
+            <Image Grid.Column="2"  HorizontalAlignment="Left" Width="20" Height="20" 
+                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
+                   Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
 
             <Label Grid.Column="0" Content="Card name" 
                    Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}" />

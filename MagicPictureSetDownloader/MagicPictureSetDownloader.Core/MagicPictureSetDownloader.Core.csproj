@@ -53,6 +53,7 @@
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
     <Compile Include="CardLanguageInfo.cs" />
+    <Compile Include="EnhancedDatabaseRequest.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
