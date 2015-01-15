@@ -18,7 +18,7 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
                 return;
@@ -29,7 +29,5 @@
             }
             _disposed = true;
         }
-
-
     }
 }

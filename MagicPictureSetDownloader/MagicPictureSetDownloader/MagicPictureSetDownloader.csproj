@@ -127,14 +127,14 @@
     <Compile Include="Converter\CardToStatisticsVisibleConverter.cs" />
     <Compile Include="Converter\CardToStatisticsConverter.cs" />
     <Compile Include="Converter\CardToImageConverter.cs" />
-    <Compile Include="Converter\BoolToImageConverter.cs" />
+    <Compile Include="Converter\BoolToOrderImageConverter.cs" />
     <Compile Include="Converter\BitmapToImageConverter.cs" />
-    <Compile Include="Converter\CardToAngleConverter.cs" />
-    <Compile Include="Converter\ModeToRowConverter.cs" />
+    <Compile Include="Converter\CardToRotationAngleConverter.cs" />
+    <Compile Include="Converter\InputModeToGridRowConverter.cs" />
     <Compile Include="Converter\TextToInlinesConverter.cs" />
-    <Compile Include="Converter\StringToImageConverter.cs" />
+    <Compile Include="Converter\StringToCastingCostImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
-    <Compile Include="Converter\TreeToImageConverter.cs" />
+    <Compile Include="Converter\TreeToTreeImageConverter.cs" />
     <Compile Include="UI\CardUpdateWindow.xaml.cs">
       <DependentUpon>CardUpdateWindow.xaml</DependentUpon>
     </Compile>

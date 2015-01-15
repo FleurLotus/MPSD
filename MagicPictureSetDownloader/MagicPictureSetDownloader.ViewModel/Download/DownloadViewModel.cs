@@ -8,6 +8,7 @@
     using System.Windows.Input;
 
     using Common.Libray;
+    using Common.Libray.Collection;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
@@ -136,15 +137,17 @@
 
             try
             {
+                bool hasCard = false;
                 foreach (string cardUrl in urls)
                 {
                     if (IsStopping)
                         break;
                     DownloadManager.GetCardInfo(cardUrl, editionId);
+                    hasCard = true;
                     setDownloadReporter.Progress();
                     DownloadReporter.Progress();
                 }
-                if (!IsStopping)
+                if (!IsStopping && hasCard)
                     DownloadManager.EditionCompleted(editionId);
             }
             catch (Exception ex)

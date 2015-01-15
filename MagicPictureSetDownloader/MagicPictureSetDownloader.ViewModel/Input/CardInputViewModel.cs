@@ -7,6 +7,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using System.Linq;
     using System.Windows.Input;
 
+    using Common.Libray.Collection;
     using Common.Libray.Notify;
     using Common.ViewModel;
 
@@ -40,9 +41,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
         private readonly ICardAllDbInfo[] _allCardInfos;
-        private IList<ICard> _cards;
-        private IList<ILanguage> _languages;
-        private IList<IEdition> _editions;
 
         public CardInputViewModel(string name)
         {
@@ -57,55 +55,21 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             SelectCardCollection(name);
 
             _allCards = _allCardInfos.GetAllCardOrdered().ToArray();
-            Cards = new ObservableCollection<ICard>();
+            Cards = new RangeObservableCollection<ICard>();
 
             _allEditions = _magicDatabase.GetAllEditionsOrdered();
-            Editions = new ObservableCollection<IEdition>();
+            Editions = new RangeObservableCollection<IEdition>();
 
-            Languages = new ObservableCollection<ILanguage>();
+            Languages = new RangeObservableCollection<ILanguage>();
 
             InitWindow();
         }
         public ICommand AddCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
         public ICommand ChangeCollectionCommand { get; private set; }
-        public IList<IEdition> Editions
-        {
-            get { return _editions; }
-            private set
-            {
-                if (value != _editions)
-                {
-                    _editions = value;
-                    OnNotifyPropertyChanged(() => Editions);
-                }
-            }
-        }
-        public IList<ILanguage> Languages
-        {
-            get { return _languages; }
-            private set
-            {
-                if (value != _languages)
-                {
-                    _languages = value;
-                    OnNotifyPropertyChanged(() => Languages);
-                }
-            }
-
-        }
-        public IList<ICard> Cards
-        {
-            get { return _cards; }
-            private set
-            {
-                if (value != _cards)
-                {
-                    _cards = value;
-                    OnNotifyPropertyChanged(() => Cards);
-                }
-            }
-        }
+        public RangeObservableCollection<IEdition> Editions { get; private set; }
+        public RangeObservableCollection<ILanguage> Languages { get; private set; }
+        public RangeObservableCollection<ICard> Cards { get; private set; }
 
         public ILanguage LanguageSelected
         {
@@ -258,14 +222,9 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             {
                 case InputMode.ByCard:
                     {
-                        IList<ICard> temp = Cards;
-                        Cards = null;
-                        temp.Clear();
+                        Cards.Clear();
+                        Cards.AddRange(_allCards);
 
-                        foreach (ICard card in _allCards)
-                            temp.Add(card);
-
-                        Cards = temp;
                         Editions.Clear();
                         EditionSelected = null;
                         CardSelected = null;
@@ -278,14 +237,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         Cards.Clear();
 
                         IEdition save = EditionSelected;
-                        IList<IEdition> temp = Editions;
-                        Editions = null;
-                        temp.Clear();
-
-                        foreach (IEdition editions in _allEditions)
-                            temp.Add(editions);
-
-                        Editions = temp;
+                        Editions.Clear();
+                        Editions.AddRange(_allEditions);
 
                         CardSelected = null;
                         EditionSelected = save;

@@ -13,15 +13,15 @@
           
             
             <!--Converter -->
-            <converter:ModeToRowConverter x:Key="m2rConv" />
+            <converter:InputModeToGridRowConverter x:Key="m2rConv" />
             <converter:CardToImageConverter x:Key="c2iConv" />
             <converter:CardToStatisticsConverter x:Key="c2sConv" />
             <converter:CardToStatisticsVisibleConverter x:Key="c2vConv" />
-            <converter:CardToAngleConverter x:Key="c2aConv" />
-            <converter:TreeToImageConverter x:Key="t2iConv" />
-            <converter:BoolToImageConverter x:Key="b2iConv" />
+            <converter:CardToRotationAngleConverter x:Key="c2aConv" />
+            <converter:TreeToTreeImageConverter x:Key="t2iConv" />
+            <converter:BoolToOrderImageConverter x:Key="b2iConv" />
             <converter:BitmapToImageConverter x:Key="bm2iConv" />
-            <converter:StringToImageConverter x:Key="s2iConv" />
+            <converter:StringToCastingCostImageConverter x:Key="s2iConv" />
             <converter:TextToInlinesConverter x:Key="t2inConv" />
 
             <!-- Style  -->
