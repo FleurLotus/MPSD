@@ -16,7 +16,7 @@ namespace MagicPictureSetDownloader.Converter
     [ValueConversion(typeof(string), typeof(List<Inline>))]
     public class TextToInlinesConverter : NoConvertBackConverter
     {
-        private static readonly StringToImageConverter _conv = new StringToImageConverter();
+        private static readonly StringToCastingCostImageConverter _conv = new StringToCastingCostImageConverter();
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

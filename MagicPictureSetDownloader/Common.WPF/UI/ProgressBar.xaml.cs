@@ -5,7 +5,6 @@ namespace Common.WPF.UI
     using System.Text;
     using System.Timers;
     using System.Windows;
-    using System.Windows.Threading;
 
     public partial class ProgressBar
     {

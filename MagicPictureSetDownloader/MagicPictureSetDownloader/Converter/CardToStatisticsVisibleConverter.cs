@@ -19,7 +19,7 @@ namespace MagicPictureSetDownloader.Converter
             if (node == null)
                 return Visibility.Collapsed;
 
-            return node.Card.Statistics.Length>0? Visibility.Visible : Visibility.Collapsed;
+            return node.Card.Statistics.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

@@ -38,11 +38,17 @@
     <Compile Include="..\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="Collection\AsyncObservableCollection.cs" />
+    <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
+    <Compile Include="Collection\RangeObservableCollection.cs" />
     <Compile Include="Exception\HandlerNotKnownException.cs" />
     <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
     <Compile Include="Notify\EventDispatcher.cs" />
     <Compile Include="Notify\IEventDispatcher.cs" />
     <Compile Include="Notify\EventHandlers.cs" />
+    <Compile Include="Threading\Flag.cs" />
+    <Compile Include="Threading\FlagCount.cs" />
+    <Compile Include="Threading\FlagExtension.cs" />
     <Compile Include="Threading\WriterLock.cs" />
     <Compile Include="Threading\ReaderLock.cs" />
     <Compile Include="HashHelper.cs" />

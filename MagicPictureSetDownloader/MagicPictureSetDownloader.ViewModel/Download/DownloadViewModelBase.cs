@@ -84,6 +84,7 @@
             {
                 IsStopping = true;
                 FinishedStopping.WaitOne();
+                FinishedStopping.Dispose();
             }
             _disposed = true;
         }

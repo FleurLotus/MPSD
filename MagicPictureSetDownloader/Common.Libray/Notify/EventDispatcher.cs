@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading;
 
-    public class EventDispatcher : IEventDispatcher, IDisposable
+    public sealed class EventDispatcher : IEventDispatcher, IDisposable
     {
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         private readonly Queue<Action> _queue = new Queue<Action>();
