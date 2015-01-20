@@ -10,6 +10,7 @@
 
         public string SchemaName { get; set; }
         public string Name { get; set; }
+        public CaseSensitivity CaseSensitivity { get; internal set; }
 
         public IColumn[] Columns()
         {
@@ -20,7 +21,7 @@
             if (column == null)
                 throw new ArgumentNullException("column");
 
-            if (column.TableName != Name || column.SchemaName != SchemaName)
+            if (TableKey(column.SchemaName, column.TableName, column.CaseSensitivity) != ToString())
                 throw new ArgumentException("Column doesn't belong to table", "column");
 
             _columns.Add(column);
@@ -28,7 +29,7 @@
         }
         public IColumn GetColumn(string name)
         {
-            return _columns.FirstOrDefault(c => c.Name == name);
+            return _columns.FirstOrDefault(c => c.CaseSensitivity.ToKeyString(c.Name) == c.CaseSensitivity.ToKeyString(name));
         }
         public bool HasColumn(string name)
         {
@@ -37,11 +38,11 @@
 
         public override string ToString()
         {
-            return TableKey( SchemaName, Name);
+            return TableKey(SchemaName, Name, CaseSensitivity);
         }
-        public static string TableKey(string schemaName, string name)
+        public static string TableKey(string schemaName, string name, CaseSensitivity caseSensitivity)
         {
-            return string.IsNullOrEmpty(schemaName) ? name : string.Format("{0}.{1}", schemaName,name);
+            return caseSensitivity.ToKeyString(string.IsNullOrEmpty(schemaName) ? name : string.Format("{0}.{1}", schemaName, name));
         }
     }
 }

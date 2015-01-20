@@ -12,10 +12,12 @@
     public class Repository
     {
         //TODO: Constrainsts, Keys, Views ...
-        //TODO: case sensitive or not?
-        private const string ColumnQuery = @"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, AUTOINC_INCREMENT, AUTOINC_SEED, COLUMN_HASDEFAULT, COLUMN_DEFAULT, COLUMN_FLAGS, NUMERIC_SCALE, TABLE_NAME, AUTOINC_NEXT, TABLE_SCHEMA, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS ORDER BY TABLE_SCHEMA ASC, TABLE_NAME ASC, ORDINAL_POSITION ASC";
-        private const string TableQuery = @" SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
 
+        private const string ColumnQuery = @"SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, AUTOINC_INCREMENT, AUTOINC_SEED, COLUMN_HASDEFAULT, COLUMN_DEFAULT, COLUMN_FLAGS, NUMERIC_SCALE, TABLE_NAME, AUTOINC_NEXT, TABLE_SCHEMA, ORDINAL_POSITION FROM INFORMATION_SCHEMA.COLUMNS ORDER BY TABLE_SCHEMA ASC, TABLE_NAME ASC, ORDINAL_POSITION ASC";
+        private const string TableQuery = @"SELECT TABLE_SCHEMA, TABLE_NAME FROM INFORMATION_SCHEMA.TABLES";
+        private const string CaseSensitivityTestQuery = @"SELECT 'AAAA' UNION SELECT 'aaaa'";
+
+        private CaseSensitivity _isCaseSensitive;
         private readonly string _connectionString;
         private readonly IDictionary<string, Table> _tables;
 
@@ -57,7 +59,7 @@
         }
         public ITable GetTable(string schemaName, string name)
         {
-            string tablekey = Table.TableKey(schemaName, name);
+            string tablekey = Table.TableKey(schemaName, name, _isCaseSensitive);
 
             Table table;
             _tables.TryGetValue(tablekey, out table);
@@ -126,6 +128,8 @@
             {
                 cnx.Open();
 
+                _isCaseSensitive = new CaseSensitivity(GetFromQuery(cnx, CaseSensitivityTestQuery, r => 1).Count() == 2);
+
                 _tables.Clear();
                 foreach (Table table in GetFromQuery(cnx, TableQuery, CreateTable))
                 {
@@ -133,7 +137,7 @@
                 }
                 foreach (Column column in GetFromQuery(cnx, ColumnQuery, CreateColumn))
                 {
-                    string tablekey = Table.TableKey(column.SchemaName, column.TableName);
+                    string tablekey = Table.TableKey(column.SchemaName, column.TableName, _isCaseSensitive);
                     Table table = _tables[tablekey];
                     table.AddColumn(column);
                 }
@@ -200,6 +204,7 @@
                            AutoIncrementNext = dr.GetInt64OrDefault(12),
                            SchemaName = dr.GetStringOrDefault(13),
                            Position = dr.GetInt32OrDefault(14),
+                           CaseSensitivity = _isCaseSensitive,
                        };
         }
         private Table CreateTable(IDataRecord dr)
@@ -208,6 +213,7 @@
                        {
                            SchemaName = dr.GetStringOrDefault(0),
                            Name = dr.GetStringOrDefault(1),
+                           CaseSensitivity = _isCaseSensitive,
                        };
         }
     }
