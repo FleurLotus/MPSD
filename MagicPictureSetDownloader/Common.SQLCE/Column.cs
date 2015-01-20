@@ -22,6 +22,7 @@
         public bool RowGuidCol { get; set; }
         public int Width { get; set; }
         public bool PadLeft { get; set; }
+        public CaseSensitivity CaseSensitivity { get; internal set; }
         public string ShortType
         {
             get

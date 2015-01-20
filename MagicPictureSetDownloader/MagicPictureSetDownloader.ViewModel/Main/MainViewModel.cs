@@ -14,7 +14,6 @@
 
     public partial class MainViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
     {
-  
         private const string MagicCards = "Magic Cards";
 
         private bool _showFilterConfig;
@@ -25,8 +24,6 @@
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
         private HierarchicalViewModel _hierarchical;
         
-
-        //TODO: Test delete with card in collection + same with move 
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
