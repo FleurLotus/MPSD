@@ -90,8 +90,8 @@
         </GroupBox>
         
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Update" IsDefault="True" Command="{Binding UpdateCommand}" Style="{StaticResource BottomButton}"/>
-            <Button Content="Close" IsCancel="True" Command="{Binding CloseCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Update" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Close" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
         </StackPanel>
     </Grid>
 </Window>

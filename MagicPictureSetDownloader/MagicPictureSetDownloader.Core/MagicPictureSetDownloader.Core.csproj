@@ -64,7 +64,7 @@
     <Compile Include="IO\ImportExportFormatterFactory.cs" />
     <Compile Include="IO\ImportExportWorker.cs" />
     <Compile Include="IO\MpsdFormatter.cs" />
-    <Compile Include="HierarchicalAnalysing\MagicRules.cs" />
+    <Compile Include="MagicRules.cs" />
     <Compile Include="Parser\CardLanguageParser.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />

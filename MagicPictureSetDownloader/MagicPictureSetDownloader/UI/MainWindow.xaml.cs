@@ -50,5 +50,10 @@
         {
             new CardUpdateWindow(args.Data) { Owner = this }.ShowDialog();
         }
+        public void Search(object sender, EventArgs<SearchViewModel> args)
+        {
+            new SearchWindow(args.Data) { Owner = this }.ShowDialog();
+        }
+
     }
 }

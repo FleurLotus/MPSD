@@ -174,6 +174,16 @@ namespace MagicPictureSetDownloader.Db
                 return _translates.GetOrDefault(key);
             }
         }
+        public IList<ITranslate> GetTranslates(ICard card)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _languages.Values.Select(l => GetTranslate(card, l.Id))
+                                        .Where(t => t != null)
+                                        .ToList();
+            }
+        }
         
         //Ensembly Get 
         public ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1)
@@ -205,7 +215,7 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
                     cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
                     cardAllDbInfo.IdGathererPart2 = -1;
-                    cardAllDbInfo.Statistics = GetCardCollectionStatistics(card);
+                    cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
 
                     //For Multipart card
                     if (card.IsMultiPart)

@@ -13,11 +13,11 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
         {
             _analyser = new Dictionary<string, IHierarchicalInfoAnalyser>
                             {
-                                { "Color", new HierarchicalInfoAnalyser(MagicRules.GetColor) },
-                                { "CastingCost", new HierarchicalInfoAnalyser(MagicRules.GetConvertedCastCost) },
-                                { "Type", new HierarchicalInfoAnalyser(MagicRules.GetCardType) },
-                                { "Edition", new HierarchicalInfoAnalyser(MagicRules.GetEdition) },
-                                { "Rarity", new HierarchicalInfoAnalyser(MagicRules.GetRarity) }
+                                { "Color", new HierarchicalInfoAnalyser(GetColor) },
+                                { "CastingCost", new HierarchicalInfoAnalyser(GetConvertedCastCost) },
+                                { "Type", new HierarchicalInfoAnalyser(GetCardType) },
+                                { "Edition", new HierarchicalInfoAnalyser(GetEdition) },
+                                { "Rarity", new HierarchicalInfoAnalyser(GetRarity) }
                             };
         }
 
@@ -39,5 +39,25 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
             return _analyser[name];
         }
 
+        private static IComparable GetEdition(ICardInfo card)
+        {
+            return card.Edition.Name;
+        }
+        private static IComparable GetRarity(ICardInfo card)
+        {
+            return card.Rarity;
+        }
+        private static IComparable GetColor(ICardInfo card)
+        {
+            return MagicRules.GetDisplayColor(card.CastingCost);
+        }
+        private static IComparable GetConvertedCastCost(ICardInfo card)
+        {
+            return MagicRules.GetConvertedCastCost(card.CastingCost);
+        }
+        private static IComparable GetCardType(ICardInfo card)
+        {
+            return MagicRules.GetDisplayCardType(card.Type);
+        }
     }
 }

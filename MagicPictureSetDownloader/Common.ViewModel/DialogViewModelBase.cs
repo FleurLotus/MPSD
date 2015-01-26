@@ -15,7 +15,7 @@
 
         public ICommand OkCommand { get; private set; }
         public ICommand CancelCommand { get; private set; }
-        public bool? Result { get; private set; }
+        public bool? Result { get; protected set; }
 
         private void OkCommandExecute(object o)
         {

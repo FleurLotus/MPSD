@@ -115,5 +115,38 @@ GO";
 ALTER TABLE [Translate] ALTER COLUMN [Name] nvarchar(150) NOT NULL
 GO";
         #endregion
+
+        #region NewBlock
+        internal const string NewBlock =
+            @"
+UPDATE [Block] SET [Name] = 'Fun' WHERE [Id] = -6
+GO
+SET IDENTITY_INSERT [Block] ON;
+GO
+INSERT INTO [Block] ([Id],[Name]) VALUES (-8,N'Others');
+GO
+INSERT INTO [Block] ([Id],[Name]) VALUES (-7,N'Commander');
+GO
+SET IDENTITY_INSERT [Block] OFF;
+GO
+UPDATE [Edition]
+SET [IdBlock] = -7 
+WHERE [IdBlock] = -6 AND [Name] LIKE 'Commander%'
+GO
+UPDATE [Edition]
+SET [IdBlock] = -8 
+WHERE [IdBlock] = -6 AND [Name] != 'Unglued' AND [Name] != 'Unhinged' 
+GO";
+        #endregion
+
+        #region Unhinge Little girl
+        internal const string UpdateLittleGirl =
+            @"
+UPDATE [Card]
+SET [Power] = '0.5', [Toughness] = '0.5', [CastingCost] = '@HW'
+WHERE [Name] = 'Little Girl'
+GO";
+
+        #endregion
     }
 }

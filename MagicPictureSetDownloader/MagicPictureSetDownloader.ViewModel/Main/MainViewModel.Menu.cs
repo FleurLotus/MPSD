@@ -23,9 +23,11 @@
         public event EventHandler<EventArgs<CardInputViewModel>>  AddCardWanted;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<CardUpdateViewModel>> UpdateCardWanted;
+        public event EventHandler<EventArgs<SearchViewModel>> Search;
 
         private readonly MenuViewModel _menuRoot;
         private readonly MenuViewModel _contextMenuRoot;
+        private SearchViewModel _searchViewModel;
         
         private MenuViewModel _showPictureViewModel;
         private MenuViewModel _showStatisticsViewModel;
@@ -97,6 +99,12 @@
             var e = UpdateCardWanted;
             if (e != null && vm != null)
                 e(this, new EventArgs<CardUpdateViewModel>(vm));
+        }
+        private void OnSearch(SearchViewModel vm)
+        {
+            var e = Search;
+            if (e != null && vm != null)
+                e(this, new EventArgs<SearchViewModel>(vm));
         }
         #endregion
 
@@ -229,6 +237,21 @@
                 LoadCardsHierarchy();
             }
         }
+        private void SearchCommandExecute(object o)
+        {
+            if (_searchViewModel == null)
+                _searchViewModel = new SearchViewModel();
+            else
+                _searchViewModel.Reuse();
+
+            OnSearch(_searchViewModel);
+
+            if (_searchViewModel.Result.HasValue && _searchViewModel.Result.Value)
+            {
+                CreateSearchResult(_searchViewModel);
+                LoadCardsHierarchyAsync();
+            }
+        }
 
         #endregion
 
@@ -237,7 +260,9 @@
             MenuViewModel fileMenu = new MenuViewModel("_File");
             fileMenu.AddChild(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Image Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
-            fileMenu.AddChild(MenuViewModel.Separator);
+            fileMenu.AddChild(MenuViewModel.Separator());
+            fileMenu.AddChild(new MenuViewModel("Search...", new RelayCommand(SearchCommandExecute)));
+            fileMenu.AddChild(MenuViewModel.Separator());
             fileMenu.AddChild(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
             MenuRoot.AddChild(fileMenu);
 
@@ -272,7 +297,7 @@
         private void GenerateContextMenu()
         {
             ContextMenuRoot.RemoveAllChildren();
-            if (Hierarchical == null || Hierarchical == _allhierarchical)
+            if (Hierarchical == null || Hierarchical == _allhierarchical || Hierarchical == _searchHierarchical)
                 return;
 
             ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
@@ -296,16 +321,16 @@
             {
                 _collectionViewModel.AddChild(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
                 _collectionViewModel.AddChild(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
-                _collectionViewModel.AddChild(MenuViewModel.Separator);
+                _collectionViewModel.AddChild(MenuViewModel.Separator());
                 _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             }
 
-            _collectionViewModel.AddChild(MenuViewModel.Separator);
+            _collectionViewModel.AddChild(MenuViewModel.Separator());
             _collectionViewModel.AddChild(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));
 
             if (hasCollection)
             {
-                _collectionViewModel.AddChild(MenuViewModel.Separator);
+                _collectionViewModel.AddChild(MenuViewModel.Separator());
                 cardCollections.Sort((c1, c2) => string.Compare(c1.Name, c2.Name, StringComparison.Ordinal));
                 foreach (ICardCollection cardCollection in cardCollections)
                 {

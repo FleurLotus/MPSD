@@ -1,9 +1,7 @@
 ﻿
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
-    using System;
     using System.Linq;
-    using System.Windows.Input;
 
     using Common.ViewModel;
 
@@ -12,9 +10,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using MagicPictureSetDownloader.Interface;
 
 
-    public class CardUpdateViewModel : NotifyPropertyChangedBase
+    public class CardUpdateViewModel : DialogViewModelBase
     {
-        public event EventHandler Closing;
 
         private ICardCollection _destinationCardCollectionSelected;
         private readonly ICardCollection[] _collections;
@@ -40,8 +37,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             Card = card;
 
             ForMoving = forMoving;
-            UpdateCommand = new RelayCommand(UpdateCommandExecute, UpdateCommandCanExecute);
-            CloseCommand = new RelayCommand(CloseCommandExecute);
 
             _magicDatabase = MagicDatabaseManager.ReadOnly;
 
@@ -72,9 +67,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     DestinationCardCollectionSelected = _collections[0];
             }
         }
-        public ICommand UpdateCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
-        public bool? Result { get; private set; }
         public bool ForMoving { get; private set; }
         public ICard Card { get; private set; }
         public IEdition[] SourceEditions
@@ -264,17 +256,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             int idGatherer = _magicDatabase.GetIdGatherer(Card, DestinationEditionSelected);
             DestinationLanguages = _magicDatabase.GetLanguages(idGatherer).ToArray();
         }
-        private void UpdateCommandExecute(object o)
-        {
-            Result = true;
-            OnClosing();
-        }
-        private void CloseCommandExecute(object o)
-        {
-            Result = false;
-            OnClosing();
-        }
-        private bool UpdateCommandCanExecute(object o)
+        protected override bool OkCommandCanExecute(object o)
         {
             if (Count <= 0 || Count > MaxCount || SourceEditionSelected == null)
                 return false;
@@ -285,12 +267,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             return DestinationEditionSelected != null && DestinationLanguageSelected!= null && 
                    (DestinationLanguageSelected != SourceLanguageSelected || DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil) && 
                    (DestinationEditionSelected.HasFoil || !DestinationIsFoil);
-        }
-        private void OnClosing()
-        {
-            var e = Closing;
-            if (e != null)
-                e(this, EventArgs.Empty);
         }
     }
 }

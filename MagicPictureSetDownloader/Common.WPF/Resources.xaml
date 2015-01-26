@@ -17,7 +17,13 @@
         <converter:EnumMatchToBooleanConverter/>
         <BooleanToVisibilityConverter/>
     </converter:AggregateConverter>
-    
+
+    <converter:AggregateConverter x:Key="be2vConv">
+        <converter:EnumMatchToBooleanConverter/>
+        <converter:BoolInvertConverter/>
+        <BooleanToVisibilityConverter/>
+    </converter:AggregateConverter>
+
     <converter:AggregateConverter x:Key="no2bConv">
         <converter:ObjectNullToBoolConverter/>
         <converter:BoolInvertConverter/>

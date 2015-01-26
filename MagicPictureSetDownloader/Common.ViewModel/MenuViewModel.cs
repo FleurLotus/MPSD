@@ -8,8 +8,11 @@
         private bool _isCheckable;
         private bool _isChecked;
         private readonly List<MenuViewModel> _children;
-        
-        public static MenuViewModel Separator = new MenuViewModel(null) { IsSeparator = true };
+
+        public static MenuViewModel Separator()
+        {
+            return new MenuViewModel(null) { IsSeparator = true };
+        }
 
         public MenuViewModel()
             : this(null)

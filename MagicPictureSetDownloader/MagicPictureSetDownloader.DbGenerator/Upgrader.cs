@@ -73,7 +73,7 @@
         }
         private void ExecuteUpgradeCommandsForData(Repository repo, int version)
         {
-            if (version < 2)
+            if (version <= 2)
             {
                 //Update queries
                 if (!repo.TableExists("Language"))
@@ -88,9 +88,9 @@
                 repo.ExecuteBatch(UpdateQueries.UpdateAlaraBlockReleaseDateQuery);
                 repo.ExecuteBatch(UpdateQueries.RemoveCompleteSetQuery);
             }
-            if (version < 3)
+            if (version <= 3)
             {
-                if (!repo.RowExists(null, "Rarity", new[] { "Name" }, new[] { "Promo" }))
+                if (!repo.RowExists(null, "Rarity", new[] { "Name" }, new object[] { "Promo" }))
                     repo.ExecuteBatch(UpdateQueries.InsertPromoRarity);
 
                 if (repo.ColumnExists("Card", "CastingCost") && repo.GetTable("Card").GetColumn("CastingCost").CharacterMaxLength < 100)
@@ -102,14 +102,22 @@
                 if (repo.ColumnExists("Translate", "Name") && repo.GetTable("Translate").GetColumn("Name").CharacterMaxLength < 150)
                     repo.ExecuteBatch(UpdateQueries.ExtendTranslateNameLength);
 
+                if (repo.RowExists(null, "Block", new[] { "Name", "Id" }, new object[] { "Others", -6 }))
+                    repo.ExecuteBatch(UpdateQueries.NewBlock);
+
+                if (repo.RowExists(null, "Card", new[] { "Name", "CastingCost" }, new object[] { "Little Girl", "@500" }))
+                    repo.ExecuteBatch(UpdateQueries.UpdateLittleGirl);
+
             }
         }
         private void ExecuteUpgradeCommandsForPicture(Repository repo, int version)
         {
-            if (version < 2)
+            /*
+            if (version <= 2)
             {
                 //Update queries
             }
+            */
         }
     }
 }

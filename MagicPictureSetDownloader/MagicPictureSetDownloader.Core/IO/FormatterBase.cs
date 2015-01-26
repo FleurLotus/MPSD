@@ -26,7 +26,7 @@ namespace MagicPictureSetDownloader.Core.IO
         protected abstract string ToLine(IImportExportCardCount cardCount);
         public abstract bool IsMatchingPattern(string line);
 
-        public IImportExportCardCount[] Parse(string input)
+        public IEnumerable<IImportExportCardCount> Parse(string input)
         {
             IDictionary<int, ImportExportCardInfo> ret = new Dictionary<int, ImportExportCardInfo>();
             IEnumerable<IImportExportCardCount> enumerable = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(ParseLine);
@@ -53,7 +53,7 @@ namespace MagicPictureSetDownloader.Core.IO
                 }
             }
 
-            return ret.Values.Cast<IImportExportCardCount>().ToArray();
+            return ret.Values.Cast<IImportExportCardCount>();
 
         }
         public string ToFile(IEnumerable<IImportExportCardCount> cardCount)

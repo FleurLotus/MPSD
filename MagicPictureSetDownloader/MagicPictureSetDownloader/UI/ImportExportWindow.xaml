@@ -7,10 +7,8 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-        xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
         d:DataContext="{d:DesignInstance Type=io:ImportExportViewModel, IsDesignTimeCreatable=False}"
-        mc:Ignorable="d" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner"
-        Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow"
         >
     <Window.Resources>
         <ResourceDictionary>
