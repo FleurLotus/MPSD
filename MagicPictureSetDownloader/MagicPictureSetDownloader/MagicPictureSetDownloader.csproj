@@ -90,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\SearchWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\CardUpdateWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -135,6 +139,9 @@
     <Compile Include="Converter\StringToCastingCostImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\TreeToTreeImageConverter.cs" />
+    <Compile Include="UI\SearchWindow.xaml.cs">
+      <DependentUpon>SearchWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\CardUpdateWindow.xaml.cs">
       <DependentUpon>CardUpdateWindow.xaml</DependentUpon>
     </Compile>

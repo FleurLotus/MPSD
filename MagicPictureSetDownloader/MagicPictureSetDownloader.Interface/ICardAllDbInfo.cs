@@ -10,6 +10,6 @@
         int IdGatherer { get; }
         ICard CardPart2 { get; }
         int IdGathererPart2 { get; }
-        ICollection<ICardInCollectionCount> Statistics { get; }
+        IEnumerable<ICardInCollectionCount> Statistics { get; }
     }
 }

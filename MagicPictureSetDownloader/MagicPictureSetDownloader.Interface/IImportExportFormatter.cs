@@ -8,7 +8,7 @@ namespace MagicPictureSetDownloader.Interface
         bool IsMatchingPattern(string line);
         ExportFormat Format { get; }
         string Extension { get; }
-        IImportExportCardCount[] Parse(string input);
+        IEnumerable<IImportExportCardCount> Parse(string input);
         string ToFile(IEnumerable<IImportExportCardCount> cardCount);
     }
 }

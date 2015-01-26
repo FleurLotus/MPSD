@@ -47,11 +47,15 @@
     <Compile Include="Download\DownloadImageViewModel.cs" />
     <Compile Include="Download\DownloadViewModelBase.cs" />
     <Compile Include="Download\EditionInfosViewModel.cs" />
+    <Compile Include="Input\SearchViewModel.cs" />
     <Compile Include="Input\CardUpdateViewModel.cs" />
     <Compile Include="Input\CardInputViewModel.cs" />
     <Compile Include="IO\ExportedCollectionViewModel.cs" />
     <Compile Include="IO\ImportExportViewModel.cs" />
     <Compile Include="Main\MainViewModel.Menu.cs">
+      <DependentUpon>MainViewModel.cs</DependentUpon>
+    </Compile>
+	    <Compile Include="Main\MainViewModel.CollectionDisplay.cs">
       <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Main\CardViewModel.cs" />

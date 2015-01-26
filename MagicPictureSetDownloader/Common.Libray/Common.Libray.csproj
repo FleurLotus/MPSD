@@ -41,6 +41,7 @@
     <Compile Include="Collection\AsyncObservableCollection.cs" />
     <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
     <Compile Include="Collection\RangeObservableCollection.cs" />
+    <Compile Include="Enums\Matcher.cs" />
     <Compile Include="Exception\HandlerNotKnownException.cs" />
     <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
     <Compile Include="Notify\EventDispatcher.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="IDispatcherInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

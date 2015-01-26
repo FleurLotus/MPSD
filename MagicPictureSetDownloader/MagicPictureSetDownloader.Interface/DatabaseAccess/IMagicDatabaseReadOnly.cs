@@ -28,6 +28,7 @@
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage);
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
         ITranslate GetTranslate(ICard card, int idLanguage);
+        IList<ITranslate> GetTranslates(ICard card);
         string[] GetMissingPictureUrls();
     }
 }

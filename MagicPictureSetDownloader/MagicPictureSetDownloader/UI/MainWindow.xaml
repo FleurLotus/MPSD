@@ -61,6 +61,9 @@
         <i:EventTrigger EventName="UpdateCardWanted" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="UpdateCardWanted" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="Search" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="Search" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <Grid>
@@ -88,7 +91,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="7*"/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >

@@ -129,13 +129,13 @@
                 Rarity = infos.GetOrDefault(RarityKey)
             };
 
-            if (IsCreature(cardWithExtraInfo.Type))
+            if (MagicRules.IsCreature(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
                 cardWithExtraInfo.Power = GetPower(htmlTrim);
                 cardWithExtraInfo.Toughness = GetToughness(htmlTrim);
             }
-            if (IsPlaneswalker(cardWithExtraInfo.Type))
+            if (MagicRules.IsPlaneswalker(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
                 //Possible see CheckInfos for more info
@@ -181,7 +181,7 @@
             string type = infos.GetOrDefault(TypeKey);
             string castingcost = infos.GetOrDefault(ManaCostKey);
             //Add check on casting cost because of second face of Garruk, the Veil-Cursed which has no loyalty counter
-            if ((IsCreature(type) || IsPlaneswalker(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
+            if ((MagicRules.IsCreature(type) || MagicRules.IsPlaneswalker(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
                 throw new ParserException("No PT/Loyalty found");
         }
         private string GetPower(string text)
@@ -191,14 +191,6 @@
         private string GetToughness(string text)
         {
             return text.Split('/')[1].HtmlTrim();
-        }
-        private bool IsCreature(string type)
-        {
-            return type.ToLowerInvariant().Contains("creature") && !type.ToLowerInvariant().Contains("enchant creature");
-        }
-        private bool IsPlaneswalker(string type)
-        {
-            return type.ToLowerInvariant().Contains("planeswalker");
         }
         private string SpecialXMLCorrection(string text)
         {
