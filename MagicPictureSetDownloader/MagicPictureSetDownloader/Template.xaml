@@ -3,13 +3,13 @@
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                    xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
                     xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:l="clr-namespace:MagicPictureSetDownloader"
                     xmlns:self="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
                     mc:Ignorable="d"
                     >
 
@@ -76,6 +76,62 @@
             <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
         </Grid>
     </ControlTemplate>
+
+    <ControlTemplate x:Key="StatisticsControlTemplate">
+        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}" 
+                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2svConv}}">
+                <i:Interaction.Behaviors>
+                    <behavior:GridViewColumnResizeBehavior />
+                </i:Interaction.Behaviors>
+
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
+                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
+                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
+                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
+                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="OtherLanguagesControlTemplate">
+        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left" 
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}" 
+                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}">
+                <i:Interaction.Behaviors>
+                    <behavior:GridViewColumnResizeBehavior />
+                </i:Interaction.Behaviors>
+
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Key}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ImageControlTemplate">
+        <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
+                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" 
+                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
+    </ControlTemplate>
     
     <!-- Data Template -->
     <!-- Menu -->
@@ -85,7 +141,7 @@
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
         <TreeView ItemsSource="{Binding Root}">
             <i:Interaction.Behaviors>
-                <wpf:BindableSelectedItemBehavior SelectedItem="{binding:TwoWayBinding Selected}" />
+                <behavior:BindableSelectedItemBehavior SelectedItem="{binding:TwoWayBinding Selected}" />
             </i:Interaction.Behaviors>
             <!-- Keep color when treeview hasn't the focus -->
             <TreeView.Resources>

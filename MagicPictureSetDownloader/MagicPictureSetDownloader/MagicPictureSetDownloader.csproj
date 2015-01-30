@@ -128,6 +128,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\CardToLanguagesTranslationConverter.cs" />
+    <Compile Include="Converter\CardToLanguagesTranslationVisibleConverter.cs" />
     <Compile Include="Converter\CardToStatisticsVisibleConverter.cs" />
     <Compile Include="Converter\CardToStatisticsConverter.cs" />
     <Compile Include="Converter\CardToImageConverter.cs" />

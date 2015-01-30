@@ -6,6 +6,7 @@
 
     using Common.ViewModel;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -26,7 +27,7 @@
             Name = gathererName;
             HasFoil = true;
             _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
-            Blocks = _magicDatabase.GetAllBlocks().ToArray();
+            Blocks = _magicDatabase.GetAllBlocks().Ordered().ToArray();
             ResetBlockCommand = new RelayCommand(ResetBlockExecute);
         }
 

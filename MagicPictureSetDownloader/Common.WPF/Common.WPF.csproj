@@ -46,7 +46,8 @@
       <Link>Properties\Copyright.cs</Link>
     </Compile>
     <Compile Include="Binding\TwoWayBinding.cs" />
-    <Compile Include="BindableSelectedItemBehavior.cs" />
+    <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
+    <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />
     <Compile Include="Converter\NoConvertBackConverter.cs" />
     <Compile Include="FocusBehavior.cs" />
     <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />

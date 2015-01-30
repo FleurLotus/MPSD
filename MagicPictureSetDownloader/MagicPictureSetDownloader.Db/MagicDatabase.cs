@@ -27,6 +27,7 @@ namespace MagicPictureSetDownloader.Db
 
         private readonly IList<IEdition> _editions = new List<IEdition>();
         private readonly IDictionary<string, ILanguage> _languages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, ILanguage> _alternativeNameLanguages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, ITranslate> _translates = new Dictionary<int, ITranslate>();
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
@@ -151,7 +152,7 @@ namespace MagicPictureSetDownloader.Db
                     return null;
 
                 IList<ILanguage> languages = new List<ILanguage> { GetLanguage(Constants.Unknown) };
-                foreach ( ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && GetTranslate(card, l.Id) != null))
+                foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && GetTranslate(card, l.Id) != null))
                     languages.Add(language);
                 return languages;
             }
@@ -268,15 +269,21 @@ namespace MagicPictureSetDownloader.Db
         }
         private int GetLanguageId(string language)
         {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-                return _languages[language].Id;
+            return GetLanguage(language).Id;
         }
         private ILanguage GetLanguage(string language)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
-                return _languages[language];
+            {
+                ILanguage lang;
+                if (_languages.TryGetValue(language, out lang) && lang != null)
+                    return lang;
+
+                if (_alternativeNameLanguages.TryGetValue(language, out lang) && lang != null)
+                    return lang;
+                return null;
+            }
         }
 
         public ICollection<IEdition> AllEditions()
@@ -547,6 +554,7 @@ namespace MagicPictureSetDownloader.Db
                 _blocks.Clear();
                 _editions.Clear();
                 _languages.Clear();
+                _alternativeNameLanguages.Clear();
                 _translates.Clear();
                 _cards.Clear();
                 _cardEditions.Clear();
@@ -650,7 +658,8 @@ namespace MagicPictureSetDownloader.Db
             {
                 foreach (string name in language.AlternativeName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    _languages.Add(name, language);
+                    if (!_languages.ContainsKey(name) && !_alternativeNameLanguages.ContainsKey(name))
+                        _alternativeNameLanguages.Add(name, language);
                 }
             }
         }

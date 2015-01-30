@@ -43,6 +43,10 @@ namespace MagicPictureSetDownloader.Core
         {
             return cards.OrderBy(c => c.ToString());
         }
+        public static IEnumerable<IBlock> Ordered(this IEnumerable<IBlock> blocks)
+        {
+            return blocks.OrderByDescending(c => c.Id);
+        }
 
     }
 }

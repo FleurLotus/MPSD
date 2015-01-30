@@ -31,6 +31,7 @@
         
         private MenuViewModel _showPictureViewModel;
         private MenuViewModel _showStatisticsViewModel;
+        private MenuViewModel _showOtherLanguagesViewModel;
         private MenuViewModel _collectionViewModel;
 
         public MenuViewModel MenuRoot
@@ -48,6 +49,10 @@
         public bool ShowStatistics
         {
             get { return _showStatisticsViewModel.IsChecked; }
+        }
+        public bool ShowOtherLanguages
+        {
+            get { return _showOtherLanguagesViewModel.IsChecked; }
         }
         
         #region Events
@@ -131,6 +136,11 @@
         {
             OnNotifyPropertyChanged(() => ShowPicture);
             _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowPicture", ShowPicture.ToString());
+        }
+        private void ShowOtherLanguagesCommandExecute(object o)
+        {
+            OnNotifyPropertyChanged(() => ShowOtherLanguages);
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowOtherLanguages", ShowOtherLanguages.ToString());
         }
         private void ShowStatisticsCommandExecute(object o)
         {
@@ -275,6 +285,14 @@
             _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = isShowStatisticsChecked };
             viewMenu.AddChild(_showStatisticsViewModel);
 
+            bool isShowOtherLanguagesChecked = true;
+            option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowOtherLanguages");
+            if (option != null)
+                isShowOtherLanguagesChecked = bool.Parse(option.Value);
+
+            _showOtherLanguagesViewModel = new MenuViewModel("Show _Other Languages", new RelayCommand(ShowOtherLanguagesCommandExecute)) { IsCheckable = true, IsChecked = isShowOtherLanguagesChecked };
+            viewMenu.AddChild(_showOtherLanguagesViewModel);
+
             bool isShowPictureChecked = true;
             option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowPicture");
             if (option != null)
@@ -282,6 +300,8 @@
 
             _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = isShowPictureChecked };
             viewMenu.AddChild(_showPictureViewModel);
+
+
             MenuRoot.AddChild(viewMenu);
 
             _collectionViewModel = new MenuViewModel("_Collection");

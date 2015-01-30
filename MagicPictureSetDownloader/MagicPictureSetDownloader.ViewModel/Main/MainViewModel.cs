@@ -17,7 +17,6 @@
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
         //TODO: think about automatic add of set icon 
-        //TODO: display language Name
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
