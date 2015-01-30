@@ -12,7 +12,7 @@
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="800" Width="900" Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
+        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -89,9 +89,9 @@
             <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={StaticResource nbConv}}">
                 <!-- Split Tree/Text/Image -->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="10*"/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >
@@ -114,32 +114,14 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
-                        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding ShowStatistics, Converter={StaticResource b2vConv}}">
-                            <ListView ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}" VerticalAlignment="Center" HorizontalAlignment="Left" Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2vConv}}">
-                                <ListView.View>
-                                    <GridView AllowsColumnReorder="False">
-                                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
-                                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
-                                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
-                                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
-                                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Control Margin="10" Visibility="{Binding ShowStatistics, Converter={StaticResource b2vConv}}" Template="{StaticResource StatisticsControlTemplate}" />
+                            <Control Margin="10" Visibility="{Binding ShowOtherLanguages, Converter={StaticResource b2vConv}}" Template="{StaticResource OtherLanguagesControlTemplate}" />
                         </StackPanel>
 
-                        <StackPanel Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="10">
-                            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
-                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
-                            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" 
-                               Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
-                                <Image.RenderTransform>
-                                    <TransformGroup>
-                                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
-                                    </TransformGroup>
-                                </Image.RenderTransform>
-                            </Image>
-                        </StackPanel>
+                        <Control Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"
+                                 Template="{StaticResource ImageControlTemplate}" />
                     </Grid>
                 </Border>
             </Grid>

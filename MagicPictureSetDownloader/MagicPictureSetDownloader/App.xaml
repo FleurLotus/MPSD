@@ -16,7 +16,9 @@
             <converter:InputModeToGridRowConverter x:Key="m2rConv" />
             <converter:CardToImageConverter x:Key="c2iConv" />
             <converter:CardToStatisticsConverter x:Key="c2sConv" />
-            <converter:CardToStatisticsVisibleConverter x:Key="c2vConv" />
+            <converter:CardToStatisticsVisibleConverter x:Key="c2svConv" />
+            <converter:CardToLanguagesTranslationConverter x:Key="c2tConv" />
+            <converter:CardToLanguagesTranslationVisibleConverter x:Key="c2tvConv" />
             <converter:CardToRotationAngleConverter x:Key="c2aConv" />
             <converter:TreeToTreeImageConverter x:Key="t2iConv" />
             <converter:BoolToOrderImageConverter x:Key="b2iConv" />

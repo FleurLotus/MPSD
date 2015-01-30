@@ -13,13 +13,13 @@
         private const string UpdateVersionQuery = "UPDATE Version Set Major = ";
         private readonly string _connectionString;
         private readonly DbType _data;
-        private static readonly int _expectedVersion;
+        private static readonly Version _applicationVersion;
 
         static Upgrader()
         {
             Assembly entryAssembly = Assembly.GetExecutingAssembly();
             AssemblyName assemblyName = entryAssembly.GetName();
-            _expectedVersion = assemblyName.Version.Major;
+            _applicationVersion = assemblyName.Version;
         }
         internal Upgrader(string connectionString, DbType data)
         {
@@ -51,73 +51,41 @@
             }
         }
 
-        private void ExecuteUpgradeCommands(int version)
+        private void ExecuteUpgradeCommands(int dbVersion)
         {
-            if (_expectedVersion < version)
+            if (_applicationVersion.Major < dbVersion)
                 throw new Exception("Db is newer that application");
 
-            if (_expectedVersion == version)
-                return;
+            if (dbVersion < 4)
+                throw new Exception("You have udpated the version!!! There is no released version with this db version");
+
 
             Repository repo = new Repository(_connectionString);
             switch (_data)
             {
                 case DbType.Data:
-                    ExecuteUpgradeCommandsForData(repo, version);
+                    ExecuteUpgradeCommandsForData(repo, dbVersion);
                     break;
                 case DbType.Picture:
-                    ExecuteUpgradeCommandsForPicture(repo, version);
+                    ExecuteUpgradeCommandsForPicture(repo, dbVersion);
                     break;
             }
-            repo.ExecuteBatch(UpdateVersionQuery + _expectedVersion);
         }
-        private void ExecuteUpgradeCommandsForData(Repository repo, int version)
+        private void ExecuteUpgradeCommandsForData(Repository repo, int dbVersion)
         {
-            if (version <= 2)
+            if (dbVersion <= 4)
             {
-                //Update queries
-                if (!repo.TableExists("Language"))
-                    repo.ExecuteBatch(UpdateQueries.CreateLanguageTable);
-
-                if (!repo.TableExists("Translate"))
-                    repo.ExecuteBatch(UpdateQueries.CreateTranslateTable);
-
-                if (!repo.ColumnExists("CardEditionsInCollection", "IdLanguage"))
-                    repo.ExecuteBatch(UpdateQueries.AddColumnLanguageToCardEditionsInCollectionQuery);
-
-                repo.ExecuteBatch(UpdateQueries.UpdateAlaraBlockReleaseDateQuery);
-                repo.ExecuteBatch(UpdateQueries.RemoveCompleteSetQuery);
-            }
-            if (version <= 3)
-            {
-                if (!repo.RowExists(null, "Rarity", new[] { "Name" }, new object[] { "Promo" }))
-                    repo.ExecuteBatch(UpdateQueries.InsertPromoRarity);
-
-                if (repo.ColumnExists("Card", "CastingCost") && repo.GetTable("Card").GetColumn("CastingCost").CharacterMaxLength < 100)
-                    repo.ExecuteBatch(UpdateQueries.ExtendCardCastingCostLength);
-
-                if (repo.ColumnExists("Card", "Name") && repo.GetTable("Card").GetColumn("Name").CharacterMaxLength < 150)
-                    repo.ExecuteBatch(UpdateQueries.ExtendCardNameLength);
-
-                if (repo.ColumnExists("Translate", "Name") && repo.GetTable("Translate").GetColumn("Name").CharacterMaxLength < 150)
-                    repo.ExecuteBatch(UpdateQueries.ExtendTranslateNameLength);
-
-                if (repo.RowExists(null, "Block", new[] { "Name", "Id" }, new object[] { "Others", -6 }))
-                    repo.ExecuteBatch(UpdateQueries.NewBlock);
-
-                if (repo.RowExists(null, "Card", new[] { "Name", "CastingCost" }, new object[] { "Little Girl", "@500" }))
-                    repo.ExecuteBatch(UpdateQueries.UpdateLittleGirl);
-
+                
+                repo.ExecuteBatch(UpdateVersionQuery + "4");
             }
         }
-        private void ExecuteUpgradeCommandsForPicture(Repository repo, int version)
+        private void ExecuteUpgradeCommandsForPicture(Repository repo, int dbVersion)
         {
-            /*
-            if (version <= 2)
+            if (dbVersion <= 4)
             {
-                //Update queries
+
+                repo.ExecuteBatch(UpdateVersionQuery + "4");
             }
-            */
         }
     }
 }
