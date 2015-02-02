@@ -84,10 +84,10 @@
             return url.Substring(0, index + 1);
         }       
 
-        public IEnumerable<SetInfoWithBlock> GetSetList(string url)
+        public IEnumerable<EditionInfoWithBlock> GetEditionList(string url)
         {
             string htmltext = GetHtml(url);
-            foreach (SetInfo setInfo in Parser.ParseSetsList(htmltext))
+            foreach (EditionInfo setInfo in Parser.ParseEditionsList(htmltext))
             {
                 IEdition edition = _magicDatabase.GetEdition(setInfo.Name);
                 if (edition == null)
@@ -95,7 +95,7 @@
                     OnNewEditionCreated(setInfo.Name);
                     edition = _magicDatabase.GetEdition(setInfo.Name);
                 }
-                yield return new SetInfoWithBlock(setInfo, edition);
+                yield return new EditionInfoWithBlock(setInfo, edition);
             }
         }
         public string[] GetCardUrls(string url)
@@ -143,7 +143,7 @@
 
 
                 InsertCardInDb(cardWithExtraInfo);
-                InsertCardSetInDb(editionId, cardWithExtraInfo, pictureUrl);
+                InsertCardEditionInDb(editionId, cardWithExtraInfo, pictureUrl);
             }
         }
         public void InsertPictureInDb(string pictureUrl)
@@ -170,7 +170,7 @@
             return _magicDatabase.GetMissingPictureUrls();
         }
 
-        private void InsertCardSetInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
+        private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 

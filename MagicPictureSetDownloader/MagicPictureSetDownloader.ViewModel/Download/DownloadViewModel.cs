@@ -15,26 +15,26 @@
 
     public class DownloadViewModel : DownloadViewModelBase
     {
-        private string _baseSetUrl;
+        private string _baseEditionUrl;
         private bool _hasJob;
         
         public DownloadViewModel(IDispatcherInvoker dispatcherInvoker, bool showConfig)
             : base(dispatcherInvoker)
         {
-            BaseSetUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
+            BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
 
             ShowConfig = showConfig;
-            Sets = new AsyncObservableCollection<SetInfoViewModel>();
-            GetSetListCommand = new RelayCommand(GetSetListCommandExecute, GetSetListCommandCanExecute);
-            FeedSetsCommand = new RelayCommand(FeedSetsCommandExecute, FeedSetsCommandCanExecute);
+            Editions = new AsyncObservableCollection<EditionInfoViewModel>();
+            GetEditionListCommand = new RelayCommand(GetEditionListCommandExecute, GetEditionListCommandCanExecute);
+            FeedEditionsCommand = new RelayCommand(FeedEditionsCommandExecute, FeedEditionsCommandCanExecute);
 
             if (!ShowConfig)
-                GetSetListCommand.Execute(null);
+                GetEditionListCommand.Execute(null);
         }
 
-        public IList<SetInfoViewModel> Sets { get; private set; }
-        public ICommand GetSetListCommand { get; private set; }
-        public ICommand FeedSetsCommand { get; private set; }
+        public IList<EditionInfoViewModel> Editions { get; private set; }
+        public ICommand GetEditionListCommand { get; private set; }
+        public ICommand FeedEditionsCommand { get; private set; }
         public bool ShowConfig { get; private set; }
         public bool HasJob
         {
@@ -48,62 +48,62 @@
                 }
             }
         }
-        public string BaseSetUrl
+        public string BaseEditionUrl
         {
-            get { return _baseSetUrl; }
+            get { return _baseEditionUrl; }
             set
             {
-                if (value != _baseSetUrl)
+                if (value != _baseEditionUrl)
                 {
-                    _baseSetUrl = value;
-                    OnNotifyPropertyChanged(() => BaseSetUrl);
+                    _baseEditionUrl = value;
+                    OnNotifyPropertyChanged(() => BaseEditionUrl);
                 }
             }
         }
 
         #region Command
 
-        private bool GetSetListCommandCanExecute(object o)
+        private bool GetEditionListCommandCanExecute(object o)
         {
-            return !IsBusy && !string.IsNullOrWhiteSpace(BaseSetUrl);
+            return !IsBusy && !string.IsNullOrWhiteSpace(BaseEditionUrl);
         }
-        private void GetSetListCommandExecute(object o)
+        private void GetEditionListCommandExecute(object o)
         {
             JobStarting();
-            ThreadPool.QueueUserWorkItem(GetSetListCallBack, BaseSetUrl);
+            ThreadPool.QueueUserWorkItem(GetEditionListCallBack, BaseEditionUrl);
         }
 
-        private bool FeedSetsCommandCanExecute(object o)
+        private bool FeedEditionsCommandCanExecute(object o)
         {
             return !IsBusy && HasJob;
         }
-        private void FeedSetsCommandExecute(object o)
+        private void FeedEditionsCommandExecute(object o)
         {
             JobStarting();
-            ThreadPool.QueueUserWorkItem(FeedSetsCallBack);
+            ThreadPool.QueueUserWorkItem(FeedEditionsCallBack);
         }
 
         #endregion
 
-        private void GetSetListCallBack(object state)
+        private void GetEditionListCallBack(object state)
         {
             try
             {
                 string baseUrl = (string)state;
                 HasJob = false;
 
-                while (Sets.Count > 0)
+                while (Editions.Count > 0)
                 {
-                    SetInfoViewModel setInfoViewModel = Sets[0];
-                    setInfoViewModel.PropertyChanged -= SetInfoViewModelPropertyChanged;
-                    Sets.Remove(setInfoViewModel);
+                    EditionInfoViewModel editionInfoViewModel = Editions[0];
+                    editionInfoViewModel.PropertyChanged -= EditionInfoViewModelPropertyChanged;
+                    Editions.Remove(editionInfoViewModel);
                 }
 
-                foreach (SetInfoWithBlock setInfoWithBlock in DownloadManager.GetSetList(baseUrl).Where(s=> !s.Edition.Completed))
+                foreach (EditionInfoWithBlock editionInfoWithBlock in DownloadManager.GetEditionList(baseUrl).Where(s=> !s.Edition.Completed))
                 {
-                    SetInfoViewModel setInfoViewModel = new SetInfoViewModel(BaseSetUrl, setInfoWithBlock);
-                    setInfoViewModel.PropertyChanged += SetInfoViewModelPropertyChanged;
-                    Sets.Add(setInfoViewModel);
+                    EditionInfoViewModel editionInfoViewModel = new EditionInfoViewModel(BaseEditionUrl, editionInfoWithBlock);
+                    editionInfoViewModel.PropertyChanged += EditionInfoViewModelPropertyChanged;
+                    Editions.Add(editionInfoViewModel);
                 }
             }
             catch (Exception ex)
@@ -112,26 +112,26 @@
             }
             JobFinished();
         }
-        private void FeedSetsCallBack(object state)
+        private void FeedEditionsCallBack(object state)
         {
             DownloadReporter.Reset();
 
-            foreach (SetInfoViewModel setInfoViewModel in Sets.Where(s => s.Active))
+            foreach (EditionInfoViewModel editionInfoViewModel in Editions.Where(s => s.Active))
             {
                 Interlocked.Increment(ref CountDown);
-                string[] cardInfos = DownloadManager.GetCardUrls(setInfoViewModel.Url);
+                string[] cardInfos = DownloadManager.GetCardUrls(editionInfoViewModel.Url);
 
-                setInfoViewModel.DownloadReporter.Total = cardInfos.Length;
+                editionInfoViewModel.DownloadReporter.Total = cardInfos.Length;
                 DownloadReporter.Total += cardInfos.Length;
 
-                SetInfoViewModel model = setInfoViewModel;
-                ThreadPool.QueueUserWorkItem(RetrieveSetDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
+                EditionInfoViewModel model = editionInfoViewModel;
+                ThreadPool.QueueUserWorkItem(RetrieveEditionDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
             }
         }
-        private void RetrieveSetDataCallBack(object state)
+        private void RetrieveEditionDataCallBack(object state)
         {
             object[] args = (object[])state;
-            DownloadReporterViewModel setDownloadReporter = (DownloadReporterViewModel)args[0];
+            DownloadReporterViewModel editionDownloadReporter = (DownloadReporterViewModel)args[0];
             int editionId = (int)args[1];
             IEnumerable<string> urls = (IEnumerable<string>)args[2];
 
@@ -144,7 +144,7 @@
                         break;
                     DownloadManager.GetCardInfo(cardUrl, editionId);
                     hasCard = true;
-                    setDownloadReporter.Progress();
+                    editionDownloadReporter.Progress();
                     DownloadReporter.Progress();
                 }
                 if (!IsStopping && hasCard)
@@ -155,7 +155,7 @@
                 Message += ex.Message;
             }
 
-            setDownloadReporter.Finish();
+            editionDownloadReporter.Finish();
             Interlocked.Decrement(ref CountDown);
             if (CountDown == 0)
             {
@@ -163,17 +163,17 @@
                 
                 //Keep previous error
                 string msg = Message;
-                GetSetListCommand.Execute(null);
+                GetEditionListCommand.Execute(null);
                 
                 if (!string.IsNullOrWhiteSpace(msg))
                     Message = msg + Message;
                 JobFinished();
             }
         }
-        private void SetInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void EditionInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Active")
-                HasJob = Sets.Any(sivm => sivm.Active);
+                HasJob = Editions.Any(sivm => sivm.Active);
         }
     }
 }

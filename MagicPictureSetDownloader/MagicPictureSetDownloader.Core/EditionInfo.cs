@@ -1,8 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
-    internal class SetInfo
+    internal class EditionInfo
     {
-        public SetInfo(string name, string baseSearchUrl)
+        public EditionInfo(string name, string baseSearchUrl)
         {
             Name = name;
             BaseSearchUrl = baseSearchUrl;

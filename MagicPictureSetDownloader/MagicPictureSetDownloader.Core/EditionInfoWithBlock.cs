@@ -2,9 +2,9 @@
 {
     using MagicPictureSetDownloader.Interface;
 
-    public class SetInfoWithBlock
+    public class EditionInfoWithBlock
     {
-        internal SetInfoWithBlock(SetInfo setInfo, IEdition edition)
+        internal EditionInfoWithBlock(EditionInfo setInfo, IEdition edition)
         {
             BaseSearchUrl = setInfo.BaseSearchUrl;
             Edition = edition;

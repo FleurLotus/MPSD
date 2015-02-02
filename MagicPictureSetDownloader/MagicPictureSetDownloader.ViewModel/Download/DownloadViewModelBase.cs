@@ -72,7 +72,8 @@
         protected void JobFinished()
         {
             IsBusy = false;
-            FinishedStopping.Set();
+            if (!_disposed)
+                FinishedStopping.Set();
         }
 
         protected virtual void Dispose(bool disposing)

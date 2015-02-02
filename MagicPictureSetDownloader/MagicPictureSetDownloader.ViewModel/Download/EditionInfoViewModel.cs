@@ -7,17 +7,17 @@
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
 
-    public class SetInfoViewModel: NotifyPropertyChangedBase
+    public class EditionInfoViewModel: NotifyPropertyChangedBase
     {
         private bool _active;
         private readonly IEdition _edition;
 
-        public SetInfoViewModel(string baseSetUrl, SetInfoWithBlock setInfoWithBlock)
+        public EditionInfoViewModel(string baseEditionUrl, EditionInfoWithBlock editionInfoWithBlock)
         {
-            _edition = setInfoWithBlock.Edition;
+            _edition = editionInfoWithBlock.Edition;
 
-            string seachUrl = DownloadManager.ToAbsoluteUrl(baseSetUrl, setInfoWithBlock.BaseSearchUrl, true);
-            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, setInfoWithBlock.Edition.GathererName);
+            string seachUrl = DownloadManager.ToAbsoluteUrl(baseEditionUrl, editionInfoWithBlock.BaseSearchUrl, true);
+            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, editionInfoWithBlock.Edition.GathererName);
             DownloadReporter = new DownloadReporterViewModel();
         }
 

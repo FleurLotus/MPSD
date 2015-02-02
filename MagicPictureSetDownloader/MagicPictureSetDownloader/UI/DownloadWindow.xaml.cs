@@ -32,7 +32,7 @@
         }
         public void NewEditionCreated(object sender, EventArgs<string> args)
         {
-            EditionInfosViewModel vm = new EditionInfosViewModel(args.Data);
+            NewEditionInfoViewModel vm = new NewEditionInfoViewModel(args.Data);
             EditionInfosWindow f = new EditionInfosWindow(vm) { Owner = this };
             f.ShowDialog();
             if (vm.Result.HasValue && vm.Result.Value)
