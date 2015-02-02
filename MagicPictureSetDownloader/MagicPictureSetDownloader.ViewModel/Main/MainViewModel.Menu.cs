@@ -268,8 +268,8 @@
         private void CreateMenu()
         {
             MenuViewModel fileMenu = new MenuViewModel("_File");
-            fileMenu.AddChild(new MenuViewModel("Update _Set Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
-            fileMenu.AddChild(new MenuViewModel("Update _Image Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());
             fileMenu.AddChild(new MenuViewModel("Search...", new RelayCommand(SearchCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());

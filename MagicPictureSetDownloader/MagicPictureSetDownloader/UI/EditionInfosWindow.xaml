@@ -10,7 +10,7 @@
 
         xmlns:system="clr-namespace:System;assembly=mscorlib" x:Class="MagicPictureSetDownloader.UI.EditionInfosWindow"
 
-        d:DataContext="{d:DesignInstance Type={x:Type download:EditionInfosViewModel}}"
+        d:DataContext="{d:DesignInstance Type={x:Type download:NewEditionInfoViewModel}}"
         mc:Ignorable="d"
         Title="New edition" WindowStyle="ToolWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
     <i:Interaction.Triggers>

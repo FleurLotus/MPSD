@@ -73,15 +73,15 @@
     <Compile Include="CardWithExtraInfo.cs" />
     <Compile Include="Parser\CardNameParser.cs" />
     <Compile Include="Parser\NextPageException.cs" />
-    <Compile Include="Parser\SetParser.cs" />
+    <Compile Include="Parser\EditionParser.cs" />
     <Compile Include="Parser\IParser.cs" />
-    <Compile Include="SetInfoWithBlock.cs" />
+    <Compile Include="EditionInfoWithBlock.cs" />
     <Compile Include="CredentialRequieredArgs.cs" />
     <Compile Include="DownloadManager.cs" />
     <Compile Include="Parser\ParserException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
-    <Compile Include="SetInfo.cs" />
+    <Compile Include="EditionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">

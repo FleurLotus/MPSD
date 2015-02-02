@@ -9,9 +9,9 @@
     {
         private static readonly Regex _idRegex = new Regex(@"multiverseid=(?<id>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        internal static IEnumerable<SetInfo> ParseSetsList(string htmltext)
+        internal static IEnumerable<EditionInfo> ParseEditionsList(string htmltext)
         {
-            return new SetParser().Parse(htmltext);
+            return new EditionParser().Parse(htmltext);
         }
         internal static IEnumerable<string> ParseCardUrls(string htmltext)
         {

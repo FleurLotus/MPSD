@@ -53,7 +53,7 @@ namespace MagicPictureSetDownloader.Core.IO
                 }
             }
 
-            return ret.Values.Cast<IImportExportCardCount>();
+            return ret.Values;
 
         }
         public string ToFile(IEnumerable<IImportExportCardCount> cardCount)

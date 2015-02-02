@@ -13,7 +13,7 @@
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=download:DownloadViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader - Sets" ResizeMode="NoResize">
+        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader - Editions" ResizeMode="NoResize">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
@@ -38,15 +38,15 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Column="0" Grid.Row="0" Width="100" Content="Gatherer URL" VerticalContentAlignment="Center" FontWeight="Bold" />
-                <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding BaseSetUrl}" />
-                <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetSetListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding BaseEditionUrl}" />
+                <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetEditionListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Grid.Column="0" Visibility="{Binding Sets.Count, Converter={StaticResource nz2vConv}}">
+        <Border Grid.Row="1" Grid.Column="0" Visibility="{Binding Editions.Count, Converter={StaticResource nz2vConv}}">
             <Grid>
                 <Grid.Resources>
-                    <CollectionViewSource Source="{Binding Sets}" x:Key="sets">
+                    <CollectionViewSource Source="{Binding Editions}" x:Key="editions">
                         <CollectionViewSource.SortDescriptions>
                             <componentModel:SortDescription PropertyName="ReleaseDate" Direction="Descending" />
                         </CollectionViewSource.SortDescriptions>
@@ -57,13 +57,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0">
-                    <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedSetsCommand}" />
+                    <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedEditionsCommand}" />
 
                     <wpfui:ProgressBar ShowETA="True" Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
                                        />
                 </Grid>
-                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource sets}}">
+                <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource editions}}">
                     <ListBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -71,7 +71,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=download:SetInfoViewModel}">
+                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=download:EditionInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="170" />

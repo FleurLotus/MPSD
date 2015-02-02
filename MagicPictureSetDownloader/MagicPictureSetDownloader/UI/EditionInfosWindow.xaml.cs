@@ -7,7 +7,7 @@
     /// </summary>
     public partial class EditionInfosWindow
     {
-        public EditionInfosWindow(EditionInfosViewModel vm)
+        public EditionInfosWindow(NewEditionInfoViewModel vm)
         {
             DataContext = vm;
             InitializeComponent();

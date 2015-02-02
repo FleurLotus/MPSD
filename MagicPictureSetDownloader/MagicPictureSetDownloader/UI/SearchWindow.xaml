@@ -50,7 +50,7 @@
         <Grid Grid.Column="1" Grid.Row="0" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="140"/>
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0"  Margin="5,0" Style="{StaticResource BorderedTextBox}" Text="{binding:TwoWayBinding Name}"/>
             <CheckBox Grid.Column="1" Content="All languages" VerticalAlignment="Center" Margin="5,0" IsChecked="{binding:TwoWayBinding AllLanguages}"/>
@@ -59,7 +59,7 @@
         <Grid Grid.Column="1" Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="140"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -73,7 +73,7 @@
             <RadioButton Grid.Row="2" Grid.Column="0" GroupName="Perimeter" Content="Not in collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollections}"/>
             <RadioButton Grid.Row="3" Grid.Column="0" GroupName="Perimeter" Content="Not in collections (Any Edition)" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollectionsAnyEdition}"/>
 
-            <CheckBox Grid.Column="1" Grid.Row="0" Margin="5,0" Content="Exclude fun Sets" IsChecked="{binding:TwoWayBinding ExcludeFunSets}"/>
+            <CheckBox Grid.Column="1" Grid.Row="0" Margin="5,0" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
         </Grid>
 
         <Label Grid.Column="0" Grid.Row="2" Content="Collections" Visibility="{Binding PerimeterScope, Converter={StaticResource be2vConv}, ConverterParameter=All}"/>

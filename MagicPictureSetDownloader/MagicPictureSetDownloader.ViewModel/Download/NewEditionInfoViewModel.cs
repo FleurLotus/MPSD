@@ -10,7 +10,7 @@
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
-    public class EditionInfosViewModel : DialogViewModelBase
+    public class NewEditionInfoViewModel : DialogViewModelBase
     {
         private string _name;
         private string _code;
@@ -21,7 +21,7 @@
         private IBlock _blockSelected;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
 
-        public EditionInfosViewModel(string gathererName)
+        public NewEditionInfoViewModel(string gathererName)
         {
             GathererName = gathererName;
             Name = gathererName;

@@ -34,7 +34,7 @@
         private MultiSelectedAggregation _colorAggregation;
         private MultiSelectedAggregation _typeAggregation;
         private PerimeterScope _perimeterScope;
-        private bool _excludeFunSets;
+        private bool _excludeFunEditions;
         private bool _allLanguages;
         private string _name;
         private int _idBlockFun;
@@ -79,15 +79,15 @@
                 }
             }
         }
-        public bool ExcludeFunSets
+        public bool ExcludeFunEditions
         {
-            get { return _excludeFunSets; }
+            get { return _excludeFunEditions; }
             set
             {
-                if (value != _excludeFunSets)
+                if (value != _excludeFunEditions)
                 {
-                    _excludeFunSets = value;
-                    OnNotifyPropertyChanged(() => ExcludeFunSets);
+                    _excludeFunEditions = value;
+                    OnNotifyPropertyChanged(() => ExcludeFunEditions);
                 }
             }
         }
@@ -166,7 +166,7 @@
         {
             //Default values
             Name = null;
-            ExcludeFunSets = true;
+            ExcludeFunEditions = true;
             AllLanguages = false;
             PerimeterScope = PerimeterScope.All;
             ColorAggregation = MultiSelectedAggregation.Or;
@@ -224,7 +224,7 @@
         }
         private bool CheckEdition(ICardAllDbInfo cai)
         {
-            if (ExcludeFunSets)
+            if (ExcludeFunEditions)
             {
                 if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockFun)
                     return false;
