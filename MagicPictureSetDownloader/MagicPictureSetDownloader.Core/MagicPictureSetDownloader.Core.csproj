@@ -52,6 +52,7 @@
     <Compile Include="CardInfo\RowWorker.cs" />
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
+    <Compile Include="EditionIconInfo.cs" />
     <Compile Include="CardLanguageInfo.cs" />
     <Compile Include="EnhancedDatabaseRequest.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
@@ -66,12 +67,15 @@
     <Compile Include="IO\MpsdFormatter.cs" />
     <Compile Include="MagicRules.cs" />
     <Compile Include="Parser\CardLanguageParser.cs" />
+    <Compile Include="Parser\EditionIconPage.cs" />
+    <Compile Include="Parser\EditionIconPageListParser.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
     <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
     <Compile Include="CardWithExtraInfo.cs" />
     <Compile Include="Parser\CardNameParser.cs" />
+    <Compile Include="Parser\EditionPageMapper.cs" />
     <Compile Include="Parser\NextPageException.cs" />
     <Compile Include="Parser\EditionParser.cs" />
     <Compile Include="Parser\IParser.cs" />

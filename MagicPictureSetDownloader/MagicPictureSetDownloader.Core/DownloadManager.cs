@@ -14,6 +14,7 @@
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
         public event EventHandler<EventArgs<string>> NewEditionCreated;
+
         private ICredentials _credentials;
         private readonly IDictionary<string, string> _htmlCache;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
@@ -87,15 +88,15 @@
         public IEnumerable<EditionInfoWithBlock> GetEditionList(string url)
         {
             string htmltext = GetHtml(url);
-            foreach (EditionInfo setInfo in Parser.ParseEditionsList(htmltext))
+            foreach (EditionInfo editionInfo in Parser.ParseEditionsList(htmltext))
             {
-                IEdition edition = _magicDatabase.GetEdition(setInfo.Name);
+                IEdition edition = _magicDatabase.GetEdition(editionInfo.Name);
                 if (edition == null)
                 {
-                    OnNewEditionCreated(setInfo.Name);
-                    edition = _magicDatabase.GetEdition(setInfo.Name);
+                    OnNewEditionCreated(editionInfo.Name);
+                    edition = _magicDatabase.GetEdition(editionInfo.Name);
                 }
-                yield return new EditionInfoWithBlock(setInfo, edition);
+                yield return new EditionInfoWithBlock(editionInfo, edition);
             }
         }
         public string[] GetCardUrls(string url)
@@ -168,6 +169,20 @@
         public string[] GetMissingPictureUrls()
         {
             return _magicDatabase.GetMissingPictureUrls();
+        }
+        public byte[] GetEditionIcon(string url, string wantedEdition)
+        {
+            string htmltext = GetHtml(url);
+            EditionIconInfo editionIconInfo = Parser.ParseEditionIconPageList(htmltext).Matching(wantedEdition);
+            if (editionIconInfo == null)
+                return null;
+
+            htmltext = GetHtml(editionIconInfo.UrlPage);
+            string iconUrl = Parser.ParseEditionIconPage(htmltext).FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(iconUrl))
+                return null;
+
+            return GetFile(iconUrl);
         }
 
         private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)

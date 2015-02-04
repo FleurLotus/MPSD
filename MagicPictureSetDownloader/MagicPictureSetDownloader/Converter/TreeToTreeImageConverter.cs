@@ -20,7 +20,7 @@ namespace MagicPictureSetDownloader.Converter
             ITreePicture treepicture = MagicDatabase.GetTreePicture(data);
             if (null != treepicture && treepicture.Image.Length > 0)
             {
-                BitmapImage image =BytesToImage(treepicture.Image);
+                BitmapImage image = BytesToImage(treepicture.Image);
                 return image;
             }
 

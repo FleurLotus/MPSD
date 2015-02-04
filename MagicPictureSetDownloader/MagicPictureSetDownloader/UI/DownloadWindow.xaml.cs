@@ -30,9 +30,9 @@
                 args.Data.Password = vm.Password;
             }
         }
-        public void NewEditionCreated(object sender, EventArgs<string> args)
+        public void NewEditionCreated(object sender, EventArgs<NewEditionInfoViewModel> args)
         {
-            NewEditionInfoViewModel vm = new NewEditionInfoViewModel(args.Data);
+            NewEditionInfoViewModel vm = args.Data;
             EditionInfosWindow f = new EditionInfosWindow(vm) { Owner = this };
             f.ShowDialog();
             if (vm.Result.HasValue && vm.Result.Value)
@@ -43,7 +43,6 @@
             {
                 vm.SaveDefault();
             }
-
         }
         protected override void OnClosed(EventArgs e)
         {

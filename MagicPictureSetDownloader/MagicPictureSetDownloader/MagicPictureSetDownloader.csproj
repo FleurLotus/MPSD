@@ -137,6 +137,7 @@
     <Compile Include="Converter\BitmapToImageConverter.cs" />
     <Compile Include="Converter\CardToRotationAngleConverter.cs" />
     <Compile Include="Converter\InputModeToGridRowConverter.cs" />
+    <Compile Include="Converter\ByteArrayToImageConverter.cs" />
     <Compile Include="Converter\TextToInlinesConverter.cs" />
     <Compile Include="Converter\StringToCastingCostImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />

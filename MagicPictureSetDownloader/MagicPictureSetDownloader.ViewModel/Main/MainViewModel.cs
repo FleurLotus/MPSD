@@ -16,7 +16,7 @@
         
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
-        //TODO: think about automatic add of set icon 
+        //TODO: think about automatic add of set icon : manage insert of new value
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
