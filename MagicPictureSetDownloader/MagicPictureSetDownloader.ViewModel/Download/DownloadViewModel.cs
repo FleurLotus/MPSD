@@ -9,20 +9,27 @@
 
     using Common.Libray;
     using Common.Libray.Collection;
+    using Common.Libray.Notify;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
 
     public class DownloadViewModel : DownloadViewModelBase
     {
+        public event EventHandler<EventArgs<NewEditionInfoViewModel>> NewEditionCreated;
+
+        private bool _disposed;
         private string _baseEditionUrl;
+        private string _baseEditionIconUrl;
         private bool _hasJob;
         
         public DownloadViewModel(IDispatcherInvoker dispatcherInvoker, bool showConfig)
             : base(dispatcherInvoker)
         {
             BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
+            _baseEditionIconUrl = @"http://www.cardkingdom.com/catalog";
 
+            DownloadManager.NewEditionCreated += OnNewEditionCreated;
             ShowConfig = showConfig;
             Editions = new AsyncObservableCollection<EditionInfoViewModel>();
             GetEditionListCommand = new RelayCommand(GetEditionListCommandExecute, GetEditionListCommandCanExecute);
@@ -85,6 +92,21 @@
 
         #endregion
 
+        protected override void Dispose(bool disposing)
+        {
+            if (_disposed)
+                return;
+
+            if (disposing)
+            {
+                if (DownloadManager != null)
+                    DownloadManager.NewEditionCreated += OnNewEditionCreated;
+            }
+            _disposed = true;
+
+            base.Dispose(disposing);
+        }
+        
         private void GetEditionListCallBack(object state)
         {
             try
@@ -175,5 +197,16 @@
             if (e.PropertyName == "Active")
                 HasJob = Editions.Any(sivm => sivm.Active);
         }
+        private void OnNewEditionCreated(object sender, EventArgs<string> args)
+        {
+            var e = NewEditionCreated;
+            if (e != null)
+            {
+                string name = args.Data;
+                NewEditionInfoViewModel vm = new NewEditionInfoViewModel(name, DownloadManager.GetEditionIcon(_baseEditionIconUrl, name));
+                DispatcherInvoker.Invoke(() => e(sender, new EventArgs<NewEditionInfoViewModel>(vm)));
+            }
+        }
+
     }
 }

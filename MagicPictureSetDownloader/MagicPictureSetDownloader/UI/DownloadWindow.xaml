@@ -37,9 +37,9 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.Column="0" Grid.Row="0" Width="100" Content="Gatherer URL" VerticalContentAlignment="Center" FontWeight="Bold" />
+                <Label Grid.Column="0" Grid.Row="0" Width="150" Content="Gatherer URL" VerticalContentAlignment="Center" FontWeight="Bold" />
                 <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding BaseEditionUrl}" />
-                <Button Grid.Column="2" Grid.Row="0" Width="70" Command="{Binding GetEditionListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
+                <Button Grid.Column="2" Grid.Row="0" Width="50" Command="{Binding GetEditionListCommand}" Content="Retrieve" HorizontalAlignment="Center" />
             </Grid>
         </Border>
 
@@ -74,15 +74,17 @@
                             <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=download:EditionInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="170" />
+                                    <ColumnDefinition Width="25" />
+                                    <ColumnDefinition Width="200" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center" 
-                                          IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource nbConv}}"/> 
-                                <Label Grid.Row="0" Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Center" />
-                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding BlockName}" VerticalAlignment="Center" />
-                                <Border Grid.Row="0" Grid.Column="3" Width="200"  Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
+                                          IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource nbConv}}"/>
+                                <Image Grid.Row="0" Grid.Column="1" Margin="5,0"  MaxHeight="15" Source="{Binding Name, Converter={StaticResource t2iConv}}" />
+                                <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
+                                <Label Grid.Row="0" Grid.Column="3" Content="{Binding BlockName}" VerticalAlignment="Center" />
+                                <Border Grid.Row="0" Grid.Column="4" Width="200"  Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
                                     <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
                                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>

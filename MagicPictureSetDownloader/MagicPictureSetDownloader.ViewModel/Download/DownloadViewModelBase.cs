@@ -11,7 +11,6 @@
     public class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
-        public event EventHandler<EventArgs<string>> NewEditionCreated;
 
         protected readonly IDispatcherInvoker DispatcherInvoker;
         protected readonly DownloadManager DownloadManager;
@@ -29,7 +28,6 @@
             DownloadReporter = new DownloadReporterViewModel();
             DownloadManager = new DownloadManager();
             DownloadManager.CredentialRequiered += OnCredentialRequiered;
-            DownloadManager.NewEditionCreated += OnNewEditionCreated;
         }
 
         public DownloadReporterViewModel DownloadReporter { get; private set; }
@@ -83,6 +81,8 @@
 
             if (disposing)
             {
+                if (DownloadManager!= null)
+                    DownloadManager.CredentialRequiered += OnCredentialRequiered;
                 IsStopping = true;
                 FinishedStopping.WaitOne();
                 FinishedStopping.Dispose();
@@ -93,12 +93,6 @@
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             var e = CredentialRequiered;
-            if (e != null)
-                DispatcherInvoker.Invoke(() => e(sender, args));
-        }
-        private void OnNewEditionCreated(object sender, EventArgs<string> args)
-        {
-            var e = NewEditionCreated;
             if (e != null)
                 DispatcherInvoker.Invoke(() => e(sender, args));
         }

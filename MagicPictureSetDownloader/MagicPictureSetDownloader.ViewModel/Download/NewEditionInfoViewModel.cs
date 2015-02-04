@@ -21,8 +21,9 @@
         private IBlock _blockSelected;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
 
-        public NewEditionInfoViewModel(string gathererName)
+        public NewEditionInfoViewModel(string gathererName, byte[] icon)
         {
+            Icon = icon;
             GathererName = gathererName;
             Name = gathererName;
             HasFoil = true;
@@ -34,6 +35,7 @@
         public ICommand ResetBlockCommand { get; private set; }
         public string GathererName { get; private set; }
         public IBlock[] Blocks { get; private set; }
+        public byte[] Icon { get; private set; }
 
         public int? Position
         {
@@ -138,7 +140,7 @@
         }
         public void Save()
         {
-            _magicDatabase.CreateNewEdition(GathererName, Name, HasFoil, Code, BlockSelected == null ?(int?)null : BlockSelected.Id, Position, CardNumber, ReleaseDate);
+            _magicDatabase.CreateNewEdition(GathererName, Name, HasFoil, Code, BlockSelected == null ? (int?)null : BlockSelected.Id, Position, CardNumber, ReleaseDate, Icon);
         }
         public void SaveDefault()
         {

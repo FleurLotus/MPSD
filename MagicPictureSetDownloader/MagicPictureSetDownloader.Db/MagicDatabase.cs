@@ -324,7 +324,7 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public void CreateNewEdition(string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate)
+        public void CreateNewEdition(string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate, byte[] icon)
         {
             using (new WriterLock(_lock))
             {
@@ -348,6 +348,7 @@ namespace MagicPictureSetDownloader.Db
 
                     AddToDbAndUpdateReferential(_connectionString, realEdition, InsertInReferential);
                 }
+                InsertNewTreePicture(name, icon);
             }
         }
 
