@@ -75,7 +75,6 @@
         {
             if (dbVersion <= 4)
             {
-                
                 repo.ExecuteBatch(UpdateVersionQuery + "4");
             }
         }
@@ -83,7 +82,6 @@
         {
             if (dbVersion <= 4)
             {
-
                 repo.ExecuteBatch(UpdateVersionQuery + "4");
             }
         }
