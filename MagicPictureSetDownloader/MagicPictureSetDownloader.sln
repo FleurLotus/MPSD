@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalReference", "Extern
 		ExternalReference\ExportSqlCE40.exe = ExternalReference\ExportSqlCE40.exe
 		ExternalReference\ICSharpCode.SharpZipLib.dll = ExternalReference\ICSharpCode.SharpZipLib.dll
 		ExternalReference\ICSharpCode.SharpZipLib.xml = ExternalReference\ICSharpCode.SharpZipLib.xml
+		ExternalReference\nunit.framework.dll = ExternalReference\nunit.framework.dll
 		ExternalReference\Xceed.Wpf.Toolkit.dll = ExternalReference\Xceed.Wpf.Toolkit.dll
 	EndProjectSection
 EndProject
@@ -49,6 +50,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Zip", "Common.Zip\Common.Zip.csproj", "{FF762F87-3489-497F-B350-BC58A6ABC48E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.SQLCE", "Common.SQLCE\Common.SQLCE.csproj", "{82CA2E59-9896-4B66-8840-63CCE3006989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "Common.UnitTests\Common.UnitTests.csproj", "{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,6 +115,10 @@ Global
 		{82CA2E59-9896-4B66-8840-63CCE3006989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82CA2E59-9896-4B66-8840-63CCE3006989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82CA2E59-9896-4B66-8840-63CCE3006989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,5 +133,6 @@ Global
 		{F454124A-EFDC-466A-AB43-99F0CE9B642A} = {D00700D7-C608-4B74-B712-CF8C773A975C}
 		{FF762F87-3489-497F-B350-BC58A6ABC48E} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 		{82CA2E59-9896-4B66-8840-63CCE3006989} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
+		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 	EndGlobalSection
 EndGlobal

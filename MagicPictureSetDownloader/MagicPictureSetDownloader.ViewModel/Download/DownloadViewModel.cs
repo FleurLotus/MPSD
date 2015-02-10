@@ -13,21 +13,27 @@
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Core.EditionInfos;
 
     public class DownloadViewModel : DownloadViewModelBase
     {
         public event EventHandler<EventArgs<NewEditionInfoViewModel>> NewEditionCreated;
 
+        private readonly IDictionary<IconPageType, string> _baseEditionIconUrls;
         private bool _disposed;
         private string _baseEditionUrl;
-        private string _baseEditionIconUrl;
         private bool _hasJob;
         
         public DownloadViewModel(IDispatcherInvoker dispatcherInvoker, bool showConfig)
             : base(dispatcherInvoker)
         {
             BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
-            _baseEditionIconUrl = @"http://www.cardkingdom.com/catalog";
+
+            _baseEditionIconUrls = new Dictionary<IconPageType, string>
+                                       {
+                                           { IconPageType.Wikia, @"http://mtg.wikia.com/wiki/Set" },
+                                           { IconPageType.CardKingdom, @"http://www.cardkingdom.com/catalog" }
+                                       };
 
             DownloadManager.NewEditionCreated += OnNewEditionCreated;
             ShowConfig = showConfig;
@@ -203,7 +209,7 @@
             if (e != null)
             {
                 string name = args.Data;
-                NewEditionInfoViewModel vm = new NewEditionInfoViewModel(name, DownloadManager.GetEditionIcon(_baseEditionIconUrl, name));
+                NewEditionInfoViewModel vm = new NewEditionInfoViewModel(name, DownloadManager.GetEditionIcon(_baseEditionIconUrls, name));
                 DispatcherInvoker.Invoke(() => e(sender, new EventArgs<NewEditionInfoViewModel>(vm)));
             }
         }

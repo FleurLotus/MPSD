@@ -25,14 +25,6 @@
         {
             return new CardLanguageParser().Parse(htmltext);
         }
-        internal static IEnumerable<EditionIconInfo> ParseEditionIconPageList(string htmltext)
-        {
-            return new EditionIconPageListParser().Parse(htmltext);
-        }
-        internal static IEnumerable<string> ParseEditionIconPage(string htmltext)
-        {
-            return new EditionIconPage().Parse(htmltext);
-        }
 
         public static int ExtractIdGatherer(string pictureUrl)
         {
@@ -47,7 +39,7 @@
             if (withHtmlDecode)
                 htmltext = WebUtility.HtmlDecode(htmltext);
 
-            if (String.IsNullOrEmpty(start))
+            if (string.IsNullOrEmpty(start))
                 return htmltext;
 
             int startIndex = htmltext.IndexOf(start, StringComparison.InvariantCulture);
