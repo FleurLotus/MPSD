@@ -47,11 +47,11 @@
             }
             else
             {
-                comp = String.Compare(SchemaName, other.SchemaName, StringComparison.Ordinal);
+                comp = string.Compare(SchemaName, other.SchemaName, StringComparison.Ordinal);
             }
 
             if (comp == 0)
-                comp = String.Compare(TableName, other.TableName, StringComparison.Ordinal);
+                comp = string.Compare(TableName, other.TableName, StringComparison.Ordinal);
 
             if (comp == 0)
                 comp = Position.CompareTo(other.Position);

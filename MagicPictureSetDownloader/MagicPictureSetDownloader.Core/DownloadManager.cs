@@ -7,6 +7,7 @@
     using System.Text;
     using Common.Libray.Notify;
 
+    using MagicPictureSetDownloader.Core.EditionInfos;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -170,19 +171,32 @@
         {
             return _magicDatabase.GetMissingPictureUrls();
         }
-        public byte[] GetEditionIcon(string url, string wantedEdition)
+        public IEditionIconInfo GetEditionIcon(IDictionary<IconPageType, string> urls, string wantedEdition)
         {
-            string htmltext = GetHtml(url);
-            EditionIconInfo editionIconInfo = Parser.ParseEditionIconPageList(htmltext).Matching(wantedEdition);
-            if (editionIconInfo == null)
-                return null;
+            foreach (KeyValuePair<IconPageType, string> kv in urls)
+            {
+                IEditionFinder finder = EditionInfoFinderFactory.Instance.CreateFinder(kv.Key, GetHtml);
+                if (finder == null)
+                    continue;
 
-            htmltext = GetHtml(editionIconInfo.UrlPage);
-            string iconUrl = Parser.ParseEditionIconPage(htmltext).FirstOrDefault();
-            if (string.IsNullOrWhiteSpace(iconUrl))
-                return null;
+                EditionIconInfo editionIconInfo = finder.Find(kv.Value, wantedEdition);
+                if (editionIconInfo == null)
+                    continue;
 
-            return GetFile(iconUrl);
+                string iconUrl = editionIconInfo.Url;
+
+                if (string.IsNullOrWhiteSpace(iconUrl))
+                    continue;
+
+                byte[] editionIcon = GetFile(iconUrl);
+                if (editionIcon != null && editionIcon.Length > 0)
+                {
+                    editionIconInfo.Icon = editionIcon;
+                    return editionIconInfo;
+                }
+            }
+
+            return null;
         }
 
         private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)

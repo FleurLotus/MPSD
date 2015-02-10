@@ -8,7 +8,7 @@ namespace MagicPictureSetDownloader.Core.CardInfo
 
         public RowWorker(IAwareXmlTextReader xmlReader)
         {
-            _innerWorker = CardInfoParserWorkerFactory.CreateParserRowSubWorker(xmlReader);
+            _innerWorker = CardInfoParserWorkerFactory.Instance.CreateParserRowSubWorker(xmlReader);
         }
         public bool WorkOnCurrentAtStart
         {

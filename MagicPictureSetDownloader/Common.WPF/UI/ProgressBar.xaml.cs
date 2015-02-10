@@ -18,6 +18,7 @@ namespace Common.WPF.UI
         public static readonly DependencyProperty DisplayTextProperty = _displayTextPropertyKey.DependencyProperty;
 
         private readonly Timer _timer;
+        private readonly object _synch = new object();
         private DateTime? _startAt;
         #endregion
 
@@ -102,7 +103,7 @@ namespace Common.WPF.UI
         // ReSharper disable CompareOfFloatsByEqualityOperator
         private void SetDisplayText()
         {
-            lock (_timer)
+            lock (_synch)
             {
                 if (!Lib.IsInDesignMode() &&  !_timer.Enabled && ShowETA && Maximum!=Value && Value>0)
                 {

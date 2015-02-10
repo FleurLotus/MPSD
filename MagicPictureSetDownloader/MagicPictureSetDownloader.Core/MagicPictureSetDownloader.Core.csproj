@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -54,11 +53,15 @@
     <Compile Include="CardInfo\ImageWorker.cs" />
     <Compile Include="EditionIconInfo.cs" />
     <Compile Include="CardLanguageInfo.cs" />
+    <Compile Include="EditionInfos\EditionInfoFinderFactory.cs" />
+    <Compile Include="EditionInfos\EditionInfoFinderBase.cs" />
+    <Compile Include="EditionInfos\IEditionFinder.cs" />
     <Compile Include="EnhancedDatabaseRequest.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
+    <Compile Include="IEditionIconInfo.cs" />
     <Compile Include="IO\FormatterBase.cs" />
     <Compile Include="IO\ImportExportCardInfo.cs" />
     <Compile Include="IO\MtgmFormatter.cs" />
@@ -67,15 +70,14 @@
     <Compile Include="IO\MpsdFormatter.cs" />
     <Compile Include="MagicRules.cs" />
     <Compile Include="Parser\CardLanguageParser.cs" />
-    <Compile Include="Parser\EditionIconPage.cs" />
-    <Compile Include="Parser\EditionIconPageListParser.cs" />
+    <Compile Include="EditionInfos\EditionInfoWikiaFinder.cs" />
+    <Compile Include="EditionInfos\EditionInfoCardKingdomFinder.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
     <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
     <Compile Include="CardWithExtraInfo.cs" />
     <Compile Include="Parser\CardNameParser.cs" />
-    <Compile Include="Parser\EditionPageMapper.cs" />
     <Compile Include="Parser\NextPageException.cs" />
     <Compile Include="Parser\EditionParser.cs" />
     <Compile Include="Parser\IParser.cs" />

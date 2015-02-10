@@ -21,9 +21,13 @@
         private IBlock _blockSelected;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
 
-        public NewEditionInfoViewModel(string gathererName, byte[] icon)
+        public NewEditionInfoViewModel(string gathererName, IEditionIconInfo editionIconInfo)
         {
-            Icon = icon;
+            if (editionIconInfo != null)
+            {
+                Icon = editionIconInfo.Icon;
+                Code = editionIconInfo.Code;
+            }
             GathererName = gathererName;
             Name = gathererName;
             HasFoil = true;

@@ -12,7 +12,7 @@
 
         d:DataContext="{d:DesignInstance Type={x:Type download:NewEditionInfoViewModel}}"
         mc:Ignorable="d"
-        Title="New edition" WindowStyle="ToolWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+        Title="New edition" WindowStyle="ToolWindow" ResizeMode="NoResize" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
             <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>

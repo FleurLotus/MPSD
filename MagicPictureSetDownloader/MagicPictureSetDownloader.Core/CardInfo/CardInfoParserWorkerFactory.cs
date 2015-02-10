@@ -1,8 +1,21 @@
 ﻿namespace MagicPictureSetDownloader.Core.CardInfo
 {
-    internal static class CardInfoParserWorkerFactory
+    using System;
+
+    internal class CardInfoParserWorkerFactory
     {
-        public static ICardInfoParserWorker CreateParserWorker(IAwareXmlTextReader xmlReader)
+        private static readonly Lazy<CardInfoParserWorkerFactory> _lazy = new Lazy<CardInfoParserWorkerFactory>(() => new CardInfoParserWorkerFactory());
+
+        private CardInfoParserWorkerFactory()
+        {
+        }
+
+        public static CardInfoParserWorkerFactory Instance
+        {
+            get { return _lazy.Value; }
+        }
+
+        public ICardInfoParserWorker CreateParserWorker(IAwareXmlTextReader xmlReader)
         {
             string classValue = xmlReader.GetAttribute("class");
             if (classValue == null)
@@ -23,7 +36,7 @@
                     return null;
             }
         }
-        public static ICardInfoParserWorker CreateParserRowSubWorker(IAwareXmlTextReader xmlReader)
+        public ICardInfoParserWorker CreateParserRowSubWorker(IAwareXmlTextReader xmlReader)
         {
             string classValue = xmlReader.GetAttribute("id");
             if (classValue == null)

@@ -5,7 +5,6 @@
     using System.IO;
     using System.Xml;
     using Common.Libray;
-    using Common.XML;
     using MagicPictureSetDownloader.Core.CardInfo;
 
     internal class CardParser : IParser<CardWithExtraInfo>
@@ -105,7 +104,7 @@
                     }
 
                     IAwareXmlTextReader reader = new AwareXmlTextReader(xmlReader);
-                    ICardInfoParserWorker worker = CardInfoParserWorkerFactory.CreateParserWorker(reader);
+                    ICardInfoParserWorker worker = CardInfoParserWorkerFactory.Instance.CreateParserWorker(reader);
 
                     if (worker == null)
                     {
