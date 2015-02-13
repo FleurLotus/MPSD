@@ -14,6 +14,7 @@
                     >
 
     <!-- Control Template -->
+    <!-- Card part display -->
     <ControlTemplate x:Key="CardInfoControlTemplate">
         <ControlTemplate.Resources>
             <Style TargetType="Label">
@@ -67,7 +68,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyText}" 
+            <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyText}"
                    Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
             <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding PowerToughnessLoyalty}"
                    Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
@@ -77,10 +78,11 @@
         </Grid>
     </ControlTemplate>
 
+    <!-- Statistics display -->
     <ControlTemplate x:Key="StatisticsControlTemplate">
         <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
-                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}" 
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}"
                       Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2svConv}}">
                 <i:Interaction.Behaviors>
                     <behavior:GridViewColumnResizeBehavior />
@@ -99,10 +101,11 @@
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Language Grid display -->
     <ControlTemplate x:Key="OtherLanguagesControlTemplate">
         <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <ListView VerticalAlignment="Center" HorizontalAlignment="Left" 
-                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}" 
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}"
                       Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}">
                 <i:Interaction.Behaviors>
                     <behavior:GridViewColumnResizeBehavior />
@@ -118,11 +121,12 @@
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
                                    Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" 
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}"
                                    Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
@@ -132,7 +136,7 @@
             </Image>
         </StackPanel>
     </ControlTemplate>
-    
+
     <!-- Data Template -->
     <!-- Menu -->
     <HierarchicalDataTemplate DataType="{x:Type self:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
@@ -228,7 +232,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="1">
-                <TextBlock FontWeight="Bold" FontSize="20" Padding="5" VerticalAlignment="Center" Text="{Binding Name}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Name}" Style="{StaticResource Title}"/>
             </Border>
             <Border Grid.Row="1" Margin="0,10">
                 <Control Template="{StaticResource CardInfoControlTemplate}" />

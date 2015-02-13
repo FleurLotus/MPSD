@@ -72,8 +72,8 @@
         <Label Grid.Column="0" Grid.Row="6" Content="Release Date"/>
         <DatePicker Grid.Column="1" Grid.Row="6" SelectedDate="{Binding ReleaseDate}"/>
         <StackPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Ok" Width="70" Margin="10" IsDefault="True" Command="{Binding OkCommand}"/>
-            <Button Content="Default" Width="70" Margin="10" IsCancel="True"  Command="{Binding CancelCommand}"/>
+            <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Default" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
         </StackPanel>
     </Grid>
 </Window>

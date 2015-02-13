@@ -8,6 +8,7 @@
         xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         d:DataContext="{d:DesignInstance Type=io:ImportExportViewModel, IsDesignTimeCreatable=False}"
+        Title="Import/Export"
         mc:Ignorable="d" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow"
         >
     <Window.Resources>

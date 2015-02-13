@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MagicPictureSetDownloader.UI.DownloadWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,7 +13,7 @@
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=download:DownloadViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Width="600" SizeToContent="Height" Title="MagicPictureSetDownloader - Editions" ResizeMode="NoResize">
+        Width="600" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
@@ -60,7 +60,7 @@
                     <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedEditionsCommand}" />
 
                     <wpfui:ProgressBar ShowETA="True" Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
-                                       Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" 
+                                       Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}"
                                        />
                 </Grid>
                 <ListBox Grid.Row="1" Grid.Column="0" ScrollViewer.VerticalScrollBarVisibility="Visible" MaxHeight="500" ItemsSource="{Binding Source={StaticResource editions}}">
@@ -79,13 +79,13 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center" 
+                                <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"
                                           IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource nbConv}}"/>
                                 <Image Grid.Row="0" Grid.Column="1" Margin="5,0"  MaxHeight="15" Source="{Binding Name, Converter={StaticResource t2iConv}}" />
                                 <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
                                 <Label Grid.Row="0" Grid.Column="3" Content="{Binding BlockName}" VerticalAlignment="Center" />
                                 <Border Grid.Row="0" Grid.Column="4" Width="200"  Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
-                                    <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}" 
+                                    <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}"
                                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>
                             </Grid>

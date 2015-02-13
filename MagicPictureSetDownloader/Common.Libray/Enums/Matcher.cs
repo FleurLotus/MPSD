@@ -28,6 +28,8 @@
         {
             if (_withFlag)
             {
+                if ((int)(object)matching == 0)
+                    return false;
                 return ((int)(object)source & ((int)(object)matching)) == (int)(object)matching;
             }
 
