@@ -13,10 +13,10 @@
 
         private readonly IDispatcherInvoker _dispatcherInvoker;
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
-        
+
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
-        //TODO: think about automatic add of edition info
+        //TODO: Create repare/enhance database data
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -31,7 +31,7 @@
 
             CreateMenu();
 
-            //ALERT: Temp for helping load file to tree picture 
+            //ALERT: Temp for helping load file to tree picture
             /*
             foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample"))
             {

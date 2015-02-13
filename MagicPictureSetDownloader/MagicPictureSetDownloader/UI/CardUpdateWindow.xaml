@@ -10,6 +10,7 @@
         xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=input:CardUpdateViewModel, IsDesignTimeCreatable=False}"
+        Title="Update infos"
         mc:Ignorable="d" SizeToContent="Height" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         >
     <i:Interaction.Triggers>
@@ -88,7 +89,7 @@
                 </StackPanel>
             </Grid>
         </GroupBox>
-        
+
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Update" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
             <Button Content="Close" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>

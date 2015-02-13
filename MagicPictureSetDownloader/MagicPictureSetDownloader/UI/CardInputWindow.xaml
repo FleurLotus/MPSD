@@ -12,6 +12,7 @@
         xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=input:CardInputViewModel}"
+        Title="Input cards"
         mc:Ignorable="d" SizeToContent="Height" Width="361" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         >
     <Window.Resources>
@@ -37,11 +38,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="0,5" Orientation="Horizontal" HorizontalAlignment="Center"
-                    Grid.ColumnSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ColumnDefinitions.Count, Mode=OneWay}">
-            <RadioButton Margin="0,0,10,0" GroupName="All" Content="Input by Edition" 
+        <StackPanel Grid.Row="0" Margin="0,5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <RadioButton Margin="0,0,10,0" GroupName="All" Content="Input by Edition"
                          IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByEdition}" />
-            <RadioButton Margin="10,0,0,0" GroupName="All" Content="Input by Card" 
+            <RadioButton Margin="10,0,0,0" GroupName="All" Content="Input by Card"
                          IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByCard}" />
         </StackPanel>
         <Grid Grid.Row="1" Margin="0,10">
@@ -58,14 +58,14 @@
             <ComboBox Grid.Column="1" IsEditable="True" wpf:AutoComplete.Enabled="True" wpf:AutoComplete.CaseInsensitive="True"
                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
                   SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
-            <Image Grid.Column="2"  HorizontalAlignment="Left" Width="20" Height="20" 
+            <Image Grid.Column="2"  HorizontalAlignment="Left" Width="20" Height="20"
                    Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
                    Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
 
-            <Label Grid.Column="0" Content="Card name" 
+            <Label Grid.Column="0" Content="Card name"
                    Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}" />
             <ComboBox Grid.Column="1" IsEditable="True" wpf:AutoComplete.Enabled="True" wpf:AutoComplete.CaseInsensitive="True"
-                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}" 
+                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}"
                    SelectedValue="{binding:TwoWayBinding CardSelected}" ItemsSource="{Binding Cards}"/>
         </Grid>
 
@@ -87,7 +87,7 @@
                 <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
             </Grid>
         </GroupBox>
-        
+
         <GroupBox Grid.Row="3" BorderBrush="Black" BorderThickness="1" Header="{Binding CardCollection.Name}" HeaderStringFormat="{}Collection {0}">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>

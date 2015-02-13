@@ -16,7 +16,7 @@
         private const string StartSubPage = @"<!-- Column 1 start -->";
         private const string Start2SubPage = @"<b>Symbol:</b>";
         private const string EndSubPage = "<!-- Column 1 end -->";
-        
+
 
         private static readonly Regex _editionRegex = new Regex(@"<a href=""(?<url>[^""]+)"">(?<name>[^<]*)<br></a>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private static readonly Regex _urlRegex = new Regex(@"<img\s*src=""(?<url>[^""]+)""[^<>]*(<|>)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
@@ -33,7 +33,7 @@
                                                       { "Ninth", "9th" },
                                                       { "Tenth", "10th" },
                                                       { "Ravnica: City of Guilds", "Ravnica" },
-                                                      { "Elves vs. Dragons", "Elves vs. Goblins" }, //bug in Gatherer Name
+                                                      { "Elves vs. Dragons", "Elves vs. Goblins" }, //error in Gatherer Name on the web site
                                                       { "Unlimited", "XXXX" }, //Do not get the wrong image
                                                       { " Anthology,", ":" },
 
@@ -48,18 +48,17 @@
                                                   };
         }
 
-
         protected override IList<EditionIconInfo> Parse(string url)
         {
             IList<EditionIconInfo> ret;
 
             if (_cache.TryGetValue(url, out ret))
                 return ret;
-            
+
             string text = GetHtml(url);
             string newtext = Parser.ExtractContent(text, Start, End, true, false);
             newtext =  Parser.ExtractContent(newtext + End, Start2, End, true, false);
-            
+
             ret = _editionRegex.Matches(newtext).OfType<Match>()
                                                 .Select(match => new EditionIconInfo(match.Groups["name"].Value.Trim(), match.Groups["url"].Value, null))
                                                 .ToList();
