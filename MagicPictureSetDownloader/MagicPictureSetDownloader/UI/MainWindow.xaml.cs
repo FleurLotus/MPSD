@@ -10,6 +10,7 @@
 
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.Main;
+    using MagicPictureSetDownloader.ViewModel.Management;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -38,15 +39,15 @@
         {
             new InputDialog(args.Data) { Owner = this }.ShowDialog();
         }
-        public void ImportExportWanted(object sender, EventArgs args)
+        public void ImportExportRequested(object sender, EventArgs args)
         {
             new ImportExportWindow { Owner = this }.ShowDialog();
         }
-        public void AddCardWanted(object sender, EventArgs<CardInputViewModel> args)
+        public void AddCardRequested(object sender, EventArgs<CardInputViewModel> args)
         {
             new CardInputWindow(args.Data) { Owner = this }.ShowDialog();
         }
-        public void UpdateCardWanted(object sender, EventArgs<CardUpdateViewModel> args)
+        public void UpdateCardRequested(object sender, EventArgs<CardUpdateViewModel> args)
         {
             new CardUpdateWindow(args.Data) { Owner = this }.ShowDialog();
         }
@@ -54,6 +55,17 @@
         {
             new SearchWindow(args.Data) { Owner = this }.ShowDialog();
         }
-
+        public void BlockModificationRequested(object sender, EventArgs<BlockDatabaseInfoModificationViewModel> args)
+        {
+            new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
+        }
+        public void EditionModificationRequested(object sender, EventArgs<EditionDatabaseInfoModificationViewModel> args)
+        {
+            new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
+        }
+        public void LanguageModificationRequested(object sender, EventArgs<LanguageDatabaseInfoModificationViewModel> args)
+        {
+            new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
+        }
     }
 }

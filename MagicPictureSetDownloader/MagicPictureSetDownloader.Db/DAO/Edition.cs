@@ -19,7 +19,11 @@ namespace MagicPictureSetDownloader.Db.DAO
         public string AlternativeCode { get; set; }
         [DbColumn]
         public int? IdBlock { get; set; }
-        public string BlockName { get; set; }
+        public IBlock Block { get; set; }
+        public string BlockName
+        {
+            get { return Block == null ? null : Block.Name; }
+        }
         [DbColumn]
         public int? BlockPosition { get; set; }
         [DbColumn]

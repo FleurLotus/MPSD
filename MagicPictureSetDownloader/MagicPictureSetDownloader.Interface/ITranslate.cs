@@ -2,8 +2,8 @@
 {
     public interface ITranslate
     {
-        int IdCard { get; set; }
-        int IdLanguage { get; set; }
-        string Name { get; set; }
+        int IdCard { get;  }
+        int IdLanguage { get; }
+        string Name { get; }
     }
 }

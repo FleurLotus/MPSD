@@ -132,7 +132,7 @@
                 }
             }
         }
-        
+
         private void ResetBlockExecute(object o)
         {
             Position = null;
@@ -144,11 +144,11 @@
         }
         public void Save()
         {
-            _magicDatabase.CreateNewEdition(GathererName, Name, HasFoil, Code, BlockSelected == null ? (int?)null : BlockSelected.Id, Position, CardNumber, ReleaseDate, Icon);
+            _magicDatabase.InsertNewEdition(GathererName, Name, HasFoil, Code, BlockSelected == null ? (int?)null : BlockSelected.Id, Position, CardNumber, ReleaseDate, Icon);
         }
         public void SaveDefault()
         {
-            _magicDatabase.CreateNewEdition(GathererName);
+            _magicDatabase.InsertNewEdition(GathererName);
         }
     }
 }

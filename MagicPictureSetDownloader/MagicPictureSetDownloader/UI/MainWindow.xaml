@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
@@ -52,18 +52,28 @@
         <i:EventTrigger EventName="InputRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="InputRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="ImportExportWanted" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="ImportExportWanted" />
+        <i:EventTrigger EventName="ImportExportRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="ImportExportRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="AddCardWanted" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="AddCardWanted" />
+        <i:EventTrigger EventName="AddCardRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="AddCardRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="UpdateCardWanted" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="UpdateCardWanted" />
+        <i:EventTrigger EventName="UpdateCardRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="UpdateCardRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Search" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="Search" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="BlockModificationRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="BlockModificationRequested" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="EditionModificationRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="EditionModificationRequested" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="LanguageModificationRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="LanguageModificationRequested" />
+        </i:EventTrigger>
+
     </i:Interaction.Triggers>
 
     <Grid>
@@ -131,7 +141,7 @@
             <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"
                             Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
-        
+
         <!-- Loading -->
         <Grid Grid.Row="0" Grid.RowSpan="2" Background="White" Visibility="{Binding Loading, Converter={StaticResource b2vConv}}">
             <Ellipse x:Name="Ellipse" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Width="300" Height="300">

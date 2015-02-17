@@ -4,6 +4,7 @@
                                                       IMagicDatabaseReadAndWriteReference,
                                                       IMagicDatabaseReadAndWriteOption,
                                                       IMagicDatabaseReadAndWriteCardInCollection,
+                                                      IMagicDatabaseReadAndUpdate,
                                                       IMagicDatabaseReadOnly
     {
     }
