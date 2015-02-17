@@ -10,9 +10,14 @@ namespace MagicPictureSetDownloader.Core
     {
         public static IEdition[] GetAllEditionsOrdered(this IMagicDatabaseReadOnly magicDatabase)
         {
-            return magicDatabase.AllEditions().Ordered()
+            return magicDatabase.GetAllEditions().Ordered()
                                               .ToArray();
         }
+        public static IEnumerable<ICard> GetAllCardOrdered(this IMagicDatabaseReadOnly magicDatabase)
+        {
+            return magicDatabase.GetAllInfos().GetAllCardOrdered();
+        }
+
         public static IEnumerable<ICard> GetAllCardOrdered(this IEnumerable<ICardAllDbInfo> allCardInfos, IEdition edition = null)
         {
             return allCardInfos.Where(cadi => edition == null || cadi.Edition == edition)

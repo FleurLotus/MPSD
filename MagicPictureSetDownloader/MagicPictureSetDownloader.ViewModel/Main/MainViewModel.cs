@@ -16,7 +16,6 @@
 
         //TODO: Test import/export
         //TODO: test add/remove splitted card and statistics
-        //TODO: Create repare/enhance database data
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);

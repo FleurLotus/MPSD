@@ -1,0 +1,79 @@
+﻿<Window x:Class="MagicPictureSetDownloader.UI.DatabaseInfoModificationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
+        mc:Ignorable="d"
+        Title="Database Info Modification"
+        ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        Height="475" Width="618"
+        d:DataContext="{d:DesignInstance Type=management:BlockDatabaseInfoModificationViewModel, IsDesignTimeCreatable=False}"
+        Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Black"/>
+                <Setter Property="BorderThickness" Value="1"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="5,0"/>
+            </Style>
+
+            <Style TargetType="ListBoxItem">
+                <Style.Resources>
+                    <!--Keep selected style even without focus -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                </Style.Resources>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- Using BlockDatabaseInfoModificationViewModel as DesignInstanbce because DatabaseInfoModificationViewModelBase<T> is not allowed -->
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
+            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0">
+            <TextBlock  HorizontalAlignment="Center" Text="{Binding Title}" Style="{StaticResource Title}"/>
+        </Border>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Border  Grid.Column="0" >
+                <ListBox ItemsSource="{Binding All}" SelectedItem="{binding:TwoWayBinding Selected}" IsEnabled="{Binding State, Converter={StaticResource e2bConv}, ConverterParameter=NoEdition}"/>
+            </Border>
+            <GridSplitter Grid.Column="1"/>
+            <Border Grid.Column="2" >
+                <ContentControl Content="{Binding}"/>
+            </Border>
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="New" Command="{Binding NewCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding AllowNew, Converter={StaticResource b2vConv}}"/>
+            <Button Content="Update" Command="{Binding UpdateCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Validate" Command="{Binding ValidateCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Close" Command="{Binding CloseCommand}" Style="{StaticResource BottomButton}"/>
+        </StackPanel>
+    </Grid>
+</Window>

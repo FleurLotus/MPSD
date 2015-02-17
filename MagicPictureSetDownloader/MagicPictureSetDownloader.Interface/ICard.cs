@@ -1,17 +1,15 @@
 ﻿namespace MagicPictureSetDownloader.Interface
 {
-    public interface ICard
+    public interface ICard : IIdName
     {
-        int Id { get; set; }
-        string Name { get; set; }
-        string Text { get; set; }
-        string Power { get; set; }
-        string Toughness { get; set; }
-        string CastingCost { get; set; }
-        int? Loyalty { get; set; }
-        string Type { get; set; }
-        string PartName { get; set; }
-        string OtherPartName { get; set; }
+        string Text { get; }
+        string Power { get; }
+        string Toughness { get; }
+        string CastingCost { get; }
+        int? Loyalty { get; }
+        string Type { get; }
+        string PartName { get; }
+        string OtherPartName { get; }
 
         bool IsMultiPart { get; }
         bool IsReverseSide { get; }

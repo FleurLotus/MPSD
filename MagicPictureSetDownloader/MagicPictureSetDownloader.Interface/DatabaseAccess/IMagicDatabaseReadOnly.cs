@@ -5,30 +5,34 @@
     public interface IMagicDatabaseReadOnly
     {
         ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1);
-        ICollection<IEdition> AllEditions();
+        ICollection<IEdition> GetAllEditions();
+        ICollection<ILanguage> GetAllLanguages();
+        ICollection<ICardCollection> GetAllCollections();
+        ICollection<IBlock> GetAllBlocks();
+
         IList<IOption> GetOptions(TypeOfOption type);
+        IOption GetOption(TypeOfOption type, string key);
         ICard GetCard(string name, string partName);
+        ICard GetCard(int idGatherer);
         IEdition GetEditionFromCode(string code);
         int GetIdGatherer(ICard card, IEdition edition);
         IPicture GetPicture(int idGatherer);
-        ITreePicture GetTreePicture(string key);
         IPicture GetDefaultPicture();
+        ITreePicture GetTreePicture(string key);
         IEdition GetEdition(string sourceName);
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
-        ICard GetCard(int idGatherer);
+        IBlock GetBlock(string blockName);
         IList<ILanguage> GetLanguages(int idGatherer);
-        IOption GetOption(TypeOfOption type, string key);
         ICardCollection GetCollection(int collectionId);
         ICardCollection GetCollection(string name);
-        ICollection<ICardCollection> GetAllCollections();
-        ICollection<IBlock> GetAllBlocks();
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection);
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, int idGatherer);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage);
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
         ITranslate GetTranslate(ICard card, int idLanguage);
         IList<ITranslate> GetTranslates(ICard card);
+
         string[] GetMissingPictureUrls();
     }
 }

@@ -90,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\DatabaseInfoModificationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SearchWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -138,10 +142,15 @@
     <Compile Include="Converter\CardToRotationAngleConverter.cs" />
     <Compile Include="Converter\InputModeToGridRowConverter.cs" />
     <Compile Include="Converter\ByteArrayToImageConverter.cs" />
+    <Compile Include="Converter\ReadOnlyConverterExceptNew.cs" />
     <Compile Include="Converter\TextToInlinesConverter.cs" />
     <Compile Include="Converter\StringToCastingCostImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
+    <Compile Include="Converter\ReadOnlyConverterForNoEdition.cs" />
     <Compile Include="Converter\TreeToTreeImageConverter.cs" />
+    <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
+      <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
@@ -254,7 +263,7 @@
     <None Include="Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
