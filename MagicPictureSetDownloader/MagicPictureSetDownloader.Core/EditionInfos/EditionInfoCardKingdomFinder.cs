@@ -33,7 +33,7 @@
                                                       { "Ninth", "9th" },
                                                       { "Tenth", "10th" },
                                                       { "Ravnica: City of Guilds", "Ravnica" },
-                                                      { "Elves vs. Dragons", "Elves vs. Goblins" }, //error in Gatherer Name on the web site
+                                                      { "Kiora vs. Elspeth", "Elspeth vs. Kiora" }, //error in Gatherer Name on the web site
                                                       { "Unlimited", "XXXX" }, //Do not get the wrong image
                                                       { " Anthology,", ":" },
 
