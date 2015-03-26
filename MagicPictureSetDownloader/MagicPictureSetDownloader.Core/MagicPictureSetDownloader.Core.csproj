@@ -36,7 +36,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Copyright.cs">
+    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
     <Compile Include="..\Version.cs">
@@ -90,11 +90,11 @@
     <Compile Include="EditionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common.XML\Common.XML.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.XML\Common.XML.csproj">
       <Project>{C695020A-1108-41BF-8494-34BDEFC30581}</Project>
       <Name>Common.XML</Name>
     </ProjectReference>

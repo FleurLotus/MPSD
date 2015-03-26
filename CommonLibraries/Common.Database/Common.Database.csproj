@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</ProjectGuid>
+    <ProjectGuid>{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Libray</RootNamespace>
-    <AssemblyName>Common.Libray</AssemblyName>
+    <RootNamespace>Common.Database</RootNamespace>
+    <AssemblyName>Common.Database</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,39 +33,31 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Copyright.cs">
+    <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
-    <Compile Include="Collection\AsyncObservableCollection.cs" />
-    <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
-    <Compile Include="Collection\RangeObservableCollection.cs" />
-    <Compile Include="Enums\Matcher.cs" />
-    <Compile Include="Exception\HandlerNotKnownException.cs" />
-    <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
-    <Compile Include="Exception\HtmlTableParserException.cs" />
-    <Compile Include="Html\HtmlCell.cs" />
-    <Compile Include="Html\HtmlTable.cs" />
-    <Compile Include="Html\HtmlTableParser.cs" />
-    <Compile Include="Html\IHtmlCell.cs" />
-    <Compile Include="Html\IHtmlTable.cs" />
-    <Compile Include="Notify\EventDispatcher.cs" />
-    <Compile Include="Notify\IEventDispatcher.cs" />
-    <Compile Include="Notify\EventHandlers.cs" />
-    <Compile Include="Threading\Flag.cs" />
-    <Compile Include="Threading\FlagCount.cs" />
-    <Compile Include="Threading\FlagExtension.cs" />
-    <Compile Include="Threading\WriterLock.cs" />
-    <Compile Include="Threading\ReaderLock.cs" />
-    <Compile Include="HashHelper.cs" />
-    <Compile Include="ReadOnlyDictionary.cs" />
-    <Compile Include="Extension.cs" />
-    <Compile Include="Notify\EventArgs.cs" />
-    <Compile Include="IDispatcherInvoker.cs" />
+    <Compile Include="CommandBuilder.cs" />
+    <Compile Include="DbAttributAnalyser.cs" />
+    <Compile Include="Exception\AttributedTypeException.cs" />
+    <Compile Include="Attribute\DbTableAttribute.cs" />
+    <Compile Include="Attribute\DbKeyColumnAttribute.cs" />
+    <Compile Include="Attribute\DbColumnAttribute.cs" />
+    <Compile Include="Exception\ApplicationDbException.cs" />
+    <Compile Include="Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataRecordExt.cs" />
+    <Compile Include="SQLQueryTools.cs" />
+    <Compile Include="TypeDbInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+      <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
+      <Name>Common.Libray</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

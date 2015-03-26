@@ -36,7 +36,7 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Copyright.cs">
+    <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
     <Compile Include="Conversion.cs" />

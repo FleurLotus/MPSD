@@ -52,7 +52,7 @@
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Copyright.cs">
+    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
     <Compile Include="..\Version.cs">
@@ -86,11 +86,11 @@
     <Compile Include="DAO\Rarity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Database\Common.Database.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.Database\Common.Database.csproj">
       <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
       <Name>Common.Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
