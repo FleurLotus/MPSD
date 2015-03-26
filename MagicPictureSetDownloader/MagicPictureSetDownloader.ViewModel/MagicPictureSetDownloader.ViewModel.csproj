@@ -38,7 +38,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Copyright.cs">
+    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
     <Compile Include="..\Version.cs">
@@ -77,11 +77,11 @@
     <Compile Include="Download\EditionInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
       <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj">
+    <ProjectReference Include="..\..\CommonLibraries\Common.ViewModel\Common.ViewModel.csproj">
       <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
       <Name>Common.ViewModel</Name>
     </ProjectReference>
