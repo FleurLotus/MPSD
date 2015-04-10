@@ -341,8 +341,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;
-            int totalInEditionAndLanguageInCollection = 0;
-            int totalOfthis = 0;
+            int totalInEditionAndLanguageInCollectionNotFoil = 0;
+            int totalInEditionAndLanguageInCollectionFoil = 0;
 
             foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, CardSelected))
             {
@@ -353,15 +353,14 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     totalInEditionInCollection += inCollection;
                     if (cardInCollectionCount.IdLanguage == LanguageSelected.Id)
                     {
-                        totalInEditionAndLanguageInCollection += inCollection;
-
-                        totalOfthis += IsFoil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
+                        totalInEditionAndLanguageInCollectionNotFoil += cardInCollectionCount.Number;
+                        totalInEditionAndLanguageInCollectionFoil += cardInCollectionCount.FoilNumber;
                     }
                 }
             }
 
-            CurrentCollectionDetail = string.Format("{0} {1}{2} {3} /{4}/{5}/{6}", totalOfthis, EditionSelected.Code, IsFoil ? "(Foil)" : string.Empty, LanguageSelected.Name,
-                                                                                   totalInEditionAndLanguageInCollection, totalInEditionInCollection, totalInCollection);
+            CurrentCollectionDetail = string.Format("{2}+{3}(Foil) {0} {1}\n{4} {0}\n{5} All Edition", EditionSelected.Code, LanguageSelected.Name, totalInEditionAndLanguageInCollectionNotFoil,
+                                                                                                       totalInEditionAndLanguageInCollectionFoil, totalInEditionInCollection, totalInCollection);
         }
     }
 }

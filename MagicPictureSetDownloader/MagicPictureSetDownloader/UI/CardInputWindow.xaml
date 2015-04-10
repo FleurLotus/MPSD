@@ -13,7 +13,7 @@
         Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}"
         d:DataContext="{d:DesignInstance Type=input:CardInputViewModel}"
         Title="Input cards"
-        mc:Ignorable="d" SizeToContent="Height" Width="361" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" SizeToContent="Height" Width="361" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" 
         >
     <Window.Resources>
         <Style TargetType="Label">
@@ -88,14 +88,14 @@
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="3" BorderBrush="Black" BorderThickness="1" Header="{Binding CardCollection.Name}" HeaderStringFormat="{}Collection {0}">
+        <GroupBox Grid.Row="3" BorderBrush="Black" BorderThickness="1" Header="{Binding CardCollection.Name}" HeaderStringFormat="{}In collection {0}">
             <Grid Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="{Binding CurrentCollectionDetail}" />
-                <Button Grid.Column="1" Content="Change" Command="{Binding ChangeCollectionCommand}" Width="70"/>
+                <Label Grid.Column="0" Height="70" Content="{Binding CurrentCollectionDetail}" />
+                <Button Grid.Column="1" Content="Change" Command="{Binding ChangeCollectionCommand}" Width="70" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
 
