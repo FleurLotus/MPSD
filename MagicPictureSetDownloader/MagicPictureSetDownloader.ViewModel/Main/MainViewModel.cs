@@ -15,7 +15,13 @@
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
 
         //TODO: Test import/export
-        //TODO: test add/remove splitted card and statistics
+        //TODO: Test add/remove splitted card and statistics
+
+        //TODO: Manage copy of card to others collection
+        //TODO: Manage copy/move of cards to others collection
+        //TODO: Historic of change (Add/Mod/Del in collection)
+
+        //TODO: Import / save historical price (Maybe)
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
