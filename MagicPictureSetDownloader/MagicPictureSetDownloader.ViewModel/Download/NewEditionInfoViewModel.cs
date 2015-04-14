@@ -34,6 +34,9 @@
             _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
             Blocks = _magicDatabase.GetAllBlocks().Ordered().ToArray();
             ResetBlockCommand = new RelayCommand(ResetBlockExecute);
+
+            Display.Title = "New edition";
+            Display.CancelCommandLabel = "Default";
         }
 
         public ICommand ResetBlockCommand { get; private set; }

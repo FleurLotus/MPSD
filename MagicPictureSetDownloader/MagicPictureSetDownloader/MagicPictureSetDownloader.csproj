@@ -58,6 +58,10 @@
     <ApplicationIcon>
     </ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,6 +90,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Template.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,29 +106,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\SearchWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\CardUpdateWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\CardInputWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\EditionInfosWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\DownloadImageWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\CredentialInputWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\DownloadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,25 +143,10 @@
     <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
       <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\SearchWindow.xaml.cs">
-      <DependentUpon>SearchWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\CardUpdateWindow.xaml.cs">
-      <DependentUpon>CardUpdateWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\CardInputWindow.xaml.cs">
-      <DependentUpon>CardInputWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\EditionInfosWindow.xaml.cs">
-      <DependentUpon>EditionInfosWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\DownloadImageWindow.xaml.cs">
       <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PicturedTextBlock.cs" />
-    <Compile Include="UI\CredentialInputWindow.xaml.cs">
-      <DependentUpon>CredentialInputWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\DownloadWindow.xaml.cs">
       <DependentUpon>DownloadWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -182,6 +159,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <None Include="TemplateDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UI\ImportExportWindow.xaml.cs">

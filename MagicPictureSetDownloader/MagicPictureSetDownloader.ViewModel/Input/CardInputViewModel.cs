@@ -1,12 +1,10 @@
 ﻿
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
-    using System;
     using System.Linq;
     using System.Windows.Input;
 
     using Common.Libray.Collection;
-    using Common.Libray.Notify;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
@@ -20,10 +18,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         ByCard,
     }
 
-    public class CardInputViewModel : NotifyPropertyChangedBase
+    public class CardInputViewModel : DialogViewModelBase
     {
-        public event EventHandler Closing;
-        public event EventHandler<EventArgs<InputViewModel>> InputRequested;
 
         private InputMode _inputMode = InputMode.ByEdition;
         private bool _isFoil;
@@ -44,8 +40,9 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         {
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
 
-            AddCommand = new RelayCommand(AddCommandExecute, AddCommandCanExecute);
-            CloseCommand = new RelayCommand(CloseCommandExecute);
+            Display.Title = "Input cards";
+            Display.OkCommandLabel = "Add";
+            Display.CancelCommandLabel = "Close";
             ChangeCollectionCommand = new RelayCommand(ChangeCollectionCommandExecute);
 
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
@@ -62,8 +59,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
             InitWindow();
         }
-        public ICommand AddCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
         public ICommand ChangeCollectionCommand { get; private set; }
         public RangeObservableCollection<IEdition> Editions { get; private set; }
         public RangeObservableCollection<ILanguage> Languages { get; private set; }
@@ -175,16 +170,12 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             }
         }
 
-        private void AddCommandExecute(object o)
+        protected override void OkCommandExecute(object o)
         {
             AddNewCard();
             InitWindow();
         }
-        private void CloseCommandExecute(object o)
-        {
-            OnClosing();
-        }
-        private bool AddCommandCanExecute(object o)
+        protected override bool OkCommandCanExecute(object o)
         {
             return Count != 0 && EditionSelected != null && CardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil);
         }
@@ -201,18 +192,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     SelectCardCollection(collection);
                 }
             }
-        }
-        private void OnClosing()
-        {
-            var e = Closing;
-            if (e != null)
-                e(this, EventArgs.Empty);
-        }
-        private void OnInputRequestedRequested(InputViewModel vm)
-        {
-            var e = InputRequested;
-            if (e != null && vm != null)
-                e(this, new EventArgs<InputViewModel>(vm));
         }
         private void InitWindow()
         {

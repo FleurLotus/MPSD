@@ -16,7 +16,7 @@
                 Login = "fabien.bossoutrot";
                 Password = "Jolmdp!01";
             }
-
+            Display.Title = "Proxy Credential";
         }
         public string Login
         {

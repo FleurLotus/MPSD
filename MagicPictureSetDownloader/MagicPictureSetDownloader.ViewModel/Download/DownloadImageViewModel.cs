@@ -21,6 +21,12 @@
             _missingImages = DownloadManager.GetMissingPictureUrls();
             CountDown = _missingImages.Length;
             DownloadReporter.Total = CountDown;
+
+            if (CountDown == 0)
+            {
+                Message = "Not any image to download";
+            }
+
             JobStarting();
             for (int i = 0; i < NbThread; i++)
             {

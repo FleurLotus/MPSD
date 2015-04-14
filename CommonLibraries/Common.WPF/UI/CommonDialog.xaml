@@ -1,0 +1,51 @@
+﻿<Window x:Class="Common.WPF.UI.CommonDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        d:DataContext="{d:DesignInstance Type=vm:DialogViewModelBase}"
+        Title="{Binding Display.Title}"
+        mc:Ignorable="d" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles.xaml"/>
+                <ResourceDictionary Source="..\Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
+            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="DialogWanted" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="DialogWanted" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="InputRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="InputRequested" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Margin="10,10,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <ContentControl Grid.Row="0" Content="{Binding}" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="{Binding Display.OkCommandLabel}" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OkCommandLabel, Converter={StaticResource no2vConv} }"/>
+            <Button Content="{Binding Display.OtherCommandLabel}" Command="{Binding OtherCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OtherCommandLabel, Converter={StaticResource no2vConv} }"/>
+            <Button Content="{Binding Display.Other2CommandLabel}" Command="{Binding Other2Command}" Style="{StaticResource BottomButton}"  Visibility="{Binding Display.Other2CommandLabel, Converter={StaticResource no2vConv} }"/>
+            <Button Content="{Binding Display.CancelCommandLabel}" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.CancelCommandLabel, Converter={StaticResource no2vConv} }"/>
+        </StackPanel>
+    </Grid>
+</Window>

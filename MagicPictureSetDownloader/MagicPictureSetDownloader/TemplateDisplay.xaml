@@ -1,0 +1,17 @@
+﻿<Window x:Class="MagicPictureSetDownloader.UI.TemplateDisplay"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=input:CardMoveViewModel}"
+        SizeToContent="WidthAndHeight"
+        Background="Black">
+    <Grid Margin="20" Background="White">
+        <!-- This file is only there to have a design view of datatemplate -->
+        <!-- It needs d:IsDesignTimeCreatable="False" in the datatemplate definition -->
+        <ContentControl Content="{Binding}"/>
+    </Grid>
+</Window>

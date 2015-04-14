@@ -15,25 +15,27 @@
         Title="{Binding Title}" 
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <converter:AggregateConverter x:Key="e2vConv">
-            <converter:EnumMatchToBooleanConverter/>
-            <BooleanToVisibilityConverter/>
-        </converter:AggregateConverter>
-        <Style TargetType="Label">
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="0,5,0,0"/>
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Margin" Value="5,5,5,0"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5,5,5,0"/>
-            <Setter Property="BorderBrush" Value="Black"/>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Width" Value="70"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <converter:AggregateConverter x:Key="e2vConv">
+                <converter:EnumMatchToBooleanConverter/>
+                <BooleanToVisibilityConverter/>
+            </converter:AggregateConverter>
+            <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="0,5,0,0"/>
+            </Style>
+            <Style TargetType="ComboBox">
+                <Setter Property="Margin" Value="5,5,5,0"/>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5,5,5,0"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
@@ -59,8 +61,8 @@
         <ComboBox Grid.Row="4" ItemsSource="{Binding List2}" SelectedItem="{binding:TwoWayBinding Selected2}" 
                   Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}"/>
-            <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}"/>
+            <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
         </StackPanel>
     </Grid>
 </Window>

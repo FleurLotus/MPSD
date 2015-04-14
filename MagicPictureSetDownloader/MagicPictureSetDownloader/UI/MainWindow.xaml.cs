@@ -8,7 +8,6 @@
     using Common.WPF;
     using Common.WPF.UI;
 
-    using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.Main;
     using MagicPictureSetDownloader.ViewModel.Management;
 
@@ -43,17 +42,9 @@
         {
             new ImportExportWindow { Owner = this }.ShowDialog();
         }
-        public void AddCardRequested(object sender, EventArgs<CardInputViewModel> args)
+        public void DialogWanted(object sender, EventArgs<DialogViewModelBase> args)
         {
-            new CardInputWindow(args.Data) { Owner = this }.ShowDialog();
-        }
-        public void UpdateCardRequested(object sender, EventArgs<CardUpdateViewModel> args)
-        {
-            new CardUpdateWindow(args.Data) { Owner = this }.ShowDialog();
-        }
-        public void Search(object sender, EventArgs<SearchViewModel> args)
-        {
-            new SearchWindow(args.Data) { Owner = this }.ShowDialog();
+            new CommonDialog(args.Data) { Owner = this }.ShowDialog();
         }
         public void BlockModificationRequested(object sender, EventArgs<BlockDatabaseInfoModificationViewModel> args)
         {

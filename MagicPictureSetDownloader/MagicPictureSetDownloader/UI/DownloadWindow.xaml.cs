@@ -5,6 +5,7 @@
 
     using Common.Libray.Notify;
     using Common.WPF;
+    using Common.WPF.UI;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.ViewModel.Download;
@@ -22,7 +23,7 @@
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             CredentialInputViewModel vm = new CredentialInputViewModel();
-            CredentialInputWindow f = new CredentialInputWindow(vm) { Owner = this };
+            CommonDialog f = new CommonDialog(vm) { Owner = this, WindowStyle = WindowStyle.ToolWindow }; 
             f.ShowDialog();
             if (vm.Result.HasValue && vm.Result.Value)
             {
@@ -33,7 +34,7 @@
         public void NewEditionCreated(object sender, EventArgs<NewEditionInfoViewModel> args)
         {
             NewEditionInfoViewModel vm = args.Data;
-            EditionInfosWindow f = new EditionInfosWindow(vm) { Owner = this };
+            CommonDialog f = new CommonDialog(vm) { Owner = this, WindowStyle = WindowStyle.ToolWindow }; 
             f.ShowDialog();
             if (vm.Result.HasValue && vm.Result.Value)
             {

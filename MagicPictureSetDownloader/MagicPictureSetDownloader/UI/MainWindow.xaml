@@ -15,10 +15,6 @@
         Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Template.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-
             <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>
@@ -37,6 +33,9 @@
         </EventTrigger>
     </Window.Triggers>
     <i:Interaction.Triggers>
+        <i:EventTrigger EventName="DialogWanted" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="DialogWanted" />
+        </i:EventTrigger>
         <i:EventTrigger EventName="VersionRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="VersionRequested" />
         </i:EventTrigger>
@@ -54,15 +53,6 @@
         </i:EventTrigger>
         <i:EventTrigger EventName="ImportExportRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="ImportExportRequested" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="AddCardRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="AddCardRequested" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="UpdateCardRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="UpdateCardRequested" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Search" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="Search" />
         </i:EventTrigger>
         <i:EventTrigger EventName="BlockModificationRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="BlockModificationRequested" />

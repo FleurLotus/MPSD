@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converter="clr-namespace:Common.WPF.Converter">
     
-    
     <BooleanToVisibilityConverter x:Key="b2vConv"/>
     <converter:EnumMatchToBooleanConverter x:Key="e2bConv"/>
     <converter:ImageSourceConverter x:Key="imgConv" />

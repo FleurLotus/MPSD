@@ -20,11 +20,11 @@
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
             base.OnStartup(e);
+
             MainWindow mainWindow = new MainWindow();
             _started = true;
             mainWindow.Show();
         }
-        
 
         private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {

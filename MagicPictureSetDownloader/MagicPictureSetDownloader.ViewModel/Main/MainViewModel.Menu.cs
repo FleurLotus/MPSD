@@ -23,10 +23,8 @@
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
         public event EventHandler ImportExportRequested;
-        public event EventHandler<EventArgs<CardInputViewModel>> AddCardRequested;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
-        public event EventHandler<EventArgs<CardUpdateViewModel>> UpdateCardRequested;
-        public event EventHandler<EventArgs<SearchViewModel>> Search;
+        public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<BlockDatabaseInfoModificationViewModel>> BlockModificationRequested;
         public event EventHandler<EventArgs<EditionDatabaseInfoModificationViewModel>> EditionModificationRequested;
         public event EventHandler<EventArgs<LanguageDatabaseInfoModificationViewModel>> LanguageModificationRequested;
@@ -85,23 +83,14 @@
         {
             OnEventRaise(ImportExportRequested);
         }
-        private void OnAddCardRequested(string name)
-        {
-            OnEventRaise(AddCardRequested, new CardInputViewModel(name));
-        }
         private void OnInputRequestedRequested(InputViewModel vm)
         {
             OnEventRaise(InputRequested, vm);
         }
-        private void OnUpdateCardRequested(CardUpdateViewModel vm)
+        private void OnDialogWanted(DialogViewModelBase vm)
         {
-            OnEventRaise(UpdateCardRequested, vm);
+            OnEventRaise(DialogWanted, vm);
         }
-        private void OnSearch(SearchViewModel vm)
-        {
-            OnEventRaise(Search, vm);
-        }
-
         #endregion
 
         private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg) where T: class
@@ -225,13 +214,13 @@
         }
         private void CardInputCommandExecute(object o)
         {
-            OnAddCardRequested(Hierarchical.Name);
+            OnDialogWanted(new CardInputViewModel(Hierarchical.Name));
             LoadCardsHierarchy();
         }
         private void ChangeCardCommandExecute(object o)
         {
-            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card, false);
-            OnUpdateCardRequested(vm);
+            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card);
+            OnDialogWanted(vm);
 
             if (vm.Result.HasValue && vm.Result.Value)
             {
@@ -241,8 +230,8 @@
         }
         private void MoveCardCommandExecute(object o)
         {
-            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card, true);
-            OnUpdateCardRequested(vm);
+            CardMoveViewModel vm = new CardMoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
+            OnDialogWanted(vm);
             if (vm.Result.HasValue && vm.Result.Value)
             {
                 _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected,vm.SourceLanguageSelected, vm.Count, vm.SourceIsFoil, vm.DestinationCardCollectionSelected);
@@ -256,7 +245,7 @@
             else
                 _searchViewModel.Reuse();
 
-            OnSearch(_searchViewModel);
+            OnDialogWanted(_searchViewModel);
 
             if (_searchViewModel.Result.HasValue && _searchViewModel.Result.Value)
             {
