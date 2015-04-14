@@ -5,8 +5,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=input:CardMoveViewModel}"
+        d:DataContext="{d:DesignInstance Type=management:AuditViewModel}"
         SizeToContent="WidthAndHeight"
         Background="Black">
     <Grid Margin="20" Background="White">

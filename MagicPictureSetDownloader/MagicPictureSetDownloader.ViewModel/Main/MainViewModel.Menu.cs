@@ -265,6 +265,11 @@
         {
             OnEventRaise(LanguageModificationRequested, new LanguageDatabaseInfoModificationViewModel());
         }
+        private void AuditCommandExecute(object o)
+        {
+            OnDialogWanted(new AuditViewModel());
+        }
+        
         #endregion
 
         private void CreateMenu()
@@ -315,6 +320,8 @@
 
             //Management
             MenuViewModel dbManagementMenu = new MenuViewModel("_Database Management");
+            dbManagementMenu.AddChild(new MenuViewModel("_Audit", new RelayCommand(AuditCommandExecute)));
+            dbManagementMenu.AddChild(MenuViewModel.Separator());
             dbManagementMenu.AddChild(new MenuViewModel("_Block", new RelayCommand(BlockModificationCommandExecute)));
             dbManagementMenu.AddChild(new MenuViewModel("_Edition", new RelayCommand(EditionModificationCommandExecute)));
             dbManagementMenu.AddChild(new MenuViewModel("_Language", new RelayCommand(LanguageModificationCommandExecute)));

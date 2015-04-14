@@ -9,6 +9,7 @@
         ICollection<ILanguage> GetAllLanguages();
         ICollection<ICardCollection> GetAllCollections();
         ICollection<IBlock> GetAllBlocks();
+        ICollection<IAudit> GetAllAudits();
 
         IList<IOption> GetOptions(TypeOfOption type);
         IOption GetOption(TypeOfOption type, string key);
