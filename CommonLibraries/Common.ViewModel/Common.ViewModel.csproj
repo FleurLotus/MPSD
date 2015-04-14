@@ -39,6 +39,7 @@
     <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="DisplayInfo.cs" />
     <Compile Include="ExceptionViewModel.cs" />
     <Compile Include="DialogViewModelBase.cs" />
     <Compile Include="InputViewModel.cs" />

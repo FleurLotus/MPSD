@@ -42,11 +42,15 @@
         public SearchViewModel()
         {
             _magicDatabase = MagicDatabaseManager.ReadOnly;
-            ReinitCommand = new RelayCommand(ReinitCommandExecute);
             //Never change
             Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
             Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token)
                                                                   .ToArray();
+
+            Display.Title = "Search";
+            Display.OkCommandLabel = "Search";
+            Display.CancelCommandLabel = "Close";
+            Display.OtherCommandLabel = "Reinit";
 
             EditionsSelected = new ObservableCollection<IEdition>();
             CollectionsSelected = new ObservableCollection<ICardCollection>();
@@ -56,7 +60,6 @@
             Reuse();
         }
 
-        public ICommand ReinitCommand { get; private set; }
 
         public ICollection<IEdition> Editions { get; private set; }
         public ICollection<IEdition> EditionsSelected { get; private set; }
@@ -145,6 +148,10 @@
             return ((!string.IsNullOrWhiteSpace(Name) || EditionsSelected.Count > 0 || ColorsSelected.Count > 0 || TypesSelected.Count > 0) && PerimeterScope == PerimeterScope.All) || 
                 CollectionsSelected.Count > 0;
         }
+        protected override void OtherCommandExecute(object o)
+        {
+            ReInit();
+        }
         internal void Reuse()
         {
             //Can be updated by application so refill the lists
@@ -176,11 +183,7 @@
             ColorsSelected.Clear();
             TypesSelected.Clear();
         }
-        private void ReinitCommandExecute(object o)
-        {
-            ReInit();
-        }
-
+       
         internal IEnumerable<CardViewModel> SearchResultAsViewModel()
         {
             return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai))

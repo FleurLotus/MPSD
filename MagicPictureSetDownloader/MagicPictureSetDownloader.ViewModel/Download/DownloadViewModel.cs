@@ -133,6 +133,8 @@
                     editionInfoViewModel.PropertyChanged += EditionInfoViewModelPropertyChanged;
                     Editions.Add(editionInfoViewModel);
                 }
+                if (Editions.Count == 0)
+                    Message = "Not any new edition";
             }
             catch (Exception ex)
             {

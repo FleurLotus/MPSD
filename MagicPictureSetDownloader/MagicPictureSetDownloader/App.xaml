@@ -1,74 +1,18 @@
 ﻿<Application x:Class="MagicPictureSetDownloader.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:converter="clr-namespace:MagicPictureSetDownloader.Converter"
-             xmlns:ui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
-             xmlns:wpfconverter="clr-namespace:Common.WPF.Converter;assembly=Common.WPF">
+             >
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Resources.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Styles.xaml"/>
+                
+                <ResourceDictionary Source="Resources.xaml"/>
+                <ResourceDictionary Source="Styles.xaml"/>
+                <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-
-            <!--Converter -->
-            <converter:InputModeToGridRowConverter x:Key="m2rConv" />
-            <converter:CardToImageConverter x:Key="c2iConv" />
-            <converter:CardToStatisticsConverter x:Key="c2sConv" />
-            <converter:CardToStatisticsVisibleConverter x:Key="c2svConv" />
-            <converter:CardToLanguagesTranslationConverter x:Key="c2tConv" />
-            <converter:CardToLanguagesTranslationVisibleConverter x:Key="c2tvConv" />
-            <converter:CardToRotationAngleConverter x:Key="c2aConv" />
-            <converter:TreeToTreeImageConverter x:Key="t2iConv" />
-            <converter:ByteArrayToImageConverter x:Key="ba2iConv" />
-            <converter:BoolToOrderImageConverter x:Key="b2iConv" />
-            <converter:BitmapToImageConverter x:Key="bm2iConv" />
-            <converter:StringToCastingCostImageConverter x:Key="s2iConv" />
-            <converter:TextToInlinesConverter x:Key="t2inConv" />
-            <converter:ReadOnlyConverterExceptNew x:Key="roenConv" />
-            <converter:ReadOnlyConverterForNoEdition x:Key="rofneConv" />
-
-            <wpfconverter:AggregateConverter x:Key="eneConv">
-                <converter:ReadOnlyConverterForNoEdition />
-                <wpfconverter:BoolInvertConverter/>
-            </wpfconverter:AggregateConverter>
-
-
-            <!-- Style  -->
-            <Style TargetType="ui:ProgressBar">
-                <Setter Property="Foreground" Value="#FF011ED3"/>
-                <Setter Property="Background" Value="#FF0AF9EE"/>
-                <Setter Property="ShowPerCent" Value="True"/>
-            </Style>
-
-            <Style TargetType="GridSplitter">
-                <Setter Property="ShowsPreview" Value="True" />
-                <Setter Property="Width" Value="5" />
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Stretch" />
-            </Style>
-
-            <Style x:Key="BorderedTextBox" TargetType="TextBox">
-                <Setter Property="BorderBrush" Value="Black"/>
-            </Style>
-
-            <Style x:Key="BottomButton"  TargetType="Button">
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="Width" Value="70"/>
-            </Style>
-
-            <Style TargetType="{x:Type ComboBoxItem}">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="VerticalContentAlignment" Value="Center"/>
-            </Style>
-
-            <Style x:Key="Title"  TargetType="TextBlock">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="Padding" Value="5"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

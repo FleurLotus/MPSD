@@ -1,25 +1,25 @@
-﻿namespace MagicPictureSetDownloader.UI
+﻿namespace Common.WPF.UI
 {
     using Common.Libray.Notify;
     using Common.ViewModel;
-    using Common.WPF.UI;
-
-    using MagicPictureSetDownloader.ViewModel.Input;
-
+    
     /// <summary>
-    /// Interaction logic for CardInputWindow.xaml
+    /// Interaction logic for CommonDialog.xaml
     /// </summary>
-    public partial class CardInputWindow
+    public partial class CommonDialog
     {
-        public CardInputWindow(CardInputViewModel vm)
+        public CommonDialog(DialogViewModelBase vm)
         {
             DataContext = vm;
             InitializeComponent();
+        }
+        public void DialogWanted(object sender, EventArgs<DialogViewModelBase> args)
+        {
+            new CommonDialog(args.Data) { Owner = this }.ShowDialog();
         }
         public void InputRequested(object sender, EventArgs<InputViewModel> args)
         {
             new InputDialog(args.Data) { Owner = this }.ShowDialog();
         }
-
     }
 }
