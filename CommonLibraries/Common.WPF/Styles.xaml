@@ -6,11 +6,37 @@
     <Style x:Key="VCentered" TargetType="Control">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
+    
     <Style x:Key="HVCentered" TargetType="Control" BasedOn="{StaticResource VCentered}">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
     </Style>
+    
     <Style x:Key="HRigthVCentered" TargetType="Control" BasedOn="{StaticResource VCentered}">
         <Setter Property="HorizontalContentAlignment" Value="Right"/>
+    </Style>
+
+    <Style x:Key="DataGridCellVCenter" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="DataGridCellHVCenter" TargetType="{x:Type DataGridCell}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DataGridCell}">
+                    <Grid Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type MenuItem}" >

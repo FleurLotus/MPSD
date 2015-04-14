@@ -58,6 +58,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DAO\Audit.cs" />
     <Compile Include="DAO\Block.cs" />
     <Compile Include="DAO\Translate.cs" />
     <Compile Include="DAO\Card.cs" />
@@ -70,6 +71,9 @@
     <Compile Include="DAO\PictureKey.cs" />
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />
+    <Compile Include="MagicDatabase.Audit.cs">
+	      <DependentUpon>MagicDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="MagicDatabase.cs" />
     <Compile Include="MagicDatabase.Collection.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
@@ -130,7 +134,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

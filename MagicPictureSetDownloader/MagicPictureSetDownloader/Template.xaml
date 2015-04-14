@@ -680,4 +680,53 @@
             </GroupBox>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type management:AuditViewModel}" d:IsDesignTimeCreatable="False">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" MinHeight="200"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Column="0" Content="Start date"/>
+                <DatePicker Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding MinDate}"/>
+                <Label Grid.Column="2" Content="End date"/>
+                <DatePicker Grid.Column="3" HorizontalAlignment="Left" SelectedDate="{Binding MaxDate}"/>
+            </Grid>
+            <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" MaxHeight="500" RowHeight="25"
+                      AlternatingRowBackground="Gainsboro"  AlternationCount="2" SelectionMode="Single" SelectionUnit="FullRow" CanUserSortColumns="False"
+                      ItemsSource="{Binding AuditInfos}" Visibility="{Binding AuditInfos.Count, Converter={StaticResource nz2vConv}}">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="FontWeight" Value="Bold" />
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Binding="{Binding OperationDate}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" CellStyle="{StaticResource DataGridCellHVCenter}"/>
+                    <DataGridTextColumn Header="Collection" Binding="{Binding CollectionName}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridTextColumn Header="Card" Binding="{Binding CardName}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="25" VerticalAlignment="Center"  Source="{Binding EditionName, Converter={StaticResource t2iConv}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Edition" Binding="{Binding EditionName}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridTextColumn Header="Card" Binding="{Binding CardName}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridTextColumn Header="Language" Binding="{Binding Language}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                    <DataGridCheckBoxColumn Header="IsFoil" Binding="{Binding IsFoil}" CellStyle="{StaticResource DataGridCellVCenter}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

@@ -126,6 +126,7 @@ namespace MagicPictureSetDownloader.Db
 
                 CardCollection collection = new CardCollection { Name = name };
                 AddToDbAndUpdateReferential(_connectionString, collection, InsertInReferential);
+                AuditAddCollection(collection.Id);
                 return collection;
             }
         }
@@ -149,6 +150,8 @@ namespace MagicPictureSetDownloader.Db
                                                                              IdLanguage = idLanguage
                                                                          };
                     AddToDbAndUpdateReferential(_connectionString, newCardInCollectionCount, InsertInReferential);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
                     return newCardInCollectionCount;
                 }
 
@@ -162,6 +165,8 @@ namespace MagicPictureSetDownloader.Db
                 if (newCount + newFoilCount == 0)
                 {
                     DeleteCardInCollection(cardInCollection.IdCollection, cardInCollection.IdGatherer, cardInCollection.IdLanguage);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
                     return null;
                 }
 
@@ -177,6 +182,8 @@ namespace MagicPictureSetDownloader.Db
                     cnx.Open();
                     Mapper<CardInCollectionCount>.UpdateOne(cnx, updateCardInCollectionCount);
                 }
+                AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
+                AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
                 return updateCardInCollectionCount;
             }
         }
@@ -337,11 +344,14 @@ namespace MagicPictureSetDownloader.Db
 
                 foreach (ICardInCollectionCount cardInCollectionCount in collection)
                 {
+                    AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, false, -cardInCollectionCount.Number);
+                    AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, true, -cardInCollectionCount.FoilNumber);
+
                     RemoveFromReferential(cardInCollectionCount);
                 }
             }
         }
-        public void DeleteCardInCollection(int idCollection, int idGatherer, int idLanguage)
+        private void DeleteCardInCollection(int idCollection, int idGatherer, int idLanguage)
         {
             using (new WriterLock(_lock))
             {
@@ -361,6 +371,7 @@ namespace MagicPictureSetDownloader.Db
                     return;
 
                 RemoveFromDbAndUpdateReferential(_connectionString, cardCollection as CardCollection, RemoveFromReferential);
+                AuditRemoveCollection(cardCollection.Id);
             }
         }
 
