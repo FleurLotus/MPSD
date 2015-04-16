@@ -146,14 +146,17 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 MaxCount = 0;
                 return;
             }
-
             MaxCount = SourceIsFoil? cardInCollectionCount.FoilNumber: cardInCollectionCount.Number;
         }
 
         private void ChangeSourceLanguage()
         {
             int idGatherer = MagicDatabase.GetIdGatherer(Card, SourceEditionSelected);
-            SourceLanguages = MagicDatabase.GetLanguages(idGatherer).ToArray();
+            SourceLanguages = _cardInCollectionCounts.Where(cicc => cicc.IdGatherer == idGatherer)
+                                                     .Select(cicc => MagicDatabase.GetLanguage(cicc.IdLanguage))
+                                                     .Distinct()
+                                                     .OrderBy(l => l.Id)
+                                                     .ToArray();
         }
     }
 }
