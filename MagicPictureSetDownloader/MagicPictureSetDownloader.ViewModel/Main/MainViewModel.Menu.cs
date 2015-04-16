@@ -341,7 +341,7 @@
                 return;
 
             ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
-
+            
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel != null)
             {
