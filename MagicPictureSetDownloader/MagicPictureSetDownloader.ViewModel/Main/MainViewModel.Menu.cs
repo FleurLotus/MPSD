@@ -318,15 +318,19 @@
             GenerateCollectionMenu();
             MenuRoot.AddChild(_collectionViewModel);
 
-            //Management
+            //Database Management
             MenuViewModel dbManagementMenu = new MenuViewModel("_Database Management");
             dbManagementMenu.AddChild(new MenuViewModel("_Audit", new RelayCommand(AuditCommandExecute)));
             dbManagementMenu.AddChild(MenuViewModel.Separator());
-            dbManagementMenu.AddChild(new MenuViewModel("_Block", new RelayCommand(BlockModificationCommandExecute)));
-            dbManagementMenu.AddChild(new MenuViewModel("_Edition", new RelayCommand(EditionModificationCommandExecute)));
-            dbManagementMenu.AddChild(new MenuViewModel("_Language", new RelayCommand(LanguageModificationCommandExecute)));
+            MenuViewModel updateTableMenu = new MenuViewModel("_Update table");
+            dbManagementMenu.AddChild(updateTableMenu);
             MenuRoot.AddChild(dbManagementMenu);
 
+            //Database Management/Update table
+            updateTableMenu.AddChild(new MenuViewModel("_Block", new RelayCommand(BlockModificationCommandExecute)));
+            updateTableMenu.AddChild(new MenuViewModel("_Edition", new RelayCommand(EditionModificationCommandExecute)));
+            updateTableMenu.AddChild(new MenuViewModel("_Language", new RelayCommand(LanguageModificationCommandExecute)));
+            
             //?
             MenuViewModel aboutMenu = new MenuViewModel("?");
             aboutMenu.AddChild(new MenuViewModel("_Version", new RelayCommand(VersionCommandExecute)));

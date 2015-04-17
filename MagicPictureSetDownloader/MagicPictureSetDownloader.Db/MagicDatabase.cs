@@ -21,6 +21,8 @@ namespace MagicPictureSetDownloader.Db
         private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase("MagicData.sdf", "MagicPicture.sdf"));
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private List<ICardAllDbInfo> _cacheForAllDbInfos;
+
 
         private MagicDatabase(string fileName, string pictureFileName)
         {
@@ -191,6 +193,15 @@ namespace MagicPictureSetDownloader.Db
                     collection = GetCardCollection(onlyInCollectionId);
                 }
 
+                if (collection == null && _cacheForAllDbInfos != null)
+                {
+                    //No filter and no change since last call but recalculate statistics 
+                    foreach (CardAllDbInfo cardAllDbInfo in _cacheForAllDbInfos.Cast<CardAllDbInfo>())
+                        cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(cardAllDbInfo.Card));
+
+                    return _cacheForAllDbInfos.AsReadOnly();
+                }
+
                 List<ICardAllDbInfo> ret = new List<ICardAllDbInfo>();
                 foreach (ICardEdition cardEdition in _cardEditions.Values)
                 {
@@ -227,9 +238,16 @@ namespace MagicPictureSetDownloader.Db
                                 cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
                         }
                     }
-
+                    
                     ret.Add(cardAllDbInfo);
                 }
+
+                //Push in cache in no filter
+                if (collection == null)
+                {
+                    _cacheForAllDbInfos = ret;
+                }
+
                 return ret.AsReadOnly();
             }
         }
