@@ -321,6 +321,7 @@ namespace MagicPictureSetDownloader.Db
         private void InsertInReferential(IEdition edition)
         {
             _editions.Add(edition);
+            _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ICard card)
         {
@@ -329,10 +330,12 @@ namespace MagicPictureSetDownloader.Db
             else
                 _cards.Add(card.Name + card.PartName, card);
 
+            _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ICardEdition cardEdition)
         {
             _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
+            _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(IOption option)
         {
@@ -349,6 +352,8 @@ namespace MagicPictureSetDownloader.Db
         {
             int key = TranslateKey(translate.IdCard, translate.IdLanguage);
             _translates.Add(key, translate);
+
+            _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ILanguage language)
         {
