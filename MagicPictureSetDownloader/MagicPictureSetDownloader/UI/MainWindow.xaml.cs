@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
     using System;
+    using System.ComponentModel;
     using System.Windows;
 
     using Common.Libray.Notify;
@@ -9,7 +10,6 @@
     using Common.WPF.UI;
 
     using MagicPictureSetDownloader.ViewModel.Main;
-    using MagicPictureSetDownloader.ViewModel.Management;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -46,15 +46,7 @@
         {
             new CommonDialog(args.Data) { Owner = this }.ShowDialog();
         }
-        public void BlockModificationRequested(object sender, EventArgs<BlockDatabaseInfoModificationViewModel> args)
-        {
-            new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
-        }
-        public void EditionModificationRequested(object sender, EventArgs<EditionDatabaseInfoModificationViewModel> args)
-        {
-            new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
-        }
-        public void LanguageModificationRequested(object sender, EventArgs<LanguageDatabaseInfoModificationViewModel> args)
+        public void DatabaseModificationRequested(object sender, EventArgs<INotifyPropertyChanged> args)
         {
             new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
         }

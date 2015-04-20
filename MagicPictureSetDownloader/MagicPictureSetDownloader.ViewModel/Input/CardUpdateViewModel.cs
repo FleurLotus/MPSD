@@ -6,94 +6,99 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
 
-    public class CardUpdateViewModel : CardUpdateViewModelCommun
+    public class CardUpdateViewModel : UpdateViewModelCommun
     {
-        private IEdition _destinationEditionSelected;
-        private ILanguage _destinationLanguageSelected;
-        private ILanguage[] _destinationLanguages;
+        private IEdition _editionSelected;
+        private ILanguage _languageSelected;
+        private ILanguage[] _languages;
 
-        private bool _destinationIsFoil;
-        private readonly IEdition[] _destinationEditions;
-        
-        public CardUpdateViewModel(string collectionName, ICard card): base (collectionName, card)
+        private bool _isFoil;
+        private readonly IEdition[] _editions;
+
+        public CardUpdateViewModel(string collectionName, ICard card)
+            : base(collectionName)
         {
-            _destinationEditions = MagicDatabase.GetAllEditionIncludingCardOrdered(card)
-                                                 .ToArray();
+            _editions = MagicDatabase.GetAllEditionIncludingCardOrdered(card)
+                .ToArray();
 
-            DestinationEditionSelected = SourceEditionSelected;
+            Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
+
+            EditionSelected = Source.EditionSelected;
 
             Display.Title = "Update infos";
         }
-        public IEdition[] DestinationEditions
+        public CardSourceViewModel Source { get; private set; }
+        public IEdition[] Editions
         {
-            get { return _destinationEditions; }
+            get { return _editions; }
         }
-        public ILanguage[] DestinationLanguages
+        public ILanguage[] Languages
         {
-            get { return _destinationLanguages; }
+            get { return _languages; }
             private set
             {
-                if (value != _destinationLanguages)
+                if (value != _languages)
                 {
-                    _destinationLanguages = value;
-                    OnNotifyPropertyChanged(() => DestinationLanguages);
-                    if (_destinationLanguages != null && _destinationLanguages.Length > 0)
-                        DestinationLanguageSelected = _destinationLanguages[0];
+                    _languages = value;
+                    OnNotifyPropertyChanged(() => Languages);
+                    if (_languages != null && _languages.Length > 0)
+                        LanguageSelected = _languages[0];
                 }
             }
         }
-        public bool DestinationIsFoil
+        public bool IsFoil
         {
-            get { return _destinationIsFoil; }
+            get { return _isFoil; }
             set
             {
-                if (value != _destinationIsFoil)
+                if (value != _isFoil)
                 {
-                    _destinationIsFoil = value;
-                    OnNotifyPropertyChanged(() => DestinationIsFoil);
+                    _isFoil = value;
+                    OnNotifyPropertyChanged(() => IsFoil);
                 }
             }
         }
-        public IEdition DestinationEditionSelected
+        public IEdition EditionSelected
         {
-            get { return _destinationEditionSelected; }
+            get { return _editionSelected; }
             set
             {
-                if (value != _destinationEditionSelected)
+                if (value != _editionSelected)
                 {
-                    _destinationEditionSelected = value;
-                    OnNotifyPropertyChanged(() => DestinationEditionSelected);
+                    _editionSelected = value;
+                    OnNotifyPropertyChanged(() => EditionSelected);
                     ChangeDestinationLanguage();
-                    if (_destinationEditionSelected != null && !_destinationEditionSelected.HasFoil)
-                        DestinationIsFoil = false;
+                    if (_editionSelected != null && !_editionSelected.HasFoil)
+                        IsFoil = false;
                 }
             }
         }
-        public ILanguage DestinationLanguageSelected
+        public ILanguage LanguageSelected
         {
-            get { return _destinationLanguageSelected; }
+            get { return _languageSelected; }
             set
             {
-                if (value != _destinationLanguageSelected)
+                if (value != _languageSelected)
                 {
-                    _destinationLanguageSelected = value;
-                    OnNotifyPropertyChanged(() => DestinationLanguageSelected);
+                    _languageSelected = value;
+                    OnNotifyPropertyChanged(() => LanguageSelected);
                 }
             }
         }
+        
         private void ChangeDestinationLanguage()
         {
-            int idGatherer = MagicDatabase.GetIdGatherer(Card, DestinationEditionSelected);
-            DestinationLanguages = MagicDatabase.GetLanguages(idGatherer).ToArray();
+            int idGatherer = MagicDatabase.GetIdGatherer(Source.Card, EditionSelected);
+            Languages = MagicDatabase.GetLanguages(idGatherer).ToArray();
         }
         protected override bool OkCommandCanExecute(object o)
         {
-            if (Count <= 0 || Count > MaxCount || SourceEditionSelected == null)
+            if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
                 return false;
 
-            return DestinationEditionSelected != null && DestinationLanguageSelected!= null && 
-                   (DestinationLanguageSelected != SourceLanguageSelected || DestinationEditionSelected != SourceEditionSelected || SourceIsFoil != DestinationIsFoil) && 
-                   (DestinationEditionSelected.HasFoil || !DestinationIsFoil);
+            return EditionSelected != null && LanguageSelected!= null &&
+                   (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil) && 
+                   (EditionSelected.HasFoil || !IsFoil);
         }
     }
 }

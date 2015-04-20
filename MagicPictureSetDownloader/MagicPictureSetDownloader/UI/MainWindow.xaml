@@ -54,16 +54,9 @@
         <i:EventTrigger EventName="ImportExportRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="ImportExportRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="BlockModificationRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="BlockModificationRequested" />
+        <i:EventTrigger EventName="DatabaseModificationRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="DatabaseModificationRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="EditionModificationRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="EditionModificationRequested" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="LanguageModificationRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="LanguageModificationRequested" />
-        </i:EventTrigger>
-
     </i:Interaction.Triggers>
 
     <Grid>

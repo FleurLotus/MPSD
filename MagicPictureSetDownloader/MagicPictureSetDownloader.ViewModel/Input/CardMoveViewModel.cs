@@ -5,44 +5,47 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
     using MagicPictureSetDownloader.Interface;
 
-    public class CardMoveViewModel : CardUpdateViewModelCommun
+    public class CardMoveViewModel : UpdateViewModelCommun
     {
-        private ICardCollection _destinationCardCollectionSelected;
+        private ICardCollection _cardCollectionSelected;
         private readonly ICardCollection[] _collections;
 
-        public CardMoveViewModel(string collectionName, ICard card): 
-            base(collectionName, card)
+        public CardMoveViewModel(string collectionName, ICard card) : 
+            base(collectionName)
         {
-            _collections = MagicDatabase.GetAllCollections().Where(c => c != SourceCardCollection)
+            Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
+
+            _collections = MagicDatabase.GetAllCollections().Where(c => c != SourceCollection)
                 .ToArray();
 
             if (_collections.Length > 0)
-                DestinationCardCollectionSelected = _collections[0];
+                CardCollectionSelected = _collections[0];
 
             Display.Title = "Move card";
         }
+        public CardSourceViewModel Source { get; private set; }
         public ICardCollection[] Collections
         {
             get { return _collections; }
         }
-        public ICardCollection DestinationCardCollectionSelected
+        public ICardCollection CardCollectionSelected
         {
-            get { return _destinationCardCollectionSelected; }
+            get { return _cardCollectionSelected; }
             set
             {
-                if (value != _destinationCardCollectionSelected)
+                if (value != _cardCollectionSelected)
                 {
-                    _destinationCardCollectionSelected = value;
-                    OnNotifyPropertyChanged(() => DestinationCardCollectionSelected);
+                    _cardCollectionSelected = value;
+                    OnNotifyPropertyChanged(() => CardCollectionSelected);
                 }
             }
         }
         protected override bool OkCommandCanExecute(object o)
         {
-            if (Count <= 0 || Count > MaxCount || SourceEditionSelected == null)
+            if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
                 return false;
 
-            return DestinationCardCollectionSelected != null && DestinationCardCollectionSelected != SourceCardCollection;
+            return CardCollectionSelected != null && CardCollectionSelected != SourceCollection;
         }
     }
 }
