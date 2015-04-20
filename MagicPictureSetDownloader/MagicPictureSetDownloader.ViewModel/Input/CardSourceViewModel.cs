@@ -131,6 +131,12 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private void UpdateMaxCount()
         {
             int idGatherer = _magicDatabase.GetIdGatherer(Card, EditionSelected);
+            if (LanguageSelected == null)
+            {
+                MaxCount = 0;
+                return;
+            }
+
             ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer && cicc.IdLanguage == LanguageSelected.Id);
           
             if (cardInCollectionCount == null)

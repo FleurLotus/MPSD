@@ -29,7 +29,10 @@ namespace MagicPictureSetDownloader.Core.IO
         public IEnumerable<IImportExportCardCount> Parse(string input)
         {
             IDictionary<int, ImportExportCardInfo> ret = new Dictionary<int, ImportExportCardInfo>();
-            IEnumerable<IImportExportCardCount> enumerable = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Select(ParseLine);
+            IEnumerable<IImportExportCardCount> enumerable = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                                                  .Select(ParseLine)
+                                                                  .Where(i => i != null);
+            //TODO: manage/notify parsing error
 
             //Merge if multiple lines from file like in mtgm format
             foreach (IImportExportCardCount importExportCardCount in enumerable)

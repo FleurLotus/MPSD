@@ -11,6 +11,7 @@
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Input;
+    using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Management;
 
     public partial class MainViewModel
@@ -23,7 +24,7 @@
         public event EventHandler UpdateImageDatabaseRequested;
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
-        public event EventHandler ImportExportRequested;
+        public event EventHandler<EventArgs<ImportExportViewModel>> ImportExportRequested;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
@@ -78,9 +79,9 @@
         {
             OnEventRaise(CloseRequested);
         }
-        private void OnImportExportRequested()
+        private void OnImportExportRequested(ImportExportViewModel vm)
         {
-            OnEventRaise(ImportExportRequested);
+            OnEventRaise(ImportExportRequested, vm);
         }
         private void OnInputRequestedRequested(InputViewModel vm)
         {
@@ -149,7 +150,7 @@
         {
             InputViewModel vm = InputViewModelFactory.Instance.CreateTextViewModel("New Collection", "Input new collection name");
             OnInputRequestedRequested(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 string newName = vm.Text;
 
@@ -173,7 +174,7 @@
             InputViewModel vm = InputViewModelFactory.Instance.CreateMoveFromListToOtherViewModel("Delete Collection", "Choose collection to delete", source, "Move card to: ('None' to remove them)", dest);
 
             OnInputRequestedRequested(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 string toBeDeleted = vm.Selected;
                 string toAdd = vm.Selected2;
@@ -181,7 +182,6 @@
                 if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
                 {
                     Loading = true;
-
                     ThreadPool.QueueUserWorkItem(DeleteCollectionAsync, vm);
                 }
             }
@@ -194,7 +194,7 @@
             InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListAndTextViewModel("Rename Collection", "Choose collection to rename and input new name", source);
 
             OnInputRequestedRequested(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 string toBeRenamed = vm.Selected;
                 string newName = vm.Text;
@@ -209,7 +209,19 @@
         }
         private void ImportExportCommandExecute(object o)
         {
-            OnImportExportRequested();
+            ImportExportViewModel vm = new ImportExportViewModel();
+            OnImportExportRequested(vm);
+
+            if (vm.Result == true)
+            {
+                Loading = true;
+                ThreadPool.QueueUserWorkItem(oo =>
+                    {
+                        vm.ImportExport();
+                        LoadCardsHierarchy();
+                    });
+            }
+
         }
         private void CardInputCommandExecute(object o)
         {
@@ -221,32 +233,19 @@
             CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card);
             OnDialogWanted(vm);
 
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.LanguageSelected);
                 LoadCardsHierarchy();
             }
         }
-        private void MoveCardCommandExecute(object o)
-        {
-            CardMoveViewModel vm = new CardMoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
-            OnDialogWanted(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
-            {
-                _magicDatabase.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
-                LoadCardsHierarchy();
-            }
-        }
         private void CopyCardCommandExecute(object o)
         {
-            //TODO: Code copy
-            /*CardMoveViewModel vm = new CardMoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
-            OnDialogWanted(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
-            {
-                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected,vm.SourceLanguageSelected, vm.Count, vm.SourceIsFoil, vm.CardCollectionSelected);
-                LoadCardsHierarchy();
-            }*/
+            MoveOrCopyCard((o as CardViewModel).Card, true);
+        }
+        private void MoveCardCommandExecute(object o)
+        {
+            MoveOrCopyCard((o as CardViewModel).Card, false);
         }
         private void SearchCommandExecute(object o)
         {
@@ -282,6 +281,17 @@
         
         #endregion
 
+        private void MoveOrCopyCard(ICard card, bool forCopy)
+        {
+            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, card, forCopy);
+            OnDialogWanted(vm);
+            if (vm.Result == true)
+            {
+                _magicDatabase.MoveOrCardToOtherCollection(vm.Copy, vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
+                LoadCardsHierarchy();
+            }
+        }
+        
         private void CreateMenu()
         {
             //File
@@ -377,9 +387,9 @@
             {
                 _collectionViewModel.AddChild(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
                 _collectionViewModel.AddChild(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
-                _collectionViewModel.AddChild(MenuViewModel.Separator());
-                _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
             }
+            _collectionViewModel.AddChild(MenuViewModel.Separator());
+            _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
 
             _collectionViewModel.AddChild(MenuViewModel.Separator());
             _collectionViewModel.AddChild(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));

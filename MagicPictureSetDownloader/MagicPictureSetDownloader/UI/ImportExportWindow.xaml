@@ -15,10 +15,12 @@
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
             <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="OpenFileDialog" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="OpenFileDialog" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
-
     <TabControl SelectedIndex="{binding:TwoWayBinding SelectedIndex}">
-        <TabItem Header="Export">
+        <TabItem Header="Export" Visibility="{Binding HasCollection, Converter={StaticResource b2vConv}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -60,11 +62,16 @@
                     <ColumnDefinition Width="Auto" MinWidth="150"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" Grid.Row="0" Content="File to import"/>
+                <Button Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" Content="Open" Padding="5,0" Command="{Binding OpenCommand}"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding ImportFilePath}" Style="{StaticResource BorderedTextBox}"/>
-                <RadioButton Grid.Column="0" Grid.Row="1" Margin="5" GroupName="All" Content="New collection" IsChecked="{binding:TwoWayBinding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=NewCollection}"/>
-                <TextBox Grid.Column="1" Grid.Row="1" Text="{binding:TwoWayBinding NewCollectionName}" IsEnabled="{Binding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=NewCollection}" Style="{StaticResource BorderedTextBox}"/>
-                <RadioButton Grid.Column="0" Grid.Row="2" Margin="5" GroupName="All" Content="Add to existing one" IsChecked="{binding:TwoWayBinding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=AddToCollection}"/>
-                <ListView Grid.Column="1" Grid.Row="2" SelectedItem="{binding:TwoWayBinding SelectedCollection}" ItemsSource="{Binding ImportCollections}" IsEnabled="{Binding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=AddToCollection}">
+                <RadioButton Grid.Column="0" Grid.Row="1" Margin="5" GroupName="All" Content="New collection" 
+                             IsChecked="{binding:TwoWayBinding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=NewCollection}"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{binding:TwoWayBinding NewCollectionName}" 
+                             IsEnabled="{Binding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=NewCollection}" Style="{StaticResource BorderedTextBox}"/>
+                <RadioButton Grid.Column="0" Grid.Row="2" Margin="5" GroupName="All" Content="Add to existing one"  IsEnabled="{Binding HasCollection}"
+                             IsChecked="{binding:TwoWayBinding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=AddToCollection}"/>
+                <ListView Grid.Column="1" Grid.Row="2" SelectedItem="{binding:TwoWayBinding SelectedCollection}" ItemsSource="{Binding ImportCollections}" 
+                             IsEnabled="{Binding ImportType, Converter={StaticResource e2bConv}, ConverterParameter=AddToCollection}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding}" MinWidth="100"/>

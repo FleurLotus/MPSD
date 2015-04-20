@@ -9,6 +9,7 @@
     using Common.WPF;
     using Common.WPF.UI;
 
+    using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Main;
 
     /// <summary>
@@ -38,9 +39,9 @@
         {
             new InputDialog(args.Data) { Owner = this }.ShowDialog();
         }
-        public void ImportExportRequested(object sender, EventArgs args)
+        public void ImportExportRequested(object sender, EventArgs<ImportExportViewModel> args)
         {
-            new ImportExportWindow { Owner = this }.ShowDialog();
+            new ImportExportWindow(args.Data) { Owner = this }.ShowDialog();
         }
         public void DialogWanted(object sender, EventArgs<DialogViewModelBase> args)
         {

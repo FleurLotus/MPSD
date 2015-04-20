@@ -25,7 +25,7 @@
             CredentialInputViewModel vm = new CredentialInputViewModel();
             CommonDialog f = new CommonDialog(vm) { Owner = this, WindowStyle = WindowStyle.ToolWindow };
             f.ShowDialog();
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 args.Data.Login = vm.Login;
                 args.Data.Password = vm.Password;
