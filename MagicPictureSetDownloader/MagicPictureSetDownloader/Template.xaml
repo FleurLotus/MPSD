@@ -418,7 +418,6 @@
         </Grid>
     </DataTemplate>
 
-
     <!-- Part source of Card move -->
     <DataTemplate DataType="{x:Type input:CardSourceViewModel}" d:IsDesignTimeCreatable="False">
         <Grid Margin="5" Width="400">
@@ -453,7 +452,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type input:CardMoveViewModel}" d:IsDesignTimeCreatable="False">
+    <DataTemplate DataType="{x:Type input:CardMoveOrCopyViewModel}" d:IsDesignTimeCreatable="False">
         <Grid Margin="5" Width="400">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -467,6 +466,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70"/>
@@ -474,12 +474,13 @@
                         <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Collection" Padding="10,0,0,0" VerticalContentAlignment="Center" />
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding CardCollectionSelected}" />
+                    <CheckBox Grid.Row="0" Grid.Column="1" Content="For copy" Margin="10,2" FontWeight="Bold" IsChecked="{binding:TwoWayBinding Copy}"/>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Collection" Padding="10,0,0,0" VerticalContentAlignment="Center" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding CardCollectionSelected}" />
 
-                    <Label Grid.Column="0" Grid.Row="1" Content="Count" HorizontalAlignment="Center"/>
-                    <Slider Grid.Column="1" Grid.Row="1" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
-                    <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                    <Label Grid.Column="0" Grid.Row="2" Content="Count" HorizontalAlignment="Center"/>
+                    <Slider Grid.Column="1" Grid.Row="2" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
+                    <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                         <Label Content="{Binding Source.Count}"/>
                         <Label Content="/"/>
                         <Label Content="{Binding Source.MaxCount}"/>

@@ -27,7 +27,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
             Display.OkCommandLabel = "Load";
             Display.CancelCommandLabel = "Close";
 
-            MinDate = DateTime.MinValue;
+            MinDate = DateTime.UtcNow.Date.AddDays(-1);
             MaxDate = DateTime.UtcNow.Date;
             AuditInfos = new RangeObservableCollection<AuditInfo>();
         }

@@ -5,23 +5,24 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
     using MagicPictureSetDownloader.Interface;
 
-    public class CardMoveViewModel : UpdateViewModelCommun
+    public class CardMoveOrCopyViewModel : UpdateViewModelCommun
     {
         private ICardCollection _cardCollectionSelected;
         private readonly ICardCollection[] _collections;
+        private bool _copy;
 
-        public CardMoveViewModel(string collectionName, ICard card) : 
+        public CardMoveOrCopyViewModel(string collectionName, ICard card, bool copy) : 
             base(collectionName)
         {
             Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
 
+            Copy = copy;
             _collections = MagicDatabase.GetAllCollections().Where(c => c != SourceCollection)
                 .ToArray();
 
             if (_collections.Length > 0)
                 CardCollectionSelected = _collections[0];
-
-            Display.Title = "Move card";
+          
         }
         public CardSourceViewModel Source { get; private set; }
         public ICardCollection[] Collections
@@ -40,6 +41,20 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
+        public bool Copy
+        {
+            get { return _copy; }
+            set
+            {
+                if (value != _copy)
+                {
+                    _copy = value;
+                    OnNotifyPropertyChanged(() => Copy);
+                }
+                Display.Title = Copy ? "Copy card" : "Move card";
+            }
+        }
+
         protected override bool OkCommandCanExecute(object o)
         {
             if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)

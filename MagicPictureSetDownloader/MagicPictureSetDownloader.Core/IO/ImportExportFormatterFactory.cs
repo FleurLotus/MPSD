@@ -15,7 +15,7 @@ namespace MagicPictureSetDownloader.Core.IO
         static ImportExportFormatterFactory()
         {
            _formatters = Assembly.GetExecutingAssembly().GetTypes()
-                                                        .Where(t => t.IsClass && t.GetInterfaces().Contains(typeof(IImportExportFormatter)))
+                                                        .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Contains(typeof(IImportExportFormatter)))
                                                         .Select(Activator.CreateInstance)
                                                         .Cast<IImportExportFormatter>()
                                                         .ToArray();

@@ -6,7 +6,7 @@
 
     internal class MtgmFormatter : FormatterBase
     {
-        private readonly Regex _regLine = new Regex(@"^(?<Name>.+)#(?<Edition>[A-Z]{2,3})#(?<Count>\d+)#(?<Foil>(?i)true|false(?-i))$", RegexOptions.Compiled);
+        private readonly Regex _regLine = new Regex(@"^(?<Name>.+)#(?<Edition>[A-Z0-9]{2,3})#(?<Count>\d+)#(?<Foil>(?i)true|false(?-i))(?<Reserve>#(?:(?i)true|false(?-i)))?$", RegexOptions.Compiled);
         
         public MtgmFormatter()
             : base(ExportFormat.MTGM, ".dk2")

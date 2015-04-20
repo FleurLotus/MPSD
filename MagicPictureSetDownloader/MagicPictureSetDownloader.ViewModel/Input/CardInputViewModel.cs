@@ -183,7 +183,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         {
             InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListViewModel("Other collection", "Choose other collection to input", _collections.Select(c => c.Name).ToList());
             OnInputRequestedRequested(vm);
-            if (vm.Result.HasValue && vm.Result.Value)
+            if (vm.Result == true)
             {
                 string collection = vm.Selected;
 

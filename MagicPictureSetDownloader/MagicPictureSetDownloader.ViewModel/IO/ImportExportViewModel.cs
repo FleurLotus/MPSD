@@ -6,15 +6,16 @@
     using System.Linq;
     using System.Windows.Input;
 
+    using Common.Libray.Notify;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.IO;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
-
-    public class ImportExportViewModel : NotifyPropertyChangedBase
+    
+    public class ImportExportViewModel : DialogViewModelBase
     {
-        public event EventHandler Closing;
+        public event EventHandler<EventArgs<InputViewModel>> OpenFileDialog;
         private int _selectedIndex;
         private string _path;
         private ExportFormat _exportFormatSelected;
@@ -29,15 +30,18 @@
             IMagicDatabaseReadOnly magicDatabase = MagicDatabaseManager.ReadOnly;
             ExportCollections = magicDatabase.GetAllCollections().Select(cc => new ExportedCollectionViewModel(cc.Name)).ToList();
             ImportCollections = magicDatabase.GetAllCollections().Select(cc => cc.Name).ToList();
-            OkCommand = new RelayCommand(OkCommandExecute, OkCommandCanExecute);
-            CancelCommand = new RelayCommand(CancelCommandExecute);
+
+            HasCollection = ExportCollections.Count > 0;
+            SelectedIndex = HasCollection ? 0 : 1;
+
+            OpenCommand = new RelayCommand(OpenCommandExecute);
         }
 
         public ExportFormat[] ExportFormats { get; private set; }
         public IList<ExportedCollectionViewModel> ExportCollections { get; private set; }
         public IList<string> ImportCollections { get; private set; }
-        public ICommand OkCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
+        public ICommand OpenCommand { get; private set; }
+        public bool HasCollection { get; private set; }
         public string Path
         {
             get { return _path; }
@@ -123,7 +127,7 @@
             }
         }
 
-        private bool OkCommandCanExecute(object o)
+        protected override bool OkCommandCanExecute(object o)
         {
             if (SelectedIndex == 0)
             {
@@ -142,39 +146,42 @@
 
             return false;
         }
-
-        private void OkCommandExecute(object o)
+        private void OpenCommandExecute(object o)
         {
-            ImportExportWorker importExportWorker = new ImportExportWorker();
-            if (SelectedIndex == 0)
+            InputViewModel vm = InputViewModelFactory.Instance.CreateTextViewModel(null, null);
+            OnOpenFileDialog(vm);
+            if (!string.IsNullOrWhiteSpace(vm.Text))
+                ImportFilePath = vm.Text;
+        }
+        private void OnOpenFileDialog(InputViewModel vm)
+        {
+            var e = OpenFileDialog;
+            if (e != null)
+                e(this, new EventArgs<InputViewModel>(vm));
+        }
+
+        public void ImportExport()
+        {
+            if (Result == true)
             {
-                importExportWorker.Export(ExportCollections.Where(c => c.IsSelected).Select(c => c.Name).ToArray(), Path, ExportFormatSelected);
-            }
-            if (SelectedIndex == 1)
-            {
-                switch (ImportType)
+                ImportExportWorker importExportWorker = new ImportExportWorker();
+                if (SelectedIndex == 0)
                 {
-                    case ImportOption.NewCollection:
-                        importExportWorker.ImportToNewColletion(ImportFilePath, NewCollectionName);
-                        break;
-                    case ImportOption.AddToCollection:
-                        importExportWorker.ImportToExistingColletion(ImportFilePath, SelectedCollection);
-                        break;
+                    importExportWorker.Export(ExportCollections.Where(c => c.IsSelected).Select(c => c.Name).ToArray(), Path, ExportFormatSelected);
+                }
+                if (SelectedIndex == 1)
+                {
+                    switch (ImportType)
+                    {
+                        case ImportOption.NewCollection:
+                            importExportWorker.ImportToNewColletion(ImportFilePath, NewCollectionName);
+                            break;
+                        case ImportOption.AddToCollection:
+                            importExportWorker.ImportToExistingColletion(ImportFilePath, SelectedCollection);
+                            break;
+                    }
                 }
             }
-
-            OnClosing();
-        }
-        private void CancelCommandExecute(object o)
-        {
-            OnClosing();
-        }
-
-        private void OnClosing()
-        {
-            var e = Closing;
-            if (e != null)
-                e(this, EventArgs.Empty);
         }
     }
 }

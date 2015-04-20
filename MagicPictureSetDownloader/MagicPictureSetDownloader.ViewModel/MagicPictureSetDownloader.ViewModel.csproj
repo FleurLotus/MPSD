@@ -51,7 +51,7 @@
     <Compile Include="Input\UpdateViewModelCommun.cs" />
     <Compile Include="Input\CardUpdateViewModel.cs" />
     <Compile Include="Input\SearchViewModel.cs" />
-    <Compile Include="Input\CardMoveViewModel.cs" />
+    <Compile Include="Input\CardMoveOrCopyViewModel.cs" />
     <Compile Include="Input\CardInputViewModel.cs" />
     <Compile Include="IO\ExportedCollectionViewModel.cs" />
     <Compile Include="IO\ImportExportViewModel.cs" />
