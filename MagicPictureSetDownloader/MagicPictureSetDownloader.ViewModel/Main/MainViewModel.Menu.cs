@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Linq;
     using System.Threading;
 
@@ -25,9 +26,7 @@
         public event EventHandler ImportExportRequested;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
-        public event EventHandler<EventArgs<BlockDatabaseInfoModificationViewModel>> BlockModificationRequested;
-        public event EventHandler<EventArgs<EditionDatabaseInfoModificationViewModel>> EditionModificationRequested;
-        public event EventHandler<EventArgs<LanguageDatabaseInfoModificationViewModel>> LanguageModificationRequested;
+        public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
 
         #endregion
 
@@ -224,7 +223,7 @@
 
             if (vm.Result.HasValue && vm.Result.Value)
             {
-                _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCardCollection, vm.Card, vm.Count, vm.SourceEditionSelected, vm.SourceIsFoil,vm.SourceLanguageSelected, vm.DestinationEditionSelected, vm.DestinationIsFoil, vm.DestinationLanguageSelected);
+                _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.LanguageSelected);
                 LoadCardsHierarchy();
             }
         }
@@ -234,9 +233,20 @@
             OnDialogWanted(vm);
             if (vm.Result.HasValue && vm.Result.Value)
             {
-                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected,vm.SourceLanguageSelected, vm.Count, vm.SourceIsFoil, vm.DestinationCardCollectionSelected);
+                _magicDatabase.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
                 LoadCardsHierarchy();
             }
+        }
+        private void CopyCardCommandExecute(object o)
+        {
+            //TODO: Code copy
+            /*CardMoveViewModel vm = new CardMoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
+            OnDialogWanted(vm);
+            if (vm.Result.HasValue && vm.Result.Value)
+            {
+                _magicDatabase.MoveCardToOtherCollection(vm.SourceCardCollection, vm.Card, vm.SourceEditionSelected,vm.SourceLanguageSelected, vm.Count, vm.SourceIsFoil, vm.CardCollectionSelected);
+                LoadCardsHierarchy();
+            }*/
         }
         private void SearchCommandExecute(object o)
         {
@@ -255,15 +265,15 @@
         }
         private void BlockModificationCommandExecute(object o)
         {
-            OnEventRaise(BlockModificationRequested, new BlockDatabaseInfoModificationViewModel());
+            OnEventRaise(DatabaseModificationRequested, new BlockDatabaseInfoModificationViewModel());
         }
         private void EditionModificationCommandExecute(object o)
         {
-            OnEventRaise(EditionModificationRequested, new EditionDatabaseInfoModificationViewModel());
+            OnEventRaise(DatabaseModificationRequested, new EditionDatabaseInfoModificationViewModel());
         }
         private void LanguageModificationCommandExecute(object o)
         {
-            OnEventRaise(LanguageModificationRequested, new LanguageDatabaseInfoModificationViewModel());
+            OnEventRaise(DatabaseModificationRequested, new LanguageDatabaseInfoModificationViewModel());
         }
         private void AuditCommandExecute(object o)
         {
@@ -349,6 +359,8 @@
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel != null)
             {
+                ContextMenuRoot.AddChild(MenuViewModel.Separator());
+                ContextMenuRoot.AddChild(new MenuViewModel("Copy to other collection", new RelayCommand(CopyCardCommandExecute), nodeViewModel.Card));
                 ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
                 ContextMenuRoot.AddChild(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
             }

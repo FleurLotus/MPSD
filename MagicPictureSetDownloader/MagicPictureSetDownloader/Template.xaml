@@ -150,31 +150,6 @@
         </StackPanel>
     </ControlTemplate>
 
-    <!-- Part source of Card move -->
-    <ControlTemplate x:Key="CardSourcePartControlTemplate">
-        <GroupBox BorderBrush="Black" BorderThickness="1" Header="Source">
-            <Grid Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="70"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
-                <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
-                <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding SourceEditions}" SelectedItem="{binding:TwoWayBinding SourceEditionSelected}"  />
-                <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding SourceEditionSelected.Name, Converter={StaticResource t2iConv}}"/>
-
-                <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding SourceLanguages}" SelectedItem="{binding:TwoWayBinding SourceLanguageSelected}"  />
-                <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding SourceIsFoil}"/>
-            </Grid>
-        </GroupBox>
-    </ControlTemplate>
-
     <!-- Data Template -->
     <!-- Menu -->
     <HierarchicalDataTemplate DataType="{x:Type self:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
@@ -443,19 +418,51 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type input:CardMoveViewModel}" d:IsDesignTimeCreatable="False">
+
+    <!-- Part source of Card move -->
+    <DataTemplate DataType="{x:Type input:CardSourceViewModel}" d:IsDesignTimeCreatable="False">
         <Grid Margin="5" Width="400">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" Content="{Binding Card}" ContentStringFormat="{}Card : {0}" />
 
-            <Control Grid.Row="1" Template="{StaticResource CardSourcePartControlTemplate}" />
+            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Source">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-            <GroupBox Grid.Row="2" BorderBrush="Black" BorderThickness="1" Header="Destination">
+                    <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding EditionSelected}"  />
+                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}"  />
+                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type input:CardMoveViewModel}" d:IsDesignTimeCreatable="False">
+        <Grid Margin="5" Width="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <ContentControl Grid.Row="0" Content="{Binding Source}" />
+
+            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Destination">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -468,14 +475,14 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Column="0" Grid.Row="0" Content="Collection" Padding="10,0,0,0" VerticalContentAlignment="Center" />
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding DestinationCardCollectionSelected}" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding CardCollectionSelected}" />
 
                     <Label Grid.Column="0" Grid.Row="1" Content="Count" HorizontalAlignment="Center"/>
-                    <Slider Grid.Column="1" Grid.Row="1" Margin="0,5"  Value="{binding:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
+                    <Slider Grid.Column="1" Grid.Row="1" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
                     <StackPanel Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                        <Label Content="{Binding Count}"/>
+                        <Label Content="{Binding Source.Count}"/>
                         <Label Content="/"/>
-                        <Label Content="{Binding MaxCount}"/>
+                        <Label Content="{Binding Source.MaxCount}"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
@@ -487,14 +494,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" Content="{Binding Card}" ContentStringFormat="{}Card : {0}" />
-
-            <Control Grid.Row="1" Template="{StaticResource CardSourcePartControlTemplate}" />
-
-            <GroupBox Grid.Row="2" BorderBrush="Black" BorderThickness="1" Header="Destination">
+            <ContentControl Grid.Row="0" Content="{Binding Source}" />
+            
+            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Destination">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -510,17 +514,17 @@
                     <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center" />
                     <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center" />
 
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding DestinationEditions}" SelectedItem="{binding:TwoWayBinding DestinationEditionSelected}" />
-                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding DestinationEditionSelected.Name, Converter={StaticResource t2iConv}}"/>
-                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding DestinationLanguages}" SelectedItem="{binding:TwoWayBinding DestinationLanguageSelected}" />
-                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding DestinationIsFoil}" IsEnabled="{Binding DestinationEditionSelected.HasFoil}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding EditionSelected}" />
+                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
+                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Count" HorizontalAlignment="Center"/>
-                    <Slider Grid.Column="1" Grid.Row="2" Margin="0,5"  Value="{binding:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
+                    <Slider Grid.Column="1" Grid.Row="2" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
                     <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                        <Label Content="{Binding Count}"/>
+                        <Label Content="{Binding Source.Count}"/>
                         <Label Content="/"/>
-                        <Label Content="{Binding MaxCount}"/>
+                        <Label Content="{Binding Source.MaxCount}"/>
                     </StackPanel>
                 </Grid>
             </GroupBox>
