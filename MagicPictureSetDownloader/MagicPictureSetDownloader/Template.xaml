@@ -150,6 +150,24 @@
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Quantity for card change -->
+    <ControlTemplate x:Key="QuantityControlTemplate">
+        <Grid Margin="5" d:DataContext="{d:DesignInstance Type=input:CardSourceViewModel, IsDesignTimeCreatable=False}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"  Content="Count" HorizontalAlignment="Center"/>
+            <Slider Grid.Column="1" Margin="0,5"  Value="{binding:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <Label Content="{Binding Count}"/>
+                <Label Content="/"/>
+                <Label Content="{Binding MaxCount}"/>
+            </StackPanel>
+        </Grid>
+    </ControlTemplate>
+
     <!-- Data Template -->
     <!-- Menu -->
     <HierarchicalDataTemplate DataType="{x:Type self:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
@@ -420,7 +438,7 @@
 
     <!-- Part source of Card move -->
     <DataTemplate DataType="{x:Type input:CardSourceViewModel}" d:IsDesignTimeCreatable="False">
-        <Grid Margin="5" Width="400">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -451,7 +469,22 @@
             </GroupBox>
         </Grid>
     </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type input:CardRemoveViewModel}" d:IsDesignTimeCreatable="False">
+        <Grid Margin="5" Width="400">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
+            <ContentControl Grid.Row="0" Content="{Binding Source}" />
+
+            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Quantity">
+                <Control Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
+            </GroupBox>
+        </Grid>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type input:CardMoveOrCopyViewModel}" d:IsDesignTimeCreatable="False">
         <Grid Margin="5" Width="400">
             <Grid.RowDefinitions>
@@ -478,13 +511,7 @@
                     <Label Grid.Column="0" Grid.Row="1" Content="Collection" Padding="10,0,0,0" VerticalContentAlignment="Center" />
                     <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding CardCollectionSelected}" />
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Count" HorizontalAlignment="Center"/>
-                    <Slider Grid.Column="1" Grid.Row="2" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
-                    <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                        <Label Content="{Binding Source.Count}"/>
-                        <Label Content="/"/>
-                        <Label Content="{Binding Source.MaxCount}"/>
-                    </StackPanel>
+                    <Control Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
                 </Grid>
             </GroupBox>
         </Grid>
@@ -520,13 +547,7 @@
                     <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
                     <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Count" HorizontalAlignment="Center"/>
-                    <Slider Grid.Column="1" Grid.Row="2" Margin="0,5"  Value="{binding:TwoWayBinding Source.Count}" Maximum="{Binding Source.MaxCount}"/>
-                    <StackPanel Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                        <Label Content="{Binding Source.Count}"/>
-                        <Label Content="/"/>
-                        <Label Content="{Binding Source.MaxCount}"/>
-                    </StackPanel>
+                    <Control Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
                 </Grid>
             </GroupBox>
         </Grid>

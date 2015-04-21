@@ -17,12 +17,15 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
 
             Copy = copy;
-            _collections = MagicDatabase.GetAllCollections().Where(c => c != SourceCollection)
-                .ToArray();
+            _collections = MagicDatabase.GetAllCollections().ToArray();
 
             if (_collections.Length > 0)
-                CardCollectionSelected = _collections[0];
-          
+            {
+                if (SourceCollection != _collections[0] ||_collections.Length ==1)
+                    CardCollectionSelected = _collections[0];
+                else
+                    CardCollectionSelected = _collections[1];
+            }
         }
         public CardSourceViewModel Source { get; private set; }
         public ICardCollection[] Collections
@@ -60,7 +63,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
                 return false;
 
-            return CardCollectionSelected != null && CardCollectionSelected != SourceCollection;
+            return CardCollectionSelected != null && (Copy || CardCollectionSelected != SourceCollection);
         }
     }
 }
