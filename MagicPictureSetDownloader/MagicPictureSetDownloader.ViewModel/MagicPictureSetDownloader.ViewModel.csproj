@@ -48,6 +48,7 @@
     <Compile Include="Download\DownloadViewModelBase.cs" />
     <Compile Include="Download\NewEditionInfoViewModel.cs" />
     <Compile Include="Input\CardSourceViewModel.cs" />
+    <Compile Include="Input\CardRemoveViewModel.cs" />
     <Compile Include="Input\UpdateViewModelCommun.cs" />
     <Compile Include="Input\CardUpdateViewModel.cs" />
     <Compile Include="Input\SearchViewModel.cs" />

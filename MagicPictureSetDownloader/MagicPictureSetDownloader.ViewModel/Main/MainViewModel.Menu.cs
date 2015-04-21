@@ -239,13 +239,38 @@
                 LoadCardsHierarchy();
             }
         }
+        private void RemoveCommandExecute(object o)
+        {
+            CardRemoveViewModel vm = new CardRemoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
+            OnDialogWanted(vm);
+
+            if (vm.Result == true)
+            {
+                _magicDatabase.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : -vm.Source.Count, vm.Source.IsFoil ? -vm.Source.Count : 0);
+                LoadCardsHierarchy();
+            }
+        }
         private void CopyCardCommandExecute(object o)
         {
-            MoveOrCopyCard((o as CardViewModel).Card, true);
+            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, (o as CardViewModel).Card, true);
+            OnDialogWanted(vm);
+            if (vm.Result == true)
+            {
+                _magicDatabase.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : vm.Source.Count, vm.Source.IsFoil ? vm.Source.Count : 0);
+                LoadCardsHierarchy();
+            }
+
         }
         private void MoveCardCommandExecute(object o)
         {
-            MoveOrCopyCard((o as CardViewModel).Card, false);
+            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, (o as CardViewModel).Card, false);
+            OnDialogWanted(vm);
+            if (vm.Result == true)
+            {
+                _magicDatabase.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
+                LoadCardsHierarchy();
+            }
+
         }
         private void SearchCommandExecute(object o)
         {
@@ -280,18 +305,7 @@
         }
         
         #endregion
-
-        private void MoveOrCopyCard(ICard card, bool forCopy)
-        {
-            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, card, forCopy);
-            OnDialogWanted(vm);
-            if (vm.Result == true)
-            {
-                _magicDatabase.MoveOrCardToOtherCollection(vm.Copy, vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
-                LoadCardsHierarchy();
-            }
-        }
-        
+       
         private void CreateMenu()
         {
             //File
@@ -372,6 +386,7 @@
                 ContextMenuRoot.AddChild(MenuViewModel.Separator());
                 ContextMenuRoot.AddChild(new MenuViewModel("Copy to other collection", new RelayCommand(CopyCardCommandExecute), nodeViewModel.Card));
                 ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCommandExecute), nodeViewModel.Card));
                 ContextMenuRoot.AddChild(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
             }
         }

@@ -7,9 +7,9 @@
         xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=input:CardUpdateViewModel}"
+        d:DataContext="{d:DesignInstance Type=input:CardMoveOrCopyViewModel}"
         SizeToContent="WidthAndHeight"
-        Background="Black">
+        Background="Black" Width="477">
     <Grid Margin="20" Background="White">
         <!-- This file is only there to have a design view of datatemplate -->
         <!-- It needs d:IsDesignTimeCreatable="False" in the datatemplate definition -->

@@ -188,7 +188,7 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void MoveOrCardToOtherCollection(bool forCopy, ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
+        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
                 return;
@@ -220,11 +220,7 @@ namespace MagicPictureSetDownloader.Db
                         return;
                 }
 
-                if (!forCopy)
-                {
-                    //Remove from source collection if moving
-                    InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount);
-                }
+                InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount);
                 InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, idLanguage, count, foilCount);
             }
         }
