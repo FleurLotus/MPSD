@@ -14,7 +14,6 @@
         private readonly IDispatcherInvoker _dispatcherInvoker;
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
 
-        //TODO: Test import/export
         //TODO: Test add/remove splitted card and statistics
 
         //TODO: Manage copy/move/del of cards to others collection

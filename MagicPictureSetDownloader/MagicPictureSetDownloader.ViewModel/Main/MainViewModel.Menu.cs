@@ -7,7 +7,9 @@
     using System.Threading;
 
     using Common.Libray.Notify;
+    using Common.Libray.Threading;
     using Common.ViewModel;
+    using Common.WPF;
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Input;
@@ -182,7 +184,7 @@
                 if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
                 {
                     Loading = true;
-                    ThreadPool.QueueUserWorkItem(DeleteCollectionAsync, vm);
+                    ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(DeleteCollectionAsync, vm));
                 }
             }
         }
@@ -215,13 +217,8 @@
             if (vm.Result == true)
             {
                 Loading = true;
-                ThreadPool.QueueUserWorkItem(oo =>
-                    {
-                        vm.ImportExport();
-                        LoadCardsHierarchy();
-                    });
+                ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(ImportExportAsync, vm));
             }
-
         }
         private void CardInputCommandExecute(object o)
         {
@@ -424,6 +421,26 @@
                 }
             }
         }
+
+        #region Async
+
+        private void AsyncCalling(object state)
+        {
+            try
+            {
+                ThreadPoolArgs args = state as ThreadPoolArgs;
+                if (args != null)
+                    args.Invoke();
+            }
+            catch (Exception ex)
+            {
+                _dispatcherInvoker.Invoke(() => ex.UserDisplay());
+            }
+            finally
+            {
+                Loading = false;
+            }
+        }
         private void DeleteCollectionAsync(object obj)
         {
             InputViewModel vm = obj as InputViewModel;
@@ -449,5 +466,13 @@
                         GenerateCollectionMenu();
                 });
         }
+        private void ImportExportAsync(object obj)
+        {
+            ImportExportViewModel vm = obj as ImportExportViewModel;
+            vm.ImportExport();
+            LoadCardsHierarchy();
+        }
+
+        #endregion
     }
 }
