@@ -91,6 +91,10 @@
       <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
       <Name>Common.ViewModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CommonLibraries\Common.WPF\Common.WPF.csproj">
+      <Project>{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}</Project>
+      <Name>Common.WPF</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
       <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
       <Name>MagicPictureSetDownloader.Core</Name>

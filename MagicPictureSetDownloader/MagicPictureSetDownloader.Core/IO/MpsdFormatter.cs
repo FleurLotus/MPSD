@@ -17,7 +17,10 @@ namespace MagicPictureSetDownloader.Core.IO
         protected override IImportExportCardCount ParseLine(string line)
         {
             Match m =  _regLine.Match(line);
-            return m.Success ? new ImportExportCardInfo(int.Parse(m.Groups["IdGatherer"].Value), int.Parse(m.Groups["Count"].Value), int.Parse(m.Groups["FoilCount"].Value), int.Parse(m.Groups["Langage"].Value)) : null;
+            if (!m.Success)
+                throw new ImportExportException("Can't parse line {0}", line);
+
+            return new ImportExportCardInfo(int.Parse(m.Groups["IdGatherer"].Value), int.Parse(m.Groups["Count"].Value), int.Parse(m.Groups["FoilCount"].Value), int.Parse(m.Groups["Langage"].Value));
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {

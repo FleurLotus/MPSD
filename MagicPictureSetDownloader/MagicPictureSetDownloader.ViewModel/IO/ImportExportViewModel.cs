@@ -33,6 +33,7 @@
 
             HasCollection = ExportCollections.Count > 0;
             SelectedIndex = HasCollection ? 0 : 1;
+            Path = ".";
 
             OpenCommand = new RelayCommand(OpenCommandExecute);
         }
