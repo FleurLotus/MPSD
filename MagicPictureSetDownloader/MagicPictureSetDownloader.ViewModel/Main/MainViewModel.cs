@@ -16,8 +16,6 @@
 
         //TODO: Test add/remove splitted card and statistics
 
-        //TODO: Manage copy/move/del of cards to others collection
-        
         //TODO: Import / save historical price (Maybe)
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
