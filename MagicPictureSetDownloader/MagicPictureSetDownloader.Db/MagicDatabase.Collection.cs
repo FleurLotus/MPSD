@@ -187,17 +187,13 @@ namespace MagicPictureSetDownloader.Db
                 return updateCardInCollectionCount;
             }
         }
-
-        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
+        public void MoveCardToOtherCollection(ICardCollection collection, int idGatherer, int idLanguage, int countToMove, bool isFoil, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
                 return;
 
             using (new WriterLock(_lock))
             {
-
-                int idGatherer = GetIdGatherer(card, edition);
-                int idLanguage = language.Id;
                 ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGatherer, idLanguage);
                 if (cardInCollectionCount == null)
                     return;
@@ -222,6 +218,18 @@ namespace MagicPictureSetDownloader.Db
 
                 InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount);
                 InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, idLanguage, count, foilCount);
+            }
+        }
+        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
+        {
+            if (countToMove <= 0)
+                return;
+
+            using (new WriterLock(_lock))
+            {
+                int idGatherer = GetIdGatherer(card, edition);
+                int idLanguage = language.Id;
+                MoveCardToOtherCollection(collection, idGatherer, idLanguage, countToMove, isFoil, collectionDestination);
             }
         }
         public void ChangeCardEditionFoilLanguage(ICardCollection collection, ICard card, int countToChange, IEdition editionSource, bool isFoilSource, ILanguage languageSource, IEdition editionDestination, bool isFoilDestination, ILanguage languageDestination)

@@ -110,19 +110,13 @@
 
                 if (next == null)
                 {
-                    next = index < analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value, card);
+                    next = index < analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value);
                     current.Children.Insert(i, next);
                 }
-                else if (index == analysers.Length)
+
+                if (index == analysers.Length)
                 {
-                    //If edition is not selected in filter, multiple version of the same card could appear, keeps the descritption and so the picture of the most recent one.
-                    HierarchicalResultNodeViewModel node = next as HierarchicalResultNodeViewModel;
-                    if (node.Card.Edition.ReleaseDate < card.Edition.ReleaseDate)
-                    {
-                        next = new HierarchicalResultNodeViewModel(value, card);
-                        current.Children.Remove(node);
-                        current.Children.Insert(i, next);
-                    }
+                    (next as HierarchicalResultNodeViewModel).AddCard(card);
                 }
 
                 current = next;

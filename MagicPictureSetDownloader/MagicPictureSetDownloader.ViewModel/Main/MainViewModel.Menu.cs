@@ -11,6 +11,7 @@
     using Common.ViewModel;
     using Common.WPF;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
@@ -85,7 +86,7 @@
         {
             OnEventRaise(ImportExportRequested, vm);
         }
-        private void OnInputRequestedRequested(InputViewModel vm)
+        private void OnInputRequested(InputViewModel vm)
         {
             OnEventRaise(InputRequested, vm);
         }
@@ -151,7 +152,7 @@
         private void CreateCollectionCommandExecute(object o)
         {
             InputViewModel vm = InputViewModelFactory.Instance.CreateTextViewModel("New Collection", "Input new collection name");
-            OnInputRequestedRequested(vm);
+            OnInputRequested(vm);
             if (vm.Result == true)
             {
                 string newName = vm.Text;
@@ -175,7 +176,7 @@
 
             InputViewModel vm = InputViewModelFactory.Instance.CreateMoveFromListToOtherViewModel("Delete Collection", "Choose collection to delete", source, "Move card to: ('None' to remove them)", dest);
 
-            OnInputRequestedRequested(vm);
+            OnInputRequested(vm);
             if (vm.Result == true)
             {
                 string toBeDeleted = vm.Selected;
@@ -195,7 +196,7 @@
 
             InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListAndTextViewModel("Rename Collection", "Choose collection to rename and input new name", source);
 
-            OnInputRequestedRequested(vm);
+            OnInputRequested(vm);
             if (vm.Result == true)
             {
                 string toBeRenamed = vm.Selected;
@@ -224,50 +225,6 @@
         {
             OnDialogWanted(new CardInputViewModel(Hierarchical.Name));
             LoadCardsHierarchy();
-        }
-        private void ChangeCardCommandExecute(object o)
-        {
-            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, (o as CardViewModel).Card);
-            OnDialogWanted(vm);
-
-            if (vm.Result == true)
-            {
-                _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.LanguageSelected);
-                LoadCardsHierarchy();
-            }
-        }
-        private void RemoveCommandExecute(object o)
-        {
-            CardRemoveViewModel vm = new CardRemoveViewModel(Hierarchical.Name, (o as CardViewModel).Card);
-            OnDialogWanted(vm);
-
-            if (vm.Result == true)
-            {
-                _magicDatabase.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : -vm.Source.Count, vm.Source.IsFoil ? -vm.Source.Count : 0);
-                LoadCardsHierarchy();
-            }
-        }
-        private void CopyCardCommandExecute(object o)
-        {
-            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, (o as CardViewModel).Card, true);
-            OnDialogWanted(vm);
-            if (vm.Result == true)
-            {
-                _magicDatabase.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : vm.Source.Count, vm.Source.IsFoil ? vm.Source.Count : 0);
-                LoadCardsHierarchy();
-            }
-
-        }
-        private void MoveCardCommandExecute(object o)
-        {
-            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, (o as CardViewModel).Card, false);
-            OnDialogWanted(vm);
-            if (vm.Result == true)
-            {
-                _magicDatabase.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
-                LoadCardsHierarchy();
-            }
-
         }
         private void SearchCommandExecute(object o)
         {
@@ -300,7 +257,69 @@
         {
             OnDialogWanted(new AuditViewModel());
         }
-        
+        private void ChangeCardCommandExecute(object o)
+        {
+            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, o as ICard);
+            OnDialogWanted(vm);
+
+            if (vm.Result == true)
+            {
+                _magicDatabase.ChangeCardEditionFoilLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.LanguageSelected);
+                LoadCardsHierarchy();
+            }
+        }
+
+        private void RemoveCardCommandExecute(object o)
+        {
+            var vm = new CardRemoveViewModel(Hierarchical.Name, o as ICard);
+            OnDialogWanted(vm);
+
+            if (vm.Result == true)
+            {
+                _magicDatabase.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : -vm.Source.Count, vm.Source.IsFoil ? -vm.Source.Count : 0);
+                LoadCardsHierarchy();
+            }
+        }
+        private void CopyCardCommandExecute(object o)
+        {
+            MoveOrCopyCard(o as ICard, true);
+        }
+        private void MoveCardCommandExecute(object o)
+        {
+            MoveOrCopyCard(o as ICard, false);
+        }
+        private void RemoveCommandExecute(object o)
+        {
+            HierarchicalResultViewModel vm = o as HierarchicalResultViewModel;
+            if (vm == null)
+                return;
+            
+            ICardCollection sourceCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == Hierarchical.Name);
+
+            InputViewModel questionViewModel = InputViewModelFactory.Instance.CreateQuestionViewModel("Remove", string.Format("Remove selected from {0}?", sourceCollection.Name));
+            OnInputRequested(questionViewModel);
+
+            if (questionViewModel.Result == true)
+            {
+                foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
+                {
+                    _magicDatabase.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, -cicc.Number, -cicc.FoilNumber);
+                }
+
+                LoadCardsHierarchy();
+            }
+
+        }
+        private void CopyCommandExecute(object o)
+        {
+            object[] args = o as object[];
+            MoveOrCopy(args[0] as ICardCollection, args[1] as HierarchicalResultViewModel, true);
+        }
+        private void MoveCommandExecute(object o)
+        {
+            object[] args = o as object[];
+            MoveOrCopy(args[0] as ICardCollection, args[1] as HierarchicalResultViewModel, false);
+        }
         #endregion
        
         private void CreateMenu()
@@ -375,16 +394,38 @@
             if (Hierarchical == null || Hierarchical == _allhierarchical || Hierarchical == _searchHierarchical)
                 return;
 
+            List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabase.GetAllCollections());
+
+            HierarchicalResultViewModel selected = Hierarchical.Selected;
+
             ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
-            
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel != null)
+            ContextMenuRoot.AddChild(MenuViewModel.Separator());
+
+            HierarchicalResultNodeViewModel nodeViewModel = selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel == null)
             {
+                MenuViewModel copyMenu = new MenuViewModel("Copy to ..");
+                ContextMenuRoot.AddChild(copyMenu);
+                ContextMenuRoot.AddChild(new MenuViewModel("Remove from collection", new RelayCommand(RemoveCommandExecute), selected));
+                MenuViewModel moveMenu = new MenuViewModel("Move to ..");
+                if (cardCollections.Count > 1)
+                    ContextMenuRoot.AddChild(moveMenu);
+
+                foreach (ICardCollection collection in cardCollections)
+                {
+                    string name = collection.Name;
+                    copyMenu.AddChild(new MenuViewModel(name, new RelayCommand(CopyCommandExecute), new object[] { collection, selected }));
+                    if (Hierarchical.Name != name)
+                        moveMenu.AddChild(new MenuViewModel(name, new RelayCommand(MoveCommandExecute), new object[] { collection, selected }));
+                }
+            }
+            else
+            {
+                ContextMenuRoot.AddChild(new MenuViewModel("Copy card to other collection", new RelayCommand(CopyCardCommandExecute), nodeViewModel.Card.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCardCommandExecute), nodeViewModel.Card.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Move card to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card.Card));
                 ContextMenuRoot.AddChild(MenuViewModel.Separator());
-                ContextMenuRoot.AddChild(new MenuViewModel("Copy to other collection", new RelayCommand(CopyCardCommandExecute), nodeViewModel.Card));
-                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card));
-                ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCommandExecute), nodeViewModel.Card));
-                ContextMenuRoot.AddChild(new MenuViewModel("Move to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card.Card));
             }
         }
         private void GenerateCollectionMenu()
@@ -422,6 +463,69 @@
             }
         }
 
+        private void MoveOrCopyCard(ICard card, bool copy)
+        {
+            CardMoveOrCopyViewModel vm = new CardMoveOrCopyViewModel(Hierarchical.Name, card, copy);
+            OnDialogWanted(vm);
+
+            if (vm.Result == true)
+            {
+                if (vm.Copy)
+                    _magicDatabase.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : vm.Source.Count, vm.Source.IsFoil ? vm.Source.Count : 0);
+                else
+                    _magicDatabase.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
+
+                LoadCardsHierarchy();
+            }
+        }
+        private void MoveOrCopy(ICardCollection destCollection, HierarchicalResultViewModel vm, bool copy)
+        {
+            if (destCollection == null || vm == null)
+                return; 
+            
+            ICardCollection sourceCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == Hierarchical.Name);
+            
+            string title = copy ? "Copy" : "Move";
+            InputViewModel questionViewModel = InputViewModelFactory.Instance.CreateQuestionViewModel(title, string.Format("{0} selected from {1} to {2}?", title, sourceCollection.Name, destCollection.Name));
+            OnInputRequested(questionViewModel);
+
+            if (questionViewModel.Result == true)
+            {
+                foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
+                {
+                    if (copy)
+                    {
+                        _magicDatabase.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, cicc.FoilNumber);
+                    }
+                    else
+                    {
+                        _magicDatabase.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, false, destCollection);
+                        _magicDatabase.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilNumber, true, destCollection);
+                    }
+                }
+                LoadCardsHierarchy();
+            }
+        }
+        private IEnumerable<ICardInCollectionCount> GetCardInCollectionInSelected(HierarchicalResultViewModel vm, ICardCollection collection)
+        {
+            if (vm == null)
+                yield break;
+
+            HierarchicalResultNodeViewModel node = vm as HierarchicalResultNodeViewModel;
+            if (node == null)
+            {
+                foreach (ICardInCollectionCount cicc in vm.Children.SelectMany(c => GetCardInCollectionInSelected(c, collection)))
+                    yield return cicc;
+            }
+            else
+            {
+                foreach (CardViewModel cardViewModel in node.AllCard)
+                    foreach (ICardInCollectionCount cicc in _magicDatabase.GetCollectionStatisticsForCard(collection, cardViewModel.Card))
+                        if (cicc.IdGatherer == cardViewModel.IdGatherer)
+                            yield return cicc;
+            }
+        }
+        
         #region Async
 
         private void AsyncCalling(object state)
