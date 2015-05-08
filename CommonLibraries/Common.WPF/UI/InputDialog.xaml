@@ -62,7 +62,8 @@
                   Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
-            <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
+            <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}" 
+                    Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=Question@TextNeed@ChooseInList@ChooseInListAndTextNeed@MoveFromListToOther}"/>
         </StackPanel>
     </Grid>
 </Window>

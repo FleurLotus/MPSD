@@ -259,7 +259,11 @@
         }
         private void ChangeCardCommandExecute(object o)
         {
-            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, o as ICard);
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel == null)
+                return;
+            
+            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
             OnDialogWanted(vm);
 
             if (vm.Result == true)
@@ -271,7 +275,11 @@
 
         private void RemoveCardCommandExecute(object o)
         {
-            var vm = new CardRemoveViewModel(Hierarchical.Name, o as ICard);
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel == null)
+                return;
+            
+            var vm = new CardRemoveViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
             OnDialogWanted(vm);
 
             if (vm.Result == true)
@@ -282,15 +290,23 @@
         }
         private void CopyCardCommandExecute(object o)
         {
-            MoveOrCopyCard(o as ICard, true);
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel == null)
+                return;
+            
+            MoveOrCopyCard(nodeViewModel.Card.Card, true);
         }
         private void MoveCardCommandExecute(object o)
         {
-            MoveOrCopyCard(o as ICard, false);
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
+            if (nodeViewModel == null)
+                return;
+
+            MoveOrCopyCard(nodeViewModel.Card.Card, false);
         }
         private void RemoveCommandExecute(object o)
         {
-            HierarchicalResultViewModel vm = o as HierarchicalResultViewModel;
+            HierarchicalResultViewModel vm = Hierarchical.Selected;
             if (vm == null)
                 return;
             
@@ -312,13 +328,11 @@
         }
         private void CopyCommandExecute(object o)
         {
-            object[] args = o as object[];
-            MoveOrCopy(args[0] as ICardCollection, args[1] as HierarchicalResultViewModel, true);
+            MoveOrCopy(o as ICardCollection, Hierarchical.Selected, true);
         }
         private void MoveCommandExecute(object o)
         {
-            object[] args = o as object[];
-            MoveOrCopy(args[0] as ICardCollection, args[1] as HierarchicalResultViewModel, false);
+            MoveOrCopy(o as ICardCollection, Hierarchical.Selected, false);
         }
         #endregion
        
@@ -394,38 +408,36 @@
             if (Hierarchical == null || Hierarchical == _allhierarchical || Hierarchical == _searchHierarchical)
                 return;
 
-            List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabase.GetAllCollections());
-
-            HierarchicalResultViewModel selected = Hierarchical.Selected;
-
             ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
 
-            HierarchicalResultNodeViewModel nodeViewModel = selected as HierarchicalResultNodeViewModel;
+            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel == null)
             {
                 MenuViewModel copyMenu = new MenuViewModel("Copy to ..");
                 ContextMenuRoot.AddChild(copyMenu);
-                ContextMenuRoot.AddChild(new MenuViewModel("Remove from collection", new RelayCommand(RemoveCommandExecute), selected));
+                ContextMenuRoot.AddChild(new MenuViewModel("Remove from collection", new RelayCommand(RemoveCommandExecute)));
                 MenuViewModel moveMenu = new MenuViewModel("Move to ..");
+
+                List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabase.GetAllCollections());
                 if (cardCollections.Count > 1)
                     ContextMenuRoot.AddChild(moveMenu);
 
                 foreach (ICardCollection collection in cardCollections)
                 {
                     string name = collection.Name;
-                    copyMenu.AddChild(new MenuViewModel(name, new RelayCommand(CopyCommandExecute), new object[] { collection, selected }));
+                    copyMenu.AddChild(new MenuViewModel(name, new RelayCommand(CopyCommandExecute), collection));
                     if (Hierarchical.Name != name)
-                        moveMenu.AddChild(new MenuViewModel(name, new RelayCommand(MoveCommandExecute), new object[] { collection, selected }));
+                        moveMenu.AddChild(new MenuViewModel(name, new RelayCommand(MoveCommandExecute), collection));
                 }
             }
             else
             {
-                ContextMenuRoot.AddChild(new MenuViewModel("Copy card to other collection", new RelayCommand(CopyCardCommandExecute), nodeViewModel.Card.Card));
-                ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCardCommandExecute), nodeViewModel.Card.Card));
-                ContextMenuRoot.AddChild(new MenuViewModel("Move card to other collection", new RelayCommand(MoveCardCommandExecute), nodeViewModel.Card.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Copy card to other collection", new RelayCommand(CopyCardCommandExecute)));
+                ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCardCommandExecute)));
+                ContextMenuRoot.AddChild(new MenuViewModel("Move card to other collection", new RelayCommand(MoveCardCommandExecute)));
                 ContextMenuRoot.AddChild(MenuViewModel.Separator());
-                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute), nodeViewModel.Card.Card));
+                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute)));
             }
         }
         private void GenerateCollectionMenu()

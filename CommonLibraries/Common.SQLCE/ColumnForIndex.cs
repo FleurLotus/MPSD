@@ -1,0 +1,37 @@
+﻿namespace Common.SQLCE
+{
+    using System;
+
+    internal class ColumnForIndex : IColumnForIndex, IComparable<IColumnForIndex>
+    {
+        public IColumn Column { get; set; }
+        public bool IsAsc { get; set; }
+        public int Position { get; set; }
+
+        public int CompareTo(IColumnForIndex other)
+        {
+            int comp = 0;
+            if (string.IsNullOrEmpty(Column.SchemaName))
+            {
+                if (!string.IsNullOrEmpty(other.Column.SchemaName))
+                    comp = -1;
+            }
+            else
+            {
+                comp = string.Compare(Column.SchemaName, other.Column.SchemaName, StringComparison.Ordinal);
+            }
+
+            if (comp == 0)
+                comp = string.Compare(Column.TableName, other.Column.TableName, StringComparison.Ordinal);
+
+            if (comp == 0)
+                comp = Position.CompareTo(other.Position);
+
+            return comp;
+        }
+        public override string ToString()
+        {
+            return string.Format("{0} {1} {2}", Position, Column, IsAsc ? "Asc" : "Desc");
+        }
+    }
+}

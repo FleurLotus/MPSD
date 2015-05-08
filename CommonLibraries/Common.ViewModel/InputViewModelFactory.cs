@@ -17,6 +17,10 @@ namespace Common.ViewModel
             get { return _lazy.Value; }
         }
 
+        public InputViewModel CreateInfoViewModel(string title, string label)
+        {
+            return new InputViewModel(InputMode.Info, title, label);
+        }
         public InputViewModel CreateQuestionViewModel(string title, string label)
         {
             return new InputViewModel(InputMode.Question, title, label);
@@ -37,6 +41,5 @@ namespace Common.ViewModel
         {
             return new InputViewModel(title, label, list, label2, list2);
         }
-
     }
 }

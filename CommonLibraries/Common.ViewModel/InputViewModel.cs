@@ -4,6 +4,7 @@
 
     public enum InputMode
     {
+        Info,
         Question,
         TextNeed,
         ChooseInList,

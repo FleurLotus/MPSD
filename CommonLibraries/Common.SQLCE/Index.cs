@@ -1,32 +1,35 @@
-﻿
-namespace Common.SQLCE
+﻿namespace Common.SQLCE
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class PrimaryKey: IPrimaryKey, IComparable<IPrimaryKey>
+    internal class Index : IIndex, IComparable<IIndex>
     {
-        private readonly SortedDictionary<int, IColumn> _columns = new SortedDictionary<int, IColumn>(); 
+        private readonly List<ColumnForIndex> _columns = new List<ColumnForIndex>();
 
         public string Name { get; set; }
         public string TableName { get; set; }
         public string SchemaName { get; set; }
+        public bool IsUnique { get; set; }
+        public bool IsClustered { get; set; }
         public CaseSensitivity CaseSensitivity { get; internal set; }
-        
-        public IColumn[] Columns()
+
+        public IColumnForIndex[] Columns()
         {
-            return _columns.Values.ToArray();
+            return _columns.Cast<IColumnForIndex>().ToArray();
         }
-        internal void AddColumn(int index, IColumn column)
+
+        internal void AddColumn(ColumnForIndex column)
         {
             if (column == null)
                 throw new ArgumentNullException("column");
-            
-            _columns[index] = column;
+
+            _columns.Add(column);
+            _columns.Sort();
         }
 
-        public int CompareTo(IPrimaryKey other)
+        public int CompareTo(IIndex other)
         {
             int comp = 0;
             if (string.IsNullOrEmpty(SchemaName))

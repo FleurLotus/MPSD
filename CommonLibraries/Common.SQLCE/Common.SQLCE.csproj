@@ -46,8 +46,17 @@
     </Compile>
     <Compile Include="CaseSensitivity.cs" />
     <Compile Include="Column.cs" />
-    <Compile Include="IColumn.cs" />
-    <Compile Include="ITable.cs" />
+    <Compile Include="ColumnForIndex.cs" />
+    <Compile Include="ForeignKey.cs" />
+    <Compile Include="ColumnForForeignKey.cs" />
+    <Compile Include="Interface\IColumnForForeignKey.cs" />
+    <Compile Include="Interface\IColumnForIndex.cs" />
+    <Compile Include="Interface\IIndex.cs" />
+    <Compile Include="Index.cs" />
+    <Compile Include="Interface\IForeignKey.cs" />
+    <Compile Include="Interface\IPrimaryKey.cs" />
+    <Compile Include="Interface\IColumn.cs" />
+    <Compile Include="Interface\ITable.cs" />
     <Compile Include="PrimaryKey.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
