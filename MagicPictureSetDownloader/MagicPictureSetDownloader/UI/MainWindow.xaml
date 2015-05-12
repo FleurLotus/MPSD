@@ -57,6 +57,9 @@
         <i:EventTrigger EventName="DatabaseModificationRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="DatabaseModificationRequested" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="ExceptionOccured" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="ExceptionOccured" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <Grid>

@@ -31,10 +31,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.SQLCE">
+      <HintPath>..\..\CommonLibraries\Common.SQLCE\bin\Debug\Common.SQLCE.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Zip">
+      <HintPath>..\..\CommonLibraries\Common.Zip\bin\Debug\Common.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalReference\SQLCE\System.Data.SqlServerCe.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
@@ -66,25 +76,15 @@
     <None Include="MagicData.zip" />
     <None Include="MagicPicture.zip" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\CommonLibraries\Common.SQLCE\Common.SQLCE.csproj">
-      <Project>{82CA2E59-9896-4B66-8840-63CCE3006989}</Project>
-      <Name>Common.SQLCE</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.Zip\Common.Zip.csproj">
-      <Project>{ff762f87-3489-497f-b350-bc58a6abc48e}</Project>
-      <Name>Common.Zip</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if exist "%25temp%25\Magic*.sql" (del /Q "%25temp%25\Magic*.sql")
 xcopy /R /Y "$(SolutionDir)MagicData.sdf" "%25temp%25"
-"$(SolutionDir)..\ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicData.sdf;Max Database Size = 4091;" "%25temp%25/MagicData.sql"
+"$(SolutionDir)..\ExternalReference\SQLCE\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicData.sdf;Max Database Size = 4091;" "%25temp%25/MagicData.sql"
 if exist "%25temp%25\MagicData_*.sql" (copy "%25temp%25\MagicData_*.sql" "%25temp%25/MagicData.sql")
 zip -9 "$(ProjectDir)MagicData.zip" "%25temp%25/MagicData.sql"
 xcopy /R /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
-"$(SolutionDir)..\ExternalReference\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf;Max Database Size = 4091;" "%25temp%25/MagicPicture.sql"
+"$(SolutionDir)..\ExternalReference\SQLCE\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf;Max Database Size = 4091;" "%25temp%25/MagicPicture.sql"
 if exist "%25temp%25\MagicPicture_*.sql" (copy "%25temp%25\MagicPicture_*.sql" "%25temp%25/MagicPicture.sql")
 zip -9 "$(ProjectDir)MagicPicture.zip" "%25temp%25/MagicPicture.sql"</PreBuildEvent>
   </PropertyGroup>

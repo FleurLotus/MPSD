@@ -9,7 +9,6 @@
     using Common.Libray.Notify;
     using Common.Libray.Threading;
     using Common.ViewModel;
-    using Common.WPF;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
@@ -31,6 +30,7 @@
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
+        public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
 
@@ -94,6 +94,11 @@
         {
             OnEventRaise(DialogWanted, vm);
         }
+        private void OnExceptionOccured(Exception ex)
+        {
+            OnEventRaise(ExceptionOccured, ex);
+        }
+
         #endregion
 
         private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg) where T: class
@@ -550,7 +555,7 @@
             }
             catch (Exception ex)
             {
-                _dispatcherInvoker.Invoke(() => ex.UserDisplay());
+                _dispatcherInvoker.Invoke(() => OnExceptionOccured(ex));
             }
             finally
             {

@@ -47,6 +47,10 @@
         {
             new CommonDialog(args.Data) { Owner = this }.ShowDialog();
         }
+        public void ExceptionOccured(object sender, EventArgs<Exception> args)
+        {
+            args.Data.UserDisplay();
+        }
         public void DatabaseModificationRequested(object sender, EventArgs<INotifyPropertyChanged> args)
         {
             new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();

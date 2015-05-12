@@ -44,6 +44,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -63,15 +64,27 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Libray">
+      <HintPath>..\..\CommonLibraries\Common.Libray\bin\Debug\Common.Libray.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.ViewModel">
+      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\Debug\Common.ViewModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.WPF, Version=1.0.5605.33103, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonLibraries\Common.WPF\bin\Debug\Common.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Libraries\Microsoft.Expression.Interactions.dll</HintPath>
+      <HintPath>..\..\ExternalReference\Blend\Microsoft.Expression.Interactions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.0\Libraries\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\..\ExternalReference\Blend\System.Windows.Interactivity.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -82,7 +95,8 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Xceed.Wpf.Toolkit">
-      <HintPath>..\..\ExternalReference\Xceed.Wpf.Toolkit.dll</HintPath>
+      <HintPath>..\..\ExternalReference\WPF\Xceed.Wpf.Toolkit.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -199,18 +213,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonLibraries\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
-      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.ViewModel\Common.ViewModel.csproj">
-      <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
-      <Name>Common.ViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.WPF\Common.WPF.csproj">
-      <Project>{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}</Project>
-      <Name>Common.WPF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
       <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
       <Name>MagicPictureSetDownloader.Core</Name>
@@ -244,11 +246,19 @@
     <None Include="Icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+    <CallTarget Targets="ExternalReferencies" />
   </Target>
-  -->
+  <Target Name="ExternalReferencies">
+    <ItemGroup>
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\Blend\*.dll" />
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\SQLCE\*.dll" />
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\WPF\*.dll" />
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\Zip\*.dll" />
+    </ItemGroup>
+    <Message Text="Copying External Referencies ..." Importance="high" />
+    <Copy SourceFiles="@(ExternalReferenciesFiles)" DestinationFolder="$(TargetDir)" UseHardlinksIfPossible="$(CreateHardLinksForCopyFilesToOutputDirectoryIfPossible)" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
 </Project>
