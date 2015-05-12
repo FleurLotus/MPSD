@@ -94,7 +94,7 @@
                 throw new ArgumentException("Primary Key doesn't belong to table", "primaryKey");
 
             if (PrimaryKey != null)
-                throw new Exception("PrimaryKey is already set"); ;
+                throw new Exception("PrimaryKey is already set");
 
             PrimaryKey = primaryKey;
         }

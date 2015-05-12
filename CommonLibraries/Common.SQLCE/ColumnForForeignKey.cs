@@ -11,6 +11,5 @@
         {
             return string.Format("{0} {1} -> {2} {3}", SourcePosition, SourceColumn, ReferencePosition, ReferenceColumn);
         }
-
     }
 }

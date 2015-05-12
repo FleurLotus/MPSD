@@ -46,10 +46,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Database, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonLibraries\Common.Database\bin\Debug\Common.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Libray, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonLibraries\Common.Libray\bin\Debug\Common.Libray.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalReference\SQLCE\System.Data.SqlServerCe.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
@@ -72,7 +84,7 @@
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />
     <Compile Include="MagicDatabase.Audit.cs">
-	      <DependentUpon>MagicDatabase.cs</DependentUpon>
+      <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="MagicDatabase.cs" />
     <Compile Include="MagicDatabase.Collection.cs">
@@ -90,14 +102,6 @@
     <Compile Include="DAO\Rarity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonLibraries\Common.Database\Common.Database.csproj">
-      <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
-      <Name>Common.Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
-      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj">
       <Project>{dac42afe-dcfb-4fec-90c9-1c26f6d4aab9}</Project>
       <Name>MagicPictureSetDownloader.DbGenerator</Name>

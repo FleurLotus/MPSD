@@ -31,6 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.Libray, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonLibraries\Common.Libray\bin\Debug\Common.Libray.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.ViewModel, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\Debug\Common.ViewModel.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -83,18 +91,6 @@
     <Compile Include="Download\EditionInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CommonLibraries\Common.Libray\Common.Libray.csproj">
-      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.ViewModel\Common.ViewModel.csproj">
-      <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
-      <Name>Common.ViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\CommonLibraries\Common.WPF\Common.WPF.csproj">
-      <Project>{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}</Project>
-      <Name>Common.WPF</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
       <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
       <Name>MagicPictureSetDownloader.Core</Name>

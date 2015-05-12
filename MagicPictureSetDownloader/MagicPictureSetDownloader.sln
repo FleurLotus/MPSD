@@ -1,27 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader", "MagicPictureSetDownloader\MagicPictureSetDownloader.csproj", "{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.ViewModel", "..\CommonLibraries\Common.ViewModel\Common.ViewModel.csproj", "{770CD409-408D-44B1-84AE-B96513D9D7C7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.ViewModel", "MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj", "{473562B3-1A2B-4F43-BA88-613C35D15AAC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.WPF", "..\CommonLibraries\Common.WPF\Common.WPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Core", "MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj", "{528D3805-C009-4AB4-9481-20F2106EFDE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Libray", "..\CommonLibraries\Common.Libray\Common.Libray.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Database", "..\CommonLibraries\Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Db", "MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj", "{1F2678D5-43D0-402E-AA40-2B0AA06C9292}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.XML", "..\CommonLibraries\Common.XML\Common.XML.csproj", "{C695020A-1108-41BF-8494-34BDEFC30581}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Interface", "MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj", "{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}"
 EndProject
@@ -34,22 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Version.cs = Version.cs
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExternalReference", "..\ExternalReference", "{F454124A-EFDC-466A-AB43-99F0CE9B642A}"
-	ProjectSection(SolutionItems) = preProject
-		..\ExternalReference\ExportSqlCE40.exe = ..\ExternalReference\ExportSqlCE40.exe
-		..\ExternalReference\ICSharpCode.SharpZipLib.dll = ..\ExternalReference\ICSharpCode.SharpZipLib.dll
-		..\ExternalReference\ICSharpCode.SharpZipLib.xml = ..\ExternalReference\ICSharpCode.SharpZipLib.xml
-		..\ExternalReference\nunit.framework.dll = ..\ExternalReference\nunit.framework.dll
-		..\ExternalReference\Xceed.Wpf.Toolkit.dll = ..\ExternalReference\Xceed.Wpf.Toolkit.dll
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.DbGenerator", "MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj", "{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Zip", "..\CommonLibraries\Common.Zip\Common.Zip.csproj", "{FF762F87-3489-497F-B350-BC58A6ABC48E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.SQLCE", "..\CommonLibraries\Common.SQLCE\Common.SQLCE.csproj", "{82CA2E59-9896-4B66-8840-63CCE3006989}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "..\CommonLibraries\Common.UnitTests\Common.UnitTests.csproj", "{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,38 +34,18 @@ Global
 		{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}.Release|Any CPU.Build.0 = Release|Any CPU
-		{770CD409-408D-44B1-84AE-B96513D9D7C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{770CD409-408D-44B1-84AE-B96513D9D7C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{770CD409-408D-44B1-84AE-B96513D9D7C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{770CD409-408D-44B1-84AE-B96513D9D7C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{473562B3-1A2B-4F43-BA88-613C35D15AAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{473562B3-1A2B-4F43-BA88-613C35D15AAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473562B3-1A2B-4F43-BA88-613C35D15AAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473562B3-1A2B-4F43-BA88-613C35D15AAC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}.Release|Any CPU.Build.0 = Release|Any CPU
 		{528D3805-C009-4AB4-9481-20F2106EFDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{528D3805-C009-4AB4-9481-20F2106EFDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{528D3805-C009-4AB4-9481-20F2106EFDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{528D3805-C009-4AB4-9481-20F2106EFDE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F2678D5-43D0-402E-AA40-2B0AA06C9292}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C695020A-1108-41BF-8494-34BDEFC30581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C695020A-1108-41BF-8494-34BDEFC30581}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C695020A-1108-41BF-8494-34BDEFC30581}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C695020A-1108-41BF-8494-34BDEFC30581}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -101,31 +54,8 @@ Global
 		{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF762F87-3489-497F-B350-BC58A6ABC48E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF762F87-3489-497F-B350-BC58A6ABC48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF762F87-3489-497F-B350-BC58A6ABC48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF762F87-3489-497F-B350-BC58A6ABC48E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{82CA2E59-9896-4B66-8840-63CCE3006989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{82CA2E59-9896-4B66-8840-63CCE3006989}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{82CA2E59-9896-4B66-8840-63CCE3006989}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{82CA2E59-9896-4B66-8840-63CCE3006989}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{770CD409-408D-44B1-84AE-B96513D9D7C7} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{C695020A-1108-41BF-8494-34BDEFC30581} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{F454124A-EFDC-466A-AB43-99F0CE9B642A} = {D00700D7-C608-4B74-B712-CF8C773A975C}
-		{FF762F87-3489-497F-B350-BC58A6ABC48E} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{82CA2E59-9896-4B66-8840-63CCE3006989} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
-		{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF} = {FD3CC8A8-5B97-4D26-B58A-C4DF102560CD}
 	EndGlobalSection
 EndGlobal
