@@ -1,13 +1,14 @@
 namespace MagicPictureSetDownloader.Db
 {
     using System;
-    using System.Data.SqlServerCe;
+    using System.Data.Common;
     using System.Linq;
 
     using Common.Database;
     using Common.Libray.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
+    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -36,9 +37,8 @@ namespace MagicPictureSetDownloader.Db
                 edition.CardNumber = cardNumber;
                 edition.ReleaseDate = releaseDate;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<Edition>.UpdateOne(cnx, edition);
                 }
             }
@@ -58,9 +58,8 @@ namespace MagicPictureSetDownloader.Db
                 //No need to update referencial because id do not change
                 block.Name = blockName;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<Block>.UpdateOne(cnx, block);
                 }
             }
@@ -87,9 +86,8 @@ namespace MagicPictureSetDownloader.Db
 
                 InsertInReferential(language);
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<Language>.UpdateOne(cnx, language);
                 }
             }

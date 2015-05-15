@@ -2,13 +2,14 @@
 namespace MagicPictureSetDownloader.Db
 {
     using System.Collections.Generic;
-    using System.Data.SqlServerCe;
+    using System.Data.Common;
     using System.Linq;
 
     using Common.Database;
     using Common.Libray.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
+    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -16,9 +17,8 @@ namespace MagicPictureSetDownloader.Db
         public ICollection<IAudit> GetAllAudits()
         {
             using (new ReaderLock(_lock))
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
             {
-                cnx.Open();
                 return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
             }
         }
@@ -58,9 +58,8 @@ namespace MagicPictureSetDownloader.Db
                 return;
             using (new WriterLock(_lock))
             {
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<Audit>.InsertOne(cnx, audit);
                 }
             }

@@ -2,23 +2,13 @@
 {
     public static class DatabaseGenerator
     {
-        public static void GenerateMagicData(string connectionString)
+        public static void Generate(string connectionString, DatabasebType databaseType)
         {
-            new Generator(connectionString, DbType.Data).Generate();
+            new Generator(connectionString, databaseType).Generate();
         }
-        public static void GenerateMagicPicture(string connectionString)
+        public static void VersionVerify(string connectionString, DatabasebType databaseType)
         {
-            new Generator(connectionString, DbType.Picture).Generate();
+            new Upgrader(connectionString, databaseType).Upgrade();
         }
-
-        public static void VersionVerifyMagicData(string connectionString)
-        {
-            new Upgrader(connectionString, DbType.Data).Upgrade();
-        }
-        public static void VersionVerifyMagicPicture(string connectionString)
-        {
-            new Upgrader(connectionString, DbType.Picture).Upgrade();
-        }
-
     }
 }

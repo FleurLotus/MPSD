@@ -2,10 +2,8 @@ namespace MagicPictureSetDownloader.Db
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlServerCe;
-    using System.IO;
+    using System.Data.Common;
     using System.Linq;
-    using System.Reflection;
     using System.Threading;
 
     using Common.Database;
@@ -18,27 +16,15 @@ namespace MagicPictureSetDownloader.Db
 
     internal partial class MagicDatabase : IMagicDatabaseReadAndWriteFull
     {
-        private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase("MagicData.sdf", "MagicPicture.sdf"));
+        private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase());
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly DatabaseConnection _databaseConnection;
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
-
-
-        private MagicDatabase(string fileName, string pictureFileName)
+        
+        private MagicDatabase()
         {
-            string mainDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
-            _connectionString = "datasource=" + mainDbPath + ";Max Database Size = 4091;";
-            if (!File.Exists(mainDbPath))
-                DatabaseGenerator.GenerateMagicData(_connectionString);
-
-            DatabaseGenerator.VersionVerifyMagicData(_connectionString);
-
-            string pictureDbPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), pictureFileName);
-            _connectionStringForPictureDb = "datasource=" + pictureDbPath + ";Max Database Size = 4091;";
-            if (!File.Exists(pictureDbPath))
-                DatabaseGenerator.GenerateMagicPicture(_connectionStringForPictureDb);
-
-            DatabaseGenerator.VersionVerifyMagicPicture(_connectionStringForPictureDb);
+            _databaseConnection = new DatabaseConnection();
         }
 
         internal static MagicDatabase DbInstance
@@ -337,9 +323,8 @@ namespace MagicPictureSetDownloader.Db
 
                 newEdition.Completed = true;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<Edition>.UpdateOne(cnx, newEdition);
                 }
             }
@@ -348,9 +333,8 @@ namespace MagicPictureSetDownloader.Db
         public string[] GetMissingPictureUrls()
         {
             IList<int> idGatherers;
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
+            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
             {
-                cnx.Open();
                 idGatherers = Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
             }
 
@@ -362,9 +346,8 @@ namespace MagicPictureSetDownloader.Db
         {
             Picture picture = new Picture { IdGatherer = idGatherer };
 
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionStringForPictureDb))
+            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
             {
-                cnx.Open();
                 return Mapper<Picture>.Load(cnx, picture);
             }
         }
