@@ -259,6 +259,6 @@
       <ExternalReferenciesFiles Include="..\..\ExternalReference\Zip\*.dll" />
     </ItemGroup>
     <Message Text="Copying External Referencies ..." Importance="high" />
-    <Copy SourceFiles="@(ExternalReferenciesFiles)" DestinationFolder="$(TargetDir)" UseHardlinksIfPossible="$(CreateHardLinksForCopyFilesToOutputDirectoryIfPossible)" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+    <Copy SourceFiles="@(ExternalReferenciesFiles)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" UseHardlinksIfPossible="$(CreateHardLinksForCopyFilesToOutputDirectoryIfPossible)" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
   </Target>
 </Project>

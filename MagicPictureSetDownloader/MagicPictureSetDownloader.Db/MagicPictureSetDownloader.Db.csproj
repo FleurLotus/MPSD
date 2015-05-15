@@ -83,6 +83,7 @@
     <Compile Include="DAO\PictureKey.cs" />
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />
+    <Compile Include="DatabaseConnection.cs" />
     <Compile Include="MagicDatabase.Audit.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>

@@ -12,7 +12,7 @@
         private const string VersionQuery = "SELECT Major FROM Version";
         private const string UpdateVersionQuery = "UPDATE Version Set Major = ";
         private readonly string _connectionString;
-        private readonly DbType _data;
+        private readonly DatabasebType _data;
         private static readonly Version _applicationVersion;
 
         static Upgrader()
@@ -21,7 +21,7 @@
             AssemblyName assemblyName = entryAssembly.GetName();
             _applicationVersion = assemblyName.Version;
         }
-        internal Upgrader(string connectionString, DbType data)
+        internal Upgrader(string connectionString, DatabasebType data)
         {
             _connectionString = connectionString;
             _data = data;
@@ -63,10 +63,10 @@
             Repository repo = new Repository(_connectionString);
             switch (_data)
             {
-                case DbType.Data:
+                case DatabasebType.Data:
                     ExecuteUpgradeCommandsForData(repo, dbVersion);
                     break;
-                case DbType.Picture:
+                case DatabasebType.Picture:
                     ExecuteUpgradeCommandsForPicture(repo, dbVersion);
                     break;
             }

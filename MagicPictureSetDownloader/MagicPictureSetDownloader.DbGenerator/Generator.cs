@@ -9,9 +9,9 @@
     internal class Generator
     {
         private readonly string _connectionString;
-        private readonly DbType _data;
+        private readonly DatabasebType _data;
 
-        internal Generator(string connectionString, DbType data)
+        internal Generator(string connectionString, DatabasebType data)
         {
             _connectionString = connectionString;
             _data = data;
@@ -27,9 +27,9 @@
         {
             switch (_data)
             {
-                case DbType.Data:
+                case DatabasebType.Data:
                     return Properties.Resource.MagicData;
-                case DbType.Picture:
+                case DatabasebType.Picture:
                     return Properties.Resource.MagicPicture;
             }
 

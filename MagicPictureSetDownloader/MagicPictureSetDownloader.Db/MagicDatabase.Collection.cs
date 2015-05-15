@@ -2,7 +2,7 @@ namespace MagicPictureSetDownloader.Db
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.SqlServerCe;
+    using System.Data.Common;
     using System.Linq;
 
     using Common.Database;
@@ -10,6 +10,7 @@ namespace MagicPictureSetDownloader.Db
     using Common.Libray.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
+    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -125,7 +126,7 @@ namespace MagicPictureSetDownloader.Db
                     return null;
 
                 CardCollection collection = new CardCollection { Name = name };
-                AddToDbAndUpdateReferential(_connectionString, collection, InsertInReferential);
+                AddToDbAndUpdateReferential(DatabasebType.Data, collection, InsertInReferential);
                 AuditAddCollection(collection.Id);
                 return collection;
             }
@@ -149,7 +150,7 @@ namespace MagicPictureSetDownloader.Db
                                                                              FoilNumber = foilCountToAdd,
                                                                              IdLanguage = idLanguage
                                                                          };
-                    AddToDbAndUpdateReferential(_connectionString, newCardInCollectionCount, InsertInReferential);
+                    AddToDbAndUpdateReferential(DatabasebType.Data, newCardInCollectionCount, InsertInReferential);
                     AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
                     AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
                     return newCardInCollectionCount;
@@ -177,9 +178,8 @@ namespace MagicPictureSetDownloader.Db
                 updateCardInCollectionCount.Number = newCount;
                 updateCardInCollectionCount.FoilNumber = newFoilCount;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<CardInCollectionCount>.UpdateOne(cnx, updateCardInCollectionCount);
                 }
                 AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
@@ -297,9 +297,8 @@ namespace MagicPictureSetDownloader.Db
 
                 newCollection.Name = name;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<CardCollection>.UpdateOne(cnx, newCollection);
                 }
 
@@ -344,9 +343,8 @@ namespace MagicPictureSetDownloader.Db
                 if (collection == null || collection.Count == 0)
                     return;
 
-                using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
-                    cnx.Open();
                     Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Cast<CardInCollectionCount>());
                 }
 
@@ -367,7 +365,7 @@ namespace MagicPictureSetDownloader.Db
                 if (cardInCollectionCount == null)
                     return;
 
-                RemoveFromDbAndUpdateReferential(_connectionString, cardInCollectionCount as CardInCollectionCount, RemoveFromReferential);
+                RemoveFromDbAndUpdateReferential(DatabasebType.Data, cardInCollectionCount as CardInCollectionCount, RemoveFromReferential);
             }
         }
         public void DeleteCollection(string name)
@@ -378,7 +376,7 @@ namespace MagicPictureSetDownloader.Db
                 if (cardCollection == null)
                     return;
 
-                RemoveFromDbAndUpdateReferential(_connectionString, cardCollection as CardCollection, RemoveFromReferential);
+                RemoveFromDbAndUpdateReferential(DatabasebType.Data, cardCollection as CardCollection, RemoveFromReferential);
                 AuditRemoveCollection(cardCollection.Id);
             }
         }
