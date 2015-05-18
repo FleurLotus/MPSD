@@ -2,9 +2,11 @@
 {
     using System.Collections.Generic;
     using System.Data.Common;
-    using System.Data.SqlServerCe;
+    using System.Data.SQLite;
     using System.IO;
     using System.Reflection;
+
+    using Common.Database;
 
     using MagicPictureSetDownloader.DbGenerator;
     
@@ -13,22 +15,20 @@
         private readonly IDictionary<DatabasebType, string> _connectionStrings = new Dictionary<DatabasebType, string>();
 
         public DatabaseConnection()
-            : this("MagicData.sdf", "MagicPicture.sdf")
         {
+            IdentityRetriever.IdentityQuery = "SELECT last_insert_rowid()";
+            GetConnectionString(DatabasebType.Data);
+            GetConnectionString(DatabasebType.Picture);
         }
-
-        public DatabaseConnection(string fileName, string pictureFileName)
+        private void GetConnectionString(DatabasebType databasebType)
         {
-            GetConnectionString(DatabasebType.Data, fileName);
-            GetConnectionString(DatabasebType.Picture, pictureFileName);
-        }
-        private void GetConnectionString(DatabasebType databasebType, string fileName)
-        {
+            string fileName = DatabaseGenerator.GetResourceName(databasebType);
+                
             string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
-            string connectionString = "datasource=" + filePath + ";Max Database Size = 4091;";
+            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = filePath }).ToString();
             if (!File.Exists(filePath))
             {
-                DatabaseGenerator.Generate(connectionString, databasebType);
+                DatabaseGenerator.Generate(databasebType);
             }
 
             DatabaseGenerator.VersionVerify(connectionString, databasebType);
@@ -37,7 +37,7 @@
 
         public DbConnection GetMagicConnection(DatabasebType databasebType)
         {
-            SqlCeConnection cnx = new SqlCeConnection(_connectionStrings[databasebType]);
+            SQLiteConnection cnx = new SQLiteConnection(_connectionStrings[databasebType]);
             cnx.Open();
             return cnx;
         }

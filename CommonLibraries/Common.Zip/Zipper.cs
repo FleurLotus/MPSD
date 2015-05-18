@@ -9,13 +9,20 @@
     {
         public static Stream UnZipOneFile(byte[] stream)
         {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                ms.Write(stream, 0, stream.Length);
+                return UnZipOneFile(ms);
+            }
+        }
+
+        public static Stream UnZipOneFile(Stream stream)
+        {
             ZipFile zipFile = null;
             Stream outStream = null;
             try
             {
-                MemoryStream ms = new MemoryStream();
-                ms.Write(stream, 0, stream.Length);
-                zipFile = new ZipFile(ms);
+                zipFile = new ZipFile(stream);
 
                 foreach (ZipEntry entry in zipFile)
                 {
@@ -43,5 +50,6 @@
 
             return outStream;
         }
+
     }
 }

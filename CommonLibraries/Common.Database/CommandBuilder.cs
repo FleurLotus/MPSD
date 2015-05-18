@@ -114,7 +114,7 @@
             sbInsert.Append("] (");
 
             StringBuilder sbDelete = new StringBuilder();
-            sbDelete.Append("DELETE [");
+            sbDelete.Append("DELETE FROM [");
             sbDelete.Append(_typeDbInfo.TableName);
             sbDelete.Append("] ");
 

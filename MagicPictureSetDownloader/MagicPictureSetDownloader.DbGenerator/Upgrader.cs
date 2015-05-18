@@ -2,10 +2,10 @@
 {
     using System;
     using System.Data;
-    using System.Data.SqlServerCe;
+    using System.Data.Common;
+    using System.Data.SQLite;
     using System.Reflection;
 
-    using Common.SQLCE;
 
     public class Upgrader
     {
@@ -30,15 +30,15 @@
         internal void Upgrade()
         {
             int version;
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            using (SQLiteConnection cnx = new SQLiteConnection(_connectionString))
             {
                 cnx.Open();
-                using (SqlCeCommand cmd = cnx.CreateCommand())
+                using (DbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = VersionQuery;
 
-                    version = (int)(cmd.ExecuteScalar());
+                    version = (int)(long)(cmd.ExecuteScalar());
                 }
             }
             try
@@ -59,30 +59,12 @@
             if (dbVersion < 4)
                 throw new Exception("You have udpated the version!!! There is no released version with this db version");
 
-
-            Repository repo = new Repository(_connectionString);
             switch (_data)
             {
                 case DatabasebType.Data:
-                    ExecuteUpgradeCommandsForData(repo, dbVersion);
                     break;
                 case DatabasebType.Picture:
-                    ExecuteUpgradeCommandsForPicture(repo, dbVersion);
                     break;
-            }
-        }
-        private void ExecuteUpgradeCommandsForData(Repository repo, int dbVersion)
-        {
-            if (dbVersion <= 4)
-            {
-                repo.ExecuteBatch(UpdateVersionQuery + "4");
-            }
-        }
-        private void ExecuteUpgradeCommandsForPicture(Repository repo, int dbVersion)
-        {
-            if (dbVersion <= 4)
-            {
-                repo.ExecuteBatch(UpdateVersionQuery + "4");
             }
         }
     }
