@@ -254,7 +254,7 @@
   <Target Name="ExternalReferencies">
     <ItemGroup>
       <ExternalReferenciesFiles Include="..\..\ExternalReference\Blend\*.dll" />
-      <ExternalReferenciesFiles Include="..\..\ExternalReference\SQLCE\*.dll" />
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\SQLite\**\*.dll" />
       <ExternalReferenciesFiles Include="..\..\ExternalReference\WPF\*.dll" />
       <ExternalReferenciesFiles Include="..\..\ExternalReference\Zip\*.dll" />
     </ItemGroup>

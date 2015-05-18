@@ -31,18 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.SQLCE">
-      <HintPath>..\..\CommonLibraries\Common.SQLCE\bin\Debug\Common.SQLCE.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Zip">
       <HintPath>..\..\CommonLibraries\Common.Zip\bin\Debug\Common.Zip.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ExternalReference\SQLCE\System.Data.SqlServerCe.dll</HintPath>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\..\ExternalReference\SQLite\System.Data.SQLite.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -57,36 +53,18 @@
     <Compile Include="Generator.cs" />
     <Compile Include="DatabaseGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
     <Compile Include="UpdateQueries.cs" />
     <Compile Include="Upgrader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resource.resx">
-      <Generator>PublicResxFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="MagicData.zip" />
-    <None Include="MagicPicture.zip" />
+    <EmbeddedResource Include="MagicData.zip" />
+    <EmbeddedResource Include="MagicPicture.zip" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>if exist "%25temp%25\Magic*.sql" (del /Q "%25temp%25\Magic*.sql")
-xcopy /R /Y "$(SolutionDir)MagicData.sdf" "%25temp%25"
-"$(SolutionDir)..\ExternalReference\SQLCE\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicData.sdf;Max Database Size = 4091;" "%25temp%25/MagicData.sql"
-if exist "%25temp%25\MagicData_*.sql" (copy "%25temp%25\MagicData_*.sql" "%25temp%25/MagicData.sql")
-zip -9 "$(ProjectDir)MagicData.zip" "%25temp%25/MagicData.sql"
-xcopy /R /Y "$(SolutionDir)MagicPicture.sdf" "%25temp%25"
-"$(SolutionDir)..\ExternalReference\SQLCE\ExportSqlCE40.exe" "DataSource=%25temp%25/MagicPicture.sdf;Max Database Size = 4091;" "%25temp%25/MagicPicture.sql"
-if exist "%25temp%25\MagicPicture_*.sql" (copy "%25temp%25\MagicPicture_*.sql" "%25temp%25/MagicPicture.sql")
-zip -9 "$(ProjectDir)MagicPicture.zip" "%25temp%25/MagicPicture.sql"</PreBuildEvent>
+    <PreBuildEvent>
+zip -9 "$(ProjectDir)MagicData.zip" "$(SolutionDir)MagicData.sqlite"
+zip -9 "$(ProjectDir)MagicPicture.zip" "$(SolutionDir)MagicPicture.sqlite"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>del "$(ProjectDir)MagicData.zip"

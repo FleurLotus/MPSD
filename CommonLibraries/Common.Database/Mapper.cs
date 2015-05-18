@@ -93,13 +93,7 @@
             PropertyInfo idKeyPropertyInfo = _commandBuilder.GetIdKeyPropertyInfo();
             if (idKeyPropertyInfo != null)
             {
-                //must be done in the transaction because of the way (SQLCE works)
-                //http://connect.microsoft.com/SQLServer/feedback/details/653675/sql-ce-4-0-select-identity-returns-null
-                //It works for others SGBDR
-                cmd.CommandText = "SELECT @@IDENTITY";
-                cmd.CommandType = CommandType.Text;
-                cmd.Parameters.Clear();
-                int id = (int)(decimal)cmd.ExecuteScalar();
+                int id = IdentityRetriever.GetId(cmd);
                 SetValue(value, idKeyPropertyInfo, id);
             }
         }
