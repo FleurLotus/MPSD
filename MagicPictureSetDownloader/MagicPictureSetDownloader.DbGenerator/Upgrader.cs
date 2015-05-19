@@ -6,6 +6,7 @@
     using System.Data.SQLite;
     using System.Reflection;
 
+    using Common.SQLite;
 
     public class Upgrader
     {
@@ -59,6 +60,8 @@
             if (dbVersion < 4)
                 throw new Exception("You have udpated the version!!! There is no released version with this db version");
 
+
+            //Repository repo = new Repository(_connectionString);
             switch (_data)
             {
                 case DatabasebType.Data:

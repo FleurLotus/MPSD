@@ -13,6 +13,7 @@
     <converter:CardToLanguagesTranslationVisibleConverter x:Key="c2tvConv" />
     <converter:CardToRotationAngleConverter x:Key="c2aConv" />
     <converter:TreeToTreeImageConverter x:Key="t2iConv" />
+    <converter:TreeToVisibleConverter x:Key="h2vConv" />
     <converter:ByteArrayToImageConverter x:Key="ba2iConv" />
     <converter:BoolToOrderImageConverter x:Key="b2iConv" />
     <converter:BitmapToImageConverter x:Key="bm2iConv" />

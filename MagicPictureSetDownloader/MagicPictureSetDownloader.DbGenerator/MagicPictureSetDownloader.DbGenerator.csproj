@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common.SQL">
+      <HintPath>..\..\CommonLibraries\Common.SQL\bin\Debug\Common.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.SQLite">
+      <HintPath>..\..\CommonLibraries\Common.SQLite\bin\Debug\Common.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Zip">
       <HintPath>..\..\CommonLibraries\Common.Zip\bin\Debug\Common.Zip.dll</HintPath>
     </Reference>
