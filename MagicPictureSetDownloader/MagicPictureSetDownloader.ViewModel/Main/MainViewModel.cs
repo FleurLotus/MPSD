@@ -17,8 +17,6 @@
         //TODO: Test add/remove splitted card and statistics
 
         //TODO: Import / save historical price (Maybe)
-
-        //TODO: Create a batch to check migration of data from sqlce to sqlite on reference file
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);

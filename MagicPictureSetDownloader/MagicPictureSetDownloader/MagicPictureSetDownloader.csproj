@@ -153,6 +153,7 @@
     <Compile Include="Converter\StringToCastingCostImageConverter.cs" />
     <Compile Include="Converter\ImageConverterBase.cs" />
     <Compile Include="Converter\ReadOnlyConverterForNoEdition.cs" />
+    <Compile Include="Converter\TreeToVisibleConverter.cs" />
     <Compile Include="Converter\TreeToTreeImageConverter.cs" />
     <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
       <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>

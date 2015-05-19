@@ -44,28 +44,13 @@
     <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
-    <Compile Include="CaseSensitivity.cs" />
-    <Compile Include="Column.cs" />
-    <Compile Include="ColumnForIndex.cs" />
-    <Compile Include="ForeignKey.cs" />
-    <Compile Include="ColumnForForeignKey.cs" />
-    <Compile Include="Interface\IColumnForForeignKey.cs" />
-    <Compile Include="Interface\IColumnForIndex.cs" />
-    <Compile Include="Interface\IIndex.cs" />
-    <Compile Include="Index.cs" />
-    <Compile Include="Interface\IForeignKey.cs" />
-    <Compile Include="Interface\IPrimaryKey.cs" />
-    <Compile Include="Interface\IColumn.cs" />
-    <Compile Include="Interface\ITable.cs" />
-    <Compile Include="PrimaryKey.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Table.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Database\Common.Database.csproj">
-      <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
-      <Name>Common.Database</Name>
+    <ProjectReference Include="..\Common.SQL\Common.SQL.csproj">
+      <Project>{7a790459-8de4-413a-820c-95320b91c1bb}</Project>
+      <Name>Common.SQL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

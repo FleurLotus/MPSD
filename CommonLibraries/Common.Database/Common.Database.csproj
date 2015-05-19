@@ -49,7 +49,6 @@
     <Compile Include="IdentityRetriever.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataRecordExt.cs" />
     <Compile Include="SQLQueryTools.cs" />
     <Compile Include="TypeDbInfo.cs" />
   </ItemGroup>

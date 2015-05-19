@@ -189,7 +189,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" />
+                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" Visibility="{Binding Converter={StaticResource h2vConv}}"/>
                         <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
                     </Grid>
                 </HierarchicalDataTemplate>

@@ -1,15 +1,12 @@
 ﻿namespace Common.SQLCE
 {
-    using System;
-    using System.Collections.Generic;
     using System.Data;
+    using System.Data.Common;
     using System.Data.SqlServerCe;
-    using System.Linq;
-    using System.Text;
 
-    using Common.Database;
+    using Common.SQL;
 
-    public class Repository
+    public class Repository: RepositoryBase
     {
         #region Query
 
@@ -49,174 +46,83 @@ INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE u ON c.CONSTRAINT_NAME = u.CONSTR
 WHERE c.CONSTRAINT_TYPE = 'PRIMARY KEY'
 ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 ";
-        private const string CaseSensitivityTestQuery = @"SELECT 'AAAA' UNION SELECT 'aaaa'";
-
         #endregion
         
-        private CaseSensitivity _isCaseSensitive;
         private readonly string _connectionString;
-        private readonly IDictionary<string, Table> _tables;
 
         public Repository(string connectionString)
         {
             _connectionString = connectionString;
-            _tables = new Dictionary<string, Table>();
 
             Refresh();
         }
 
-        public ITable[] AllTables()
+        protected override DbConnection GetConnection()
         {
-            return _tables.Values.Cast<ITable>().ToArray();
-        }
-        public bool TableExists(string name)
-        {
-            return GetTable(name) != null;
-        }
-        public bool TableExists(string schemaName, string name)
-        {
-            return GetTable(schemaName, name) != null;
+            return new SqlCeConnection(_connectionString);
         }
 
-        public bool ColumnExists(string tableName, string name)
+        public override sealed void Refresh()
         {
-            ITable table = GetTable(tableName);
-            return table != null && table.HasColumn(name);
-        }
-        public bool ColumnExists(string schemaName, string tableName, string name)
-        {
-            ITable table = GetTable(schemaName, tableName);
-            return table != null && table.HasColumn(name);
-        }
-        
-        public ITable GetTable(string name)
-        {
-            return GetTable(null, name);
-        }
-        public ITable GetTable(string schemaName, string name)
-        {
-            string tablekey = Table.TableKey(schemaName, name, _isCaseSensitive);
-
-            Table table;
-            _tables.TryGetValue(tablekey, out table);
-            return table;
-        }
-        public bool RowExists(string schemaName, string tableName, string[] columnNames, object[] values)
-        {
-            ITable table = GetTable(schemaName, tableName);
-            if (table == null)
-                throw new Exception("Unknown table");
-
-            if (columnNames == null || columnNames.Length == 0)
-                throw new ArgumentException("columnNames");
-
-            if (values == null || values.Length == 0)
-                throw new ArgumentException("values");
-
-            if (values.Length != columnNames.Length)
-                throw new Exception("columnNames and values must have the same length");
-
-            if (columnNames.Any(columnName => !table.HasColumn(columnName)))
-                throw new Exception("Unknown column");
-
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("Select 1 FROM {0} WHERE ", table);
-
-
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
+            using (DbConnection cnx = GetConnection())
             {
                 cnx.Open();
 
-                using (SqlCeCommand cmd = cnx.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
+                Tables.Clear();
 
-
-                    for (int i = 0; i < columnNames.Length; i++)
-                    {
-                        if (i != 0)
-                            sb.Append(" AND ");
-
-                        if (values[i] == null)
-                        {
-                            sb.AppendFormat("([{0}] IS NULL)", columnNames[i]);
-                        }
-                        else
-                        {
-                            sb.AppendFormat("([{0}] = @{0})", columnNames[i]);
-                            cmd.Parameters.AddWithValue("@" + columnNames[i], values[i]);
-                        }
-                    }
-
-                    cmd.CommandText = sb.ToString();
-
-                    object o = cmd.ExecuteScalar();
-                    
-                    return o != null && o != DBNull.Value;
-                }
-            }
-        }
-
-        public void Refresh()
-        {
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
-            {
-                cnx.Open();
-
-                _tables.Clear();
-
-                using (SqlCeCommand cmd = cnx.CreateCommand())
+                using (DbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
 
                     //Case Sensibility
                     cmd.CommandText = CaseSensitivityTestQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         reader.Read();
-                        _isCaseSensitive = new CaseSensitivity(reader.Read());
+                        IsCaseSensitive = new CaseSensitivity(reader.Read());
                     }
                     
                     //Tables
                     cmd.CommandText = TableQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             Table table = CreateTable(reader);
-                            _tables.Add(table.ToString(), table);
+                            Tables.Add(table.ToString(), table);
                         }
                     }
 
                     //Columns
                     cmd.CommandText = ColumnQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             Column column = CreateColumn(reader);
-                            string tablekey = Table.TableKey(column.SchemaName, column.TableName, _isCaseSensitive);
-                            Table table = _tables[tablekey];
+                            string tablekey = Table.TableKey(column.SchemaName, column.TableName, IsCaseSensitive);
+                            Table table = Tables[tablekey] as Table;
+                            // ReSharper disable PossibleNullReferenceException
                             table.AddColumn(column);
+                            // ReSharper restore PossibleNullReferenceException
                         }
                     }
 
                     //Primary Keys
                     cmd.CommandText = PrimaryKeyQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             PrimaryKey primaryKey = CreatePrimaryKey(reader);
-                            string tablekey = Table.TableKey(primaryKey.SchemaName, primaryKey.TableName, _isCaseSensitive);
-                            Table table = _tables[tablekey];
+                            string tablekey = Table.TableKey(primaryKey.SchemaName, primaryKey.TableName, IsCaseSensitive);
+                            Table table = Tables[tablekey] as Table;
                             
+                            // ReSharper disable PossibleNullReferenceException
                             if (table.PrimaryKey == null)
                                 table.SetPrimaryKey(primaryKey);
 
                             primaryKey = table.PrimaryKey as PrimaryKey;
-                            // ReSharper disable PossibleNullReferenceException
                             primaryKey.AddColumn(reader.GetInt32OrDefault(4), table.GetColumn(reader.GetStringOrDefault(3)));
                             // ReSharper restore PossibleNullReferenceException
                         }
@@ -224,14 +130,14 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Indexes
                     cmd.CommandText = IndexQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             Index index = CreateIndex(reader);
-                            string tablekey = Table.TableKey(index.SchemaName, index.TableName, _isCaseSensitive);
-                            Table table = _tables[tablekey];
-
+                            string tablekey = Table.TableKey(index.SchemaName, index.TableName, IsCaseSensitive);
+                            Table table = Tables[tablekey] as Table;
+                            // ReSharper disable PossibleNullReferenceException
                             if (table.HasIndex(index.Name))
                             {
                                 index = table.GetIndex(index.Name) as Index;
@@ -242,7 +148,6 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                             }
 
                             IColumn column = table.GetColumn(reader.GetStringOrDefault(6));
-                            // ReSharper disable PossibleNullReferenceException
                             index.AddColumn(new ColumnForIndex { Column = column, IsAsc = (reader.GetInt16OrDefault(7) == 1), Position = reader.GetInt32OrDefault(5) });
                             // ReSharper restore PossibleNullReferenceException
                         }
@@ -250,17 +155,18 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Foreign Key
                     cmd.CommandText = ForeignKeyQuery;
-                    using (SqlCeDataReader reader = cmd.ExecuteReader())
+                    using (DbDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             ForeignKey foreignKey = CreateForeignKey(reader);
-                            string sourceTablekey = Table.TableKey(foreignKey.SourceSchemaName, foreignKey.SourceTableName, _isCaseSensitive);
-                            string referenceTablekey = Table.TableKey(foreignKey.ReferenceSchemaName, foreignKey.ReferenceTableName, _isCaseSensitive);
+                            string sourceTablekey = Table.TableKey(foreignKey.SourceSchemaName, foreignKey.SourceTableName, IsCaseSensitive);
+                            string referenceTablekey = Table.TableKey(foreignKey.ReferenceSchemaName, foreignKey.ReferenceTableName, IsCaseSensitive);
 
-                            Table sourceTable = _tables[sourceTablekey];
-                            Table referenceTable = _tables[referenceTablekey];
+                            Table sourceTable = Tables[sourceTablekey] as Table;
+                            Table referenceTable = Tables[referenceTablekey] as Table;
                             
+                            // ReSharper disable PossibleNullReferenceException
                             if (sourceTable.HasForeignKey(foreignKey.Name))
                             {
                                 foreignKey = sourceTable.GetForeignKey(foreignKey.Name) as ForeignKey;
@@ -272,31 +178,8 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                             IColumn sourceColumn = sourceTable.GetColumn(reader.GetStringOrDefault(3));
                             IColumn referenceColumn = referenceTable.GetColumn(reader.GetStringOrDefault(7));
-                            // ReSharper disable PossibleNullReferenceException
                             foreignKey.AddColumn(new ColumnForForeignKey{SourceColumn = sourceColumn, ReferenceColumn =  referenceColumn, SourcePosition = reader.GetInt32OrDefault(10), ReferencePosition = reader.GetInt32(11)});
                             // ReSharper restore PossibleNullReferenceException
-                        }
-                    }
-                }
-            }
-        }
-        public void ExecuteBatch(string sqlcommand)
-        {
-            string[] commands = sqlcommand.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
-
-            using (SqlCeConnection cnx = new SqlCeConnection(_connectionString))
-            {
-                cnx.Open();
-                using (SqlCeCommand cmd = cnx.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    foreach (string command in commands)
-                    {
-                        string trimcommand = command.TrimEnd(new[] { '\r', '\n' });
-                        if (!string.IsNullOrWhiteSpace(trimcommand))
-                        {
-                            cmd.CommandText = trimcommand;
-                            cmd.ExecuteNonQuery();
                         }
                     }
                 }
@@ -322,7 +205,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                            AutoIncrementNext = dr.GetInt64OrDefault(12),
                            SchemaName = dr.GetStringOrDefault(13),
                            Position = dr.GetInt32OrDefault(14),
-                           CaseSensitivity = _isCaseSensitive,
+                           CaseSensitivity = IsCaseSensitive,
                        };
         }
         private Table CreateTable(IDataRecord dr)
@@ -331,7 +214,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                        {
                            SchemaName = dr.GetStringOrDefault(0),
                            Name = dr.GetStringOrDefault(1),
-                           CaseSensitivity = _isCaseSensitive,
+                           CaseSensitivity = IsCaseSensitive,
                        };
         }
         private PrimaryKey CreatePrimaryKey(IDataRecord dr)
@@ -341,7 +224,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                 Name = dr.GetStringOrDefault(0),
                 SchemaName = dr.GetStringOrDefault(1),
                 TableName = dr.GetStringOrDefault(2),
-                CaseSensitivity = _isCaseSensitive,
+                CaseSensitivity = IsCaseSensitive,
             };
         }
         private Index CreateIndex(IDataRecord dr)
@@ -353,7 +236,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                 TableName = dr.GetStringOrDefault(2),
                 IsUnique = dr.GetBoolOrDefault(3),
                 IsClustered = dr.GetBoolOrDefault(4),
-                CaseSensitivity = _isCaseSensitive,
+                CaseSensitivity = IsCaseSensitive,
             };
         }
         private ForeignKey CreateForeignKey(IDataRecord dr)
@@ -371,7 +254,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                 UpdateRule = dr.GetStringOrDefault(8),
                 DeleteRule = dr.GetStringOrDefault(9),
                 
-                CaseSensitivity = _isCaseSensitive,
+                CaseSensitivity = IsCaseSensitive,
             };
         }
     }
