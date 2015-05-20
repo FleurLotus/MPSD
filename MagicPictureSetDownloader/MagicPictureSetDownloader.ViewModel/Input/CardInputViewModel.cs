@@ -1,6 +1,7 @@
 ﻿
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
+    using System;
     using System.Linq;
     using System.Windows.Input;
 
@@ -20,7 +21,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
 
     public class CardInputViewModel : DialogViewModelBase
     {
-
         private InputMode _inputMode = InputMode.ByEdition;
         private bool _isFoil;
         private int _count;
@@ -29,6 +29,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private IEdition _editionSelected;
         private ILanguage _languageSelected;
         private string _currentCollectionDetail;
+        private string _translate;
         private readonly IEdition[] _allEditions;
         private ICardCollection _cardCollection;
         private readonly ICardCollection[] _collections;
@@ -39,6 +40,14 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         public CardInputViewModel(string name)
         {
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+
+            IOption option = _magicDatabase.GetOption(TypeOfOption.Input, "Mode");
+            if (option != null)
+            {
+                InputMode mode;
+                if (Enum.TryParse(option.Value, out mode))
+                    _inputMode = mode;
+            }
 
             Display.Title = "Input cards";
             Display.OkCommandLabel = "Add";
@@ -77,7 +86,6 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
-
         public ICardCollection CardCollection
         {
             get { return _cardCollection; }
@@ -164,8 +172,21 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 if (value != _inputMode)
                 {
                     _inputMode = value;
+                    MagicDatabaseManager.ReadAndWriteOption.InsertNewOption(TypeOfOption.Input, "Mode", _inputMode.ToString());
                     OnNotifyPropertyChanged(() => InputMode);
                     InitWindow();
+                }
+            }
+        }
+        public string Translate
+        {
+            get { return _translate; }
+            private set
+            {
+                if (value != _translate)
+                {
+                    _translate = value;
+                    OnNotifyPropertyChanged(() => Translate);
                 }
             }
         }
@@ -252,7 +273,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private void RefreshDisplayedData(InputMode modifyData)
         {
-            UpdateCurrentCollectionDetail();
+            UpdateCurrentCollectionDetailAndTranslate();
 
             //None one the key changed, nothing to recompute
             if (modifyData == InputMode.None)
@@ -310,13 +331,17 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
-        private void UpdateCurrentCollectionDetail()
+        private void UpdateCurrentCollectionDetailAndTranslate()
         {
             if (EditionSelected == null || CardSelected == null || LanguageSelected == null)
             {
                 CurrentCollectionDetail = null;
+                Translate = null;
                 return;
             }
+
+            ITranslate translate = _magicDatabase.GetTranslate(CardSelected, LanguageSelected.Id);
+            Translate = translate == null ? null : translate.Name;
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;

@@ -16,7 +16,9 @@
 
         //TODO: Test add/remove splitted card and statistics
 
-        //TODO: Import / save historical price (Maybe)
+		//TODO: allow input in other language namespace
+		//TODO: (Maybe) Filter on quantity
+        //TODO: (Maybe) Import / save historical price 
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
