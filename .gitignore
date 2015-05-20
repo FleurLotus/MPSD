@@ -8,3 +8,4 @@ packages/
 *.DotSettings.user
 */Sample/
 *.orig
+MatrixAvailable/

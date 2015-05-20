@@ -4,7 +4,8 @@
     {
         Hierarchy,
         SelectedCollection,
-        Display
+        Display,
+        Input,
     }
 
     public enum ExportFormat
