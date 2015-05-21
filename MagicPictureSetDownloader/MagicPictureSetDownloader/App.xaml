@@ -11,7 +11,11 @@
                 
                 <ResourceDictionary Source="Resources.xaml"/>
                 <ResourceDictionary Source="Styles.xaml"/>
-                <ResourceDictionary Source="Template.xaml"/>
+                <ResourceDictionary Source="Templates\ControlTemplates.xaml"/>
+                <ResourceDictionary Source="Templates\DataTemplates.Main.xaml"/>
+                <ResourceDictionary Source="Templates\DataTemplates.Export.xaml"/>
+                <ResourceDictionary Source="Templates\DataTemplates.DatabaseInfoModification.xaml"/>
+                <ResourceDictionary Source="Templates\DataTemplates.CommonDialog.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

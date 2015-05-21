@@ -10,8 +10,9 @@
         private readonly string[] _missingImages;
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         private int _nextJob;
+        private volatile bool _fatalException;
         private const int NbThread = 5;
-        private readonly ManualResetEvent _manualResetEvent = new ManualResetEvent(false);
+        private readonly ManualResetEvent _firstDoneEvent = new ManualResetEvent(false);
 
 
         public DownloadImageViewModel(IDispatcherInvoker dispatcherInvoker)
@@ -49,8 +50,12 @@
                     if (currentJob >= _missingImages.Length || IsStopping)
                         break;
 
-                    if (currentJob == 0 || _manualResetEvent.WaitOne())
+                    //Do the first alone to wait for proxy if needed
+                    if (currentJob == 0 || _firstDoneEvent.WaitOne())
                     {
+                        if (_fatalException)
+                            break;
+
                         DownloadManager.InsertPictureInDb(_missingImages[currentJob]);
                     }
                     DownloadReporter.Progress();
@@ -58,18 +63,22 @@
                 }
                 catch (Exception ex)
                 {
-                    Message = ex.Message;
+                    if (currentJob == 0)
+                        _fatalException = true;
+
+                    Message += (Message == null ? "" : "\n") + ex.Message;
                 }
                 finally
                 {
+                    //First finished, Go for the others
                     if (currentJob == 0)
-                        _manualResetEvent.Set();
+                        _firstDoneEvent.Set();
                 }
 
                 Interlocked.Decrement(ref CountDown);
             }
 
-            if (CountDown == 0 || IsStopping)
+            if (CountDown == 0 || IsStopping || _fatalException)
             {
                 DownloadReporter.Finish();
                 JobFinished();

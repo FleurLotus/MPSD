@@ -16,8 +16,7 @@
 
         //TODO: Test add/remove splitted card and statistics
 
-		//TODO: allow input in other language namespace
-		//TODO: (Maybe) Filter on quantity
+		//TODO: allow input in other language
         //TODO: (Maybe) Import / save historical price 
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {

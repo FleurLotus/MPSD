@@ -1,0 +1,160 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    
+                    
+                    xmlns:l="clr-namespace:MagicPictureSetDownloader"
+                    xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
+                    xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
+                    
+                    xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
+                    
+                    mc:Ignorable="d"
+                    >
+
+    <!-- Control Template -->
+    <!-- Card part display -->
+    <ControlTemplate x:Key="CardInfoControlTemplate">
+        <ControlTemplate.Resources>
+            <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="5,0"/>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style TargetType="l:PicturedTextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+        </ControlTemplate.Resources>
+        <Grid d:DataContext="{d:DesignInstance Type=main:CardViewModel, IsDesignTimeCreatable=False}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Part Name" FontSize="15" HorizontalAlignment="Right" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}" />
+            <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Text="{Binding PartName}" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}" />
+
+            <Label Grid.Column="0" Grid.Row="1" Content="Block"/>
+            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding BlockName}"/>
+            <Label Grid.Column="2" Grid.Row="1" Content="Edition"/>
+            <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Edition.Name}"/>
+            <Label Grid.Column="0" Grid.Row="2" Content="Rarity"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Rarity}"/>
+            <Label Grid.Column="2" Grid.Row="2" Content="Type"/>
+            <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Type}"/>
+            <Label Grid.Column="0" Grid.Row="3" Content="CastingCost" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}"/>
+            <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding DisplayedCastingCost}" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Width="12" Height="12" Source="{Binding Converter={StaticResource s2iConv}}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyText}"
+                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
+            <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding PowerToughnessLoyalty}"
+                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
+
+            <Label Grid.Column="0" Grid.Row="5" Content="Text"/>
+            <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
+        </Grid>
+    </ControlTemplate>
+
+    <!-- Statistics display -->
+    <ControlTemplate x:Key="StatisticsControlTemplate">
+        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}"
+                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2svConv}}">
+                <i:Interaction.Behaviors>
+                    <behavior:GridViewColumnResizeBehavior />
+                </i:Interaction.Behaviors>
+
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
+                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
+                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
+                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
+                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Language Grid display -->
+    <ControlTemplate x:Key="OtherLanguagesControlTemplate">
+        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}"
+                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}">
+                <i:Interaction.Behaviors>
+                    <behavior:GridViewColumnResizeBehavior />
+                </i:Interaction.Behaviors>
+
+                <ListView.View>
+                    <GridView AllowsColumnReorder="False">
+                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Key}"/>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Card picture display -->
+    <ControlTemplate x:Key="ImageControlTemplate">
+        <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
+                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}"
+                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- Quantity for card change -->
+    <ControlTemplate x:Key="QuantityControlTemplate">
+        <Grid Margin="5" d:DataContext="{d:DesignInstance Type=input:CardSourceViewModel, IsDesignTimeCreatable=False}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0"  Content="Count" HorizontalAlignment="Center"/>
+            <Slider Grid.Column="1" Margin="0,5"  Value="{binding:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
+            <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                <Label Content="{Binding Count}"/>
+                <Label Content="/"/>
+                <Label Content="{Binding MaxCount}"/>
+            </StackPanel>
+        </Grid>
+    </ControlTemplate>
+
+</ResourceDictionary>
