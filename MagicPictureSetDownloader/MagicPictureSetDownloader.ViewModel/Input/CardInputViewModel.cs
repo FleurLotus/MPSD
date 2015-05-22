@@ -340,8 +340,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 return;
             }
 
-            ITranslate translate = _magicDatabase.GetTranslate(CardSelected, LanguageSelected.Id);
-            Translate = translate == null ? null : translate.Name;
+            Translate = CardSelected.ToString(LanguageSelected.Id);
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;

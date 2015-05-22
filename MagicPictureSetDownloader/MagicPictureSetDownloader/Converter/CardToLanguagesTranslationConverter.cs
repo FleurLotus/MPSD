@@ -3,7 +3,6 @@ namespace MagicPictureSetDownloader.Converter
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Linq;
     using System.Windows.Data;
 
     using Common.WPF;
@@ -25,7 +24,14 @@ namespace MagicPictureSetDownloader.Converter
             if (node == null)
                 return null;
 
-            return _magicDatabase.GetTranslates(node.Card.Card).ToDictionary(t => _magicDatabase.GetLanguage(t.IdLanguage).Name, t => t.Name);
+            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            foreach (ILanguage language in _magicDatabase.GetAllLanguages())
+            {
+                string name = node.Card.Card.ToString(language.Id);
+                if (!string.IsNullOrEmpty(name))
+                    dictionary.Add(language.Name, name);
+            }
+            return dictionary;
         }
     }
 }

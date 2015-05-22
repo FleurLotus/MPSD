@@ -222,7 +222,11 @@
                        (cai.CardPart2 != null && cai.CardPart2.Name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0);
             }
 
-            return _magicDatabase.GetTranslates(cai.Card).Any(t => t.Name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0);
+            return _magicDatabase.GetAllLanguages().Any(l =>
+                {
+                    string name = cai.Card.ToString(l.Id);
+                    return !string.IsNullOrEmpty(name) && name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0;
+                });
         }
         private bool CheckEdition(ICardAllDbInfo cai)
         {

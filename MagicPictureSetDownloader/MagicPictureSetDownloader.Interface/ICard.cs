@@ -14,5 +14,7 @@
         bool IsMultiPart { get; }
         bool IsReverseSide { get; }
         bool IsSplitted { get; }
+        string ToString(int? languageId);
+        bool HasTranslation(int languageId);
     }
 }
