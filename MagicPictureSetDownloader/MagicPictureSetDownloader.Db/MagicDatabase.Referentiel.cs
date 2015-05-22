@@ -3,6 +3,7 @@ namespace MagicPictureSetDownloader.Db
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
+    using System.Linq;
 
     using Common.Database;
     using Common.Libray;
@@ -19,7 +20,6 @@ namespace MagicPictureSetDownloader.Db
         private readonly IList<IEdition> _editions = new List<IEdition>();
         private readonly IDictionary<string, ILanguage> _languages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<string, ILanguage> _alternativeNameLanguages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<int, ITranslate> _translates = new Dictionary<int, ITranslate>();
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
@@ -100,7 +100,6 @@ namespace MagicPictureSetDownloader.Db
                 ICard refCard = GetCard(name, partName);
                 if (null == refCard)
                 {
-
                     Card card = new Card
                     {
                         PartName = partName ?? name,
@@ -202,7 +201,7 @@ namespace MagicPictureSetDownloader.Db
 
             using (new WriterLock(_lock))
             {
-                if (GetTranslate(card, idLanguage) == null)
+                if (!card.HasTranslation(idLanguage))
                 {
                     Translate translate = new Translate { IdCard = card.Id, IdLanguage = idLanguage, Name = name };
                     AddToDbAndUpdateReferential(DatabasebType.Data, translate, InsertInReferential);
@@ -250,7 +249,6 @@ namespace MagicPictureSetDownloader.Db
                 _editions.Clear();
                 _languages.Clear();
                 _alternativeNameLanguages.Clear();
-                _translates.Clear();
                 _cards.Clear();
                 _cardEditions.Clear();
                 _collections.Clear();
@@ -343,10 +341,13 @@ namespace MagicPictureSetDownloader.Db
 
             options.Add(option);
         }
-        private void InsertInReferential(ITranslate translate)
+        private void InsertInReferential(Translate translate)
         {
-            int key = TranslateKey(translate.IdCard, translate.IdLanguage);
-            _translates.Add(key, translate);
+            Card card = _cards.Values.FirstOrDefault(c => c.Id == translate.IdCard) as Card;
+            if (card == null)
+                throw new ApplicationDbException("Can't find card with id " + translate.IdCard);
+
+            card.AddTranslate(translate);
 
             _cacheForAllDbInfos = null;
         }

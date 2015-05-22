@@ -132,7 +132,7 @@ namespace MagicPictureSetDownloader.Db
                     return null;
 
                 IList<ILanguage> languages = new List<ILanguage> { GetLanguage(Constants.Unknown) };
-                foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && GetTranslate(card, l.Id) != null))
+                foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && card.HasTranslation(l.Id)))
                     languages.Add(language);
                 return languages;
             }
@@ -142,28 +142,6 @@ namespace MagicPictureSetDownloader.Db
         {
             IList<IOption> options = GetOptions(type);
             return options == null ? null : options.FirstOrDefault(o => o.Key == key);
-        }
-        public ITranslate GetTranslate(ICard card, int idLanguage)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                if (card == null)
-                    return null;
-
-                int key = TranslateKey(card.Id, idLanguage);
-                return _translates.GetOrDefault(key);
-            }
-        }
-        public IList<ITranslate> GetTranslates(ICard card)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return _languages.Values.Select(l => GetTranslate(card, l.Id))
-                                        .Where(t => t != null)
-                                        .ToList();
-            }
         }
 
         //Ensembly Get
@@ -350,10 +328,6 @@ namespace MagicPictureSetDownloader.Db
             {
                 return Mapper<Picture>.Load(cnx, picture);
             }
-        }
-        private int TranslateKey(int idCard, int idLanguage)
-        {
-            return idCard * 100 + idLanguage;
         }
     }
 }
