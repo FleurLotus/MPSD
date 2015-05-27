@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text.RegularExpressions;
 
     internal class CardLanguageParser : IParser<CardLanguageInfo>
@@ -10,7 +9,6 @@
         private const string Start = @"<table class=""cardList"" cellspacing=""0"" cellpadding=""2"">";
         private const string End = @"</table>";
 
-        private static readonly Regex _pageRegex = new Regex(@"<a href=""[^""]+page=(?<page>\d+)[^""]+""(?: style=""text-decoration:underline;"")?>\d+</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex _languageRegex = new Regex(@">\s*(?<name>.*?)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex _cardNameRegex = new Regex(@"<a id="".*"" href="".*"">(?<name>.*)</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -31,15 +29,7 @@
 
                 if (trimedrow.Contains(@"<tr id=""ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_languageList_pagingControlsParent"">"))
                 {
-                    MatchCollection matches = _pageRegex.Matches(trimedrow);
-                    if (matches.Count == 0)
-                        throw new ParserException("Can't parse footer row");
-
-                    HashSet<int> pages = new HashSet<int>();
-                    foreach (Match match in matches)
-                        pages.Add(int.Parse(match.Groups["page"].Value));
-
-                    throw new NextPageException(pages.ToArray());
+                    NextPageChecker.CheckHasNextPage(trimedrow, true);
                 }
 
                 string[] columns = trimedrow.Replace("\r", "").Replace("\n", "").Split(new[] { "</td>" }, StringSplitOptions.None);
