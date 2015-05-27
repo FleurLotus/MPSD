@@ -87,6 +87,7 @@
     <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
     <Compile Include="CardWithExtraInfo.cs" />
     <Compile Include="Parser\CardNameParser.cs" />
+    <Compile Include="Parser\NextPageChecker.cs" />
     <Compile Include="Parser\NextPageException.cs" />
     <Compile Include="Parser\EditionParser.cs" />
     <Compile Include="Parser\IParser.cs" />

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
     using System.Text;
     using Common.Libray.Notify;
@@ -102,8 +101,15 @@
         }
         public string[] GetCardUrls(string url)
         {
-            string htmltext = GetHtml(url);
-            return Parser.ParseCardUrls(htmltext).ToArray();
+            List<string> ret = new List<string>();
+            
+            ManageMultiPage(url, html =>
+            {
+                foreach (string cardurl in Parser.ParseCardUrls(html))
+                    ret.Add(cardurl);
+            });
+
+            return ret.ToArray();
         }
         public void GetCardInfo(string url, int editionId)
         {
@@ -113,40 +119,49 @@
             {
                 string pictureUrl = ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
                 int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
+                string baseUrl = ToAbsoluteUrl(url, string.Format("Languages.aspx?multiverseid={0}",  idGatherer));
 
-                int page = 0;
-                bool hasnextpage;
-                do
-                {
-                    hasnextpage = false;
-                    string languageUrl = ToAbsoluteUrl(url, string.Format("Languages.aspx?page={0}&multiverseid={1}", page, idGatherer));
-                    string html = GetHtml(languageUrl);
-                    try
+                CardWithExtraInfo info = cardWithExtraInfo;
+
+                ManageMultiPage(baseUrl, html => 
                     {
                         foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
-                            cardWithExtraInfo.Add(language);
-                    }
-                    catch (NextPageException ex)
-                    {
-                        int index;
-                        int[] pages = ex.Pages;
-                        for (index = 0; index < pages.Length; index++)
-                        {
-                            if (page == pages[index])
-                                break;
-                        }
-
-                        hasnextpage = (index + 1 < pages.Length);
-                        if (hasnextpage)
-                            page = pages[index + 1];
-                    }
-                }
-                while (hasnextpage);
-
+                            info.Add(language);
+                    });
 
                 InsertCardInDb(cardWithExtraInfo);
                 InsertCardEditionInDb(editionId, cardWithExtraInfo, pictureUrl);
             }
+        }
+        private void ManageMultiPage(string baseUrl, Action<string> workOnHtml )
+        {
+            int page = 0;
+            bool hasnextpage;
+            do
+            {
+                hasnextpage = false;
+                string realUrl = string.Format("{0}&page={1}", baseUrl, page);
+                string html = GetHtml(realUrl);
+                try
+                {
+                    workOnHtml(html);
+                }
+                catch (NextPageException ex)
+                {
+                    int index;
+                    int[] pages = ex.Pages;
+                    for (index = 0; index < pages.Length; index++)
+                    {
+                        if (page == pages[index])
+                            break;
+                    }
+
+                    hasnextpage = (index + 1 < pages.Length);
+                    if (hasnextpage)
+                        page = pages[index + 1];
+                }
+            }
+            while (hasnextpage);
         }
         public void InsertPictureInDb(string pictureUrl)
         {
