@@ -20,6 +20,7 @@ namespace MagicPictureSetDownloader.Db
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly DatabaseConnection _databaseConnection;
+        //To optimize display
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
         
         private MagicDatabase()
@@ -103,7 +104,7 @@ namespace MagicPictureSetDownloader.Db
                 if (cardEdition == null)
                     return null;
 
-                return _cards.Values.FirstOrDefault(c => c.Id == cardEdition.IdCard);
+                return _cardsbyId.GetOrDefault(cardEdition.IdCard);
             }
         }
         public ILanguage GetLanguage(int idLanguage)
@@ -120,7 +121,10 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
                 return _blocks.Values.FirstOrDefault(b => string.Compare(b.Name, blockName, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
-
+        public ILanguage GetDefaultLanguage()
+        {
+            return GetLanguage(Constants.Unknown);
+        }
         public IList<ILanguage> GetLanguages(int idGatherer)
         {
             CheckReferentialLoaded();
@@ -131,7 +135,7 @@ namespace MagicPictureSetDownloader.Db
                 if (card == null)
                     return null;
 
-                IList<ILanguage> languages = new List<ILanguage> { GetLanguage(Constants.Unknown) };
+                IList<ILanguage> languages = new List<ILanguage> { GetDefaultLanguage() };
                 foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && card.HasTranslation(l.Id)))
                     languages.Add(language);
                 return languages;
@@ -177,7 +181,7 @@ namespace MagicPictureSetDownloader.Db
                     }
 
                     ICardEdition edition = cardEdition;
-                    ICard card = _cards.Values.FirstOrDefault(c => c.Id == edition.IdCard);
+                    ICard card = _cardsbyId.GetOrDefault(edition.IdCard);
                     cardAllDbInfo.Card = card;
                     cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
                     cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);

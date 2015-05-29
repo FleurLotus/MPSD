@@ -7,13 +7,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
-        xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
+        xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
         mc:Ignorable="d"
         Title="Database Info Modification"
         ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Height="475" Width="618"
         d:DataContext="{d:DesignInstance Type=management:BlockDatabaseInfoModificationViewModel, IsDesignTimeCreatable=False}"
-        Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
+        Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="Border">

@@ -8,6 +8,8 @@ namespace MagicPictureSetDownloader.Converter
 
     using Common.WPF.Converter;
 
+    using MagicPictureSetDownloader.Resources;
+
     [ValueConversion(typeof(bool), typeof(BitmapSource))]
     public class BoolToOrderImageConverter : NoConvertBackConverter 
     {
@@ -15,7 +17,7 @@ namespace MagicPictureSetDownloader.Converter
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Bitmap bitmap = (bool)value ? Properties.Resources.Asc : Properties.Resources.Desc;
+            Bitmap bitmap = (bool)value ? ResourceManager.Asc : ResourceManager.Desc;
 
             return _bitmapToImageConverter.Convert(bitmap, targetType, parameter, culture);
         }
