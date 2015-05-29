@@ -28,7 +28,7 @@
 
         private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            var ex = e.ExceptionObject as Exception;
+            Exception ex = e.ExceptionObject as Exception;
             Dispatcher.Invoke((Action)(ex.UserDisplay));
         }
 

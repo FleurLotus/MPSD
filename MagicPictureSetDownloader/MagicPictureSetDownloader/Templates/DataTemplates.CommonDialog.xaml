@@ -96,7 +96,7 @@
 
             <Label Grid.Row="0" HorizontalAlignment="Center" FontWeight="Bold" FontSize="15" Content="{Binding Card}" ContentStringFormat="{}Card : {0}" />
 
-            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Source">
+            <GroupBox Grid.Row="1" Header="Source">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70"/>
@@ -129,7 +129,7 @@
 
             <ContentControl Grid.Row="0" Content="{Binding Source}" />
 
-            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Quantity">
+            <GroupBox Grid.Row="1" Header="Quantity">
                 <Control Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
             </GroupBox>
         </Grid>
@@ -144,7 +144,7 @@
 
             <ContentControl Grid.Row="0" Content="{Binding Source}" />
 
-            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Destination">
+            <GroupBox Grid.Row="1" Header="Destination">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -176,7 +176,7 @@
 
             <ContentControl Grid.Row="0" Content="{Binding Source}" />
             
-            <GroupBox Grid.Row="1" BorderBrush="Black" BorderThickness="1" Header="Destination">
+            <GroupBox Grid.Row="1" Header="Destination">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -259,8 +259,8 @@
                 <CheckBox Grid.Column="1" Grid.Row="0" Margin="5,0" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
             </Grid>
 
-            <Label Grid.Column="0" Grid.Row="2" Content="Collections" Visibility="{Binding PerimeterScope, Converter={StaticResource be2vConv}, ConverterParameter=All}"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={StaticResource be2vConv}, ConverterParameter=All}"/>
+            <Label Grid.Column="0" Grid.Row="2" Content="Collections" Visibility="{Binding PerimeterScope, Converter={StaticResource ne2vConv}, ConverterParameter=All}"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={StaticResource ne2vConv}, ConverterParameter=All}"/>
 
             <Label Grid.Column="0" Grid.Row="3" Content="Editions"/>
             <xctk:CheckComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
@@ -284,48 +284,71 @@
     <DataTemplate DataType="{x:Type input:CardInputViewModel}" d:IsDesignTimeCreatable="False">
         <DataTemplate.Resources>
             <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Margin" Value="5,0"/>
             </Style>
         </DataTemplate.Resources>
-        <Grid Margin="5" Width="361">
+        <Grid Width="361">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Margin="0,5" Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton Margin="0,0,10,0" GroupName="All" Content="Input by Edition"
+
+            <GroupBox Grid.Row="0" Header="Input options">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,5" Orientation="Horizontal" HorizontalAlignment="Center"
+                                Grid.ColumnSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ColumnDefinitions.Count, Mode=OneWay}" >
+                        <RadioButton Margin="0,0,10,0" GroupName="All" Content="Input by Edition"
                          IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByEdition}" />
-                <RadioButton Margin="10,0,0,0" GroupName="All" Content="Input by Card"
+                        <RadioButton Margin="10,0,0,0" GroupName="All" Content="Input by Card"
                          IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByCard}" />
-            </StackPanel>
-            <Grid Grid.Row="1" Margin="0,10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" Content="Edition" Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}" />
-                <ComboBox Grid.Column="1" IsEditable="True" cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True"
-                  Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
-                  SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
-                <Image Grid.Column="2"  HorizontalAlignment="Left" Width="20" Height="20"
-                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByEdition}"
-                   Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                    </StackPanel>
 
-                <Label Grid.Column="0" Content="Card name"
-                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}" />
-                <ComboBox Grid.Column="1" IsEditable="True" cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True"
-                   Grid.Row="{Binding InputMode, Converter={StaticResource m2rConv}, ConverterParameter=ByCard}"
-                   SelectedValue="{binding:TwoWayBinding CardSelected}" ItemsSource="{Binding Cards}"/>
-            </Grid>
+                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
+                    <Button Grid.Column="1" Grid.Row="1" Content="Change" Command="{Binding ChangeInputLanguageCommand}" Width="70" VerticalAlignment="Center"/>
+               </Grid>
+            </GroupBox>
+            
+            <GroupBox Grid.Row="1" Header="Card">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                   
+                    <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" 
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"/>
 
-            <GroupBox Grid.Row="2" BorderBrush="Black" BorderThickness="1" Header="Detail">
+                    <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" 
+                              SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
+                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0"  Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+
+                    <Label Grid.Column="0" Grid.Row="2" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" 
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"/>
+                </Grid>
+            </GroupBox>
+            
+            <GroupBox Grid.Row="2" Header="Detail">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -350,7 +373,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Grid.Row="3" BorderBrush="Black" BorderThickness="1" Header="{Binding CardCollection.Name}" HeaderStringFormat="{}In collection {0}">
+            <GroupBox Grid.Row="3" Header="{Binding CardCollection.Name}" HeaderStringFormat="{}In collection {0}">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

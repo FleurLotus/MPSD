@@ -31,4 +31,10 @@
         <Setter Property="Padding" Value="5"/>
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
+
+    <Style TargetType="GroupBox">
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
 </ResourceDictionary>

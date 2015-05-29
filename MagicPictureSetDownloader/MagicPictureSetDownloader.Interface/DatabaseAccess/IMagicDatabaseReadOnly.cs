@@ -23,6 +23,7 @@
         IEdition GetEdition(string sourceName);
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
+        ILanguage GetDefaultLanguage();
         IBlock GetBlock(string blockName);
         IList<ILanguage> GetLanguages(int idGatherer);
         ICardCollection GetCollection(int collectionId);

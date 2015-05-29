@@ -2,9 +2,12 @@
 namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Windows.Input;
 
+    using Common.Libray;
     using Common.Libray.Collection;
     using Common.ViewModel;
 
@@ -25,9 +28,11 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private bool _isFoil;
         private int _count;
         private ICard _cardSelected;
-        private readonly ICard[] _allCards;
+        private string _cardSelectedName;
+        private readonly IDictionary<string, ICard> _allCardSorted = new SortedList<string, ICard>();
         private IEdition _editionSelected;
         private ILanguage _languageSelected;
+        private ILanguage _inputLanguage;
         private string _currentCollectionDetail;
         private string _translate;
         private readonly IEdition[] _allEditions;
@@ -35,13 +40,17 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private readonly ICardCollection[] _collections;
 
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
+        private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
         private readonly ICardAllDbInfo[] _allCardInfos;
+        private readonly ILanguage[] _allLanguages;
 
         public CardInputViewModel(string name)
         {
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
 
-            IOption option = _magicDatabase.GetOption(TypeOfOption.Input, "Mode");
+            //Set directly field and not property to avoid save the retrieve value
+            IOption option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Mode");
             if (option != null)
             {
                 InputMode mode;
@@ -49,29 +58,41 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     _inputMode = mode;
             }
 
+            option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Language");
+            if (option != null)
+            {
+                int id;
+                if (int.TryParse(option.Value, out id))
+                    _inputLanguage = _magicDatabase.GetLanguage(id);
+            }
+
             Display.Title = "Input cards";
             Display.OkCommandLabel = "Add";
             Display.CancelCommandLabel = "Close";
             ChangeCollectionCommand = new RelayCommand(ChangeCollectionCommandExecute);
+            ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
 
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
             _collections = _magicDatabase.GetAllCollections().ToArray();
             SelectCardCollection(name);
 
-            _allCards = _allCardInfos.GetAllCardOrdered().ToArray();
-            Cards = new RangeObservableCollection<ICard>();
+            _allLanguages = _magicDatabase.GetAllLanguages().ToArray();
+
+            Cards = new RangeObservableCollection<string>();
 
             _allEditions = _magicDatabase.GetAllEditionsOrdered();
             Editions = new RangeObservableCollection<IEdition>();
 
             Languages = new RangeObservableCollection<ILanguage>();
 
+            RebuildOrder();
             InitWindow();
         }
         public ICommand ChangeCollectionCommand { get; private set; }
+        public ICommand ChangeInputLanguageCommand { get; private set; }
         public RangeObservableCollection<IEdition> Editions { get; private set; }
         public RangeObservableCollection<ILanguage> Languages { get; private set; }
-        public RangeObservableCollection<ICard> Cards { get; private set; }
+        public RangeObservableCollection<string> Cards { get; private set; }
 
         public ILanguage LanguageSelected
         {
@@ -86,6 +107,11 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
+        public string InputLanguageName
+        {
+            get { return _inputLanguage == null ? "Default" : _inputLanguage.Name; }
+        }
+
         public ICardCollection CardCollection
         {
             get { return _cardCollection; }
@@ -139,15 +165,17 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
-        public ICard CardSelected
+        public string CardSelectedName
         {
-            get { return _cardSelected; }
+            get { return _cardSelectedName; }
             set
             {
-                if (value != _cardSelected)
+                if (value != _cardSelectedName)
                 {
-                    _cardSelected = value;
-                    OnNotifyPropertyChanged(() => CardSelected);
+                    _cardSelectedName = value;
+                    _cardSelected = _cardSelectedName == null ? null : _allCardSorted.GetOrDefault(_cardSelectedName);
+
+                    OnNotifyPropertyChanged(() => CardSelectedName);
                     RefreshDisplayedData(InputMode.ByCard);
                 }
             }
@@ -172,7 +200,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 if (value != _inputMode)
                 {
                     _inputMode = value;
-                    MagicDatabaseManager.ReadAndWriteOption.InsertNewOption(TypeOfOption.Input, "Mode", _inputMode.ToString());
+                    _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Mode", _inputMode.ToString());
                     OnNotifyPropertyChanged(() => InputMode);
                     InitWindow();
                 }
@@ -198,7 +226,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         protected override bool OkCommandCanExecute(object o)
         {
-            return Count != 0 && EditionSelected != null && CardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil);
+            return Count != 0 && EditionSelected != null && _cardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil);
         }
         private void ChangeCollectionCommandExecute(object obj)
         {
@@ -214,6 +242,21 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 }
             }
         }
+        private void ChangeInputLanguageCommandExecute(object obj)
+        {
+            InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListViewModel("Input language", "Choose input language", _allLanguages.Select(c => c.Name).ToList());
+            OnInputRequestedRequested(vm);
+            if (vm.Result == true)
+            {
+                string languageName = vm.Selected;
+
+                if (!string.IsNullOrWhiteSpace(languageName))
+                {
+                    SelectInputLanguage(languageName);
+                }
+            }
+
+        }
         private void InitWindow()
         {
             switch (InputMode)
@@ -221,11 +264,11 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                 case InputMode.ByCard:
                     {
                         Cards.Clear();
-                        Cards.AddRange(_allCards);
+                        Cards.AddRange(_allCardSorted.Keys);
 
                         Editions.Clear();
                         EditionSelected = null;
-                        CardSelected = null;
+                        CardSelectedName = null;
 
                         break;
                     }
@@ -238,7 +281,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         Editions.Clear();
                         Editions.AddRange(_allEditions);
 
-                        CardSelected = null;
+                        CardSelectedName = null;
                         EditionSelected = save;
                         break;
                     }
@@ -248,7 +291,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     Cards.Clear();
                     Editions.Clear();
                     EditionSelected = null;
-                    CardSelected = null;
+                    CardSelectedName = null;
                     break;
             }
 
@@ -263,13 +306,61 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             int count = IsFoil ? 0 : Count;
             int foilCount = IsFoil ? Count: 0;
 
-            ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == CardSelected);
+            ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
             _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, count, foilCount);
         }
         private void SelectCardCollection(string name)
         {
             CardCollection = _collections.First(cc => cc.Name == name);
             RefreshDisplayedData(InputMode.None);
+        }
+        private void SelectInputLanguage(string name)
+        {
+            _inputLanguage = _allLanguages.First(l => l.Name == name);
+            if (_inputLanguage == _magicDatabase.GetDefaultLanguage())
+            {
+                _inputLanguage = null;
+                _magicDatabaseForOption.DeleteOption(TypeOfOption.Input, "Language");
+            }
+            else
+            {
+                _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Language", _inputLanguage.Id.ToString(CultureInfo.InvariantCulture));
+            }
+            
+            OnNotifyPropertyChanged(() => InputLanguageName);
+            RebuildOrder();
+            InitWindow();
+        }
+        private void RebuildOrder()
+        {
+            _allCardSorted.Clear();
+
+            List<KeyValuePair<string, ICard>> keysToReplace = new List<KeyValuePair<string, ICard>>();
+
+            foreach (KeyValuePair<string, ICard> kv in _allCardInfos.GetAllCard(_inputLanguage))
+            {
+                //manage multiple identical traduction 
+                if (_allCardSorted.ContainsKey(kv.Key))
+                {
+                    keysToReplace.Add(kv);
+                }
+                else
+                {
+                    _allCardSorted.Add(kv);
+                }
+            }
+
+            foreach (KeyValuePair<string, ICard> kv in keysToReplace)
+            {
+                //Test again if more than 2 with the same traduction
+                if (_allCardSorted.ContainsKey(kv.Key))
+                {
+                    ICard card = _allCardSorted[kv.Key];
+                    _allCardSorted.Remove(kv.Key);
+                    _allCardSorted.Add(string.Format("{0} ({1})", kv.Key, card), card);
+                }
+                _allCardSorted.Add(string.Format("{0} ({1})", kv.Key, kv.Value), kv.Value);
+            }
         }
         private void RefreshDisplayedData(InputMode modifyData)
         {
@@ -284,7 +375,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
             {
                 Languages.Clear();
                 IEdition editionSelected = EditionSelected;
-                ICard cardNameSelected = CardSelected;
+                ICard cardNameSelected = _cardSelected;
                 if (editionSelected == null || cardNameSelected == null)
                     return;
 
@@ -296,7 +387,12 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                     Languages.Add(language);
 
                 if (Languages.Count > 0)
-                    LanguageSelected = Languages[0];
+                {
+                    if (_inputLanguage != null && Languages.Contains(_inputLanguage))
+                        LanguageSelected = _inputLanguage;
+                    else
+                        LanguageSelected = Languages[0];
+                }
             }
             else
             {
@@ -311,14 +407,27 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         if (editionSelected == null)
                             return;
 
-                        foreach (ICard card in _allCardInfos.GetAllCardOrdered(editionSelected))
-                            Cards.Add(card);
-
+                        List<string> sorted = new List<string>();
+                        foreach (KeyValuePair<string, ICard> kv in _allCardInfos.GetAllCard(_inputLanguage, editionSelected))
+                        {
+                            //Normal case
+                            if (_allCardSorted.ContainsKey(kv.Key))
+                            {
+                                sorted.Add(kv.Key);
+                            }
+                            else
+                            {
+                                //Key was changed because of duplicate traduction, we need to look for the card
+                                sorted.Add(_allCardSorted.First(acsKv => kv.Value == acsKv.Value).Key);
+                            }
+                        }
+                        sorted.Sort();
+                        Cards.AddRange(sorted);
                         break;
 
                     case InputMode.ByCard:
 
-                        ICard cardNameSelected = CardSelected;
+                        ICard cardNameSelected = _cardSelected;
                         Editions.Clear();
                         Languages.Clear();
                         if (cardNameSelected == null)
@@ -333,21 +442,21 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private void UpdateCurrentCollectionDetailAndTranslate()
         {
-            if (EditionSelected == null || CardSelected == null || LanguageSelected == null)
+            if (EditionSelected == null || _cardSelected == null || LanguageSelected == null)
             {
                 CurrentCollectionDetail = null;
                 Translate = null;
                 return;
             }
 
-            Translate = CardSelected.ToString(LanguageSelected.Id);
+            Translate = _cardSelected.ToString(LanguageSelected.Id);
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;
             int totalInEditionAndLanguageInCollectionNotFoil = 0;
             int totalInEditionAndLanguageInCollectionFoil = 0;
 
-            foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, CardSelected))
+            foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, _cardSelected))
             {
                 int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
                 totalInCollection += inCollection;

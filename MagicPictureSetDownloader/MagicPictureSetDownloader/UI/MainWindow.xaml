@@ -8,11 +8,11 @@
         xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
-        xmlns:prop="clr-namespace:MagicPictureSetDownloader.Properties"
+        xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static prop:Resources.Icon}, Converter={StaticResource bm2iConv}}">
+        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}">
     <Window.Resources>
         <ResourceDictionary>
             <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
@@ -121,7 +121,6 @@
                     </Grid>
                 </Border>
             </Grid>
-
 
             <!-- Analysers control -->
             <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"

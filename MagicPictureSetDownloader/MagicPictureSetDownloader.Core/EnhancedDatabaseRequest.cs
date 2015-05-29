@@ -13,17 +13,26 @@ namespace MagicPictureSetDownloader.Core
             return magicDatabase.GetAllEditions().Ordered()
                                               .ToArray();
         }
-        public static IEnumerable<ICard> GetAllCardOrdered(this IMagicDatabaseReadOnly magicDatabase)
-        {
-            return magicDatabase.GetAllInfos().GetAllCardOrdered();
-        }
 
-        public static IEnumerable<ICard> GetAllCardOrdered(this IEnumerable<ICardAllDbInfo> allCardInfos, IEdition edition = null)
+        public static IEnumerable<KeyValuePair<string, ICard>> GetAllCard(this IEnumerable<ICardAllDbInfo> allCardInfos, ILanguage language, IEdition edition = null)
         {
             return allCardInfos.Where(cadi => edition == null || cadi.Edition == edition)
                                .Select(cadi => cadi.Card)
                                .Distinct()
-                               .Ordered();
+                               .Select(c =>
+                                   {
+                                       string key;
+                                       if (language != null)
+                                       {
+                                           key = c.HasTranslation(language.Id) ? c.ToString(language.Id) : string.Format("{0} (No traduction)", c);
+                                       }
+                                       else
+                                       {
+                                           key = c.ToString();
+                                       }
+
+                                       return new KeyValuePair<string, ICard>(key, c);
+                                   });
         }
         public static IEnumerable<IEdition> GetAllEditionIncludingCardOrdered(this IMagicDatabaseReadOnly magicDatabase, ICard card)
         {
@@ -44,14 +53,9 @@ namespace MagicPictureSetDownloader.Core
         {
             return editions.OrderByDescending(ed => ed.ReleaseDate);
         }
-        public static IEnumerable<ICard> Ordered(this IEnumerable<ICard> cards)
-        {
-            return cards.OrderBy(c => c.ToString());
-        }
         public static IEnumerable<IBlock> Ordered(this IEnumerable<IBlock> blocks)
         {
             return blocks.OrderByDescending(c => c.Id);
         }
-
     }
 }
