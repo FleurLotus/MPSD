@@ -134,11 +134,11 @@
                     Editions.Add(editionInfoViewModel);
                 }
                 if (Editions.Count == 0)
-                    Message = "Not any new edition";
+                    SetMessage("Not any new edition");
             }
             catch (Exception ex)
             {
-                Message = ex.Message;
+                SetMessage(ex.Message);
             }
             JobFinished();
         }
@@ -155,12 +155,20 @@
                 DownloadReporter.Total += cardInfos.Length;
 
                 EditionInfoViewModel model = editionInfoViewModel;
+                if (model.CardNumber.HasValue)
+                {
+                    if (cardInfos.Length != model.CardNumber.Value)
+                    {
+                        AppendMessage(string.Format("{0}: {1} urls while cardnumber is set to {2}", model.Name, cardInfos.Length, model.CardNumber.Value), false);
+                    }
+                }
                 ThreadPool.QueueUserWorkItem(RetrieveEditionDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
             }
         }
         private void RetrieveEditionDataCallBack(object state)
         {
             object[] args = (object[])state;
+
             DownloadReporterViewModel editionDownloadReporter = (DownloadReporterViewModel)args[0];
             int editionId = (int)args[1];
             IEnumerable<string> urls = (IEnumerable<string>)args[2];
@@ -182,7 +190,7 @@
             }
             catch (Exception ex)
             {
-                Message += ex.Message;
+                AppendMessage(ex.Message, false);
             }
 
             editionDownloadReporter.Finish();
@@ -194,9 +202,9 @@
                 //Keep previous error
                 string msg = Message;
                 GetEditionListCommand.Execute(null);
-                
+
                 if (!string.IsNullOrWhiteSpace(msg))
-                    Message = msg + Message;
+                    AppendMessage(msg, true);
                 JobFinished();
             }
         }
@@ -215,6 +223,5 @@
                 DispatcherInvoker.Invoke(() => e(sender, new EventArgs<NewEditionInfoViewModel>(vm)));
             }
         }
-
     }
 }
