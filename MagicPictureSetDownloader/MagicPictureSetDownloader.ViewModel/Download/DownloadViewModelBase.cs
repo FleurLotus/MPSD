@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
+    using System.Text;
     using System.Threading;
 
     using Common.Libray;
@@ -20,7 +21,7 @@
         protected readonly ManualResetEvent FinishedStopping = new ManualResetEvent(true);
         private bool _disposed;
         private bool _isBusy;
-        private string _message;
+        private readonly StringBuilder _stringBuilder = new StringBuilder();
         
         public DownloadViewModelBase(IDispatcherInvoker dispatcherInvoker)
         {
@@ -45,15 +46,7 @@
         }
         public string Message
         {
-            get { return _message; }
-            set
-            {
-                if (value != _message)
-                {
-                    _message = value;
-                    OnNotifyPropertyChanged(() => Message);
-                }
-            }
+            get { return _stringBuilder.Length ==  0 ? null: _stringBuilder.ToString(); }
         }
 
         public void Dispose()
@@ -63,7 +56,7 @@
         }
         protected void JobStarting()
         {
-            Message = null;
+            SetMessage(null);
             IsBusy = true;
             FinishedStopping.Reset();
         }
@@ -89,7 +82,38 @@
             }
             _disposed = true;
         }
-        
+
+
+        protected void SetMessage(string msg)
+        {
+            lock (_stringBuilder)
+            {
+                _stringBuilder.Clear();
+                _stringBuilder.Append(msg);
+            }
+
+            OnNotifyPropertyChanged(() => Message);
+        }
+        protected void AppendMessage(string msg, bool before)
+        {
+            lock (_stringBuilder)
+            {
+                if (before)
+                {
+                    _stringBuilder.Insert(0, msg);
+                }
+                else
+                {
+                    if (_stringBuilder.Length > 0)
+                        msg = "\n" + msg;
+
+                    _stringBuilder.Append(msg);
+                }
+            }
+
+            OnNotifyPropertyChanged(() => Message);
+        }
+
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
             var e = CredentialRequiered;

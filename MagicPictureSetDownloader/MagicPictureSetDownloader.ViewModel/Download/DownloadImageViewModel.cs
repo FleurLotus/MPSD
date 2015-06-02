@@ -25,7 +25,7 @@
 
             if (CountDown == 0)
             {
-                Message = "Not any image to download";
+                SetMessage("Not any image to download");
             }
 
             JobStarting();
@@ -66,7 +66,7 @@
                     if (currentJob == 0)
                         _fatalException = true;
 
-                    Message += (Message == null ? "" : "\n") + ex.Message;
+                    AppendMessage(ex.Message, false);
                 }
                 finally
                 {
