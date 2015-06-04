@@ -405,7 +405,6 @@ namespace MagicPictureSetDownloader.Db
             }
 
         }
-
         private void CheckReferentialLoaded()
         {
             if (!_referentialLoaded)

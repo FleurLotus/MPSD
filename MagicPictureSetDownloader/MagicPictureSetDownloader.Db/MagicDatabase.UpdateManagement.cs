@@ -92,5 +92,25 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
+        public void UpdateTranslate(ICard card, ILanguage language, string translation)
+        {
+            using (new WriterLock(_lock))
+            {
+                if (card == null || language == null || string.IsNullOrWhiteSpace(translation))
+                    return;
+
+                translation = translation.Trim();
+
+                Translate translate = new Translate { IdCard = card.Id, IdLanguage = language.Id, Name = translation };
+
+                //No need to remove, the insert overrides existing value
+                InsertInReferential(translate);
+
+                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                {
+                    Mapper<Translate>.UpdateOne(cnx, translate);
+                }
+            }
+        }
     }
 }

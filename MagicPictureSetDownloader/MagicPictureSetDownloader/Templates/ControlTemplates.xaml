@@ -115,7 +115,22 @@
 
                 <ListView.View>
                     <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Key}"/>
+                        <GridViewColumn Header="Language">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
+                                            <Image Width="30" Source="{Binding Key, Converter={StaticResource t2iConv}}" />
+                                        </Border>
+                                        <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
                     </GridView>
                 </ListView.View>

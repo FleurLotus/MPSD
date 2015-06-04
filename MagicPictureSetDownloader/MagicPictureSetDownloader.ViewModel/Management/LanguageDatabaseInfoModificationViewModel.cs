@@ -25,11 +25,6 @@ namespace MagicPictureSetDownloader.ViewModel.Management
                 }
             }
         }
-
-        protected override bool CheckCurrent()
-        {
-            return !string.IsNullOrWhiteSpace(Name);
-        }
         protected override void DisplayCurrent()
         {
             if (Selected == null)
@@ -43,7 +38,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
                 Name = Selected.Name;
             }
         }
-        protected override bool ValidateEdition()
+        protected override bool ApplyEditionToDatabase()
         {
             if (Selected == null)
             {

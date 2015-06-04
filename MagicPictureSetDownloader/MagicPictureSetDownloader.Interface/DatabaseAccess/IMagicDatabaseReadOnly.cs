@@ -24,6 +24,7 @@
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
         ILanguage GetDefaultLanguage();
+        ILanguage GetEnglishLanguage();
         IBlock GetBlock(string blockName);
         IList<ILanguage> GetLanguages(int idGatherer);
         ICardCollection GetCollection(int collectionId);
