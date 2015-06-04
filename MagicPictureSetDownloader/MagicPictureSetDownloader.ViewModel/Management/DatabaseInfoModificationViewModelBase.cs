@@ -89,9 +89,16 @@ namespace MagicPictureSetDownloader.ViewModel.Management
             get { return true; }
         }
 
-        protected abstract bool CheckCurrent();
+        protected virtual bool ValidateCurrent()
+        {
+            return !string.IsNullOrWhiteSpace(Name);
+        }
+        protected virtual bool CouldBeUpdated()
+        {
+            return true;
+        }
         protected abstract void DisplayCurrent();
-        protected abstract bool ValidateEdition();
+        protected abstract bool ApplyEditionToDatabase();
 
         private void NewCommandExecute(object o)
         {
@@ -101,12 +108,11 @@ namespace MagicPictureSetDownloader.ViewModel.Management
         }
         private void UpdateCommandExecute(object o)
         {
-            if (EditCurrent())
             State = ChangeState.Updating;
         }
         private void ValidateCommandExecute(object o)
         {
-            if (ValidateEdition())
+            if (ApplyEditionToDatabase())
                 State = ChangeState.NoEdition;
 
             DisplayCurrent();
@@ -131,16 +137,11 @@ namespace MagicPictureSetDownloader.ViewModel.Management
         }
         private bool UpdateCommandCanExecute(object o)
         {
-            return Selected != null && State == ChangeState.NoEdition;
+            return Selected != null && State == ChangeState.NoEdition && CouldBeUpdated();
         }
         private bool ValidateCommandCanExecute(object o)
         {
-            return State != ChangeState.NoEdition && CheckCurrent();
-        }
-
-        private bool EditCurrent()
-        {
-            return (Selected != null);
+            return State != ChangeState.NoEdition && ValidateCurrent();
         }
         private bool CancelEdition()
         {

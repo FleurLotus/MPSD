@@ -258,6 +258,10 @@
         {
             OnEventRaise(DatabaseModificationRequested, new LanguageDatabaseInfoModificationViewModel());
         }
+        private void TranslateModificationCommandExecute(object o)
+        {
+            OnEventRaise(DatabaseModificationRequested, new TranslateDatabaseInfoModificationViewModel());
+        }
         private void AuditCommandExecute(object o)
         {
             OnDialogWanted(new AuditViewModel());
@@ -399,6 +403,7 @@
             updateTableMenu.AddChild(new MenuViewModel("_Block", new RelayCommand(BlockModificationCommandExecute)));
             updateTableMenu.AddChild(new MenuViewModel("_Edition", new RelayCommand(EditionModificationCommandExecute)));
             updateTableMenu.AddChild(new MenuViewModel("_Language", new RelayCommand(LanguageModificationCommandExecute)));
+            updateTableMenu.AddChild(new MenuViewModel("_Translate", new RelayCommand(TranslateModificationCommandExecute)));
             
             //?
             MenuViewModel aboutMenu = new MenuViewModel("?");

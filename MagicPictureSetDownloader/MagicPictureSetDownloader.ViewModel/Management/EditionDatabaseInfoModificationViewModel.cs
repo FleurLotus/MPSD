@@ -128,9 +128,9 @@ namespace MagicPictureSetDownloader.ViewModel.Management
         {
             return State != ChangeState.NoEdition;
         }
-        protected override bool CheckCurrent()
+        protected override bool ValidateCurrent()
         {
-            return !string.IsNullOrWhiteSpace(Name) && ! string.IsNullOrWhiteSpace(GathererName);
+            return base.ValidateCurrent() && !string.IsNullOrWhiteSpace(GathererName);
         }
         protected override void DisplayCurrent()
         {
@@ -158,7 +158,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
             }
         }
 
-        protected override bool ValidateEdition()
+        protected override bool ApplyEditionToDatabase()
         {
             if (Selected == null)
                 return false;

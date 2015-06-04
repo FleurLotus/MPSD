@@ -125,6 +125,10 @@ namespace MagicPictureSetDownloader.Db
         {
             return GetLanguage(Constants.Unknown);
         }
+        public ILanguage GetEnglishLanguage()
+        {
+            return GetLanguage(Constants.English);
+        }
         public IList<ILanguage> GetLanguages(int idGatherer)
         {
             CheckReferentialLoaded();

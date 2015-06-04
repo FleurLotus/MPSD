@@ -5,7 +5,6 @@ namespace MagicPictureSetDownloader.ViewModel.Management
 
     public class BlockDatabaseInfoModificationViewModel : DatabaseInfoModificationViewModelBase<IBlock>
     {
-
         public BlockDatabaseInfoModificationViewModel()
         {
             All.AddRange(MagicDatabase.GetAllBlocks());
@@ -15,11 +14,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
         {
             Name = Selected == null ? null : Selected.Name;
         }
-        protected override bool CheckCurrent()
-        {
-            return !string.IsNullOrWhiteSpace(Name);
-        }
-        protected override bool ValidateEdition()
+        protected override bool ApplyEditionToDatabase()
         {
             if (Selected == null)
             {

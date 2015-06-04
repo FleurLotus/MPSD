@@ -81,9 +81,11 @@
     <Compile Include="Download\DownloadReporterViewModel.cs" />
     <Compile Include="Download\DownloadViewModel.cs" />
     <Compile Include="Main\StatisticViewModel.cs" />
+    <Compile Include="Management\TranslationViewModel.cs" />
     <Compile Include="Management\AuditInfo.cs" />
     <Compile Include="Management\AuditViewModel.cs" />
     <Compile Include="Management\BlockDatabaseInfoModificationViewModel.cs" />
+    <Compile Include="Management\TranslateDatabaseInfoModificationViewModel.cs" />
     <Compile Include="Management\LanguageDatabaseInfoModificationViewModel.cs" />
     <Compile Include="Management\EditionDatabaseInfoModificationViewModel.cs" />
     <Compile Include="Management\DatabaseInfoModificationViewModelBase.cs" />

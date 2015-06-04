@@ -335,16 +335,28 @@
                    
                     <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" />
                     <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"/>
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
 
                     <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
                     <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" 
                               SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
-                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0"  Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" />
                     <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"/>
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}">
+                        <ComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel />
+                            </ItemsPanelTemplate>
+                        </ComboBox.ItemsPanel>
+                    </ComboBox>
                 </Grid>
             </GroupBox>
             

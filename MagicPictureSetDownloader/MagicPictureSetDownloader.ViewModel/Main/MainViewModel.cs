@@ -15,7 +15,6 @@
         private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
 
         //TODO: Test add/remove splitted card and statistics
-        //TODO: manage update/correct traduction
         //TODO: (Maybe) Import / save historical price 
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {

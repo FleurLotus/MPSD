@@ -83,4 +83,40 @@
             <TextBox Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Text="{binding:TwoWayBinding CardNumber, TargetNullValue={x:Static system:String.Empty}}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type management:TranslateDatabaseInfoModificationViewModel}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{Binding DefaultTranslation.Language.Name}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding DefaultTranslation.Translation}" IsReadOnly="True" />
+
+            <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0"  ItemsSource="{Binding AllTranslations}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding Language.Name}"/>
+                            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{binding:TwoWayBinding Translation}" IsReadOnly="{Binding DataContext.State, RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={StaticResource rofneConv}}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </DataTemplate>
+
 </ResourceDictionary>

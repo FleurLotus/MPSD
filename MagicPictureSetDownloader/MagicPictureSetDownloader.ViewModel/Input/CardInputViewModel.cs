@@ -29,7 +29,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         private int _count;
         private ICard _cardSelected;
         private string _cardSelectedName;
-        private readonly IDictionary<string, ICard> _allCardSorted = new SortedList<string, ICard>();
+        private IDictionary<string, ICard> _allCardSorted;
         private IEdition _editionSelected;
         private ILanguage _languageSelected;
         private ILanguage _inputLanguage;
@@ -333,34 +333,7 @@ namespace MagicPictureSetDownloader.ViewModel.Input
         }
         private void RebuildOrder()
         {
-            _allCardSorted.Clear();
-
-            List<KeyValuePair<string, ICard>> keysToReplace = new List<KeyValuePair<string, ICard>>();
-
-            foreach (KeyValuePair<string, ICard> kv in _allCardInfos.GetAllCard(_inputLanguage))
-            {
-                //manage multiple identical traduction 
-                if (_allCardSorted.ContainsKey(kv.Key))
-                {
-                    keysToReplace.Add(kv);
-                }
-                else
-                {
-                    _allCardSorted.Add(kv);
-                }
-            }
-
-            foreach (KeyValuePair<string, ICard> kv in keysToReplace)
-            {
-                //Test again if more than 2 with the same traduction
-                if (_allCardSorted.ContainsKey(kv.Key))
-                {
-                    ICard card = _allCardSorted[kv.Key];
-                    _allCardSorted.Remove(kv.Key);
-                    _allCardSorted.Add(string.Format("{0} ({1})", kv.Key, card), card);
-                }
-                _allCardSorted.Add(string.Format("{0} ({1})", kv.Key, kv.Value), kv.Value);
-            }
+            _allCardSorted = _allCardInfos.GetAllCardsOrderByTranslation(_inputLanguage);
         }
         private void RefreshDisplayedData(InputMode modifyData)
         {
@@ -408,7 +381,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                             return;
 
                         List<string> sorted = new List<string>();
-                        foreach (KeyValuePair<string, ICard> kv in _allCardInfos.GetAllCard(_inputLanguage, editionSelected))
+                        //Could not call directly GetAllCardsOrderByTranslation because the key must be the same as in all card even if there is no duplicate traduction in the subset
+                        foreach (KeyValuePair<string, ICard> kv in _allCardInfos.Where(cadi => cadi.Edition == editionSelected).GetAllCardWithTranslation(_inputLanguage))
                         {
                             //Normal case
                             if (_allCardSorted.ContainsKey(kv.Key))
@@ -436,6 +410,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
                         foreach (IEdition edition in _allCardInfos.GetAllEditionIncludingCardOrdered(cardNameSelected))
                             Editions.Add(edition);
 
+                        if (Editions.Count > 0)
+                            EditionSelected = Editions[0];
                         break;
                 }
             }
