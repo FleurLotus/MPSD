@@ -1,10 +1,10 @@
-﻿
-namespace Common.WPF
+﻿namespace Common.WPF
 {
     using System.Windows;
     using System.Windows.Controls;
 
-    using Common.ViewModel;
+    using Common.ViewModel.Menu;
+
     //Use to allow display of separator with menu created from binding
     public class SeparatorStyleSelector : StyleSelector
     {

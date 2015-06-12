@@ -7,8 +7,9 @@
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.RegisterAttached("Password", typeof (string), typeof (PasswordHelper), new FrameworkPropertyMetadata(string.Empty, OnPasswordPropertyChanged));
         public static readonly DependencyProperty AttachProperty = DependencyProperty.RegisterAttached("Attach", typeof (bool), typeof (PasswordHelper), new PropertyMetadata(false, Attach));
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable InconsistentNaming
         private static readonly DependencyProperty IsUpdatingProperty = DependencyProperty.RegisterAttached("IsUpdating", typeof (bool), typeof (PasswordHelper));
+        // ReSharper restore InconsistentNaming
 
 
         public static void SetAttach(DependencyObject dp, bool value)

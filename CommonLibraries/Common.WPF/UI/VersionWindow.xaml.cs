@@ -1,6 +1,6 @@
 ﻿namespace Common.WPF.UI
 {
-    using Common.ViewModel;
+    using Common.ViewModel.Version;
 
     /// <summary>
     /// Interaction logic for VersionWindow.xaml

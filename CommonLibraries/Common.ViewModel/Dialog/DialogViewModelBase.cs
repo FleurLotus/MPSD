@@ -1,8 +1,10 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Dialog
 {
     using System;
     using System.Windows.Input;
+
     using Common.Libray.Notify;
+    using Common.ViewModel.Input;
 
     public class DialogViewModelBase : NotifyPropertyChangedBase
     {

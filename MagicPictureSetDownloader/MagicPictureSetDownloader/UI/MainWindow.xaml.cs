@@ -5,7 +5,8 @@
     using System.Windows;
 
     using Common.Libray.Notify;
-    using Common.ViewModel;
+    using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
     using Common.WPF;
     using Common.WPF.UI;
 

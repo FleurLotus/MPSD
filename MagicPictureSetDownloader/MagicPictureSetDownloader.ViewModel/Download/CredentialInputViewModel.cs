@@ -2,7 +2,7 @@
 {
     using System;
 
-    using Common.ViewModel;
+    using Common.ViewModel.Dialog;
 
     public class CredentialInputViewModel : DialogViewModelBase
     {

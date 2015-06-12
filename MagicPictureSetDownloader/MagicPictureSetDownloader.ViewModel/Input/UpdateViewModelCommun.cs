@@ -1,9 +1,8 @@
-﻿
-namespace MagicPictureSetDownloader.ViewModel.Input
+﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using System.Linq;
 
-    using Common.ViewModel;
+    using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;

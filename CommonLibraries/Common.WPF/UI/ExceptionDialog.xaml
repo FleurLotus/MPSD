@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModel="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:exception="clr-namespace:Common.ViewModel.Exception;assembly=Common.ViewModel"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=viewModel:ExceptionViewModel}"
+        d:DataContext="{d:DesignInstance Type=exception:ExceptionViewModel}"
         Title="Error"
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277"
         WindowStartupLocation="CenterOwner">

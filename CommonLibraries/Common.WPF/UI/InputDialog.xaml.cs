@@ -1,6 +1,6 @@
 ﻿namespace Common.WPF.UI
 {
-    using Common.ViewModel;
+    using Common.ViewModel.Input;
 
     /// <summary>
     /// Interaction logic for InputDialog.xaml

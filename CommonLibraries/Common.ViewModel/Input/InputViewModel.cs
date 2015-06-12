@@ -1,6 +1,8 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Input
 {
     using System.Collections.Generic;
+
+    using Common.ViewModel.Dialog;
 
     public enum InputMode
     {

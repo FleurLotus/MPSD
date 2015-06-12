@@ -15,7 +15,6 @@
                 return UnZipOneFile(ms);
             }
         }
-
         public static Stream UnZipOneFile(Stream stream)
         {
             ZipFile zipFile = null;
@@ -50,6 +49,5 @@
 
             return outStream;
         }
-
     }
 }

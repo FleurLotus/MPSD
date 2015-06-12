@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:viewModel="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+        xmlns:version="clr-namespace:Common.ViewModel.Version;assembly=Common.ViewModel"
 
-        d:DataContext="{d:DesignInstance Type=viewModel:VersionViewModel}"
+        d:DataContext="{d:DesignInstance Type=version:VersionViewModel}"
         d:DesignWidth="200" d:DesignHeight="150"
         mc:Ignorable="d"
         WindowStyle="ToolWindow" 

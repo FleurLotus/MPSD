@@ -6,7 +6,7 @@
     using System.Linq;
 
     using Common.Libray.Enums;
-    using Common.ViewModel;
+    using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;

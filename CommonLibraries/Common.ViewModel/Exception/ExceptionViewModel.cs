@@ -1,7 +1,9 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Exception
 {
     using System;
     using System.Text;
+
+    using Common.ViewModel.Dialog;
 
     public class ExceptionViewModel : DialogViewModelBase
     {
