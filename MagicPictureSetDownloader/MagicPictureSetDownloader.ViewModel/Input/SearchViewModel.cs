@@ -34,9 +34,11 @@
         private MultiSelectedAggregation _typeAggregation;
         private PerimeterScope _perimeterScope;
         private bool _excludeFunEditions;
+        private bool _excludeOnlineOnlyEditions;
         private bool _allLanguages;
         private string _name;
         private int _idBlockFun;
+        private int _idBlockOnlineOnly;
         
         public SearchViewModel()
         {
@@ -90,6 +92,18 @@
                 {
                     _excludeFunEditions = value;
                     OnNotifyPropertyChanged(() => ExcludeFunEditions);
+                }
+            }
+        }
+        public bool ExcludeOnlineOnlyEditions
+        {
+            get { return _excludeOnlineOnlyEditions; }
+            set
+            {
+                if (value != _excludeOnlineOnlyEditions)
+                {
+                    _excludeOnlineOnlyEditions = value;
+                    OnNotifyPropertyChanged(() => ExcludeOnlineOnlyEditions);
                 }
             }
         }
@@ -156,6 +170,7 @@
             //Can be updated by application so refill the lists
             Result = null;
             _idBlockFun = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("Fun", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).First();
+            _idBlockOnlineOnly = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("OnlineOnly", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).First();
             Editions = _magicDatabase.GetAllEditionsOrdered();
             Collections = _magicDatabase.GetAllCollections();
 
@@ -173,6 +188,7 @@
             //Default values
             Name = null;
             ExcludeFunEditions = true;
+            ExcludeOnlineOnlyEditions = true;
             AllLanguages = false;
             PerimeterScope = PerimeterScope.All;
             ColorAggregation = MultiSelectedAggregation.Or;
@@ -233,6 +249,11 @@
             if (ExcludeFunEditions)
             {
                 if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockFun)
+                    return false;
+            }
+            if (ExcludeOnlineOnlyEditions)
+            {
+                if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockOnlineOnly)
                     return false;
             }
 

@@ -251,12 +251,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <RadioButton Grid.Row="0" Grid.Column="0" GroupName="Perimeter" Content="All existing cards" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=All}"/>
-                <RadioButton Grid.Row="1" Grid.Column="0" GroupName="Perimeter" Content="In collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=InSelectedCollections}"/>
-                <RadioButton Grid.Row="2" Grid.Column="0" GroupName="Perimeter" Content="Not in collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollections}"/>
-                <RadioButton Grid.Row="3" Grid.Column="0" GroupName="Perimeter" Content="Not in collections (Any Edition)" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollectionsAnyEdition}"/>
+                <RadioButton Grid.Column="0" Grid.Row="0" GroupName="Perimeter" Content="All existing cards" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=All}"/>
+                <RadioButton Grid.Column="0" Grid.Row="1" GroupName="Perimeter" Content="In collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=InSelectedCollections}"/>
+                <RadioButton Grid.Column="0" Grid.Row="2" GroupName="Perimeter" Content="Not in collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollections}"/>
+                <RadioButton Grid.Column="0" Grid.Row="3" GroupName="Perimeter" Content="Not in collections (Any Edition)" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollectionsAnyEdition}"/>
 
                 <CheckBox Grid.Column="1" Grid.Row="0" Margin="5,0" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
+                <CheckBox Grid.Column="1" Grid.Row="1" Margin="5,0" Content="Exclude online only editions" IsChecked="{binding:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
             </Grid>
 
             <Label Grid.Column="0" Grid.Row="2" Content="Collections" Visibility="{Binding PerimeterScope, Converter={StaticResource ne2vConv}, ConverterParameter=All}"/>
