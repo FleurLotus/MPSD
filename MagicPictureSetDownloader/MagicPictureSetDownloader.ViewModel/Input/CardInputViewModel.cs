@@ -10,6 +10,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using Common.Libray;
     using Common.Libray.Collection;
     using Common.ViewModel;
+    using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;

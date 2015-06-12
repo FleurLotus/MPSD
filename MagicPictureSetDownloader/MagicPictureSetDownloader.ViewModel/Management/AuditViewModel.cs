@@ -6,7 +6,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
     using System.Linq;
 
     using Common.Libray.Collection;
-    using Common.ViewModel;
+    using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;

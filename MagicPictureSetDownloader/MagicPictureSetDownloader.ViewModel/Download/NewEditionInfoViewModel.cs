@@ -5,6 +5,7 @@
     using System.Windows.Input;
 
     using Common.ViewModel;
+    using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;

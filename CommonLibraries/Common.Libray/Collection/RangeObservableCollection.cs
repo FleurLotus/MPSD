@@ -25,7 +25,7 @@
             if (list == null)
                 throw new ArgumentNullException("list");
             
-            using (IDisposable flag = this.SetFlag(SuppressNotification))
+            using (this.SetFlag(SuppressNotification))
             {
                 foreach (T value in list)
                     Add(value);

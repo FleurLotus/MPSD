@@ -1,5 +1,4 @@
-﻿
-namespace Common.ViewModel
+﻿namespace Common.ViewModel.Input
 {
     using System;
     using System.Collections.Generic;

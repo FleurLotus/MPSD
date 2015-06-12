@@ -2,6 +2,7 @@
 {
     using Common.Libray;
     using Common.ViewModel;
+    using Common.ViewModel.Menu;
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;

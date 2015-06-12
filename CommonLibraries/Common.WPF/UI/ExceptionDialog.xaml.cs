@@ -1,6 +1,6 @@
 ﻿namespace Common.WPF.UI
 {
-    using Common.ViewModel;
+    using Common.ViewModel.Exception;
 
     /// <summary>
     /// Interaction logic for ExceptionDialog.xaml

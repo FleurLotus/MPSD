@@ -1,8 +1,9 @@
 ﻿namespace Common.WPF.UI
 {
     using Common.Libray.Notify;
-    using Common.ViewModel;
-    
+    using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
+
     /// <summary>
     /// Interaction logic for CommonDialog.xaml
     /// </summary>

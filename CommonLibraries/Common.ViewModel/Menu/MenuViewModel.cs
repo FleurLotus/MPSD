@@ -1,4 +1,4 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Menu
 {
     using System.Collections.Generic;
     using System.Windows.Input;

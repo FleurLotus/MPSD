@@ -8,6 +8,8 @@
 
     using Common.Libray.Notify;
     using Common.ViewModel;
+    using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
 
     using MagicPictureSetDownloader.Core.IO;
     using MagicPictureSetDownloader.Db;

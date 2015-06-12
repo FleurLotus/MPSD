@@ -7,13 +7,13 @@
                     
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
                     
-                    xmlns:self="clr-namespace:Common.ViewModel;assembly=Common.ViewModel"
+                    xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel"
                     
                     xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
                     >
     <!-- Data Template -->
     <!-- Menu -->
-    <HierarchicalDataTemplate DataType="{x:Type self:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
+    <HierarchicalDataTemplate DataType="{x:Type menu:MenuViewModel}" ItemsSource="{Binding Path=Children}"/>
 
     <!-- TreeView -->
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">

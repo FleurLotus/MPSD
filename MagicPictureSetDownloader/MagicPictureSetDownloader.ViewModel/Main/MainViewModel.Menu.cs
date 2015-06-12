@@ -9,6 +9,9 @@
     using Common.Libray.Notify;
     using Common.Libray.Threading;
     using Common.ViewModel;
+    using Common.ViewModel.Menu;
+    using Common.ViewModel.Input;
+    using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;

@@ -1,4 +1,4 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Dialog
 {
     public class DisplayInfo : NotifyPropertyChangedBase
     {
