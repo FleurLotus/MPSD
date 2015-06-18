@@ -23,6 +23,5 @@
             if (e != null)
                 e(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

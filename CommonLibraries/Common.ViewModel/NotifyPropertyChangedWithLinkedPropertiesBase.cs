@@ -17,21 +17,21 @@
 
         static NotifyPropertyChangedWithLinkedPropertiesBase()
         {
-            IEnumerable<string> propertyNames = typeof (NotifyPropertyChangedBase).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi=>pi.Name);
+            IEnumerable<string> propertyNames = typeof(NotifyPropertyChangedBase).GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi => pi.Name);
             _innerPropertyNameSet = new HashSet<string>(propertyNames);
         }
 
         protected NotifyPropertyChangedWithLinkedPropertiesBase()
         {
             _linkedProperties = new Dictionary<string, HashSet<string>>();
-            IEnumerable<string> propertyNames = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi => pi.Name).Where(n=>!_innerPropertyNameSet.Contains((n)));
+            IEnumerable<string> propertyNames = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(pi => pi.Name).Where(n => !_innerPropertyNameSet.Contains((n)));
             _childPropertyNameSet = new HashSet<string>(propertyNames);
         }
         public void OnNotifyPropertyChanged<T>(Expression<Func<T>> expression)
         {
             OnNotifyPropertyChangedWithLinked(expression.GetMemberName(), new HashSet<string>());
         }
-        public void AddLinkedProperty<T1,T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
+        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
         {
             string sourceName = source.GetMemberName();
             string destinationName = destination.GetMemberName();
@@ -41,6 +41,9 @@
 
             if (!_childPropertyNameSet.Contains(destinationName))
                 throw new ArgumentException(destinationName + " is not a valid property Name");
+
+            if (sourceName == destinationName)
+                throw new ArgumentException("source and destination could not be the same");
             
             HashSet<string> linked;
             if (!_linkedProperties.TryGetValue(sourceName, out linked))

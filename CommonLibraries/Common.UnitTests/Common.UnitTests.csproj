@@ -46,6 +46,8 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="NotifyPropertyChangedTest.cs" />
+    <Compile Include="TestViewModel .cs" />
     <Compile Include="XMLTest.cs" />
     <Compile Include="MatcherTest.cs" />
     <Compile Include="HtmlTest.cs" />
@@ -55,6 +57,10 @@
     <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
       <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
       <Name>Common.Libray</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj">
+      <Project>{770cd409-408d-44b1-84ae-b96513d9d7c7}</Project>
+      <Name>Common.ViewModel</Name>
     </ProjectReference>
     <ProjectReference Include="..\Common.XML\Common.XML.csproj">
       <Project>{c695020a-1108-41bf-8494-34bdefc30581}</Project>

@@ -1,5 +1,4 @@
-﻿
-namespace Common.UnitTests
+﻿namespace Common.UnitTests
 {
     using System;
 
