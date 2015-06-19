@@ -2,7 +2,6 @@
 {
     using System.Linq;
     using System.Reflection;
-    using Common.Libray;
     using System;
     using System.Collections.Generic;
 
@@ -26,7 +25,7 @@
             string tableName = tableAttributes[0].Name ?? type.Name;
 
             IDictionary<string, PropertyInfo> columns = new Dictionary<string, PropertyInfo>();
-            foreach (PropertyInfo pi in type.GetProperties())
+            foreach (PropertyInfo pi in type.GetPublicInstanceProperties())
             {
                 DbColumnAttribute[] columnAttributes = pi.GetCustomAttributes<DbColumnAttribute>();
                 if (columnAttributes.Length == 1)
