@@ -49,6 +49,7 @@
     <Compile Include="DataRecordExt.cs" />
     <Compile Include="ForeignKey.cs" />
     <Compile Include="ColumnForForeignKey.cs" />
+    <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Interface\IColumnForForeignKey.cs" />
     <Compile Include="Interface\IColumnForIndex.cs" />
     <Compile Include="Interface\IIndex.cs" />

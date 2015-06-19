@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:binding="clr-namespace:Common.WPF.Binding"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel"
+                    mc:Ignorable="d"
                     >
     
     <Style x:Key="VCentered" TargetType="Control">
@@ -39,7 +43,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type MenuItem}" >
+    <Style TargetType="{x:Type MenuItem}" d:DataContext="{d:DesignInstance menu:MenuViewModel }" >
         <Setter Property="Header" Value="{Binding Path=MenuText}"/>
         <Setter Property="Command" Value="{Binding Path=Command}"/>
         <Setter Property="CommandParameter" Value="{Binding Path=CommandParameter}"/>

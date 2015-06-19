@@ -49,6 +49,7 @@
     <Compile Include="Attribute\DbKeyColumnAttribute.cs" />
     <Compile Include="Attribute\DbColumnAttribute.cs" />
     <Compile Include="Exception\ApplicationDbException.cs" />
+    <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="IdentityRetriever.cs" />
     <Compile Include="Mapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

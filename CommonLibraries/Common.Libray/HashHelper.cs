@@ -1,5 +1,7 @@
 ﻿namespace Common.Libray
 {
+    using System.Linq;
+
     public static class HashHelper
     {
         /// <summary> 
@@ -22,13 +24,10 @@
 
             unchecked
             {
-                foreach (object t in input)
+                foreach (object t in input.Where(t => t != null))
                 {
-                    if (t != null)
-                    {
-                        hash = hash * a + t.GetHashCode();
-                        a = a * b;
-                    }
+                    hash = hash * a + t.GetHashCode();
+                    a = a * b;
                 }
             }
 

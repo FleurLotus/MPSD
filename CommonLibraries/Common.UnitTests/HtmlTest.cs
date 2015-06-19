@@ -184,7 +184,7 @@ namespace Common.UnitTests
                     { "C91", "C91", "C91", null, null, null, null },
                     { "C91", "C91", "C91", "CA4", "CA4", "CA4", null },
                     { "C91", "C91", "C91", "CA4", "CA4", "CA4", null },
-                    { null, null, null, "CA4", "CA4", "CA4", null },
+                    { null, null, null, "CA4", "CA4", "CA4", null }
                 };
 
 

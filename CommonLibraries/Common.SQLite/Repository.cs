@@ -159,12 +159,5 @@
                 CaseSensitivity = IsCaseSensitive,
             };
         }
-        private ForeignKey CreateForeignKey(IDataRecord dr)
-        {
-            return new ForeignKey
-            {
-                CaseSensitivity = IsCaseSensitive,
-            };
-        }
     }
 }
