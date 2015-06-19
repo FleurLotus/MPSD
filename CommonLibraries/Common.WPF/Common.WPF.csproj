@@ -53,6 +53,9 @@
     <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="..\CommonFiles\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />

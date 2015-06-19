@@ -38,6 +38,9 @@
     <Compile Include="..\CommonFiles\Copyright.cs">
       <Link>Properties\Copyright.cs</Link>
     </Compile>
+    <Compile Include="..\CommonFiles\Version.cs">
+      <Link>Properties\Version.cs</Link>
+    </Compile>
     <Compile Include="Collection\AsyncObservableCollection.cs" />
     <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
     <Compile Include="Collection\RangeObservableCollection.cs" />
