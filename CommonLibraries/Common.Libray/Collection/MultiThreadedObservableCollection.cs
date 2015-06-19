@@ -3,6 +3,7 @@
     using System;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
+    using System.Linq;
 
     using Common.Libray;
 
@@ -30,7 +31,7 @@
 
                 Delegate[] delegates = eventHandler.GetInvocationList();
                 // Walk thru invocation list
-                foreach (NotifyCollectionChangedEventHandler handler in delegates)
+                foreach (NotifyCollectionChangedEventHandler handler in delegates.Cast<NotifyCollectionChangedEventHandler>())
                 {
                     NotifyCollectionChangedEventHandler handler1 = handler;
                     _dispatcherInvoker.Invoke(() => handler1(this, e));
