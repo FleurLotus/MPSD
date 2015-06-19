@@ -6,6 +6,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Common.Libray.Extension;
+
     internal static class DbAttributAnalyser
     {
         private static readonly IDictionary<Type, TypeDbInfo> _analysied = new Dictionary<Type, TypeDbInfo>();

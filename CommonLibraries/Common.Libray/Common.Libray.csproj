@@ -48,6 +48,8 @@
     <Compile Include="Exception\HandlerNotKnownException.cs" />
     <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
     <Compile Include="Exception\HtmlTableParserException.cs" />
+    <Compile Include="Extension\DictionaryExtension.cs" />
+    <Compile Include="Extension\StringExtension.cs" />
     <Compile Include="Html\HtmlCell.cs" />
     <Compile Include="Html\HtmlTable.cs" />
     <Compile Include="Html\HtmlTableParser.cs" />
@@ -64,7 +66,7 @@
     <Compile Include="Threading\ReaderLock.cs" />
     <Compile Include="HashHelper.cs" />
     <Compile Include="ReadOnlyDictionary.cs" />
-    <Compile Include="Extension.cs" />
+    <Compile Include="Extension\ReflectionExtension.cs" />
     <Compile Include="Notify\EventArgs.cs" />
     <Compile Include="IDispatcherInvoker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

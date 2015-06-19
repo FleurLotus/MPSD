@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Common.Libray.Extension;
+
     public static class Matcher<T> where T : struct, IConvertible
     {
         private readonly static bool _withFlag;
