@@ -7,7 +7,7 @@
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
-    public partial class MainViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
+    public partial class MainViewModel : NotifyPropertyChangedBase
     {
         private bool _showFilterConfig;
         private bool _loading;

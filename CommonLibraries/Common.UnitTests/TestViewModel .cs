@@ -5,7 +5,7 @@
 
     using Common.ViewModel;
     
-    internal class TestViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
+    internal class TestViewModel : NotifyPropertyChangedBase
     {
         public void InitLink()
         {

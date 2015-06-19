@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Windows.Input;
 
-    public class MenuViewModel : NotifyPropertyChangedWithLinkedPropertiesBase
+    public class MenuViewModel : NotifyPropertyChangedBase
     {
         private bool _isCheckable;
         private bool _isChecked;
