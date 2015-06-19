@@ -3,7 +3,7 @@
     using System.Collections.Generic;
 
     using Common.Database;
-    using Common.Libray;
+    using Common.Libray.Extension;
 
     using MagicPictureSetDownloader.Interface;
 

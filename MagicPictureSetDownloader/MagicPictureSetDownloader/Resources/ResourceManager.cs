@@ -6,7 +6,7 @@ namespace MagicPictureSetDownloader.Resources
     using System.Linq;
     using System.Reflection;
 
-    using Common.Libray;
+    using Common.Libray.Extension;
 
     public static class ResourceManager
     {
