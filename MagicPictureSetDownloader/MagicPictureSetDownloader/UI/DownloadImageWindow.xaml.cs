@@ -3,7 +3,7 @@
     using System;
     using System.Windows;
 
-    using Common.Libray.Notify;
+    using Common.Library.Notify;
     using Common.WPF;
     using Common.WPF.UI;
 

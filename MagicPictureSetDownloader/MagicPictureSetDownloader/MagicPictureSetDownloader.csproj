@@ -64,8 +64,8 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Libray">
-      <HintPath>..\..\CommonLibraries\Common.Libray\bin\Debug\Common.Libray.dll</HintPath>
+    <Reference Include="Common.Library">
+      <HintPath>..\..\CommonLibraries\Common.Library\bin\Debug\Common.Library.dll</HintPath>
     </Reference>
     <Reference Include="Common.ViewModel">
       <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\Debug\Common.ViewModel.dll</HintPath>

@@ -1,6 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
-    using Common.Libray;
+    using Common.Library;
     using Common.ViewModel;
     using Common.ViewModel.Menu;
 

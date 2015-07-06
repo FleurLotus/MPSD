@@ -50,9 +50,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\CommonLibraries\Common.Database\bin\Debug\Common.Database.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Libray, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Common.Library, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonLibraries\Common.Libray\bin\Debug\Common.Libray.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.Library\bin\Debug\Common.Library.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

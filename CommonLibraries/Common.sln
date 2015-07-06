@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.ViewModel", "Common.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.WPF", "Common.WPF\Common.WPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Libray", "Common.Libray\Common.Libray.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Library", "Common.Library\Common.Library.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Database", "Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
 EndProject

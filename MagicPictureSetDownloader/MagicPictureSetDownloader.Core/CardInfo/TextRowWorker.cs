@@ -3,7 +3,7 @@ namespace MagicPictureSetDownloader.Core.CardInfo
     using System.Collections.Generic;
     using System.Xml;
 
-    using Common.Libray.Extension;
+    using Common.Library.Extension;
 
     internal class TextRowWorker : ICardInfoParserWorker
     {

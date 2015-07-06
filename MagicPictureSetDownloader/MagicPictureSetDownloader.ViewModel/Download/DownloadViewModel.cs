@@ -7,9 +7,9 @@
     using System.Threading;
     using System.Windows.Input;
 
-    using Common.Libray;
-    using Common.Libray.Collection;
-    using Common.Libray.Notify;
+    using Common.Library;
+    using Common.Library.Collection;
+    using Common.Library.Notify;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;

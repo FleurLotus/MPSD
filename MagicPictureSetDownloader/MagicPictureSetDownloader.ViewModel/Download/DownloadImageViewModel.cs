@@ -3,7 +3,7 @@
     using System;
     using System.Threading;
 
-    using Common.Libray;
+    using Common.Library;
 
     public class DownloadImageViewModel : DownloadViewModelBase
     {

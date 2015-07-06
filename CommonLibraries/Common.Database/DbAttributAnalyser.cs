@@ -5,7 +5,7 @@
     using System;
     using System.Collections.Generic;
 
-    using Common.Libray.Extension;
+    using Common.Library.Extension;
 
     internal static class DbAttributAnalyser
     {

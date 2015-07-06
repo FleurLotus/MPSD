@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    using Common.Libray.Extension;
-    using Common.Libray.Html;
+    using Common.Library.Extension;
+    using Common.Library.Html;
 
     internal class EditionInfoWikiaFinder : EditionInfoFinderBase
     {

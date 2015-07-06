@@ -1,6 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
-    using Common.Libray.Notify;
+    using Common.Library.Notify;
     using Common.ViewModel.Input;
 
     using MagicPictureSetDownloader.ViewModel.IO;

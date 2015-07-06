@@ -5,7 +5,7 @@
     using System.Collections.ObjectModel;
     using System.Linq;
 
-    using Common.Libray.Enums;
+    using Common.Library.Enums;
     using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Core;

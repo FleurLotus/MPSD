@@ -4,7 +4,7 @@ namespace MagicPictureSetDownloader.ViewModel.Management
     using System;
     using System.Windows.Input;
 
-    using Common.Libray.Collection;
+    using Common.Library.Collection;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Db;

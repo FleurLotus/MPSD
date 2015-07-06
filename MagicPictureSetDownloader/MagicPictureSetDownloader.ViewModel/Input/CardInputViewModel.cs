@@ -7,8 +7,8 @@ namespace MagicPictureSetDownloader.ViewModel.Input
     using System.Linq;
     using System.Windows.Input;
 
-    using Common.Libray.Extension;
-    using Common.Libray.Collection;
+    using Common.Library.Extension;
+    using Common.Library.Collection;
     using Common.ViewModel;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;

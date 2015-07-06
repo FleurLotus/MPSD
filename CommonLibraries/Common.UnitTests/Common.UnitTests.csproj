@@ -46,13 +46,13 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="LibExtensionTest.cs" />
-    <Compile Include="ValidatorTest.cs" />
-    <Compile Include="NotifyPropertyChangedTest.cs" />
-    <Compile Include="NotifyPropertyChangedWithValidationTest.cs" />
-    <Compile Include="XMLTest.cs" />
-    <Compile Include="MatcherTest.cs" />
-    <Compile Include="HtmlTest.cs" />
+    <Compile Include="Library\LibExtensionTest.cs" />
+    <Compile Include="ViewModel\ValidatorTest.cs" />
+    <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
+    <Compile Include="ViewModel\NotifyPropertyChangedWithValidationTest.cs" />
+    <Compile Include="Xml\XMLTest.cs" />
+    <Compile Include="Library\MatcherTest.cs" />
+    <Compile Include="Html\HtmlTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +60,7 @@
       <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
       <Name>Common.Database</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+    <ProjectReference Include="..\Common.Library\Common.Library.csproj">
       <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>
