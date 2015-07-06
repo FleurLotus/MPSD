@@ -1,4 +1,4 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Validation
 {
     using System;
     using System.Collections.Generic;
@@ -13,33 +13,23 @@
 
     public class NotifyPropertyChangedWithValidationBase : NotifyPropertyChangedBase, IValidable
     {
-        private static readonly string[] _innerProperty;
-        private readonly string[] _toBeValidatedProperty;
+        private readonly PropertyInfo[] _toBeValidatedProperty;
         private readonly PropertyInfo[] _toBeValidatedRecursiveProperty;
+        private readonly IDictionary<PropertyInfo, Func<object, string>[]> _propertyValidatorRules;
 
         private readonly IDictionary<string, IList<Func<string>>> _rules;
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
-
-        static NotifyPropertyChangedWithValidationBase()
-        {
-            _innerProperty = typeof(NotifyPropertyChangedWithValidationBase).GetPublicInstanceProperties()
-                                                                            .Select(pi=> pi.Name)
-                                                                            .ToArray();
-        }
         
         protected NotifyPropertyChangedWithValidationBase()
         {
             _rules = new Dictionary<string, IList<Func<string>>>();
 
-            _toBeValidatedProperty = GetType().GetPublicInstanceProperties()
-                                              .Select(pi => pi.Name)
-                                              .Where(n => !_innerProperty.Contains(n))
-                                              .ToArray();
+            _toBeValidatedProperty = ReflectionCacheRepository.GetToBeValidatedProperty(GetType());
 
-            _toBeValidatedRecursiveProperty = GetType().GetPublicInstanceProperties()
-                                                       .Where(pi => !_innerProperty.Contains(pi.Name) &&  typeof(IValidable).IsAssignableFrom(pi.PropertyType))
-                                                       .ToArray();
+            _propertyValidatorRules = _toBeValidatedProperty.ToDictionary(pi => pi, ReflectionCacheRepository.GetTypeValidatorRules);
+
+            _toBeValidatedRecursiveProperty = ReflectionCacheRepository.GetToBeValidatedRecursiveProperty(GetType());
             
         }
         protected IValidator Validator { get; set; }
@@ -79,7 +69,7 @@
 
             string propertyName = expression.GetMemberName();
 
-            if (_toBeValidatedProperty.All(name => name != propertyName))
+            if (_toBeValidatedProperty.All(pi => pi.Name != propertyName))
                 throw new ArgumentException("property is unknown");
 
             using (new WriterLock(_lock))
@@ -100,9 +90,11 @@
             StringBuilder errorMessage = new StringBuilder();
 
             //Property rule checks
-            foreach (string propName in _toBeValidatedProperty)
+            foreach (var pi in _toBeValidatedProperty)
             {
+                string propName = pi.Name;
                 string res = ValidateProperty(propName);
+
                 if (!string.IsNullOrWhiteSpace(res))
                     errorMessage.AppendFormat("{0} -> {1}", propName, res);
             }
@@ -132,25 +124,45 @@
                     errorMessage.AppendFormat("Global validation ---> {0}", res);
             }
 
-            if (errorMessage.Length == 0)
+            return errorMessage.ToString();
+        }
+        private string ValidatePropertyUsingAttributes(string propertyName)
+        {
+            //Rules Attribute check
+            var keyValue = _propertyValidatorRules.First(kv => kv.Key.Name == propertyName);
+            if (keyValue.Value == null || keyValue.Value.Length == 0)
                 return null;
 
-            return errorMessage.ToString();
+            PropertyInfo pi = keyValue.Key;
+            MethodInfo getter = pi.GetGetMethod();
+            if (getter == null)
+                return null;
+
+
+            StringBuilder sb = new StringBuilder();
+            object value = getter.Invoke(this, null);
+            foreach (var rule in keyValue.Value)
+            {
+                string res = rule(value);
+                if (!string.IsNullOrWhiteSpace(res))
+                    sb.AppendLine(res);
+            }
+            return sb.ToString();
         }
         private string ValidateProperty(string propertyName)
         {
+            StringBuilder sb = new StringBuilder();
+
             IList<Func<string>> propertyRules;
             using (new ReaderLock(_lock))
             {
                 IList<Func<string>> lst = _rules.GetOrDefault(propertyName);
                 if (lst == null || lst.Count == 0)
-                    return null;
-
-                propertyRules = new List<Func<string>>(lst);
+                    propertyRules  = new List<Func<string>>();
+                else
+                    propertyRules = new List<Func<string>>(lst);
             }
             
-            StringBuilder sb = new StringBuilder();
-
             foreach (var rule in propertyRules)
             {
                 string res = rule();
@@ -158,8 +170,7 @@
                     sb.AppendLine(res);
             }
 
-            if (sb.Length == 0)
-                return null;
+            sb.Append(ValidatePropertyUsingAttributes(propertyName));
 
             return sb.ToString();
         }

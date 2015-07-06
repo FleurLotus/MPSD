@@ -1,4 +1,4 @@
-﻿namespace Common.ViewModel
+﻿namespace Common.ViewModel.Validation
 {
     public interface IValidator
     {

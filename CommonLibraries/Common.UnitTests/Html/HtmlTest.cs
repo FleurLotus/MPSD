@@ -191,7 +191,7 @@
                 {
                     IHtmlCell cell = ret[i, j];
                     string value = cell == null ? null : cell.InnerText;
-                    Assert.AreEqual(value, expectedValue[i, j], "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
+                    Assert.AreEqual(expectedValue[i, j], value, "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
 
                 }
             }
