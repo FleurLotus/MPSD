@@ -2,12 +2,12 @@
 {
     using System;
 
-    using Common.ViewModel;
+    using Common.ViewModel.Validation;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class ValidatorTest
+    public class GlobalValidatingTest
     {
         private const string MessageFormat = "Global validation ---> {0}\r\n";
 

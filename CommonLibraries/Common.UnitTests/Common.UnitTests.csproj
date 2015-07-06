@@ -46,10 +46,15 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Library\LibExtensionTest.Reflection.cs">
+      <DependentUpon>LibExtensionTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Library\LibExtensionTest.cs" />
-    <Compile Include="ViewModel\ValidatorTest.cs" />
+    <Compile Include="ViewModel\ValidationUsingAttributTest.cs" />
+    <Compile Include="ViewModel\ValidationAttributeTest.cs" />
+    <Compile Include="ViewModel\GlobalValidatingTest.cs" />
     <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
-    <Compile Include="ViewModel\NotifyPropertyChangedWithValidationTest.cs" />
+    <Compile Include="ViewModel\ValidationUsingRulesTest.cs" />
     <Compile Include="Xml\XMLTest.cs" />
     <Compile Include="Library\MatcherTest.cs" />
     <Compile Include="Html\HtmlTest.cs" />

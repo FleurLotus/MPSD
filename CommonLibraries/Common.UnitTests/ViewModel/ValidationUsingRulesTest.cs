@@ -2,12 +2,12 @@
 {
     using System;
 
-    using Common.ViewModel;
+    using Common.ViewModel.Validation;
 
     using NUnit.Framework;
 
     [TestFixture]
-    public class NotifyPropertyChangedWithValidationTest
+    public class ValidationUsingRulesTest
     {
         [Test]
         public void TestUnknownProperty()
@@ -31,10 +31,10 @@
             Assert.IsNotNullOrEmpty(vm.Error, "Must still have error");
             vm.PropertyWithProtectedGet = "bbbb";
             //Ok
-            Assert.IsNull(vm.Error, "Must have not error");
+            Assert.IsNullOrEmpty(vm.Error, "Must have not error");
             vm.PropertyWithNoRule = "bbbb";
             //No change for rules
-            Assert.IsNull(vm.Error, "Must still have not error");
+            Assert.IsNullOrEmpty(vm.Error, "Must still have not error");
             vm.PropertyPublic = "";
             //PropertyPublic is empty
             Assert.IsNotNullOrEmpty(vm.Error, "Must have error again");
@@ -49,7 +49,7 @@
             Assert.IsNotNullOrEmpty(vm.Error, "Must have error");
             vm.PropertyPublic = "ahahah";
             //OK
-            Assert.IsNull(vm.Error, "Must have not error");
+            Assert.IsNullOrEmpty(vm.Error, "Must have not error");
             vm.CreateChild();
             //Set child  and Child.PropertyPublic and Child.PropertyWithProtectedGet are null
             Assert.IsNotNullOrEmpty(vm.Error, "Must have error");
@@ -58,7 +58,7 @@
             Assert.IsNotNullOrEmpty(vm.Error, "Must still have error");
             vm.Child.PropertyWithProtectedGet = "bbbb";
             //Ok
-            Assert.IsNull(vm.Error, "Must have not error");
+            Assert.IsNullOrEmpty(vm.Error, "Must have not error");
         }
 
         //Used by reflection

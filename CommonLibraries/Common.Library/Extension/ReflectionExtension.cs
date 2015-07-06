@@ -19,7 +19,6 @@
         {
             return (T[])member.GetCustomAttributes(typeof(T), inherit);
         }
-        
 
         public static PropertyInfo[] GetPublicInstanceProperties(this object o)
         {
