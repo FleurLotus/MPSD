@@ -10,6 +10,9 @@
 
         public WriterLock(ReaderWriterLockSlim readerWriter)
         {
+            if (readerWriter == null)
+                throw new ArgumentNullException("readerWriter");
+
             _readerWriter = readerWriter;
             _readerWriter.EnterWriteLock();
         }
@@ -29,7 +32,5 @@
             }
             _disposed = true;
         }
-
-
     }
 }

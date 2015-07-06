@@ -3,18 +3,18 @@
     using System;
     using System.Threading;
 
-    public class ReaderLock : IDisposable
+    public class UpgradeableReadLock : IDisposable
     {
         private bool _disposed;
         private readonly ReaderWriterLockSlim _readerWriter;
 
-        public ReaderLock(ReaderWriterLockSlim readerWriter)
+        public UpgradeableReadLock(ReaderWriterLockSlim readerWriter)
         {
             if (readerWriter == null)
                 throw new ArgumentNullException("readerWriter");
 
             _readerWriter = readerWriter;
-            _readerWriter.EnterReadLock();
+            _readerWriter.EnterUpgradeableReadLock();
         }
         public void Dispose()
         {
@@ -28,7 +28,7 @@
 
             if (disposing)
             {
-                _readerWriter.ExitReadLock();
+                _readerWriter.ExitUpgradeableReadLock();
             }
             _disposed = true;
         }
