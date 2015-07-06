@@ -116,7 +116,6 @@
         [TestCase("<TD rowspan=3 colspan=4>CA4</TD>", "CA4", 3, 4, false)]
         [TestCase("<TH />", "", 1, 1, true)]
         #endregion
-
         public void TestExtractCell(string text, string expectedText, int expectedRowSpan, int expectedColSpan, bool expectedIsHeader)
         {
             IHtmlCell cell = HtmlTableParser.ExtractCell(text);
@@ -132,8 +131,7 @@
             if (cell.ColSpan != expectedColSpan)
                 throw new Exception(string.Format("The found ColSpan {0} is differente from the excepted one {1} for {2}", cell.ColSpan, expectedColSpan, text));
         }
-
-
+        
         [Test]
         public void TestCellsInfos()
         {

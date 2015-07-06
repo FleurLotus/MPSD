@@ -5,8 +5,7 @@
     using System.Linq.Expressions;
     using System.Threading;
 
-    //TODO: Add IDataError + validation 
-    public class NotifyPropertyChangedBase: INotifyPropertyChanged, ILinkedProperties
+    public class NotifyPropertyChangedBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -39,16 +38,16 @@
                 e(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
+        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
         {
             _lazyLinkedProperties.Value.Add(source, destination);
         }
-        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>>[] sources, Expression<Func<T2>> destination)
+        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>>[] sources, Expression<Func<T2>> destination)
         {
             foreach (Expression<Func<T1>> source in sources)
                 AddLinkedProperty(source, destination);
         }
-        public void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>>[] destinations)
+        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>>[] destinations)
         {
             foreach (Expression<Func<T2>> destination in destinations)
                 AddLinkedProperty(source, destination);

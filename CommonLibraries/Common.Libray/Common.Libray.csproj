@@ -61,6 +61,7 @@
     <Compile Include="Threading\Flag.cs" />
     <Compile Include="Threading\FlagCount.cs" />
     <Compile Include="Threading\FlagExtension.cs" />
+    <Compile Include="Threading\UpgradeableReadLock.cs" />
     <Compile Include="Threading\ThreadPoolArgs.cs" />
     <Compile Include="Threading\WriterLock.cs" />
     <Compile Include="Threading\ReaderLock.cs" />
