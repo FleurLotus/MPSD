@@ -1,6 +1,6 @@
 ﻿namespace Common.WPF.UI
 {
-    using Common.Libray.Notify;
+    using Common.Library.Notify;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
 

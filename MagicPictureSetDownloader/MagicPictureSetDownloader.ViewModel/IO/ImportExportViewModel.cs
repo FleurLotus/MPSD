@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Windows.Input;
 
-    using Common.Libray.Notify;
+    using Common.Library.Notify;
     using Common.ViewModel;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;

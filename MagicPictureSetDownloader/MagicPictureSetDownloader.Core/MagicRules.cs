@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Common.Libray.Enums;
+    using Common.Library.Enums;
 
     using MagicPictureSetDownloader.Core.CardInfo;
     

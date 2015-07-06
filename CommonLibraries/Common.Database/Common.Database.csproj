@@ -57,7 +57,7 @@
     <Compile Include="TypeDbInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Libray\Common.Libray.csproj">
+    <ProjectReference Include="..\Common.Library\Common.Library.csproj">
       <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
       <Name>Common.Libray</Name>
     </ProjectReference>

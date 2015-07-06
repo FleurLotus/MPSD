@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Reflection;
-    using Common.Libray;
+    using Common.Library;
 
     internal class TypeDbInfo
     {

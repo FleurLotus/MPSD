@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Net;
     using System.Text;
-    using Common.Libray.Notify;
+    using Common.Library.Notify;
 
     using MagicPictureSetDownloader.Core.EditionInfos;
     using MagicPictureSetDownloader.Db;

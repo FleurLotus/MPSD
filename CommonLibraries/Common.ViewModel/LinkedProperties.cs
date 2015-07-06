@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Common.Libray.Extension;
+    using Common.Library.Extension;
 
     internal class LinkedProperties
     {

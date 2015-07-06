@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Xml;
-    using Common.Libray.Extension;
+    using Common.Library.Extension;
     using MagicPictureSetDownloader.Core.CardInfo;
 
     internal class CardParser : IParser<CardWithExtraInfo>
