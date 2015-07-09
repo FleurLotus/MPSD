@@ -3,11 +3,11 @@
     using System;
 
     [Serializable]
-    public class HandlerAlreadyKnownException : ApplicationException
+    public class CsvReaderNoReadCallException : CsvReaderExceptionBase
     {
         #region Constructors and Destructors
-        public HandlerAlreadyKnownException()
-            : base("Handler already added")
+        public CsvReaderNoReadCallException()
+            : base("Call read before try to access data")
         {
         }
         #endregion

@@ -3,11 +3,11 @@
     using System;
 
     [Serializable]
-    public class HandlerAlreadyKnownException : ApplicationException
+    public class CsvReaderBadClosingEscapeException : CsvReaderExceptionBase
     {
         #region Constructors and Destructors
-        public HandlerAlreadyKnownException()
-            : base("Handler already added")
+        public CsvReaderBadClosingEscapeException()
+            : base("Escape must start and end the field")
         {
         }
         #endregion

@@ -7,7 +7,6 @@
     using Common.Library.Extension;
 
     using NUnit.Framework;
-    using NUnit.Framework.Constraints;
 
     public partial class LibExtensionTest
     {

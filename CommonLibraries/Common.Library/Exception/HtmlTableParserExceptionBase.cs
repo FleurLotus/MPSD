@@ -3,11 +3,11 @@
     using System;
 
     [Serializable]
-    public class HandlerAlreadyKnownException : ApplicationException
+    public abstract class HtmlTableParserExceptionBase : ApplicationException
     {
         #region Constructors and Destructors
-        public HandlerAlreadyKnownException()
-            : base("Handler already added")
+        protected HtmlTableParserExceptionBase(string message)
+            : base(message)
         {
         }
         #endregion

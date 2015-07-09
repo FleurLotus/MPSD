@@ -1,7 +1,5 @@
 ﻿namespace Common.UnitTests.ViewModel
 {
-    using System;
-
     using Common.ViewModel.Validation;
     using Common.ViewModel.Validation.Attributes;
 
@@ -65,7 +63,7 @@
                     }
                 }
             }
-            [NotNullValidation()]
+            [NotNullValidation]
             public object ObjectValue
             {
                 get { return _objectValue; }
