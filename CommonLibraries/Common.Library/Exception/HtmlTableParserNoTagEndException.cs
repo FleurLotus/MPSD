@@ -3,11 +3,11 @@
     using System;
 
     [Serializable]
-    public class HandlerAlreadyKnownException : ApplicationException
+    public class HtmlTableParserNoTagEndException : HtmlTableParserExceptionBase
     {
         #region Constructors and Destructors
-        public HandlerAlreadyKnownException()
-            : base("Handler already added")
+        public HtmlTableParserNoTagEndException()
+            : base("Invalid tag end")
         {
         }
         #endregion

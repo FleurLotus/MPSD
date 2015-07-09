@@ -19,30 +19,12 @@
         [Test]
         public void TestMultipleTableTag()
         {
-            try
-            {
-                HtmlTableParser.Parse("<TABLE><TABLE>");
-                throw new Exception("A HtmlTableParserException should have be thrown");
-            }
-            catch (HtmlTableParserException ex)
-            {
-                Assert.AreEqual(ex.Message, "Multi table in the input text", "Not the good exception message");
-
-            }
+            Assert.Throws<HtmlTableParserMultiTableException>(() => HtmlTableParser.Parse("<TABLE><TABLE>"), "A HtmlTableParserMultiTableException should have be thrown");
         }
         [Test]
         public void TestNoCloseTableTag()
         {
-            try
-            {
-                HtmlTableParser.Parse("<TABLE>skdsdkskdksd");
-                throw new Exception("HtmlTableParserException should have be thrown");
-            }
-            catch (HtmlTableParserException ex)
-            {
-                Assert.AreEqual(ex.Message, "Can't find any close tag from table", "Not the good exception message");
-
-            }
+            Assert.Throws<HtmlTableParserNoTableClosingTagException>(() => HtmlTableParser.Parse("<TABLE>skdsdkskdksd"), "A HtmlTableParserNoTableClosingTagException should have be thrown");
         }
 
         #region TestCase List
@@ -106,7 +88,7 @@
 
             index = HtmlTableParser.GetPostClosingIndex(text.ToLower(), startindex, wantedtag.ToUpper());
             if (index != expectedreturn)
-                throw new Exception("Case sensitivity problem, result must the case");
+                throw new Exception("Case sensitivity problem, result must the same");
         }
 
         #region TestCase List
@@ -192,7 +174,6 @@
                     IHtmlCell cell = ret[i, j];
                     string value = cell == null ? null : cell.InnerText;
                     Assert.AreEqual(expectedValue[i, j], value, "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
-
                 }
             }
 

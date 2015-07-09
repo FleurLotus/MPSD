@@ -46,11 +46,11 @@ namespace Common.Library.Html
 
             //Multi start tag
             if (workingText.IndexOf(TableStart, TableStart.Length, StringComparison.InvariantCultureIgnoreCase) >= 0)
-                throw new HtmlTableParserException("Multi table in the input text");
+                throw new HtmlTableParserMultiTableException();
 
             int end = GetPostClosingIndex(workingText,0 ,TableEnd);
             if (end < 0)
-                throw new HtmlTableParserException("Can't find any close tag from table");
+                throw new HtmlTableParserNoTableClosingTagException();
 
             return workingText.Substring(0, end);
         }
@@ -64,7 +64,7 @@ namespace Common.Library.Html
             {
                 int end = GetPostClosingIndex(htmlText, lastindex, RowEnd);
                 if (end < 0)
-                    throw new HtmlTableParserException("Can't find any close tag for row");
+                    throw new HtmlTableParserNoRowClosingTagException();
 
 
                 rows.Add(htmlText.Substring(lastindex, end - lastindex));
@@ -103,7 +103,7 @@ namespace Common.Library.Html
 
                 int end = GetPostClosingIndex(htmlRow, lastindex, endTag);
                 if (end < 0)
-                    throw new HtmlTableParserException("Can't find any close tag for cells");
+                    throw new HtmlTableParserNoCellClosingTagException();
 
                 cells.Add(ExtractCell(htmlRow.Substring(lastindex, end - lastindex)));
                 lastindex = end;
@@ -117,7 +117,7 @@ namespace Common.Library.Html
             int tagIndex = htmlCell.IndexOf(Close,StringComparison.InvariantCultureIgnoreCase);
             //Should never happen
             if (tagIndex < 0)
-                throw new HtmlTableParserException("Invalid tag end");
+                throw new HtmlTableParserNoTagEndException();
 
             string tag = htmlCell.Substring(0, tagIndex + Close.Length);
 

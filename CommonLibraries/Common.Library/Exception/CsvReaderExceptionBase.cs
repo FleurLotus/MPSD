@@ -3,11 +3,10 @@
     using System;
 
     [Serializable]
-    public class HtmlTableParserException : ApplicationException
+    public abstract class CsvReaderExceptionBase : ApplicationException
     {
         #region Constructors and Destructors
-
-        public HtmlTableParserException(string message)
+        protected CsvReaderExceptionBase(string message)
             : base(message)
         {
         }

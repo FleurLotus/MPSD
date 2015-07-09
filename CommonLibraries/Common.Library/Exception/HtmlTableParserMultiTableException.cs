@@ -3,11 +3,11 @@
     using System;
 
     [Serializable]
-    public class HandlerAlreadyKnownException : ApplicationException
+    public class HtmlTableParserMultiTableException : HtmlTableParserExceptionBase
     {
         #region Constructors and Destructors
-        public HandlerAlreadyKnownException()
-            : base("Handler already added")
+        public HtmlTableParserMultiTableException()
+            : base("Multi table in the input text")
         {
         }
         #endregion

@@ -46,6 +46,7 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="CSV\CsvReaderTest.cs" />
     <Compile Include="Library\LibExtensionTest.Reflection.cs">
       <DependentUpon>LibExtensionTest.cs</DependentUpon>
     </Compile>

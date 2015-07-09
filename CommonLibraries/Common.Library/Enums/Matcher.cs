@@ -8,6 +8,7 @@
     {
         private readonly static bool _withFlag;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         static Matcher()
         {
             Type t = typeof(T);
