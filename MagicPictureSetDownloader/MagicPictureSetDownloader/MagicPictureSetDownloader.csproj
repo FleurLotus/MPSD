@@ -65,14 +65,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Library">
-      <HintPath>..\..\CommonLibraries\Common.Library\bin\Debug\Common.Library.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
     </Reference>
     <Reference Include="Common.ViewModel">
-      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\Debug\Common.ViewModel.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\$(Configuration)\Common.ViewModel.dll</HintPath>
     </Reference>
     <Reference Include="Common.WPF, Version=1.0.5605.33103, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonLibraries\Common.WPF\bin\Debug\Common.WPF.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.WPF\bin\$(Configuration)\Common.WPF.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
