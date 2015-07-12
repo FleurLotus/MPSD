@@ -17,6 +17,9 @@
 
         //TODO: Test add/remove splitted card and statistics
         //TODO: (Maybe) Import / save historical price 
+
+        //TODO: Create a auto upgrade program maybe using a repo
+        //TODO: think about upgrade set using reference script
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);

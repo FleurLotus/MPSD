@@ -49,6 +49,9 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
         }
         private static IComparable GetColor(ICardInfo card)
         {
+            if (MagicRules.IsLand(card.Type))
+                return DisplayColor.Land;
+
             return MagicRules.GetDisplayColor(card.CastingCost);
         }
         private static IComparable GetConvertedCastCost(ICardInfo card)

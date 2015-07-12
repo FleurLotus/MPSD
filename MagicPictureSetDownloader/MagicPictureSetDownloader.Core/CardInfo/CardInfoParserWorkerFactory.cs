@@ -30,6 +30,7 @@
                     return new SkipWorker();
 
                 case "row":
+                case "row manarow":
                     return new RowWorker(xmlReader);
 
                 default:

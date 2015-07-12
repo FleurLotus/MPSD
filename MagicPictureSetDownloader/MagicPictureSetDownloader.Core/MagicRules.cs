@@ -45,7 +45,8 @@
         Black,
         Red,
         Green,
-        Multicolor
+        Multicolor,
+        Land,
     }
 
     [Flags]
