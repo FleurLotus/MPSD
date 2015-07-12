@@ -33,11 +33,11 @@
   <ItemGroup>
     <Reference Include="Common.Library, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonLibraries\Common.Library\bin\Debug\Common.Library.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
     </Reference>
     <Reference Include="Common.ViewModel, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\Debug\Common.ViewModel.dll</HintPath>
+      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\$(Configuration)\Common.ViewModel.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
