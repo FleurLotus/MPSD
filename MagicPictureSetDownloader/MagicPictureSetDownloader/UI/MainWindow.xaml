@@ -123,7 +123,7 @@
             </Grid>
 
             <!-- Analysers control -->
-            <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left"
+            <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                             Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
 

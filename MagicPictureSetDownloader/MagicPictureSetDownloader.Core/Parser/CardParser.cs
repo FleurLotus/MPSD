@@ -203,6 +203,7 @@
 
             //Known XML issues in file
             text = text.Replace("<div>", "<tr>");
+            text = text.Replace("</div\r\n", "</div>");
             text = text.Replace("<i>", "");
             text = text.Replace("</i>", "");
             text = text.Replace("--->", "-->");

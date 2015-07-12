@@ -9,4 +9,4 @@ packages/
 */Sample/
 *.orig
 Matrix*/
-
+MagicPicture-*.sqlite
