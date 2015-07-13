@@ -57,11 +57,13 @@
             if (_applicationVersion.Major < dbVersion)
                 throw new Exception("Db is newer that application");
 
-            if (dbVersion < 4)
+            if (_applicationVersion.Major == dbVersion)
+                return;
+
+            if (dbVersion < 6)
                 throw new Exception("You have udpated the version!!! There is no released version with this db version");
 
-
-            //Repository repo = new Repository(_connectionString);
+            Repository repo = new Repository(_connectionString);
             switch (_data)
             {
                 case DatabasebType.Data:
@@ -69,6 +71,8 @@
                 case DatabasebType.Picture:
                     break;
             }
+
+            repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
         }
     }
 }

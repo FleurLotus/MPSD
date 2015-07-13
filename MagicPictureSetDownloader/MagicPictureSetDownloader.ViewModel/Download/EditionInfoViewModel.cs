@@ -3,6 +3,7 @@
     using System;
 
     using Common.ViewModel;
+    using Common.Web;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
@@ -16,7 +17,7 @@
         {
             _edition = editionInfoWithBlock.Edition;
 
-            string seachUrl = DownloadManager.ToAbsoluteUrl(baseEditionUrl, editionInfoWithBlock.BaseSearchUrl, true);
+            string seachUrl = WebAccess.ToAbsoluteUrl(baseEditionUrl, editionInfoWithBlock.BaseSearchUrl, true);
             Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, editionInfoWithBlock.Edition.GathererName);
             DownloadReporter = new DownloadReporterViewModel();
         }

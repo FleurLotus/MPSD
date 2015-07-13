@@ -6,6 +6,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     
                     xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
+                    xmlns:web="clr-namespace:Common.ViewModel.Web;assembly=Common.ViewModel"
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     
@@ -18,7 +19,7 @@
                     mc:Ignorable="d"
                    >
     <!-- CommonDialog -->
-    <DataTemplate DataType="{x:Type download:CredentialInputViewModel}" d:IsDesignTimeCreatable="False">
+    <DataTemplate DataType="{x:Type web:CredentialInputViewModel}" d:IsDesignTimeCreatable="False">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

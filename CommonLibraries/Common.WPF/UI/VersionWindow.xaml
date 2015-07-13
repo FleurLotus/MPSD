@@ -20,6 +20,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -32,5 +33,7 @@
         <Label Grid.Column="1" Grid.Row="1" Content="{Binding Version}"/>
         <Label Grid.Column="0" Grid.Row="2" Content="Copyright" Style="{StaticResource Title}"/>
         <Label Grid.Column="1" Grid.Row="2" Content="{Binding Copyright}"/>
+        <Label Grid.Column="0" Grid.Row="3" Content="Info" Style="{StaticResource Title}"/>
+        <Label Grid.Column="1" Grid.Row="3" Content="{Binding Description}"/>
     </Grid>
 </Window>

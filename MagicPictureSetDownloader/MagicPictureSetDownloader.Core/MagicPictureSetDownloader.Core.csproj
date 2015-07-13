@@ -31,12 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Library, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Library">
       <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
     </Reference>
-    <Reference Include="Common.XML, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Web">
+      <HintPath>..\..\CommonLibraries\Common.Web\bin\$(Configuration)\Common.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.XML">
       <HintPath>..\..\CommonLibraries\Common.XML\bin\$(Configuration)\Common.XML.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -92,7 +93,6 @@
     <Compile Include="Parser\EditionParser.cs" />
     <Compile Include="Parser\IParser.cs" />
     <Compile Include="EditionInfoWithBlock.cs" />
-    <Compile Include="CredentialRequieredArgs.cs" />
     <Compile Include="DownloadManager.cs" />
     <Compile Include="Parser\ParserException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -21,9 +21,16 @@
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
             base.OnStartup(e);
 
-            MainWindow mainWindow = new MainWindow();
-            _started = true;
-            mainWindow.Show();
+            if (ProgramUpgrader.CheckNewVerion())
+            {
+                Shutdown();
+            }
+            else
+            {
+                MainWindow mainWindow = new MainWindow();
+                _started = true;
+                mainWindow.Show();
+            }
         }
 
         private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
