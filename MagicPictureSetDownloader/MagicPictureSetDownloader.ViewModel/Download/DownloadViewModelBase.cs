@@ -7,6 +7,8 @@
     using Common.Library;
     using Common.Library.Notify;
     using Common.ViewModel;
+    using Common.Web;
+
     using MagicPictureSetDownloader.Core;
 
     public class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable

@@ -10,6 +10,7 @@
     using Common.Library;
     using Common.Library.Collection;
     using Common.Library.Notify;
+    using Common.Web;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
@@ -162,7 +163,7 @@
                         AppendMessage(string.Format("{0}: {1} urls while cardnumber is set to {2}", model.Name, cardInfos.Length, model.CardNumber.Value), false);
                     }
                 }
-                ThreadPool.QueueUserWorkItem(RetrieveEditionDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => DownloadManager.ToAbsoluteUrl(model.Url, s)) });
+                ThreadPool.QueueUserWorkItem(RetrieveEditionDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => WebAccess.ToAbsoluteUrl(model.Url, s)) });
             }
         }
         private void RetrieveEditionDataCallBack(object state)

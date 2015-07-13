@@ -31,13 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Library, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Library">
       <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
     </Reference>
-    <Reference Include="Common.ViewModel, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.ViewModel">
       <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\$(Configuration)\Common.ViewModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Web">
+      <HintPath>..\..\CommonLibraries\Common.Web\bin\$(Configuration)\Common.Web.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -77,7 +78,6 @@
     <Compile Include="Main\HierarchicalResultViewModel.cs" />
     <Compile Include="Main\HierarchicalViewModel.cs" />
     <Compile Include="Main\MainViewModel.cs" />
-    <Compile Include="Download\CredentialInputViewModel.cs" />
     <Compile Include="Download\DownloadReporterViewModel.cs" />
     <Compile Include="Download\DownloadViewModel.cs" />
     <Compile Include="Main\StatisticViewModel.cs" />
@@ -91,6 +91,7 @@
     <Compile Include="Management\DatabaseInfoModificationViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Download\EditionInfoViewModel.cs" />
+    <Compile Include="Upgrade\VersionUpgraderViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">

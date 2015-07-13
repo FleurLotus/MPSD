@@ -9,10 +9,15 @@
         public VersionViewModel()
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            AssemblyCopyrightAttribute[] attrib = entryAssembly.GetCustomAttributes<AssemblyCopyrightAttribute>(false);
-            if (attrib != null && attrib.Length >= 1)
+            AssemblyCopyrightAttribute[] copyrightAttrib = entryAssembly.GetCustomAttributes<AssemblyCopyrightAttribute>(false);
+            if (copyrightAttrib != null && copyrightAttrib.Length >= 1)
             {
-                Copyright = attrib[0].Copyright;
+                Copyright = copyrightAttrib[0].Copyright;
+            }
+            AssemblyDescriptionAttribute[] descriptionAttrib = entryAssembly.GetCustomAttributes<AssemblyDescriptionAttribute>(false);
+            if (descriptionAttrib != null && descriptionAttrib.Length >= 1)
+            {
+                Description = descriptionAttrib[0].Description;
             }
             
             AssemblyName assemblyName = entryAssembly.GetName();
@@ -23,5 +28,6 @@
         public string Version { get; private set; }
         public string Name { get; private set; }
         public string Copyright { get; private set; }
+        public string Description { get; private set; }
     }
 }

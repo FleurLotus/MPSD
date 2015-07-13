@@ -46,12 +46,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Database, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Database">
       <HintPath>..\..\CommonLibraries\Common.Database\bin\$(Configuration)\Common.Database.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Library, Version=1.0.5605.33033, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Library">
       <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
     </Reference>
     <Reference Include="System" />

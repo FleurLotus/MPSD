@@ -70,19 +70,19 @@
     <Reference Include="Common.ViewModel">
       <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\$(Configuration)\Common.ViewModel.dll</HintPath>
     </Reference>
-    <Reference Include="Common.WPF, Version=1.0.5605.33103, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Common.Web">
+      <HintPath>..\..\CommonLibraries\Common.Web\bin\$(Configuration)\Common.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.WPF">
       <HintPath>..\..\CommonLibraries\Common.WPF\bin\$(Configuration)\Common.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.Expression.Interactions">
       <HintPath>..\..\ExternalReference\Blend\Microsoft.Expression.Interactions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="System.Windows.Interactivity">
       <HintPath>..\..\ExternalReference\Blend\System.Windows.Interactivity.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -170,6 +170,7 @@
     <Compile Include="Converter\ReadOnlyConverterForNoEdition.cs" />
     <Compile Include="Converter\TreeToVisibleConverter.cs" />
     <Compile Include="Converter\TreeToTreeImageConverter.cs" />
+    <Compile Include="ProgramUpgrader.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
       <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>
