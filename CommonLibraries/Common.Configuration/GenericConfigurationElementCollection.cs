@@ -1,6 +1,7 @@
 ﻿namespace Common.Configuration
 {
     using System.Configuration;
+    using System.Diagnostics.CodeAnalysis;
 
     public class GenericConfigurationElementCollection<T> : ConfigurationElementCollection
         where T : ConfigurationElement, IHasKey, new()
@@ -9,11 +10,10 @@
         {
             return new T();
         }
+        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         protected override object GetElementKey(ConfigurationElement element)
         {
-            // ReSharper disable SuspiciousTypeConversion.Global
-            IHasKey key = element as IHasKey;
-            // ReSharper restore SuspiciousTypeConversion.Global
+            IHasKey key = element as IHasKey;sss
             return null == key ? null : key.Key;
         }
         public void Add(T element)

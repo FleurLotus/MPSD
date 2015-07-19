@@ -59,7 +59,7 @@
             if (source == null)
                 return null;
 
-            return source.Replace("&nbsp;", " ").Trim(new[] { ' ', '\t', '\n', '\r' });
+            return source.Replace("&nbsp;", " ").Trim(' ', '\t', '\n', '\r');
         }
         public static string HtmlRemoveFormatTag(this string source)
         {

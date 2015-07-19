@@ -118,7 +118,7 @@
                     cmd.CommandType = CommandType.Text;
                     foreach (string command in commands)
                     {
-                        string trimcommand = command.TrimEnd(new[] { '\r', '\n' });
+                        string trimcommand = command.TrimEnd('\r', '\n');
                         if (!string.IsNullOrWhiteSpace(trimcommand))
                         {
                             cmd.CommandText = trimcommand;

@@ -2,6 +2,7 @@
 {
 
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Text;
 
@@ -11,6 +12,7 @@
     using NUnit.Framework;
 
     [TestFixture]
+    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class CsvReaderTest
     {
 
@@ -39,12 +41,12 @@
 
         #region Behavior
         [Test]
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void TestCheckDisposed()
         {
             ICsvReader reader = new CsvReader(new MemoryStream(), false);
             reader.Dispose();
 
-            // ReSharper disable UnusedVariable
             Assert.Throws<ObjectDisposedException>(() => { bool b = reader.WithHeader; }, "Access to WithHeader should throw ObjectDisposedException after call to Dispose");
             Assert.Throws<ObjectDisposedException>(() => { char c = reader.Separator; }, "Access to Separator should throw ObjectDisposedException after call to Dispose");
             Assert.Throws<ObjectDisposedException>(() => reader.GetCurrentLine(), "Access to GetCurrentLine() should throw ObjectDisposedException after call to Dispose");
@@ -53,16 +55,15 @@
             Assert.Throws<ObjectDisposedException>(() => reader.GetValue(0), "Access to GetValue() should throw ObjectDisposedException after call to Dispose");
             Assert.Throws<ObjectDisposedException>(() => { bool b = reader.EndOfStream; }, "Access to EndOfStream should throw ObjectDisposedException after call to Dispose");
             Assert.Throws<ObjectDisposedException>(() => reader.Read(), "Access to Read() should throw ObjectDisposedException after call to Dispose");
-            // ReSharper restore UnusedVariable
         }
         [Test]
+        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void TestCheckNoRead([Values(true, false)] bool withHeader)
         {
             const string input = "azerty\nazerty";
 
             using (ICsvReader reader = CreateCsvReader(input, withHeader))
             {
-                // ReSharper disable UnusedVariable
                 Assert.DoesNotThrow(() => { bool b = reader.WithHeader; }, "Access to WithHeader should not throw exception before call to Read");
                 Assert.DoesNotThrow(() => { char c = reader.Separator; }, "Access to Separator should not throw exception before call to Read");
                 Assert.DoesNotThrow(() => reader.GetCurrentLine(), "Access to GetCurrentLine() should not throw exception before call to Read");
@@ -87,7 +88,6 @@
                 Assert.DoesNotThrow(() => reader.GetHeaders(), "Access to GetHeaders() should not throw exception after call to Read");
                 Assert.DoesNotThrow(() => reader.GetValue(0), "Access to GetValue should not throw exception  after call to Read");
                 Assert.DoesNotThrow(() => { bool b = reader.EndOfStream; }, "Access to EndOfStream should not throw exception before after to Read");
-                // ReSharper restore UnusedVariable
             }
         }
         [Test]

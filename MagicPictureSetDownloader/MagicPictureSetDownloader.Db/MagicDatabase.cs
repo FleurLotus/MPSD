@@ -3,6 +3,7 @@ namespace MagicPictureSetDownloader.Db
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
 
@@ -286,6 +287,7 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
                 return new List<ILanguage>(_languages.Values).AsReadOnly();
         }
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();

@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Windows;
 
 [assembly: AssemblyTitle("MagicPictureSetDownloader")]
 [assembly: AssemblyProduct("MagicPictureSetDownloader")]

@@ -6,8 +6,6 @@
     using System.Diagnostics;
     using System.Reflection;
 
-    using MagicPictureSetDownloader.Core;
-
     //TODO: Create a auto upgrade program maybe using a repo TO BE CODED
     //TODO: how to manage error
     //TODO: should be in a ViewModel/Core
@@ -58,12 +56,12 @@
                     throw new DirectoryNotFoundException("Can't upgrade, unzipped directory not found");
 
                 //From http://www.codeproject.com/Articles/31454/How-To-Make-Your-Application-Delete-Itself-Immedia
-                ProcessStartInfo Info = new ProcessStartInfo();
-                Info.Arguments = string.Format("/C choice /C Y /N /D Y /T 3 & copy /Y \"{0}\" \"{1}\"", Path.Combine(temporyDirectory, "*.*"), Path.GetDirectoryName(entryAssembly.Location));
-                Info.WindowStyle = ProcessWindowStyle.Hidden;
-                Info.CreateNoWindow = true;
-                Info.FileName = "cmd.exe";
-                Process.Start(Info);
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.Arguments = string.Format("/C choice /C Y /N /D Y /T 3 & copy /Y \"{0}\" \"{1}\"", Path.Combine(temporyDirectory, "*.*"), Path.GetDirectoryName(entryAssembly.Location));
+                info.WindowStyle = ProcessWindowStyle.Hidden;
+                info.CreateNoWindow = true;
+                info.FileName = "cmd.exe";
+                Process.Start(info);
                 return true;
             }
 

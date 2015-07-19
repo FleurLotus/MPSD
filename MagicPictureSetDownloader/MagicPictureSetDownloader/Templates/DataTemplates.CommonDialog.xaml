@@ -436,7 +436,9 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
+                                <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                                 <Image Width="25" VerticalAlignment="Center"  Source="{Binding EditionName, Converter={StaticResource t2iConv}}" />
+                                <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -1,7 +1,5 @@
 ﻿namespace Common.ViewModel.Web
 {
-    using System;
-
     using Common.ViewModel.Dialog;
 
     public class CredentialInputViewModel : DialogViewModelBase

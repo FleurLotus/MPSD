@@ -34,6 +34,7 @@
 
             PropertyInfo[] ret;
 
+            // ReSharper disable once InconsistentlySynchronizedField
             if (!_propertiesCache.TryGetValue(t, out ret))
             {
                 lock (_propertiesCache)

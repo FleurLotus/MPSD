@@ -11,7 +11,7 @@
                     
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
                     xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
-                    
+
                     mc:Ignorable="d"
                     >
 
@@ -123,10 +123,13 @@
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
+                                        <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
+                                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                                         <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
                                             <Image Width="30" Source="{Binding Key, Converter={StaticResource t2iConv}}" />
                                         </Border>
                                         <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
+                                        <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                                     </Grid>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

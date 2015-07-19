@@ -17,7 +17,9 @@ namespace MagicPictureSetDownloader.Resources
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
             foreach (string name in executingAssembly.GetManifestResourceNames().Where(n => n.EndsWith(".png")))
             {
+                // ReSharper disable AssignNullToNotNullAttribute
                 Bitmap bitmap = new Bitmap(executingAssembly.GetManifestResourceStream(name));
+                // ReSharper restore AssignNullToNotNullAttribute
                 string key = name.Substring(0, name.Length - 4);
                 key = key.Substring(key.LastIndexOf('.') + 1);
                 _images.Add(key, bitmap);

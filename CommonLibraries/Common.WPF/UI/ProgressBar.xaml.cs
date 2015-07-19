@@ -2,6 +2,7 @@ namespace Common.WPF.UI
 {
     using System;
     using System.ComponentModel;
+    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using System.Timers;
     using System.Windows;
@@ -100,7 +101,7 @@ namespace Common.WPF.UI
             if (null == pb) return;
             pb.SetDisplayText();
         }
-        // ReSharper disable CompareOfFloatsByEqualityOperator
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         private void SetDisplayText()
         {
             lock (_synch)
@@ -141,7 +142,6 @@ namespace Common.WPF.UI
                 DisplayText = sb.ToString();
             }
         }
-        // ReSharper restore CompareOfFloatsByEqualityOperator
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
             Dispatcher.Invoke((Action)SetDisplayText);

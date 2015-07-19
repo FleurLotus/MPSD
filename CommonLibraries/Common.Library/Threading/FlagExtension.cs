@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Diagnostics.CodeAnalysis;
 
     public static class FlagExtension
     {
@@ -26,6 +27,7 @@
             return flagCount.IsFlagSet(source);
         }
 
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private static void CheckArgs(object source, string name)
         {
             if (string.IsNullOrWhiteSpace(name))

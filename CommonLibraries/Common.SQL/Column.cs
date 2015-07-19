@@ -28,12 +28,12 @@
             get
             {
                 if (DataType == "nchar" || DataType == "nvarchar" || DataType == "binary" || DataType == "varbinary")
-                    return string.Format(CultureInfo.InvariantCulture, "{0}({1})", new object[] { DataType, CharacterMaxLength });
+                    return string.Format(CultureInfo.InvariantCulture, "{0}({1})", DataType, CharacterMaxLength);
 
                 if (DataType == "numeric")
-                    return string.Format(CultureInfo.InvariantCulture, "{0}({1},{2})", new object[] { DataType, NumericPrecision, NumericScale });
+                    return string.Format(CultureInfo.InvariantCulture, "{0}({1},{2})", DataType, NumericPrecision, NumericScale);
 
-                return string.Format(CultureInfo.InvariantCulture, "{0}", new object[] { DataType });
+                return string.Format(CultureInfo.InvariantCulture, "{0}", DataType);
             }
         }
 

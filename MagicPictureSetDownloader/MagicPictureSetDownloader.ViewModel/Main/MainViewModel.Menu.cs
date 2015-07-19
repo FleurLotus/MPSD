@@ -574,7 +574,9 @@
         {
             InputViewModel vm = obj as InputViewModel;
 
+            // ReSharper disable PossibleNullReferenceException
             string toBeDeleted = vm.Selected;
+            // ReSharper restore PossibleNullReferenceException
             string toAdd = vm.Selected2;
 
             if (toAdd == None)
@@ -598,7 +600,9 @@
         private void ImportExportAsync(object obj)
         {
             ImportExportViewModel vm = obj as ImportExportViewModel;
+            // ReSharper disable PossibleNullReferenceException
             vm.ImportExport();
+            // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
         }
 
