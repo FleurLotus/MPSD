@@ -121,4 +121,4 @@
     <DataTemplate DataType="{x:Type main:HierarchicalResultViewModel}">
     </DataTemplate>
 
-	</ResourceDictionary>
+    </ResourceDictionary>

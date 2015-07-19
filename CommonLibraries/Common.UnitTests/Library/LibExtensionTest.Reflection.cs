@@ -75,7 +75,7 @@
         // ReSharper disable UnusedMember.Local
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         // ReSharper disable ValueParameterNotUsed
-        [AttributeUsage(AttributeTargets.Property, AllowMultiple = true, Inherited = true)]
+        [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
         private class MotherAttribute : Attribute
         {
 

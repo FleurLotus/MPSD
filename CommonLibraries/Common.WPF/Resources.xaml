@@ -1,49 +1,49 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converter="clr-namespace:Common.WPF.Converter">
-    
-    <BooleanToVisibilityConverter x:Key="b2vConv"/>
-    <converter:EnumMatchToBooleanConverter x:Key="e2bConv"/>
+
+    <BooleanToVisibilityConverter x:Key="b2vConv" />
+    <converter:EnumMatchToBooleanConverter x:Key="e2bConv" />
     <converter:ImageSourceConverter x:Key="imgConv" />
-    <converter:BoolInvertConverter x:Key="nbConv"/>
+    <converter:BoolInvertConverter x:Key="nbConv" />
 
     <converter:AggregateConverter x:Key="nb2vConv">
-        <converter:BoolInvertConverter/>
-        <BooleanToVisibilityConverter/>
+        <converter:BoolInvertConverter />
+        <BooleanToVisibilityConverter />
     </converter:AggregateConverter>
 
     <converter:AggregateConverter x:Key="e2vConv">
-        <converter:EnumMatchToBooleanConverter/>
-        <BooleanToVisibilityConverter/>
+        <converter:EnumMatchToBooleanConverter />
+        <BooleanToVisibilityConverter />
     </converter:AggregateConverter>
 
     <converter:AggregateConverter x:Key="ne2vConv">
-        <converter:EnumMatchToBooleanConverter/>
-        <converter:BoolInvertConverter/>
-        <BooleanToVisibilityConverter/>
+        <converter:EnumMatchToBooleanConverter />
+        <converter:BoolInvertConverter />
+        <BooleanToVisibilityConverter />
     </converter:AggregateConverter>
 
     <converter:AggregateConverter x:Key="no2bConv">
-        <converter:ObjectNullToBoolConverter/>
-        <converter:BoolInvertConverter/>
+        <converter:ObjectNullToBoolConverter />
+        <converter:BoolInvertConverter />
     </converter:AggregateConverter>
-    
+
     <converter:AggregateConverter x:Key="nz2bConv">
-        <converter:ValueIsZeroToBoolConverter/>
-        <converter:BoolInvertConverter/>
+        <converter:ValueIsZeroToBoolConverter />
+        <converter:BoolInvertConverter />
     </converter:AggregateConverter>
-    
+
     <converter:AggregateConverter x:Key="nz2vConv">
-        <converter:ValueIsZeroToBoolConverter/>
-        <converter:BoolInvertConverter/>
-        <BooleanToVisibilityConverter/>
+        <converter:ValueIsZeroToBoolConverter />
+        <converter:BoolInvertConverter />
+        <BooleanToVisibilityConverter />
     </converter:AggregateConverter>
 
     <converter:AggregateConverter x:Key="no2vConv">
-        <converter:ObjectNullToBoolConverter/>
-        <converter:BoolInvertConverter/>
-        <BooleanToVisibilityConverter/>
+        <converter:ObjectNullToBoolConverter />
+        <converter:BoolInvertConverter />
+        <BooleanToVisibilityConverter />
     </converter:AggregateConverter>
 
-    <converter:ProgressBarFillToRectConverter x:Key="pbf2rectConv"/>
+    <converter:ProgressBarFillToRectConverter x:Key="pbf2rectConv" />
 </ResourceDictionary>

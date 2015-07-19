@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System.Diagnostics.CodeAnalysis;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
@@ -29,6 +30,8 @@
             return cicc.IdCollection == IdCollection && cicc.IdGatherer == IdGatherer && cicc.IdLanguage == IdLanguage;
         }
 
+        //There are not readonly because of reflection feeding by they never change after instance creation
+        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
         public override int GetHashCode()
         {
             return IdCollection * 23 + IdGatherer;

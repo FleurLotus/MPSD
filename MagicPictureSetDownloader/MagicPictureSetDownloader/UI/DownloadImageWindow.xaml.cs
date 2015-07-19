@@ -9,7 +9,6 @@
     using Common.WPF;
     using Common.WPF.UI;
 
-    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.ViewModel.Download;
 
     /// <summary>

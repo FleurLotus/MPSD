@@ -12,7 +12,7 @@
         }
         public static bool GetBoolOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(bool) : dr.GetBoolean(index);
+            return !dr.IsDBNull(index) && dr.GetBoolean(index);
         }
         public static int GetInt32OrDefault(this IDataRecord dr, int index)
         {

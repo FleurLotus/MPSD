@@ -1,12 +1,10 @@
 namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
-    using System.Diagnostics;
-
+    using System.Diagnostics.CodeAnalysis;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{Name}")]
     [DbTable]
     internal class Audit : IAudit
     {
@@ -30,9 +28,10 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public int Quantity { get; set; }
 
+        //IdGather, IsFoil, IdLanguage null or not are linked
+        [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         public override string ToString()
         {
-
             if (IdGatherer.HasValue)
                 return string.Format(" {0} card(s) {1} {2}{3} to collection {4} at {5:yyyy-MM-dd HH:mm:ss.ff}", Quantity, 
                                                                                                                 IdGatherer.Value,

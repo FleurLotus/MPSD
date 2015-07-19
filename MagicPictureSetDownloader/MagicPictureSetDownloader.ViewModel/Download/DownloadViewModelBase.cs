@@ -46,9 +46,16 @@
                 }
             }
         }
+
         public string Message
         {
-            get { return _stringBuilder.Length ==  0 ? null: _stringBuilder.ToString(); }
+            get
+            {
+                lock (_stringBuilder)
+                {
+                    return _stringBuilder.Length == 0 ? null : _stringBuilder.ToString();
+                }
+            }
         }
 
         public void Dispose()

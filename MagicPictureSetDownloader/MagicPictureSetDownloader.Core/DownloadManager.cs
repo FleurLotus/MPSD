@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Net;
-    using System.Text;
 
     using Common.Library.Notify;
     using Common.Web;
@@ -142,7 +140,7 @@
         {
             foreach (KeyValuePair<IconPageType, string> kv in urls)
             {
-                IEditionFinder finder = EditionInfoFinderFactory.Instance.CreateFinder(kv.Key, s => _webAccess.GetHtml(s, false));
+                IEditionFinder finder = EditionInfoFinderFactory.Instance.CreateFinder(kv.Key, s => _webAccess.GetHtml(s));
                 if (finder == null)
                     continue;
 

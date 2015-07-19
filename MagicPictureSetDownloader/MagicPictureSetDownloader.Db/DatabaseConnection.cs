@@ -24,7 +24,9 @@
         {
             string fileName = DatabaseGenerator.GetResourceName(databasebType);
                 
+            // ReSharper disable AssignNullToNotNullAttribute
             string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
+            // ReSharper restore AssignNullToNotNullAttribute
             string connectionString = (new SQLiteConnectionStringBuilder { DataSource = filePath }).ToString();
             if (!File.Exists(filePath))
             {

@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Diagnostics.CodeAnalysis;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
@@ -31,6 +31,8 @@
         }
 
         public string Name { get; private set; }
+
+        [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
         public IList<HierarchicalResultViewModel> Root
         {
             get { return _root; }
@@ -116,7 +118,9 @@
 
                 if (index == analysers.Length)
                 {
+                    // ReSharper disable PossibleNullReferenceException
                     (next as HierarchicalResultNodeViewModel).AddCard(card);
+                    // ReSharper restore PossibleNullReferenceException
                 }
 
                 current = next;
