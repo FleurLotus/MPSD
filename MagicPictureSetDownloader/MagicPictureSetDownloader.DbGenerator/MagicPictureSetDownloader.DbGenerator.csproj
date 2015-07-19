@@ -69,8 +69,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
-zip -9 "$(ProjectDir)MagicData.zip" "$(SolutionDir)MagicData.sqlite"
-zip -9 "$(ProjectDir)MagicPicture.zip" "$(SolutionDir)MagicPicture.sqlite"</PreBuildEvent>
+"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)MagicData.zip" "$(SolutionDir)MagicData.sqlite"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)MagicPicture.zip" "$(SolutionDir)MagicPicture.sqlite"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>del "$(ProjectDir)MagicData.zip"
