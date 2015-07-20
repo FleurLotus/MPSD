@@ -48,7 +48,7 @@ namespace MagicPictureSetDownloader.Db.DAO
             if (AlternativeCode == null || format == ExportFormat.MPSD)
                 return code;
 
-            string[] codes = AlternativeCode.Split(new[] { ';' });
+            string[] codes = AlternativeCode.Split(';');
             int pos = (int)format;
             if (pos < 0 || pos >= codes.Length)
                 return code;

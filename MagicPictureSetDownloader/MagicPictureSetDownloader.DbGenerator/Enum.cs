@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.DbGenerator
+﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     public enum DatabasebType
     {

@@ -60,6 +60,7 @@
     <Compile Include="Library\MatcherTest.cs" />
     <Compile Include="Html\HtmlTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Zip\ZipperTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Database\Common.Database.csproj">
@@ -78,13 +79,25 @@
       <Project>{c695020a-1108-41bf-8494-34bdefc30581}</Project>
       <Name>Common.XML</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common.Zip\Common.Zip.csproj">
+      <Project>{ff762f87-3489-497f-b350-bc58a6abc48e}</Project>
+      <Name>Common.Zip</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ZipTest.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
   <Target Name="AfterBuild">
+    <CallTarget Targets="ExternalReferencies" />
   </Target>
-  -->
+  <Target Name="ExternalReferencies">
+    <ItemGroup>
+      <ExternalReferenciesFiles Include="..\..\ExternalReference\Zip\*.dll" />
+    </ItemGroup>
+    <Message Text="Copying External Referencies ..." Importance="high" />
+    <Copy SourceFiles="@(ExternalReferenciesFiles)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" UseHardlinksIfPossible="$(CreateHardLinksForCopyFilesToOutputDirectoryIfPossible)" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
 </Project>

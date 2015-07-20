@@ -6,6 +6,7 @@
         SelectedCollection,
         Display,
         Input,
+        Upgrade,
     }
 
     public enum ExportFormat

@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.ViewModel.Input
+﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using MagicPictureSetDownloader.Interface;
 

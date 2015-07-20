@@ -145,9 +145,9 @@
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
-                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" />
+                                   Visibility="{Binding Options.ShowPicture, Converter={StaticResource b2vConv}}" />
             <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}"
-                                   Visibility="{Binding ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
+                                   Visibility="{Binding Options.ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />

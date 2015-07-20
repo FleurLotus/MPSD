@@ -20,7 +20,7 @@
         private string _selected;
         private string _selected2;
 
-        internal InputViewModel(InputMode inputMode, string title, string label): 
+        internal InputViewModel(InputMode inputMode, string title, string label) :
             this(inputMode, title, label, null, null, null)
         {
         }
@@ -102,7 +102,7 @@
 
                 case InputMode.ChooseInListAndTextNeed:
                     return Selected != null && !string.IsNullOrWhiteSpace(Text) && Selected != Text;
-                    
+
                 default:
                     return true;
             }

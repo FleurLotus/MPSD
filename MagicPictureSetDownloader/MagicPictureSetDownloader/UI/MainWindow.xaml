@@ -63,10 +63,11 @@
     </i:Interaction.Triggers>
 
     <Grid>
-        <!-- Split Menu/Others -->
+        <!-- Split Menu/Others/Status Bar -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Menu IsMainMenu="True" Grid.Row="0" ItemsSource="{Binding MenuRoot.Children}" ItemContainerStyleSelector="{StaticResource separatorStyleSelector}"/>
         <Grid Margin="5" Grid.Row="1">
@@ -112,8 +113,8 @@
                         <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Control Margin="10" Visibility="{Binding ShowStatistics, Converter={StaticResource b2vConv}}" Template="{StaticResource StatisticsControlTemplate}" />
-                            <Control Margin="10" Visibility="{Binding ShowOtherLanguages, Converter={StaticResource b2vConv}}" Template="{StaticResource OtherLanguagesControlTemplate}" />
+                            <Control Margin="10" Visibility="{Binding Options.ShowStatistics, Converter={StaticResource b2vConv}}" Template="{StaticResource StatisticsControlTemplate}" />
+                            <Control Margin="10" Visibility="{Binding Options.ShowOtherLanguages, Converter={StaticResource b2vConv}}" Template="{StaticResource OtherLanguagesControlTemplate}" />
                         </StackPanel>
 
                         <Control Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"
@@ -127,8 +128,18 @@
                             Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
 
+        <Grid Grid.Row="2" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated@CantCheck}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="1" Content="New version available!" Foreground="Red" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated}" />
+            <Label Grid.Column="1" Content="Error while checking" Foreground="Red" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=CantCheck}" />
+            <Button Grid.Column="2" Content="Hide" Padding="5,0" Command="{Binding HideResultCommand}" />
+        </Grid>
         <!-- Loading -->
-        <Grid Grid.Row="0" Grid.RowSpan="2" Background="White" Visibility="{Binding Loading, Converter={StaticResource b2vConv}}">
+        <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Visibility="{Binding Loading, Converter={StaticResource b2vConv}}">
             <Ellipse x:Name="Ellipse" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Width="300" Height="300">
                 <Ellipse.RenderTransform>
                     <TransformGroup>

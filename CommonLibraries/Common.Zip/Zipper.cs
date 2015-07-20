@@ -1,24 +1,21 @@
 ﻿namespace Common.Zip
 {
     using System.IO;
-
-    using ICSharpCode.SharpZipLib.Core;
     using ICSharpCode.SharpZipLib.Zip;
 
     public static class Zipper
     {
-        public static Stream UnZipOneFile(byte[] stream)
+        public static void UnZipAll(byte[] stream, string outputDirectory)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 ms.Write(stream, 0, stream.Length);
-                return UnZipOneFile(ms);
+                UnZipAll(ms, outputDirectory);
             }
         }
-        public static Stream UnZipOneFile(Stream stream)
+        public static void UnZipAll(Stream stream, string outputDirectory)
         {
             ZipFile zipFile = null;
-            Stream outStream = null;
             try
             {
                 zipFile = new ZipFile(stream);
@@ -28,14 +25,13 @@
                     if (!entry.IsFile)
                         continue;
 
-                    byte[] buffer = new byte[4096];
-
                     Stream zstream = zipFile.GetInputStream(entry);
 
-                    outStream = new MemoryStream(10 * 1024 * 1024);
-                    StreamUtils.Copy(zstream, outStream, buffer);
-                    outStream.Seek(0, SeekOrigin.Begin);
-                    break; // process the only one entry
+                    string filePath = Path.Combine(outputDirectory, entry.Name);
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                    using (FileStream sw = new FileStream(filePath, FileMode.CreateNew))
+                        zstream.CopyTo(sw);
                 }
             }
             finally
@@ -46,8 +42,6 @@
                     zipFile.Close();
                 }
             }
-
-            return outStream;
         }
     }
 }

@@ -93,6 +93,10 @@
     <Compile Include="VisualTreeExtension.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="DataTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
