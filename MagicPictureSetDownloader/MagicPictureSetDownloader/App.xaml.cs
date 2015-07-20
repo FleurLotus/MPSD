@@ -5,7 +5,6 @@
     using System.Windows.Threading;
 
     using Common.WPF;
-
     using MagicPictureSetDownloader.UI;
 
     /// <summary>
@@ -21,16 +20,9 @@
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
             base.OnStartup(e);
 
-            if (ProgramUpgrader.CheckNewVerion())
-            {
-                Shutdown();
-            }
-            else
-            {
-                MainWindow mainWindow = new MainWindow();
-                _started = true;
-                mainWindow.Show();
-            }
+            MainWindow mainWindow = new MainWindow();
+            _started = true;
+            mainWindow.Show();
         }
 
         private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)

@@ -170,7 +170,6 @@
     <Compile Include="Converter\ReadOnlyConverterForNoEdition.cs" />
     <Compile Include="Converter\TreeToVisibleConverter.cs" />
     <Compile Include="Converter\TreeToTreeImageConverter.cs" />
-    <Compile Include="ProgramUpgrader.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
       <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>

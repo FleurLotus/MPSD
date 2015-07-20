@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Resources.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/Styles.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Common.WPF;component/DataTemplate.xaml"/>
                 
                 <ResourceDictionary Source="Resources.xaml"/>
                 <ResourceDictionary Source="Styles.xaml"/>

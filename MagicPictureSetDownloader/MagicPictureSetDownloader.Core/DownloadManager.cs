@@ -2,10 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-
     using Common.Library.Notify;
     using Common.Web;
-
     using MagicPictureSetDownloader.Core.EditionInfos;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
@@ -24,15 +22,8 @@
 
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered
         {
-            add
-            {
-                _webAccess.CredentialRequiered += value;
-            }
-            remove
-            {
-
-                _webAccess.CredentialRequiered -= value;
-            }
+            add { _webAccess.CredentialRequiered += value; }
+            remove { _webAccess.CredentialRequiered -= value; }
         }
 
         public IEnumerable<EditionInfoWithBlock> GetEditionList(string url)
@@ -52,7 +43,7 @@
         public string[] GetCardUrls(string url)
         {
             List<string> ret = new List<string>();
-            
+
             ManageMultiPage(url, html =>
             {
                 foreach (string cardurl in Parser.ParseCardUrls(html))
@@ -73,17 +64,17 @@
 
                 CardWithExtraInfo info = cardWithExtraInfo;
 
-                ManageMultiPage(baseUrl, html => 
-                    {
-                        foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
-                            info.Add(language);
-                    });
+                ManageMultiPage(baseUrl, html =>
+                {
+                    foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
+                        info.Add(language);
+                });
 
                 InsertCardInDb(cardWithExtraInfo);
                 InsertCardEditionInDb(editionId, cardWithExtraInfo, pictureUrl);
             }
         }
-        private void ManageMultiPage(string baseUrl, Action<string> workOnHtml )
+        private void ManageMultiPage(string baseUrl, Action<string> workOnHtml)
         {
             int page = 0;
             bool hasnextpage;
@@ -110,8 +101,7 @@
                     if (hasnextpage)
                         page = pages[index + 1];
                 }
-            }
-            while (hasnextpage);
+            } while (hasnextpage);
         }
         public void InsertPictureInDb(string pictureUrl)
         {
@@ -125,6 +115,7 @@
 
                 MagicDatabase.InsertNewPicture(idGatherer, pictureData);
             }
+
             //ALERT: see if we update the data
             /*
             else
@@ -185,8 +176,8 @@
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
             MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
-                                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type, 
-                                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName, cardWithExtraInfo.Languages);
+                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type,
+                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName, cardWithExtraInfo.Languages);
         }
     }
 }

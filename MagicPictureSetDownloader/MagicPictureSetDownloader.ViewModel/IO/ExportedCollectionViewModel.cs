@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.ViewModel.IO
+﻿namespace MagicPictureSetDownloader.ViewModel.IO
 {
     using Common.ViewModel;
 

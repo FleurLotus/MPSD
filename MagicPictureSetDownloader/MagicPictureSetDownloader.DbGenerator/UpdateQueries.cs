@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.DbGenerator
+﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     internal static class UpdateQueries
     {

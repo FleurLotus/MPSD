@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.ViewModel.Management
+﻿namespace MagicPictureSetDownloader.ViewModel.Management
 {
     using MagicPictureSetDownloader.Interface;
 

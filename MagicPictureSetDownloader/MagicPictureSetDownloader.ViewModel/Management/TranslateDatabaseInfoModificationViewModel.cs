@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.ViewModel.Management
+﻿namespace MagicPictureSetDownloader.ViewModel.Management
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;

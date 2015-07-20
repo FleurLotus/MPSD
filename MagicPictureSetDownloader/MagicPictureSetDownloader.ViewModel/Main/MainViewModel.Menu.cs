@@ -18,6 +18,7 @@
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Management;
+    using MagicPictureSetDownloader.ViewModel.Option;
 
     public partial class MainViewModel
     {
@@ -36,14 +37,10 @@
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
-
         private readonly MenuViewModel _menuRoot;
         private readonly MenuViewModel _contextMenuRoot;
         private SearchViewModel _searchViewModel;
-
-        private MenuViewModel _showPictureViewModel;
-        private MenuViewModel _showStatisticsViewModel;
-        private MenuViewModel _showOtherLanguagesViewModel;
+        
         private MenuViewModel _collectionViewModel;
 
         public MenuViewModel MenuRoot
@@ -54,19 +51,7 @@
         {
             get { return _contextMenuRoot; }
         }
-        public bool ShowPicture
-        {
-            get { return _showPictureViewModel.IsChecked; }
-        }
-        public bool ShowStatistics
-        {
-            get { return _showStatisticsViewModel.IsChecked; }
-        }
-        public bool ShowOtherLanguages
-        {
-            get { return _showOtherLanguagesViewModel.IsChecked; }
-        }
-
+     
         #region Events
 
         private void OnUpdateDatabaseRequested()
@@ -134,22 +119,7 @@
         {
             OnCloseRequested();
         }
-        private void ShowPictureCommandExecute(object o)
-        {
-            OnNotifyPropertyChanged(() => ShowPicture);
-            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowPicture", ShowPicture.ToString());
-        }
-        private void ShowOtherLanguagesCommandExecute(object o)
-        {
-            OnNotifyPropertyChanged(() => ShowOtherLanguages);
-            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowOtherLanguages", ShowOtherLanguages.ToString());
-        }
-        private void ShowStatisticsCommandExecute(object o)
-        {
-            OnNotifyPropertyChanged(() => ShowStatistics);
-            _magicDatabase.InsertNewOption(TypeOfOption.Display, "ShowStatistics", ShowStatistics.ToString());
-        }
-        private void ShowAllCollectionCommandExecute(object o)
+         private void ShowAllCollectionCommandExecute(object o)
         {
             LoadCollection();
         }
@@ -269,6 +239,40 @@
         {
             OnDialogWanted(new AuditViewModel());
         }
+        private void OptionCommandExecute(object o)
+        {
+            OptionsChangeViewModel vm = new OptionsChangeViewModel(Options);
+            OnDialogWanted(vm);
+
+            if (vm.Result == true)
+            {
+                Options.Save();
+            }
+            else
+            {
+                //reset data
+                Options.GetDbOptions();
+            }
+        }
+        private void CheckNewVersionCommandExecute(object o)
+        {
+            if (_programUpdater.HasNewVersionAvailable())
+            {
+                InputViewModel vm = InputViewModelFactory.Instance.CreateQuestionViewModel("New version available", "Do you want to upgrade?");
+                OnInputRequested(vm);
+                if (vm.Result == true)
+                {
+                    Loading = true;
+                    _programUpdater.Upgrade();
+                    OnCloseRequested();
+                }
+            }
+            else
+            {
+                InputViewModel vm = InputViewModelFactory.Instance.CreateInfoViewModel("No new version", "You have the lastest version");
+                OnInputRequested(vm);
+            }
+        }
         private void ChangeCardCommandExecute(object o)
         {
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
@@ -360,35 +364,6 @@
             fileMenu.AddChild(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
             MenuRoot.AddChild(fileMenu);
 
-            //View
-            MenuViewModel viewMenu = new MenuViewModel("_View");
-
-            bool isShowStatisticsChecked = true;
-            IOption option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowStatistics");
-            if (option != null)
-                isShowStatisticsChecked = bool.Parse(option.Value);
-            _showStatisticsViewModel = new MenuViewModel("Show _Statistics", new RelayCommand(ShowStatisticsCommandExecute)) { IsCheckable = true, IsChecked = isShowStatisticsChecked };
-            viewMenu.AddChild(_showStatisticsViewModel);
-
-            bool isShowOtherLanguagesChecked = true;
-            option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowOtherLanguages");
-            if (option != null)
-                isShowOtherLanguagesChecked = bool.Parse(option.Value);
-
-            _showOtherLanguagesViewModel = new MenuViewModel("Show _Other Languages", new RelayCommand(ShowOtherLanguagesCommandExecute)) { IsCheckable = true, IsChecked = isShowOtherLanguagesChecked };
-            viewMenu.AddChild(_showOtherLanguagesViewModel);
-
-            bool isShowPictureChecked = true;
-            option = _magicDatabase.GetOption(TypeOfOption.Display, "ShowPicture");
-            if (option != null)
-                isShowPictureChecked = bool.Parse(option.Value);
-
-            _showPictureViewModel = new MenuViewModel("Show _Picture", new RelayCommand(ShowPictureCommandExecute)) { IsCheckable = true, IsChecked = isShowPictureChecked };
-            viewMenu.AddChild(_showPictureViewModel);
-
-
-            MenuRoot.AddChild(viewMenu);
-
             //Collection
             _collectionViewModel = new MenuViewModel("_Collection");
             GenerateCollectionMenu();
@@ -407,7 +382,14 @@
             updateTableMenu.AddChild(new MenuViewModel("_Edition", new RelayCommand(EditionModificationCommandExecute)));
             updateTableMenu.AddChild(new MenuViewModel("_Language", new RelayCommand(LanguageModificationCommandExecute)));
             updateTableMenu.AddChild(new MenuViewModel("_Translate", new RelayCommand(TranslateModificationCommandExecute)));
-            
+
+            //Tools
+            MenuViewModel toolsMenu = new MenuViewModel("_Tools");
+            toolsMenu.AddChild(new MenuViewModel("_Options", new RelayCommand(OptionCommandExecute)));
+            toolsMenu.AddChild(MenuViewModel.Separator());
+            toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
+            MenuRoot.AddChild(toolsMenu);
+
             //?
             MenuViewModel aboutMenu = new MenuViewModel("?");
             aboutMenu.AddChild(new MenuViewModel("_Version", new RelayCommand(VersionCommandExecute)));

@@ -21,15 +21,8 @@
 
             string name = executingAssembly.GetManifestResourceNames().First(s => s.EndsWith(resourceName.Replace(".sqlite", ".zip")));
 
-            // ReSharper disable AssignNullToNotNullAttribute
-            string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), resourceName);
-            // ReSharper restore AssignNullToNotNullAttribute
-            using (FileStream sw = new FileStream(filePath, FileMode.CreateNew))
             using (Stream stream = executingAssembly.GetManifestResourceStream(name))
-            using (Stream unzip = Zipper.UnZipOneFile(stream))
-            {
-                unzip.CopyTo(sw);
-            }
+                Zipper.UnZipAll(stream, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
         }
     }
 }

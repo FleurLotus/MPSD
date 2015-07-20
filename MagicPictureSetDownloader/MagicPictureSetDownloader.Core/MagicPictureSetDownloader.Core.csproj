@@ -40,6 +40,9 @@
     <Reference Include="Common.XML">
       <HintPath>..\..\CommonLibraries\Common.XML\bin\$(Configuration)\Common.XML.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Zip">
+      <HintPath>..\..\CommonLibraries\Common.Zip\bin\$(Configuration)\Common.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -98,6 +101,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="EditionInfo.cs" />
+    <Compile Include="Upgrade\ProgramUpgrader.cs" />
+    <Compile Include="Upgrade\ProgramUpgraderException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj">
