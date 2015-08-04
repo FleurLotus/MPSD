@@ -6,6 +6,7 @@ namespace Common.WPF.UI
     using System.Text;
     using System.Timers;
     using System.Windows;
+    using System.Windows.Media;
 
     public partial class ProgressBar
     {
@@ -26,8 +27,14 @@ namespace Common.WPF.UI
         #region Constructor/Destuctor
         public ProgressBar()
         {
+            Background = Brushes.Black;
+            Foreground = Brushes.White;
             _timer = new Timer { Interval = 1000, AutoReset = true, Enabled = false };
-            _timer.Elapsed += TimerOnElapsed;
+
+            if (!Lib.IsInDesignMode())
+            {
+                _timer.Elapsed += TimerOnElapsed;
+            }
 
             InitializeComponent();
         }
@@ -106,12 +113,12 @@ namespace Common.WPF.UI
         {
             lock (_synch)
             {
-                if (!Lib.IsInDesignMode() &&  !_timer.Enabled && ShowETA && Maximum!=Value && Value>0)
+                if (!Lib.IsInDesignMode() && !_timer.Enabled && ShowETA && Maximum != Value && Value > 0)
                 {
                     _startAt = DateTime.Now;
                     _timer.Enabled = true;
                 }
-                if (_timer.Enabled && (!ShowETA || Maximum == Value || Value ==0))
+                if (_timer.Enabled && (!ShowETA || Maximum == Value || Value == 0))
                 {
                     _startAt = null;
                     _timer.Enabled = false;
@@ -121,7 +128,6 @@ namespace Common.WPF.UI
                 double value = Value;
                 double percent;
                 string estimatedTime = null;
-
 
                 if (max == value)
                     percent = 100;

@@ -9,9 +9,10 @@
         xmlns:converter="clr-namespace:Common.WPF.Converter"
         xmlns:wpf="clr-namespace:Common.WPF"
         xmlns:input="clr-namespace:Common.ViewModel.Input;assembly=Common.ViewModel"
+        xmlns:behavior="clr-namespace:Common.WPF.Behavior"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=input:InputViewModel}"
-        wpf:FocusBehavior.FocusFirst="True"
+        behavior:FocusBehavior.FocusFirst="True"
         Title="{Binding Title}" 
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" WindowStartupLocation="CenterOwner">
     <Window.Resources>
