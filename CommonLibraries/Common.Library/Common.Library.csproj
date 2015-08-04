@@ -68,6 +68,7 @@
     <Compile Include="Html\HtmlTableParser.cs" />
     <Compile Include="Html\IHtmlCell.cs" />
     <Compile Include="Html\IHtmlTable.cs" />
+    <Compile Include="ISplashScreen.cs" />
     <Compile Include="Notify\EventDispatcher.cs" />
     <Compile Include="Notify\IEventDispatcher.cs" />
     <Compile Include="Notify\EventHandlers.cs" />

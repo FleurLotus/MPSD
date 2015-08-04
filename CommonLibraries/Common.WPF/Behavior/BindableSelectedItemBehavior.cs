@@ -1,6 +1,4 @@
-﻿
-
-namespace Common.WPF.Behavior
+﻿namespace Common.WPF.Behavior
 {
     using System;
     using System.Reflection;

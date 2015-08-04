@@ -1,5 +1,4 @@
-﻿
-namespace Common.WPF
+﻿namespace Common.WPF.Behavior
 {
     using System.Windows;
     using System.Windows.Controls;

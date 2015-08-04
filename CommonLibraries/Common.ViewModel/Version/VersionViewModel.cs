@@ -4,7 +4,7 @@
 
     using Common.Library.Extension;
 
-    public class VersionViewModel : NotifyPropertyChangedBase
+    internal class VersionViewModel : NotifyPropertyChangedBase
     {
         public VersionViewModel()
         {

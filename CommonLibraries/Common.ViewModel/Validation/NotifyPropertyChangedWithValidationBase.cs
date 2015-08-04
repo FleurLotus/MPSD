@@ -19,7 +19,7 @@
 
         private readonly IDictionary<string, IList<Func<string>>> _rules;
 
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
+        private readonly Lazy<ReaderWriterLockSlim> _lazyLock = new Lazy<ReaderWriterLockSlim>(() => new ReaderWriterLockSlim());
         
         protected NotifyPropertyChangedWithValidationBase()
         {
@@ -72,7 +72,7 @@
             if (_toBeValidatedProperty.All(pi => pi.Name != propertyName))
                 throw new ArgumentException("property is unknown");
 
-            using (new WriterLock(_lock))
+            using (new WriterLock(_lazyLock.Value))
             {
                 IList<Func<string>> list;
                 if (!_rules.TryGetValue(propertyName, out list))
@@ -154,7 +154,7 @@
             StringBuilder sb = new StringBuilder();
 
             IList<Func<string>> propertyRules;
-            using (new ReaderLock(_lock))
+            using (new ReaderLock(_lazyLock.Value))
             {
                 IList<Func<string>> lst = _rules.GetOrDefault(propertyName);
                 if (lst == null || lst.Count == 0)
