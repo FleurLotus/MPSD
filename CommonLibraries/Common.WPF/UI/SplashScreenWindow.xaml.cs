@@ -7,7 +7,7 @@
     /// <summary>
     /// Interaction logic for SplashScreenWindow.xaml
     /// </summary>
-    internal partial class SplashScreenWindow
+    public partial class SplashScreenWindow
     {
         public SplashScreenWindow(SplashScreenViewModel vm)
         {
