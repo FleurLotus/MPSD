@@ -75,7 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeparatorStyleSelector.cs" />
     <Compile Include="Attach\AutoComplete.cs" />
-    <Compile Include="SplashScreenWrapper.cs" />
     <Compile Include="UI\CommonDialog.xaml.cs">
       <DependentUpon>CommonDialog.xaml</DependentUpon>
     </Compile>

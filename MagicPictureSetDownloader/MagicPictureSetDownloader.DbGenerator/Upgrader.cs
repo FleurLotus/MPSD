@@ -6,6 +6,7 @@
     using System.Data.SQLite;
     using System.Reflection;
 
+    using Common.SQL;
     using Common.SQLite;
 
     public class Upgrader
@@ -57,8 +58,11 @@
             if (_applicationVersion.Major < dbVersion)
                 throw new Exception("Db is newer that application");
 
+//We redo the change of current version because of minor version upgrade          
+/*
             if (_applicationVersion.Major == dbVersion)
                 return;
+*/
 
             if (dbVersion < 6)
                 throw new Exception("You have udpated the version!!! There is no released version with this db version");
@@ -67,12 +71,25 @@
             switch (_data)
             {
                 case DatabasebType.Data:
+                    UpgradeData(dbVersion, repo);
                     break;
                 case DatabasebType.Picture:
                     break;
             }
+            
+#if !DEBUG 
+            //No update of Version in debug
+			if (_applicationVersion.Major != dbVersion)
+				repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
+#endif
+        }
 
-            repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
+        private void UpgradeData(int dbVersion, IRepository repo)
+        {
+            if (dbVersion <= 7)
+            {
+                repo.ExecuteBatch(UpdateQueries.UpdateCastingCostForUltimateNightmare);
+            }
         }
     }
 }

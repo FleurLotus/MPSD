@@ -2,13 +2,21 @@
 {
     using System;
 
-    internal class SplashScreenViewModel : NotifyPropertyChangedBase
+    public class SplashScreenViewModel : NotifyPropertyChangedBase
     {
         private string _info;
         private int _currentValue;
-        private bool _showProgess;
+        private bool _showProgress;
         private Uri _sourceUri;
-        
+
+        internal SplashScreenViewModel()
+        {
+        }
+
+        public int MaxValue
+        {
+            get { return 100; }
+        }
         public Uri SourceUri
         {
             get { return _sourceUri; }
@@ -21,15 +29,15 @@
                 }
             }
         }
-        public bool ShowProgess
+        public bool ShowProgress
         {
-            get { return _showProgess; }
+            get { return _showProgress; }
             set
             {
-                if (value != _showProgess)
+                if (value != _showProgress)
                 {
-                    _showProgess = value;
-                    OnNotifyPropertyChanged(() => ShowProgess);
+                    _showProgress = value;
+                    OnNotifyPropertyChanged(() => ShowProgress);
                 }
             }
         }
@@ -40,7 +48,10 @@
             {
                 if (value != _currentValue)
                 {
-                    _currentValue = value;
+                    if (value >= 0 && value <= MaxValue)
+                    {
+                        _currentValue = value;
+                    }
                     OnNotifyPropertyChanged(() => CurrentValue);
                 }
             }

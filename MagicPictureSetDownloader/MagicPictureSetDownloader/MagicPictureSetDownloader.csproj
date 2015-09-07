@@ -243,6 +243,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Splash.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
   </Target>

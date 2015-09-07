@@ -41,6 +41,7 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="AssemblyResolver.cs" />
     <Compile Include="Collection\AsyncObservableCollection.cs" />
     <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
     <Compile Include="Collection\RangeObservableCollection.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Html\HtmlTableParser.cs" />
     <Compile Include="Html\IHtmlCell.cs" />
     <Compile Include="Html\IHtmlTable.cs" />
-    <Compile Include="ISplashScreen.cs" />
     <Compile Include="Notify\EventDispatcher.cs" />
     <Compile Include="Notify\IEventDispatcher.cs" />
     <Compile Include="Notify\EventHandlers.cs" />

@@ -4,7 +4,10 @@
     using System.Windows;
     using System.Windows.Threading;
 
+    using Common.ViewModel.SplashScreen;
     using Common.WPF;
+    using Common.WPF.UI;
+
     using MagicPictureSetDownloader.UI;
 
     /// <summary>
@@ -20,7 +23,23 @@
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
             base.OnStartup(e);
 
-            MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow;
+
+            SplashScreenViewModel splashScreen = SplashScreenFactory.CreateOrGetSplashScreen();
+            splashScreen.SourceUri = new Uri("pack://application:,,,/Resources/Splash.jpg");
+            splashScreen.ShowProgress = false;
+            splashScreen.Info = "Loading ...";;
+            SplashScreenWindow splashScreenWindow = new SplashScreenWindow(splashScreen);
+
+            try
+            {
+                splashScreenWindow.Show();
+                mainWindow = new MainWindow();
+            }
+            finally
+            {
+                splashScreenWindow.Close();
+            }
             _started = true;
             mainWindow.Show();
         }

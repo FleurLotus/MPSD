@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Net;
+
     using Common.Library.Notify;
     using Common.Web;
     using MagicPictureSetDownloader.Core.EditionInfos;
@@ -144,7 +146,16 @@
                 if (string.IsNullOrWhiteSpace(iconUrl))
                     continue;
 
-                byte[] editionIcon = _webAccess.GetFile(iconUrl);
+                byte[] editionIcon = null;
+                try
+                {
+                    editionIcon = _webAccess.GetFile(iconUrl);
+                }
+                catch (WebException)
+                {
+                    //Manage file not found error
+                }
+                
                 if (editionIcon != null && editionIcon.Length > 0)
                 {
                     editionIconInfo.Icon = editionIcon;

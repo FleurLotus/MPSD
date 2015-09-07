@@ -26,7 +26,8 @@
         //TODO: Test add/remove splitted card and statistics
         //TODO: (Maybe) Import / save historical price 
 
-        //TODO: think about upgrade set using reference script
+        //TODO: manage ocT for tap symbol
+        //TODO: think about adding complete prebuilt deck
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);

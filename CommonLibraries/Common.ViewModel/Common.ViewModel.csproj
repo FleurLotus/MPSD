@@ -47,6 +47,7 @@
     <Compile Include="Dialog\DialogViewModelBase.cs" />
     <Compile Include="Input\InputViewModel.cs" />
     <Compile Include="Input\InputViewModelFactory.cs" />
+    <Compile Include="SplashScreen\SplashScreenFactory.cs" />
     <Compile Include="SplashScreen\SplashScreenViewModel.cs" />
     <Compile Include="Validation\Attributes\StringRegExValidationAttribute.cs" />
     <Compile Include="Validation\Attributes\StringMaxLenValidationAttribute.cs" />
