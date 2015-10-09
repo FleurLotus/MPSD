@@ -79,8 +79,8 @@
             
 #if !DEBUG 
             //No update of Version in debug
-			if (_applicationVersion.Major != dbVersion)
-				repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
+            if (_applicationVersion.Major != dbVersion)
+                repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
 #endif
         }
 
