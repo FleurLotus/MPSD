@@ -6,7 +6,6 @@ namespace Common.WPF.UI
     using System.Text;
     using System.Timers;
     using System.Windows;
-    using System.Windows.Media;
 
     public partial class ProgressBar
     {
@@ -27,8 +26,6 @@ namespace Common.WPF.UI
         #region Constructor/Destuctor
         public ProgressBar()
         {
-            Background = Brushes.Black;
-            Foreground = Brushes.White;
             _timer = new Timer { Interval = 1000, AutoReset = true, Enabled = false };
 
             if (!Lib.IsInDesignMode())

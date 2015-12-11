@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="7.1">
+  <Last Number="7.3">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with From the Vault: Angels, Duel Decks: Zendikar vs Eldrazi</Comment>
+    <Comment>Version with Commander 2015</Comment>
   </Last>
+  <Old Number="7.2">
+    <Comment>Version with Battle for Zendikar</Comment>
+  </Old>
+  <Old Number="7.1">
+    <Comment>Version with From the Vault: Angels, Duel Decks: Zendikar vs Eldrazi</Comment>
+  </Old>
   <Old Number="7.0">
     <Comment>Version with Magic Origins</Comment>
   </Old>
