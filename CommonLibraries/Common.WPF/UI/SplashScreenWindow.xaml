@@ -9,8 +9,7 @@
         d:DataContext="{d:DesignInstance Type=sp:SplashScreenViewModel, IsDesignTimeCreatable=False}"
         
         mc:Ignorable="d"
-        Topmost="True"
-        Background="Transparent" Opacity=".8"  AllowsTransparency="True"
+        Background="Transparent" Opacity=".8" AllowsTransparency="True"
         WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
         ShowInTaskbar="False" SizeToContent="WidthAndHeight"
         MaxHeight="500" MaxWidth="500">

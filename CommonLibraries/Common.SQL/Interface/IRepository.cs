@@ -17,5 +17,6 @@ namespace Common.SQL
         void Refresh();
 
         void ExecuteBatch(string sqlcommand);
+        void ExecuteBatch(string sqlcommand, params string[] parameters);
     }
 }
