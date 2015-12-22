@@ -29,6 +29,7 @@ namespace MagicPictureSetDownloader.Core.IO
 
                 if (cardsInCollection == null)
                     throw new ImportExportException("Can't find collection named {0}", collectionName);
+
                 string filePath = Path.Combine(outpath, collectionName + formatter.Extension);
 
                 try
@@ -90,7 +91,9 @@ namespace MagicPictureSetDownloader.Core.IO
             }
 
             using (StreamReader sr = new StreamReader(importFilePath))
+            {
                 return formatter.Parse(sr.ReadToEnd());
+            }
         }
     }
 }

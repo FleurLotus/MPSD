@@ -46,6 +46,10 @@
         {
             get { return IsMultiPart && PartName != Name && OtherPartName != Name; }
         }
+        public bool IsMultiCard
+        {
+            get { return IsMultiPart && PartName == Name && OtherPartName == Name && CastingCost != null; }
+        }
         public string ToString(int? languageId)
         {
             if (languageId == null)

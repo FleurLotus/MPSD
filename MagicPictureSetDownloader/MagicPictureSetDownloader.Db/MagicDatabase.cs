@@ -43,10 +43,17 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
+                string key;
                 if (partName == null || partName == name)
-                    return _cards.GetOrDefault(name);
+                {
+                    key = name;
+                }
+                else
+                {
+                    key = name + partName;
+                }
 
-                return _cards.GetOrDefault(name + partName);
+                return _cards.GetOrDefault(key) ?? _cardsWithoutSpecialCharacters.GetOrDefault(LowerCaseWithoutSpecialCharacters(key));
             }
         }
         public IPicture GetDefaultPicture()
@@ -197,21 +204,22 @@ namespace MagicPictureSetDownloader.Db
                     //For Multipart card
                     if (card.IsMultiPart)
                     {
+                        //Up/Down so it is the same part
                         if (card.IsReverseSide)
                             continue;
 
                         ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
                         cardAllDbInfo.CardPart2 = cardPart2;
 
-                        ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id);
-                        //Verso of Reserse Card
+                        //Be sure to get the other part
+                        ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id && ce.IdGatherer != edition.IdGatherer);
+
+                        //Verso of Reserse Card and Multi-card
                         if (cardEdition2 != null)
-                        {
-                            if (cardEdition2.IdGatherer != cardEdition.IdGatherer)
-                                cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
-                        }
+                            cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
+
                     }
-                    
+
                     ret.Add(cardAllDbInfo);
                 }
 

@@ -9,7 +9,7 @@
         private const string Start = @"<select name=""ctl00$ctl00$MainContent$Content$SearchControls$setAddText""";
         private const string End = "</select>";
 
-        private static readonly Regex _setRegex = new Regex(@"<option value=""(?<editionname>[^""]+)"">.*?</option>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
+        private static readonly Regex _setRegex = new Regex(@"<option value=""(?<editionname>[^>]+)"">.*?</option>", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private static readonly Regex _searchPageRegex = new Regex(@"var cardSearchPage = '(?<url>[^']+)';", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public IEnumerable<EditionInfo> Parse(string text)

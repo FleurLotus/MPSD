@@ -18,7 +18,9 @@ namespace MagicPictureSetDownloader.Core.IO
         {
             Match m =  _regLine.Match(line);
             if (!m.Success)
-                throw new ImportExportException("Can't parse line {0}", line);
+            {
+                return new ErrorImportExportCardInfo(line, "Can't parse line");
+            }
 
             return new ImportExportCardInfo(int.Parse(m.Groups["IdGatherer"].Value), int.Parse(m.Groups["Count"].Value), int.Parse(m.Groups["FoilCount"].Value), int.Parse(m.Groups["Langage"].Value));
         }

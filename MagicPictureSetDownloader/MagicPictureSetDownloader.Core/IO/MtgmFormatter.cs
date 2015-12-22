@@ -16,7 +16,9 @@
         {
             Match m =  _regLine.Match(line);
             if (!m.Success)
-                throw new ImportExportException("Can't parse line {0}", line);
+            {
+                return new ErrorImportExportCardInfo(line, "Can't parse line");
+            }
 
             int count = 0;
             int foilCount = 0;
@@ -31,15 +33,21 @@
 
             ICard card = MagicDatabase.GetCard(m.Groups["Name"].Value, null);
             if (card == null)
-                throw new ImportExportException("Can't find card named {0}", m.Groups["Name"].Value);
+            {
+                return new ErrorImportExportCardInfo(line, string.Format("Can't find card named {0}", m.Groups["Name"].Value));
+            }
 
             IEdition edition = MagicDatabase.GetEditionFromCode(m.Groups["Edition"].Value);
             if (edition == null)
-                throw new ImportExportException("Can't find edition named {0}", m.Groups["Edition"].Value);
+            {
+                return new ErrorImportExportCardInfo(line, string.Format("Can't find edition named {0}", m.Groups["Edition"].Value));
+            }
 
             int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
             if (idGatherer <= 0)
-                throw new ImportExportException("Can't find gatherer id for card {0} edition {1}", card, edition);
+            {
+                return new ErrorImportExportCardInfo(line, string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
+            }
 
             return new ImportExportCardInfo(idGatherer, count, foilCount);
         }
@@ -51,7 +59,9 @@
             ICard card = MagicDatabase.GetCard(cardCount.IdGatherer);
             IEdition edition = MagicDatabase.GetEdition(cardCount.IdGatherer);
             if (card == null || edition == null)
+            {
                 throw new ImportExportException("Can't find card with IdGatherer={0}", cardCount.IdGatherer);
+            }
 
             string ret = string.Empty;
             if (cardCount.Number > 0)

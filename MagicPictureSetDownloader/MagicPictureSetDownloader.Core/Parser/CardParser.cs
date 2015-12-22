@@ -87,6 +87,11 @@
             {
                 //Do nothing
             }
+            //MultiCard 
+            else
+            {
+                //Do nothing
+            }
 
             return cardWithExtraInfos;
         }

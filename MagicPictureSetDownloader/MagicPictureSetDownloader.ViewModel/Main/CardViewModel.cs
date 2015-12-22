@@ -43,7 +43,7 @@
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
-                if (!cardAllDbInfo.CardPart2.IsSplitted && !cardAllDbInfo.CardPart2.IsReverseSide)
+                if (!cardAllDbInfo.CardPart2.IsSplitted && !cardAllDbInfo.CardPart2.IsReverseSide && !cardAllDbInfo.CardPart2.IsMultiCard)
                     OtherCardPart.IsDownSide = true;
             }
         }
@@ -68,7 +68,11 @@
         {
             get { return Card.CastingCost; }
         }
-        
+        public string AllPartCastingCost
+        {
+            get { return IsMultiPart ? CastingCost + " " + OtherCardPart.CastingCost : CastingCost; }
+        }
+
         public bool IsMultiPart
         {
             get { return Card.IsMultiPart; }
@@ -83,7 +87,7 @@
         }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; private set; }
-        public StatisticViewModel[] Statistics { get; private set; }        
+        public StatisticViewModel[] Statistics { get; private set; }
         public string PowerToughnessLoyalty { get; private set; }
         public string PowerToughnessLoyaltyText { get; private set; }
         public string[] DisplayedCastingCost { get; private set; }
