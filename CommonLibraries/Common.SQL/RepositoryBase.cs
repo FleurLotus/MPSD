@@ -9,6 +9,11 @@
 
     public abstract class RepositoryBase : IRepository
     {
+        public static string ToSqlStringEscaped(string s)
+        {
+            return string.IsNullOrEmpty(s) ? s : s.Replace("'", "''");
+        }
+
         protected const string CaseSensitivityTestQuery = @"SELECT 'AAAA' UNION SELECT 'aaaa'";
 
         protected CaseSensitivity IsCaseSensitive;
@@ -128,8 +133,17 @@
                 }
             }
         }
+        public void ExecuteBatch(string sqlcommand, params string[] parameters)
+        {
+            object[] formattedParameters = new object[parameters.Length];
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                formattedParameters[i] = ToSqlStringEscaped(parameters[i]);
+            }
 
-        
+            ExecuteBatch(string.Format(sqlcommand, formattedParameters));
+        }
+
         public abstract void Refresh();
         protected abstract DbConnection GetConnection();
     }

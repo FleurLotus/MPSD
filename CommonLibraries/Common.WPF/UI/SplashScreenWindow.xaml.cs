@@ -14,8 +14,10 @@
             if (vm == null)
                 throw new ArgumentNullException("vm");
 
+            Topmost = true;
             DataContext = vm;
             InitializeComponent();
+            Topmost = false;
         }
     }
 }

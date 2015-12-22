@@ -60,7 +60,7 @@
             if (o is DateTime)
                 return ((DateTime)o).ToString("yyyyMMdd HH:mm:ss");
 
-            return string.Format("'{0}'", o.ToString().Replace("'", "''"));
+            return string.Format("'{0}'", o.ToString().ToSqlStringEscaped());
         }
         public static string EqualityOperator(string value)
         {
@@ -74,6 +74,9 @@
                 return null;
             return dbType;
         }
-
+        public static string ToSqlStringEscaped(this string s)
+        {
+            return string.IsNullOrEmpty(s) ? s : s.Replace("'", "''");
+        }
     }
 }
