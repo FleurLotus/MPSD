@@ -18,7 +18,7 @@
             _edition = editionInfoWithBlock.Edition;
 
             string seachUrl = WebAccess.ToAbsoluteUrl(baseEditionUrl, editionInfoWithBlock.BaseSearchUrl, true);
-            Url = string.Format("{0}?output=checklist&set=[\"{1}\"]", seachUrl, editionInfoWithBlock.Edition.GathererName);
+            Url = string.Format("{0}?output=checklist&action=advanced&special=true&set=[\"{1}\"]", seachUrl, editionInfoWithBlock.Edition.GathererName);
             DownloadReporter = new DownloadReporterViewModel();
         }
 

@@ -52,11 +52,14 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
             if (MagicRules.IsLand(card.Type))
                 return DisplayColor.Land;
 
-            return MagicRules.GetDisplayColor(card.CastingCost);
+            if (MagicRules.IsSpecial(card.Type))
+                return DisplayColor.Special;
+
+            return MagicRules.GetDisplayColor(card.AllPartCastingCost);
         }
         private static IComparable GetConvertedCastCost(ICardInfo card)
         {
-            return MagicRules.GetConvertedCastCost(card.CastingCost);
+            return MagicRules.GetConvertedCastCost(card.AllPartCastingCost);
         }
         private static IComparable GetCardType(ICardInfo card)
         {

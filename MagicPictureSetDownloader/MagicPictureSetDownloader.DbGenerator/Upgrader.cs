@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
@@ -58,7 +59,7 @@
             if (_applicationVersion.Major < dbVersion)
                 throw new Exception("Db is newer that application");
 
-//We redo the change of current version because of minor version upgrade          
+//We redo the change of current version because of minor version upgrade
 /*
             if (_applicationVersion.Major == dbVersion)
                 return;
@@ -74,6 +75,7 @@
                     UpgradeData(dbVersion, repo);
                     break;
                 case DatabasebType.Picture:
+                    UpgradePicture(dbVersion, repo);
                     break;
             }
             
@@ -89,7 +91,75 @@
             if (dbVersion <= 7)
             {
                 repo.ExecuteBatch(UpdateQueries.UpdateCastingCostForUltimateNightmare);
+
+                repo.ExecuteBatch(UpdateQueries.UpdateCommander2015Code);
+
+                repo.ExecuteBatch(UpdateQueries.UpdateEditionWithNoCard);
+
+                repo.ExecuteBatch(UpdateQueries.UpdateEditionWithSpecialCard);
+
+                foreach (Tuple<string, string> t in GetAlternativeCodeToUpdate())
+                {
+                    repo.ExecuteBatch(UpdateQueries.UpdateEditionAlternativeCode, t.Item1, t.Item2);
+                }
+
+                foreach (Tuple<string, string> t in GetForceAlternativeCodeToUpdate())
+                {
+                    repo.ExecuteBatch(UpdateQueries.UpdateForceEditionAlternativeCode, t.Item1, t.Item2);
+                }
+
             }
+        }
+        private void UpgradePicture(int dbVersion, IRepository repo)
+        {
+            if (dbVersion <= 7)
+            {
+                foreach (Tuple<string, string> t in GetImageToCopy())
+                {
+                    repo.ExecuteBatch(UpdateQueries.CopyImage, t.Item1, t.Item2);
+                }
+            }
+        }
+
+        private IEnumerable<Tuple<string, string>> GetImageToCopy()
+        {
+            yield return new Tuple<string, string>("Time Spiral", "Time Spiral \"Timeshifted\"");
+            yield return new Tuple<string, string>("Archenemy", "Scheme");
+            yield return new Tuple<string, string>("Planechase", "Phenomenon");
+            yield return new Tuple<string, string>("Planechase", "Plane");
+        }
+        private IEnumerable<Tuple<string, string>> GetAlternativeCodeToUpdate()
+        {
+            yield return new Tuple<string, string>("3B", "Revised Edition");
+            yield return new Tuple<string, string>("3W", "Revised Edition");
+            yield return new Tuple<string, string>("AH", "Archenemy");
+            yield return new Tuple<string, string>("BT", "Beatdown Box Set");
+            yield return new Tuple<string, string>("BZ", "Battle for Zendikar");
+            yield return new Tuple<string, string>("C5", "Commander 2015");
+            yield return new Tuple<string, string>("DC", "Duel Decks: Zendikar vs. Eldrazi");
+            yield return new Tuple<string, string>("DH", "Speed vs. Cunning");
+            yield return new Tuple<string, string>("DJ", "Elspeth vs. Kiora");
+            yield return new Tuple<string, string>("HP", "Promo set for Gatherer");
+            yield return new Tuple<string, string>("ME", "Masters Edition");
+            yield return new Tuple<string, string>("MU", "Modern Masters 2015 Edition");
+            yield return new Tuple<string, string>("OR", "Magic Origins");
+            yield return new Tuple<string, string>("RE", "Fourth Edition");
+        }
+        private IEnumerable<Tuple<string, string>> GetForceAlternativeCodeToUpdate()
+        {
+            yield return new Tuple<string, string>("V1", "From the Vault: Dragons");
+            yield return new Tuple<string, string>("V2", "From the Vault: Exiled");
+            yield return new Tuple<string, string>("V3", "From the Vault: Relics");
+            yield return new Tuple<string, string>("V4", "From the Vault: Legends");
+            yield return new Tuple<string, string>("V5", "From the Vault: Realms");
+            yield return new Tuple<string, string>("V6", "From the Vault: Twenty");
+            yield return new Tuple<string, string>("V7", "From the Vault: Annihilation");
+            yield return new Tuple<string, string>("V8", "From the Vault: Angels");
+            yield return new Tuple<string, string>("", "Masters Edition II");
+            yield return new Tuple<string, string>("R3", "Graveborn");
+            yield return new Tuple<string, string>("R2", "Slivers");
+            yield return new Tuple<string, string>("TD", "Time Spiral \"Timeshifted\"");
+            yield return new Tuple<string, string>("TS", "Time Spiral");
         }
     }
 }

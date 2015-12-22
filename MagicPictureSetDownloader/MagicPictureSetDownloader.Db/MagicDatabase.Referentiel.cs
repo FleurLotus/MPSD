@@ -3,6 +3,10 @@ namespace MagicPictureSetDownloader.Db
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Text;
+    using System.Text.RegularExpressions;
 
     using Common.Database;
     using Common.Library.Extension;
@@ -26,6 +30,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         //For quicker access
         private readonly IDictionary<int, ICard> _cardsbyId = new Dictionary<int, ICard>();
+        private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
@@ -224,7 +229,6 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-
         private void AddToDbAndUpdateReferential<T>(DatabasebType databaseType, T value, Action<T> addToReferential)
             where T : class, new()
         {
@@ -267,6 +271,7 @@ namespace MagicPictureSetDownloader.Db
                 _alternativeNameLanguages.Clear();
                 _cards.Clear();
                 _cardsbyId.Clear();
+                _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
                 _collections.Clear();
                 _allCardInCollectionCount.Clear();
@@ -335,11 +340,22 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICard card)
         {
+            string key;
             if (card.PartName == null || card.Name == card.PartName)
-                _cards.Add(card.Name, card);
+            {
+                key = card.Name;
+            }
             else
-                _cards.Add(card.Name + card.PartName, card);
+            {
+                key = card.Name + card.PartName;
+            }
 
+            _cards.Add(key, card);
+            if (!card.IsSplitted || card.Name.StartsWith(card.PartName))
+            {
+                //Remove second part of splitted card for search
+                _cardsWithoutSpecialCharacters.Add(LowerCaseWithoutSpecialCharacters(card.Name), card);
+            }
             _cardsbyId.Add(card.Id, card);
             _cacheForAllDbInfos = null;
         }
@@ -417,6 +433,112 @@ namespace MagicPictureSetDownloader.Db
                     }
                 }
             }
+        }
+
+        private string LowerCaseWithoutSpecialCharacters(string source)
+        {
+            if (string.IsNullOrEmpty(source))
+            {
+                return source;
+            }
+
+            StringBuilder sb = new StringBuilder(source.Length);
+
+            bool isPreviousSpace = false;
+            foreach (char c in source)
+            {
+                if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
+                {
+                    sb.Append(c);
+                    isPreviousSpace = false;
+                }
+                else if (c >= 'A' && c <= 'Z')
+                {
+                    // => a - z
+                    sb.Append((char)(c + 0x20));
+                    isPreviousSpace = false;
+                }
+                else if (c == 'æ' || c == 'Æ')
+                {
+                    sb.Append("ae");
+                    isPreviousSpace = false;
+                }
+                else if (c == 'Œ' || c == 'œ')
+                {
+                    sb.Append("oe");
+                    isPreviousSpace = false;
+                }
+                else if (c == 'Ñ' || c == 'ñ')
+                {
+                    sb.Append('n');
+                    isPreviousSpace = false;
+                }
+                else if ((c >= 'À' && c <= 'Å') || (c >= 'à' && c <= 'å'))
+                {
+                    // À Á Â Ã Ä Å à á â ã ä å => a
+                    sb.Append('a');
+                    isPreviousSpace = false;
+                }
+                else if ((c >= 'È' && c <= 'Ë') || (c >= 'è' && c <= 'ë'))
+                {
+                    // È É Ê Ë è é ê ë => e
+                    sb.Append('e');
+                    isPreviousSpace = false;
+                }
+                else if ((c >= 'Ì' && c <= 'Ï') || (c >= 'ì' && c <= 'ï'))
+                {
+                    // Ì Í Î Ï ì í î ï => i
+                    sb.Append('i');
+                    isPreviousSpace = false;
+                }
+                else if ((c >= 'Ò' && c <= 'Ö') || (c >= 'ò' && c <= 'ö'))
+                {
+                    // Ò Ó Ô Õ Ö ò ó ô õ ö => o
+                    sb.Append('o');
+                    isPreviousSpace = false;
+                }
+                else if ((c >= 'Ù' && c <= 'Ü') || (c >= 'ù' && c <= 'ü'))
+                {
+                    // Ù Ú Û Ü ù ú û ü => u
+                    sb.Append('u');
+                    isPreviousSpace = false;
+                }
+                else if (c == '/')
+                {
+                    //Keep because manage in block
+                    sb.Append(c);
+                    isPreviousSpace = false;
+                }
+                else if (c == '\'' || c == ',' || c == '.')
+                {
+                    //Remove 
+                }
+                else if (sb.Length == 0 || isPreviousSpace)
+                {
+                    //Never starts with space and not two spaces
+                }
+                else
+                {
+                    sb.Append(' ');
+                    isPreviousSpace = true;
+                }
+            }
+
+            string ret = sb.ToString().TrimEnd();
+            //Case for token
+            if (ret.EndsWith(" card"))
+            {
+                ret = ret.Substring(0, ret.Length - 5);
+            }
+            foreach (string s in new []{" // ","//", " / ", "/"})
+            {
+                if (ret.Contains(s))
+                {
+                    ret = ret.Replace(s, string.Empty);
+                }
+            }
+
+            return ret;
         }
     }
 }

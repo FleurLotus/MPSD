@@ -48,14 +48,21 @@ namespace MagicPictureSetDownloader.Core.IO
                 {
                     cardInfo = importExportCardCount as ImportExportCardInfo;
                     if (null == cardInfo)
+                    {
+                        //First the error
+                        yield return importExportCardCount;
                         continue;
+                    }
 
                     ret.Add(cardInfo.IdGatherer, cardInfo);
                 }
             }
 
-            return ret.Values;
-
+            //them the merged values
+            foreach (var value in ret.Values)
+            {
+                yield return value;
+            }
         }
         public string ToFile(IEnumerable<IImportExportCardCount> cardCount)
         {

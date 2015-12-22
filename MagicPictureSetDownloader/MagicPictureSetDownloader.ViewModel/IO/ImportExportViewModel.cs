@@ -126,6 +126,10 @@
                 {
                     _importType = value;
                     OnNotifyPropertyChanged(() => ImportType);
+                    if (_importType == ImportOption.AddToCollection && HasCollection && SelectedCollection == null)
+                    {
+                        SelectedCollection = ImportCollections[0];
+                    }
                 }
             }
         }

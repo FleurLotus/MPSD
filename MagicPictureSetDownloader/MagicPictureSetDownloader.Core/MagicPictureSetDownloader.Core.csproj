@@ -75,6 +75,7 @@
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
     <Compile Include="IEditionIconInfo.cs" />
     <Compile Include="IO\FormatterBase.cs" />
+    <Compile Include="IO\ErrorImportExportCardInfo.cs" />
     <Compile Include="IO\ImportExportCardInfo.cs" />
     <Compile Include="IO\ImportExportException.cs" />
     <Compile Include="IO\MtgmFormatter.cs" />

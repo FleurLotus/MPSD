@@ -18,7 +18,7 @@
         public ICardInfoParserWorker CreateParserWorker(IAwareXmlTextReader xmlReader)
         {
             string classValue = xmlReader.GetAttribute("class");
-            if (classValue == null)
+            if (classValue == null || classValue.ToLowerInvariant() == "planeimage")
             {
                 return ImageWorker.IsWorkingInfo(xmlReader.GetAttribute("id")) ? new ImageWorker() : null;
             }

@@ -10,6 +10,7 @@
         string Name { get; }
         string Type { get; }
         string CastingCost { get; }
+        string AllPartCastingCost { get; }
         int IdGatherer { get; }
     }
 }

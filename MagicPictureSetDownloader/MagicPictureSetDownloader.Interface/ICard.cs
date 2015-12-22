@@ -14,6 +14,7 @@
         bool IsMultiPart { get; }
         bool IsReverseSide { get; }
         bool IsSplitted { get; }
+        bool IsMultiCard { get; }
         string ToString(int? languageId);
         bool HasTranslation(int languageId);
     }

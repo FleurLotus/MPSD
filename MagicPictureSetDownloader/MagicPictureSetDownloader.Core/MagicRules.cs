@@ -17,7 +17,11 @@
         Planeswalker,
         Artifact,
         Land,
-        Token
+        Plane,
+        Scheme,
+        Conspiracy,
+        Phenomenon,
+        Token,
     }
     
     [Flags]
@@ -34,6 +38,10 @@
         Tribal = 1 << 7,
         Arcane = 1 << 8,
         Legendary = 1 << 9,
+        Plane = 1 << 10,
+        Scheme = 1 << 11,
+        Conspiracy = 1 << 12,
+        Phenomenon = 1 << 13,
         //Must be constistante with GetAllType
     }
 
@@ -47,6 +55,7 @@
         Green,
         Multicolor,
         Land,
+        Special,
     }
 
     [Flags]
@@ -119,6 +128,10 @@
             if (Matcher<CardType>.HasValue(card, CardType.Instant)) return DisplayCardType.Instant;
             if (Matcher<CardType>.HasValue(card, CardType.Sorcery)) return DisplayCardType.Sorcery;
             if (Matcher<CardType>.HasValue(card, CardType.Creature)) return DisplayCardType.Creature;
+            if (Matcher<CardType>.HasValue(card, CardType.Plane)) return DisplayCardType.Plane;
+            if (Matcher<CardType>.HasValue(card, CardType.Phenomenon)) return DisplayCardType.Phenomenon;
+            if (Matcher<CardType>.HasValue(card, CardType.Conspiracy)) return DisplayCardType.Conspiracy;
+            if (Matcher<CardType>.HasValue(card, CardType.Scheme)) return DisplayCardType.Scheme;
 
             return DisplayCardType.Token;
         }
@@ -126,8 +139,7 @@
         {
             if (string.IsNullOrWhiteSpace(castingCost)) return new string[0];
 
-            return
-                castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+            return castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                            .Select(s => s.StartsWith(SymbolParser.Prefix) ? s.Substring(SymbolParser.Prefix.Length) : s);
         }
         private static ShardColor GetShardColor(string shard)
@@ -158,6 +170,10 @@
             if (IsTribal(type)) cardType |= CardType.Tribal;
             if (IsArcane(type)) cardType |= CardType.Arcane;
             if (IsLegendary(type)) cardType |= CardType.Legendary;
+            if (IsPhenomenon(type)) cardType |= CardType.Phenomenon;
+            if (IsPlane(type)) cardType |= CardType.Plane;
+            if (IsConspiracy(type)) cardType |= CardType.Conspiracy;
+            if (IsScheme(type)) cardType |= CardType.Scheme;
             
             return cardType;
         }
@@ -207,5 +223,26 @@
         {
             return type.ToLowerInvariant().Contains("legend");
         }
+        public static bool IsSpecial(string type)
+        {
+            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type);
+        }
+        public static bool IsPhenomenon(string type)
+        {
+            return type.ToLowerInvariant().Contains("phenomenon");
+        }
+        public static bool IsConspiracy(string type)
+        {
+            return type.ToLowerInvariant().Contains("conspiracy");
+        }
+        public static bool IsScheme(string type)
+        {
+            return type.ToLowerInvariant().Contains("scheme");
+        }
+        public static bool IsPlane(string type)
+        {
+            return type.ToLowerInvariant().Contains("plane") && !IsPlaneswalker(type);
+        }
+
     }
 }

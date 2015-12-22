@@ -35,6 +35,7 @@
         private PerimeterScope _perimeterScope;
         private bool _excludeFunEditions;
         private bool _excludeOnlineOnlyEditions;
+        private bool _excludeSpecialCards;
         private bool _allLanguages;
         private string _name;
         private int _idBlockFun;
@@ -60,8 +61,7 @@
             ReInit();
             Reuse();
         }
-
-
+        
         public ICollection<IEdition> Editions { get; private set; }
         public ICollection<IEdition> EditionsSelected { get; private set; }
         public ICollection<ICardCollection> Collections { get; private set; }
@@ -104,6 +104,18 @@
                 {
                     _excludeOnlineOnlyEditions = value;
                     OnNotifyPropertyChanged(() => ExcludeOnlineOnlyEditions);
+                }
+            }
+        }
+        public bool ExcludeSpecialCards
+        {
+            get { return _excludeSpecialCards; }
+            set
+            {
+                if (value != _excludeSpecialCards)
+                {
+                    _excludeSpecialCards = value;
+                    OnNotifyPropertyChanged(() => ExcludeSpecialCards);
                 }
             }
         }
@@ -189,6 +201,7 @@
             Name = null;
             ExcludeFunEditions = true;
             ExcludeOnlineOnlyEditions = true;
+            ExcludeSpecialCards = true;
             AllLanguages = false;
             PerimeterScope = PerimeterScope.All;
             ColorAggregation = MultiSelectedAggregation.Or;
@@ -202,7 +215,7 @@
         internal IEnumerable<CardViewModel> SearchResultAsViewModel()
         {
             return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai))
-                .Select(cai => new CardViewModel(cai));
+                                               .Select(cai => new CardViewModel(cai));
         }
 
         private bool CheckPerimeter(ICardAllDbInfo cai)
@@ -287,6 +300,12 @@
         }
         private bool CheckType(ICardAllDbInfo cai)
         {
+            if (ExcludeSpecialCards)
+            {
+                if (MagicRules.IsSpecial(cai.Card.Type))
+                    return false;
+            }
+
             if (TypesSelected.Count == 0)
                 return true;
 
