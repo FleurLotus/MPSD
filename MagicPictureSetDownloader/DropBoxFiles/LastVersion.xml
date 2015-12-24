@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="7.3">
+  <Last Number="7.4">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Commander 2015</Comment>
+    <Comment>Version with special card</Comment>
   </Last>
+  <Old Number="7.3">
+    <Comment>Version with Commander 2015</Comment>
+  </Old>  
   <Old Number="7.2">
     <Comment>Version with Battle for Zendikar</Comment>
   </Old>
