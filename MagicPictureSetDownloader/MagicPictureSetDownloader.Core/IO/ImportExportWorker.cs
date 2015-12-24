@@ -1,10 +1,8 @@
-﻿
-namespace MagicPictureSetDownloader.Core.IO
+﻿namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
@@ -48,34 +46,38 @@ namespace MagicPictureSetDownloader.Core.IO
                 }
             }
         }
-        public void ImportToNewColletion(string importFilePath, string newCollectionName)
+        public ImportStatus ImportToNewCollection(string importFilePath, string newCollectionName)
         {
             IMagicDatabaseReadAndWriteCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCollection;
             ICardCollection collection = magicDatabaseCollection.InsertNewCollection(newCollectionName);
             if (collection == null)
                 throw new ArgumentException("Collection name already exists", "newCollectionName");
 
-            ImportToColletion(importFilePath, collection);
+            return ImportToCollection(importFilePath, collection);
         }
 
-        public void ImportToExistingColletion(string importFilePath, string collectionToCompletName)
+        public ImportStatus ImportToExistingCollection(string importFilePath, string collectionToCompletName)
         {
             IMagicDatabaseReadAndWriteCardInCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
             ICardCollection collection = magicDatabaseCollection.GetCollection(collectionToCompletName);
             if (collection == null)
                 throw new ArgumentException("Collection name doesn't exist", "collectionToCompletName");
 
-            ImportToColletion(importFilePath, collection);
+            return ImportToCollection(importFilePath, collection);
         }
-        private void ImportToColletion(string importFilePath, ICardCollection collection)
+        private ImportStatus ImportToCollection(string importFilePath, ICardCollection collection)
         {
-            IImportExportCardCount[] cardToImport = GetImport(importFilePath).ToArray();
-            IMagicDatabaseReadAndWriteCardInCollection magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            ImportStatus status = ImportStatus.BuildStatus(GetImport(importFilePath));
 
-            foreach (IImportExportCardCount importExportCardCount in cardToImport)
+            IMagicDatabaseReadAndWriteCardInCollection magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            
+            //Add in database the good one
+            foreach (IImportExportCardCount importExportCardCount in status.ReadyToBeInserted)
             {
                 magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.Number, importExportCardCount.FoilNumber);
             }
+
+            return status;
         }
         private IEnumerable<IImportExportCardCount> GetImport(string importFilePath)
         {

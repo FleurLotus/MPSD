@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Core.IO
+﻿ namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
     using System.Collections.Generic;
@@ -49,7 +48,7 @@ namespace MagicPictureSetDownloader.Core.IO
                     cardInfo = importExportCardCount as ImportExportCardInfo;
                     if (null == cardInfo)
                     {
-                        //First the error
+                        //First the error because no id to put in dictionary
                         yield return importExportCardCount;
                         continue;
                     }

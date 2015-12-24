@@ -18,6 +18,9 @@
         <i:EventTrigger EventName="OpenFileDialog" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="OpenFileDialog" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="DisplayResult" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="DisplayResult" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
     <TabControl SelectedIndex="{binding:TwoWayBinding SelectedIndex}">
         <TabItem Header="Export" Visibility="{Binding HasCollection, Converter={StaticResource b2vConv}}">

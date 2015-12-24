@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Core.IO
+﻿ namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
     using System.IO;

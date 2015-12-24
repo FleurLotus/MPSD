@@ -1,5 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.UI
 {
+    using System.Windows;
+
     using Common.Library.Notify;
     using Common.ViewModel.Input;
 
@@ -24,6 +26,10 @@
             {
                 args.Data.Text = openFileDialog.FileName;
             }
+        }
+        public void DisplayResult(object sender, EventArgs<string> args)
+        {
+            MessageBox.Show(args.Data, "Import result", MessageBoxButton.OK);
         }
     }
 }

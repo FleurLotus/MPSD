@@ -78,6 +78,7 @@
     <Compile Include="IO\ErrorImportExportCardInfo.cs" />
     <Compile Include="IO\ImportExportCardInfo.cs" />
     <Compile Include="IO\ImportExportException.cs" />
+    <Compile Include="IO\ImportStatus.cs" />
     <Compile Include="IO\MtgmFormatter.cs" />
     <Compile Include="IO\ImportExportFormatterFactory.cs" />
     <Compile Include="IO\ImportExportWorker.cs" />

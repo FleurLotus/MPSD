@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Core
+﻿ namespace MagicPictureSetDownloader.Core
 {
     using System.Collections.Generic;
     using System.Linq;
