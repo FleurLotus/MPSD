@@ -2,20 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                    
+
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
-                    
+
                     xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
-                    
+
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-                    
+
                     xmlns:cwpf="clr-namespace:Common.WPF;assembly=Common.WPF"
                     
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    
+
                     mc:Ignorable="d"
                    >
      <!-- CommonDialog -->

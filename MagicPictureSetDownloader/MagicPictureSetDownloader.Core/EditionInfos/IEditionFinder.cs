@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Core.EditionInfos
+﻿ namespace MagicPictureSetDownloader.Core.EditionInfos
 {
     internal interface IEditionFinder
     {

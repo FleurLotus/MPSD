@@ -190,7 +190,7 @@
         }
         private void ImportExportCommandExecute(object o)
         {
-            ImportExportViewModel vm = new ImportExportViewModel();
+            ImportExportViewModel vm = new ImportExportViewModel(_dispatcherInvoker);
             OnImportExportRequested(vm);
 
             if (vm.Result == true)

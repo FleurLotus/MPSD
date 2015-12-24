@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.UI
+﻿ namespace MagicPictureSetDownloader.UI
 {
     using System.ComponentModel;
 

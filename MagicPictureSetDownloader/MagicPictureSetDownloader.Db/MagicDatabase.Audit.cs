@@ -1,5 +1,4 @@
-﻿
-namespace MagicPictureSetDownloader.Db
+﻿ namespace MagicPictureSetDownloader.Db
 {
     using System.Collections.Generic;
     using System.Data.Common;
