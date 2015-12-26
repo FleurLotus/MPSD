@@ -41,7 +41,7 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
 
         private static IComparable GetEdition(ICardInfo card)
         {
-            return card.Edition.Name;
+            return card.Edition;
         }
         private static IComparable GetRarity(ICardInfo card)
         {

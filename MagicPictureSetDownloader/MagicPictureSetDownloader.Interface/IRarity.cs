@@ -1,6 +1,8 @@
 namespace MagicPictureSetDownloader.Interface
 {
-    public interface IRarity: IIdName
+    using System;
+
+    public interface IRarity: IIdName, IComparable
     {
         string Code { get; }
     }

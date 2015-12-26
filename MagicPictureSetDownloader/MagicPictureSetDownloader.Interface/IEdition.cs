@@ -2,7 +2,7 @@ namespace MagicPictureSetDownloader.Interface
 {
     using System;
 
-    public interface IEdition : IIdName
+    public interface IEdition : IIdName, IComparable
     {
         string Code { get; }
         int? IdBlock { get; }
