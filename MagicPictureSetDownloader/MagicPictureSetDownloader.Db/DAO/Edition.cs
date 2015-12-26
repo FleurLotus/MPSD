@@ -63,5 +63,15 @@ namespace MagicPictureSetDownloader.Db.DAO
         {
             return Name;
         }
+
+        public int CompareTo(object obj)
+        {
+            Edition e = obj as Edition;
+
+            if (e == null)
+                return -1;
+
+            return Name.CompareTo(e.Name);
+        }
     }
 }

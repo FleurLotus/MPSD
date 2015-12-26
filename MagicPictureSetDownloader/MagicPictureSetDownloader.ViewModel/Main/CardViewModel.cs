@@ -24,7 +24,7 @@
             
             IsDownSide = false;
             Edition = edition;
-            Rarity = cardAllDbInfo.Rarity.Name;
+            Rarity = cardAllDbInfo.Rarity;
             IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
             if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
             {
@@ -49,7 +49,7 @@
         }
 
         public IEdition Edition { get; private set; }
-        public string Rarity { get; private set; }
+        public IRarity Rarity { get; private set; }
         public int IdGatherer { get; private set; }
         
         public string Name

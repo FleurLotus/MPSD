@@ -28,6 +28,9 @@
 
         //TODO: manage ocT for tap symbol
         //TODO: think about adding complete prebuilt deck
+
+        //TODO: correct split mana color
+        //TODO: add extra infos in status bar
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
