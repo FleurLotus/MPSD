@@ -27,6 +27,7 @@
     {
         private InputMode _inputMode = InputMode.ByEdition;
         private bool _isFoil;
+        private bool _isFocused;
         private int _count;
         private ICard _cardSelected;
         private string _cardSelectedName;
@@ -134,6 +135,18 @@
                 {
                     _currentCollectionDetail = value;
                     OnNotifyPropertyChanged(() => CurrentCollectionDetail);
+                }
+            }
+        }
+        public bool IsFocused
+        {
+            get { return _isFocused; }
+            set
+            {
+                if (value != _isFocused)
+                {
+                    _isFocused = value;
+                    OnNotifyPropertyChanged(() => IsFocused);
                 }
             }
         }
@@ -270,7 +283,6 @@
                         Editions.Clear();
                         EditionSelected = null;
                         CardSelectedName = null;
-
                         break;
                     }
 
@@ -301,6 +313,7 @@
             LanguageSelected = null;
             Count = 1;
             IsFoil = false;
+            ResetFocus();
         }
         private void AddNewCard()
         {
@@ -450,6 +463,14 @@
 
             CurrentCollectionDetail = string.Format("{2}+{3}(Foil) {0} {1}\n{4} {0}\n{5} All Edition", EditionSelected.Code, LanguageSelected.Name, totalInEditionAndLanguageInCollectionNotFoil,
                                                                                                        totalInEditionAndLanguageInCollectionFoil, totalInEditionInCollection, totalInCollection);
+        }
+        private void ResetFocus()
+        {
+            if (EditionSelected != null || InputMode == InputMode.ByCard)
+            {
+                IsFocused = true;
+            }
+            IsFocused = false;
         }
     }
 }

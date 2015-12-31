@@ -1,7 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Db
 {
     using System.Collections.Generic;
-    using System.Data.Common;
+    using System.Data;
     using System.Data.SQLite;
     using System.IO;
     using System.Reflection;
@@ -10,19 +10,20 @@
 
     using MagicPictureSetDownloader.DbGenerator;
     
-    internal class DatabaseConnection
+    internal partial class DatabaseConnection
     {
         private readonly IDictionary<DatabasebType, string> _connectionStrings = new Dictionary<DatabasebType, string>();
-
+        private IDbConnection _batchConnection;
+        
         public DatabaseConnection()
         {
             IdentityRetriever.IdentityQuery = "SELECT last_insert_rowid()";
             GetConnectionString(DatabasebType.Data);
             GetConnectionString(DatabasebType.Picture);
         }
-        private void GetConnectionString(DatabasebType databasebType)
+        private void GetConnectionString(DatabasebType databaseType)
         {
-            string fileName = DatabaseGenerator.GetResourceName(databasebType);
+            string fileName = DatabaseGenerator.GetResourceName(databaseType);
                 
             // ReSharper disable AssignNullToNotNullAttribute
             string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
@@ -30,18 +31,50 @@
             string connectionString = (new SQLiteConnectionStringBuilder { DataSource = filePath }).ToString();
             if (!File.Exists(filePath))
             {
-                DatabaseGenerator.Generate(databasebType);
+                DatabaseGenerator.Generate(databaseType);
             }
 
-            DatabaseGenerator.VersionVerify(connectionString, databasebType);
-            _connectionStrings[databasebType] = connectionString;
+            DatabaseGenerator.VersionVerify(connectionString, databaseType);
+            _connectionStrings[databaseType] = connectionString;
         }
-
-        public DbConnection GetMagicConnection(DatabasebType databasebType)
+        private IDbConnection GetMagicConnectionInternal(DatabasebType databasebType)
         {
             SQLiteConnection cnx = new SQLiteConnection(_connectionStrings[databasebType]);
             cnx.Open();
             return cnx;
+        }
+        private bool BatchModeActivated()
+        {
+            return _batchConnection != null;
+        }
+
+        public IDbConnection GetMagicConnection(DatabasebType databasebType)
+        {
+            if (databasebType == DatabasebType.Picture || !BatchModeActivated())
+            {
+                return new ConnectionWrapper(GetMagicConnectionInternal(databasebType), false);
+            }
+
+            return new ConnectionWrapper(_batchConnection, true);
+        }
+        public void ActivateBatchMode()
+        {
+            if (BatchModeActivated())
+            {
+                throw new ApplicationDbException("BatchMode is already activated");
+            }
+
+            _batchConnection = GetMagicConnectionInternal(DatabasebType.Data);
+        }
+        public void DesactivateBatchMode()
+        {
+            if (!BatchModeActivated())
+            {
+                throw new ApplicationDbException("BatchMode is not activated");
+            }
+
+            _batchConnection.Dispose();
+            _batchConnection = null;
         }
     }
 }

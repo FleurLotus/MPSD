@@ -1,7 +1,7 @@
 namespace MagicPictureSetDownloader.Db
 {
     using System;
-    using System.Data.Common;
+    using System.Data;
     using System.Linq;
 
     using Common.Database;
@@ -37,7 +37,7 @@ namespace MagicPictureSetDownloader.Db
                 edition.CardNumber = cardNumber;
                 edition.ReleaseDate = releaseDate;
 
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Edition>.UpdateOne(cnx, edition);
                 }
@@ -58,7 +58,7 @@ namespace MagicPictureSetDownloader.Db
                 //No need to update referencial because id do not change
                 block.Name = blockName;
 
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Block>.UpdateOne(cnx, block);
                 }
@@ -86,7 +86,7 @@ namespace MagicPictureSetDownloader.Db
 
                 InsertInReferential(language);
 
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Language>.UpdateOne(cnx, language);
                 }
@@ -106,7 +106,7 @@ namespace MagicPictureSetDownloader.Db
                 //No need to remove, the insert overrides existing value
                 InsertInReferential(translate);
 
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Translate>.UpdateOne(cnx, translate);
                 }

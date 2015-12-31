@@ -2,11 +2,8 @@ namespace MagicPictureSetDownloader.Db
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Common;
-    using System.Diagnostics;
-    using System.Linq;
+    using System.Data;
     using System.Text;
-    using System.Text.RegularExpressions;
 
     using Common.Database;
     using Common.Library.Extension;
@@ -236,7 +233,7 @@ namespace MagicPictureSetDownloader.Db
             if (value == null)
                 return;
 
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
             {
                 Mapper<T>.InsertOne(cnx, value);
             }
@@ -250,7 +247,7 @@ namespace MagicPictureSetDownloader.Db
             if (value == null)
                 return;
 
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
             {
                 Mapper<T>.DeleteOne(cnx, value);
             }
@@ -261,7 +258,7 @@ namespace MagicPictureSetDownloader.Db
         private void LoadReferentials()
         {
             //Lock Write on calling
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
             {
                 _allOptions.Clear();
                 _rarities.Clear();
@@ -311,7 +308,7 @@ namespace MagicPictureSetDownloader.Db
                     InsertInReferential(cardInCollectionCount);
 
             }
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
             {
                 _treePictures.Clear();
 

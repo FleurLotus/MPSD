@@ -80,10 +80,16 @@
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />
     <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="DatabaseConnection.ConnectionWrapper.cs" >
+      <DependentUpon>DatabaseConnection.cs</DependentUpon>
+    </Compile>
     <Compile Include="MagicDatabase.Audit.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="MagicDatabase.cs" />
+    <Compile Include="MagicDatabase.Batch.cs">
+      <DependentUpon>MagicDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="MagicDatabase.Collection.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>

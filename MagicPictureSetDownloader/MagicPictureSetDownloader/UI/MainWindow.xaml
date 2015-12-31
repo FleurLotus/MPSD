@@ -11,8 +11,8 @@
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
-        mc:Ignorable="d"
-        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}">
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}" >
     <Window.Resources>
         <ResourceDictionary>
             <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
@@ -86,9 +86,9 @@
             <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={StaticResource nbConv}}">
                 <!-- Split Tree/Text/Image -->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="5*"/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >

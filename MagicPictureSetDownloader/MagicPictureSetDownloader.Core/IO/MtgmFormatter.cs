@@ -14,7 +14,7 @@
         }
         protected override IImportExportCardCount ParseLine(string line)
         {
-            Match m =  _regLine.Match(line);
+            Match m = _regLine.Match(line);
             if (!m.Success)
             {
                 return new ErrorImportExportCardInfo(line, "Can't parse line");
@@ -22,14 +22,22 @@
 
             int count = 0;
             int foilCount = 0;
+            int tmpcount;
+
+            if (!int.TryParse(m.Groups["Count"].Value, out tmpcount) || tmpcount <= 0)
+            {
+                return new ErrorImportExportCardInfo(line, "Invalid value for count");
+            }
+            
             if (m.Groups["Foil"].Value.ToUpper() == "TRUE")
             {
-                foilCount = int.Parse(m.Groups["Count"].Value);
+                foilCount = tmpcount;
             }
             else
             {
-                count = int.Parse(m.Groups["Count"].Value);
+                count = tmpcount;
             }
+
 
             ICard card = MagicDatabase.GetCard(m.Groups["Name"].Value, null);
             if (card == null)

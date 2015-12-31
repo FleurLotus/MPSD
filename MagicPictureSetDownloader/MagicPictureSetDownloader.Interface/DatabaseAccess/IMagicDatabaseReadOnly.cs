@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Interface
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IMagicDatabaseReadOnly
@@ -35,5 +36,6 @@
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
 
         string[] GetMissingPictureUrls();
+        IDisposable BatchMode();
     }
 }

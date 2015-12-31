@@ -11,7 +11,7 @@
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
 
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-
+                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
                     xmlns:cwpf="clr-namespace:Common.WPF;assembly=Common.WPF"
                     
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
@@ -345,14 +345,15 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
                    
                     <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" />
                     <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}">
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
+                              behavior:FocusBehavior.IsFocused="{Binding IsFocused}" >
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -367,7 +368,8 @@
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" />
                     <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}">
+                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
+                              behavior:FocusBehavior.IsFocused="{Binding IsFocused}" >
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -385,18 +387,19 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Column="0" Grid.Row="0" Content="Language" HorizontalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="0,2,10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
+                    <Label Grid.Column="0" Grid.Row="0" Content="Language" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
 
                     <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" Visibility="{Binding LanguageSelected, Converter={StaticResource no2vConv}}">
                         <Image Width="30" Source="{Binding LanguageSelected.Name, Converter={StaticResource t2iConv}}" />
                     </Border>
                     <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Translate}" />
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Quantity" HorizontalAlignment="Center"/>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Quantity" />
                     <xctk:IntegerUpDown Grid.Column="1" Grid.Row="2" Maximum="99" Minimum="-99" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding Count}" />
                     <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,0,10,0" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
                 </Grid>
