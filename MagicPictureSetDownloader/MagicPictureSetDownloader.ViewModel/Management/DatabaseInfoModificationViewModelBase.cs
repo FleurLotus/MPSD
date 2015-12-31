@@ -23,12 +23,12 @@
         private string _name;
         private T _selected;
         private ChangeState _state;
-        protected readonly IMagicDatabaseReadAndWriteFull MagicDatabase;
+        protected readonly IMagicDatabaseReadAndUpdate MagicDatabase;
 
         protected DatabaseInfoModificationViewModelBase()
         {
             All = new RangeObservableCollection<T>();
-            MagicDatabase = MagicDatabaseManager.ReadAndWriteFull;
+            MagicDatabase = MagicDatabaseManager.ReadAndUpdate;
             State = ChangeState.NoEdition;
 
             NewCommand = new RelayCommand(NewCommandExecute, NewCommandCanExecute);

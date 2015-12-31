@@ -2,7 +2,7 @@ namespace MagicPictureSetDownloader.Db
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Common;
+    using System.Data;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
@@ -15,7 +15,11 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
-    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteFull
+    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollection,
+                                           IMagicDatabaseReadAndWriteOption,
+                                           IMagicDatabaseReadAndWriteCardInCollection,
+                                           IMagicDatabaseReadAndUpdate
+
     {
         private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase());
 
@@ -319,7 +323,7 @@ namespace MagicPictureSetDownloader.Db
 
                 newEdition.Completed = true;
 
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Edition>.UpdateOne(cnx, newEdition);
                 }
@@ -329,7 +333,7 @@ namespace MagicPictureSetDownloader.Db
         public string[] GetMissingPictureUrls()
         {
             IList<int> idGatherers;
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
             {
                 idGatherers = Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
             }
@@ -342,7 +346,7 @@ namespace MagicPictureSetDownloader.Db
         {
             Picture picture = new Picture { IdGatherer = idGatherer };
 
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
             {
                 return Mapper<Picture>.Load(cnx, picture);
             }

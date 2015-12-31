@@ -1,6 +1,5 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
-    using System;
     using System.Threading;
     using System.Windows.Input;
 
@@ -20,7 +19,11 @@
 
         private readonly ProgramUpgrader _programUpdater;
         private readonly IDispatcherInvoker _dispatcherInvoker;
-        private readonly IMagicDatabaseReadAndWriteFull _magicDatabase;
+        private readonly IMagicDatabaseReadOnly _magicDatabase;
+        private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
+        private readonly IMagicDatabaseReadAndWriteCollection _magicDatabaseForCollection;
+        private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabaseForCardInCollection;
+
         private UpgradeStatus _status;
 
         //TODO: Test add/remove splitted card and statistics
@@ -29,7 +32,6 @@
         //TODO: manage ocT for tap symbol
         //TODO: think about adding complete prebuilt deck
 
-        //TODO: correct split mana color
         //TODO: add extra infos in status bar
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
@@ -39,8 +41,12 @@
             _dispatcherInvoker = dispatcherInvoker;
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
-            _magicDatabase = MagicDatabaseManager.ReadAndWriteFull;
-            Options = new OptionsViewModel(_magicDatabase);
+            _magicDatabase = MagicDatabaseManager.ReadOnly;
+            _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
+            _magicDatabaseForCollection = MagicDatabaseManager.ReadAndWriteCollection;
+            _magicDatabaseForCardInCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
+
+            Options = new OptionsViewModel(_magicDatabaseForOption);
             _programUpdater = new ProgramUpgrader();
             Status = _programUpdater.Status;
            

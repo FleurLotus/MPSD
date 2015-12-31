@@ -49,6 +49,8 @@ AND GathererName in ('Archenemy', 'Magic: The Gathering—Conspiracy', 'Planecha
   AND NOT EXISTS(SELECT 1 
                  FROM TreePicture
                  WHERE Name = '{1}')";
+
+        public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
     }
 
 }

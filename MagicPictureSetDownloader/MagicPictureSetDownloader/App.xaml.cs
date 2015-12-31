@@ -28,7 +28,7 @@
             SplashScreenViewModel splashScreen = SplashScreenFactory.CreateOrGetSplashScreen();
             splashScreen.SourceUri = new Uri("pack://application:,,,/Resources/Splash.jpg");
             splashScreen.ShowProgress = false;
-            splashScreen.Info = "Loading ...";;
+            splashScreen.Info = "Loading ...";
             SplashScreenWindow splashScreenWindow = new SplashScreenWindow(splashScreen);
 
             try

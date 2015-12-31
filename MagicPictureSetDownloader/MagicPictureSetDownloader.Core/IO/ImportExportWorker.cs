@@ -70,11 +70,14 @@
             ImportStatus status = ImportStatus.BuildStatus(GetImport(importFilePath));
 
             IMagicDatabaseReadAndWriteCardInCollection magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
-            
-            //Add in database the good one
-            foreach (IImportExportCardCount importExportCardCount in status.ReadyToBeInserted)
+
+            using (magicDatabase.BatchMode())
             {
-                magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.Number, importExportCardCount.FoilNumber);
+                //Add in database the good one
+                foreach (IImportExportCardCount importExportCardCount in status.ReadyToBeInserted)
+                {
+                    magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.Number, importExportCardCount.FoilNumber);
+                }
             }
 
             return status;

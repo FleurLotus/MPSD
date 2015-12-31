@@ -1,7 +1,7 @@
 ﻿ namespace MagicPictureSetDownloader.Db
 {
     using System.Collections.Generic;
-    using System.Data.Common;
+    using System.Data;
     using System.Linq;
 
     using Common.Database;
@@ -16,7 +16,7 @@
         public ICollection<IAudit> GetAllAudits()
         {
             using (new ReaderLock(_lock))
-            using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
             {
                 return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
             }
@@ -57,7 +57,7 @@
                 return;
             using (new WriterLock(_lock))
             {
-                using (DbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
                 {
                     Mapper<Audit>.InsertOne(cnx, audit);
                 }

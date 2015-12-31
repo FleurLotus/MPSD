@@ -52,7 +52,7 @@
         public void LoadCollection(string collectionName = "")
         {
             //Save the chosen option
-            _magicDatabase.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
+            _magicDatabaseForOption.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
 
             Hierarchical = string.IsNullOrEmpty(collectionName) ? _allhierarchical : new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
             LoadCardsHierarchyAsync();

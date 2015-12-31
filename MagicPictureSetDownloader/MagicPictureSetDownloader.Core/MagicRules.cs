@@ -76,6 +76,8 @@
         private const string Black = "B";
         private const string Red = "R";
         private const string Green = "G";
+        private const string Colorless = "C";
+        private static readonly string[] Generics = { "X", "Y", "Z" };
 
         public static DisplayColor GetDisplayColor(string castingCost)
         {
@@ -93,7 +95,7 @@
             int ccm = 0;
             foreach (string shard in GetShards(castingCost))
             {
-                if (shard == White || shard == Blue || shard == Black || shard == Red || shard == Green)
+                if (shard == White || shard == Blue || shard == Black || shard == Red || shard == Green || shard == Colorless)
                 {
                     ccm += 1;
                 }
@@ -104,12 +106,18 @@
                     {
                         ccm += newccm;
                     }
+                    else if (Generics.Contains(shard))
+                    {
+                        //CCM of generics is 0.
+                    }
                     else if (shard.StartsWith("2"))
                     {
+                        // 2W, 2U, 2B, 2R, 2G
                         ccm += 2;
                     }
                     else
                     {
+                        //Hybrid mana / Phyraxian mana
                         ccm ++;
                     }
                 }
@@ -147,13 +155,15 @@
             if (string.IsNullOrWhiteSpace(shard)) return ShardColor.Colorless;
 
             string shardup = shard.ToUpperInvariant();
-            if (shardup.Contains(White)) return ShardColor.White;
-            if (shardup.Contains(Blue)) return ShardColor.Blue;
-            if (shardup.Contains(Black)) return ShardColor.Black;
-            if (shardup.Contains(Red)) return ShardColor.Red;
-            if (shardup.Contains(Green)) return ShardColor.Green;
+            
+            ShardColor ret = ShardColor.Colorless;
+            if (shardup.Contains(White)) ret |= ShardColor.White;
+            if (shardup.Contains(Blue)) ret |= ShardColor.Blue;
+            if (shardup.Contains(Black)) ret |= ShardColor.Black;
+            if (shardup.Contains(Red)) ret |= ShardColor.Red;
+            if (shardup.Contains(Green)) ret |= ShardColor.Green;
 
-            return ShardColor.Colorless;
+            return ret;
         }
 
         //For search 
