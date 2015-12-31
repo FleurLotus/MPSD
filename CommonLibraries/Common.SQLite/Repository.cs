@@ -1,7 +1,6 @@
 ﻿namespace Common.SQLite
 {
     using System.Data;
-    using System.Data.Common;
     using System.Data.SQLite;
     using System.Linq;
 
@@ -26,26 +25,26 @@
             Refresh();
         }
 
-        protected override DbConnection GetConnection()
+        protected override IDbConnection GetConnection()
         {
             return new SQLiteConnection(_connectionString);
         }
 
         public override sealed void Refresh()
         {
-            using (DbConnection cnx = GetConnection())
+            using (IDbConnection cnx = GetConnection())
             {
                 cnx.Open();
 
                 Tables.Clear();
 
-                using (DbCommand cmd = cnx.CreateCommand())
+                using (IDbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
 
                     //Case Sensibility
                     cmd.CommandText = CaseSensitivityTestQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         reader.Read();
                         IsCaseSensitive = new CaseSensitivity(reader.Read());
@@ -53,7 +52,7 @@
 
                     //Tables
                     cmd.CommandText = TableQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -66,7 +65,7 @@
                     foreach (Table table in Tables.Values.Cast<Table>())
                     {
                         cmd.CommandText = string.Format(ColumnQuery, table.Name);
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        using (IDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -92,7 +91,7 @@
                     foreach (Table table in Tables.Values.Cast<Table>())
                     {
                         cmd.CommandText = string.Format(IndexListQuery, table.Name);
-                        using (DbDataReader reader = cmd.ExecuteReader())
+                        using (IDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -104,7 +103,7 @@
                         foreach (Index index in table.Indexes().Cast<Index>())
                         {
                             cmd.CommandText = string.Format(IndexInfoQuery, index.Name);
-                            using (DbDataReader reader = cmd.ExecuteReader())
+                            using (IDataReader reader = cmd.ExecuteReader())
                             {
                                 while (reader.Read())
                                 {

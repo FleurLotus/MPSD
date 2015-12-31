@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Common;
+    using System.Data;
     using System.Reflection;
 
     public static class Mapper<T>
@@ -15,13 +15,13 @@
             _commandBuilder = new CommandBuilder(DbAttributAnalyser.Analyse(typeof(T)));
         }
 
-        public static T Load(DbConnection cnx, T input)
+        public static T Load(IDbConnection cnx, T input)
         {
-            using (DbCommand cmd = cnx.CreateCommand())
+            using (IDbCommand cmd = cnx.CreateCommand())
             {
                 _commandBuilder.BuildSelectOneCommand(cmd, input);
 
-                using (DbDataReader reader = cmd.ExecuteReader())
+                using (IDataReader reader = cmd.ExecuteReader())
                 {
                     IDictionary<int, PropertyInfo> map = _commandBuilder.GenerateReaderMap(reader);
 
@@ -39,15 +39,15 @@
                 }
             }
         }
-        public static IEnumerable<T> LoadAll(DbConnection cnx)
+        public static IEnumerable<T> LoadAll(IDbConnection cnx)
         {
             IList<T> ret = new List<T>();
 
-            using (DbCommand cmd = cnx.CreateCommand())
+            using (IDbCommand cmd = cnx.CreateCommand())
             {
                 _commandBuilder.BuildSelectAllCommand(cmd);
 
-                using (DbDataReader reader = cmd.ExecuteReader())
+                using (IDataReader reader = cmd.ExecuteReader())
                 {
                     IDictionary<int, PropertyInfo> map = _commandBuilder.GenerateReaderMap(reader);
 
@@ -68,24 +68,24 @@
             return ret;
         }
 
-        public static void DeleteOne(DbConnection cnx, T value)
+        public static void DeleteOne(IDbConnection cnx, T value)
         {
             DeleteMulti(cnx, new[] { value });
         }
-        public static void DeleteMulti(DbConnection cnx, IEnumerable<T> values)
+        public static void DeleteMulti(IDbConnection cnx, IEnumerable<T> values)
         {
             ExecuteWithTransaction(cnx, values, _commandBuilder.BuildDeleteOneCommand);
         }
-        public static void InsertOne(DbConnection cnx, T value)
+        public static void InsertOne(IDbConnection cnx, T value)
         {
             InsertMulti(cnx, new[] { value });
         }
-        public static void InsertMulti(DbConnection cnx, IEnumerable<T> values)
+        public static void InsertMulti(IDbConnection cnx, IEnumerable<T> values)
         {
             ExecuteWithTransaction(cnx, values, _commandBuilder.BuildInsertOneCommand, GetIdentity);
         }
 
-        private static void GetIdentity(DbCommand cmd, T value)
+        private static void GetIdentity(IDbCommand cmd, T value)
         {
             PropertyInfo idKeyPropertyInfo = _commandBuilder.GetIdKeyPropertyInfo();
             if (idKeyPropertyInfo != null)
@@ -94,25 +94,25 @@
                 SetValue(value, idKeyPropertyInfo, id);
             }
         }
-        public static void UpdateOne(DbConnection cnx, T value)
+        public static void UpdateOne(IDbConnection cnx, T value)
         {
             UpdateMulti(cnx, new[] { value });
         }
-        public static void UpdateMulti(DbConnection cnx, IEnumerable<T> values)
+        public static void UpdateMulti(IDbConnection cnx, IEnumerable<T> values)
         {
             ExecuteWithTransaction(cnx, values, _commandBuilder.BuildUpdateOneCommand);
         }
 
-        private static void ExecuteWithTransaction(DbConnection cnx, IEnumerable<T> values,
-                                                   Action<DbCommand,T> prepareCommand, Action<DbCommand,T> doPostExecuteAction = null)
+        private static void ExecuteWithTransaction(IDbConnection cnx, IEnumerable<T> values,
+                                                   Action<IDbCommand,T> prepareCommand, Action<IDbCommand,T> doPostExecuteAction = null)
         {
-            using (DbTransaction transaction = cnx.BeginTransaction())
+            using (IDbTransaction transaction = cnx.BeginTransaction())
             {
                 try
                 {
                     foreach (T value in values)
                     {
-                        using (DbCommand cmd = cnx.CreateCommand())
+                        using (IDbCommand cmd = cnx.CreateCommand())
                         {
                             cmd.Transaction = transaction;
                             prepareCommand(cmd, value);

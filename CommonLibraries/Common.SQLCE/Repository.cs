@@ -1,7 +1,6 @@
 ﻿namespace Common.SQLCE
 {
     using System.Data;
-    using System.Data.Common;
     using System.Data.SqlServerCe;
 
     using Common.SQL;
@@ -57,26 +56,26 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
             Refresh();
         }
 
-        protected override DbConnection GetConnection()
+        protected override IDbConnection GetConnection()
         {
             return new SqlCeConnection(_connectionString);
         }
 
         public override sealed void Refresh()
         {
-            using (DbConnection cnx = GetConnection())
+            using (IDbConnection cnx = GetConnection())
             {
                 cnx.Open();
 
                 Tables.Clear();
 
-                using (DbCommand cmd = cnx.CreateCommand())
+                using (IDbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
 
                     //Case Sensibility
                     cmd.CommandText = CaseSensitivityTestQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         reader.Read();
                         IsCaseSensitive = new CaseSensitivity(reader.Read());
@@ -84,7 +83,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                     
                     //Tables
                     cmd.CommandText = TableQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -95,7 +94,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Columns
                     cmd.CommandText = ColumnQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -110,7 +109,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Primary Keys
                     cmd.CommandText = PrimaryKeyQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -130,7 +129,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Indexes
                     cmd.CommandText = IndexQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -155,7 +154,7 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
 
                     //Foreign Key
                     cmd.CommandText = ForeignKeyQuery;
-                    using (DbDataReader reader = cmd.ExecuteReader())
+                    using (IDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {

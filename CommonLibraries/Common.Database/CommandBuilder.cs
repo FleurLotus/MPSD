@@ -2,7 +2,6 @@
 {
     using System;
     using System.Data;
-    using System.Data.Common;
     using System.Linq;
     using System.Reflection;
     using System.Collections.Generic;
@@ -24,24 +23,24 @@
             BuildQueries();
         }
 
-        public void BuildSelectOneCommand(DbCommand cmd, object input)
+        public void BuildSelectOneCommand(IDbCommand cmd, object input)
         {
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
 
             AppendWhereCriteriaCommand(cmd, input);
         }
-        public void BuildSelectAllCommand(DbCommand cmd)
+        public void BuildSelectAllCommand(IDbCommand cmd)
         {
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
         }
-        public void BuildDeleteAllCommand(DbCommand cmd)
+        public void BuildDeleteAllCommand(IDbCommand cmd)
         {
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _deleteQuery;
         }
-        public void BuildUpdateOneCommand(DbCommand cmd, object input)
+        public void BuildUpdateOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -58,7 +57,7 @@
 
             AppendWhereCriteriaCommand(cmd, input);
         }
-        public void BuildDeleteOneCommand(DbCommand cmd, object input)
+        public void BuildDeleteOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -70,7 +69,7 @@
 
             AppendWhereCriteriaCommand(cmd, input);
         }
-        public void BuildInsertOneCommand(DbCommand cmd, object input)
+        public void BuildInsertOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -165,7 +164,7 @@
 
             _deleteQuery = sbDelete.ToString();
         }
-        private void AppendWhereCriteriaCommand(DbCommand cmd, object input)
+        private void AppendWhereCriteriaCommand(IDbCommand cmd, object input)
         {
             if (input == null)
                 throw new ArgumentNullException("input");
@@ -186,9 +185,9 @@
 
             cmd.CommandText = sb.ToString();
         }
-        private void AddParameter(DbCommand cmd, object input, string col)
+        private void AddParameter(IDbCommand cmd, object input, string col)
         {
-            DbParameter parameter = cmd.CreateParameter();
+            IDbDataParameter parameter = cmd.CreateParameter();
             PropertyInfo pi = _typeDbInfo.Columns[col];
             parameter.ParameterName = string.Format("@{0}", col);
             object value = pi.GetValue(input, null);
