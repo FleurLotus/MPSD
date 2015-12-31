@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Data.Common;
     using System.Linq;
     using System.Text;
 
@@ -76,11 +75,11 @@
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("SELECT 1 FROM {0} WHERE ", table);
 
-            using (DbConnection cnx = GetConnection())
+            using (IDbConnection cnx = GetConnection())
             {
                 cnx.Open();
 
-                using (DbCommand cmd = cnx.CreateCommand())
+                using (IDbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
                     
@@ -96,7 +95,7 @@
                         else
                         {
                             sb.AppendFormat("([{0}] = @{0})", columnNames[i]);
-                            DbParameter param = cmd.CreateParameter();
+                            IDbDataParameter param = cmd.CreateParameter();
                             param.ParameterName = "@" + columnNames[i];
                             param.Value =  values[i];
                             cmd.Parameters.Add(param);
@@ -115,10 +114,10 @@
         {
             string[] commands = sqlcommand.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
 
-            using (DbConnection cnx = GetConnection())
+            using (IDbConnection cnx = GetConnection())
             {
                 cnx.Open();
-                using (DbCommand cmd = cnx.CreateCommand())
+                using (IDbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
                     foreach (string command in commands)
@@ -144,7 +143,33 @@
             ExecuteBatch(string.Format(sqlcommand, formattedParameters));
         }
 
+        public void ExecuteParametrizeCommand(string sqlcommand, params KeyValuePair<string, object>[] parameters)
+        {
+            using (IDbConnection cnx = GetConnection())
+            {
+                cnx.Open();
+                using (IDbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    string trimcommand = sqlcommand.TrimEnd('\r', '\n');
+                    if (!string.IsNullOrWhiteSpace(trimcommand))
+                    {
+                        cmd.CommandText = trimcommand;
+                        foreach (var kv in parameters)
+                        {
+                            IDbDataParameter parameter = cmd.CreateParameter();
+                            parameter.ParameterName = kv.Key;
+                            object value = kv.Value;
+                            parameter.Value = value ?? DBNull.Value;
+                            cmd.Parameters.Add(parameter);
+                        }
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
         public abstract void Refresh();
-        protected abstract DbConnection GetConnection();
+        protected abstract IDbConnection GetConnection();
     }
 }

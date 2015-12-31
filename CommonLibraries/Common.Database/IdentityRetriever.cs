@@ -1,10 +1,7 @@
-﻿
-
-namespace Common.Database
+﻿namespace Common.Database
 {
     using System;
     using System.Data;
-    using System.Data.Common;
 
     public static class IdentityRetriever
     {
@@ -13,7 +10,7 @@ namespace Common.Database
         //ALERT: Warning, sql injection!
         public static string IdentityQuery { get; set; }
         
-        public static int GetId(DbCommand cmd)
+        public static int GetId(IDbCommand cmd)
         {
             //must be done in the transaction because of the way, SQLCE works
             //http://connect.microsoft.com/SQLServer/feedback/details/653675/sql-ce-4-0-select-identity-returns-null

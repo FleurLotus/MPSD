@@ -1,5 +1,7 @@
 namespace Common.SQL
 {
+    using System.Collections.Generic;
+
     public interface IRepository
     {
         ITable[] AllTables();
@@ -18,5 +20,7 @@ namespace Common.SQL
 
         void ExecuteBatch(string sqlcommand);
         void ExecuteBatch(string sqlcommand, params string[] parameters);
+
+        void ExecuteParametrizeCommand(string sqlcommand, params KeyValuePair<string, object>[] parameters);
     }
 }
