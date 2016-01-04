@@ -59,6 +59,7 @@
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />
+    <Compile Include="Converter\NoConvertBackMultiConverter.cs" />
     <Compile Include="Converter\NoConvertBackConverter.cs" />
     <Compile Include="Behavior\FocusBehavior.cs" />
     <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />

@@ -54,7 +54,7 @@
             <Label Grid.Column="2" Grid.Row="1" Content="Edition"/>
             <TextBlock Grid.Column="3" Grid.Row="1" Text="{Binding Edition.Name}"/>
             <Label Grid.Column="0" Grid.Row="2" Content="Rarity"/>
-            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Rarity}"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Rarity.Name}"/>
             <Label Grid.Column="2" Grid.Row="2" Content="Type"/>
             <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Type}"/>
             <Label Grid.Column="0" Grid.Row="3" Content="CastingCost" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}"/>
@@ -83,9 +83,21 @@
     <!-- Statistics display -->
     <ControlTemplate x:Key="StatisticsControlTemplate">
         <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
-                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2sConv}}"
-                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2svConv}}">
+            <ListView VerticalAlignment="Center" HorizontalAlignment="Left">
+                <ListView.ItemsSource>
+                    <MultiBinding Converter="{StaticResource c2sConv}">
+                        <Binding Path="Hierarchical.Selected"/>
+                        <Binding Path="Options.ShowOnlyCurrentStatistics"/>
+                        <Binding Path="Hierarchical.Name"/>
+                    </MultiBinding>
+                </ListView.ItemsSource>
+                <ListView.Visibility>
+                    <MultiBinding Converter="{StaticResource c2svConv}">
+                        <Binding Path="Hierarchical.Selected"/>
+                        <Binding Path="Options.ShowOnlyCurrentStatistics"/>
+                        <Binding Path="Hierarchical.Name"/>
+                    </MultiBinding>
+                </ListView.Visibility>
                 <i:Interaction.Behaviors>
                     <behavior:GridViewColumnResizeBehavior />
                 </i:Interaction.Behaviors>

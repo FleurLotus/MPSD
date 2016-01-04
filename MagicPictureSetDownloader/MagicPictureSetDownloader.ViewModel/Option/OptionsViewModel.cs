@@ -8,9 +8,11 @@
         private const string ShowPictureKey = "ShowPicture";
         private bool _showPicture;
         private const string ShowOtherLanguagesKey = "ShowOtherLanguages";
-        private bool _showStatistics;
-        private const string ShowStatisticsKey = "ShowStatistics";
         private bool _showOtherLanguages;
+        private const string ShowStatisticsKey = "ShowStatistics";
+        private bool _showStatistics;
+        private const string ShowOnlyCurrentStatisticsKey = "ShowOnlyCurrentStatistics";
+        private bool _showOnlyCurrentStatistics;
         private const string AutoCheckUpgradeKey = "AutoCheckUpgrade";
         private bool _autoCheckUpgrade;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabase;
@@ -42,6 +44,18 @@
                 {
                     _showStatistics = value;
                     OnNotifyPropertyChanged(() => ShowStatistics);
+                }
+            }
+        }
+        public bool ShowOnlyCurrentStatistics
+        {
+            get { return _showOnlyCurrentStatistics; }
+            set
+            {
+                if (value != _showOnlyCurrentStatistics)
+                {
+                    _showOnlyCurrentStatistics = value;
+                    OnNotifyPropertyChanged(() => ShowOnlyCurrentStatistics);
                 }
             }
         }
@@ -84,14 +98,16 @@
             ShowPicture = GetOptionValue(TypeOfOption.Display, ShowPictureKey);
             ShowOtherLanguages = GetOptionValue(TypeOfOption.Display, ShowOtherLanguagesKey);
             ShowStatistics = GetOptionValue(TypeOfOption.Display, ShowStatisticsKey);
+            ShowOnlyCurrentStatistics = GetOptionValue(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey);
             AutoCheckUpgrade = GetOptionValue(TypeOfOption.Upgrade, AutoCheckUpgradeKey);
         }
         public void Save()
         {
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowPictureKey, ShowPicture.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowStatisticsKey, ShowStatistics.ToString());
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey, ShowOnlyCurrentStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOtherLanguagesKey, ShowOtherLanguages.ToString());
-            _magicDatabase.InsertNewOption(TypeOfOption.Upgrade, AutoCheckUpgradeKey, ShowStatistics.ToString());
+            _magicDatabase.InsertNewOption(TypeOfOption.Upgrade, AutoCheckUpgradeKey, AutoCheckUpgrade.ToString());
         }
     }
 }

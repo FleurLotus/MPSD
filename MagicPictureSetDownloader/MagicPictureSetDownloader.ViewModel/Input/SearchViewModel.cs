@@ -16,15 +16,18 @@
     public enum PerimeterScope
     {
         All,
-        InSelectedCollections,
-        NotInSelectedCollections,
-        NotInSelectedCollectionsAnyEdition,
+        CollectionBased,
     }
 
     public enum MultiSelectedAggregation
     {
         Or,
         And,
+    }
+    public enum ComparisonType
+    {
+        GreaterOrEquals = 0,
+        LessThan = 1,
     }
 
     public class SearchViewModel : DialogViewModelBase
@@ -36,7 +39,11 @@
         private bool _excludeFunEditions;
         private bool _excludeOnlineOnlyEditions;
         private bool _excludeSpecialCards;
+        private bool _countIncludeFoil;
+        private bool _countIsNameBased;
         private bool _allLanguages;
+        private ComparisonType _countComparatorWanted;
+        private int _countSelected;
         private string _name;
         private int _idBlockFun;
         private int _idBlockOnlineOnly;
@@ -45,6 +52,7 @@
         {
             _magicDatabase = MagicDatabaseManager.ReadOnly;
             //Never change
+            CountComparator = new[] { "≥", "<" };
             Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
             Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token)
                                                                   .ToArray();
@@ -70,6 +78,7 @@
         public ICollection<ShardColor> ColorsSelected { get; private set; }
         public ICollection<CardType> Types { get; private set; }
         public ICollection<CardType> TypesSelected { get; private set; }
+        public string[] CountComparator { get; private set; }
 
         public string Name
         {
@@ -116,6 +125,61 @@
                 {
                     _excludeSpecialCards = value;
                     OnNotifyPropertyChanged(() => ExcludeSpecialCards);
+                }
+            }
+        }
+        public string CountComparatorSelected
+        {
+            get { return CountComparator[(int)_countComparatorWanted]; }
+            set
+            {
+                for (int i = 0; i < CountComparator.Length; i++)
+                {
+                    if (value == CountComparator[i])
+                    {
+                        if (_countComparatorWanted == (ComparisonType)i)
+                            return;
+
+                        _countComparatorWanted = (ComparisonType)i;
+                        OnNotifyPropertyChanged(() => CountComparatorSelected);
+                        break;
+                    }
+                }
+            }
+        }
+        public int CountSelected
+        {
+            get { return _countSelected; }
+            set
+            {
+                if (value != _countSelected)
+                {
+                    _countSelected = value;
+                    OnNotifyPropertyChanged(() => CountSelected);
+                }
+            }
+        }
+        public bool CountIsNameBased
+        {
+            get { return _countIsNameBased; }
+            set
+            {
+                if (value != _countIsNameBased)
+                {
+                    _countIsNameBased = value;
+                    OnNotifyPropertyChanged(() => CountIsNameBased);
+                }
+            }
+        }
+        public bool CountIncludeFoil
+        {
+            get { return _countIncludeFoil; }
+            set
+            {
+                if (value != _countIncludeFoil)
+                {
+                    _countIncludeFoil = value;
+                    OnNotifyPropertyChanged(() => CountIncludeFoil);
                 }
             }
         }
@@ -202,6 +266,10 @@
             ExcludeFunEditions = true;
             ExcludeOnlineOnlyEditions = true;
             ExcludeSpecialCards = true;
+            CountIncludeFoil = false;
+            CountIsNameBased = false;
+            CountComparatorSelected = CountComparator[(int)ComparisonType.GreaterOrEquals];
+            CountSelected = 1;
             AllLanguages = false;
             PerimeterScope = PerimeterScope.All;
             ColorAggregation = MultiSelectedAggregation.Or;
@@ -223,22 +291,18 @@
             if (PerimeterScope == PerimeterScope.All)
                 return true;
 
-            ICardInCollectionCount[] statistics;
-            //We filter statitiscs on only current version of the card 
-            if (PerimeterScope == PerimeterScope.InSelectedCollections || PerimeterScope == PerimeterScope.NotInSelectedCollections)
-                statistics = cai.Statistics.Where(s => s.IdGatherer == cai.IdGatherer).ToArray();
-            else
-                statistics = cai.Statistics.ToArray();
+            IEnumerable<ICardInCollectionCount> cardStats = CountIsNameBased ? cai.Statistics :
+                                                                     //We filter statitiscs on only current version of the card 
+                                                                     cai.Statistics.Where(s => s.IdGatherer == cai.IdGatherer);
 
+            //Filter on collection
+            ICardInCollectionCount[] statistics = cardStats.Where(s => CollectionsSelected.Any(cc => cc.Id == s.IdCollection)).ToArray();
 
-            if (PerimeterScope == PerimeterScope.InSelectedCollections)
-            {
-                //Find at least one collection selected with the specific car card 
-                return statistics.Length != 0 && statistics.Any(cicc => CollectionsSelected.Any(cc => cc.Id == cicc.IdCollection));
-            }
+            int count = statistics.Sum(stat => stat.Number);
+            if (CountIncludeFoil)
+                count += statistics.Sum(stat => stat.FoilNumber);
 
-            //All statistics contains only out of selection collection
-            return statistics.Length == 0 ||  statistics.All(cicc => CollectionsSelected.All(cc => cc.Id != cicc.IdCollection));
+            return _countComparatorWanted == ComparisonType.GreaterOrEquals ? count >= CountSelected : count < CountSelected;
         }
         private bool CheckName(ICardAllDbInfo cai)
         {
