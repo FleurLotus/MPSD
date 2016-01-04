@@ -12,7 +12,7 @@
 
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="{Binding Title}" Height="800" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}" >
+        Title="{Binding Title}" Height="600" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}" >
     <Window.Resources>
         <ResourceDictionary>
             <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
@@ -127,16 +127,22 @@
             <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
                             Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
         </Grid>
-
-        <Grid Grid.Row="2" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated@CantCheck}">
+        <Grid Grid.Row="2">
+            <Grid.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+            </Grid.Resources>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="1" Content="New version available!" Foreground="Red" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated}" />
-            <Label Grid.Column="1" Content="Error while checking" Foreground="Red" Visibility="{Binding Status, Converter={StaticResource e2vConv}, ConverterParameter=CantCheck}" />
-            <Button Grid.Column="2" Content="Hide" Padding="5,0" Command="{Binding HideResultCommand}" />
+            <Label Grid.Column="0" Content="{Binding StatusBarInfo}" Visibility="{Binding StatusBarInfo, Converter={StaticResource no2vConv}}"/>
+            <Label Grid.Column="2" Content="New version available!" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated}" />
+            <Label Grid.Column="2" Content="Error while checking" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=CantCheck}" />
+            <Button Grid.Column="3" Content="Hide" Padding="5,0" Command="{Binding HideResultCommand}" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated@CantCheck}" />
         </Grid>
         <!-- Loading -->
         <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Visibility="{Binding Loading, Converter={StaticResource b2vConv}}">

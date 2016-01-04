@@ -104,7 +104,7 @@
             catch (Exception ex)
             {
                 Status = UpgradeStatus.CantCheck;
-                throw new ProgramUpgraderException(ex.Message, ex);
+                throw new ProgramUpgraderException("Can't check", ex);
             }
         }
 

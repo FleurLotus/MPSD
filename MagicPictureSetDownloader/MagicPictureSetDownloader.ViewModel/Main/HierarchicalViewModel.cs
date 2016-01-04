@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
@@ -21,10 +20,12 @@
         //Use temporary to notify change only after build because of asynchronous call
         private readonly HierarchicalResultViewModel _buildingRoot;
         private IList<HierarchicalResultViewModel> _root;
+        private readonly GlobalStatictics _globalStatictics;
 
         public HierarchicalViewModel(string name, Func<string, IEnumerable<CardViewModel>> getCardViewModels)
         {
             Name = name;
+            _globalStatictics = new GlobalStatictics(name);
             _getCardViewModels = getCardViewModels;
             _buildingRoot = new HierarchicalResultViewModel(name);
             Root = new List<HierarchicalResultViewModel>();
@@ -32,7 +33,6 @@
 
         public string Name { get; private set; }
 
-        [SuppressMessage("ReSharper", "PossibleUnintendedReferenceComparison")]
         public IList<HierarchicalResultViewModel> Root
         {
             get { return _root; }
@@ -65,10 +65,12 @@
                 saveSelected = selected.Card;
 
             _buildingRoot.Children.Clear();
+            _globalStatictics.Reset();
 
             foreach (CardViewModel card in _getCardViewModels(Name))
             {
                 MakeHierarchy(analysers, orders, card);
+                _globalStatictics.Add(card);
             }
             
             Root = (new List<HierarchicalResultViewModel> { _buildingRoot });
@@ -80,9 +82,9 @@
                     Selected = bestmatch;
             }
         }
+
         private void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders, CardViewModel card)
         {
-
             HierarchicalResultViewModel current = _buildingRoot;
 
             for (int index = 0; index <= analysers.Length; index++)
@@ -166,6 +168,11 @@
             }
 
             return res;
+        }
+
+        internal string GetInfo(bool onlyCount)
+        {
+            return _globalStatictics.GetInfo(onlyCount);
         }
     }
 }

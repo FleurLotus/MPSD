@@ -16,6 +16,7 @@
     {
         private bool _showFilterConfig;
         private bool _loading;
+        private string _statusBarInfo;
 
         private readonly ProgramUpgrader _programUpdater;
         private readonly IDispatcherInvoker _dispatcherInvoker;
@@ -24,20 +25,18 @@
         private readonly IMagicDatabaseReadAndWriteCollection _magicDatabaseForCollection;
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabaseForCardInCollection;
 
-        private UpgradeStatus _status;
+        private UpgradeStatus _upgradeStatus;
 
         //TODO: Test add/remove splitted card and statistics
         //TODO: (Maybe) Import / save historical price 
 
         //TODO: manage ocT for tap symbol
         //TODO: think about adding complete prebuilt deck
-
-        //TODO: add extra infos in status bar
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
 
-            HideResultCommand = new RelayCommand(o => Status = UpgradeStatus.NotChecked);
+            HideResultCommand = new RelayCommand(o => UpgradeStatus = UpgradeStatus.NotChecked);
             _dispatcherInvoker = dispatcherInvoker;
             _allhierarchical = new HierarchicalViewModel(MagicCards, AllCardAsViewModel);
 
@@ -48,7 +47,7 @@
 
             Options = new OptionsViewModel(_magicDatabaseForOption);
             _programUpdater = new ProgramUpgrader();
-            Status = _programUpdater.Status;
+            UpgradeStatus = _programUpdater.Status;
            
             if (Options.AutoCheckUpgrade)
             {
@@ -99,21 +98,32 @@
   
         public string Title
         {
-            get { return "MagicPictureSetDownloader - " + Hierarchical.Name; }
+            get { return Hierarchical == null ? "MagicPictureSetDownloader" : "MagicPictureSetDownloader - " + Hierarchical.Name; }
         }
-        public UpgradeStatus Status
+        public UpgradeStatus UpgradeStatus
         {
-            get { return _status; }
+            get { return _upgradeStatus; }
             private set
             {
-                if (value != _status)
+                if (value != _upgradeStatus)
                 {
-                    _status = value;
-                    OnNotifyPropertyChanged(() => Status);
+                    _upgradeStatus = value;
+                    OnNotifyPropertyChanged(() => UpgradeStatus);
                 }
             }
         }
-
+        public string StatusBarInfo
+        {
+            get { return _statusBarInfo; }
+            private set
+            {
+                if (value != _statusBarInfo)
+                {
+                    _statusBarInfo = value;
+                    OnNotifyPropertyChanged(() => StatusBarInfo);
+                }
+            }
+        }
         private void DoCheckNewVersion(object o)
         {
             try
@@ -126,8 +136,17 @@
             }
             finally
             {
-                Status = _programUpdater.Status;
+                UpgradeStatus = _programUpdater.Status;
             }
+        }
+        private void GenerateStatusBarInfo()
+        {
+            if (Hierarchical == null)
+            {
+                StatusBarInfo = null;
+                return;
+            }
+            StatusBarInfo = Hierarchical.GetInfo(Hierarchical == _allhierarchical || Hierarchical == _searchHierarchical);
         }
     }
 }

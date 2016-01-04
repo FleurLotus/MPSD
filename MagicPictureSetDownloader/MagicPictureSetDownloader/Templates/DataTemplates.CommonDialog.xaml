@@ -13,7 +13,7 @@
                     xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
                     xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
                     xmlns:cwpf="clr-namespace:Common.WPF;assembly=Common.WPF"
-                    
+
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 
                     mc:Ignorable="d"
@@ -82,10 +82,13 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Show picture" IsChecked="{binding:TwoWayBinding Options.ShowPicture}"/>
                     <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show other languages" IsChecked="{binding:TwoWayBinding Options.ShowOtherLanguages}"/>
                     <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show statistics" IsChecked="{binding:TwoWayBinding Options.ShowStatistics}"/>
+                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
+                              IsChecked="{binding:TwoWayBinding Options.ShowOnlyCurrentStatistics}" IsEnabled="{Binding Options.ShowStatistics}"/>
                 </Grid>
             </GroupBox>
          
@@ -221,80 +224,79 @@
     <DataTemplate DataType="{x:Type input:SearchViewModel}" d:IsDesignTimeCreatable="False">
         <DataTemplate.Resources>
             <Style TargetType="Label">
-                <Setter Property="Margin" Value="5,0"/>
+                <Setter Property="FontWeight" Value="Bold"/>
             </Style>
             <Style TargetType="xctk:CheckComboBox">
-                <Setter Property="Margin" Value="5,0"/>
                 <Setter Property="MinHeight" Value="25"/>
             </Style>
         </DataTemplate.Resources>
-        <Grid Margin="5" Width="470">
+        <Grid Width="470">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Content="Name"/>
-            <Grid Grid.Column="1" Grid.Row="0" Margin="5">
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0" Style="{StaticResource BorderedTextBox}" Text="{binding:TwoWayBinding Name}"/>
+            <CheckBox Grid.Column="2" Grid.Row="0" Content="All languages" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding AllLanguages}"/>
+
+            <Label Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Content="Perimeter" />
+            <RadioButton Grid.Column="1" Grid.Row="2" Margin="5,0" GroupName="Perimeter" Content="All existing cards" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=All}"/>
+            <RadioButton Grid.Column="1" Grid.Row="3" Margin="5,0" GroupName="Perimeter" Content="Based on collection" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=CollectionBased}"/>
+
+            <CheckBox Grid.Column="2" Grid.Row="2" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
+            <CheckBox Grid.Column="2" Grid.Row="3" Content="Exclude online only editions" IsChecked="{binding:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
+            <CheckBox Grid.Column="2" Grid.Row="4" Content="Exclude special card" IsChecked="{binding:TwoWayBinding ExcludeSpecialCards}"/>
+
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,10,5,0" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={StaticResource e2vConv}, ConverterParameter=CollectionBased}"/>
+            <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Margin="5,0" Visibility="{Binding PerimeterScope, Converter={StaticResource e2vConv}, ConverterParameter=CollectionBased}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"  Margin="5,0" Style="{StaticResource BorderedTextBox}" Text="{binding:TwoWayBinding Name}"/>
-                <CheckBox Grid.Column="1" Content="All languages" VerticalAlignment="Center" Margin="5,0" IsChecked="{binding:TwoWayBinding AllLanguages}"/>
+
+                <ComboBox Grid.Column="0" ItemsSource="{Binding CountComparator}" SelectedItem="{binding:TwoWayBinding CountComparatorSelected}" />
+                <xctk:IntegerUpDown Grid.Column="1" Maximum="99" Minimum="1" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding CountSelected}" />
+                <CheckBox Grid.Column="2" Margin="20,0" Content="Include foil" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding CountIncludeFoil}"/>
+                <CheckBox Grid.Column="3" Content="Use name (all editions)" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding CountIsNameBased}"/>
             </Grid>
-            <Label Grid.Column="0" Grid.Row="1" Content="Perimeter"/>
-            <Grid Grid.Column="1" Grid.Row="1" Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="180"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            
+            <Label Grid.Column="0" Grid.Row="8" Content="Editions"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
 
-                <RadioButton Grid.Column="0" Grid.Row="0" GroupName="Perimeter" Content="All existing cards" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=All}"/>
-                <RadioButton Grid.Column="0" Grid.Row="1" GroupName="Perimeter" Content="In collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=InSelectedCollections}"/>
-                <RadioButton Grid.Column="0" Grid.Row="2" GroupName="Perimeter" Content="Not in collections" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollections}"/>
-                <RadioButton Grid.Column="0" Grid.Row="3" GroupName="Perimeter" Content="Not in collections (Any Edition)" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=NotInSelectedCollectionsAnyEdition}"/>
-
-                <CheckBox Grid.Column="1" Grid.Row="0" Margin="5,0" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
-                <CheckBox Grid.Column="1" Grid.Row="1" Margin="5,0" Content="Exclude online only editions" IsChecked="{binding:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
-                <CheckBox Grid.Column="1" Grid.Row="2" Margin="5,0" Content="Exclude special card" IsChecked="{binding:TwoWayBinding ExcludeSpecialCards}"/>
-            </Grid>
-
-            <Label Grid.Column="0" Grid.Row="2" Content="Collections" Visibility="{Binding PerimeterScope, Converter={StaticResource ne2vConv}, ConverterParameter=All}"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={StaticResource ne2vConv}, ConverterParameter=All}"/>
-
-            <Label Grid.Column="0" Grid.Row="3" Content="Editions"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="3" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
-
-            <Label Grid.Column="0" Grid.Row="4" Grid.RowSpan="2" Content="Colors"/>
-            <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton GroupName="Color" Width="50" Content="Or" IsChecked="{binding:TwoWayBinding ColorAggregation, Converter={StaticResource e2bConv}, ConverterParameter=Or}"/>
                 <RadioButton GroupName="Color" Width="50" Content="And" IsChecked="{binding:TwoWayBinding ColorAggregation, Converter={StaticResource e2bConv}, ConverterParameter=And}"/>
             </StackPanel>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="5" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}"/>
+            <Label Grid.Column="0" Grid.Row="11" Content="Colors" />
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}"/>
 
-            <Label Grid.Column="0" Grid.Row="6" Grid.RowSpan="2" Content="Types"/>
-            <StackPanel Grid.Column="1" Grid.Row="6" Margin="0,5,0,0" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton GroupName="Type" Width="50" Content="Or" IsChecked="{binding:TwoWayBinding TypeAggregation, Converter={StaticResource e2bConv}, ConverterParameter=Or}"/>
                 <RadioButton GroupName="Type" Width="50" Content="And" IsChecked="{binding:TwoWayBinding TypeAggregation, Converter={StaticResource e2bConv}, ConverterParameter=And}"/>
             </StackPanel>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="7" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
+            <Label Grid.Column="0" Grid.Row="14" Content="Types" VerticalAlignment="Center"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="14" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
         </Grid>
     </DataTemplate>
 
@@ -349,7 +351,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
-                   
+
                     <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" />
                     <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" 
                               cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
@@ -378,7 +380,7 @@
                     </ComboBox>
                 </Grid>
             </GroupBox>
-            
+
             <GroupBox Grid.Row="2" Header="Detail">
                 <Grid Margin="5">
                     <Grid.RowDefinitions>

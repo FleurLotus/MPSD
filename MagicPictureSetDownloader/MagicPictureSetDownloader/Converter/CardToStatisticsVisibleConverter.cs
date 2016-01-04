@@ -3,23 +3,23 @@ namespace MagicPictureSetDownloader.Converter
     using System;
     using System.Globalization;
     using System.Windows;
-    using System.Windows.Data;
 
     using Common.WPF.Converter;
 
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(Visibility))]
-    public class CardToStatisticsVisibleConverter : NoConvertBackConverter
+    public class CardToStatisticsVisibleConverter : NoConvertBackMultiConverter
     {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
+        private readonly CardToStatisticsConverter _innerConverter = new CardToStatisticsConverter();
 
-            if (node == null)
+        public override object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
+        {
+            StatisticViewModel[] stats = _innerConverter.Convert(value, targetType, parameter, culture) as StatisticViewModel[];
+
+            if (stats == null || stats.Length == 0)
                 return Visibility.Collapsed;
 
-            return node.Card.Statistics.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+            return Visibility.Visible;
         }
     }
 }

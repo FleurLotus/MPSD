@@ -53,7 +53,8 @@
         {
             //Save the chosen option
             _magicDatabaseForOption.InsertNewOption(TypeOfOption.SelectedCollection, "Name", collectionName);
-
+            //Force to null to avoid block on refreshing
+            Hierarchical = null;
             Hierarchical = string.IsNullOrEmpty(collectionName) ? _allhierarchical : new HierarchicalViewModel(collectionName, CardCollectionAsViewModel);
             LoadCardsHierarchyAsync();
         }
@@ -82,6 +83,7 @@
 
             GenerateCollectionMenu();
             GenerateContextMenu();
+            GenerateStatusBarInfo();
             Loading = false;
         }
         private IEnumerable<CardViewModel> AllCardAsViewModel(string collectionName)
