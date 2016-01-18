@@ -90,14 +90,16 @@
         {
             if (dbVersion <= 7)
             {
+                //7.1
                 repo.ExecuteBatch(UpdateQueries.UpdateCastingCostForUltimateNightmare);
 
+                //7.4
                 repo.ExecuteBatch(UpdateQueries.UpdateCommander2015Code);
 
                 repo.ExecuteBatch(UpdateQueries.UpdateEditionWithNoCard);
 
                 repo.ExecuteBatch(UpdateQueries.UpdateEditionWithSpecialCard);
-
+                
                 foreach (Tuple<string, string> t in GetAlternativeCodeToUpdate())
                 {
                     repo.ExecuteBatch(UpdateQueries.UpdateEditionAlternativeCode, t.Item1, t.Item2);
@@ -108,17 +110,20 @@
                     repo.ExecuteBatch(UpdateQueries.UpdateForceEditionAlternativeCode, t.Item1, t.Item2);
                 }
 
+                //7.7
+                repo.ExecuteBatch(UpdateQueries.UpdateZendikarExpeditionCount);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
         {
             if (dbVersion <= 7)
             {
+                //7.4
                 foreach (Tuple<string, string> t in GetImageToCopy())
                 {
                     repo.ExecuteBatch(UpdateQueries.CopyImage, t.Item1, t.Item2);
                 }
-
+                //7.5
                 if (!repo.RowExists(null, "TreePicture", new[] { "Name" }, new object[] { "@C" }))
                 {
                     repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,

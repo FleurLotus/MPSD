@@ -2,7 +2,6 @@
 {
     internal static class UpdateQueries
     {
-        //
         public const string UpdateCastingCostForUltimateNightmare = 
 @"UPDATE Card 
     SET CastingCost = '@X @Y @Z @R @R' 
@@ -12,7 +11,7 @@
         public const string UpdateCommander2015Code = 
 @"UPDATE Edition 
     SET Code = 'C15' 
-  WHERE NAME = 'Commander 2015'";
+  WHERE GathererName = 'Commander 2015'";
 
         public const string UpdateEditionAlternativeCode =
 @"UPDATE EDITION 
@@ -51,6 +50,12 @@ AND GathererName in ('Archenemy', 'Magic: The Gathering—Conspiracy', 'Planecha
                  WHERE Name = '{1}')";
 
         public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
+
+        public const string UpdateZendikarExpeditionCount =
+@"UPDATE Edition 
+    SET CardNumber = 45 
+  WHERE GathererName = 'Zendikar Expeditions'";
+
     }
 
 }
