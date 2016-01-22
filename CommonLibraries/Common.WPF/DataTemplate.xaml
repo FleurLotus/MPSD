@@ -6,6 +6,7 @@
                     xmlns:web="clr-namespace:Common.ViewModel.Web;assembly=Common.ViewModel"
                     xmlns:binding="clr-namespace:Common.WPF.Binding"
                     xmlns:local="clr-namespace:Common.WPF"
+                    xmlns:behavior="clr-namespace:Common.WPF.Behavior"
 
                     mc:Ignorable="d"
                    >
@@ -20,7 +21,7 @@
                 <ColumnDefinition Width="*" MinWidth="180"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Grid.Row="0" Content="Login"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding Login}" />
+            <TextBox Grid.Column="1" Grid.Row="0" behavior:FocusBehavior.IsFocused="True" Text="{binding:TwoWayBinding Login}" />
             <Label Grid.Row="1" Grid.Column="0" Content="Password" />
             <PasswordBox Grid.Row="1" Grid.Column="1" local:PasswordHelper.Attach="True" local:PasswordHelper.Password="{binding:TwoWayBinding Password}" />
         </Grid>
