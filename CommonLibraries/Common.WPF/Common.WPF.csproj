@@ -56,6 +56,8 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Attach\TabItemExtensions.cs" />
+    <Compile Include="Attach\TabControlExtensions.cs" />
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />
