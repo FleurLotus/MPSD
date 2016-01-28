@@ -15,6 +15,9 @@
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.ViewModel.Download;
+    using MagicPictureSetDownloader.ViewModel.Download.Auto;
+    using MagicPictureSetDownloader.ViewModel.Download.Edition;
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Management;
@@ -26,8 +29,8 @@
 
         #region EventHandler
 
-        public event EventHandler UpdateDatabaseRequested;
-        public event EventHandler UpdateImageDatabaseRequested;
+        public event EventHandler<EventArgs<DownloadViewModelBase>> UpdateDatabaseRequested;
+        public event EventHandler<EventArgs<DownloadViewModelBase>> AutoUpdateDatabaseRequested;
         public event EventHandler VersionRequested;
         public event EventHandler CloseRequested;
         public event EventHandler<EventArgs<ImportExportViewModel>> ImportExportRequested;
@@ -54,13 +57,13 @@
      
         #region Events
 
-        private void OnUpdateDatabaseRequested()
+        private void OnUpdateDatabaseRequested(DownloadViewModelBase vm)
         {
-            OnEventRaise(UpdateDatabaseRequested);
+            OnEventRaise(UpdateDatabaseRequested, vm);
         }
-        private void OnUpdateImageDatabaseRequested()
+        private void OnAutoUpdateDatabaseRequested(DownloadViewModelBase vm)
         {
-            OnEventRaise(UpdateImageDatabaseRequested);
+            OnEventRaise(AutoUpdateDatabaseRequested, vm);
         }
         private void OnVersionRequested()
         {
@@ -89,7 +92,7 @@
 
         #endregion
 
-        private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg) where T: class
+        private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg)
         {
             if (ev != null && arg != null)
                 ev(this, new EventArgs<T>(arg));
@@ -104,12 +107,16 @@
 
         private void UpdateDatabaseCommandExecute(object o)
         {
-            OnUpdateDatabaseRequested();
+            OnUpdateDatabaseRequested(new DownloadEditionViewModel());
             LoadCardsHierarchy();
         }
         private void UpdateImageDatabaseCommandExecute(object o)
         {
-            OnUpdateImageDatabaseRequested();
+            OnAutoUpdateDatabaseRequested(new AutoDownloadImageViewModel());
+        }
+        private void UpdateRulesDatabaseCommandExecute(object o)
+        {
+            OnAutoUpdateDatabaseRequested(new AutoDownloadRuleViewModel());
         }
         private void VersionCommandExecute(object o)
         {
@@ -119,7 +126,7 @@
         {
             OnCloseRequested();
         }
-         private void ShowAllCollectionCommandExecute(object o)
+        private void ShowAllCollectionCommandExecute(object o)
         {
             LoadCollection();
         }
@@ -360,6 +367,7 @@
             //File
             MenuViewModel fileMenu = new MenuViewModel("_File");
             fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());
             fileMenu.AddChild(new MenuViewModel("Search...", new RelayCommand(SearchCommandExecute)));

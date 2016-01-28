@@ -82,84 +82,112 @@
 
     <!-- Statistics display -->
     <ControlTemplate x:Key="StatisticsControlTemplate">
-        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <ListView VerticalAlignment="Center" HorizontalAlignment="Left">
-                <ListView.ItemsSource>
-                    <MultiBinding Converter="{StaticResource c2sConv}">
-                        <Binding Path="Hierarchical.Selected"/>
-                        <Binding Path="Options.ShowOnlyCurrentStatistics"/>
-                        <Binding Path="Hierarchical.Name"/>
-                    </MultiBinding>
-                </ListView.ItemsSource>
-                <ListView.Visibility>
-                    <MultiBinding Converter="{StaticResource c2svConv}">
-                        <Binding Path="Hierarchical.Selected"/>
-                        <Binding Path="Options.ShowOnlyCurrentStatistics"/>
-                        <Binding Path="Hierarchical.Name"/>
-                    </MultiBinding>
-                </ListView.Visibility>
-                <i:Interaction.Behaviors>
-                    <behavior:GridViewColumnResizeBehavior />
-                </i:Interaction.Behaviors>
+        <ListView VerticalAlignment="Center" HorizontalAlignment="Left" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView.ItemsSource>
+                <MultiBinding Converter="{StaticResource c2sConv}">
+                    <Binding Path="Hierarchical.Selected"/>
+                    <Binding Path="Options.ShowOnlyCurrentStatistics"/>
+                    <Binding Path="Hierarchical.Name"/>
+                </MultiBinding>
+            </ListView.ItemsSource>
+            <ListView.Visibility>
+                <MultiBinding Converter="{StaticResource c2svConv}">
+                    <Binding Path="Hierarchical.Selected"/>
+                    <Binding Path="Options.ShowOnlyCurrentStatistics"/>
+                    <Binding Path="Hierarchical.Name"/>
+                </MultiBinding>
+            </ListView.Visibility>
+            <i:Interaction.Behaviors>
+                <behavior:GridViewColumnResizeBehavior />
+            </i:Interaction.Behaviors>
 
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
-                        <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
-                        <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
-                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
-                        <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False" d:DataContext="{d:DesignInstance Type=main:StatisticViewModel, IsDesignTimeCreatable=False}">
+                    <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
+                    <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
+                    <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
+                    <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
+                    <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </ControlTemplate>
 
     <!-- Language Grid display -->
     <ControlTemplate x:Key="OtherLanguagesControlTemplate">
-        <StackPanel d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
-                      ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}"
-                      Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}">
-                <i:Interaction.Behaviors>
-                    <behavior:GridViewColumnResizeBehavior />
-                </i:Interaction.Behaviors>
+        <ListView VerticalAlignment="Center" HorizontalAlignment="Left" 
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}"
+                  d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <i:Interaction.Behaviors>
+                <behavior:GridViewColumnResizeBehavior />
+            </i:Interaction.Behaviors>
 
-                <ListView.View>
-                    <GridView AllowsColumnReorder="False">
-                        <GridViewColumn Header="Language">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
-                                        <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-                                        <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
-                                            <Image Width="30" Source="{Binding Key, Converter={StaticResource t2iConv}}" />
-                                        </Border>
-                                        <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
-                                        <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
-                                    </Grid>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </StackPanel>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Language">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
+                                    <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                                    <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
+                                        <Image Width="30" Source="{Binding Key, Converter={StaticResource t2iConv}}" />
+                                    </Border>
+                                    <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
+                                    <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </ControlTemplate>
+
+    <!-- Rules Grid display -->
+    <ControlTemplate x:Key="RulesControlTemplate">
+        <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2rConv}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2rvConv}}"
+                  d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <i:Interaction.Behaviors>
+                <behavior:GridViewColumnResizeBehavior />
+            </i:Interaction.Behaviors>
+            
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
+                    <GridViewColumn Header="Rule">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </ControlTemplate>
 
     <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}"
-                                   Visibility="{Binding Options.ShowPicture, Converter={StaticResource b2vConv}}" />
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}"
-                                   Visibility="{Binding Options.ShowPicture, Converter={StaticResource b2vConv}}" RenderTransformOrigin="0.5,0.5" >
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}" />
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />

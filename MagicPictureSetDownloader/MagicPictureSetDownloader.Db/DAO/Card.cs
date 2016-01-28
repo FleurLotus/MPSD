@@ -1,5 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System;
+    using System.Linq;
     using System.Collections.Generic;
 
     using Common.Database;
@@ -10,7 +12,8 @@
     [DbTable]
     internal class Card : ICard
     {
-        private readonly IDictionary<int, string> _translations = new Dictionary<int, string>(); 
+        private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
+        private readonly IList<IRuling> _rulings = new List<IRuling>();
 
         [DbColumn]
         [DbKeyColumn(true)]
@@ -50,6 +53,11 @@
         {
             get { return IsMultiPart && PartName == Name && OtherPartName == Name && CastingCost != null; }
         }
+        public IRuling[] Rulings
+        {
+            get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }
+        }
+
         public string ToString(int? languageId)
         {
             if (languageId == null)
@@ -71,6 +79,18 @@
         public bool HasTranslation(int languageId)
         {
             return _translations.ContainsKey(languageId);
+        }
+        internal void AddRuling(Ruling ruling)
+        {
+            if (ruling == null || ruling.IdCard != Id)
+                return;
+            
+            _rulings.Add(ruling);
+        }
+
+        public bool HasRuling(DateTime addDate, string text)
+        {
+            return _rulings.Any(r => r.AddDate == addDate && r.Text == text);
         }
     }
 }

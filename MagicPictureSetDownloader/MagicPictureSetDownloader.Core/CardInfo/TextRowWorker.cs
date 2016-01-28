@@ -29,11 +29,10 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                 if (string.IsNullOrEmpty(value))
                     throw new ParserException("No Text element found in Element");
 
-                return new Dictionary<string, string> {{CardParser.TextKey, value.HtmlTrim()}};
+                return new Dictionary<string, string> {{CardParserBase.TextKey, value.HtmlTrim()}};
             }
             return new Dictionary<string, string>();
         }
-
 
         private string WorkOnTextBox(IAwareXmlTextReader xmlReader)
         {

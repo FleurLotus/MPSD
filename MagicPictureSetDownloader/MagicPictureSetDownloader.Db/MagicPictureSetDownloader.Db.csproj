@@ -66,6 +66,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DAO\Ruling.cs" />
     <Compile Include="DAO\Audit.cs" />
     <Compile Include="DAO\Block.cs" />
     <Compile Include="DAO\Translate.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="DAO\TreePicture.cs" />
     <Compile Include="DAO\Edition.cs" />
     <Compile Include="DatabaseConnection.cs" />
-    <Compile Include="DatabaseConnection.ConnectionWrapper.cs" >
+    <Compile Include="DatabaseConnection.ConnectionWrapper.cs">
       <DependentUpon>DatabaseConnection.cs</DependentUpon>
     </Compile>
     <Compile Include="MagicDatabase.Audit.cs">

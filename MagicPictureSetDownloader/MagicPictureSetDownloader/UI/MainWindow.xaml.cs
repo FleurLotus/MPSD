@@ -10,6 +10,7 @@
     using Common.WPF;
     using Common.WPF.UI;
 
+    using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Main;
 
@@ -24,13 +25,13 @@
             InitializeComponent();
         }
 
-        public void UpdateImageDatabaseRequested(object sender, EventArgs args)
+        public void AutoUpdateDatabaseRequested(object sender, EventArgs<DownloadViewModelBase> args)
         {
-            new DownloadImageWindow { Owner = this }.ShowDialog();
+            new AutoDownloadWindow(args.Data) { Owner = this }.ShowDialog();
         }
-        public void UpdateDatabaseRequested(object sender, EventArgs args)
+        public void UpdateDatabaseRequested(object sender, EventArgs<DownloadViewModelBase> args)
         {
-            new DownloadWindow { Owner = this }.ShowDialog();
+            new DownloadWindow(args.Data) { Owner = this }.ShowDialog();
         }
         public void VersionRequested(object sender, EventArgs args)
         {

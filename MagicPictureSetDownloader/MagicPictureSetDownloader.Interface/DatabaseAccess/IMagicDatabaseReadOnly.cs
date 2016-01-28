@@ -36,6 +36,7 @@
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
 
         string[] GetMissingPictureUrls();
+        int[] GetRulesId();
         IDisposable BatchMode();
     }
 }

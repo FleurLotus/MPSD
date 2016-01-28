@@ -41,6 +41,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="IRuling.cs" />
     <Compile Include="IAudit.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndUpdate.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteOption.cs" />

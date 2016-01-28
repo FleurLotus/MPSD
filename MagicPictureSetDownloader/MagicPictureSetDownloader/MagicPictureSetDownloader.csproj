@@ -136,7 +136,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\DownloadImageWindow.xaml">
+    <Page Include="UI\AutoDownloadWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -154,7 +154,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\CardToRulesConverter.cs" />
     <Compile Include="Converter\CardToLanguagesTranslationConverter.cs" />
+    <Compile Include="Converter\CardToRulesVisibleConverter.cs" />
     <Compile Include="Converter\CardToLanguagesTranslationVisibleConverter.cs" />
     <Compile Include="Converter\CardToStatisticsVisibleConverter.cs" />
     <Compile Include="Converter\CardToStatisticsConverter.cs" />
@@ -174,8 +176,8 @@
     <Compile Include="UI\DatabaseInfoModificationWindow.xaml.cs">
       <DependentUpon>DatabaseInfoModificationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\DownloadImageWindow.xaml.cs">
-      <DependentUpon>DownloadImageWindow.xaml</DependentUpon>
+    <Compile Include="UI\AutoDownloadWindow.xaml.cs">
+      <DependentUpon>AutoDownloadWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="PicturedTextBlock.cs" />
     <Compile Include="UI\DownloadWindow.xaml.cs">

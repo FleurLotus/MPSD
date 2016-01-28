@@ -63,6 +63,7 @@
     <Compile Include="CardInfo\RowWorker.cs" />
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
+    <Compile Include="CardRuleInfo.cs" />
     <Compile Include="EditionIconInfo.cs" />
     <Compile Include="CardLanguageInfo.cs" />
     <Compile Include="EditionInfos\EditionInfoFinderFactory.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Parser\CardLanguageParser.cs" />
     <Compile Include="EditionInfos\EditionInfoWikiaFinder.cs" />
     <Compile Include="EditionInfos\EditionInfoCardKingdomFinder.cs" />
+    <Compile Include="Parser\CardParserBase.cs" />
+    <Compile Include="Parser\CardRuleParser.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
     <Compile Include="Parser\CardParser.cs" />
     <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />

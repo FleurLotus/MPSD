@@ -329,7 +329,6 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-
         public string[] GetMissingPictureUrls()
         {
             IList<int> idGatherers;
@@ -340,6 +339,22 @@ namespace MagicPictureSetDownloader.Db
 
             return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
                                     .Select(ce => ce.Url).ToArray();
+        }
+        public int[] GetRulesId()
+        {
+            using (new ReaderLock(_lock))
+            {
+                IDictionary<int, ICardEdition> temp = new Dictionary<int, ICardEdition>();
+                foreach (ICardEdition ce in AllCardEditions())
+                {
+                    if (!temp.ContainsKey(ce.IdCard))
+                    {
+                        temp.Add(ce.IdCard, ce);
+                    }
+                }
+
+                return temp.Values.Select(ce => ce.IdGatherer).ToArray();
+            }
         }
 
         private IPicture LoadImage(int idGatherer)

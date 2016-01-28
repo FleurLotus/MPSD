@@ -56,7 +56,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Border  Grid.Column="0" >
+            <Border Grid.Column="0" >
                 <ListBox ItemsSource="{Binding All}" SelectedItem="{binding:TwoWayBinding Selected}" IsEnabled="{Binding State, Converter={StaticResource e2bConv}, ConverterParameter=NoEdition}"/>
             </Border>
             <GridSplitter Grid.Column="1"/>

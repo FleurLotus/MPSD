@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using System.Threading;
+    using System.Windows;
 
     using Common.Library;
     using Common.Library.Notify;
@@ -11,12 +12,12 @@
 
     using MagicPictureSetDownloader.Core;
 
-    public class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable
+    public abstract class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
 
-        protected readonly IDispatcherInvoker DispatcherInvoker;
         protected readonly DownloadManager DownloadManager;
+        protected IDispatcherInvoker DispatcherInvoker;
 
         protected int CountDown;
         protected bool IsStopping;
@@ -25,9 +26,9 @@
         private bool _isBusy;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
         
-        public DownloadViewModelBase(IDispatcherInvoker dispatcherInvoker)
+        protected DownloadViewModelBase(string title)
         {
-            DispatcherInvoker = dispatcherInvoker;
+            Title = title;
             DownloadReporter = new DownloadReporterViewModel();
             DownloadManager = new DownloadManager();
             DownloadManager.CredentialRequiered += OnCredentialRequiered;
@@ -47,6 +48,8 @@
             }
         }
 
+
+        public string Title { get; private set; }
         public string Message
         {
             get
@@ -63,6 +66,23 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+        public void Start(IDispatcherInvoker dispatcherInvoker)
+        {
+            if (null == dispatcherInvoker)
+            {
+                throw new ArgumentNullException("dispatcherInvoker");
+            }
+
+            DispatcherInvoker = dispatcherInvoker;
+
+            JobStarting();
+            if (!StartImpl())
+            {
+                JobFinished();
+            }
+        }
+
+        protected abstract bool StartImpl();
         protected void JobStarting()
         {
             SetMessage(null);
@@ -91,8 +111,7 @@
             }
             _disposed = true;
         }
-
-
+        
         protected void SetMessage(string msg)
         {
             lock (_stringBuilder)

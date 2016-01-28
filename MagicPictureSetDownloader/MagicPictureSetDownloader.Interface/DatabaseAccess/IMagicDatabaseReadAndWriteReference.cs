@@ -13,6 +13,7 @@
         void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url);
         void InsertNewBlock(string blockName);
         void InsertNewLanguage(string languageName, string alternativeName);
+        void InsertNewRuling(int idGatherer, DateTime addDate, string text);
         void EditionCompleted(int editionId);
     }
 }

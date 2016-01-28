@@ -5,7 +5,7 @@
 
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
 
-                    xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
+                    xmlns:edition="clr-namespace:MagicPictureSetDownloader.ViewModel.Download.Edition;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
@@ -16,10 +16,11 @@
 
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 
+
                     mc:Ignorable="d"
                    >
      <!-- CommonDialog -->
-     <DataTemplate DataType="{x:Type download:NewEditionInfoViewModel}" d:IsDesignTimeCreatable="False">
+     <DataTemplate DataType="{x:Type edition:NewEditionInfoViewModel}" d:IsDesignTimeCreatable="False">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -83,11 +84,13 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Show picture" IsChecked="{binding:TwoWayBinding Options.ShowPicture}"/>
-                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show other languages" IsChecked="{binding:TwoWayBinding Options.ShowOtherLanguages}"/>
-                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show statistics" IsChecked="{binding:TwoWayBinding Options.ShowStatistics}"/>
-                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
+                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show rules" IsChecked="{binding:TwoWayBinding Options.ShowRules}"/>
+                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show other languages" IsChecked="{binding:TwoWayBinding Options.ShowOtherLanguages}"/>
+                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Show statistics" IsChecked="{binding:TwoWayBinding Options.ShowStatistics}"/>
+                    <CheckBox Grid.Row="4" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
                               IsChecked="{binding:TwoWayBinding Options.ShowOnlyCurrentStatistics}" IsEnabled="{Binding Options.ShowStatistics}"/>
                 </Grid>
             </GroupBox>

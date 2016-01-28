@@ -5,8 +5,8 @@ namespace MagicPictureSetDownloader.Core.CardInfo
     internal class ImageWorker : ICardInfoParserWorker
     {
         //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardImage for normal card
-        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl03_cardImage for part A of multi part card
-        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl04_cardImage for part B of multi part card
+        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl02_cardImage for part A of multi part card
+        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl03_cardImage for part B of multi part card
         private const string KeyStart = "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent";
         private const string KeyEnd = "cardimage";
 
@@ -34,7 +34,7 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                     if (string.IsNullOrWhiteSpace(source))
                         throw new ParserException("Can't find image path");
 
-                    return new Dictionary<string, string> { { CardParser.ImageKey, source } };
+                    return new Dictionary<string, string> { { CardParserBase.ImageKey, source } };
                 }
             }
             return new Dictionary<string, string>();
