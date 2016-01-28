@@ -28,7 +28,7 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                 if (string.IsNullOrEmpty(value))
                     throw new ParserException("No Text element found in Element");
 
-                return new Dictionary<string, string> {{CardParser.ManaCostKey, value}};
+                return new Dictionary<string, string> {{CardParserBase.ManaCostKey, value}};
             }
             return new Dictionary<string, string>();
         }

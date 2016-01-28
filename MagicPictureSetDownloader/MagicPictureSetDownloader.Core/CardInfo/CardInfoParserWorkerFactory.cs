@@ -55,17 +55,17 @@
             switch (infoType)
             {
                 case "namerow":
-                    return new SimpleValueRowWorker(CardParser.NameKey);
+                    return new SimpleValueRowWorker(CardParserBase.NameKey);
                 case "manarow":
                     return new ManaRowWorker();
                 case "cmcrow":
-                    return new SimpleValueRowWorker(CardParser.CmcKey);
+                    return new SimpleValueRowWorker(CardParserBase.CmcKey);
                 case "ptrow":
-                    return new SimpleValueRowWorker(CardParser.PTKey);
+                    return new SimpleValueRowWorker(CardParserBase.PTKey);
                 case "typerow":
-                    return new SimpleValueRowWorker(CardParser.TypeKey);
+                    return new SimpleValueRowWorker(CardParserBase.TypeKey);
                 case "rarityrow":
-                    return new SimpleValueRowWorker(CardParser.RarityKey);
+                    return new SimpleValueRowWorker(CardParserBase.RarityKey);
                 case "textrow":
                     return new TextRowWorker();
 

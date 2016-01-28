@@ -10,16 +10,18 @@
     using Common.WPF.UI;
 
     using MagicPictureSetDownloader.ViewModel.Download;
+    using MagicPictureSetDownloader.ViewModel.Download.Edition;
 
     /// <summary>
     /// Interaction logic for DownloadWindow.xaml
     /// </summary>
     public partial class DownloadWindow
     {
-        public DownloadWindow()
+        public DownloadWindow(DownloadViewModelBase vm)
         {
-            DataContext = new DownloadViewModel(new DispatcherInvoker(Application.Current.Dispatcher), false);
+            DataContext = vm;
             InitializeComponent();
+            vm.Start(new DispatcherInvoker(Application.Current.Dispatcher) );
         }
         public void CredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {

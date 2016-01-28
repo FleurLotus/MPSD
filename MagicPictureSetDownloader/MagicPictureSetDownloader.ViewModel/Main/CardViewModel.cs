@@ -85,12 +85,20 @@
         {
             get { return Card.Text; }
         }
+        public IRuling[] Rulings
+        {
+            get { return Card.Rulings; }
+        }
+        public string ToString(int? languageId)
+        {
+            return Card.ToString(languageId);
+        }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; private set; }
         public StatisticViewModel[] Statistics { get; private set; }
         public string PowerToughnessLoyalty { get; private set; }
         public string PowerToughnessLoyaltyText { get; private set; }
         public string[] DisplayedCastingCost { get; private set; }
-        public ICard Card { get; private set; }
+        internal ICard Card { get; private set; }
     }
 }

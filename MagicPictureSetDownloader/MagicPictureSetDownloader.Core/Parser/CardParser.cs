@@ -1,59 +1,32 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Xml;
     using Common.Library.Extension;
     using MagicPictureSetDownloader.Core.CardInfo;
 
-    internal class CardParser : IParser<CardWithExtraInfo>
+    internal class CardParser : CardParserBase, IParser<CardWithExtraInfo>
     {
-        private const string Start = @"<!-- Card Details Table -->";
-        private const string End = @"<!-- End Card Details Table -->";
-        private const string SubCardStart = @"<table class=""cardDetails cardComponent""";
-
-        public const string ImageKey = "Image";
-        public const string NameKey = "Name";
-        public const string ManaCostKey = "ManaCost";
-        public const string CmcKey = "CMC";
-        public const string TypeKey = "Type";
-        public const string TextKey = "Text";
-        public const string FlavorKey = "Flavor";
-        public const string PTKey = "PT";
-        public const string SetKey = "Set";
-        public const string RarityKey = "Rarity";
-        public const string NumberKey = "Number";
-        public const string ArtistKey = "Artist";
-
         public IEnumerable<CardWithExtraInfo> Parse(string text)
         {
-            //No decode because we need to do a special correction for XmlTextReader to be able to read HTML with javascript
-            //For end because of multi part card
-            string cutText = Parser.ExtractContent(text, Start, End, false, true);
-            
-            if (cutText.IndexOf(End, StringComparison.InvariantCulture) >= 0)
-                return ManageMultiPartCards(text, cutText);
+            string[] cutTexts = ExtractCardText(text);
 
-            //Case for normal card
-            CardWithExtraInfo cardWithExtraInfo = GenerateCard(cutText);
-            return new[] { cardWithExtraInfo };
+            if (cutTexts.Length == 1)
+            {
+                //Case for normal card
+                CardWithExtraInfo cardWithExtraInfo = GenerateCard(cutTexts[0]);
+                return new[] { cardWithExtraInfo };
+            }
+
+            return ManageMultiPartCards(text, cutTexts);
         }
 
-        private IEnumerable<CardWithExtraInfo> ManageMultiPartCards(string text, string cutText)
+        private IEnumerable<CardWithExtraInfo> ManageMultiPartCards(string text, IEnumerable<string> cutTexts)
         {
             //Case for multi part card
-            List<CardWithExtraInfo> cardWithExtraInfos = new List<CardWithExtraInfo>();
-            foreach (string subinfo in  cutText.Split(new[] { End }, StringSplitOptions.RemoveEmptyEntries))
-            {
-                int index = subinfo.LastIndexOf(SubCardStart, StringComparison.InvariantCulture);
-                if (index < 0)
-                {
-                    continue;
-                }
-
-                cardWithExtraInfos.Add(GenerateCard(subinfo.Substring(index)));
-            }
+            List<CardWithExtraInfo> cardWithExtraInfos = cutTexts.Select(GenerateCard).ToList();
 
             if (cardWithExtraInfos.Count != 2)
             {
@@ -195,25 +168,6 @@
         private string GetToughness(string text)
         {
             return text.Split('/')[1].HtmlTrim();
-        }
-        private string SpecialXMLCorrection(string text)
-        {
-            //Ensure unique root element because of fragment file
-            text = "<root>" + text + "</root>";
-
-            //For XmlTextReader which doesn't support & caracter
-            text = text.Replace("&amp;", "&");
-            text = text.Replace("&", "&amp;");
-            text = text.Replace("<</i>", "&lt;</i>");
-
-            //Known XML issues in file
-            text = text.Replace("<div>", "<tr>");
-            text = text.Replace("</div\r\n", "</div>");
-            text = text.Replace("<i>", "");
-            text = text.Replace("</i>", "");
-            text = text.Replace("--->", "-->");
-
-            return text;
         }
     }
 }

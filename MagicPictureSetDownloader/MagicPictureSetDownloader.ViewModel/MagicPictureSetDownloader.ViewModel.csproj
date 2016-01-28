@@ -53,9 +53,11 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Download\DownloadImageViewModel.cs" />
+    <Compile Include="Download\Auto\AutoDownloadViewModelBase.cs" />
+    <Compile Include="Download\Auto\AutoDownloadRuleViewModel.cs" />
+    <Compile Include="Download\Auto\AutoDownloadImageViewModel.cs" />
     <Compile Include="Download\DownloadViewModelBase.cs" />
-    <Compile Include="Download\NewEditionInfoViewModel.cs" />
+    <Compile Include="Download\Edition\NewEditionInfoViewModel.cs" />
     <Compile Include="Input\CardSourceViewModel.cs" />
     <Compile Include="Input\CardRemoveViewModel.cs" />
     <Compile Include="Input\UpdateViewModelCommun.cs" />
@@ -80,7 +82,7 @@
     <Compile Include="Main\HierarchicalViewModel.cs" />
     <Compile Include="Main\MainViewModel.cs" />
     <Compile Include="Download\DownloadReporterViewModel.cs" />
-    <Compile Include="Download\DownloadViewModel.cs" />
+    <Compile Include="Download\Edition\DownloadEditionViewModel.cs" />
     <Compile Include="Main\StatisticViewModel.cs" />
     <Compile Include="Management\TranslationViewModel.cs" />
     <Compile Include="Management\AuditInfo.cs" />
@@ -93,7 +95,7 @@
     <Compile Include="Option\OptionsChangeViewModel.cs" />
     <Compile Include="Option\OptionsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Download\EditionInfoViewModel.cs" />
+    <Compile Include="Download\Edition\EditionInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">

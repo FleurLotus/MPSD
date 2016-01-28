@@ -32,7 +32,7 @@
                     NextPageChecker.CheckHasNextPage(trimedrow, true);
                 }
 
-                string[] columns = trimedrow.Replace("\r", "").Replace("\n", "").Split(new[] { "</td>" }, StringSplitOptions.None);
+                string[] columns = trimedrow.Split(new[] { "</td>" }, StringSplitOptions.None);
                 if (header)
                 {
                     for (int i = 0; i < columns.Length; i++)

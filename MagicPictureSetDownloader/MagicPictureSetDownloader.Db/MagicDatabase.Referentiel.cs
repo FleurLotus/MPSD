@@ -211,6 +211,22 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
+        public void InsertNewRuling(int idGatherer, DateTime addDate, string text)
+        {
+            ICard card = GetCard(idGatherer);
+            if (card == null || string.IsNullOrWhiteSpace(text))
+                return;
+
+            using (new WriterLock(_lock))
+            {
+                if (!card.HasRuling(addDate, text))
+                {
+                    Ruling ruling = new Ruling { IdCard = card.Id, AddDate = addDate, Text = text };
+                    AddToDbAndUpdateReferential(DatabasebType.Data, ruling, InsertInReferential);
+                }
+            }
+        }
+
         public void DeleteOption(TypeOfOption type, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -298,6 +314,9 @@ namespace MagicPictureSetDownloader.Db
                 foreach (Translate translate in Mapper<Translate>.LoadAll(cnx))
                     InsertInReferential(translate);
 
+                foreach (Ruling ruling in Mapper<Ruling>.LoadAll(cnx))
+                    InsertInReferential(ruling);
+
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                     InsertInReferential(cardEdition);
 
@@ -379,6 +398,16 @@ namespace MagicPictureSetDownloader.Db
                 throw new ApplicationDbException("Can't find card with id " + translate.IdCard);
 
             card.AddTranslate(translate);
+
+            _cacheForAllDbInfos = null;
+        }
+        private void InsertInReferential(Ruling ruling)
+        {
+            Card card = _cardsbyId.GetOrDefault(ruling.IdCard) as Card;
+            if (card == null)
+                throw new ApplicationDbException("Can't find card with id " + ruling.IdCard);
+
+            card.AddRuling(ruling);
 
             _cacheForAllDbInfos = null;
         }

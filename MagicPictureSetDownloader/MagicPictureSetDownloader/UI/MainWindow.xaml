@@ -39,8 +39,8 @@
         <i:EventTrigger EventName="VersionRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="VersionRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="UpdateImageDatabaseRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="UpdateImageDatabaseRequested" />
+        <i:EventTrigger EventName="AutoUpdateDatabaseRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="AutoUpdateDatabaseRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="UpdateDatabaseRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="UpdateDatabaseRequested" />
@@ -102,24 +102,7 @@
                 <GridSplitter Grid.Column="1"/>
 
                 <Border Grid.Column="2">
-                    <Grid>
-                        <!-- Split Card/Image -->
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <ContentControl Grid.Row="0" Content="{Binding Hierarchical.Selected}" />
-
-                        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Control Margin="10" Visibility="{Binding Options.ShowStatistics, Converter={StaticResource b2vConv}}" Template="{StaticResource StatisticsControlTemplate}" />
-                            <Control Margin="10" Visibility="{Binding Options.ShowOtherLanguages, Converter={StaticResource b2vConv}}" Template="{StaticResource OtherLanguagesControlTemplate}" />
-                        </StackPanel>
-
-                        <Control Grid.Row="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"
-                                 Template="{StaticResource ImageControlTemplate}" />
-                    </Grid>
+                    <ContentControl Content="{Binding Hierarchical.Selected}" />
                 </Border>
             </Grid>
 

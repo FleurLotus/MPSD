@@ -27,7 +27,7 @@ namespace MagicPictureSetDownloader.Converter
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             foreach (ILanguage language in _magicDatabase.GetAllLanguages())
             {
-                string name = node.Card.Card.ToString(language.Id);
+                string name = node.Card.ToString(language.Id);
                 if (!string.IsNullOrEmpty(name))
                     dictionary.Add(language.Name, name);
             }

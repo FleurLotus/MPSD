@@ -13,6 +13,9 @@
         private bool _showStatistics;
         private const string ShowOnlyCurrentStatisticsKey = "ShowOnlyCurrentStatistics";
         private bool _showOnlyCurrentStatistics;
+        private const string ShowRulesKey = "ShowRules";
+        private bool _showRules;
+
         private const string AutoCheckUpgradeKey = "AutoCheckUpgrade";
         private bool _autoCheckUpgrade;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabase;
@@ -71,6 +74,18 @@
                 }
             }
         }
+        public bool ShowRules
+        {
+            get { return _showRules; }
+            set
+            {
+                if (value != _showRules)
+                {
+                    _showRules = value;
+                    OnNotifyPropertyChanged(() => ShowRules);
+                }
+            }
+        }
         public bool AutoCheckUpgrade
         {
             get { return _autoCheckUpgrade; }
@@ -99,6 +114,7 @@
             ShowOtherLanguages = GetOptionValue(TypeOfOption.Display, ShowOtherLanguagesKey);
             ShowStatistics = GetOptionValue(TypeOfOption.Display, ShowStatisticsKey);
             ShowOnlyCurrentStatistics = GetOptionValue(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey);
+            ShowRules = GetOptionValue(TypeOfOption.Display, ShowRulesKey);
             AutoCheckUpgrade = GetOptionValue(TypeOfOption.Upgrade, AutoCheckUpgradeKey);
         }
         public void Save()
@@ -107,6 +123,7 @@
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowStatisticsKey, ShowStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey, ShowOnlyCurrentStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOtherLanguagesKey, ShowOtherLanguages.ToString());
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowRulesKey, ShowRules.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Upgrade, AutoCheckUpgradeKey, AutoCheckUpgrade.ToString());
         }
     }

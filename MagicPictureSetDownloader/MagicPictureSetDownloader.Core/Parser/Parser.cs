@@ -25,6 +25,10 @@
         {
             return new CardLanguageParser().Parse(htmltext);
         }
+        internal static IEnumerable<CardRuleInfo> ParseCardRule(string htmltext)
+        {
+            return new CardRuleParser().Parse(htmltext);
+        }
 
         public static int ExtractIdGatherer(string pictureUrl)
         {

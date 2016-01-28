@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
 
     using Common.Library.Notify;
@@ -13,6 +14,8 @@
     public class DownloadManager
     {
         public event EventHandler<EventArgs<string>> NewEditionCreated;
+
+        public const string BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
 
         private readonly WebAccess _webAccess = new WebAccess();
         private readonly Lazy<IMagicDatabaseReadAndWriteReference> _lazy = new Lazy<IMagicDatabaseReadAndWriteReference>(() => MagicDatabaseManager.ReadAndWriteReference);
@@ -125,6 +128,22 @@
             }
             */
         }
+        public void InsertRuleInDb(string rulesUrl)
+        {
+            int idGatherer = Parser.ExtractIdGatherer(rulesUrl);
+
+            string htmltext = _webAccess.GetHtml(rulesUrl);
+
+            foreach (CardRuleInfo cardRuleInfo in Parser.ParseCardRule(htmltext))
+            {
+                MagicDatabase.InsertNewRuling(idGatherer, cardRuleInfo.Date, cardRuleInfo.Text);
+            }
+        }
+        public string[] GetRulesUrls()
+        {
+            return MagicDatabase.GetRulesId().Select(idGatherer => WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer))).ToArray();
+        }
+
         public string[] GetMissingPictureUrls()
         {
             return MagicDatabase.GetMissingPictureUrls();

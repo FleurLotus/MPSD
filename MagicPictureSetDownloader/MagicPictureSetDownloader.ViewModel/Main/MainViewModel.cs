@@ -29,9 +29,12 @@
 
         //TODO: Test add/remove splitted card and statistics
         //TODO: (Maybe) Import / save historical price 
-
-        //TODO: manage ocT for tap symbol
         //TODO: think about adding complete prebuilt deck
+
+        //For 8.0
+        //TODO: Merge code for rule and image as possible
+        //TODO: Parsing and call InsertNewRuling 
+        //TODO: Manage ruling and maybe delete using DatabaseInfoModificationViewModelBase
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -130,10 +133,12 @@
             {
                 _programUpdater.HasNewVersionAvailable();
             }
+            // ReSharper disable EmptyGeneralCatchClause
             catch
             {
                 //Call by threadpool must not throw exception
             }
+            // ReSharper restore EmptyGeneralCatchClause
             finally
             {
                 UpgradeStatus = _programUpdater.Status;
