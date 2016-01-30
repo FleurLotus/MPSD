@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="7.6">
+  <Last Number="8.0">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Status bar info</Comment>
+    <Comment>Version with Rules and Oath of the Gatewatch</Comment>
   </Last>
-   <Old Number="7.5">
+  <Old Number="7.6">
+    <Comment>Version with Status bar info</Comment>
+  </Old>
+  <Old Number="7.5">
     <Comment>Version with optimize import</Comment>
   </Old>
   <Old Number="7.4">
