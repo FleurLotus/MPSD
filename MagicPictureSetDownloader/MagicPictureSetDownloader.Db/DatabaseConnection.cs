@@ -14,6 +14,7 @@
     {
         private readonly IDictionary<DatabasebType, string> _connectionStrings = new Dictionary<DatabasebType, string>();
         private IDbConnection _batchConnection;
+        private IDbTransaction _batchTransaction;
         
         public DatabaseConnection()
         {
@@ -65,6 +66,7 @@
             }
 
             _batchConnection = GetMagicConnectionInternal(DatabasebType.Data);
+            _batchTransaction = _batchConnection.BeginTransaction();
         }
         public void DesactivateBatchMode()
         {
@@ -72,6 +74,9 @@
             {
                 throw new ApplicationDbException("BatchMode is not activated");
             }
+            _batchTransaction.Commit();
+            _batchTransaction.Dispose();
+            _batchTransaction = null;
 
             _batchConnection.Dispose();
             _batchConnection = null;
