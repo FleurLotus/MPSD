@@ -74,7 +74,7 @@
         }
         public static void DeleteMulti(IDbConnection cnx, IEnumerable<T> values)
         {
-            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildDeleteOneCommand);
+            Execute(cnx, values, _commandBuilder.BuildDeleteOneCommand);
         }
         public static void InsertOne(IDbConnection cnx, T value)
         {
@@ -82,7 +82,7 @@
         }
         public static void InsertMulti(IDbConnection cnx, IEnumerable<T> values)
         {
-            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildInsertOneCommand, GetIdentity);
+            Execute(cnx, values, _commandBuilder.BuildInsertOneCommand, GetIdentity);
         }
 
         private static void GetIdentity(IDbCommand cmd, T value)
@@ -100,39 +100,28 @@
         }
         public static void UpdateMulti(IDbConnection cnx, IEnumerable<T> values)
         {
-            ExecuteWithTransaction(cnx, values, _commandBuilder.BuildUpdateOneCommand);
+            Execute(cnx, values, _commandBuilder.BuildUpdateOneCommand);
         }
 
-        private static void ExecuteWithTransaction(IDbConnection cnx, IEnumerable<T> values,
-                                                   Action<IDbCommand,T> prepareCommand, Action<IDbCommand,T> doPostExecuteAction = null)
+        private static void Execute(IDbConnection cnx, IEnumerable<T> values, Action<IDbCommand, T> prepareCommand, Action<IDbCommand, T> doPostExecuteAction = null)
         {
-            using (IDbTransaction transaction = cnx.BeginTransaction())
+            foreach (T value in values)
             {
-                try
+                using (IDbCommand cmd = cnx.CreateCommand())
                 {
-                    foreach (T value in values)
+                    prepareCommand(cmd, value);
+
+                    if (cmd.ExecuteNonQuery() != 1)
                     {
-                        using (IDbCommand cmd = cnx.CreateCommand())
-                        {
-                            cmd.Transaction = transaction;
-                            prepareCommand(cmd, value);
-                            if (cmd.ExecuteNonQuery() != 1)
-                                throw new ApplicationDbException("Wrong number of row affected. Rollback");
-
-                            if (doPostExecuteAction != null)
-                            {
-                                doPostExecuteAction(cmd, value);
-                            }
-                        }
-
+                        throw new ApplicationDbException("Wrong number of row affected. Rollback");
                     }
-                    transaction.Commit();
+
+                    if (doPostExecuteAction != null)
+                    {
+                        doPostExecuteAction(cmd, value);
+                    }
                 }
-                catch (Exception)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
+
             }
         }
         private static void SetValue(T t, PropertyInfo pi, object value)

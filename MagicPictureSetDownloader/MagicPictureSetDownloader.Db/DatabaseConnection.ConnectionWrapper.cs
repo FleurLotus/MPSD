@@ -2,7 +2,9 @@
 {
     using System;
     using System.Data;
-    
+
+    using Common.Database;
+
     internal partial class DatabaseConnection
     {
         private sealed class ConnectionWrapper : IDbConnection
@@ -39,8 +41,7 @@
             {
                 CheckDisposed();
 
-                if (!_bacthMode)
-                    _cnx.Close();
+                CloseInner();
             }
 
             public string ConnectionString
@@ -52,8 +53,7 @@
                 }
                 set
                 {
-                    CheckDisposed();
-                    _cnx.ConnectionString = value;
+                    throw new ApplicationDbException("Change of ConnectionString is not allowed");
                 }
             }
 
@@ -83,8 +83,7 @@
 
             public void Open()
             {
-                CheckDisposed();
-                _cnx.Open();
+                throw new ApplicationDbException("Open is not allowed");
             }
 
             public ConnectionState State
@@ -101,9 +100,7 @@
                 if (_disposed)
                     return;
 
-
-                if (!_bacthMode)
-                    _cnx.Dispose();
+                CloseInner();
 
                 _disposed = true;
             }
@@ -114,7 +111,13 @@
                     throw new ObjectDisposedException(typeof(ConnectionWrapper).Name);
             }
 
+            private void CloseInner()
+            {
+                if (!_bacthMode)
+                {
+                    _cnx.Close();
+                }
+            }
         }
-
     }
 }

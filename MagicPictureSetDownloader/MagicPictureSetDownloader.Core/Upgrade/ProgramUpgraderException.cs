@@ -3,6 +3,7 @@
     using System;
     using System.Runtime.Serialization;
 
+    [Serializable]
     public class ProgramUpgraderException : ApplicationException
     {
         public ProgramUpgraderException()
