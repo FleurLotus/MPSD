@@ -30,11 +30,6 @@
         //TODO: Test add/remove splitted card and statistics
         //TODO: (Maybe) Import / save historical price 
         //TODO: think about adding complete prebuilt deck
-
-        //For 8.0
-        //TODO: Merge code for rule and image as possible
-        //TODO: Parsing and call InsertNewRuling 
-        //TODO: Manage ruling and maybe delete using DatabaseInfoModificationViewModelBase
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             AddLinkedProperty(() => Hierarchical, () => Title);
@@ -67,9 +62,16 @@
             /*
             foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample"))
             {
-                _magicDatabase.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
+                MagicDatabaseManager.ReadAndWriteReference.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
+            }
+
+            var sb = new System.Text.StringBuilder();
+            foreach (var b in System.IO.File.ReadAllBytes(System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample")[0]))
+            {
+                sb.Append(", 0x" +b.ToString("X2"));
             }
             */
+
 
             //Reload last chosen option
             IOption option = _magicDatabase.GetOption(TypeOfOption.SelectedCollection, "Name");

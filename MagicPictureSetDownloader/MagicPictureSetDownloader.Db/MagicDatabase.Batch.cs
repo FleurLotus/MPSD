@@ -11,6 +11,9 @@
          private sealed class Batch : IDisposable
          {
              private readonly MagicDatabase _database;
+             //To avoid multiple call of dispose on the same object and break of recursivity
+             private readonly object _sync = new object();
+             private bool _disposed;
 
              public Batch(MagicDatabase database)
              {
@@ -20,6 +23,13 @@
 
              public void Dispose()
              {
+                 lock (_sync)
+                 {
+                     if (_disposed)
+                         return;
+
+                     _disposed = true;
+                 }
                  _database.DecrementBatchDepth();
              }
          }

@@ -72,7 +72,7 @@
         private CardRuleInfo WorkOnRow(IAwareXmlTextReader xmlReader)
         {
             DateTime date = new DateTime();
-            string rule = null;;
+            string rule = null;
 
             while (xmlReader.Read())
             {
