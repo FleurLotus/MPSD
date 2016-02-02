@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="8.1">
+  <Last Number="8.2">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with option batch</Comment>
+    <Comment>Version with correction on batch mode</Comment>
   </Last>
+  <Old Number="8.1">
+    <Comment>Version with batch mode for import</Comment>
+  </Old>
   <Old Number="8.0">
     <Comment>Version with Rules and Oath of the Gatewatch</Comment>
   </Old>
