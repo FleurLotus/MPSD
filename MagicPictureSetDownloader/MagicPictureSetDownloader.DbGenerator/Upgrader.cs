@@ -101,17 +101,26 @@
         {
             if (dbVersion <= 8)
             {
+                //Older
                 foreach (Tuple<string, string> t in GetImageToCopy())
                 {
                     repo.ExecuteBatch(UpdateQueries.CopyImage, t.Item1, t.Item2);
                 }
-
+                //8.0
                 if (!repo.RowExists(null, "TreePicture", new[] { "Name" }, new object[] { "@C" }))
                 {
                     repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
                         new KeyValuePair<string, object>("@name", "@C"),
                         new KeyValuePair<string, object>("@value", UpdateQueries.NewColorlessManaSymbol));
                 }
+                //8.2
+                if (!repo.RowExists(null, "TreePicture", new[] { "Name" }, new object[] { "Oath of the Gatewatch" }))
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
+                        new KeyValuePair<string, object>("@name", "Oath of the Gatewatch"),
+                        new KeyValuePair<string, object>("@value", UpdateQueries.NewOgwSymbol));
+                }
+
             }
         }
 

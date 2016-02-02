@@ -7,7 +7,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:wpfui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-        xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
         xmlns:edition="clr-namespace:MagicPictureSetDownloader.ViewModel.Download.Edition;assembly=MagicPictureSetDownloader.ViewModel"
         Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}"

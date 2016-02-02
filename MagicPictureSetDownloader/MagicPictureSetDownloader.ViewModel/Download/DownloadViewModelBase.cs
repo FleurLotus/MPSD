@@ -3,7 +3,6 @@
     using System;
     using System.Text;
     using System.Threading;
-    using System.Windows;
 
     using Common.Library;
     using Common.Library.Notify;
@@ -11,6 +10,7 @@
     using Common.Web;
 
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Db;
 
     public abstract class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable
     {
@@ -23,6 +23,8 @@
         protected bool IsStopping;
         protected readonly ManualResetEvent FinishedStopping = new ManualResetEvent(true);
         private bool _disposed;
+        private IDisposable _batch;
+        private readonly object _sync = new object();
         private bool _isBusy;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
         
@@ -87,13 +89,37 @@
         {
             SetMessage(null);
             IsBusy = true;
+
+            lock (_sync)
+            {
+                if (_batch == null)
+                    _batch = MagicDatabaseManager.ReadAndUpdate.BatchMode();
+            }
+
             FinishedStopping.Reset();
         }
         protected void JobFinished()
         {
             IsBusy = false;
+
+            BatchEnd();
+
             if (!_disposed)
+            {
                 FinishedStopping.Set();
+            }
+        }
+
+        private void BatchEnd()
+        {
+            lock (_sync)
+            {
+                if (_batch != null)
+                {
+                    _batch.Dispose();
+                    _batch = null;
+                }
+            }
         }
 
         protected virtual void Dispose(bool disposing)

@@ -41,14 +41,7 @@
 
         protected override void DisplayCurrent()
         {
-            if (Selected == null)
-            {
-                Name = null;
-            }
-            else
-            {
-                Name = Selected.ToString();
-            }
+            Name = Selected == null ? null : Selected.ToString();
             BuildAllTranslations();
         }
         protected override bool CouldBeUpdated()
