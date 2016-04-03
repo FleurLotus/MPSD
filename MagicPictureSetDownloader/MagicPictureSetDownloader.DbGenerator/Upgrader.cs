@@ -1,11 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     using System;
-    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
     using System.Reflection;
+    using System.Collections.Generic;
+    using System.IO;
 
     using Common.SQL;
     using Common.SQLite;
@@ -101,35 +102,52 @@
         {
             if (dbVersion <= 8)
             {
-                //Older
-                foreach (Tuple<string, string> t in GetImageToCopy())
-                {
-                    repo.ExecuteBatch(UpdateQueries.CopyImage, t.Item1, t.Item2);
-                }
-                //8.0
-                if (!repo.RowExists(null, "TreePicture", new[] { "Name" }, new object[] { "@C" }))
-                {
-                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
-                        new KeyValuePair<string, object>("@name", "@C"),
-                        new KeyValuePair<string, object>("@value", UpdateQueries.NewColorlessManaSymbol));
-                }
-                //8.2
-                if (!repo.RowExists(null, "TreePicture", new[] { "Name" }, new object[] { "Oath of the Gatewatch" }))
-                {
-                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
-                        new KeyValuePair<string, object>("@name", "Oath of the Gatewatch"),
-                        new KeyValuePair<string, object>("@value", UpdateQueries.NewOgwSymbol));
-                }
-
+                AddMissingPictureFromReference(repo);
             }
         }
-
-        private IEnumerable<Tuple<string, string>> GetImageToCopy()
+        private void AddMissingPictureFromReference(IRepository repo)
         {
-            yield return new Tuple<string, string>("Time Spiral", "Time Spiral \"Timeshifted\"");
-            yield return new Tuple<string, string>("Archenemy", "Scheme");
-            yield return new Tuple<string, string>("Planechase", "Phenomenon");
-            yield return new Tuple<string, string>("Planechase", "Plane");
+            string temporaryDatabasePath = new Generator(DatabasebType.Picture).Generate(true);
+            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabasebType.Picture));
+            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = temporaryDatabasePath }).ToString();
+
+            Dictionary<string, byte[]> reference = GetTreePictures(connectionString);
+            File.Delete(temporaryDatabasePath);
+
+            Dictionary<string, byte[]> current = GetTreePictures(_connectionString);
+            
+            foreach (var kv in reference) 
+            {
+                if (!current.ContainsKey(kv.Key))
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
+                       new KeyValuePair<string, object>("@name", kv.Key),
+                       new KeyValuePair<string, object>("@value", kv.Value));
+                }
+            }
+        }
+        private Dictionary<string, byte[]> GetTreePictures(string connectionString)
+        {
+            Dictionary<string, byte[]> ret = new Dictionary<string, byte[]>(StringComparer.InvariantCultureIgnoreCase);
+           
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectTreePicture;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret.Add(reader.GetString(0), (byte[])reader.GetValue(1));
+                        }
+                    }
+                }
+            }
+            return ret;
         }
     }
 }

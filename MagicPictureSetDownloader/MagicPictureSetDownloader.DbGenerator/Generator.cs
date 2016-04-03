@@ -14,15 +14,19 @@
         {
             _data = data;
         }
-        internal void Generate()
+        internal string Generate(bool tempDir = false)
         {
             string resourceName = DatabaseGenerator.GetResourceName(_data);
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            string outDir = tempDir ? Path.GetTempPath() : Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
             string name = executingAssembly.GetManifestResourceNames().First(s => s.EndsWith(resourceName.Replace(".sqlite", ".zip")));
 
             using (Stream stream = executingAssembly.GetManifestResourceStream(name))
-                Zipper.UnZipAll(stream, Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            {
+                Zipper.UnZipAll(stream, outDir);
+                return outDir;
+            }
         }
     }
 }
