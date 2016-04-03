@@ -65,14 +65,8 @@
                 MagicDatabaseManager.ReadAndWriteReference.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
 
-            var sb = new System.Text.StringBuilder();
-            foreach (var b in System.IO.File.ReadAllBytes(System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample")[0]))
-            {
-                sb.Append(", 0x" +b.ToString("X2"));
-            }
             */
-
-
+            
             //Reload last chosen option
             IOption option = _magicDatabase.GetOption(TypeOfOption.SelectedCollection, "Name");
             if (option != null)
