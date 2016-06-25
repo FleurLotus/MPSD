@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="8.3">
+  <Last Number="8.5">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Shadow over Innistrad</Comment>
+    <Comment>Version with Eternal master</Comment>
   </Last>
+   <Old Number="8.4">
+   <Comment>Version with Missing icon retrieval from referential</Comment>
+  </Old>
+  <Old Number="8.3">
+   <Comment>Version with Shadow over Innistrad</Comment>
+  </Old>
   <Old Number="8.2">
     <Comment>Version with correction on batch mode</Comment>
   </Old>  
