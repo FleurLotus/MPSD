@@ -60,13 +60,12 @@
 
             //ALERT: Temp for helping load file to tree picture
             /*
-            foreach (string file in System.IO.Directory.GetFiles(@"C:\Users\fbossout042214\Documents\Visual Studio 2013\Projects\MagicPictureSetDownloader\Sample"))
+            foreach (string file in System.IO.Directory.GetFiles(@"D:\Documents\Dev\MPSD\Save\icons"))
             {
                 MagicDatabaseManager.ReadAndWriteReference.InsertNewTreePicture(System.IO.Path.GetFileNameWithoutExtension(file), System.IO.File.ReadAllBytes(file));
             }
-
             */
-            
+
             //Reload last chosen option
             IOption option = _magicDatabase.GetOption(TypeOfOption.SelectedCollection, "Name");
             if (option != null)

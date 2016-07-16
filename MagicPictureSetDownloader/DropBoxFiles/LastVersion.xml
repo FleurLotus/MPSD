@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="8.5">
+  <Last Number="8.6">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Eternal master</Comment>
+    <Comment>Version with Eldritch Moon</Comment>
   </Last>
+  <Old Number="8.5">
+    <Comment>Version with Eternal master</Comment>
+  </Old>
    <Old Number="8.4">
    <Comment>Version with Missing icon retrieval from referential</Comment>
   </Old>
