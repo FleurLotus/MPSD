@@ -29,7 +29,7 @@
             _baseEditionIconUrls = new Dictionary<IconPageType, string>
                                        {
                                            { IconPageType.Wikia, @"http://mtg.wikia.com/wiki/Set" },
-                                           { IconPageType.CardKingdom, @"http://www.cardkingdom.com/catalog" }
+                                          // { IconPageType.CardKingdom, @"http://www.cardkingdom.com/catalog" }
                                        };
 
             DownloadManager.NewEditionCreated += OnNewEditionCreated;
