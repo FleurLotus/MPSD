@@ -43,7 +43,7 @@
         }
         public bool IsReverseSide
         {
-            get { return IsMultiPart && CastingCost == null; }
+            get { return IsMultiPart && CastingCost == null && !Type.ToLowerInvariant().Contains("land"); }
         }
         public bool IsSplitted
         {
