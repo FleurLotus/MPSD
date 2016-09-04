@@ -6,6 +6,7 @@
     using System.Reflection;
     using System.Collections.Generic;
     using System.Text;
+    using Library.Enums;
 
     internal class CommandBuilder
     {
@@ -25,6 +26,11 @@
 
         public void BuildSelectOneCommand(IDbCommand cmd, object input)
         {
+            if (input == null)
+                throw new ArgumentNullException("input");
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
 
@@ -32,11 +38,19 @@
         }
         public void BuildSelectAllCommand(IDbCommand cmd)
         {
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
         }
         public void BuildDeleteAllCommand(IDbCommand cmd)
         {
+            if (cmd == null)
+                throw new ArgumentNullException("cmd");
+
+            CheckRestriction(Restriction.Delete);
+
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _deleteQuery;
         }
@@ -46,6 +60,8 @@
                 throw new ArgumentNullException("input");
             if (cmd == null)
                 throw new ArgumentNullException("cmd");
+
+            CheckRestriction(Restriction.Update);
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _updateQuery;
@@ -64,6 +80,8 @@
             if (cmd == null)
                 throw new ArgumentNullException("cmd");
 
+            CheckRestriction(Restriction.Delete);
+
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _deleteQuery;
 
@@ -75,6 +93,8 @@
                 throw new ArgumentNullException("input");
             if (cmd == null)
                 throw new ArgumentNullException("cmd");
+
+            CheckRestriction(Restriction.Insert);
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _insertQuery;
@@ -198,6 +218,14 @@
                 parameter.DbType = dbtype.Value;
 
             cmd.Parameters.Add(parameter);
+        }
+
+        private void CheckRestriction(Restriction restriction)
+        {
+            if (Matcher<Restriction>.IncludeValue(_typeDbInfo.Restriction, restriction))
+            {
+                throw new RestrictedDmlException(_typeDbInfo.TableName, restriction);
+            }
         }
     }
 }

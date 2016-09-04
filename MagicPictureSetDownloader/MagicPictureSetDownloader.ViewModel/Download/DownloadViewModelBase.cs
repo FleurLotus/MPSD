@@ -37,6 +37,7 @@
         }
 
         public DownloadReporterViewModel DownloadReporter { get; private set; }
+        public string Title { get; private set; }
         public bool IsBusy
         {
             get { return _isBusy; }
@@ -49,9 +50,6 @@
                 }
             }
         }
-
-
-        public string Title { get; private set; }
         public string Message
         {
             get
