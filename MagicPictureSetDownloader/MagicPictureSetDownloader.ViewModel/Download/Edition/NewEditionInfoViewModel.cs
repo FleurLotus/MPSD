@@ -20,30 +20,41 @@
         private bool _hasFoil;
         private int? _position;
         private IBlock _blockSelected;
+        private byte[] _icon;
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
+        private readonly Func<string, byte[]> _getIcon;
 
-        public NewEditionInfoViewModel(string gathererName, IEditionIconInfo editionIconInfo)
+        public NewEditionInfoViewModel(string gathererName, Func<string, byte[]> getIcon)
         {
-            if (editionIconInfo != null)
-            {
-                Icon = editionIconInfo.Icon;
-                Code = editionIconInfo.Code;
-            }
+            _getIcon = getIcon;
             GathererName = gathererName;
             Name = gathererName;
             HasFoil = true;
             _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
             Blocks = _magicDatabase.GetAllBlocks().Ordered().ToArray();
             ResetBlockCommand = new RelayCommand(ResetBlockExecute);
+            GetIconCommand = new RelayCommand(GetIconExecute, GetIconCanExecute);
 
             Display.Title = "New edition";
             Display.CancelCommandLabel = "Default";
         }
 
         public ICommand ResetBlockCommand { get; private set; }
+        public ICommand GetIconCommand { get; private set; }
         public string GathererName { get; private set; }
         public IBlock[] Blocks { get; private set; }
-        public byte[] Icon { get; private set; }
+        public byte[] Icon
+        {
+            get { return _icon; }
+            set
+            {
+                if (value != _icon)
+                {
+                    _icon = value;
+                    OnNotifyPropertyChanged(() => Icon);
+                }
+            }
+        }
 
         public int? Position
         {
@@ -142,9 +153,24 @@
             Position = null;
             BlockSelected = null;
         }
+        private void GetIconExecute(object o)
+        {
+            if (_getIcon != null)
+            {
+                byte[] icon = _getIcon(Code);
+                if (icon != null)
+                {
+                    Icon = icon;
+                }
+            }
+        }
         protected override bool OkCommandCanExecute(object o)
         {
             return !string.IsNullOrWhiteSpace(Name);
+        }
+        private bool GetIconCanExecute(object o)
+        {
+            return !string.IsNullOrWhiteSpace(Code);
         }
         public void Save()
         {
