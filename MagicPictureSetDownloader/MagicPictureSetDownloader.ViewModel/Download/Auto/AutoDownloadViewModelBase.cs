@@ -12,7 +12,6 @@
         private const int NbThread = 5;
         private readonly ManualResetEvent _firstDoneEvent = new ManualResetEvent(false);
 
-
         protected AutoDownloadViewModelBase(string title)
             : base(title)
         {

@@ -6,6 +6,7 @@ namespace MagicPictureSetDownloader.Db.DAO
 
     [DebuggerDisplay("{IdGatherer}")]
     [DbTable(Name = "Picture")]
+    [DbRestictedDml(Restriction.Insert | Restriction.Delete | Restriction.Update)]
     internal class PictureKey : IPictureKey
     {
         //Use for light load

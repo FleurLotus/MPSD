@@ -96,6 +96,9 @@
                 {
                     repo.ExecuteBatch(UpdateQueries.CreateRulingTable);
                 }
+
+                repo.ExecuteBatch(UpdateQueries.RemoveDuelDeckFromName);
+                repo.ExecuteBatch(UpdateQueries.UpdateCodeHeroesMonsterDeck);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)

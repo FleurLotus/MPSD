@@ -42,7 +42,11 @@
                                                     .Select(pi => pi.Name)
                                                     .FirstOrDefault();
 
-            typeDbInfo = new TypeDbInfo(tableName, keys, identities, columns);
+            DbRestictedDmlAttribute[] restrictionAttributes = type.GetCustomAttributes<DbRestictedDmlAttribute>();
+
+            Restriction restriction = restrictionAttributes.Length == 1 ? restrictionAttributes[0].Restriction : Restriction.None;
+            
+            typeDbInfo = new TypeDbInfo(tableName, keys, identities, columns, restriction);
             _analysied[type] = typeDbInfo;
 
             return typeDbInfo;
