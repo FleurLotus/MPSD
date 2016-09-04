@@ -13,25 +13,17 @@
     using Common.Web;
 
     using MagicPictureSetDownloader.Core;
-    using MagicPictureSetDownloader.Core.EditionInfos;
 
     public class DownloadEditionViewModel : DownloadViewModelBase
     {
         public event EventHandler<EventArgs<NewEditionInfoViewModel>> NewEditionCreated;
 
-        private readonly IDictionary<IconPageType, string> _baseEditionIconUrls;
         private bool _disposed;
         private bool _hasJob;
         
         public DownloadEditionViewModel()
             : base("Download new editions")
         {
-            _baseEditionIconUrls = new Dictionary<IconPageType, string>
-                                       {
-                                           { IconPageType.Wikia, @"http://mtg.wikia.com/wiki/Set" },
-                                          // { IconPageType.CardKingdom, @"http://www.cardkingdom.com/catalog" }
-                                       };
-
             DownloadManager.NewEditionCreated += OnNewEditionCreated;
             Editions = new AsyncObservableCollection<EditionInfoViewModel>();
             FeedEditionsCommand = new RelayCommand(FeedEditionsCommandExecute, FeedEditionsCommandCanExecute);
@@ -192,7 +184,7 @@
             if (e != null)
             {
                 string name = args.Data;
-                NewEditionInfoViewModel vm = new NewEditionInfoViewModel(name, DownloadManager.GetEditionIcon(_baseEditionIconUrls, name));
+                NewEditionInfoViewModel vm = new NewEditionInfoViewModel(name, DownloadManager.GetEditionIcon);
                 DispatcherInvoker.Invoke(() => e(sender, new EventArgs<NewEditionInfoViewModel>(vm)));
             }
         }

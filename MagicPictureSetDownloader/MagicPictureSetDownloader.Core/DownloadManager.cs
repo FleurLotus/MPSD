@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-
     using Common.Library.Notify;
     using Common.Web;
-    using MagicPictureSetDownloader.Core.EditionInfos;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -16,6 +14,7 @@
         public event EventHandler<EventArgs<string>> NewEditionCreated;
 
         public const string BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
+        private const string BaseIconUrl = @"http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&size=small&rarity=C&set=";
 
         private readonly WebAccess _webAccess = new WebAccess();
         private readonly Lazy<IMagicDatabaseReadAndWriteReference> _lazy = new Lazy<IMagicDatabaseReadAndWriteReference>(() => MagicDatabaseManager.ReadAndWriteReference);
@@ -148,38 +147,24 @@
         {
             return MagicDatabase.GetMissingPictureUrls();
         }
-        public IEditionIconInfo GetEditionIcon(IDictionary<IconPageType, string> urls, string wantedEdition)
+        public byte[] GetEditionIcon(string code)
         {
-            foreach (KeyValuePair<IconPageType, string> kv in urls)
+            if (string.IsNullOrWhiteSpace(code))
+                return null;
+
+            byte[] editionIcon = null;
+            try
             {
-                IEditionFinder finder = EditionInfoFinderFactory.Instance.CreateFinder(kv.Key, s => _webAccess.GetHtml(s));
-                if (finder == null)
-                    continue;
+                editionIcon = _webAccess.GetFile(BaseIconUrl + code);
+            }
+            catch (WebException)
+            {
+                //Manage file not found error
+            }
 
-                EditionIconInfo editionIconInfo = finder.Find(kv.Value, wantedEdition);
-                if (editionIconInfo == null)
-                    continue;
-
-                string iconUrl = editionIconInfo.Url;
-
-                if (string.IsNullOrWhiteSpace(iconUrl))
-                    continue;
-
-                byte[] editionIcon = null;
-                try
-                {
-                    editionIcon = _webAccess.GetFile(iconUrl);
-                }
-                catch (WebException)
-                {
-                    //Manage file not found error
-                }
-                
-                if (editionIcon != null && editionIcon.Length > 0)
-                {
-                    editionIconInfo.Icon = editionIcon;
-                    return editionIconInfo;
-                }
+            if (editionIcon != null && editionIcon.Length > 0)
+            {
+                return editionIcon;
             }
 
             return null;
@@ -195,7 +180,6 @@
         {
             MagicDatabase.EditionCompleted(editionId);
         }
-
         private void OnNewEditionCreated(string name)
         {
             var e = NewEditionCreated;

@@ -64,17 +64,12 @@
     <Compile Include="CardInfo\SkipWorker.cs" />
     <Compile Include="CardInfo\ImageWorker.cs" />
     <Compile Include="CardRuleInfo.cs" />
-    <Compile Include="EditionIconInfo.cs" />
     <Compile Include="CardLanguageInfo.cs" />
-    <Compile Include="EditionInfos\EditionInfoFinderFactory.cs" />
-    <Compile Include="EditionInfos\EditionInfoFinderBase.cs" />
-    <Compile Include="EditionInfos\IEditionFinder.cs" />
     <Compile Include="EnhancedDatabaseRequest.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
     <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
     <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
     <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
-    <Compile Include="IEditionIconInfo.cs" />
     <Compile Include="IO\FormatterBase.cs" />
     <Compile Include="IO\ErrorImportExportCardInfo.cs" />
     <Compile Include="IO\ImportExportCardInfo.cs" />
@@ -86,8 +81,6 @@
     <Compile Include="IO\MpsdFormatter.cs" />
     <Compile Include="MagicRules.cs" />
     <Compile Include="Parser\CardLanguageParser.cs" />
-    <Compile Include="EditionInfos\EditionInfoWikiaFinder.cs" />
-    <Compile Include="EditionInfos\EditionInfoCardKingdomFinder.cs" />
     <Compile Include="Parser\CardParserBase.cs" />
     <Compile Include="Parser\CardRuleParser.cs" />
     <Compile Include="Parser\CardUrlParser.cs" />
