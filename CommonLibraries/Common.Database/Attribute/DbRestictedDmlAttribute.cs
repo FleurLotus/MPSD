@@ -11,7 +11,7 @@
         Delete = 1<<2
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
     public class DbRestictedDmlAttribute : Attribute
     {
         public DbRestictedDmlAttribute(Restriction restriction)
