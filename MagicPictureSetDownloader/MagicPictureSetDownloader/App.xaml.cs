@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader
 {
     using System;
+    using System.Configuration;
     using System.Windows;
     using System.Windows.Threading;
 
@@ -21,6 +22,12 @@
         {
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
+            string softwareRenderMode = ConfigurationManager.AppSettings["SoftwareRenderMode"];
+            if (string.Compare(softwareRenderMode, "TRUE", true) == 0)
+            {
+                Lib.SoftwareRenderMode = true;
+            }
+
             base.OnStartup(e);
 
             MainWindow mainWindow;
