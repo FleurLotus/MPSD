@@ -13,7 +13,10 @@
         {
             DataContext = vm;
             InitializeComponent();
+
+            Loaded += (s, a) => Lib.ForceSoftwareRenderModeIfNeeded(this);
         }
+        
         public void DialogWanted(object sender, EventArgs<DialogViewModelBase> args)
         {
             new CommonDialog(args.Data) { Owner = this }.ShowDialog();
