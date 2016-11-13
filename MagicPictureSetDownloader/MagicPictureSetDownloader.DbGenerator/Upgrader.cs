@@ -99,6 +99,9 @@
 
                 repo.ExecuteBatch(UpdateQueries.RemoveDuelDeckFromName);
                 repo.ExecuteBatch(UpdateQueries.UpdateCodeHeroesMonsterDeck);
+
+                //8.14
+                repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionGathererName);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
