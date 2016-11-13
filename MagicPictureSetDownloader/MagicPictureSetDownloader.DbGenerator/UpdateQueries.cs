@@ -24,5 +24,9 @@ WHERE Code='HVM'";
 , [Text] TEXT NOT NULL
 )";
 
+        public const string UpdateKaladeshInventionGathererName =
+@"UPDATE Edition 
+SET GathererName = 'Masterpiece Series: Kaladesh Inventions'
+WHERE GathererName = 'Kaladesh Inventions'";
       }
 }
