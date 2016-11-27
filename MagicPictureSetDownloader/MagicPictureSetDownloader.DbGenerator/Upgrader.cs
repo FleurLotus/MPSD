@@ -102,6 +102,9 @@
 
                 //8.14
                 repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionGathererName);
+
+                //8.15
+                repo.ExecuteBatch(UpdateQueries.DeleteKaladeshInventionGathererIdChange);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
