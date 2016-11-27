@@ -28,5 +28,10 @@ WHERE Code='HVM'";
 @"UPDATE Edition 
 SET GathererName = 'Masterpiece Series: Kaladesh Inventions'
 WHERE GathererName = 'Kaladesh Inventions'";
-      }
+
+    public const string DeleteKaladeshInventionGathererIdChange =
+@"DELETE FROM CardEdition 
+WHERE IdGatherer IN (417582, 417640, 417669, 417685,417745) 
+AND IdEdition = (SELECT id FROM Edition WHERE Name='Kaladesh Inventions')";
+    }
 }
