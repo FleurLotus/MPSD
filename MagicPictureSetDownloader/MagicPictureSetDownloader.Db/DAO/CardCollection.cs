@@ -6,8 +6,7 @@
     [DbTable(Name = "Collection")]
     internal class CardCollection : ICardCollection
     {
-        [DbColumn]
-        [DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }

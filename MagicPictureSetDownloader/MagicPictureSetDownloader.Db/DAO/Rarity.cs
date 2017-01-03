@@ -8,7 +8,7 @@
     [DbTable]
     internal class Rarity : IRarity
     {
-        [DbColumn, DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }

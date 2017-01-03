@@ -16,7 +16,7 @@
         public ICollection<IAudit> GetAllAudits()
         {
             using (new ReaderLock(_lock))
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
             {
                 return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
             }
@@ -57,7 +57,7 @@
                 return;
             using (new WriterLock(_lock))
             {
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
                 {
                     Mapper<Audit>.InsertOne(cnx, audit);
                 }

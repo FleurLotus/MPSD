@@ -12,17 +12,17 @@
     
     internal partial class DatabaseConnection
     {
-        private readonly IDictionary<DatabasebType, string> _connectionStrings = new Dictionary<DatabasebType, string>();
+        private readonly IDictionary<DatabaseType, string> _connectionStrings = new Dictionary<DatabaseType, string>();
         private IDbConnection _batchConnection;
         private IDbTransaction _batchTransaction;
         
         public DatabaseConnection()
         {
             IdentityRetriever.IdentityQuery = "SELECT last_insert_rowid()";
-            GetConnectionString(DatabasebType.Data);
-            GetConnectionString(DatabasebType.Picture);
+            GetConnectionString(DatabaseType.Data);
+            GetConnectionString(DatabaseType.Picture);
         }
-        private void GetConnectionString(DatabasebType databaseType)
+        private void GetConnectionString(DatabaseType databaseType)
         {
             string fileName = DatabaseGenerator.GetResourceName(databaseType);
                 
@@ -38,9 +38,9 @@
             DatabaseGenerator.VersionVerify(connectionString, databaseType);
             _connectionStrings[databaseType] = connectionString;
         }
-        private IDbConnection GetMagicConnectionInternal(DatabasebType databasebType)
+        private IDbConnection GetMagicConnectionInternal(DatabaseType DatabaseType)
         {
-            SQLiteConnection cnx = new SQLiteConnection(_connectionStrings[databasebType]);
+            SQLiteConnection cnx = new SQLiteConnection(_connectionStrings[DatabaseType]);
             cnx.Open();
             return cnx;
         }
@@ -49,11 +49,11 @@
             return _batchConnection != null;
         }
 
-        public IDbConnection GetMagicConnection(DatabasebType databasebType)
+        public IDbConnection GetMagicConnection(DatabaseType DatabaseType)
         {
-            if (databasebType == DatabasebType.Picture || !BatchModeActivated())
+            if (DatabaseType == DatabaseType.Picture || !BatchModeActivated())
             {
-                return new ConnectionWrapper(GetMagicConnectionInternal(databasebType), false);
+                return new ConnectionWrapper(GetMagicConnectionInternal(DatabaseType), false);
             }
 
             return new ConnectionWrapper(_batchConnection, true);
@@ -65,7 +65,7 @@
                 throw new ApplicationDbException("BatchMode is already activated");
             }
 
-            _batchConnection = GetMagicConnectionInternal(DatabasebType.Data);
+            _batchConnection = GetMagicConnectionInternal(DatabaseType.Data);
             _batchTransaction = _batchConnection.BeginTransaction();
         }
         public void DesactivateBatchMode()

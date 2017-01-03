@@ -15,8 +15,7 @@
         private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
         private readonly IList<IRuling> _rulings = new List<IRuling>();
 
-        [DbColumn]
-        [DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }

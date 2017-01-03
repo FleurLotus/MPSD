@@ -64,7 +64,7 @@ namespace MagicPictureSetDownloader.Db
         {
             return GetPicture(0);
         }
-        public IPicture GetPicture(int idGatherer)
+        public IPicture GetPicture(int idGatherer, bool doNotCache = false)
         {
             IPicture picture;
 
@@ -75,7 +75,7 @@ namespace MagicPictureSetDownloader.Db
                     if (!_pictures.TryGetValue(idGatherer, out picture))
                     {
                         picture = LoadImage(idGatherer);
-                        if (picture != null)
+                        if (picture != null && !doNotCache)
                             _pictures.Add(picture.IdGatherer, picture);
                     }
                 }
@@ -312,6 +312,13 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
         }
+        private ICollection<int> GetAllPicturesId()
+        {
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
+            {
+                return Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
+            }
+        }
 
         public void EditionCompleted(int editionId)
         {
@@ -323,7 +330,7 @@ namespace MagicPictureSetDownloader.Db
 
                 newEdition.Completed = true;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
                 {
                     Mapper<Edition>.UpdateOne(cnx, newEdition);
                 }
@@ -331,14 +338,16 @@ namespace MagicPictureSetDownloader.Db
         }
         public string[] GetMissingPictureUrls()
         {
-            IList<int> idGatherers;
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
-            {
-                idGatherers = Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
-            }
+            ICollection<int> idGatherers = GetAllPicturesId();
 
             return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
                                     .Select(ce => ce.Url).ToArray();
+        }
+        public ICardAllDbInfo[] GetCardsWithPicture()
+        {
+            ICollection<int> idGatherers = GetAllPicturesId();
+
+            return GetAllInfos().Where(ce => idGatherers.Contains(ce.IdGatherer) || idGatherers.Contains(ce.IdGathererPart2)).ToArray();
         }
         public int[] GetRulesId()
         {
@@ -361,7 +370,7 @@ namespace MagicPictureSetDownloader.Db
         {
             Picture picture = new Picture { IdGatherer = idGatherer };
 
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabasebType.Picture))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
             {
                 return Mapper<Picture>.Load(cnx, picture);
             }

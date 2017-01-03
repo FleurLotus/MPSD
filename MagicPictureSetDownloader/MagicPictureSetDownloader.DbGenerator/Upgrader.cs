@@ -16,7 +16,7 @@
         private const string VersionQuery = "SELECT Major FROM Version";
         private const string UpdateVersionQuery = "UPDATE Version Set Major = ";
         private readonly string _connectionString;
-        private readonly DatabasebType _data;
+        private readonly DatabaseType _data;
         private static readonly Version _applicationVersion;
 
         static Upgrader()
@@ -25,7 +25,7 @@
             AssemblyName assemblyName = entryAssembly.GetName();
             _applicationVersion = assemblyName.Version;
         }
-        internal Upgrader(string connectionString, DatabasebType data)
+        internal Upgrader(string connectionString, DatabaseType data)
         {
             _connectionString = connectionString;
             _data = data;
@@ -72,10 +72,10 @@
             Repository repo = new Repository(_connectionString);
             switch (_data)
             {
-                case DatabasebType.Data:
+                case DatabaseType.Data:
                     UpgradeData(dbVersion, repo);
                     break;
-                case DatabasebType.Picture:
+                case DatabaseType.Picture:
                     UpgradePicture(dbVersion, repo);
                     break;
             }
@@ -105,6 +105,9 @@
 
                 //8.15
                 repo.ExecuteBatch(UpdateQueries.DeleteKaladeshInventionGathererIdChange);
+
+                //8.15+
+                repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionCode);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
@@ -116,8 +119,8 @@
         }
         private void AddMissingPictureFromReference(IRepository repo)
         {
-            string temporaryDatabasePath = new Generator(DatabasebType.Picture).Generate(true);
-            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabasebType.Picture));
+            string temporaryDatabasePath = new Generator(DatabaseType.Picture).Generate(true);
+            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabaseType.Picture));
             string connectionString = (new SQLiteConnectionStringBuilder { DataSource = temporaryDatabasePath }).ToString();
 
             Dictionary<string, byte[]> reference = GetTreePictures(connectionString);

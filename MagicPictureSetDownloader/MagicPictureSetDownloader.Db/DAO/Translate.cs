@@ -5,11 +5,9 @@
     [DbTable]
     internal class Translate
     {
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdLanguage { get; set; }
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdCard { get; set; }
         [DbColumn]
         public string Name { get; set; }

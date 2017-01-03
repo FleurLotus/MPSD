@@ -7,18 +7,15 @@
     [DbTable(Name = "CardEditionsInCollection")]
     internal class CardInCollectionCount : ICardInCollectionCount
     {
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdCollection { get; set; }
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdGatherer { get; set; }
         [DbColumn]
         public int Number { get; set; }
         [DbColumn]
         public int FoilNumber { get; set; }
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdLanguage { get; set; }
         
         public override bool Equals(object obj)

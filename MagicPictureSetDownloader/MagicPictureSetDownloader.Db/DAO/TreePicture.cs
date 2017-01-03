@@ -9,7 +9,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     internal class TreePicture: ITreePicture
     {
         private byte[] _image;
-        [DbColumn, DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public string Name { get; set; }
         [DbColumn]
         public byte[] Image

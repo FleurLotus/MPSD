@@ -1,6 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
-    public enum DatabasebType
+    public enum DatabaseType
     {
         Data,
         Picture,

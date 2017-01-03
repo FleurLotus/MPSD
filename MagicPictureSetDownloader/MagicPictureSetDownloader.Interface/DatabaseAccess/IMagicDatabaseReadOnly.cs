@@ -18,7 +18,7 @@
         ICard GetCard(int idGatherer);
         IEdition GetEditionFromCode(string code);
         int GetIdGatherer(ICard card, IEdition edition);
-        IPicture GetPicture(int idGatherer);
+        IPicture GetPicture(int idGatherer, bool doNotCache = false);
         IPicture GetDefaultPicture();
         ITreePicture GetTreePicture(string key);
         IEdition GetEdition(string sourceName);
@@ -36,6 +36,7 @@
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
 
         string[] GetMissingPictureUrls();
+        ICardAllDbInfo[] GetCardsWithPicture();
         int[] GetRulesId();
         IDisposable BatchMode();
     }

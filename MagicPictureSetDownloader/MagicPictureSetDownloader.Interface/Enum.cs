@@ -20,4 +20,9 @@
         NewCollection,
         AddToCollection,
     }
+    public enum ExportImagesOption
+    {
+        OneByGathererId,
+        OneByCardName,
+    }
 }

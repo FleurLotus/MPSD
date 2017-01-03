@@ -31,6 +31,8 @@
             if (cmd == null)
                 throw new ArgumentNullException("cmd");
 
+            CheckHasKey();
+
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
 
@@ -62,6 +64,7 @@
                 throw new ArgumentNullException("cmd");
 
             CheckRestriction(Restriction.Update);
+            CheckHasKey();
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _updateQuery;
@@ -81,6 +84,7 @@
                 throw new ArgumentNullException("cmd");
 
             CheckRestriction(Restriction.Delete);
+            CheckHasKey();
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _deleteQuery;
@@ -135,7 +139,7 @@
             StringBuilder sbDelete = new StringBuilder();
             sbDelete.Append("DELETE FROM [");
             sbDelete.Append(_typeDbInfo.TableName);
-            sbDelete.Append("] ");
+            sbDelete.Append("]");
 
             string[] allColums = _typeDbInfo.Columns.Keys.ToArray();
             _notKeycolumns = _typeDbInfo.Columns.Keys.Where(s => !_typeDbInfo.Keys.Contains(s)).ToArray();
@@ -151,7 +155,7 @@
 
             sbSelect.Append(" FROM [");
             sbSelect.Append(_typeDbInfo.TableName);
-            sbSelect.Append("] ");
+            sbSelect.Append("]");
 
             _selectQuery = sbSelect.ToString();
 
@@ -218,6 +222,14 @@
                 parameter.DbType = dbtype.Value;
 
             cmd.Parameters.Add(parameter);
+        }
+
+        private void CheckHasKey()
+        {
+            if (_typeDbInfo.Keys.Count == 0)
+            {
+                throw new AttributedTypeException(null, "DbKeyColumnAttribute must be declared one and one time for the type when using OneCommand");
+            }
         }
 
         private void CheckRestriction(Restriction restriction)

@@ -10,8 +10,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     internal class PictureKey : IPictureKey
     {
         //Use for light load
-        [DbColumn]
-        [DbKeyColumn(false)]
+        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdGatherer { get; set; }
     }
 }
