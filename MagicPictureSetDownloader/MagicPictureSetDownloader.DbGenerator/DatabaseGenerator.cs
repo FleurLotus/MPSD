@@ -4,24 +4,24 @@
 
     public static class DatabaseGenerator
     {
-        public static void Generate(DatabasebType databaseType)
+        public static void Generate(DatabaseType databaseType)
         {
             new Generator(databaseType).Generate();
         }
-        public static void VersionVerify(string connectionString, DatabasebType databaseType)
+        public static void VersionVerify(string connectionString, DatabaseType databaseType)
         {
             new Upgrader(connectionString, databaseType).Upgrade();
         }
-        public static string GetResourceName(DatabasebType databaseType)
+        public static string GetResourceName(DatabaseType databaseType)
         {
             switch (databaseType)
             {
-                case DatabasebType.Data:
+                case DatabaseType.Data:
                     return "MagicData.sqlite";
-                case DatabasebType.Picture:
+                case DatabaseType.Picture:
                     return "MagicPicture.sqlite";
                 default:
-                    throw new ArgumentException("Unknown DatabasebType type");
+                    throw new ArgumentException("Unknown DatabaseType type");
             }
         }
 

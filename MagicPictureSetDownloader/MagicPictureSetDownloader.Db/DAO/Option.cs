@@ -9,7 +9,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     [DbTable]
     internal class Option : IOption
     {
-        [DbColumn, DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public TypeOfOption Type { get; set; }

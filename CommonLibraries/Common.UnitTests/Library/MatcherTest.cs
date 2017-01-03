@@ -43,7 +43,7 @@
         [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value2, EnumWithFlag.Value1 | EnumWithFlag.Value2, true)]
         [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value3, EnumWithFlag.Value1 | EnumWithFlag.Value2, true)]
         [TestCase(EnumWithFlag.Value2 | EnumWithFlag.Value3, EnumWithFlag.Value1 | EnumWithFlag.Value2, true)]
-        [TestCase(EnumWithFlag.Value4 | EnumWithFlag.Value4, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
+        [TestCase(EnumWithFlag.Value3 | EnumWithFlag.Value4, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
 
         //Work with value out of enum
         [TestCase(132, 2, false)]

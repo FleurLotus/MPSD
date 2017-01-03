@@ -13,7 +13,7 @@ namespace MagicPictureSetDownloader.Db.DAO
             OperationDate = DateTime.UtcNow;
         }
 
-        [DbColumn, DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public DateTime OperationDate { get; set; }

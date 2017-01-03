@@ -7,7 +7,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     [DbTable]
     internal class Language : ILanguage
     {
-        [DbColumn, DbKeyColumn(true)]
+        [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }

@@ -48,7 +48,6 @@
     <Compile Include="Exception\RestrictedDmlException.cs" />
     <Compile Include="Exception\AttributedTypeException.cs" />
     <Compile Include="Attribute\DbTableAttribute.cs" />
-    <Compile Include="Attribute\DbKeyColumnAttribute.cs" />
     <Compile Include="Attribute\DbColumnAttribute.cs" />
     <Compile Include="Exception\ApplicationDbException.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />

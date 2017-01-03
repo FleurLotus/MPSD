@@ -14,7 +14,7 @@ WHERE Name like 'Duel Decks: %'";
         public const string UpdateCodeHeroesMonsterDeck =
 @"UPDATE Edition
 SET Code = 'DDL' 
-WHERE Code='HVM'";
+WHERE Code = 'HVM'";
 
         public const string CreateRulingTable =
 @"CREATE TABLE [Ruling] (
@@ -29,7 +29,12 @@ WHERE Code='HVM'";
 SET GathererName = 'Masterpiece Series: Kaladesh Inventions'
 WHERE GathererName = 'Kaladesh Inventions'";
 
-    public const string DeleteKaladeshInventionGathererIdChange =
+        public const string UpdateKaladeshInventionCode =
+@"UPDATE Edition 
+SET Code = 'MPS'
+WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions'";
+
+        public const string DeleteKaladeshInventionGathererIdChange =
 @"DELETE FROM CardEdition 
 WHERE IdGatherer IN (417582, 417640, 417669, 417685,417745) 
 AND IdEdition = (SELECT id FROM Edition WHERE Name='Kaladesh Inventions')";

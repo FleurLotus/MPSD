@@ -8,9 +8,9 @@
 
     internal class Generator
     {
-        private readonly DatabasebType _data;
+        private readonly DatabaseType _data;
 
-        internal Generator(DatabasebType data)
+        internal Generator(DatabaseType data)
         {
             _data = data;
         }

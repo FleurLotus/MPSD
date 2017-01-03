@@ -17,7 +17,6 @@
         public int FoilNumber { get; private set; }
         public int IdLanguage { get; private set; }
 
-
         internal void Add(int number)
         {
             Number += number;
@@ -26,6 +25,5 @@
         {
             FoilNumber += foilNumber;
         }
-
     }
 }

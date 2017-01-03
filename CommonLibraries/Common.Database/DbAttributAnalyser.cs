@@ -16,37 +16,63 @@
             TypeDbInfo typeDbInfo;
 
             if (_analysied.TryGetValue(type, out typeDbInfo))
+            {
                 return typeDbInfo;
+            }
 
             DbTableAttribute[] tableAttributes = type.GetCustomAttributes<DbTableAttribute>();
             if (tableAttributes.Length != 1)
+            {
                 throw new AttributedTypeException(type, "DbTableAttribute must be declared one and one time for the type");
+            }
 
             string tableName = tableAttributes[0].Name ?? type.Name;
 
             IDictionary<string, PropertyInfo> columns = new Dictionary<string, PropertyInfo>();
+            IList<string> keys = new List<string>();
+            string identity = null;
+
             foreach (PropertyInfo pi in type.GetPublicInstanceProperties())
             {
                 DbColumnAttribute[] columnAttributes = pi.GetCustomAttributes<DbColumnAttribute>();
                 if (columnAttributes.Length == 1)
-                    columns.Add(columnAttributes[0].Name ?? pi.Name, pi);
+                {
+                    DbColumnAttribute columnAttribute = columnAttributes[0];
+                    string name = columnAttribute.Name ?? pi.Name;
+
+                    columns.Add(name, pi);
+
+                    switch (columnAttribute.Kind)
+                    {
+                        case ColumnKind.Normal:
+                            break;
+                        case ColumnKind.PrimaryKey:
+                            keys.Add(name);
+                            break;
+                        case ColumnKind.Identity:
+                            keys.Add(name);
+                            if (!string.IsNullOrEmpty(identity))
+                            {
+                                throw new AttributedTypeException(type, "DbColumnAttribute identity could only be declared one time for the type");
+                            }
+                            identity = name;
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException(string.Format("{0} is not managed", columnAttribute.Kind));
+                    }
+                }
             }
 
             if (columns.Count == 0)
+            {
                 throw new AttributedTypeException(type, "DbColumnAttribute must be declared at least one time for the type");
-
-            IEnumerable<string> keys = type.GetProperties().Where(pi => pi.GetCustomAttributes<DbKeyColumnAttribute>().Length == 1)
-                                                           .Select(pi => pi.Name);
-
-            string identities = type.GetProperties().Where(pi => pi.GetCustomAttributes<DbKeyColumnAttribute>().Length == 1 && pi.GetCustomAttributes<DbKeyColumnAttribute>()[0].IsIdentity)
-                                                    .Select(pi => pi.Name)
-                                                    .FirstOrDefault();
+            }
 
             DbRestictedDmlAttribute[] restrictionAttributes = type.GetCustomAttributes<DbRestictedDmlAttribute>();
 
             Restriction restriction = restrictionAttributes.Length == 1 ? restrictionAttributes[0].Restriction : Restriction.None;
             
-            typeDbInfo = new TypeDbInfo(tableName, keys, identities, columns, restriction);
+            typeDbInfo = new TypeDbInfo(tableName, keys, identity, columns, restriction);
             _analysied[type] = typeDbInfo;
 
             return typeDbInfo;

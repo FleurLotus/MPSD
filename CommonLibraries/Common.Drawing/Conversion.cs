@@ -1,11 +1,40 @@
 ﻿namespace Common.Drawing
 {
+    using System.IO;
+    using System.Linq;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
+    using System;
 
     public static class Conversion
     {
+        public static string GetFileExtension(this Image image)
+        {
+            Guid guid = image.RawFormat.Guid;
+            string extension = ImageCodecInfo.GetImageEncoders()
+                                                .Where(ie => ie.FormatID == guid)
+                                                .Select(ie => ie.FilenameExtension.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                                                  .First()
+                                                                                  .Trim('*')
+                                                                                  .ToLower())
+                                                .FirstOrDefault();
+
+            return extension ?? string.Format(".{0}", image.RawFormat.ToString().ToLower());
+        }
+
+        public static Image ToImage(this byte[] bytes)
+        {
+            using (MemoryStream stream = new MemoryStream(bytes))
+            {
+                return ToImage(stream);
+            }
+        }
+        public static Image ToImage(this Stream stream)
+        {
+            return Image.FromStream(stream);
+        }
+
         public static Image ResizeImage(this Image source, float percent)
         {
             int sourceWidth = source.Width;
