@@ -38,5 +38,11 @@ WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions'";
 @"DELETE FROM CardEdition 
 WHERE IdGatherer IN (417582, 417640, 417669, 417685,417745) 
 AND IdEdition = (SELECT id FROM Edition WHERE Name='Kaladesh Inventions')";
+
+        public const string UpdateKaladeshInventionMissingCard =
+    @"UPDATE Edition 
+SET Completed = 0, CardNumber = 54
+WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions' 
+AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id =ce.IdEdition WHERE  GathererName = 'Masterpiece Series: Kaladesh Inventions') < 54";
     }
 }

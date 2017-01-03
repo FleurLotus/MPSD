@@ -109,6 +109,10 @@
                 //8.15+
                 repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionCode);
             }
+            if (dbVersion <= 9)
+            {
+                repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionMissingCard);
+            }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
         {
