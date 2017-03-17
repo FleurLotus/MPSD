@@ -411,7 +411,8 @@
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
-            toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute)));
+            //Disabled - Waiting to finish the development
+            toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute, o => false)));
             MenuRoot.AddChild(toolsMenu);
 
             //?

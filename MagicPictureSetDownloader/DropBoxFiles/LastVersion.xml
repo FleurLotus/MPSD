@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="8.15">
+  <Last Number="9.0">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Planechase Anthology and missing card in Kaladesh</Comment>
+    <Comment>Version with Aether Revolt and Modern Master 2017 and correction of Kaladesh inventions</Comment>
   </Last>
+  <Old Number="8.15">
+    <Comment>Version with Planechase Anthology and missing card in Kaladesh</Comment>
+  </Old>
   <Old Number="8.14">
    <Comment>Version with Commander 2016</Comment>
   </Old>  
   <Old Number="8.13">
-    <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
+    <Comment>Version with correction of display glitch when adding new cards</Comment>
   </Old>  
   <Old Number="8.12">
     <Comment>Version with Kaladesh</Comment>
