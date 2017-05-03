@@ -191,6 +191,15 @@
                 <Image.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
+                        <TranslateTransform>
+                            <TranslateTransform.X>
+                                <MultiBinding Converter="{StaticResource h2mConv}">
+                                    <Binding Path="Hierarchical.Selected"/>
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                </MultiBinding>
+                            </TranslateTransform.X>
+                        </TranslateTransform>
                     </TransformGroup>
                 </Image.RenderTransform>
             </Image>

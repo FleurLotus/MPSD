@@ -117,7 +117,18 @@
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
                 //Possible see CheckInfos for more info
                 if (!string.IsNullOrWhiteSpace(htmlTrim))
-                    cardWithExtraInfo.Loyalty = int.Parse(htmlTrim);
+                {
+                    htmlTrim = htmlTrim.ToUpper();
+                    //Special case for Nissa, Steward of Elements with loyalty to X
+                    if (htmlTrim == "X")
+                    {
+                        cardWithExtraInfo.Loyalty = htmlTrim;
+                    }
+                    else
+                    {
+                        cardWithExtraInfo.Loyalty = int.Parse(htmlTrim).ToString();
+                    }
+                }
             }
 
             cardWithExtraInfo.Type = infos.GetOrDefault(TypeKey);

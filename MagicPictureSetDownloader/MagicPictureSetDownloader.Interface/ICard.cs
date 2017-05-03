@@ -8,7 +8,7 @@
         string Power { get; }
         string Toughness { get; }
         string CastingCost { get; }
-        int? Loyalty { get; }
+        string Loyalty { get; }
         string Type { get; }
         string PartName { get; }
         string OtherPartName { get; }
@@ -17,6 +17,7 @@
         bool IsMultiPart { get; }
         bool IsReverseSide { get; }
         bool IsSplitted { get; }
+        bool Is90DegreeSide { get; }
         bool IsMultiCard { get; }
         string ToString(int? languageId);
         bool HasTranslation(int languageId);

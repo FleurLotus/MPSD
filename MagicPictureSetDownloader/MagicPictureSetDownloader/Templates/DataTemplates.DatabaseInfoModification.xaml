@@ -61,7 +61,7 @@
             <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={StaticResource roenConv}}"/>
             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Code"/>
             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
-                <TextBox Width="110" MaxLength="3" VerticalAlignment="Center" Text="{binding:TwoWayBinding Code}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
+                <TextBox Width="110" MaxLength="7" VerticalAlignment="Center" Text="{binding:TwoWayBinding Code}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
                 <CheckBox VerticalAlignment="Center" Margin="5,0" Content="HasFoil" IsChecked="{binding:TwoWayBinding HasFoil}" IsEnabled="{Binding State, Converter={StaticResource eneConv}}"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="GathererName"/>

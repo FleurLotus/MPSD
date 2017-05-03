@@ -106,20 +106,35 @@
                 //8.15
                 repo.ExecuteBatch(UpdateQueries.DeleteKaladeshInventionGathererIdChange);
 
-                //8.15+
-                repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionCode);
             }
             if (dbVersion <= 9)
             {
                 repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionMissingCard);
+
+                // 9.1
+                repo.ExecuteBatch(UpdateQueries.UpdateKaladeshInventionBlock);
+
+                Dictionary<string, string> missing = new Dictionary<string, string> {
+                    { "EXP" , "Zendikar Expeditions"},
+                    { "W16" , "Welcome Deck 2016"},
+                    { "MPS" , "Masterpiece Series: Kaladesh Inventions"},
+                };
+
+                foreach (var kv in missing)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.UpdateEditionMissingCode,
+                       new KeyValuePair<string, object>("@code", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value));
+                }
+                
+                // 9.2
+                // To be uncommented after release of second set of amonkhet block
+                //repo.ExecuteBatch(UpdateQueries.UpdateAmonkhetInvocationsMissingCard);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
         {
-            if (dbVersion <= 8)
-            {
-                AddMissingPictureFromReference(repo);
-            }
+            AddMissingPictureFromReference(repo);
         }
         private void AddMissingPictureFromReference(IRepository repo)
         {

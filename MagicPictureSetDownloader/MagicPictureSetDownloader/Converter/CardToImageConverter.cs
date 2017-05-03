@@ -26,7 +26,7 @@ namespace MagicPictureSetDownloader.Converter
             }
             else if (node.Card.OtherCardPart != null)
             {
-                idGatherer = node.Card.OtherCardPart.IsDownSide ? node.Card.IdGatherer : node.Card.OtherCardPart.IdGatherer;
+                idGatherer = node.Card.OtherCardPart.IsDownSide || node.Card.OtherCardPart.Is90DegreeSide ? node.Card.IdGatherer : node.Card.OtherCardPart.IdGatherer;
             }
 
             if (idGatherer == -1)
