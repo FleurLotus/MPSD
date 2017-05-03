@@ -28,7 +28,7 @@
         [DbColumn]
         public string CastingCost { get; set; }
         [DbColumn]
-        public int? Loyalty { get; set; }
+        public string Loyalty { get; set; }
         [DbColumn]
         public string Type { get; set; }
         [DbColumn]
@@ -40,17 +40,25 @@
         {
             get { return OtherPartName != null; }
         }
+        //Recto-Verso
         public bool IsReverseSide
         {
             get { return IsMultiPart && CastingCost == null && !Type.ToLowerInvariant().Contains("land"); }
         }
+        //Multiple part on the same side (Not Up/Down)
         public bool IsSplitted
         {
             get { return IsMultiPart && PartName != Name && OtherPartName != Name; }
         }
+        //B.F.M. (Big Furry Monster)
         public bool IsMultiCard
         {
             get { return IsMultiPart && PartName == Name && OtherPartName == Name && CastingCost != null; }
+        }
+        //Aftermath
+        public bool Is90DegreeSide
+        {
+            get { return IsSplitted && Text != null && Text.StartsWith("Aftermath"); }
         }
         public IRuling[] Rulings
         {

@@ -208,14 +208,14 @@ namespace MagicPictureSetDownloader.Db
                     //For Multipart card
                     if (card.IsMultiPart)
                     {
-                        //Up/Down so it is the same part
+                        //This is the reverse side of a recto-verso card no need to do anything
                         if (card.IsReverseSide)
                             continue;
 
                         ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
                         cardAllDbInfo.CardPart2 = cardPart2;
 
-                        //Be sure to get the other part
+                        //Be sure to get the other part (Up/Down and Splitted have the same gatherer id so no return)
                         ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id && ce.IdGatherer != edition.IdGatherer);
 
                         //Verso of Reserse Card and Multi-card

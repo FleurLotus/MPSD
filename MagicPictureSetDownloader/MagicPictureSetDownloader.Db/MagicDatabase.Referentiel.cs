@@ -93,7 +93,7 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(DatabaseType.Picture, treepicture, InsertInReferential);
             }
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, int? loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");

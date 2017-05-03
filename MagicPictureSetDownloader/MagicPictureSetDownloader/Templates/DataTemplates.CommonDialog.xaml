@@ -50,7 +50,7 @@
             <TextBox Grid.Column="1" Grid.Row="1" Text="{binding:TwoWayBinding Name}" />
             <Label Grid.Column="0" Grid.Row="2" Content="Code"/>
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
-                <TextBox Width="60" Text="{binding:TwoWayBinding Code}" MaxLength="3"/>
+                <TextBox Width="60" Text="{binding:TwoWayBinding Code}" MaxLength="7"/>
                 <Button Margin="5,0" Width="60" Content="Get Icon" Command="{Binding GetIconCommand }"/>
                 <CheckBox Margin="5,0" Content="HasFoil" IsChecked="{binding:TwoWayBinding HasFoil}" VerticalAlignment="Center"/>
             </StackPanel>

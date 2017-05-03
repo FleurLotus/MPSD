@@ -29,20 +29,32 @@ WHERE Code = 'HVM'";
 SET GathererName = 'Masterpiece Series: Kaladesh Inventions'
 WHERE GathererName = 'Kaladesh Inventions'";
 
-        public const string UpdateKaladeshInventionCode =
-@"UPDATE Edition 
-SET Code = 'MPS'
-WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions'";
-
         public const string DeleteKaladeshInventionGathererIdChange =
 @"DELETE FROM CardEdition 
 WHERE IdGatherer IN (417582, 417640, 417669, 417685,417745) 
 AND IdEdition = (SELECT id FROM Edition WHERE Name='Kaladesh Inventions')";
 
         public const string UpdateKaladeshInventionMissingCard =
-    @"UPDATE Edition 
+@"UPDATE Edition 
 SET Completed = 0, CardNumber = 54
 WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions' 
-AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id =ce.IdEdition WHERE  GathererName = 'Masterpiece Series: Kaladesh Inventions') < 54";
+AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Masterpiece Series: Kaladesh Inventions') < 54";
+
+        public const string UpdateKaladeshInventionBlock =
+@"UPDATE Edition 
+SET IdBlock = (SELECT IdBlock FROM Edition WHERE GathererName = 'Kaladesh')
+WHERE GathererName = 'Masterpiece Series: Kaladesh Inventions'";
+
+        public const string UpdateEditionMissingCode =
+@"UPDATE Edition 
+SET Code = @code
+WHERE GathererName = @name";
+
+        public const string UpdateAmonkhetInvocationsMissingCard =
+@"UPDATE Edition 
+SET Completed = 0, CardNumber = 54
+WHERE GathererName = 'Masterpiece Series: Amonkhet Invocations' 
+AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Masterpiece Series: Amonkhet Invocations') < 54";
+
     }
 }

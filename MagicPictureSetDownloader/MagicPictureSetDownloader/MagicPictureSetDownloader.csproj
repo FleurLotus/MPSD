@@ -155,6 +155,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\HeightToMoveConverter.cs" />
     <Compile Include="Converter\CardToRulesConverter.cs" />
     <Compile Include="Converter\CardToLanguagesTranslationConverter.cs" />
     <Compile Include="Converter\CardToRulesVisibleConverter.cs" />

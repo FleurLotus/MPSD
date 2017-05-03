@@ -31,9 +31,9 @@
                 PowerToughnessLoyalty = string.Format("{0}/{1}", Card.Power, Card.Toughness);
                 PowerToughnessLoyaltyText = "Power/Toughness";
             }
-            else if (Card.Loyalty.HasValue)
+            else if (!string.IsNullOrWhiteSpace(Card.Loyalty))
             {
-                PowerToughnessLoyalty = Card.Loyalty.Value.ToString(CultureInfo.InvariantCulture);
+                PowerToughnessLoyalty = Card.Loyalty;
                 PowerToughnessLoyaltyText = "Loyalty";
             }
 
@@ -92,6 +92,10 @@
         public string ToString(int? languageId)
         {
             return Card.ToString(languageId);
+        }
+        public bool Is90DegreeSide
+        {
+            get { return Card.Is90DegreeSide; }
         }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; private set; }
