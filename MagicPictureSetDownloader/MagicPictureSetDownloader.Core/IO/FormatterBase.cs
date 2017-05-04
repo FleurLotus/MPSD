@@ -27,7 +27,7 @@
 
         public IEnumerable<IImportExportCardCount> Parse(string input)
         {
-            IDictionary<int, ImportExportCardInfo> ret = new Dictionary<int, ImportExportCardInfo>();
+            IDictionary<string, ImportExportCardInfo> ret = new Dictionary<string, ImportExportCardInfo>();
             IEnumerable<IImportExportCardCount> enumerable = input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
                                                                   .Select(ParseLine);
 
@@ -35,7 +35,8 @@
             foreach (IImportExportCardCount importExportCardCount in enumerable)
             {
                 ImportExportCardInfo cardInfo;
-                if (ret.TryGetValue(importExportCardCount.IdGatherer, out cardInfo))
+                string key = string.Format("{0}¤{1}", importExportCardCount.IdGatherer, importExportCardCount.IdLanguage);
+                if (ret.TryGetValue(key, out cardInfo))
                 {
                     if (importExportCardCount.FoilNumber > 0)
                         cardInfo.AddFoil(importExportCardCount.FoilNumber);
@@ -53,7 +54,7 @@
                         continue;
                     }
 
-                    ret.Add(cardInfo.IdGatherer, cardInfo);
+                    ret.Add(key, cardInfo);
                 }
             }
 
