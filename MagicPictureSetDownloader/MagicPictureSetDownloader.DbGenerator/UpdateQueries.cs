@@ -56,5 +56,12 @@ SET Completed = 0, CardNumber = 54
 WHERE GathererName = 'Masterpiece Series: Amonkhet Invocations' 
 AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Masterpiece Series: Amonkhet Invocations') < 54";
 
+        public static readonly string[] ChangeCardLoyaltyColumnType = {
+@"ALTER TABLE Card RENAME TO Temp_Card",
+@"CREATE TABLE Card (Id INTEGER PRIMARY KEY NOT NULL,Name TEXT NOT NULL,Text TEXT,Power TEXT,Toughness TEXT,CastingCost TEXT,Loyalty TEXT DEFAULT (null),Type TEXT NOT NULL,PartName TEXT NOT NULL,OtherPartName TEXT)",
+@"INSERT INTO Card SELECT Id,Name,Text,Power,Toughness,CastingCost,Loyalty,Type,PartName,OtherPartName FROM Temp_Card",
+@"DROP TABLE Temp_Card",
+    };
+
     }
 }
