@@ -126,7 +126,15 @@
                        new KeyValuePair<string, object>("@code", kv.Key),
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
-                
+
+                if (repo.ColumnExists("Card", "Loyalty") && repo.GetTable("Card").GetColumn("Loyalty").DataType == "INTEGER")
+                {
+                    foreach (string query in UpdateQueries.ChangeCardLoyaltyColumnType)
+                    {
+                        repo.ExecuteBatch(query);
+                    }
+                }
+
                 // 9.2
                 // To be uncommented after release of second set of amonkhet block
                 //repo.ExecuteBatch(UpdateQueries.UpdateAmonkhetInvocationsMissingCard);
