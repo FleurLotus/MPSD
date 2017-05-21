@@ -68,7 +68,7 @@
         public string ToString(int? languageId)
         {
             if (languageId == null)
-                return IsSplitted ? Name + PartName : Name;
+                return Name;
 
             return _translations.GetOrDefault(languageId.Value);
         }
