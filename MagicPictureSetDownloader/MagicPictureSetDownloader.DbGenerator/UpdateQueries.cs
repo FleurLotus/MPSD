@@ -63,5 +63,9 @@ AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdE
 @"DROP TABLE Temp_Card",
     };
 
+        public const string UpdateHourofDevastationReleaseDate =
+@"UPDATE Edition
+SET ReleaseDate = '2017-07-14 00:00:00'
+WHERE GathererName = 'Hour of Devastation'";
     }
 }

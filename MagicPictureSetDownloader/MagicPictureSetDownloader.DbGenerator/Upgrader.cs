@@ -136,8 +136,10 @@
                 }
 
                 // 9.2
-                // To be uncommented after release of second set of amonkhet block
-                //repo.ExecuteBatch(UpdateQueries.UpdateAmonkhetInvocationsMissingCard);
+                repo.ExecuteBatch(UpdateQueries.UpdateAmonkhetInvocationsMissingCard);
+
+                // 9.3
+                repo.ExecuteBatch(UpdateQueries.UpdateHourofDevastationReleaseDate);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
