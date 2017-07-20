@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="9.2">
+  <Last Number="9.3">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Commander Anthology, Archenemy: Nicol Bolas and Hour of Devastation</Comment>
+    <Comment>Version with full Amonkhet Invocation</Comment>
   </Last>
+  <Old Number="9.2">
+    <Comment>Version with Commander Anthology, Archenemy: Nicol Bolas and Hour of Devastation</Comment>
+  </Old>
   <Old Number="9.1">
     <Comment>Version with Mind vs Might, Welcome Deck 2017 and Amonkhet</Comment>
   </Old>
