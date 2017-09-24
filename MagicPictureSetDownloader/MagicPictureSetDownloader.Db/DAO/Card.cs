@@ -43,7 +43,11 @@
         //Recto-Verso
         public bool IsReverseSide
         {
-            get { return IsMultiPart && CastingCost == null && !Type.ToLowerInvariant().Contains("land"); }
+            //Exclude land because of Westvale Abbey and Hanweir Battlements
+            //But keep transformed to land
+            get { return IsMultiPart && CastingCost == null && 
+                    (!Type.ToLowerInvariant().Contains("land") || (Text != null && Text.StartsWith("(Transforms from")));
+            }
         }
         //Multiple part on the same side (Not Up/Down)
         public bool IsSplitted
