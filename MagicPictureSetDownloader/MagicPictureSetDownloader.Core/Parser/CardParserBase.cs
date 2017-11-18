@@ -5,10 +5,11 @@
 
     internal class CardParserBase
     {
-        private const string Start = @"<!-- Card Details Table -->";
-        private const string End = @"<!-- End Card Details Table -->";
-        private const string SubCardStart = @"<table class=""cardDetails cardComponent""";
-
+        private const string Start = @"<div class=""contentcontainer"">";
+        private const string End = @"<div class=""clear""></div>";
+        private const string CardStartBlock = @"<td id=""ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_cardComponent";
+        private const string CardStartData = @"<table class=""cardDetails";
+        private const string LastCardEndData = @"</td>";
         public const string ImageKey = "Image";
         public const string NameKey = "Name";
         public const string ManaCostKey = "ManaCost";
@@ -32,31 +33,36 @@
 
             //No decode because we need to do a special correction for XmlTextReader to be able to read HTML with javascript
             //To end because of multi part card
+            //This a way to get rid for header and footer of HTML file
             string cutText = Parser.ExtractContent(text, Start, End, false, true);
-
-            if (cutText.IndexOf(End, StringComparison.InvariantCulture) >= 0)
+            
+            string[] tokens = cutText.Split(new[] { CardStartBlock }, StringSplitOptions.RemoveEmptyEntries);
+            if (tokens.Length == 1)
             {
-                //Case for multi part card
-                foreach (string subinfo in cutText.Split(new[] { End }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    int index = subinfo.LastIndexOf(SubCardStart, StringComparison.InvariantCulture);
-                    if (index < 0)
-                    {
-                        continue;
-                    }
-
-                    cardsText.Add(subinfo.Substring(index));
-                }
-
-                if (cardsText.Count != 2)
-                {
-                    throw new ParserException("Wrong number of parsed cards in a single block of multipart card! Check HTML source");
-                }
+                throw new ParserException("Wrong parsing of card block exteaction! Check HTML source");
             }
-            else
+            //tokens[0] before card ignored
+            //tokens[1+] real cards
+            //last token contains also after card data
+            for (int i = 1; i < tokens.Length; i++)
             {
-                //Case for normal card
-                cardsText.Add(cutText);
+                string tmpString = CardStartBlock + tokens[i];
+                int index = tmpString.LastIndexOf(CardStartData, StringComparison.InvariantCulture);
+                if (index < 0)
+                {
+                    continue;
+                }
+
+                if (i == tokens.Length - 1)
+                {
+                    int endpos = tmpString.LastIndexOf(LastCardEndData, StringComparison.InvariantCulture);
+                    if (endpos >= 0)
+                    {
+                        tmpString = tmpString.Substring(0, endpos + LastCardEndData.Length);
+                    }
+                }
+
+                cardsText.Add(tmpString);
             }
 
             return cardsText.ToArray();
