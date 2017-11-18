@@ -14,7 +14,7 @@
         public event EventHandler<EventArgs<string>> NewEditionCreated;
 
         public const string BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
-        private const string BaseIconUrl = @"http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&size=small&rarity=C&set=";
+        private const string BaseIconUrl = @"http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&size=small&rarity={0}&set={1}";
 
         private readonly WebAccess _webAccess = new WebAccess();
         private readonly Lazy<IMagicDatabaseReadAndWriteReference> _lazy = new Lazy<IMagicDatabaseReadAndWriteReference>(() => MagicDatabaseManager.ReadAndWriteReference);
@@ -153,18 +153,20 @@
                 return null;
 
             byte[] editionIcon = null;
-            try
+            foreach (string rarity in new[] { "C", "U", "R", "M" })
             {
-                editionIcon = _webAccess.GetFile(BaseIconUrl + code);
-            }
-            catch (WebException)
-            {
-                //Manage file not found error
-            }
-
-            if (editionIcon != null && editionIcon.Length > 0)
-            {
-                return editionIcon;
+                try
+                {
+                    editionIcon = _webAccess.GetFile(string.Format(BaseIconUrl, rarity, code));
+                }
+                catch (WebException)
+                {
+                    //Manage file not found error
+                }
+                if (editionIcon != null && editionIcon.Length > 0)
+                {
+                    return editionIcon;
+                }
             }
 
             return null;

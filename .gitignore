@@ -3,6 +3,7 @@
 obj/
 [Rr]elease*/
 _ReSharper*/
+.vs/
 *.suo
 packages/
 *.DotSettings.user
