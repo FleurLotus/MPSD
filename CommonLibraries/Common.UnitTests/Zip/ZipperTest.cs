@@ -21,10 +21,14 @@
             try
             {
                 if (Directory.Exists(temporyDirectory))
+                {
                     Directory.Delete(temporyDirectory, true);
+                }
 
                 using (Stream fs = new FileStream(ZipFileName, FileMode.Open))
+                {
                     Zipper.UnZipAll(fs, temporyDirectory);
+                }
 
                 string[] files = Directory.GetFiles(temporyDirectory);
 
@@ -75,9 +79,10 @@
             finally
             {
                 if (Directory.Exists(temporyDirectory))
+                {
                     Directory.Delete(temporyDirectory, true);
+                }
             }
         }
-
     }
 }

@@ -28,11 +28,14 @@
             get
             {
                 if (DataType == "nchar" || DataType == "nvarchar" || DataType == "binary" || DataType == "varbinary")
+                {
                     return string.Format(CultureInfo.InvariantCulture, "{0}({1})", DataType, CharacterMaxLength);
+                }
 
                 if (DataType == "numeric")
+                {
                     return string.Format(CultureInfo.InvariantCulture, "{0}({1},{2})", DataType, NumericPrecision, NumericScale);
-
+                }
                 return string.Format(CultureInfo.InvariantCulture, "{0}", DataType);
             }
         }
@@ -43,7 +46,9 @@
             if (string.IsNullOrEmpty(SchemaName))
             {
                 if (!string.IsNullOrEmpty(other.SchemaName))
+                {
                     comp = -1;
+                }
             }
             else
             {
@@ -51,11 +56,13 @@
             }
 
             if (comp == 0)
+            {
                 comp = string.Compare(TableName, other.TableName, StringComparison.Ordinal);
-
+            }
             if (comp == 0)
+            {
                 comp = Position.CompareTo(other.Position);
-
+            }
             return comp;
         }
         public override string ToString()

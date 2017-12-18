@@ -17,7 +17,9 @@
         internal LinkedProperties(INotifyPropertyChanged parent)
         {
             if (parent == null)
-                throw new ArgumentNullException("parent");
+            {
+                throw new ArgumentNullException(nameof(parent));
+            }
 
             _propertyNameSet = new HashSet<string>(parent.GetPublicInstanceProperties().Select(pi => pi.Name));
         }
@@ -28,14 +30,20 @@
             string destinationName = destination.GetMemberName();
 
             if (!_propertyNameSet.Contains(sourceName))
+            {
                 throw new ArgumentException(sourceName + " is not a valid property Name");
+            }
 
             if (!_propertyNameSet.Contains(destinationName))
+            {
                 throw new ArgumentException(destinationName + " is not a valid property Name");
+            }
 
             if (sourceName == destinationName)
+            {
                 throw new ArgumentException("source and destination could not be the same");
-            
+            }
+
             lock (_sync)
             {
                 HashSet<string> linked;

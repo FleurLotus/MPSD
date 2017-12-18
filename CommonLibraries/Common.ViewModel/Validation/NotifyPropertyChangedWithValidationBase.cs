@@ -45,8 +45,9 @@
         protected void AddValidationRule<T>(IEnumerable<Expression<Func<T>>> expressions, Func<string> rule)
         {
             if (expressions == null)
-                throw new ArgumentNullException("expressions");
-
+            {
+                throw new ArgumentNullException(nameof(expressions));
+            }
             foreach (var expression in expressions)
             {
                 AddValidationRule(expression, rule);
@@ -55,7 +56,9 @@
         protected void AddValidationRule<T>(Expression<Func<T>> expression, IEnumerable<Func<string>> rules)
         {
             if (rules == null)
-                throw new ArgumentNullException("rules");
+            {
+                throw new ArgumentNullException(nameof(rules));
+            }
 
             foreach (var rule in rules)
             {
@@ -65,12 +68,16 @@
         protected void AddValidationRule<T>(Expression<Func<T>> expression, Func<string> rule)
         {
             if (rule == null)
-                throw new ArgumentNullException("rule");
+            {
+                throw new ArgumentNullException(nameof(rule));
+            }
 
             string propertyName = expression.GetMemberName();
 
             if (_toBeValidatedProperty.All(pi => pi.Name != propertyName))
+            {
                 throw new ArgumentException("property is unknown");
+            }
 
             using (new WriterLock(_lazyLock.Value))
             {
@@ -96,7 +103,9 @@
                 string res = ValidateProperty(propName);
 
                 if (!string.IsNullOrWhiteSpace(res))
+                {
                     errorMessage.AppendFormat("{0} -> {1}", propName, res);
+                }
             }
 
             //Recursice call on IValidable
@@ -121,7 +130,9 @@
             {
                 string res = validator.Validate();
                 if (!string.IsNullOrWhiteSpace(res))
+                {
                     errorMessage.AppendFormat("Global validation ---> {0}", res);
+                }
             }
 
             return errorMessage.ToString();
@@ -131,13 +142,16 @@
             //Rules Attribute check
             var keyValue = _propertyValidatorRules.First(kv => kv.Key.Name == propertyName);
             if (keyValue.Value == null || keyValue.Value.Length == 0)
+            {
                 return null;
+            }
 
             PropertyInfo pi = keyValue.Key;
             MethodInfo getter = pi.GetGetMethod();
             if (getter == null)
+            {
                 return null;
-
+            }
 
             StringBuilder sb = new StringBuilder();
             object value = getter.Invoke(this, null);
@@ -145,7 +159,9 @@
             {
                 string res = rule(value);
                 if (!string.IsNullOrWhiteSpace(res))
+                {
                     sb.AppendLine(res);
+                }
             }
             return sb.ToString();
         }
@@ -158,16 +174,22 @@
             {
                 IList<Func<string>> lst = _rules.GetOrDefault(propertyName);
                 if (lst == null || lst.Count == 0)
-                    propertyRules  = new List<Func<string>>();
+                {
+                    propertyRules = new List<Func<string>>();
+                }
                 else
+                {
                     propertyRules = new List<Func<string>>(lst);
+                }
             }
             
             foreach (var rule in propertyRules)
             {
                 string res = rule();
                 if (!string.IsNullOrWhiteSpace(res))
+                {
                     sb.AppendLine(res);
+                }
             }
 
             sb.Append(ValidatePropertyUsingAttributes(propertyName));

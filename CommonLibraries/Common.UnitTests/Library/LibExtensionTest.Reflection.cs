@@ -24,54 +24,7 @@
             Assert.IsTrue(names.Length == 11, "Not the could number of property found");
             Assert.IsTrue(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), "Must find only member public");
         }
-        [Test]
-        public void ReflectionExtensionGetCustomAttributes()
-        {
-            PropertyInfo[] mother = typeof(MotherClass).GetPublicInstanceProperties();
-            PropertyInfo[] child = typeof(ChildClass).GetPublicInstanceProperties();
-
-
-            Assert.IsTrue(mother.Length == 2, "Not the expected number of property");
-            Assert.IsTrue(child.Length == 4, "Not the expected number of property");
-
-            foreach (var propArray in new[] { mother, child })
-            {
-                foreach (var propertyInfo in propArray)
-                {
-                    var resm = propertyInfo.GetCustomAttributes<MotherAttribute>();
-                    var resm2 = propertyInfo.GetCustomAttributes<MotherAttribute>(true);
-                    var resc = propertyInfo.GetCustomAttributes<ChildAttribute>();
-                    var resc2 = propertyInfo.GetCustomAttributes<ChildAttribute>(true);
-
-                    string name = propertyInfo.Name;
-                    //Child and Mother are a Mother
-                    Assert.IsTrue(resm.Length == 1, "Not the expected number of {0} on GetCustomAttributes<MotherAttribute>() call", name);
-                    Assert.IsTrue(resm2.Length == 1, "Not the expected number of {0} on GetCustomAttributes<MotherAttribute>(true) call", name);
-                    
-                    switch (name)
-                    {
-                        case "Property2":
-                        case "Property4":
-                            //Child is a child
-                            Assert.IsTrue(resc.Length == 1, "Not the expected number of {0} on GetCustomAttributes<ChildAttribute>() call", name);
-                            Assert.IsTrue(resc2.Length == 1, "Not the expected number of {0} on GetCustomAttributes<ChildAttribute>(true) call", name);
-                            break;
-
-                        case "Property":
-                        case "Property3":
-                            //Mother is not a child
-                            Assert.IsTrue(resc.Length == 0, "Not the expected number of {0} on GetCustomAttributes<ChildAttribute>() call", name);
-                            Assert.IsTrue(resc2.Length == 0, "Not the expected number of {0} on GetCustomAttributes<ChildAttribute>(true) call", name);
-                            break;
-
-                        default:
-                            throw new Exception("Unknow property");
-                    }
-                }
-            }
-        }
-
-
+    
         // ReSharper disable UnusedMember.Local
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         // ReSharper disable ValueParameterNotUsed

@@ -21,7 +21,6 @@
             // I have added the unchecked keyword to make sure 
             // not get an overflow exception.
             // It can be enhanced later by catching the OverflowException.
-
             unchecked
             {
                 foreach (object t in input.Where(t => t != null))

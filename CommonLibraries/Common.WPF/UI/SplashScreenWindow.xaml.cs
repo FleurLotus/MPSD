@@ -12,8 +12,9 @@
         public SplashScreenWindow(SplashScreenViewModel vm)
         {
             if (vm == null)
-                throw new ArgumentNullException("vm");
-
+            {
+                throw new ArgumentNullException(nameof(vm));
+            }
             Topmost = true;
             DataContext = vm;
             InitializeComponent();

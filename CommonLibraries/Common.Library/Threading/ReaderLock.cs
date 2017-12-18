@@ -11,7 +11,9 @@
         public ReaderLock(ReaderWriterLockSlim readerWriter)
         {
             if (readerWriter == null)
-                throw new ArgumentNullException("readerWriter");
+            {
+                throw new ArgumentNullException(nameof(readerWriter));
+            }
 
             _readerWriter = readerWriter;
             _readerWriter.EnterReadLock();
@@ -24,7 +26,9 @@
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {

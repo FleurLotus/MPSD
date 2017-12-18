@@ -42,7 +42,9 @@
         {
             int index = HtmlTableParser.GetAutoCloseIndex(text, startindex);
             if (index != expectedreturn)
+            {
                 throw new Exception(string.Format("The found index {0} is differente from the excepted one {1} for {2}", index, expectedreturn, text));
+            }
         }
 
         #region TestCase List
@@ -84,11 +86,15 @@
         {
             int index = HtmlTableParser.GetPostClosingIndex(text, startindex, wantedtag);
             if (index != expectedreturn)
+            {
                 throw new Exception(string.Format("The found index {0} is differente from the excepted one {1} for {2}", index, expectedreturn, text));
+            }
 
             index = HtmlTableParser.GetPostClosingIndex(text.ToLower(), startindex, wantedtag.ToUpper());
             if (index != expectedreturn)
+            {
                 throw new Exception("Case sensitivity problem, result must the same");
+            }
         }
 
         #region TestCase List
@@ -102,16 +108,24 @@
         {
             IHtmlCell cell = HtmlTableParser.ExtractCell(text);
             if (cell.InnerText != expectedText)
+            {
                 throw new Exception(string.Format("The found InnerText {0} is differente from the excepted one {1} for {2}", cell.InnerText, expectedText, text));
+            }
 
             if (cell.IsHeader != expectedIsHeader)
+            {
                 throw new Exception(string.Format("The found IsHeader {0} is differente from the excepted one {1} for {2}", cell.IsHeader, expectedIsHeader, text));
+            }
 
             if (cell.RowSpan != expectedRowSpan)
+            {
                 throw new Exception(string.Format("The found RowSpan {0} is differente from the excepted one {1} for {2}", cell.RowSpan, expectedRowSpan, text));
+            }
 
             if (cell.ColSpan != expectedColSpan)
+            {
                 throw new Exception(string.Format("The found ColSpan {0} is differente from the excepted one {1} for {2}", cell.ColSpan, expectedColSpan, text));
+            }
         }
         
         [Test]

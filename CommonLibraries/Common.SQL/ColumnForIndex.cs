@@ -14,7 +14,9 @@
             if (string.IsNullOrEmpty(Column.SchemaName))
             {
                 if (!string.IsNullOrEmpty(other.Column.SchemaName))
+                {
                     comp = -1;
+                }
             }
             else
             {
@@ -22,18 +24,21 @@
             }
 
             if (comp == 0)
+            {
                 comp = string.Compare(Column.TableName, other.Column.TableName, StringComparison.Ordinal);
-
+            }
             if (comp == 0)
+            {
                 comp = Position.CompareTo(other.Position);
-
+            }
             return comp;
         }
         public override string ToString()
         {
             if (IsAsc.HasValue)
+            {
                 return string.Format("{0} {1} {2}", Position, Column, IsAsc.Value ? "Asc" : "Desc");
-
+            }
             return string.Format("{0} {1}", Position, Column);
         }
     }

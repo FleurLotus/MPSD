@@ -11,7 +11,9 @@
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (null == value || null == parameter)
+            {
                 return false;
+            }
 
             string checkValue = value.ToString();
             string targetValues = parameter.ToString();
@@ -21,7 +23,9 @@
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (null == value || null == parameter)
+            {
                 return null;
+            }
 
             bool useValue = (bool)value;
             string targetValue = parameter.ToString();

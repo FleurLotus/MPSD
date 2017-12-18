@@ -15,7 +15,9 @@
             while (ex != null)
             {
                 for (int j = 0; j < i; j++)
+                {
                     sb.Append('\t');
+                }
                 sb.AppendLine(ex.Message);
 
                 i++;

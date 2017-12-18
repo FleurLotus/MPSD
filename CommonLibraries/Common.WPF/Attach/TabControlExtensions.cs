@@ -56,7 +56,9 @@ namespace Common.WPF
             // If the selected element is not suposed to be visible,
             // selects the next visible element
             if (selected.Visibility == Visibility.Collapsed)
+            {
                 tabControl.SelectedItem = tabControl.Items.OfType<UIElement>().FirstOrDefault(e => e.Visibility == Visibility.Visible);
+            }
         }
     }
 }

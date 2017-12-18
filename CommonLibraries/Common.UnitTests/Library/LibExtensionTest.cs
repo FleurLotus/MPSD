@@ -19,7 +19,6 @@
         [TestCase("azertyazerty", "ZER", "123456", StringComparison.InvariantCultureIgnoreCase, "a123456tya123456ty")]
         [TestCase("azertyazerty", "ZER", null, StringComparison.InvariantCultureIgnoreCase, "atyaty")]
         #endregion
-
         public void StringExtensionReplaceTest(string source, string old, string replace, StringComparison comparison, string expectedResult)
         {
             string value = source.Replace(old, replace, comparison);

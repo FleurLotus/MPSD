@@ -76,7 +76,9 @@
                                 if (pkpos > 0)
                                 {
                                     if (table.PrimaryKey == null)
+                                    {
                                         table.SetPrimaryKey(CreatePrimaryKey(table));
+                                    }
 
                                     PrimaryKey primaryKey = table.PrimaryKey as PrimaryKey;
                                     // ReSharper disable PossibleNullReferenceException

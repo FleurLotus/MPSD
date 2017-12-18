@@ -23,7 +23,9 @@
                 foreach (ZipEntry entry in zipFile)
                 {
                     if (!entry.IsFile)
+                    {
                         continue;
+                    }
 
                     Stream zstream = zipFile.GetInputStream(entry);
 
@@ -31,7 +33,9 @@
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                     using (FileStream sw = new FileStream(filePath, FileMode.CreateNew))
+                    {
                         zstream.CopyTo(sw);
+                    }
                 }
             }
             finally

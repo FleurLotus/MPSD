@@ -21,8 +21,10 @@
 
         protected override bool IsValide(object instance)
         {
-            if (instance == null || instance.GetType().IsClass) 
+            if (instance == null || instance.GetType().IsClass)
+            {
                 return false;
+            }
 
             try
             {

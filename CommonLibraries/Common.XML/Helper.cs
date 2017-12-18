@@ -11,10 +11,14 @@
             Dictionary<string, string> ret = new Dictionary<string, string>();
 
             if (reader == null)
-                throw new ArgumentNullException("reader");
+            {
+                throw new ArgumentNullException(nameof(reader));
+            }
 
             if (!reader.MoveToFirstAttribute())
+            {
                 return ret;
+            }
 
             do
             {

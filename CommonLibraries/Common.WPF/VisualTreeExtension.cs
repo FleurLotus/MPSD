@@ -17,7 +17,9 @@
             {
                 T itemAsT = item as T;
                 if (itemAsT != null)
+                {
                     return itemAsT;
+                }
                 item = VisualTreeHelper.GetParent(item);
             }
 
@@ -30,7 +32,10 @@
             while (item != null)
             {
                 if (item.GetType() == type)
+                {
                     return item;
+                }
+
                 item = VisualTreeHelper.GetParent(item);
             }
 

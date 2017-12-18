@@ -8,7 +8,6 @@
         private string _otherCommandLabel;
         private string _other2CommandLabel;
 
-
         public DisplayInfo()
         {
             CancelCommandLabel = "Cancel";

@@ -7,8 +7,8 @@
     {
         None = 0,
         Insert = 1,
-        Update = 1<<1,
-        Delete = 1<<2
+        Update = 1 << 1,
+        Delete = 1 << 2
     }
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false)]

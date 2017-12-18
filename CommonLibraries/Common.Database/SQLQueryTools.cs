@@ -49,16 +49,24 @@
         public static string ToSqlString(this object o)
         {
             if (o == null)
+            {
                 return NullString;
+            }
 
             if (o is int)
-                return ((int) o).ToString(CultureInfo.InvariantCulture);
+            {
+                return ((int)o).ToString(CultureInfo.InvariantCulture);
+            }
 
             if (o is double)
+            {
                 return ((double)o).ToString(CultureInfo.InvariantCulture);
+            }
 
             if (o is DateTime)
+            {
                 return ((DateTime)o).ToString("yyyyMMdd HH:mm:ss");
+            }
 
             return string.Format("'{0}'", o.ToString().ToSqlStringEscaped());
         }
@@ -71,7 +79,9 @@
         {
             DbType dbType;
             if (!_typeToDbTypes.TryGetValue(type, out dbType))
+            {
                 return null;
+            }
             return dbType;
         }
         public static string ToSqlStringEscaped(this string s)

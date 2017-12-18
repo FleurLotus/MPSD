@@ -31,10 +31,14 @@
         public void Enqueue(Action action)
         {
             if (_exit)
+            {
                 return;
+            }
 
             lock (_queue)
+            {
                 _queue.Enqueue(action);
+            }
 
             _autoResetEvent.Set();
         }
@@ -62,7 +66,9 @@
                     foreach (var action in todo)
                     {
                         if (_exit)
+                        {
                             return;
+                        }
 
                         try
                         {

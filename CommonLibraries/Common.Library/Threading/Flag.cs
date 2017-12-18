@@ -23,7 +23,9 @@ namespace Common.Library.Threading
             lock (_sync)
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException("Flag");
+                }
 
                 _flagCount.Decrement(_source);
 
