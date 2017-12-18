@@ -47,7 +47,6 @@
         }
         public static Image ResizeImage(this Image source, int newWidth, int newHeight)
         {
-
             int sourceWidth = source.Width;
             int sourceHeight = source.Height;
 

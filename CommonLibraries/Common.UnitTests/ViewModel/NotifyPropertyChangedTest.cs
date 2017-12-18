@@ -21,14 +21,15 @@
             _notified.Clear();
             _vm = new ViewModel();
             _vm.PropertyChanged += PropertyChanged;
-
         }
 
         [TearDown]
         public void TearDown()
         {
             if (_vm != null)
+            {
                 _vm.PropertyChanged -= PropertyChanged;
+            }
         }
 
         [Test]

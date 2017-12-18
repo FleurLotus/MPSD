@@ -29,8 +29,9 @@ namespace Common.Library.Html
             string workingText = ExtractTable(htmlText);
 
             if (string.IsNullOrWhiteSpace(workingText))
+            {
                 return null;
-
+            }
 
             return new HtmlTable(ExtractRows(workingText).Select(ExtractCells));
         }
@@ -40,17 +41,23 @@ namespace Common.Library.Html
             int start = htmlText.IndexOf(TableStart, StringComparison.InvariantCultureIgnoreCase);
             //Can't find start tag
             if (start < 0)
+            {
                 return null;
+            }
 
             string workingText = htmlText.Substring(start);
 
             //Multi start tag
             if (workingText.IndexOf(TableStart, TableStart.Length, StringComparison.InvariantCultureIgnoreCase) >= 0)
+            {
                 throw new HtmlTableParserMultiTableException();
+            }
 
             int end = GetPostClosingIndex(workingText,0 ,TableEnd);
             if (end < 0)
+            {
                 throw new HtmlTableParserNoTableClosingTagException();
+            }
 
             return workingText.Substring(0, end);
         }
@@ -64,8 +71,9 @@ namespace Common.Library.Html
             {
                 int end = GetPostClosingIndex(htmlText, lastindex, RowEnd);
                 if (end < 0)
+                {
                     throw new HtmlTableParserNoRowClosingTagException();
-
+                }
 
                 rows.Add(htmlText.Substring(lastindex, end - lastindex));
                 lastindex = end;
@@ -99,11 +107,15 @@ namespace Common.Library.Html
                 }
 
                 if (string.IsNullOrEmpty(endTag))
+                {
                     break;
+                }
 
                 int end = GetPostClosingIndex(htmlRow, lastindex, endTag);
                 if (end < 0)
+                {
                     throw new HtmlTableParserNoCellClosingTagException();
+                }
 
                 cells.Add(ExtractCell(htmlRow.Substring(lastindex, end - lastindex)));
                 lastindex = end;
@@ -117,22 +129,30 @@ namespace Common.Library.Html
             int tagIndex = htmlCell.IndexOf(Close,StringComparison.InvariantCultureIgnoreCase);
             //Should never happen
             if (tagIndex < 0)
+            {
                 throw new HtmlTableParserNoTagEndException();
+            }
 
             string tag = htmlCell.Substring(0, tagIndex + Close.Length);
 
             int colspan = 1;
             Match m = _colSpanRegex.Match(tag);
             if (m.Success)
+            {
                 colspan = int.Parse(m.Groups["size"].Value);
+            }
 
             int rowspan = 1;
             m = _rowSpanRegex.Match(tag);
             if (m.Success)
+            {
                 rowspan = int.Parse(m.Groups["size"].Value);
+            }
 
             if (htmlCell.EndsWith(AutoEnd, StringComparison.InvariantCultureIgnoreCase))
+            {
                 return new HtmlCell(string.Empty, isHeader, colspan, rowspan);
+            }
 
             return new HtmlCell(htmlCell.Substring(tagIndex + 1, htmlCell.Length - (isHeader ? RowCellHeaderEnd.Length : RowCellEnd.Length) - tagIndex - 1), isHeader, colspan, rowspan);
         }
@@ -141,13 +161,17 @@ namespace Common.Library.Html
             //Check auto close
             int autoClose = GetAutoCloseIndex(workingText, startIndex);
             if (autoClose >= 0)
+            {
                 return autoClose + AutoEnd.Length;
+            }
 
             int end = workingText.IndexOf(wantedCloseTag, startIndex, StringComparison.InvariantCultureIgnoreCase);
 
             //No closing tag
             if (end < 0)
+            {
                 return -1;
+            }
 
             return end + wantedCloseTag.Length;
         }

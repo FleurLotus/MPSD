@@ -19,7 +19,7 @@
         {
             _dispatcherInvoker = dispatcherInvoker;
         }
-        
+
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             // Be nice - use BlockReentrancy like MSDN said
@@ -27,7 +27,9 @@
             {
                NotifyCollectionChangedEventHandler eventHandler = CollectionChanged;
                 if (eventHandler == null)
+                {
                     return;
+                }
 
                 Delegate[] delegates = eventHandler.GetInvocationList();
                 // Walk thru invocation list

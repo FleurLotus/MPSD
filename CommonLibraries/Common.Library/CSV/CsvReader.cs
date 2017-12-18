@@ -14,7 +14,6 @@
         private const char DefaultSeparator = ',';
         private const int UninitializedColumnsCount = -1;
 
-
         private string[] _currentData;
         private string[] _headers;
         private bool _withHeader;
@@ -33,7 +32,7 @@
         {
             if (stream == null)
             {
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             }
 
             Init(stream, withHeader, separator);
@@ -47,7 +46,7 @@
         {
             if (path == null)
             {
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
             }
 
             if (!File.Exists(path))
@@ -87,7 +86,7 @@
         {
             if (separator == EscapingChar)
             {
-                throw new ArgumentException("Could not be " + EscapingChar, "separator");
+                throw new ArgumentException("Could not be " + EscapingChar, nameof(separator));
             }
 
             _withHeader = withHeader;

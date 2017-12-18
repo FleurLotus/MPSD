@@ -68,19 +68,25 @@
         {
             var ev = DialogWanted;
             if (ev != null && arg != null)
+            {
                 ev(this, new EventArgs<DialogViewModelBase>(arg));
+            }
         }
         protected void OnInputRequestedRequested(InputViewModel vm)
         {
             var e = InputRequested;
             if (e != null && vm != null)
+            {
                 e(this, new EventArgs<InputViewModel>(vm));
+            }
         }
         protected void OnClosing()
         {
             var e = Closing;
             if (e != null)
+            {
                 e(this, EventArgs.Empty);
+            }
         }
     }
 }

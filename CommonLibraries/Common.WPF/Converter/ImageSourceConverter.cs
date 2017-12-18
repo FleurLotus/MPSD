@@ -15,11 +15,15 @@ namespace Common.WPF.Converter
             {
                 string str = value as string;
                 if (str != null)
+                {
                     return new BitmapImage(new Uri(str, UriKind.RelativeOrAbsolute));
+                }
 
                 Uri uri = value as Uri;
                 if (uri != null)
+                {
                     return new BitmapImage(uri);
+                }
             }
             return value;
         }

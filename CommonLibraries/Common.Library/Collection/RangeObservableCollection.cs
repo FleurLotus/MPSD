@@ -28,7 +28,9 @@
             using (this.SetFlag(SuppressNotification))
             {
                 foreach (T value in list)
+                {
                     Add(value);
+                }
             }
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }

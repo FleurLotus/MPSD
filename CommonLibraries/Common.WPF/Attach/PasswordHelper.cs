@@ -40,7 +40,9 @@
         {
             PasswordBox passwordBox = sender as PasswordBox;
             if (passwordBox == null)
+            {
                 return;
+            }
             passwordBox.PasswordChanged -= PasswordChanged;
 
             if (!GetIsUpdating(passwordBox))
@@ -53,7 +55,9 @@
         {
             PasswordBox passwordBox = sender as PasswordBox;
             if (passwordBox == null)
+            {
                 return;
+            }
 
             if ((bool) e.OldValue)
             {
@@ -69,7 +73,9 @@
         {
             PasswordBox passwordBox = sender as PasswordBox;
             if (passwordBox == null)
+            {
                 return;
+            }
             SetIsUpdating(passwordBox, true);
             SetPassword(passwordBox, passwordBox.Password);
             SetIsUpdating(passwordBox, false);

@@ -29,8 +29,9 @@
         internal void AddColumn(ColumnForForeignKey column)
         {
             if (column == null)
-                throw new ArgumentNullException("column");
-
+            {
+                throw new ArgumentNullException(nameof(column));
+            }
             _columns.Add(column);
             _columns.Sort();
         }
@@ -41,7 +42,9 @@
             if (string.IsNullOrEmpty(SourceSchemaName))
             {
                 if (!string.IsNullOrEmpty(other.SourceSchemaName))
+                {
                     comp = -1;
+                }
             }
             else
             {
@@ -49,11 +52,13 @@
             }
 
             if (comp == 0)
+            {
                 comp = string.Compare(SourceTableName, other.SourceTableName, StringComparison.Ordinal);
-
+            }
             if (comp == 0)
+            {
                 comp = string.Compare(CaseSensitivity.ToKeyString(Name), CaseSensitivity.ToKeyString(other.Name), StringComparison.Ordinal);
-
+            }
             return comp;
         }
         public override string ToString()

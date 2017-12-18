@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Net;
+    using System.Net.Http;
     using System.Text;
     using Common.Library.Notify;
 
@@ -16,22 +17,34 @@
         public static string ToAbsoluteUrl(string baseurl, string relativeurl, bool useOnlyDomain = false)
         {
             if (string.IsNullOrWhiteSpace(relativeurl))
+            {
                 return baseurl;
+            }
 
             if (string.IsNullOrWhiteSpace(baseurl))
+            {
                 return relativeurl;
+            }
 
             if (relativeurl.Contains("//"))
+            {
                 return relativeurl;
+            }
 
             if (useOnlyDomain)
+            {
                 baseurl = ExtractBaseUrl(baseurl);
+            }
 
             if (!baseurl.EndsWith("/"))
+            {
                 baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
+            }
 
             if (relativeurl.StartsWith("/"))
+            {
                 relativeurl = relativeurl.Substring(1);
+            }
 
             return RemovePathBack(baseurl + relativeurl);
         }
@@ -39,7 +52,9 @@
         private static string RemovePathBack(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
+            {
                 return url;
+            }
 
             const string pathBack = "/../";
             int index;
@@ -47,7 +62,9 @@
             {
                 int start = url.LastIndexOf('/', index - 1);
                 if (start < 0)
+                {
                     continue;
+                }
 
                 url = url.Substring(0, start + 1) + url.Substring(index + pathBack.Length);
             }
@@ -59,16 +76,21 @@
             const string postfixProtocol = @"://";
 
             if (string.IsNullOrWhiteSpace(url))
+            {
                 return url;
-
+            }
 
             int startIndex = url.IndexOf(postfixProtocol, StringComparison.InvariantCulture);
             if (startIndex < 0)
+            {
                 return url;
+            }
 
             int index = url.IndexOf('/', startIndex + postfixProtocol.Length);
             if (index < 0)
+            {
                 return url;
+            }
 
             return url.Substring(0, index + 1);
         }       
@@ -92,13 +114,20 @@
             return false;
         }
 
-        private WebClient GetWebClient()
+        private HttpClient GetHttpClient()
         {
-            WebClient webClient = new WebClient {Encoding = Encoding.UTF8};
-            if (_credentials != null)
-                webClient.Proxy.Credentials = _credentials;
+            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            if (_credentials == null)
+            {
+                httpClientHandler.UseDefaultCredentials = true;
+            }
+            else
+            {
+                httpClientHandler.Credentials = _credentials;
+            }
 
-            return webClient;
+            return new HttpClient(httpClientHandler);
+
         }
         public string GetHtml(string url, bool forceRefresh = false)
         {
@@ -107,8 +136,10 @@
             {
                 html = GetDataWithProxyFallBack(() =>
                 {
-                    using (WebClient webClient = GetWebClient())
-                        return webClient.DownloadString(url);
+                    using (HttpClient httpClient = GetHttpClient())
+                    {
+                        return httpClient.GetStringAsync(url).Result;
+                    }
                 });
                 _htmlCache[url] = html;
             }
@@ -119,8 +150,10 @@
             return GetDataWithProxyFallBack(
                 () =>
                     {
-                        using (WebClient webClient = GetWebClient())
-                            return webClient.DownloadData(url);
+                        using (HttpClient httpClient = GetHttpClient())
+                        {
+                            return httpClient.GetByteArrayAsync(url).Result;
+                        }
                     }
                );
         }
@@ -135,7 +168,9 @@
                 catch (WebException wex)
                 {
                     if (!wex.Message.Contains("407") || !OnCredentialRequiered())
+                    {
                         throw;
+                    }
                 }
 
             } while (true);

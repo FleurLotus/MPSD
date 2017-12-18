@@ -1,6 +1,5 @@
 ﻿namespace Common.UnitTests.CSV
 {
-
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
@@ -15,7 +14,6 @@
     [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class CsvReaderTest
     {
-
         #region Args Tests
         [Test]
         public void TestNullStringArgument()

@@ -34,27 +34,37 @@
             if (combo != null)
             {
                 if (combo.Template != null)
+                {
                     SetTextChangedHandler(combo);
+                }
                 else
+                {
                     combo.Loaded += ComboLoaded;
+                }
             }
         }
         private static void ComboLoaded(object sender, RoutedEventArgs e)
         {
             ComboBox combo = sender as ComboBox;
             if (combo == null)
+            {
                 return;
+            }
 
             combo.Loaded -= ComboLoaded;
             if (combo.Template != null)
+            {
                 SetTextChangedHandler(combo);
+            }
         }
 
         private static void CaseInsensitiveValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             ComboBox combo = sender as ComboBox;
             if (combo != null && combo.Template != null && GetEnabled(combo))
+            {
                 TextBoxTextChanged(combo, new RoutedEventArgs());
+            }
         }
 
         private static void SetTextChangedHandler(ComboBox combo)
@@ -64,9 +74,13 @@
             {
                 bool enabled = GetEnabled(combo);
                 if (enabled)
+                {
                     textBox.TextChanged += TextBoxTextChanged;
+                }
                 else
+                {
                     textBox.TextChanged -= TextBoxTextChanged;
+                }
             }
         }
 
@@ -74,14 +88,20 @@
         {
             TextBox textBox = sender as TextBox;
             if (textBox == null)
+            {
                 return;
+            }
 
             ComboBox combo = textBox.TemplatedParent as ComboBox;
             //combo.IsDropDownOpen = true;
             if (combo == null)
+            {
                 return;
+            }
             if (combo.IsTextSearchEnabled && textBox.SelectionStart == 0 && !string.IsNullOrEmpty(textBox.Text))
+            {
                 return;
+            }
             string text = combo.IsTextSearchEnabled ? textBox.Text.Substring(0, textBox.SelectionStart) : textBox.Text;
             bool caseInsensitive = GetCaseInsensitive(combo);
             

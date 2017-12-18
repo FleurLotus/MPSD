@@ -26,16 +26,19 @@
                                                            "<h6>", "</h6>"
                                                        };
 
-
         public static string Replace(this string str, string oldValue, string newValue, StringComparison comparison)
         {
             if (string.IsNullOrEmpty(str) || oldValue == null)
+            {
                 return str;
+            }
 
             int index = str.IndexOf(oldValue, comparison);
 
             if (index == -1)
+            {
                 return str;
+            }
 
             StringBuilder sb = new StringBuilder();
 
@@ -57,14 +60,18 @@
         public static string HtmlTrim(this string source)
         {
             if (source == null)
+            {
                 return null;
+            }
 
             return source.Replace("&nbsp;", " ").Trim(' ', '\t', '\n', '\r');
         }
         public static string HtmlRemoveFormatTag(this string source)
         {
             if (source == null)
+            {
                 return null;
+            }
 
             return _formatTags.Aggregate(source, (s, iter) => s.Replace(iter, string.Empty, StringComparison.InvariantCultureIgnoreCase)).HtmlTrim();
         }

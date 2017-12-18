@@ -58,20 +58,25 @@
         {
             ITable table = GetTable(schemaName, tableName);
             if (table == null)
+            {
                 throw new Exception("Unknown table");
-
+            }
             if (columnNames == null || columnNames.Length == 0)
+            {
                 throw new ArgumentException("columnNames");
-
+            }
             if (values == null || values.Length == 0)
+            {
                 throw new ArgumentException("values");
-
+            }
             if (values.Length != columnNames.Length)
+            {
                 throw new Exception("columnNames and values must have the same length");
-
+            }
             if (columnNames.Any(columnName => !table.HasColumn(columnName)))
+            {
                 throw new Exception("Unknown column");
-
+            }
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("SELECT 1 FROM {0} WHERE ", table);
 
@@ -86,7 +91,9 @@
                     for (int i = 0; i < columnNames.Length; i++)
                     {
                         if (i != 0)
+                        {
                             sb.Append(" AND ");
+                        }
 
                         if (values[i] == null)
                         {

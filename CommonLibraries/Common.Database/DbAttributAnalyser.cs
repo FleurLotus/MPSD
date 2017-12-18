@@ -20,7 +20,7 @@
                 return typeDbInfo;
             }
 
-            DbTableAttribute[] tableAttributes = type.GetCustomAttributes<DbTableAttribute>();
+            DbTableAttribute[] tableAttributes = type.GetCustomAttributes<DbTableAttribute>().ToArray();
             if (tableAttributes.Length != 1)
             {
                 throw new AttributedTypeException(type, "DbTableAttribute must be declared one and one time for the type");
@@ -34,7 +34,7 @@
 
             foreach (PropertyInfo pi in type.GetPublicInstanceProperties())
             {
-                DbColumnAttribute[] columnAttributes = pi.GetCustomAttributes<DbColumnAttribute>();
+                DbColumnAttribute[] columnAttributes = pi.GetCustomAttributes<DbColumnAttribute>().ToArray();
                 if (columnAttributes.Length == 1)
                 {
                     DbColumnAttribute columnAttribute = columnAttributes[0];
@@ -68,7 +68,7 @@
                 throw new AttributedTypeException(type, "DbColumnAttribute must be declared at least one time for the type");
             }
 
-            DbRestictedDmlAttribute[] restrictionAttributes = type.GetCustomAttributes<DbRestictedDmlAttribute>();
+            DbRestictedDmlAttribute[] restrictionAttributes = type.GetCustomAttributes<DbRestictedDmlAttribute>().ToArray();
 
             Restriction restriction = restrictionAttributes.Length == 1 ? restrictionAttributes[0].Restriction : Restriction.None;
             

@@ -27,9 +27,13 @@
         public void BuildSelectOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
             if (cmd == null)
-                throw new ArgumentNullException("cmd");
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
 
             CheckHasKey();
 
@@ -59,9 +63,13 @@
         public void BuildUpdateOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
             if (cmd == null)
-                throw new ArgumentNullException("cmd");
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
 
             CheckRestriction(Restriction.Update);
             CheckHasKey();
@@ -79,9 +87,13 @@
         public void BuildDeleteOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
             if (cmd == null)
-                throw new ArgumentNullException("cmd");
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
 
             CheckRestriction(Restriction.Delete);
             CheckHasKey();
@@ -94,9 +106,13 @@
         public void BuildInsertOneCommand(IDbCommand cmd, object input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
             if (cmd == null)
-                throw new ArgumentNullException("cmd");
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
 
             CheckRestriction(Restriction.Insert);
 
@@ -116,7 +132,9 @@
         {
             IDictionary<int, PropertyInfo> map = new Dictionary<int, PropertyInfo>();
             foreach (KeyValuePair<string, PropertyInfo> kv in _typeDbInfo.Columns)
+            {
                 map.Add(reader.GetOrdinal(kv.Key), kv.Value);
+            }
             return map;
         }
 
@@ -148,7 +166,9 @@
             for (int i = 0; i < allColums.Length; i++)
             {
                 if (i != 0)
+                {
                     sbSelect.Append(", ");
+                }
 
                 sbSelect.Append("[" + allColums[i] + "]");
             }
@@ -177,8 +197,8 @@
                 {
                     sbInsert.Append(", ");
                     sbInsertValues.Append(", ");
-
                 }
+
                 sbInsert.Append("[" + col + "]");
                 sbInsertValues.AppendFormat("@{0}", col);
             }
@@ -191,9 +211,13 @@
         private void AppendWhereCriteriaCommand(IDbCommand cmd, object input)
         {
             if (input == null)
-                throw new ArgumentNullException("input");
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
             if (cmd == null)
-                throw new ArgumentNullException("cmd");
+            {
+                throw new ArgumentNullException(nameof(cmd));
+            }
 
             StringBuilder sb = new StringBuilder(cmd.CommandText);
 
@@ -202,7 +226,10 @@
             {
                 string key = _typeDbInfo.Keys[i];
                 if (i != 0)
+                {
                     sb.Append(" AND ");
+                }
+
                 sb.AppendFormat("([{0}] = @{0})", key);
                 AddParameter(cmd, input, key);
             }
@@ -219,7 +246,9 @@
             DbType? dbtype = pi.PropertyType.ToDbType();
             //If not type found let the underlying provider try is one job
             if (dbtype.HasValue)
+            {
                 parameter.DbType = dbtype.Value;
+            }
 
             cmd.Parameters.Add(parameter);
         }

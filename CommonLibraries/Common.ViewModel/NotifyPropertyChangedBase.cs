@@ -35,7 +35,9 @@
         {
             PropertyChangedEventHandler e = PropertyChanged;
             if (e != null)
+            {
                 e(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
@@ -45,12 +47,16 @@
         protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>>[] sources, Expression<Func<T2>> destination)
         {
             foreach (Expression<Func<T1>> source in sources)
+            {
                 AddLinkedProperty(source, destination);
+            }
         }
         protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>>[] destinations)
         {
             foreach (Expression<Func<T2>> destination in destinations)
+            {
                 AddLinkedProperty(source, destination);
+            }
         }
     }
 }

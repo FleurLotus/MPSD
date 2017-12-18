@@ -12,7 +12,9 @@
         public string ToKeyString(string input)
         {
             if (_isCaseSensitive || string.IsNullOrEmpty(input))
+            {
                 return input;
+            }
 
             return input.ToLowerInvariant();
         }

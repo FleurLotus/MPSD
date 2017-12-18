@@ -29,7 +29,9 @@
         {
             base.OnDetaching();
             if (AssociatedObject != null)
+            {
                 AssociatedObject.SelectedItemChanged -= OnTreeViewSelectedItemChanged;
+            }
         }
         private void OnTreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -40,12 +42,15 @@
         {
             VirtualizingStackPanel virtualizingPanel = itemsHostPanel as VirtualizingStackPanel;
             if (virtualizingPanel == null)
+            {
                 return null;
+            }
 
             MethodInfo method = virtualizingPanel.GetType().GetMethod("BringIndexIntoView", BindingFlags.Instance | BindingFlags.NonPublic, Type.DefaultBinder, new[] { typeof(int) }, null);
             if (method == null)
+            {
                 return null;
-
+            }
             return i => method.Invoke(virtualizingPanel, new object[] { i });
         }
 
@@ -155,8 +160,9 @@
             }
 
             if (treeView.SelectedItem == e.NewValue)
+            {
                 return;
-
+            }
 
             item = GetTreeViewItem(treeView, e.NewValue);
             if (item != null)

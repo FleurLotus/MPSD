@@ -16,16 +16,19 @@
             : base(errorMessage)
         {
             if (string.IsNullOrWhiteSpace(regExRule))
-                throw new ArgumentNullException("regExRule");
-
+            {
+                throw new ArgumentNullException(nameof(regExRule));
+            }
             _regExRule = new Regex(regExRule);
         }
         protected override bool IsValide(object instance)
         {
             string s = instance as string;
             if (s == null)
+            {
                 return false;
-
+            }
+            
             return _regExRule.IsMatch(s);
         }
     }

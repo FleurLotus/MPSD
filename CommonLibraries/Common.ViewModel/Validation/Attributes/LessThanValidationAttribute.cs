@@ -22,7 +22,9 @@
         protected override bool IsValide(object instance)
         {
             if (instance == null)
+            {
                 return false;
+            }
 
             try
             {

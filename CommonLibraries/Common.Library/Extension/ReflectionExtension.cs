@@ -8,12 +8,6 @@
     {
         private static readonly IDictionary<Type, PropertyInfo[]> _propertiesCache = new Dictionary<Type, PropertyInfo[]>();
 
-        public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider member)
-            where T : Attribute
-        {
-            return GetCustomAttributes<T>(member, true);
-        }
-
         public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider member, bool inherit)
             where T : Attribute
         {
@@ -23,15 +17,17 @@
         public static PropertyInfo[] GetPublicInstanceProperties(this object o)
         {
             if (o == null)
-                throw new ArgumentNullException("o");
-
+            {
+                throw new ArgumentNullException(nameof(o));
+            }
             return o.GetType().GetPublicInstanceProperties();
         }
         public static PropertyInfo[] GetPublicInstanceProperties(this Type t)
         {
             if (t == null)
-                throw new ArgumentNullException("t");
-
+            {
+                throw new ArgumentNullException(nameof(t));
+            }
             PropertyInfo[] ret;
 
             // ReSharper disable once InconsistentlySynchronizedField

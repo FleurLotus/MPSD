@@ -13,14 +13,17 @@
         protected ValidatorBase(T instance)
         {
             if (instance == null)
-                throw new ArgumentNullException("instance");
-
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
             _instance = instance;
         }
         protected ValidatorBase(ValidatorBase<T> child)
         {
             if (child == null)
-                throw new ArgumentNullException("child");
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
 
             _child = child;
             _instance = child._instance;
@@ -31,17 +34,23 @@
             StringBuilder errorMessage = new StringBuilder();
             string res = PerformValidation(_instance);
             if (!string.IsNullOrWhiteSpace(res))
+            {
                 errorMessage.AppendLine(res);
+            }
 
             if (_child != null)
             {
                 res = _child.Validate();
                 if (!string.IsNullOrWhiteSpace(res))
+                {
                     errorMessage.Append(res);
+                }
             }
 
             if (errorMessage.Length == 0)
+            {
                 return null;
+            }
 
             return errorMessage.ToString();
         }

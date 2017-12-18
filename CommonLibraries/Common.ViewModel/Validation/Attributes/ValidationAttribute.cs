@@ -10,7 +10,9 @@
         protected ValidationAttribute(string errorMessage)
         {
             if (string.IsNullOrWhiteSpace(errorMessage))
-                throw new ArgumentNullException("errorMessage");
+            {
+                throw new ArgumentNullException(nameof(errorMessage));
+            }
 
             _errorMessage = errorMessage;
         }
@@ -21,6 +23,5 @@
         {
             return IsValide(instance) ? null: _errorMessage;
         }
-
     }
 }

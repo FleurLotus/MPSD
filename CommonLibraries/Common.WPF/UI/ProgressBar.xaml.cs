@@ -127,21 +127,31 @@ namespace Common.WPF.UI
                 string estimatedTime = null;
 
                 if (max == value)
+                {
                     percent = 100;
+                }
                 else
+                {
                     percent = value / max * 100;
+                }
 
                 if (_startAt.HasValue && percent > 0)
+                {
                     estimatedTime = TimeSpan.FromSeconds((DateTime.Now - _startAt.Value).TotalSeconds * (100.0 - percent) / percent).ToString(@"hh\:mm\:ss");
+                }
 
                 StringBuilder sb = new StringBuilder(Text);
 
                 if (ShowPerCent)
+                {
                     sb.AppendFormat(" {0:0.00}%", percent);
+                }
 
                 if (!string.IsNullOrEmpty(estimatedTime))
+                {
                     sb.Append(" ETA:" + estimatedTime);
-                
+                }
+
                 DisplayText = sb.ToString();
             }
         }

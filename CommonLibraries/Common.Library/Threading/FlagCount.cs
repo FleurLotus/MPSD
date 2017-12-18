@@ -18,7 +18,6 @@
             lock (_count)
             {
                 int value;
-
                 return _count.TryGetValue(source, out value) && value > 0;
             }
         }
@@ -28,7 +27,9 @@
             {
                 int value;
                 if (!_count.TryGetValue(source, out value))
+                {
                     value = 0;
+                }
 
                 value++;
                 _count[source] = value;
@@ -40,14 +41,20 @@
             {
                 int value;
                 if (!_count.TryGetValue(source, out value) || value <= 0)
+                {
                     throw new Exception("Can't decrement");
+                }
 
                 value--;
 
                 if (value > 0)
+                {
                     _count[source] = value;
+                }
                 else
+                {
                     _count.Remove(source);
+                }
             }
         }
     }

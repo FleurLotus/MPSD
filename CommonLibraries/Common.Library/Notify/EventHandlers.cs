@@ -28,7 +28,9 @@ namespace Common.Library.Notify
             get
             {
                 lock (_synclock)
+                {
                     return _handlers.Count;
+                }
             }
         }
 
@@ -42,24 +44,33 @@ namespace Common.Library.Notify
             lock (_synclock)
             {
                 if (handler == null)
-                    throw new ArgumentNullException("handler", "Cannot be null");
-
+                {
+                    throw new ArgumentNullException(nameof(handler), "Cannot be null");
+                }
                 if (_handlers.Contains(handler))
+                {
                     throw new HandlerAlreadyKnownException();
+                }
 
                 if (ExecuteOnAdding != null)
+                {
                     ExecuteOnAdding(handler, _handlers.Count);
+                }
 
                 _handlers.Add(handler);
 
                 if (ExecuteOnAdded != null)
+                {
                     ExecuteOnAdded(handler, _handlers.Count);
+                }
             }
         }
         public void Clear()
         {
             lock (_synclock)
+            {
                 _handlers.Clear();
+            }
         }
 
         public void Notify(IEventDispatcher eventDispatcher, object sender, T args, Action<EventHandler<T>, Exception> executeOnException = null)
@@ -93,18 +104,25 @@ namespace Common.Library.Notify
             lock (_synclock)
             {
                 if (handler == null)
-                    throw new ArgumentNullException("handler", "Cannot be null");
-
+                {
+                    throw new ArgumentNullException(nameof(handler), "Cannot be null");
+                }
                 if (!_handlers.Contains(handler))
+                {
                     throw new HandlerNotKnownException();
+                }
 
                 if (ExecuteOnRemoving != null)
+                {
                     ExecuteOnRemoving(handler, _handlers.Count);
+                }
 
                 _handlers.Remove(handler);
 
                 if (ExecuteOnRemoved != null)
+                {
                     ExecuteOnRemoved(handler, _handlers.Count);
+                }
             }
         }
     }

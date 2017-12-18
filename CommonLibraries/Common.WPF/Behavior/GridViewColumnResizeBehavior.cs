@@ -15,8 +15,9 @@
 
             var listView = AssociatedObject;
             if (listView == null)
+            {
                 return;
-
+            }
             AddHandler(listView.Items);
         }
 
@@ -34,11 +35,15 @@
         {
             var listView = AssociatedObject;
             if (listView == null)
+            {
                 return;
+            }
 
             var gridView = listView.View as GridView;
             if (gridView == null)
+            {
                 return;
+            }
 
             // If the column is automatically sized, change the column width to re-apply automatic width
             foreach (var column in gridView.Columns.Where(column => Double.IsNaN(column.Width)))
@@ -52,7 +57,9 @@
         {
             var listView = AssociatedObject;
             if (listView != null)
+            {
                 RemoveHandler(listView.Items);
+            }
 
             base.OnDetaching();
         }

@@ -116,10 +116,12 @@ ORDER BY c.CONSTRAINT_NAME, u.ORDINAL_POSITION
                             PrimaryKey primaryKey = CreatePrimaryKey(reader);
                             string tablekey = Table.TableKey(primaryKey.SchemaName, primaryKey.TableName, IsCaseSensitive);
                             Table table = Tables[tablekey] as Table;
-                            
+
                             // ReSharper disable PossibleNullReferenceException
                             if (table.PrimaryKey == null)
+                            {
                                 table.SetPrimaryKey(primaryKey);
+                            }
 
                             primaryKey = table.PrimaryKey as PrimaryKey;
                             primaryKey.AddColumn(reader.GetInt32OrDefault(4), table.GetColumn(reader.GetStringOrDefault(3)));

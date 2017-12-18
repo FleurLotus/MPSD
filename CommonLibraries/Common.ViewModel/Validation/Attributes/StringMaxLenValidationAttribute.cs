@@ -15,8 +15,9 @@
             : base(errorMessage)
         {
             if (maxLen <= 0)
-                throw new ArgumentException("Can't be less or equal to 0", "maxLen" );
-
+            {
+                throw new ArgumentException("Can't be less or equal to 0", nameof(maxLen));
+            }
             _maxLen = maxLen;
         }
 
@@ -24,8 +25,9 @@
         {
             string s = instance as string;
             if (s == null)
+            {
                 return true;
-
+            }
             return s.Length <= _maxLen;
         }
     }

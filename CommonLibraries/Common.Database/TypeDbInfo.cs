@@ -1,8 +1,8 @@
 ﻿namespace Common.Database
 {
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Reflection;
-    using Common.Library;
 
     internal class TypeDbInfo
     {

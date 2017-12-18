@@ -31,7 +31,9 @@
             if (string.IsNullOrEmpty(SchemaName))
             {
                 if (!string.IsNullOrEmpty(other.SchemaName))
+                {
                     comp = -1;
+                }
             }
             else
             {
@@ -39,11 +41,13 @@
             }
 
             if (comp == 0)
+            {
                 comp = string.Compare(TableName, other.TableName, StringComparison.Ordinal);
-
+            }
             if (comp == 0)
+            {
                 comp = string.Compare(CaseSensitivity.ToKeyString(Name), CaseSensitivity.ToKeyString(other.Name), StringComparison.Ordinal);
-
+            }
             return comp;
         }
         public override string ToString()

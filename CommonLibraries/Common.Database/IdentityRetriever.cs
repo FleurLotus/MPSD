@@ -21,6 +21,5 @@
             object id = cmd.ExecuteScalar();
             return Convert.ToInt32(id);
         }
-
     }
 }

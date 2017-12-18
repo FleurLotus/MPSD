@@ -22,11 +22,13 @@
         internal void AddColumn(Column column)
         {
             if (column == null)
-                throw new ArgumentNullException("column");
-
+            {
+                throw new ArgumentNullException(nameof(column));
+            }
             if (TableKey(column.SchemaName, column.TableName, column.CaseSensitivity) != ToString())
-                throw new ArgumentException("Column doesn't belong to table", "column");
-
+            {
+                throw new ArgumentException("Column doesn't belong to table", nameof(column));
+            }
             _columns.Add(column);
             _columns.Sort();
         }
@@ -46,11 +48,13 @@
         internal void AddIndex(Index index)
         {
             if (index == null)
-                throw new ArgumentNullException("index");
-
+            {
+                throw new ArgumentNullException(nameof(index));
+            }
             if (TableKey(index.SchemaName, index.TableName, index.CaseSensitivity) != ToString())
-                throw new ArgumentException("Index doesn't belong to table", "index");
-
+            {
+                throw new ArgumentException("Index doesn't belong to table", nameof(index));
+            }
             _indexes.Add(index);
         }
         public IIndex GetIndex(string name)
@@ -69,11 +73,13 @@
         internal void AddForeignKey(ForeignKey foreignKey)
         {
             if (foreignKey == null)
-                throw new ArgumentNullException("foreignKey");
-
+            {
+                throw new ArgumentNullException(nameof(foreignKey));
+            }
             if (TableKey(foreignKey.SourceSchemaName, foreignKey.SourceTableName, foreignKey.CaseSensitivity) != ToString())
-                throw new ArgumentException("ForeignKey doesn't belong to table", "foreignKey");
-
+            {
+                throw new ArgumentException("ForeignKey doesn't belong to table", nameof(foreignKey));
+            }
             _foreignKeys.Add(foreignKey);
         }
         public IForeignKey GetForeignKey(string name)
@@ -88,14 +94,17 @@
         internal void SetPrimaryKey(IPrimaryKey primaryKey)
         {
             if (primaryKey == null)
-                throw new ArgumentNullException("primaryKey");
-
+            {
+                throw new ArgumentNullException(nameof(primaryKey));
+            }
             if (TableKey(primaryKey.SchemaName, primaryKey.TableName, CaseSensitivity) != ToString())
-                throw new ArgumentException("Primary Key doesn't belong to table", "primaryKey");
-
+            {
+                throw new ArgumentException("Primary Key doesn't belong to table", nameof(primaryKey));
+            }
             if (PrimaryKey != null)
+            {
                 throw new Exception("PrimaryKey is already set");
-
+            }
             PrimaryKey = primaryKey;
         }
 

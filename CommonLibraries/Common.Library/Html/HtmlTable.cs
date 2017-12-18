@@ -12,7 +12,9 @@ namespace Common.Library.Html
         public HtmlTable(IEnumerable<IHtmlCell[]> rows)
         {
             if (rows == null)
-                throw new ArgumentNullException("rows");
+            {
+                throw new ArgumentNullException(nameof(rows));
+            }
 
             Build(rows);
         }
@@ -24,7 +26,9 @@ namespace Common.Library.Html
         public int GetColCount(int row)
         {
             if (row < 0 || row >= _rows.Count)
+            {
                 return 0;
+            }
 
             return _rows[row].Length;
         }
@@ -34,10 +38,14 @@ namespace Common.Library.Html
             get
             {
                 if (row < 0 || row >= _rows.Count)
+                {
                     return null;
+                }
 
                 if (col < 0 || col >= _rows[row].Length)
+                {
                     return null;
+                }
 
                 return _rows[row][col];
             }
@@ -58,7 +66,9 @@ namespace Common.Library.Html
                     if (cell.ColSpan > 1)
                     {
                         for (int c = 1; c < cell.ColSpan; c++)
-                            InsertCellAtIndex( currentRow, cell, index + c);
+                        {
+                            InsertCellAtIndex(currentRow, cell, index + c);
+                        }
                     }
 
                     if (cell.RowSpan > 1)
@@ -70,19 +80,24 @@ namespace Common.Library.Html
                             IList<IHtmlCell> workingRow = r <= waitingRowAsArray.GetLength(0) ? waitingRowAsArray[r - 1] : new List<IHtmlCell>();
 
                             for (int c = 0; c < cell.ColSpan; c++)
+                            {
                                 InsertCellAtIndex(workingRow, cell, index + c);
+                            }
 
                             if (r > waitingRowAsArray.GetLength(0))
+                            {
                                 waitingRows.Enqueue(workingRow);
+                            }
                         }
                     }
                 }
                 _rows.Add(currentRow.ToArray());
             }
 
-            while(waitingRows.Count>0)
+            while (waitingRows.Count > 0)
+            {
                 _rows.Add(waitingRows.Dequeue().ToArray());
-
+            }
         }
         private int InsertCellAtIndex(IList<IHtmlCell> cells, IHtmlCell cell, int index = -1)
         {
@@ -99,11 +114,15 @@ namespace Common.Library.Html
                     }
                 }
                 if (wantedindex < 0)
+                {
                     wantedindex = cells.Count;
+                }
             }
 
             for (int i = cells.Count; i <= wantedindex; i++)
+            {
                 cells.Add(null);
+            }
 
             cells[wantedindex] = cell;
             return wantedindex;
