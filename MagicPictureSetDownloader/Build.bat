@@ -1,5 +1,5 @@
 @echo off
-@SET MSBUILD="C:\Program Files (x86)\MSBuild\12.0\Bin\msbuild.exe"
+@SET MSBUILD="C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 
 @pushd ..\CommonLibraries
 
