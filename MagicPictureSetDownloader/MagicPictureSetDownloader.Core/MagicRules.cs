@@ -21,6 +21,7 @@
         Scheme,
         Conspiracy,
         Phenomenon,
+        Contraption,
         Token,
     }
     
@@ -42,6 +43,7 @@
         Scheme = 1 << 11,
         Conspiracy = 1 << 12,
         Phenomenon = 1 << 13,
+        Contraption = 1 << 14,
         //Must be constistante with GetAllType
     }
 
@@ -140,6 +142,7 @@
             if (Matcher<CardType>.HasValue(card, CardType.Phenomenon)) return DisplayCardType.Phenomenon;
             if (Matcher<CardType>.HasValue(card, CardType.Conspiracy)) return DisplayCardType.Conspiracy;
             if (Matcher<CardType>.HasValue(card, CardType.Scheme)) return DisplayCardType.Scheme;
+            if (Matcher<CardType>.HasValue(card, CardType.Contraption)) return DisplayCardType.Contraption;
 
             return DisplayCardType.Token;
         }
@@ -184,7 +187,8 @@
             if (IsPlane(type)) cardType |= CardType.Plane;
             if (IsConspiracy(type)) cardType |= CardType.Conspiracy;
             if (IsScheme(type)) cardType |= CardType.Scheme;
-            
+            if (IsContraption(type)) cardType |= CardType.Contraption;
+
             return cardType;
         }
         public static ShardColor GetColor(string castingCost)
@@ -235,7 +239,11 @@
         }
         public static bool IsSpecial(string type)
         {
-            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type);
+            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type);
+        }
+        public static bool IsContraption(string type)
+        {
+            return type.ToLowerInvariant().Contains("contraption");
         }
         public static bool IsPhenomenon(string type)
         {

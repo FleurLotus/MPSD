@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="10.0">
+  <Last Number="10.1">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with adpatation to gatherer change + Duel Decks: Merfolk vs. Goblins, From the Vault: Transform, Explorers of Ixalan, Iconic Masters</Comment>
+    <Comment>Version with Unstable, Rivals of Ixalan</Comment>
   </Last>
+  <OLd Number="10.0">
+    <Comment>Version with adpatation to gatherer change + Duel Decks: Merfolk vs. Goblins, From the Vault: Transform, Explorers of Ixalan, Iconic Masters</Comment>
+  </Old>
   <Old Number="9.5">
     <Comment>Version with Ixalan</Comment>
   </Old>
