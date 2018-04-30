@@ -2,8 +2,11 @@
 <Version>
   <Last Number="10.2">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Master 25</Comment>
+    <Comment>Version with Dominaria and Duel Decks: Elves vs. Inventors</Comment>
   </Last>
+  <Old Number="10.2">
+    <Comment>Version with Master 25</Comment>
+  </Old>
   <Old Number="10.1">
     <Comment>Version with Unstable, Rivals of Ixalan</Comment>
   </Old>
