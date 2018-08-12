@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="10.4">
+  <Last Number="10.5">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Battlebond, Signature Spell: Jace, Jiang Yanggu and Mu Yanling and Commander Anthology 2018</Comment>
+    <Comment>Version with Magic Core 2019 and Commander 2018</Comment>
   </Last>
+  <Old Number="10.4">
+    <Comment>Version with Battlebond, Signature Spell: Jace, Jiang Yanggu and Mu Yanling and Commander Anthology 2018</Comment>
+  </Old>
   <Old Number="10.3">
     <Comment>Version with Dominaria and Duel Decks: Elves vs. Inventors</Comment>
   </Old>
