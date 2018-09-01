@@ -44,7 +44,8 @@
         Conspiracy = 1 << 12,
         Phenomenon = 1 << 13,
         Contraption = 1 << 14,
-        //Must be constistante with GetAllType
+        Saga = 1 << 15,
+        //Must be constistante with GetCardType
     }
 
     public enum DisplayColor
@@ -188,6 +189,7 @@
             if (IsConspiracy(type)) cardType |= CardType.Conspiracy;
             if (IsScheme(type)) cardType |= CardType.Scheme;
             if (IsContraption(type)) cardType |= CardType.Contraption;
+            if (IsSaga(type)) cardType |= CardType.Saga;
 
             return cardType;
         }
@@ -261,6 +263,9 @@
         {
             return type.ToLowerInvariant().Contains("plane") && !IsPlaneswalker(type);
         }
-
+        public static bool IsSaga(string type)
+        {
+            return type.ToLowerInvariant().Contains("saga");
+        }
     }
 }

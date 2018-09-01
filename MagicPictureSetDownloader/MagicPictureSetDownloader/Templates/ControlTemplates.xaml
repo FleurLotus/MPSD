@@ -57,7 +57,7 @@
             <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Rarity.Name}"/>
             <Label Grid.Column="2" Grid.Row="2" Content="Type"/>
             <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Type}"/>
-            <Label Grid.Column="0" Grid.Row="3" Content="CastingCost" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}"/>
+            <Label Grid.Column="0" Grid.Row="3" Content="Casting Cost" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}"/>
             <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding DisplayedCastingCost}" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
