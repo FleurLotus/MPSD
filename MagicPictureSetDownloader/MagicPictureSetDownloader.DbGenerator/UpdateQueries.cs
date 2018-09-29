@@ -99,5 +99,29 @@ WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Selesnya Guildgate (a)')",
 @"DELETE FROM Card
 WHERE Name IN ('Boros Guildgate (a)', 'Dimir Guildgate (a)','Golgari Guildgate (a)', 'Izzet Guildgate (a)', 'Selesnya Guildgate (a)')"
 };
+
+        public const string CreatePriceTable =
+@"CREATE TABLE [Price] (
+  [Id] INTEGER PRIMARY KEY NOT NULL 
+, [AddDate] TEXT NOT NULL
+, [Source] TEXT NOT NULL
+, [IdGatherer] INTEGER NOT NULL
+, [Foil] INTEGER NOT NULL
+, [Value] INTEGER NOT NULL
+)";
+
+        public const string CorrectHasFoilFalse =
+@"UPDATE Edition
+SET HasFoil = 0
+WHERE Code IN ('V15','V16','V17',
+'C15','C16','CMA','C17','CM2','C18',
+'DDO','DDP','DDQ','DDR','DDS','DDT','DDU','GS1',
+'E01','PCA'
+)";
+        public const string CorrectHasFoilTrue =
+@"UPDATE Edition
+SET HasFoil = 1
+WHERE Code IN ('CNS','EXO')
+";
     }
 }

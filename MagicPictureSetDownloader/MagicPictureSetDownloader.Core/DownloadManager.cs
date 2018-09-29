@@ -127,13 +127,6 @@
 
                 MagicDatabase.InsertNewPicture(idGatherer, pictureData);
             }
-
-            //ALERT: see if we update the data
-            /*
-            else
-            {
-            }
-            */
         }
         public void InsertRuleInDb(string rulesUrl)
         {
@@ -150,7 +143,19 @@
         {
             return MagicDatabase.GetRulesId().Select(idGatherer => WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer))).ToArray();
         }
+        public void InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl)
+        {
+            string htmltext = _webAccess.GetHtml(pricesUrl);
 
+            foreach (PriceInfo priceInfo in priceImporter.Parse(htmltext))
+            {
+                MagicDatabase.InsertNewPrice(priceInfo.IdGatherer, DateTime.Today, priceImporter.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
+            }
+        }
+        public string[] GetPricesUrls(IPriceImporter priceImporter)
+        {
+            return priceImporter.GetUrls();
+        }
         public string[] GetMissingPictureUrls()
         {
             return MagicDatabase.GetMissingPictureUrls();

@@ -11,5 +11,6 @@
         ICard CardPart2 { get; }
         int IdGathererPart2 { get; }
         IEnumerable<ICardInCollectionCount> Statistics { get; }
+        ICollection<IPrice> Prices { get; }
     }
 }

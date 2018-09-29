@@ -121,6 +121,12 @@
         private void UpdateRulesDatabaseCommandExecute(object o)
         {
             OnAutoUpdateDatabaseRequested(new AutoDownloadRuleViewModel());
+            LoadCardsHierarchy();
+        }
+        private void UpdatePriceDatabaseCommandExecute(object o)
+        {
+            OnAutoUpdateDatabaseRequested(new AutoDownloadPriceViewModel((PriceSource)o));
+            LoadCardsHierarchy();
         }
         private void VersionCommandExecute(object o)
         {
@@ -399,6 +405,15 @@
             fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());
+            //Price
+            MenuViewModel priceMenu = new MenuViewModel("Update _Prices Database");
+            foreach (PriceSource pricesource in (PriceSource[])Enum.GetValues(typeof(PriceSource)))
+            {
+                priceMenu.AddChild(new MenuViewModel(pricesource.ToString("g"), new RelayCommand(UpdatePriceDatabaseCommandExecute), pricesource));
+            }
+
+            fileMenu.AddChild(priceMenu);
+            fileMenu.AddChild(MenuViewModel.Separator());
             fileMenu.AddChild(new MenuViewModel("Search...", new RelayCommand(SearchCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());
             fileMenu.AddChild(new MenuViewModel("_Exit", new RelayCommand(CloseCommandExecute)));
@@ -429,7 +444,7 @@
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
-            //Disabled - Waiting to finish the development
+            //TODO: Disabled - Waiting to finish the development
             toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute, o => false)));
             MenuRoot.AddChild(toolsMenu);
 

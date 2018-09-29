@@ -39,7 +39,7 @@
             string[] tokens = cutText.Split(new[] { CardStartBlock }, StringSplitOptions.RemoveEmptyEntries);
             if (tokens.Length == 1)
             {
-                throw new ParserException("Wrong parsing of card block exteaction! Check HTML source");
+                throw new ParserException("Wrong parsing of card block extraction! Check HTML source");
             }
             //tokens[0] before card ignored
             //tokens[1+] real cards

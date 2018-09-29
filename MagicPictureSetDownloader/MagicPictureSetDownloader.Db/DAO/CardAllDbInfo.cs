@@ -11,6 +11,7 @@
         public ICard Card { get; set; }
         public IRarity Rarity { get; set; }
         public IEdition Edition { get; set; }
+        public ICollection<IPrice> Prices { get; set; }
         //For Multipart card
         public int IdGathererPart2 { get; set; }
         public ICard CardPart2 { get; set; }
@@ -18,7 +19,6 @@
         {
             get { return _statistics; }
         }
-
         internal void SetStatistics(ICollection<ICardInCollectionCount> statistics)
         {
             _statistics = statistics;

@@ -226,6 +226,8 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
                     cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
                     cardAllDbInfo.IdGathererPart2 = -1;
+                    IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdGatherer);
+                    cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
 
                     //For Multipart card

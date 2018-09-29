@@ -15,9 +15,11 @@
         private bool _showOnlyCurrentStatistics;
         private const string ShowRulesKey = "ShowRules";
         private bool _showRules;
-
+        private const string ShowPricesKey = "ShowPrices";
+        private bool _showPrices;
         private const string AutoCheckUpgradeKey = "AutoCheckUpgrade";
         private bool _autoCheckUpgrade;
+
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabase;
 
         public OptionsViewModel(IMagicDatabaseReadAndWriteOption magicDatabase)
@@ -86,6 +88,18 @@
                 }
             }
         }
+        public bool ShowPrices
+        {
+            get { return _showPrices; }
+            set
+            {
+                if (value != _showPrices)
+                {
+                    _showPrices = value;
+                    OnNotifyPropertyChanged(() => ShowPrices);
+                }
+            }
+        }
         public bool AutoCheckUpgrade
         {
             get { return _autoCheckUpgrade; }
@@ -117,6 +131,7 @@
             ShowStatistics = GetOptionValue(TypeOfOption.Display, ShowStatisticsKey);
             ShowOnlyCurrentStatistics = GetOptionValue(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey);
             ShowRules = GetOptionValue(TypeOfOption.Display, ShowRulesKey);
+            ShowPrices = GetOptionValue(TypeOfOption.Display, ShowPricesKey);
             AutoCheckUpgrade = GetOptionValue(TypeOfOption.Upgrade, AutoCheckUpgradeKey);
         }
         public void Save()
@@ -126,6 +141,7 @@
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey, ShowOnlyCurrentStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOtherLanguagesKey, ShowOtherLanguages.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowRulesKey, ShowRules.ToString());
+            _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowPricesKey, ShowPrices.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Upgrade, AutoCheckUpgradeKey, AutoCheckUpgrade.ToString());
         }
     }

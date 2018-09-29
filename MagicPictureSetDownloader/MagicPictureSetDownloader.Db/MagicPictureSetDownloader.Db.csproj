@@ -68,6 +68,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DAO\Price.cs" />
     <Compile Include="DAO\Ruling.cs" />
     <Compile Include="DAO\Audit.cs" />
     <Compile Include="DAO\Block.cs" />

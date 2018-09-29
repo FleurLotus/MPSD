@@ -4,14 +4,13 @@
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
 
-    internal class CardLanguageParser : IParser<CardLanguageInfo>
+    internal class CardLanguageParser : TableParserBase, IParser<CardLanguageInfo>
     {
         private const string Start = @"<table class=""cardList"" cellspacing=""0"" cellpadding=""2"">";
         private const string End = @"</table>";
 
         private static readonly Regex _languageRegex = new Regex(@">\s*(?<name>.*?)\s*$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex _cardNameRegex = new Regex(@"<a id="".*"" href="".*"">(?<name>.*)</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
 
         public IEnumerable<CardLanguageInfo> Parse(string text)
         {
@@ -44,8 +43,7 @@
                         {
                             translateNameIndex = i;
                         }
-
-                        if (column.Contains(">Language<"))
+                        else if (column.Contains(">Language<"))
                         {
                             languageNameIndex = i;
                         }
@@ -85,28 +83,6 @@
                 }
 
                 yield return new CardLanguageInfo { Language = languageName, Name = cardName };
-            }
-        }
-        private IEnumerable<string> GetTableRow(string newtext)
-        {
-            int pos = 0;
-            while (pos >= 0)
-            {
-                pos = newtext.IndexOf("<tr", pos, StringComparison.OrdinalIgnoreCase);
-                if (pos == -1)
-                {
-                    yield break;
-                }
-
-                int end = newtext.IndexOf("</tr", pos, StringComparison.OrdinalIgnoreCase);
-                if (end == -1 || end <= pos)
-                {
-                    yield break;
-                }
-
-                yield return newtext.Substring(pos, end - pos);
-
-                pos = end;
             }
         }
     }

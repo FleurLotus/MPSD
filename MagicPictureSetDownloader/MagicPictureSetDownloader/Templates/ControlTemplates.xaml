@@ -183,6 +183,42 @@
         </ListView>
     </ControlTemplate>
 
+    <!-- Prices Grid display -->
+    <ControlTemplate x:Key="PricesControlTemplate">
+        <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2pConv}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2pvConv}}"
+                  d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <i:Interaction.Behaviors>
+                <behavior:GridViewColumnResizeBehavior />
+            </i:Interaction.Behaviors>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="BorderBrush" Value="LightGray" />
+                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Edtion" DisplayMemberBinding="{Binding EditionName}" />
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}"/>
+                    <GridViewColumn Header="Foil">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Foil, Mode=OneWay}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource v2pConv}, StringFormat='0.00 $'}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </ControlTemplate>
+    
     <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">

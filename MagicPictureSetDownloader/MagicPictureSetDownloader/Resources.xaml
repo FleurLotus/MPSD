@@ -12,6 +12,9 @@
     <converter:CardToLanguagesTranslationVisibleConverter x:Key="c2tvConv" />
     <converter:CardToRulesConverter x:Key="c2rConv" />
     <converter:CardToRulesVisibleConverter x:Key="c2rvConv" />
+    <converter:CardToPricesConverter x:Key="c2pConv" />
+    <converter:CardToPricesVisibleConverter x:Key="c2pvConv" />
+    <converter:ValueToPriceVisibleConverter x:Key="v2pConv" />
     <converter:CardToRotationAngleConverter x:Key="c2aConv" />
     <converter:HeightToMoveConverter x:Key="h2mConv" />
     <converter:TreeToTreeImageConverter x:Key="t2iConv" />

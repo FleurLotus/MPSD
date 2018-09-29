@@ -159,6 +159,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Converter\ValueToPriceVisibleConverter.cs" />
+    <Compile Include="Converter\CardToPricesConverter.cs" />
+    <Compile Include="Converter\CardToPricesVisibleConverter.cs" />
     <Compile Include="Converter\HeightToMoveConverter.cs" />
     <Compile Include="Converter\CardToRulesConverter.cs" />
     <Compile Include="Converter\CardToLanguagesTranslationConverter.cs" />
