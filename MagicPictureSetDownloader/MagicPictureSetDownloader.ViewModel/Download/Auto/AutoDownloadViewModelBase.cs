@@ -6,7 +6,7 @@
     public abstract class AutoDownloadViewModelBase : DownloadViewModelBase
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private readonly string[] _urls;
+        private string[] _urls;
         private int _nextJob;
         private volatile bool _fatalException;
         private const int NbThread = 5;
@@ -15,9 +15,6 @@
         protected AutoDownloadViewModelBase(string title)
             : base(title)
         {
-            _urls = GetUrls();
-            CountDown = _urls.Length;
-            DownloadReporter.Total = CountDown;
         }
 
         protected abstract string[] GetUrls();
@@ -25,6 +22,10 @@
 
         protected override bool StartImpl()
         {
+            _urls = GetUrls();
+            CountDown = _urls.Length;
+            DownloadReporter.Total = CountDown;
+
             if (CountDown == 0)
             {
                 SetMessage("Not any data to download");

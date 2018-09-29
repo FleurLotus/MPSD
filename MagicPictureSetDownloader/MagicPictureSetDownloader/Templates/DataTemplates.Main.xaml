@@ -143,6 +143,9 @@
                 <TabItem Header="Rules" wpf:TabItemExtensions.Visibility="{Binding Options.ShowRules, Converter={StaticResource b2vConv}}">
                     <Control Template="{StaticResource RulesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
+                <TabItem Header="Price" wpf:TabItemExtensions.Visibility="{Binding Options.ShowPrices, Converter={StaticResource b2vConv}}">
+                    <Control Template="{StaticResource PricesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                </TabItem>
                 <TabItem Header="In Collection" wpf:TabItemExtensions.Visibility="{Binding Options.ShowStatistics, Converter={StaticResource b2vConv}}">
                     <Control Template="{StaticResource StatisticsControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>

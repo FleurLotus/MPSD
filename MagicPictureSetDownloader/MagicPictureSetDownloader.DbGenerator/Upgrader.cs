@@ -87,7 +87,9 @@
 #if !DEBUG 
             //No update of Version in debug
             if (_applicationVersion.Major != dbVersion)
+            {
                 repo.ExecuteBatch(UpdateVersionQuery + _applicationVersion.Major);
+            }
 #endif
         }
 
@@ -172,6 +174,18 @@
                 {
                     repo.ExecuteBatch(query);
                 }
+            }
+
+            if (dbVersion <= 11)
+            {
+                //11.0
+                if (!repo.TableExists("Price"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.CreatePriceTable);
+                }
+
+                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilTrue);
+                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilFalse);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)

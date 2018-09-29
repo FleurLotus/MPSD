@@ -23,6 +23,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
+        private readonly IDictionary<int, IList<IPrice>> _prices = new Dictionary<int, IList<IPrice>>();
         private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
         //For quicker access
@@ -248,7 +249,19 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
+        public void InsertNewPrice(int idGatherer, DateTime addDate, string source, bool foil, int value)
+        {
+             if (GetCardEdition(idGatherer) == null)
+            {
+                return;
+            }
 
+            using (new WriterLock(_lock))
+            {
+                Price price = new Price { IdGatherer = idGatherer, AddDate = addDate, Source = source, Foil = foil, Value = value };
+                AddToDbAndUpdateReferential(DatabaseType.Data, price, InsertInReferential);
+            }
+        }
         public void DeleteOption(TypeOfOption type, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -379,6 +392,11 @@ namespace MagicPictureSetDownloader.Db
                 {
                     InsertInReferential(cardInCollectionCount);
                 }
+
+                foreach (Price price in Mapper<Price>.LoadAll(cnx))
+                {
+                    InsertInReferential(price);
+                }
             }
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
             {
@@ -467,6 +485,23 @@ namespace MagicPictureSetDownloader.Db
             }
 
             card.AddRuling(ruling);
+
+            _cacheForAllDbInfos = null;
+        }
+        private void InsertInReferential(Price price)
+        {
+            if (_cardEditions.GetOrDefault(price.IdGatherer) == null)
+            {
+                throw new ApplicationDbException("Can't find CardEdition with id " + price.IdGatherer);
+            }
+
+            if (!_prices.TryGetValue(price.IdGatherer, out IList<IPrice> prices))
+            {
+                prices = new List<IPrice>();
+                _prices.Add(price.IdGatherer, prices);
+            }
+
+            prices.Add(price);
 
             _cacheForAllDbInfos = null;
         }

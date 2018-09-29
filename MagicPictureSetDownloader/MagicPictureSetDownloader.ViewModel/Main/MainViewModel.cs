@@ -28,7 +28,6 @@
         private UpgradeStatus _upgradeStatus;
 
         //TODO: Test add/remove splitted card and statistics
-        //TODO: (Maybe) Import / save historical price 
         //TODO: think about adding complete prebuilt deck
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {

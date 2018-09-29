@@ -14,6 +14,7 @@
         void InsertNewBlock(string blockName);
         void InsertNewLanguage(string languageName, string alternativeName);
         void InsertNewRuling(int idGatherer, DateTime addDate, string text);
+        void InsertNewPrice(int idGatherer, DateTime addDate, string source, bool foil, int value);
         void EditionCompleted(int editionId);
     }
 }

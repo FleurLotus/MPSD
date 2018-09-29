@@ -1,7 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
-    using System.Globalization;
     using System.Linq;
 
     using Common.ViewModel;
@@ -21,7 +20,7 @@
             Card = otherPart ? cardAllDbInfo.CardPart2 : cardAllDbInfo.Card;
             IEdition edition = cardAllDbInfo.Edition;
             Statistics = cardAllDbInfo.Statistics.Select(s => new StatisticViewModel(s)).ToArray();
-            
+            Prices = cardAllDbInfo.Prices.Select(p => new PriceViewModel(p,edition)).ToArray();
             IsDownSide = false;
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
@@ -104,6 +103,7 @@
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; }
         public StatisticViewModel[] Statistics { get; }
+        public PriceViewModel[] Prices { get; }
         public string PowerToughnessLoyalty { get; }
         public string PowerToughnessLoyaltyText { get; }
         public string[] DisplayedCastingCost { get; }

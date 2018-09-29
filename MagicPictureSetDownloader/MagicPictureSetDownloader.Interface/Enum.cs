@@ -25,4 +25,8 @@
         OneByGathererId,
         OneByCardName,
     }
+    public enum PriceSource
+    {
+        MTGGoldfish
+    }
 }
