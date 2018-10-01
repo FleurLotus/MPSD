@@ -16,7 +16,9 @@ namespace MagicPictureSetDownloader.Converter
             IRuling[] rules = base.Convert(value, targetType, parameter, culture) as IRuling[];
 
             if (rules == null || rules.Length == 0)
+            {
                 return Visibility.Collapsed;
+            }
 
             return Visibility.Visible;
         }

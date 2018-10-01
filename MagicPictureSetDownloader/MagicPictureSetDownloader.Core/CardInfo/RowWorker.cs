@@ -16,8 +16,10 @@ namespace MagicPictureSetDownloader.Core.CardInfo
         }
         public IDictionary<string, string> WorkOnElement(IAwareXmlTextReader xmlReader)
         {
-            if (_innerWorker == null) 
+            if (_innerWorker == null)
+            {
                 return new Dictionary<string, string>();
+            }
 
             return _innerWorker.WorkOnElement(new AwareXmlTextReader(xmlReader));
         }

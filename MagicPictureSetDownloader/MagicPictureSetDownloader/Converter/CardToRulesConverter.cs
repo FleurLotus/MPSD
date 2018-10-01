@@ -17,7 +17,9 @@ namespace MagicPictureSetDownloader.Converter
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 
             if (node == null)
+            {
                 return null;
+            }
 
             return node.Card.Rulings;
         }

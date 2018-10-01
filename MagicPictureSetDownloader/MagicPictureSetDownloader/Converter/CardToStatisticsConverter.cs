@@ -20,7 +20,9 @@ namespace MagicPictureSetDownloader.Converter
             HierarchicalResultNodeViewModel node = value[0] as HierarchicalResultNodeViewModel;
             string name = value[2] as string;
             if (node == null || !(value[1] is bool) || string.IsNullOrWhiteSpace(name))
+            {
                 return null;
+            }
 
             StatisticViewModel[] statistics = node.Card.Statistics;
             if (!((bool)value[1]))

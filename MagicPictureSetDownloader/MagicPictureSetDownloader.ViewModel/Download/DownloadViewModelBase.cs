@@ -91,7 +91,9 @@
             lock (_sync)
             {
                 if (_batch == null)
+                {
                     _batch = MagicDatabaseManager.ReadAndUpdate.BatchMode();
+                }
             }
 
             FinishedStopping.Reset();
@@ -123,12 +125,17 @@
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {
                 if (DownloadManager!= null)
+                {
                     DownloadManager.CredentialRequiered += OnCredentialRequiered;
+                }
+
                 IsStopping = true;
                 FinishedStopping.WaitOne();
                 FinishedStopping.Dispose();
@@ -157,7 +164,9 @@
                 else
                 {
                     if (_stringBuilder.Length > 0)
+                    {
                         msg = "\n" + msg;
+                    }
 
                     _stringBuilder.Append(msg);
                 }
@@ -170,7 +179,9 @@
         {
             var e = CredentialRequiered;
             if (e != null)
+            {
                 DispatcherInvoker.Invoke(() => e(sender, args));
+            }
         }
     }
 }

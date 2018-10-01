@@ -76,7 +76,9 @@ namespace MagicPictureSetDownloader.Db
                     {
                         picture = LoadImage(idGatherer);
                         if (picture != null && !doNotCache)
+                        {
                             _pictures.Add(picture.IdGatherer, picture);
+                        }
                     }
                 }
             }
@@ -88,14 +90,18 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
+            {
                 return _treePictures.GetOrDefault(key);
+            }
         }
         public IEdition GetEdition(string sourceName)
         {
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
+            {
                 return _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
+            }
         }
         public IEdition GetEdition(int idGatherer)
         {
@@ -103,7 +109,9 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardEdition cardEdition = GetCardEdition(idGatherer);
                 if (cardEdition == null)
+                {
                     return null;
+                }
 
                 return _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
             }
@@ -114,7 +122,9 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardEdition cardEdition = GetCardEdition(idGatherer);
                 if (cardEdition == null)
+                {
                     return null;
+                }
 
                 return _cardsbyId.GetOrDefault(cardEdition.IdCard);
             }
@@ -124,14 +134,18 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
+            {
                 return _languages.Values.FirstOrDefault(l => l.Id == idLanguage);
+            }
         }
         public IBlock GetBlock(string blockName)
         {
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
+            {
                 return _blocks.Values.FirstOrDefault(b => string.Compare(b.Name, blockName, StringComparison.InvariantCultureIgnoreCase) == 0);
+            }
         }
         public ILanguage GetDefaultLanguage()
         {
@@ -149,11 +163,16 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICard card = GetCard(idGatherer);
                 if (card == null)
+                {
                     return null;
+                }
 
                 IList<ILanguage> languages = new List<ILanguage> { GetDefaultLanguage() };
                 foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && card.HasTranslation(l.Id)))
+                {
                     languages.Add(language);
+                }
+
                 return languages;
             }
         }
@@ -181,7 +200,9 @@ namespace MagicPictureSetDownloader.Db
                 {
                     //No filter and no change since last call but recalculate statistics 
                     foreach (CardAllDbInfo cardAllDbInfo in _cacheForAllDbInfos.Cast<CardAllDbInfo>())
+                    {
                         cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(cardAllDbInfo.Card));
+                    }
 
                     return _cacheForAllDbInfos.AsReadOnly();
                 }
@@ -193,7 +214,9 @@ namespace MagicPictureSetDownloader.Db
                     if (collection != null)
                     {
                         if (collection.All(cicc => cicc.IdGatherer != cardEdition.IdGatherer))
+                        {
                             continue;
+                        }
                     }
 
                     ICardEdition edition = cardEdition;
@@ -210,7 +233,9 @@ namespace MagicPictureSetDownloader.Db
                     {
                         //This is the reverse side of a recto-verso card no need to do anything
                         if (card.IsReverseSide)
+                        {
                             continue;
+                        }
 
                         ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
                         cardAllDbInfo.CardPart2 = cardPart2;
@@ -220,8 +245,9 @@ namespace MagicPictureSetDownloader.Db
 
                         //Verso of Reserse Card and Multi-card
                         if (cardEdition2 != null)
+                        {
                             cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
-
+                        }
                     }
 
                     ret.Add(cardAllDbInfo);
@@ -244,7 +270,10 @@ namespace MagicPictureSetDownloader.Db
             {
                 IList<IOption> options;
                 if (!_allOptions.TryGetValue(type, out options))
+                {
                     return null;
+                }
+
                 return new List<IOption>(options).AsReadOnly();
             }
         }
@@ -254,13 +283,17 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
+            {
                 return _cardEditions.GetOrDefault(idGatherer);
+            }
         }
         private int GetRarityId(string rarity)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return _rarities[rarity].Id;
+            }
         }
         private int GetLanguageId(string language)
         {
@@ -273,10 +306,15 @@ namespace MagicPictureSetDownloader.Db
             {
                 ILanguage lang;
                 if (_languages.TryGetValue(language, out lang) && lang != null)
+                {
                     return lang;
+                }
 
                 if (_alternativeNameLanguages.TryGetValue(language, out lang) && lang != null)
+                {
                     return lang;
+                }
+
                 return null;
             }
         }
@@ -285,32 +323,42 @@ namespace MagicPictureSetDownloader.Db
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return new List<IEdition>(_editions).AsReadOnly();
+            }
         }
         public ICollection<IBlock> GetAllBlocks()
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return new List<IBlock>(_blocks.Values).AsReadOnly();
+            }
         }
         public ICollection<ILanguage> GetAllLanguages()
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return new List<ILanguage>(_languages.Values).AsReadOnly();
+            }
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return new List<IRarity>(_rarities.Values).AsReadOnly();
+            }
         }
         private ICollection<ICardEdition> AllCardEditions()
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
+            }
         }
         private ICollection<int> GetAllPicturesId()
         {
@@ -326,7 +374,9 @@ namespace MagicPictureSetDownloader.Db
             {
                 Edition newEdition = _editions.FirstOrDefault(e => e.Id == editionId) as Edition;
                 if (newEdition == null || newEdition.Completed)
+                {
                     return;
+                }
 
                 newEdition.Completed = true;
 

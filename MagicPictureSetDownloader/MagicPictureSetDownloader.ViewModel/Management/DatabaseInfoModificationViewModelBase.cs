@@ -102,8 +102,9 @@
         private void NewCommandExecute(object o)
         {
             if (CreateNew())
+            {
                 State = ChangeState.New;
-
+            }
         }
         private void UpdateCommandExecute(object o)
         {
@@ -112,7 +113,9 @@
         private void ValidateCommandExecute(object o)
         {
             if (ApplyEditionToDatabase())
+            {
                 State = ChangeState.NoEdition;
+            }
 
             DisplayCurrent();
         }
@@ -123,7 +126,9 @@
         private void CancelCommandExecute(object o)
         {
             if (CancelEdition())
+            {
                 State = ChangeState.NoEdition;
+            }
         }
 
         private bool NewCommandCanExecute(object o)
@@ -157,7 +162,9 @@
         {
             var e = Closing;
             if (e != null)
+            {
                 e(this, EventArgs.Empty);
+            }
         }
     }
 }

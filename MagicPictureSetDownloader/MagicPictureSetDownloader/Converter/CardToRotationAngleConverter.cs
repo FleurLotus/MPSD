@@ -16,13 +16,19 @@ namespace MagicPictureSetDownloader.Converter
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 
             if (node == null || node.Card.OtherCardPart == null)
+            {
                 return 0;
+            }
 
             if (node.Card.OtherCardPart.IsDownSide)
+            {
                 return 180;
+            }
 
             if (node.Card.OtherCardPart.Is90DegreeSide)
+            {
                 return -90;
+            }
 
             return 0;
         }

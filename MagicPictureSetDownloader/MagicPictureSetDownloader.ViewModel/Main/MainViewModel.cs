@@ -69,9 +69,13 @@
             //Reload last chosen option
             IOption option = _magicDatabase.GetOption(TypeOfOption.SelectedCollection, "Name");
             if (option != null)
+            {
                 LoadCollection(option.Value);
+            }
             else
+            {
                 LoadCollection();
+            }
         }
 
         public ICommand HideResultCommand { get; private set; }

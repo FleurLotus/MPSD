@@ -22,14 +22,18 @@ namespace MagicPictureSetDownloader.Converter
             HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
 
             if (node == null)
+            {
                 return null;
+            }
 
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             foreach (ILanguage language in _magicDatabase.GetAllLanguages())
             {
                 string name = node.Card.ToString(language.Id);
                 if (!string.IsNullOrEmpty(name))
+                {
                     dictionary.Add(language.Name, name);
+                }
             }
             return dictionary;
         }

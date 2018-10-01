@@ -247,7 +247,10 @@
             CheckDisposed();
 
             if (WithHeader)
+            {
                 return (string[])_headers.Clone();
+            }
+
             return new string[0];
         }
         public string GetValue(int index)
@@ -299,7 +302,9 @@
         protected virtual void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {

@@ -25,7 +25,9 @@
             Rarity r = obj as Rarity;
 
             if (r == null)
+            {
                 return -1;
+            }
 
             return Id.CompareTo(r.Id);
         }

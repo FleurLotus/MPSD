@@ -27,7 +27,9 @@
                 List<Inline> inlines = args.NewValue as List<Inline>;
 
                 if (inlines != null)
+                {
                     textBlock.Inlines.AddRange(inlines);
+                }
             }
         }
     }

@@ -23,11 +23,15 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                     {
                         string text = WorkOnTextBox(new AwareXmlTextReader(xmlReader));
                         if (!string.IsNullOrWhiteSpace(text))
+                        {
                             value += "\r\n" + text;
+                        }
                     }
                 }
                 if (string.IsNullOrEmpty(value))
+                {
                     throw new ParserException("No Text element found in Element");
+                }
 
                 return new Dictionary<string, string> {{CardParserBase.TextKey, value.HtmlTrim()}};
             }

@@ -15,7 +15,9 @@
         public AwareXmlTextReader(XmlTextReader reader)
         {
             if (reader.NodeType != XmlNodeType.Element)
+            {
                 throw new ArgumentException("Can create AwareXmlTextReader only on Element");
+            }
 
             _level = reader.IsEmptyElement ? 0 : 1; 
             _sourceElementName = reader.Name;
@@ -47,7 +49,9 @@
         public bool Read()
         {
             if (_level <= 0)
+            {
                 return false;
+            }
 
             bool ret =  _parent != null ? _parent.Read() : _reader.Read();
             if (ret)
@@ -55,14 +59,20 @@
                 if (NodeType == XmlNodeType.Element)
                 {
                     if (!IsEmptyElement)
+                    {
                         _level++;
+                    }
                 }
 
                 if (NodeType == XmlNodeType.EndElement)
+                {
                     _level--;
+                }
 
                 if (_level == 0 && _sourceElementName != Name)
+                {
                     throw new ParserException("Closing Element is not matching opening one");
+                }
             }
 
             return ret;

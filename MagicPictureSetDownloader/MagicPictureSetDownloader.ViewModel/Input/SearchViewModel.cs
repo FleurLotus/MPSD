@@ -138,7 +138,9 @@
                     if (value == CountComparator[i])
                     {
                         if (_countComparatorWanted == (ComparisonType)i)
+                        {
                             return;
+                        }
 
                         _countComparatorWanted = (ComparisonType)i;
                         OnNotifyPropertyChanged(() => CountComparatorSelected);
@@ -253,11 +255,16 @@
             IEdition[] editions = EditionsSelected.ToArray();
 
             foreach (IEdition edition in editions.Where(edition => !Editions.Contains(edition)))
+            {
                 EditionsSelected.Remove(edition);
+            }
+
             ICardCollection[] collections = CollectionsSelected.ToArray();
 
             foreach (ICardCollection collection in collections.Where(collection => !Collections.Contains(collection)))
+            {
                 CollectionsSelected.Remove(collection);
+            }
         }
         private void ReInit()
         {
@@ -289,7 +296,9 @@
         private bool CheckPerimeter(ICardAllDbInfo cai)
         {
             if (PerimeterScope == PerimeterScope.All)
+            {
                 return true;
+            }
 
             IEnumerable<ICardInCollectionCount> cardStats = CountIsNameBased ? cai.Statistics :
                                                                      //We filter statitiscs on only current version of the card 
@@ -300,14 +309,18 @@
 
             int count = statistics.Sum(stat => stat.Number);
             if (CountIncludeFoil)
+            {
                 count += statistics.Sum(stat => stat.FoilNumber);
+            }
 
             return _countComparatorWanted == ComparisonType.GreaterOrEquals ? count >= CountSelected : count < CountSelected;
         }
         private bool CheckName(ICardAllDbInfo cai)
         {
             if (string.IsNullOrWhiteSpace(Name))
+            {
                 return true;
+            }
 
             if (!AllLanguages)
             {
@@ -326,16 +339,22 @@
             if (ExcludeFunEditions)
             {
                 if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockFun)
+                {
                     return false;
+                }
             }
             if (ExcludeOnlineOnlyEditions)
             {
                 if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockOnlineOnly)
+                {
                     return false;
+                }
             }
 
             if (EditionsSelected.Count == 0)
+            {
                 return true;
+            }
 
             IEdition edition = _magicDatabase.GetEdition(cai.IdGatherer);
 
@@ -344,11 +363,15 @@
         private bool CheckColor(ICardAllDbInfo cai)
         {
             if (ColorsSelected.Count == 0)
+            {
                 return true;
+            }
 
             ShardColor color = MagicRules.GetColor(cai.Card.CastingCost);
             if (cai.Card.IsSplitted)
+            {
                 color |= MagicRules.GetColor(cai.CardPart2.CastingCost);
+            }
 
             bool wantedColorless = ColorsSelected.Contains(ShardColor.Colorless);
 
@@ -367,16 +390,22 @@
             if (ExcludeSpecialCards)
             {
                 if (MagicRules.IsSpecial(cai.Card.Type))
+                {
                     return false;
+                }
             }
 
             if (TypesSelected.Count == 0)
+            {
                 return true;
+            }
 
             CardType type = MagicRules.GetCardType(cai.Card.Type);
             if (cai.Card.IsSplitted)
+            {
                 type |= MagicRules.GetCardType(cai.CardPart2.Type);
-            
+            }
+
             CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newColor) => current | newColor);
 
             if (TypeAggregation == MultiSelectedAggregation.And)

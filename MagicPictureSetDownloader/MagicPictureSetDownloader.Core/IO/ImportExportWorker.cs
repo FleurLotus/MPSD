@@ -12,11 +12,15 @@
         public void Export(string[] collectionNames, string outpath, ExportFormat exportFormatSelected)
         {
             if (!Directory.Exists(outpath))
+            {
                 throw new ArgumentException("output path doesn't exist", "outpath");
+            }
 
             IImportExportFormatter formatter = ImportExportFormatterFactory.Create(exportFormatSelected);
             if (formatter == null)
+            {
                 throw new ArgumentException("Can't find appropriate formatter for " + exportFormatSelected, "exportFormatSelected");
+            }
 
             IMagicDatabaseReadOnly magicDatabase = MagicDatabaseManager.ReadOnly;
 
@@ -26,7 +30,9 @@
                 IEnumerable<ICardInCollectionCount> cardsInCollection = magicDatabase.GetCardCollection(cardcollection);
 
                 if (cardsInCollection == null)
+                {
                     throw new ImportExportException("Can't find collection named {0}", collectionName);
+                }
 
                 string filePath = Path.Combine(outpath, collectionName + formatter.Extension);
 
@@ -40,7 +46,9 @@
                 catch (ImportExportException)
                 {
                     if (File.Exists(filePath))
+                    {
                         File.Delete(filePath);
+                    }
 
                     throw;
                 }
@@ -51,7 +59,9 @@
             IMagicDatabaseReadAndWriteCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCollection;
             ICardCollection collection = magicDatabaseCollection.InsertNewCollection(newCollectionName);
             if (collection == null)
+            {
                 throw new ArgumentException("Collection name already exists", "newCollectionName");
+            }
 
             return ImportToCollection(importFilePath, collection);
         }
@@ -61,7 +71,9 @@
             IMagicDatabaseReadAndWriteCardInCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
             ICardCollection collection = magicDatabaseCollection.GetCollection(collectionToCompletName);
             if (collection == null)
+            {
                 throw new ArgumentException("Collection name doesn't exist", "collectionToCompletName");
+            }
 
             return ImportToCollection(importFilePath, collection);
         }

@@ -34,27 +34,38 @@
         {
             Match m = _idRegex.Match(pictureUrl);
             if (!m.Success)
+            {
                 throw new ParserException("Can't parse card picture Id");
+            }
+
             return int.Parse(m.Groups["id"].Value);
         }
         
         internal static string ExtractContent(string htmltext, string start, string end, bool withHtmlDecode, bool untilLastEnd)
         {
             if (withHtmlDecode)
+            {
                 htmltext = WebUtility.HtmlDecode(htmltext);
+            }
 
             if (string.IsNullOrEmpty(start))
+            {
                 return htmltext;
+            }
 
             int startIndex = htmltext.IndexOf(start, StringComparison.InvariantCulture);
             if (startIndex < 0)
+            {
                 return htmltext;
+            }
 
             startIndex += start.Length;
 
             int endIndex = untilLastEnd ? htmltext.LastIndexOf(end, StringComparison.InvariantCulture) : htmltext.IndexOf(end, startIndex, StringComparison.InvariantCulture);
             if (endIndex < 0 || endIndex < startIndex)
+            {
                 return htmltext;
+            }
 
             return htmltext.Substring(startIndex, endIndex - startIndex);
         }

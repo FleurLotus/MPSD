@@ -62,7 +62,9 @@
         protected override string ToLine(IImportExportCardCount cardCount)
         {
             if (cardCount == null || (cardCount.FoilNumber == 0 && cardCount.Number == 0))
+            {
                 return null;
+            }
 
             ICard card = MagicDatabase.GetCard(cardCount.IdGatherer);
             IEdition edition = MagicDatabase.GetEdition(cardCount.IdGatherer);
@@ -73,9 +75,14 @@
 
             string ret = string.Empty;
             if (cardCount.Number > 0)
+            {
                 ret += string.Format("{0}#{1}#{2}#False\n", card, edition.AlternativeCode(Format), cardCount.Number);
+            }
+
             if (cardCount.FoilNumber > 0)
+            {
                 ret += string.Format("{0}#{1}#{2}#True\n", card, edition.AlternativeCode(Format), cardCount.FoilNumber);
+            }
 
             return ret;
         }

@@ -32,7 +32,9 @@
                 }
                 Match m = _cardNameUrlRegex.Match(Get(columnInfos, "name"));
                 if (!m.Success)
+                {
                     throw new ParserException("Can't parse name for" + row);
+                }
 
                 yield return m.Groups["url"].Value;
             }
@@ -49,7 +51,9 @@
         {
             TValue value;
             if (!dic.TryGetValue(key, out value))
+            {
                 throw new ParserException("Missing info " + value);
+            }
 
             return value;
         }

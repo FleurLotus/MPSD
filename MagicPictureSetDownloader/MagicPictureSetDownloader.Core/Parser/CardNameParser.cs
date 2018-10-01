@@ -13,11 +13,15 @@
 
 
             if (string.IsNullOrWhiteSpace(newtext) || newtext.Length>100)
+            {
                 throw new ParserException("Error while parsing, can't retrieve ");
-            
+            }
+
             int index = newtext.IndexOf(">", StringComparison.InvariantCulture);
             if (index <0)
+            {
                 throw new ParserException("Error while parsing, can't retrieve ");
+            }
 
             return newtext.Substring(index + 1).Replace(@" // ", @"//");
         }

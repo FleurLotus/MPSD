@@ -84,25 +84,53 @@ namespace Common.WPF.UI
         private static object CoerceValueCallback(DependencyObject dependencyObject, object baseValue)
         {
             ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb) return baseValue;
+            if (null == pb)
+            {
+                return baseValue;
+            }
+
             double value = (double) baseValue;
-            if (value < 0) return 0;
-            if (value > pb.Maximum) return pb.Maximum;
+            if (value < 0)
+            {
+                return 0;
+            }
+
+            if (value > pb.Maximum)
+            {
+                return pb.Maximum;
+            }
+
             return baseValue;
         }
         private static object CoerceMaximumCallback(DependencyObject dependencyObject, object baseValue)
         {
             ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb) return baseValue;
+            if (null == pb)
+            {
+                return baseValue;
+            }
+
             double max = (double) baseValue;
-            if (max < pb.Value) return pb.Value;
-            if (max < 0) return 0;
+            if (max < pb.Value)
+            {
+                return pb.Value;
+            }
+
+            if (max < 0)
+            {
+                return 0;
+            }
+
             return baseValue;
         }
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
             ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb) return;
+            if (null == pb)
+            {
+                return;
+            }
+
             pb.SetDisplayText();
         }
         [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]

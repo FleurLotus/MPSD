@@ -17,7 +17,9 @@ namespace MagicPictureSetDownloader.Converter
             int param = int.Parse(parameter.ToString());
 
             if (node == null)
+            {
                 return null;
+            }
 
             int idGatherer = -1;
             if (param == 0)
@@ -30,14 +32,20 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             if (idGatherer == -1)
+            {
                 return null;
+            }
 
             IPicture picture = MagicDatabase.GetPicture(idGatherer);
             if (null == picture || picture.Image == null || picture.Image.Length == 0)
+            {
                 picture = MagicDatabase.GetDefaultPicture();
+            }
 
             if (null == picture || picture.Image == null || picture.Image.Length == 0)
+            {
                 return null;
+            }
 
             return BytesToImage(picture.Image);
         }

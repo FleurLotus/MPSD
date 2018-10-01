@@ -26,9 +26,11 @@
                  lock (_sync)
                  {
                      if (_disposed)
-                         return;
+                    {
+                        return;
+                    }
 
-                     _disposed = true;
+                    _disposed = true;
                  }
                  _database.DecrementBatchDepth();
              }

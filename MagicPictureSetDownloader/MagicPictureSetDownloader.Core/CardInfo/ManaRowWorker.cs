@@ -20,13 +20,19 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                     {
                         string symbol = SymbolParser.Parse(xmlReader);
                         if (string.IsNullOrEmpty(value))
+                        {
                             value = symbol;
+                        }
                         else
+                        {
                             value += " " + symbol;
+                        }
                     }
                 }
                 if (string.IsNullOrEmpty(value))
+                {
                     throw new ParserException("No Text element found in Element");
+                }
 
                 return new Dictionary<string, string> {{CardParserBase.ManaCostKey, value}};
             }

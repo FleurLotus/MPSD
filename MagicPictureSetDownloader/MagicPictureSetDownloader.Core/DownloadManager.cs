@@ -51,7 +51,9 @@
             ManageMultiPage(url, html =>
             {
                 foreach (string cardurl in Parser.ParseCardUrls(html))
+                {
                     ret.Add(cardurl);
+                }
             });
 
             return ret.ToArray();
@@ -71,7 +73,9 @@
                 ManageMultiPage(baseUrl, html =>
                 {
                     foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
+                    {
                         info.Add(language);
+                    }
                 });
 
                 InsertCardInDb(cardWithExtraInfo);
@@ -98,12 +102,16 @@
                     for (index = 0; index < pages.Length; index++)
                     {
                         if (page == pages[index])
+                        {
                             break;
+                        }
                     }
 
                     hasnextpage = (index + 1 < pages.Length);
                     if (hasnextpage)
+                    {
                         page = pages[index + 1];
+                    }
                 }
             } while (hasnextpage);
         }
@@ -150,7 +158,9 @@
         public byte[] GetEditionIcon(string code)
         {
             if (string.IsNullOrWhiteSpace(code))
+            {
                 return null;
+            }
 
             byte[] editionIcon = null;
             foreach (string rarity in new[] { "C", "U", "R", "M" })
@@ -186,7 +196,9 @@
         {
             var e = NewEditionCreated;
             if (e != null)
+            {
                 e(this, new EventArgs<string>(name));
+            }
         }
 
         private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)

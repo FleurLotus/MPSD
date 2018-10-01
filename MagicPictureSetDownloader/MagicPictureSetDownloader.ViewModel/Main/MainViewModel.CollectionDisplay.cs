@@ -39,9 +39,15 @@
                 {
                     //Need Listen to Selected modification for ContextMenu recreation
                     if (_hierarchical != null)
+                    {
                         _hierarchical.PropertyChanged -= HierarchicalPropertyChanged;
+                    }
+
                     if (value != null)
+                    {
                         value.PropertyChanged += HierarchicalPropertyChanged;
+                    }
+
                     _hierarchical = value;
 
                     OnNotifyPropertyChanged(() => Hierarchical);
@@ -66,7 +72,9 @@
         private void HierarchicalPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Selected")
+            {
                 GenerateContextMenu();
+            }
         }
         private void LoadCardsHierarchyAsync()
         {

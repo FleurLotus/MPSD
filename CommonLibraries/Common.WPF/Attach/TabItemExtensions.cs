@@ -28,18 +28,30 @@
         public static void VisibilityChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
             var tabItem = sender as TabItem;
-            if (tabItem == null) return;
+            if (tabItem == null)
+            {
+                return;
+            }
 
             var visibility = (Visibility)args.NewValue;
-            if (tabItem.Visibility == visibility) return;
+            if (tabItem.Visibility == visibility)
+            {
+                return;
+            }
 
             tabItem.Visibility = visibility;
-            if (visibility == Visibility.Visible) return;
+            if (visibility == Visibility.Visible)
+            {
+                return;
+            }
 
             // Finds the tab's parent tabcontrol and corrects the selected item, 
             // if necessary.
             var tabControl = tabItem.GetSelfAndAncestors().OfType<TabControl>().FirstOrDefault();
-            if (tabControl == null) return;
+            if (tabControl == null)
+            {
+                return;
+            }
 
             TabControlExtensions.CorrectSelection(tabControl);
         }

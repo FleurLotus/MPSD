@@ -14,14 +14,18 @@
             if (matches.Count == 0)
             {
                 if (expectedAtLeastOne)
+                {
                     throw new ParserException("Can't parse footer row");
+                }
 
                 return;
             }
 
             HashSet<int> pages = new HashSet<int>();
             foreach (Match match in matches)
+            {
                 pages.Add(int.Parse(match.Groups["page"].Value));
+            }
 
             throw new NextPageException(pages.ToArray());
         }

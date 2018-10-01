@@ -64,7 +64,9 @@ namespace MagicPictureSetDownloader.Db
                         ReleaseDate = releaseDate
                     };
                     if (realEdition.IdBlock.HasValue)
+                    {
                         realEdition.Block = _blocks.GetOrDefault(realEdition.IdBlock.Value);
+                    }
 
                     AddToDbAndUpdateReferential(DatabaseType.Data, realEdition, InsertInReferential);
                 }
@@ -76,7 +78,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (GetPicture(idGatherer) != null || data == null || data.Length == 0)
+                {
                     return;
+                }
 
                 Picture picture = new Picture { IdGatherer = idGatherer, Image = data };
                 AddToDbAndUpdateReferential(DatabaseType.Picture, picture, InsertInReferential);
@@ -87,7 +91,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (GetTreePicture(name) != null || data == null || data.Length == 0)
+                {
                     return;
+                }
 
                 TreePicture treepicture = new TreePicture { Name = name, Image = data };
                 AddToDbAndUpdateReferential(DatabaseType.Picture, treepicture, InsertInReferential);
@@ -96,7 +102,9 @@ namespace MagicPictureSetDownloader.Db
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
         {
             if (string.IsNullOrWhiteSpace(name))
+            {
                 throw new ArgumentNullException("name");
+            }
 
             using (new WriterLock(_lock))
             {
@@ -135,10 +143,14 @@ namespace MagicPictureSetDownloader.Db
                 int idCard = GetCard(name, partName).Id;
 
                 if (idGatherer <= 0 || idEdition <= 0)
+                {
                     throw new ApplicationDbException("Data are not filled correctedly");
+                }
 
                 if (GetCardEdition(idGatherer) != null)
+                {
                     return;
+                }
 
                 CardEdition cardEdition = new CardEdition
                 {
@@ -155,7 +167,9 @@ namespace MagicPictureSetDownloader.Db
         public void InsertNewOption(TypeOfOption type, string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
+            {
                 throw new ApplicationDbException("Data are not filled correctedly");
+            }
 
             using (new WriterLock(_lock))
             {
@@ -180,7 +194,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (GetBlock(blockName) != null)
+                {
                     return;
+                }
 
                 Block block = new Block { Name = blockName };
                 AddToDbAndUpdateReferential(DatabaseType.Data, block, InsertInReferential);
@@ -191,7 +207,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (GetLanguage(languageName) != null)
+                {
                     return;
+                }
 
                 Language language = new Language { Name = languageName, AlternativeName = alternativeName };
                 AddToDbAndUpdateReferential(DatabaseType.Data, language, InsertInReferential);
@@ -200,7 +218,9 @@ namespace MagicPictureSetDownloader.Db
         private void InsertNewTranslate(ICard card, int idLanguage, string name)
         {
             if (card == null)
+            {
                 return;
+            }
 
             using (new WriterLock(_lock))
             {
@@ -215,7 +235,9 @@ namespace MagicPictureSetDownloader.Db
         {
             ICard card = GetCard(idGatherer);
             if (card == null || string.IsNullOrWhiteSpace(text))
+            {
                 return;
+            }
 
             using (new WriterLock(_lock))
             {
@@ -230,14 +252,19 @@ namespace MagicPictureSetDownloader.Db
         public void DeleteOption(TypeOfOption type, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
+            {
                 throw new ApplicationDbException("Data are not filled correctedly");
+            }
 
             using (new WriterLock(_lock))
             {
                 IOption option = GetOption(type, key);
 
                 if (option == null)
+                {
                     return;
+                }
+
                 RemoveFromDbAndUpdateReferential(DatabaseType.Data, option as Option, RemoveFromReferential);
             }
         }
@@ -247,7 +274,9 @@ namespace MagicPictureSetDownloader.Db
         {
             //Lock write on calling
             if (value == null)
+            {
                 return;
+            }
 
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
             {
@@ -261,7 +290,9 @@ namespace MagicPictureSetDownloader.Db
         {
             //Lock write on calling
             if (value == null)
+            {
                 return;
+            }
 
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
             {
@@ -290,49 +321,73 @@ namespace MagicPictureSetDownloader.Db
                 _allCardInCollectionCount.Clear();
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
+                {
                     InsertInReferential(option);
+                }
 
                 foreach (Rarity rarity in Mapper<Rarity>.LoadAll(cnx))
+                {
                     InsertInReferential(rarity);
+                }
 
                 foreach (Block block in Mapper<Block>.LoadAll(cnx))
+                {
                     InsertInReferential(block);
+                }
 
                 foreach (Language language in Mapper<Language>.LoadAll(cnx))
+                {
                     InsertInReferential(language);
+                }
 
                 foreach (Edition edition in Mapper<Edition>.LoadAll(cnx))
                 {
                     if (edition.IdBlock.HasValue)
+                    {
                         edition.Block = _blocks.GetOrDefault(edition.IdBlock.Value);
+                    }
+
                     InsertInReferential(edition);
                 }
 
                 foreach (Card card in Mapper<Card>.LoadAll(cnx))
+                {
                     InsertInReferential(card);
+                }
 
                 foreach (Translate translate in Mapper<Translate>.LoadAll(cnx))
+                {
                     InsertInReferential(translate);
+                }
 
                 foreach (Ruling ruling in Mapper<Ruling>.LoadAll(cnx))
+                {
                     InsertInReferential(ruling);
+                }
 
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
+                {
                     InsertInReferential(cardEdition);
+                }
 
                 foreach (CardCollection cardCollection in Mapper<CardCollection>.LoadAll(cnx))
+                {
                     InsertInReferential(cardCollection);
+                }
 
                 foreach (CardInCollectionCount cardInCollectionCount in Mapper<CardInCollectionCount>.LoadAll(cnx))
+                {
                     InsertInReferential(cardInCollectionCount);
-
+                }
             }
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
             {
                 _treePictures.Clear();
 
                 foreach (TreePicture treePicture in Mapper<TreePicture>.LoadAll(cnx))
+                {
                     InsertInReferential(treePicture);
+                }
             }
 
             _referentialLoaded = true;
@@ -395,7 +450,9 @@ namespace MagicPictureSetDownloader.Db
         {
             Card card = _cardsbyId.GetOrDefault(translate.IdCard) as Card;
             if (card == null)
+            {
                 throw new ApplicationDbException("Can't find card with id " + translate.IdCard);
+            }
 
             card.AddTranslate(translate);
 
@@ -405,7 +462,9 @@ namespace MagicPictureSetDownloader.Db
         {
             Card card = _cardsbyId.GetOrDefault(ruling.IdCard) as Card;
             if (card == null)
+            {
                 throw new ApplicationDbException("Can't find card with id " + ruling.IdCard);
+            }
 
             card.AddRuling(ruling);
 
@@ -419,7 +478,9 @@ namespace MagicPictureSetDownloader.Db
                 foreach (string name in language.AlternativeName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     if (!_languages.ContainsKey(name) && !_alternativeNameLanguages.ContainsKey(name))
+                    {
                         _alternativeNameLanguages.Add(name, language);
+                    }
                 }
             }
         }
@@ -433,7 +494,9 @@ namespace MagicPictureSetDownloader.Db
             IList<IOption> options = _allOptions[option.Type];
             options.Remove(option);
             if (options.Count == 0)
+            {
                 _allOptions.Remove(option.Type);
+            }
         }
         private void RemoveFromReferential(ILanguage language)
         {

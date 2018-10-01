@@ -17,7 +17,9 @@ namespace MagicPictureSetDownloader.Core.CardInfo
         public static bool IsWorkingInfo(string id)
         {
             if (id == null)
+            {
                 return false;
+            }
 
             string lid = id.ToLowerInvariant();
 
@@ -32,7 +34,9 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                 {
                     string source = xmlReader.GetAttribute("src");
                     if (string.IsNullOrWhiteSpace(source))
+                    {
                         throw new ParserException("Can't find image path");
+                    }
 
                     return new Dictionary<string, string> { { CardParserBase.ImageKey, source } };
                 }

@@ -47,7 +47,9 @@
         protected override string ToLine(IImportExportCardCount cardCount)
         {
             if (cardCount == null || (cardCount.FoilNumber == 0 && cardCount.Number == 0))
+            {
                 return null;
+            }
 
             return string.Format("{0}#{1}#{2}#{3}\n", cardCount.IdGatherer, cardCount.Number, cardCount.FoilNumber, cardCount.IdLanguage);
         }

@@ -62,7 +62,9 @@
             CardViewModel saveSelected = null;
             HierarchicalResultNodeViewModel selected = Selected as HierarchicalResultNodeViewModel;
             if (selected != null)
+            {
                 saveSelected = selected.Card;
+            }
 
             _buildingRoot.Children.Clear();
             _globalStatictics.Reset();
@@ -79,7 +81,9 @@
             {
                 HierarchicalResultNodeViewModel bestmatch = FindBestName(_buildingRoot, saveSelected);
                 if (bestmatch != null)
+                {
                     Selected = bestmatch;
+                }
             }
         }
 
@@ -131,29 +135,38 @@
         private Matching FindBestMatch(HierarchicalResultNodeViewModel hrnvm, CardViewModel saveSelected)
         {
             if (hrnvm == null || hrnvm.Card == null)
+            {
                 return Matching.None;
+            }
 
             CardViewModel card = hrnvm.Card;
 
             if (card.Name != saveSelected.Name)
+            {
                 return Matching.None;
+            }
 
             return card.IdGatherer == saveSelected.IdGatherer ? Matching.Full : Matching.Name;
         }
         private HierarchicalResultNodeViewModel FindBestName(HierarchicalResultViewModel toInspect, CardViewModel saveSelected)
         {
             if (toInspect == null || saveSelected == null)
+            {
                 return null;
+            }
 
             HierarchicalResultNodeViewModel res = null;
             HierarchicalResultNodeViewModel nodevm = toInspect as HierarchicalResultNodeViewModel;
             Matching resMatch = FindBestMatch(nodevm, saveSelected);
             if (resMatch == Matching.Full)
+            {
                 return nodevm;
-
+            }
 
             if (resMatch == Matching.Name)
+            {
                 res = nodevm;
+            }
 
             foreach (HierarchicalResultViewModel child in toInspect.Children)
             {
@@ -161,10 +174,14 @@
 
                 resMatch = FindBestMatch(nodevm, saveSelected);
                 if (resMatch == Matching.Full)
+                {
                     return nodevm;
+                }
 
                 if (resMatch == Matching.Name && res == null)
+                {
                     res = nodevm;
+                }
             }
 
             return res;

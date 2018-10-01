@@ -16,7 +16,9 @@
         {
             Match match = _searchPageRegex.Match(text);
             if (!match.Success)
+            {
                 throw new ParserException("Can't find seach page");
+            }
 
             string url = match.Groups["url"].Value;
 

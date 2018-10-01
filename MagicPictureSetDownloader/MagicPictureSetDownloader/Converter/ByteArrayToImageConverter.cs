@@ -13,7 +13,10 @@ namespace MagicPictureSetDownloader.Converter
             byte[] data = value as byte[];
 
             if (data == null)
+            {
                 return null;
+            }
+
             return BytesToImage(data);
         }
     }

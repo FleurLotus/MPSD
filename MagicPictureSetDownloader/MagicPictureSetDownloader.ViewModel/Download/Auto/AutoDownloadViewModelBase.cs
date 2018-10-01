@@ -51,13 +51,17 @@
                     _lock.ExitWriteLock();
 
                     if (currentJob >= _urls.Length || IsStopping)
+                    {
                         break;
+                    }
 
                     //Do the first alone to wait for proxy if needed
                     if (currentJob == 0 || _firstDoneEvent.WaitOne())
                     {
                         if (_fatalException)
+                        {
                             break;
+                        }
 
                         Download(_urls[currentJob]);
                     }
@@ -67,7 +71,9 @@
                 catch (Exception ex)
                 {
                     if (currentJob == 0)
+                    {
                         _fatalException = true;
+                    }
 
                     AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], ex.Message), false);
                 }
@@ -75,7 +81,9 @@
                 {
                     //First finished, Go for the others
                     if (currentJob == 0)
+                    {
                         _firstDoneEvent.Set();
+                    }
                 }
 
                 Interlocked.Decrement(ref CountDown);

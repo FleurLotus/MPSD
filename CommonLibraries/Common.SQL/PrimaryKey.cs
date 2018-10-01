@@ -20,8 +20,10 @@
         internal void AddColumn(int index, IColumn column)
         {
             if (column == null)
+            {
                 throw new ArgumentNullException("column");
-            
+            }
+
             _columns[index] = column;
         }
 

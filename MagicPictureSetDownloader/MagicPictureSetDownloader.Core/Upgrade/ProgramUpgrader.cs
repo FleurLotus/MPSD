@@ -42,30 +42,42 @@
 
             XmlNode lastVersionNode = GetNewVersionFile().SelectSingleNode(@"Version/Last");
             if (lastVersionNode == null)
+            {
                 return;
+            }
 
             XmlAttribute versionNumberAttribute = lastVersionNode.Attributes["Number"];
             if (versionNumberAttribute == null)
+            {
                 return;
+            }
 
             string newVersionNumber = versionNumberAttribute.Value;
             if (string.IsNullOrWhiteSpace(newVersionNumber))
+            {
                 return;
+            }
 
             XmlNode urlNode = lastVersionNode.SelectSingleNode("Url");
             if (urlNode == null)
+            {
                 return;
+            }
 
             string newVersionUrl = urlNode.InnerText;
             if (string.IsNullOrWhiteSpace(newVersionUrl))
+            {
                 return;
+            }
 
             XmlNode commentNode = lastVersionNode.SelectSingleNode("Comment");
             if (commentNode != null)
             {
                 string newVersionComment = commentNode.InnerText;
                 if (string.IsNullOrWhiteSpace(newVersionComment))
+                {
                     NewVersionComment = newVersionComment;
+                }
             }
 
             NewVersionNumberVersion = new Version(newVersionNumber);
@@ -87,8 +99,10 @@
                 GetInfo();
 
                 if (NewVersionNumberVersion == null)
+                {
                     throw new ProgramUpgraderException("Can't get info from new version file");
-              
+                }
+
                 Assembly entryAssembly = Assembly.GetEntryAssembly();
                 Version currentVersion = entryAssembly.GetName().Version;
 
@@ -111,10 +125,14 @@
         public void Upgrade()
         {
             if (NewVersionUrl == null)
+            {
                 throw new ProgramUpgraderException("Can't get info from new version file");
+            }
 
             if (!HasNewVersionAvailable())
+            {
                 throw new ProgramUpgraderException("No call of upgrade if HasNewVersionAvailable is false");
+            }
 
             string temporyDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().ToUpperInvariant());
 
@@ -122,7 +140,9 @@
             Zipper.UnZipAll(new MemoryStream(array), temporyDirectory);
 
             if (!Directory.Exists(temporyDirectory))
+            {
                 throw new DirectoryNotFoundException("Can't upgrade, unzipped directory not found");
+            }
 
             Assembly entryAssembly = Assembly.GetEntryAssembly();
 

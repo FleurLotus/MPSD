@@ -20,7 +20,9 @@ namespace MagicPictureSetDownloader.Converter
             HierarchicalResultNodeViewModel node = value[0] as HierarchicalResultNodeViewModel;
 
             if (node == null || node.Card.OtherCardPart == null || !node.Card.OtherCardPart.Is90DegreeSide)
+            {
                 return 0;
+            }
 
             double actualHeight = (double)value[1];
             double actualWidth = (double)value[2];

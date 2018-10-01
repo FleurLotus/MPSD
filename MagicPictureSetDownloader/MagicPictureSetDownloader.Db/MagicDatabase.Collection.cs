@@ -21,7 +21,9 @@ namespace MagicPictureSetDownloader.Db
         public int GetIdGatherer(ICard card, IEdition edition)
         {
             if (card == null || edition == null)
+            {
                 return 0;
+            }
 
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
@@ -34,41 +36,55 @@ namespace MagicPictureSetDownloader.Db
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
+            {
                 return _editions.FirstOrDefault(ed => ed.IsCode(code));
+            }
         }
 
         public ICardCollection GetCollection(int collectionId)
         {
             using (new ReaderLock(_lock))
+            {
                 return _collections.FirstOrDefault(c => c.Id == collectionId);
+            }
         }
         public ICardCollection GetCollection(string name)
         {
             using (new ReaderLock(_lock))
+            {
                 return _collections.FirstOrDefault(c => c.Name == name);
+            }
         }
         public ICollection<ICardCollection> GetAllCollections()
         {
             using (new ReaderLock(_lock))
+            {
                 return (new List<ICardCollection>(_collections).AsReadOnly());
+            }
         }
 
         public ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
         {
             if (cardCollection == null)
+            {
                 return null;
+            }
 
             return GetCardCollection(cardCollection.Id);
         }
         private ICollection<ICardInCollectionCount> GetCardCollection(int idCollection)
         {
             using (new ReaderLock(_lock))
+            {
                 return _allCardInCollectionCount.SelectMany(kv => kv.Value).Where(cicc => cicc.IdCollection == idCollection).ToArray();
+            }
         }
         public ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, int idGatherer)
         {
             if (cardCollection == null)
+            {
                 return null;
+            }
 
             return GetCardCollection(cardCollection.Id, idGatherer);
         }
@@ -89,7 +105,9 @@ namespace MagicPictureSetDownloader.Db
         public ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage)
         {
             if (cardCollection == null)
+            {
                 return null;
+            }
 
             return GetCardCollection(cardCollection.Id, idGatherer, idLanguage);
         }
@@ -113,7 +131,10 @@ namespace MagicPictureSetDownloader.Db
             {
                 IList<ICardInCollectionCount> list;
                 if (_allCardInCollectionCount.TryGetValue(card.Id, out list))
+                {
                     return new List<ICardInCollectionCount>(list).AsReadOnly();
+                }
+
                 return new List<ICardInCollectionCount>();
             }
         }
@@ -123,7 +144,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (GetCollection(name) != null || string.IsNullOrWhiteSpace(name))
+                {
                     return null;
+                }
 
                 CardCollection collection = new CardCollection { Name = name };
                 AddToDbAndUpdateReferential(DatabaseType.Data, collection, InsertInReferential);
@@ -142,7 +165,9 @@ namespace MagicPictureSetDownloader.Db
                     {
                         //Insert new 
                         if (countToAdd < 0 || foilCountToAdd < 0 || countToAdd + foilCountToAdd == 0)
+                        {
                             return;
+                        }
 
                         CardInCollectionCount newCardInCollectionCount = new CardInCollectionCount
                                                                              {
@@ -166,11 +191,15 @@ namespace MagicPictureSetDownloader.Db
                     int newFoilCount = foilCountToAdd + cardInCollection.FoilNumber;
 
                     if (newCount < 0 || newFoilCount < 0)
+                    {
                         return;
+                    }
 
                     CardInCollectionCount updateCardInCollectionCount = cardInCollection as CardInCollectionCount;
                     if (updateCardInCollectionCount == null)
+                    {
                         return;
+                    }
 
                     if (newCount + newFoilCount == 0)
                     {
@@ -196,13 +225,17 @@ namespace MagicPictureSetDownloader.Db
         public void MoveCardToOtherCollection(ICardCollection collection, int idGatherer, int idLanguage, int countToMove, bool isFoil, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
+            {
                 return;
+            }
 
             using (new WriterLock(_lock))
             {
                 ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGatherer, idLanguage);
                 if (cardInCollectionCount == null)
+                {
                     return;
+                }
 
                 int count = 0;
                 int foilCount = 0;
@@ -212,14 +245,18 @@ namespace MagicPictureSetDownloader.Db
                     foilCount = countToMove;
 
                     if (cardInCollectionCount.FoilNumber < countToMove)
+                    {
                         return;
+                    }
                 }
                 else
                 {
                     count = countToMove;
 
                     if (cardInCollectionCount.Number < countToMove)
+                    {
                         return;
+                    }
                 }
 
                 InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount);
@@ -229,7 +266,9 @@ namespace MagicPictureSetDownloader.Db
         public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
+            {
                 return;
+            }
 
             using (new WriterLock(_lock))
             {
@@ -242,18 +281,24 @@ namespace MagicPictureSetDownloader.Db
                                                   IEdition editionDestination, bool isFoilDestination, ILanguage languageDestination)
         {
             if (countToChange <= 0)
+            {
                 return;
+            }
 
             using (new WriterLock(_lock))
             {
                 if (languageSource == null || languageDestination == null)
+                {
                     return;
+                }
 
                 int idGathererSource = GetIdGatherer(card, editionSource);
                 int idGathererDestination = GetIdGatherer(card, editionDestination);
                 ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGathererSource, languageSource.Id);
                 if (cardInCollectionCount == null || idGathererDestination <= 0)
+                {
                     return;
+                }
 
                 int count = 0;
                 int foilCount = 0;
@@ -265,21 +310,28 @@ namespace MagicPictureSetDownloader.Db
                     foilCount = -countToChange;
 
                     if (cardInCollectionCount.FoilNumber < countToChange)
+                    {
                         return;
+                    }
                 }
                 else
                 {
                     count = -countToChange;
 
                     if (cardInCollectionCount.Number < countToChange)
+                    {
                         return;
+                    }
                 }
 
                 if (isFoilDestination)
+                {
                     foilCountDestination = countToChange;
+                }
                 else
+                {
                     countDestination = countToChange;
-
+                }
 
                 InsertOrUpdateCardInCollection(collection.Id, idGathererSource, languageSource.Id, count, foilCount);
                 InsertOrUpdateCardInCollection(collection.Id, idGathererDestination, languageDestination.Id, countDestination, foilCountDestination);
@@ -295,12 +347,16 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (collection == null || string.IsNullOrWhiteSpace(name) || GetCollection(name) != null)
+                {
                     return collection;
+                }
 
                 CardCollection newCollection = collection as CardCollection;
 
                 if (newCollection == null)
+                {
                     return collection;
+                }
 
                 newCollection.Name = name;
 
@@ -319,16 +375,22 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardCollection toBeDeletedCollection = GetCollection(toBeDeletedCollectionName);
                 if (toBeDeletedCollection == null)
+                {
                     return;
+                }
 
                 ICollection<ICardInCollectionCount> collectionToRemove = GetCardCollection(toBeDeletedCollection);
                 if (collectionToRemove == null || collectionToRemove.Count == 0)
+                {
                     return;
+                }
 
                 ICardCollection toAddCollection = GetCollection(toAddCollectionName);
                 if (toAddCollection == null)
+                {
                     return;
- 
+                }
+
                 using (BatchMode())
                 {
                     foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
@@ -347,11 +409,15 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardCollection cardCollection = GetCollection(name);
                 if (cardCollection == null)
+                {
                     return;
+                }
 
                 ICollection<ICardInCollectionCount> collection = GetCardCollection(cardCollection);
                 if (collection == null || collection.Count == 0)
+                {
                     return;
+                }
 
                 using (BatchMode())
                 {
@@ -376,7 +442,9 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardCollection cardCollection = GetCollection(name);
                 if (cardCollection == null)
+                {
                     return;
+                }
 
                 RemoveFromDbAndUpdateReferential(DatabaseType.Data, cardCollection as CardCollection, RemoveFromReferential);
                 AuditRemoveCollection(cardCollection.Id);
@@ -400,7 +468,9 @@ namespace MagicPictureSetDownloader.Db
             }
 
             if (list.Contains(cardInCollectionCount))
+            {
                 throw new Exception("Invalid addition");
+            }
 
             list.Add(cardInCollectionCount);
         }

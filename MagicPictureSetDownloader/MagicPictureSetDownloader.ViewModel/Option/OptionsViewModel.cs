@@ -104,7 +104,9 @@
             bool ret = true;
             IOption option = _magicDatabase.GetOption(typeOfOption, optionName);
             if (option != null)
+            {
                 ret = bool.Parse(option.Value);
+            }
 
             return ret;
         }

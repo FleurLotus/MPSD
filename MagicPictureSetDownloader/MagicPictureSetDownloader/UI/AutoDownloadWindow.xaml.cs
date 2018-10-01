@@ -38,7 +38,10 @@
         {
             IDisposable disposable = DataContext as IDisposable;
             if (disposable != null)
+            {
                 disposable.Dispose();
+            }
+
             base.OnClosed(e);
         }
     }

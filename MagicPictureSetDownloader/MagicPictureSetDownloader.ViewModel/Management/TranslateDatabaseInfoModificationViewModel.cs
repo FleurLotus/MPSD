@@ -66,7 +66,9 @@
             DefaultTranslation = null;
 
             if (Selected == null)
+            {
                 return;
+            }
 
             //English
             DefaultTranslation = new TranslationViewModel(_notUpdatableLanguages[1], Selected.ToString());

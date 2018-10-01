@@ -165,19 +165,25 @@
             InputViewModel vm = InputViewModelFactory.Instance.CreateTextViewModel(null, null);
             OnOpenFileDialog(vm);
             if (!string.IsNullOrWhiteSpace(vm.Text))
+            {
                 ImportFilePath = vm.Text;
+            }
         }
         private void OnOpenFileDialog(InputViewModel vm)
         {
             var e = OpenFileDialog;
             if (e != null)
+            {
                 e(this, new EventArgs<InputViewModel>(vm));
+            }
         }
         private void OnDisplayResult(string message)
         {
             var e = DisplayResult;
             if (e != null)
+            {
                 _dispatcherInvoker.Invoke(() => e(this, new EventArgs<string>(message)));
+            }
         }
 
         public void ImportExport()
@@ -210,7 +216,9 @@
         private void DoPostImport(ImportStatus status, string importFilePath)
         {
             if (status == null)
+            {
                 return;
+            }
 
             StringBuilder message = new StringBuilder();
             string fileName = System.IO.Path.GetFileName(importFilePath);

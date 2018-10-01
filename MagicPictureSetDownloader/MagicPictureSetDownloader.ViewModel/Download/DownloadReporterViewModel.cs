@@ -71,11 +71,17 @@
         }
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed) return;
+            if (_disposed)
+            {
+                return;
+            }
+
             if (disposing)
             {
-                if (_lock != null) 
+                if (_lock != null)
+                {
                     _lock.Dispose();
+                }
             }
             _disposed = true;
         }

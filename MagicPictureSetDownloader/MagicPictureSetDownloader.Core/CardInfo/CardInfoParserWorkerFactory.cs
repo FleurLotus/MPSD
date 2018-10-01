@@ -41,11 +41,15 @@
         {
             string classValue = xmlReader.GetAttribute("id");
             if (classValue == null)
+            {
                 return null;
+            }
 
             string lowerClassValue = classValue.ToLowerInvariant();
             if (!lowerClassValue.StartsWith("ctl00_ctl00_ctl00_maincontent_subcontent_subcontent"))
+            {
                 return null;
+            }
 
             string infoType = lowerClassValue.Substring(lowerClassValue.LastIndexOf('_') + 1);
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_* for normalcard

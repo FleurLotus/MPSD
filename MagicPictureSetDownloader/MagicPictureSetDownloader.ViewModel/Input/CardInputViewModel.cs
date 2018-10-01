@@ -57,7 +57,9 @@
             {
                 InputMode mode;
                 if (Enum.TryParse(option.Value, out mode))
+                {
                     _inputMode = mode;
+                }
             }
 
             option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Language");
@@ -65,7 +67,9 @@
             {
                 int id;
                 if (int.TryParse(option.Value, out id))
+                {
                     _inputLanguage = _magicDatabase.GetLanguage(id);
+                }
             }
 
             Display.Title = "Input cards";
@@ -174,8 +178,9 @@
                     OnNotifyPropertyChanged(() => EditionSelected);
                     RefreshDisplayedData(InputMode.ByEdition);
                     if (_editionSelected != null && !_editionSelected.HasFoil)
+                    {
                         IsFoil = false;
-
+                    }
                 }
             }
         }
@@ -355,7 +360,9 @@
 
             //None one the key changed, nothing to recompute
             if (modifyData == InputMode.None)
+            {
                 return;
+            }
 
             //Change one of the key but no the reference one
             if (InputMode != modifyData)
@@ -364,21 +371,31 @@
                 IEdition editionSelected = EditionSelected;
                 ICard cardNameSelected = _cardSelected;
                 if (editionSelected == null || cardNameSelected == null)
+                {
                     return;
+                }
 
                 ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == editionSelected && cadi.Card == cardNameSelected);
                 if (cardAllDbInfo == null)
+                {
                     return;
+                }
 
                 foreach (ILanguage language in _magicDatabase.GetLanguages(cardAllDbInfo.IdGatherer))
+                {
                     Languages.Add(language);
+                }
 
                 if (Languages.Count > 0)
                 {
                     if (_inputLanguage != null && Languages.Contains(_inputLanguage))
+                    {
                         LanguageSelected = _inputLanguage;
+                    }
                     else
+                    {
                         LanguageSelected = Languages[0];
+                    }
                 }
             }
             else
@@ -392,7 +409,9 @@
                         Cards.Clear();
                         Languages.Clear();
                         if (editionSelected == null)
+                        {
                             return;
+                        }
 
                         List<string> sorted = new List<string>();
                         //Could not call directly GetAllCardsOrderByTranslation because the key must be the same as in all card even if there is no duplicate traduction in the subset
@@ -419,13 +438,20 @@
                         Editions.Clear();
                         Languages.Clear();
                         if (cardNameSelected == null)
+                        {
                             return;
+                        }
 
                         foreach (IEdition edition in _allCardInfos.GetAllEditionIncludingCardOrdered(cardNameSelected))
+                        {
                             Editions.Add(edition);
+                        }
 
                         if (Editions.Count > 0)
+                        {
                             EditionSelected = Editions[0];
+                        }
+
                         break;
                 }
             }

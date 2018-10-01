@@ -72,7 +72,9 @@
         public string ToString(int? languageId)
         {
             if (languageId == null)
+            {
                 return Name;
+            }
 
             return _translations.GetOrDefault(languageId.Value);
         }
@@ -84,7 +86,10 @@
         internal void AddTranslate(Translate translate)
         {
             if (translate == null || translate.IdCard != Id)
+            {
                 return;
+            }
+
             _translations[translate.IdLanguage] = translate.Name;
         }
         public bool HasTranslation(int languageId)
@@ -94,8 +99,10 @@
         internal void AddRuling(Ruling ruling)
         {
             if (ruling == null || ruling.IdCard != Id)
+            {
                 return;
-            
+            }
+
             _rulings.Add(ruling);
         }
 
