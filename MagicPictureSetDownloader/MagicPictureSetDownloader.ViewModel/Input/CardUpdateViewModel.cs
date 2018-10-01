@@ -41,7 +41,9 @@
                     _languages = value;
                     OnNotifyPropertyChanged(() => Languages);
                     if (_languages != null && _languages.Length > 0)
+                    {
                         LanguageSelected = _languages[0];
+                    }
                 }
             }
         }
@@ -68,7 +70,9 @@
                     OnNotifyPropertyChanged(() => EditionSelected);
                     ChangeDestinationLanguage();
                     if (_editionSelected != null && !_editionSelected.HasFoil)
+                    {
                         IsFoil = false;
+                    }
                 }
             }
         }
@@ -93,7 +97,9 @@
         protected override bool OkCommandCanExecute(object o)
         {
             if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
+            {
                 return false;
+            }
 
             return EditionSelected != null && LanguageSelected!= null &&
                    (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil) && 

@@ -17,7 +17,9 @@ namespace MagicPictureSetDownloader.Converter
             StatisticViewModel[] stats = _innerConverter.Convert(value, targetType, parameter, culture) as StatisticViewModel[];
 
             if (stats == null || stats.Length == 0)
+            {
                 return Visibility.Collapsed;
+            }
 
             return Visibility.Visible;
         }

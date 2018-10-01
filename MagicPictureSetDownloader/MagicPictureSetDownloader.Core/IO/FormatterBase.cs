@@ -39,10 +39,14 @@
                 if (ret.TryGetValue(key, out cardInfo))
                 {
                     if (importExportCardCount.FoilNumber > 0)
+                    {
                         cardInfo.AddFoil(importExportCardCount.FoilNumber);
+                    }
 
                     if (importExportCardCount.Number > 0)
+                    {
                         cardInfo.Add(importExportCardCount.Number);
+                    }
                 }
                 else
                 {
@@ -73,7 +77,9 @@
                 if (!string.IsNullOrWhiteSpace(line))
                 {
                     if (!line.EndsWith("\n"))
+                    {
                         line += "\n";
+                    }
 
                     sb.Append(line);
                 }

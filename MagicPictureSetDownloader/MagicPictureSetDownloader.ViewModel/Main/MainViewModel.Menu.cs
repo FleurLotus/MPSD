@@ -95,12 +95,16 @@
         private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg)
         {
             if (ev != null && arg != null)
+            {
                 ev(this, new EventArgs<T>(arg));
+            }
         }
         private void OnEventRaise(EventHandler ev)
         {
             if (ev != null)
+            {
                 ev(this, EventArgs.Empty);
+            }
         }
 
         #region Command
@@ -214,9 +218,13 @@
         private void SearchCommandExecute(object o)
         {
             if (_searchViewModel == null)
+            {
                 _searchViewModel = new SearchViewModel();
+            }
             else
+            {
                 _searchViewModel.Reuse();
+            }
 
             OnDialogWanted(_searchViewModel);
 
@@ -295,8 +303,10 @@
         {
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel == null)
+            {
                 return;
-            
+            }
+
             CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
             OnDialogWanted(vm);
 
@@ -311,8 +321,10 @@
         {
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel == null)
+            {
                 return;
-            
+            }
+
             var vm = new CardRemoveViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
             OnDialogWanted(vm);
 
@@ -326,15 +338,19 @@
         {
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel == null)
+            {
                 return;
-            
+            }
+
             MoveOrCopyCard(nodeViewModel.Card.Card, true);
         }
         private void MoveCardCommandExecute(object o)
         {
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
             if (nodeViewModel == null)
+            {
                 return;
+            }
 
             MoveOrCopyCard(nodeViewModel.Card.Card, false);
         }
@@ -342,8 +358,10 @@
         {
             HierarchicalResultViewModel vm = Hierarchical.Selected;
             if (vm == null)
+            {
                 return;
-            
+            }
+
             ICardCollection sourceCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == Hierarchical.Name);
 
             InputViewModel questionViewModel = InputViewModelFactory.Instance.CreateQuestionViewModel("Remove", string.Format("Remove selected from {0}?", sourceCollection.Name));
@@ -426,7 +444,9 @@
         {
             ContextMenuRoot.RemoveAllChildren();
             if (Hierarchical == null || Hierarchical == _allhierarchical || Hierarchical == _searchHierarchical)
+            {
                 return;
+            }
 
             ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
@@ -441,14 +461,18 @@
 
                 List<ICardCollection> cardCollections = new List<ICardCollection>(_magicDatabase.GetAllCollections());
                 if (cardCollections.Count > 1)
+                {
                     ContextMenuRoot.AddChild(moveMenu);
+                }
 
                 foreach (ICardCollection collection in cardCollections)
                 {
                     string name = collection.Name;
                     copyMenu.AddChild(new MenuViewModel(name, new RelayCommand(CopyCommandExecute), collection));
                     if (Hierarchical.Name != name)
+                    {
                         moveMenu.AddChild(new MenuViewModel(name, new RelayCommand(MoveCommandExecute), collection));
+                    }
                 }
             }
             else
@@ -503,9 +527,13 @@
             if (vm.Result == true)
             {
                 if (vm.Copy)
+                {
                     _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : vm.Source.Count, vm.Source.IsFoil ? vm.Source.Count : 0);
+                }
                 else
+                {
                     _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
+                }
 
                 LoadCardsHierarchy();
             }
@@ -513,8 +541,10 @@
         private void MoveOrCopy(ICardCollection destCollection, HierarchicalResultViewModel vm, bool copy)
         {
             if (destCollection == null || vm == null)
-                return; 
-            
+            {
+                return;
+            }
+
             ICardCollection sourceCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == Hierarchical.Name);
             
             string title = copy ? "Copy" : "Move";
@@ -544,20 +574,30 @@
         private IEnumerable<ICardInCollectionCount> GetCardInCollectionInSelected(HierarchicalResultViewModel vm, ICardCollection collection)
         {
             if (vm == null)
+            {
                 yield break;
+            }
 
             HierarchicalResultNodeViewModel node = vm as HierarchicalResultNodeViewModel;
             if (node == null)
             {
                 foreach (ICardInCollectionCount cicc in vm.Children.SelectMany(c => GetCardInCollectionInSelected(c, collection)))
+                {
                     yield return cicc;
+                }
             }
             else
             {
                 foreach (CardViewModel cardViewModel in node.AllCard)
+                {
                     foreach (ICardInCollectionCount cicc in _magicDatabase.GetCollectionStatisticsForCard(collection, cardViewModel.Card))
+                    {
                         if (cicc.IdGatherer == cardViewModel.IdGatherer)
+                        {
                             yield return cicc;
+                        }
+                    }
+                }
             }
         }
         
@@ -569,7 +609,9 @@
             {
                 ThreadPoolArgs args = state as ThreadPoolArgs;
                 if (args != null)
+                {
                     args.Invoke();
+                }
             }
             catch (Exception ex)
             {
@@ -590,9 +632,13 @@
             string toAdd = vm.Selected2;
 
             if (toAdd == None)
+            {
                 _magicDatabaseForCollection.DeleteAllCardInCollection(toBeDeleted);
+            }
             else
+            {
                 _magicDatabaseForCollection.MoveCollection(toBeDeleted, toAdd);
+            }
 
             _magicDatabaseForCollection.DeleteCollection(toBeDeleted);
 
@@ -602,9 +648,13 @@
                 {
                     //Delete current collection -> reset display to default
                     if (Hierarchical.Name == toBeDeleted)
+                    {
                         LoadCollection();
+                    }
                     else
+                    {
                         GenerateCollectionMenu();
+                    }
                 });
         }
         private void ImportExportAsync(object obj)

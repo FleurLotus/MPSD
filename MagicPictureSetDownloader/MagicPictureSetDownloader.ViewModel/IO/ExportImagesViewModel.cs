@@ -82,7 +82,9 @@ namespace MagicPictureSetDownloader.ViewModel.IO
         {
             var e = DisplayResult;
             if (e != null)
+            {
                 _dispatcherInvoker.Invoke(() => e(this, new EventArgs<string>(message)));
+            }
         }
         public void Export()
         {

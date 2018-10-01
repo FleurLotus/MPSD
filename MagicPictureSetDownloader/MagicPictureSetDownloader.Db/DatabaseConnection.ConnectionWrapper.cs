@@ -98,7 +98,9 @@
             public void Dispose()
             {
                 if (_disposed)
+                {
                     return;
+                }
 
                 CloseInner();
 
@@ -108,7 +110,9 @@
             private void CheckDisposed()
             {
                 if (_disposed)
+                {
                     throw new ObjectDisposedException(typeof(ConnectionWrapper).Name);
+                }
             }
 
             private void CloseInner()

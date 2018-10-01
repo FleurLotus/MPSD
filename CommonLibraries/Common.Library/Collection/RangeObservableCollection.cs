@@ -23,8 +23,10 @@
         public void AddRange(IEnumerable<T> list)
         {
             if (list == null)
+            {
                 throw new ArgumentNullException("list");
-            
+            }
+
             using (this.SetFlag(SuppressNotification))
             {
                 foreach (T value in list)
@@ -37,7 +39,9 @@
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             if (!this.IsFlagSet(SuppressNotification))
+            {
                 base.OnCollectionChanged(e);
+            }
         }
     }
 }

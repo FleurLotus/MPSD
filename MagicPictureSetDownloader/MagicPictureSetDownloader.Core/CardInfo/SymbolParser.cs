@@ -16,7 +16,9 @@
                 string src = reader.GetAttribute("src");
                 Match m = _symbolRegex.Match(src);
                 if (m.Success)
+                {
                     return Prefix + m.Groups["symbol"].Value;
+                }
             }
 
             throw new ParserException("Can't retrieve symbol");

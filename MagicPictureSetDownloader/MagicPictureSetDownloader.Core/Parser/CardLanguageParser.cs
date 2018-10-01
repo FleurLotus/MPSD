@@ -25,7 +25,9 @@
             {
                 string trimedrow = row.Replace("\r", "").Replace("\n", "");
                 if (trimedrow.Contains(@"<tr id=""ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_languageList_noOtherLanguagesParent"">"))
+                {
                     continue;
+                }
 
                 if (trimedrow.Contains(@"<tr id=""ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_languageList_pagingControlsParent"">"))
                 {
@@ -39,14 +41,20 @@
                     {
                         string column = columns[i];
                         if (column.Contains(">Translated Card Name<"))
+                        {
                             translateNameIndex = i;
+                        }
 
                         if (column.Contains(">Language<"))
+                        {
                             languageNameIndex = i;
+                        }
                     }
 
                     if (languageNameIndex == -1 || translateNameIndex == -1)
+                    {
                         throw new ParserException("Can't parse language page.");
+                    }
 
                     header = false;
                     continue;
@@ -54,19 +62,27 @@
 
                 Match m = _cardNameRegex.Match(columns[translateNameIndex]);
                 if (!m.Success)
+                {
                     throw new ParserException("Can't find card name in foreign language");
+                }
 
                 string cardName = m.Groups["name"].Value.Trim();
                 if (string.IsNullOrWhiteSpace(cardName))
+                {
                     throw new ParserException("Card name in foreign language is null or empty");
+                }
 
                 m = _languageRegex.Match(columns[languageNameIndex]);
                 if (!m.Success)
+                {
                     throw new ParserException("Can't find foreign language name");
+                }
 
                 string languageName = m.Groups["name"].Value;
                 if (string.IsNullOrWhiteSpace(languageName))
+                {
                     throw new ParserException("Foreign language name is null or empty");
+                }
 
                 yield return new CardLanguageInfo { Language = languageName, Name = cardName };
             }
@@ -78,11 +94,15 @@
             {
                 pos = newtext.IndexOf("<tr", pos, StringComparison.OrdinalIgnoreCase);
                 if (pos == -1)
+                {
                     yield break;
+                }
 
                 int end = newtext.IndexOf("</tr", pos, StringComparison.OrdinalIgnoreCase);
                 if (end == -1 || end <= pos)
+                {
                     yield break;
+                }
 
                 yield return newtext.Substring(pos, end - pos);
 

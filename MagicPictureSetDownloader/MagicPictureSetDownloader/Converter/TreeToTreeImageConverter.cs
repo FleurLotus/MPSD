@@ -15,7 +15,9 @@ namespace MagicPictureSetDownloader.Converter
             string data = value as string;
 
             if (data == null)
+            {
                 return null;
+            }
 
             ITreePicture treepicture = MagicDatabase.GetTreePicture(data);
             if (null != treepicture && treepicture.Image.Length > 0)

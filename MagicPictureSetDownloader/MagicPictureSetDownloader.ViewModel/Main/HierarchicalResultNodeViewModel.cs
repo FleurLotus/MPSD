@@ -15,7 +15,9 @@
         public void AddCard(CardViewModel card)
         {
             if (card == null)
+            {
                 throw new ArgumentNullException("card");
+            }
 
             _allCards.Add(card);
             //If edition is not selected in filter, multiple version of the same card could appear, keeps the description and so the picture of the most recent one.

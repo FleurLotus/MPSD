@@ -16,7 +16,9 @@
         public void Export(string outpath, string suffix, ExportImagesOption exportImageOption)
         {
             if (!Directory.Exists(outpath))
+            {
                 throw new ArgumentException("output path doesn't exist", "outpath");
+            }
 
             foreach (ICardAllDbInfo cardInfo in MagicDatabase.GetCardsWithPicture())
             {

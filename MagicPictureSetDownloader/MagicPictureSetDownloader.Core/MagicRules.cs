@@ -85,12 +85,36 @@
         public static DisplayColor GetDisplayColor(string castingCost)
         {
             ShardColor color = GetColor(castingCost);
-            if (color == ShardColor.Colorless) return DisplayColor.Colorless;
-            if (color == ShardColor.White) return DisplayColor.White;
-            if (color == ShardColor.Blue) return DisplayColor.Blue;
-            if (color == ShardColor.Black) return DisplayColor.Black;
-            if (color == ShardColor.Red) return DisplayColor.Red;
-            if (color == ShardColor.Green) return DisplayColor.Green;
+            if (color == ShardColor.Colorless)
+            {
+                return DisplayColor.Colorless;
+            }
+
+            if (color == ShardColor.White)
+            {
+                return DisplayColor.White;
+            }
+
+            if (color == ShardColor.Blue)
+            {
+                return DisplayColor.Blue;
+            }
+
+            if (color == ShardColor.Black)
+            {
+                return DisplayColor.Black;
+            }
+
+            if (color == ShardColor.Red)
+            {
+                return DisplayColor.Red;
+            }
+
+            if (color == ShardColor.Green)
+            {
+                return DisplayColor.Green;
+            }
+
             return DisplayColor.Multicolor;
         }
         public static int GetConvertedCastCost(string castingCost)
@@ -132,40 +156,112 @@
         {
             CardType card = GetCardType(type);
 
-            if (Matcher<CardType>.HasValue(card, CardType.Land)) return DisplayCardType.Land;
-            if (Matcher<CardType>.HasValue(card, CardType.Artifact)) return DisplayCardType.Artifact;
-            if (Matcher<CardType>.HasValue(card, CardType.Planeswalker)) return DisplayCardType.Planeswalker;
-            if (Matcher<CardType>.HasValue(card, CardType.Enchantment)) return DisplayCardType.Enchantment;
-            if (Matcher<CardType>.HasValue(card, CardType.Instant)) return DisplayCardType.Instant;
-            if (Matcher<CardType>.HasValue(card, CardType.Sorcery)) return DisplayCardType.Sorcery;
-            if (Matcher<CardType>.HasValue(card, CardType.Creature)) return DisplayCardType.Creature;
-            if (Matcher<CardType>.HasValue(card, CardType.Plane)) return DisplayCardType.Plane;
-            if (Matcher<CardType>.HasValue(card, CardType.Phenomenon)) return DisplayCardType.Phenomenon;
-            if (Matcher<CardType>.HasValue(card, CardType.Conspiracy)) return DisplayCardType.Conspiracy;
-            if (Matcher<CardType>.HasValue(card, CardType.Scheme)) return DisplayCardType.Scheme;
-            if (Matcher<CardType>.HasValue(card, CardType.Contraption)) return DisplayCardType.Contraption;
+            if (Matcher<CardType>.HasValue(card, CardType.Land))
+            {
+                return DisplayCardType.Land;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Artifact))
+            {
+                return DisplayCardType.Artifact;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Planeswalker))
+            {
+                return DisplayCardType.Planeswalker;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Enchantment))
+            {
+                return DisplayCardType.Enchantment;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Instant))
+            {
+                return DisplayCardType.Instant;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Sorcery))
+            {
+                return DisplayCardType.Sorcery;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Creature))
+            {
+                return DisplayCardType.Creature;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Plane))
+            {
+                return DisplayCardType.Plane;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Phenomenon))
+            {
+                return DisplayCardType.Phenomenon;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Conspiracy))
+            {
+                return DisplayCardType.Conspiracy;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Scheme))
+            {
+                return DisplayCardType.Scheme;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Contraption))
+            {
+                return DisplayCardType.Contraption;
+            }
 
             return DisplayCardType.Token;
         }
         private static IEnumerable<string> GetShards(string castingCost)
         {
-            if (string.IsNullOrWhiteSpace(castingCost)) return new string[0];
+            if (string.IsNullOrWhiteSpace(castingCost))
+            {
+                return new string[0];
+            }
 
             return castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                            .Select(s => s.StartsWith(SymbolParser.Prefix) ? s.Substring(SymbolParser.Prefix.Length) : s);
         }
         private static ShardColor GetShardColor(string shard)
         {
-            if (string.IsNullOrWhiteSpace(shard)) return ShardColor.Colorless;
+            if (string.IsNullOrWhiteSpace(shard))
+            {
+                return ShardColor.Colorless;
+            }
 
             string shardup = shard.ToUpperInvariant();
             
             ShardColor ret = ShardColor.Colorless;
-            if (shardup.Contains(White)) ret |= ShardColor.White;
-            if (shardup.Contains(Blue)) ret |= ShardColor.Blue;
-            if (shardup.Contains(Black)) ret |= ShardColor.Black;
-            if (shardup.Contains(Red)) ret |= ShardColor.Red;
-            if (shardup.Contains(Green)) ret |= ShardColor.Green;
+            if (shardup.Contains(White))
+            {
+                ret |= ShardColor.White;
+            }
+
+            if (shardup.Contains(Blue))
+            {
+                ret |= ShardColor.Blue;
+            }
+
+            if (shardup.Contains(Black))
+            {
+                ret |= ShardColor.Black;
+            }
+
+            if (shardup.Contains(Red))
+            {
+                ret |= ShardColor.Red;
+            }
+
+            if (shardup.Contains(Green))
+            {
+                ret |= ShardColor.Green;
+            }
 
             return ret;
         }
@@ -174,22 +270,85 @@
         public static CardType GetCardType(string type)
         {
             CardType cardType = CardType.Token;
-            if (IsLand(type)) cardType |= CardType.Land;
-            if (IsInstant(type)) cardType |= CardType.Instant;
-            if (IsSorcery(type)) cardType |= CardType.Sorcery;
-            if (IsEnchantment(type)) cardType |= CardType.Enchantment;
-            if (IsCreature(type)) cardType |= CardType.Creature;
-            if (IsArtifact(type)) cardType |= CardType.Artifact;
-            if (IsPlaneswalker(type)) cardType |= CardType.Planeswalker;
-            if (IsTribal(type)) cardType |= CardType.Tribal;
-            if (IsArcane(type)) cardType |= CardType.Arcane;
-            if (IsLegendary(type)) cardType |= CardType.Legendary;
-            if (IsPhenomenon(type)) cardType |= CardType.Phenomenon;
-            if (IsPlane(type)) cardType |= CardType.Plane;
-            if (IsConspiracy(type)) cardType |= CardType.Conspiracy;
-            if (IsScheme(type)) cardType |= CardType.Scheme;
-            if (IsContraption(type)) cardType |= CardType.Contraption;
-            if (IsSaga(type)) cardType |= CardType.Saga;
+            if (IsLand(type))
+            {
+                cardType |= CardType.Land;
+            }
+
+            if (IsInstant(type))
+            {
+                cardType |= CardType.Instant;
+            }
+
+            if (IsSorcery(type))
+            {
+                cardType |= CardType.Sorcery;
+            }
+
+            if (IsEnchantment(type))
+            {
+                cardType |= CardType.Enchantment;
+            }
+
+            if (IsCreature(type))
+            {
+                cardType |= CardType.Creature;
+            }
+
+            if (IsArtifact(type))
+            {
+                cardType |= CardType.Artifact;
+            }
+
+            if (IsPlaneswalker(type))
+            {
+                cardType |= CardType.Planeswalker;
+            }
+
+            if (IsTribal(type))
+            {
+                cardType |= CardType.Tribal;
+            }
+
+            if (IsArcane(type))
+            {
+                cardType |= CardType.Arcane;
+            }
+
+            if (IsLegendary(type))
+            {
+                cardType |= CardType.Legendary;
+            }
+
+            if (IsPhenomenon(type))
+            {
+                cardType |= CardType.Phenomenon;
+            }
+
+            if (IsPlane(type))
+            {
+                cardType |= CardType.Plane;
+            }
+
+            if (IsConspiracy(type))
+            {
+                cardType |= CardType.Conspiracy;
+            }
+
+            if (IsScheme(type))
+            {
+                cardType |= CardType.Scheme;
+            }
+
+            if (IsContraption(type))
+            {
+                cardType |= CardType.Contraption;
+            }
+
+            if (IsSaga(type))
+            {
+                cardType |= CardType.Saga;
+            }
 
             return cardType;
         }

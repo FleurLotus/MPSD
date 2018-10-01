@@ -29,13 +29,17 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                     if (xmlReader.NodeType == XmlNodeType.Text)
                     {
                         if (!string.IsNullOrEmpty(value))
+                        {
                             throw new ParserException("Multiple Text element in Element");
+                        }
 
                         value = xmlReader.Value.HtmlTrim();
                     }
                 }
                 if (string.IsNullOrEmpty(value))
+                {
                     throw new ParserException("No Text element found in Element for Key: " + _key);
+                }
 
                 return new Dictionary<string, string> {{_key, value}};
             }

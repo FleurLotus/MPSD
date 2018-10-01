@@ -160,7 +160,9 @@
         protected override bool ApplyEditionToDatabase()
         {
             if (Selected == null)
+            {
                 return false;
+            }
 
             MagicDatabase.UpdateEdition(Selected, GathererName, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, BlockPosition, CardNumber, ReleaseDate);
             All.Clear();

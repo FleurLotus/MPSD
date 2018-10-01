@@ -46,15 +46,21 @@ namespace MagicPictureSetDownloader.Db.DAO
         {
             string code = Code;
             if (AlternativeCode == null || format == ExportFormat.MPSD)
+            {
                 return code;
+            }
 
             string[] codes = AlternativeCode.Split(';');
             int pos = (int)format;
             if (pos < 0 || pos >= codes.Length)
+            {
                 return code;
+            }
 
             if (string.IsNullOrWhiteSpace(codes[pos]))
+            {
                 return code;
+            }
 
             return codes[pos].Trim();
         }
@@ -69,7 +75,9 @@ namespace MagicPictureSetDownloader.Db.DAO
             Edition e = obj as Edition;
 
             if (e == null)
+            {
                 return -1;
+            }
 
             return Name.CompareTo(e.Name);
         }

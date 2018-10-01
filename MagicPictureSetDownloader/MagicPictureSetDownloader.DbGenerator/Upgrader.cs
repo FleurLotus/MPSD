@@ -58,16 +58,20 @@
         private void ExecuteUpgradeCommands(int dbVersion)
         {
             if (_applicationVersion.Major < dbVersion)
+            {
                 throw new Exception("Db is newer that application");
+            }
 
-//We redo the change of current version because of minor version upgrade
-/*
-            if (_applicationVersion.Major == dbVersion)
-                return;
-*/
+            //We redo the change of current version because of minor version upgrade
+            /*
+                        if (_applicationVersion.Major == dbVersion)
+                            return;
+            */
 
             if (dbVersion < 6)
+            {
                 throw new Exception("You have udpated the version!!! There is no released version with this db version");
+            }
 
             Repository repo = new Repository(_connectionString);
             switch (_data)

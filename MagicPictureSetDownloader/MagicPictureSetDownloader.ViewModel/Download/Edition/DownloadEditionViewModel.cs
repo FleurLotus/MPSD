@@ -61,12 +61,16 @@
         protected override void Dispose(bool disposing)
         {
             if (_disposed)
+            {
                 return;
+            }
 
             if (disposing)
             {
                 if (DownloadManager != null)
+                {
                     DownloadManager.NewEditionCreated += OnNewEditionCreated;
+                }
             }
             _disposed = true;
 
@@ -99,7 +103,9 @@
                     Editions.Add(editionInfoViewModel);
                 }
                 if (Editions.Count == 0)
+                {
                     SetMessage("Not any new edition");
+                }
             }
             catch (Exception ex)
             {
@@ -144,14 +150,19 @@
                 foreach (string cardUrl in urls)
                 {
                     if (IsStopping)
+                    {
                         break;
+                    }
+
                     DownloadManager.GetCardInfo(cardUrl, editionId);
                     hasCard = true;
                     editionDownloadReporter.Progress();
                     DownloadReporter.Progress();
                 }
                 if (!IsStopping && hasCard)
+                {
                     DownloadManager.EditionCompleted(editionId);
+                }
             }
             catch (Exception ex)
             {
@@ -169,14 +180,19 @@
                 Start(DispatcherInvoker);
 
                 if (!string.IsNullOrWhiteSpace(msg))
+                {
                     AppendMessage(msg, true);
+                }
+
                 JobFinished();
             }
         }
         private void EditionInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Active")
+            {
                 HasJob = Editions.Any(sivm => sivm.Active);
+            }
         }
         private void OnNewEditionCreated(object sender, EventArgs<string> args)
         {

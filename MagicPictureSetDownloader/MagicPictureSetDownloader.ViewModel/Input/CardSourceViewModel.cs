@@ -55,7 +55,9 @@
                     _languages = value;
                     OnNotifyPropertyChanged(() => Languages);
                     if (_languages != null && _languages.Length > 0)
+                    {
                         LanguageSelected = _languages[0];
+                    }
                 }
             }
         }
@@ -110,7 +112,9 @@
                     OnNotifyPropertyChanged(() => MaxCount);
 
                     if (value < Count)
+                    {
                         Count = value;
+                    }
                 }
             }
         }

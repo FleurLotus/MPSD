@@ -21,7 +21,9 @@ namespace MagicPictureSetDownloader.Converter
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
+            {
                 return null;
+            }
 
             List<Inline> newList = new List<Inline>();
 
@@ -52,7 +54,9 @@ namespace MagicPictureSetDownloader.Converter
 
                 int end = text.IndexOf(' ', pos);
                 if (end < 0)
+                {
                     end = text.Length;
+                }
 
                 string symbol = text.Substring(pos, end - pos);
                 BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
@@ -66,9 +70,14 @@ namespace MagicPictureSetDownloader.Converter
                     Image image = new Image { Source = source, Width = 12, Height = 12, Visibility = Visibility.Visible };
                     newList.Add(new InlineUIContainer(image));
                     if (text.Length > end)
+                    {
                         text = text.Substring(end + 1);
+                    }
                     else
+                    {
                         text = string.Empty;
+                    }
+
                     previousIsPicture = true;
                 }
 
@@ -76,8 +85,10 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             if (!string.IsNullOrEmpty(text))
+            {
                 newList.Add(new Run(" " + text));
-            
+            }
+
             return newList;
         }
     }

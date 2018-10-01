@@ -19,13 +19,17 @@ namespace MagicPictureSetDownloader.Db
             {
                 Edition edition = iedition as Edition;
                 if (edition == null || string.IsNullOrWhiteSpace(sourceName) || string.IsNullOrWhiteSpace(name))
+                {
                     return;
+                }
 
                 name = name.Trim();
                 sourceName = sourceName.Trim();
 
                 if (_editions.FirstOrDefault(e => edition.Id != e.Id && string.Compare(e.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase) == 0) != null)
+                {
                     return;
+                }
 
                 //No need to update referencial because instance is still the same
                 edition.Name = name;
@@ -49,11 +53,15 @@ namespace MagicPictureSetDownloader.Db
             {
                 Block block = iblock as Block;
                 if (block == null ||string.IsNullOrWhiteSpace(blockName))
+                {
                     return;
+                }
 
                 blockName = blockName.Trim();
                 if (_blocks.Values.FirstOrDefault(b => string.Compare(b.Name, blockName, StringComparison.InvariantCultureIgnoreCase) == 0) != null)
+                {
                     return;
+                }
 
                 //No need to update referencial because id do not change
                 block.Name = blockName;
@@ -70,14 +78,20 @@ namespace MagicPictureSetDownloader.Db
             {
                 Language language = ilanguage as Language;
                 if (language == null || string.IsNullOrWhiteSpace(languageName))
+                {
                     return;
+                }
 
                 languageName = languageName.Trim();
                 if (alternativeName != null)
+                {
                     alternativeName = alternativeName.Trim();
+                }
 
                 if (_languages.Values.FirstOrDefault(b => b.Id != language.Id && string.Compare(b.Name, languageName, StringComparison.InvariantCultureIgnoreCase) == 0) != null)
+                {
                     return;
+                }
 
                 RemoveFromReferential(language);
 
@@ -97,7 +111,9 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 if (card == null || language == null || string.IsNullOrWhiteSpace(translation))
+                {
                     return;
+                }
 
                 translation = translation.Trim();
 

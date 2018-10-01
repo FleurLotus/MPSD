@@ -21,9 +21,13 @@
             if (_collections.Length > 0)
             {
                 if (SourceCollection != _collections[0] ||_collections.Length ==1)
+                {
                     CardCollectionSelected = _collections[0];
+                }
                 else
+                {
                     CardCollectionSelected = _collections[1];
+                }
             }
         }
         public CardSourceViewModel Source { get; private set; }
@@ -60,7 +64,9 @@
         protected override bool OkCommandCanExecute(object o)
         {
             if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
+            {
                 return false;
+            }
 
             return CardCollectionSelected != null && (Copy || CardCollectionSelected != SourceCollection);
         }

@@ -27,7 +27,10 @@ namespace Common.WPF
         public static void SelectOnlyVisibleTabsChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
             var tabControl = sender as TabControl;
-            if (tabControl == null) return;
+            if (tabControl == null)
+            {
+                return;
+            }
 
             if ((bool)args.NewValue)
             {
@@ -43,7 +46,10 @@ namespace Common.WPF
         private static void TabControlSelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             var tabControl = sender as TabControl;
-            if (tabControl == null) return;
+            if (tabControl == null)
+            {
+                return;
+            }
 
             CorrectSelection(tabControl);
         }
@@ -51,7 +57,10 @@ namespace Common.WPF
         public static void CorrectSelection(TabControl tabControl)
         {
             var selected = tabControl.SelectedItem as UIElement;
-            if (selected == null) return;
+            if (selected == null)
+            {
+                return;
+            }
 
             // If the selected element is not suposed to be visible,
             // selects the next visible element

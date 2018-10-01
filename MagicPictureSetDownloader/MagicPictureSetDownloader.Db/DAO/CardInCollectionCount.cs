@@ -22,7 +22,9 @@
         {
             CardInCollectionCount cicc = obj as CardInCollectionCount;
             if (null == cicc)
+            {
                 return false;
+            }
 
             return cicc.IdCollection == IdCollection && cicc.IdGatherer == IdGatherer && cicc.IdLanguage == IdLanguage;
         }

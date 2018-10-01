@@ -16,7 +16,9 @@ namespace MagicPictureSetDownloader.Converter
         {
             Bitmap bitmap = value as Bitmap;
             if (bitmap == null)
+            {
                 return null;
+            }
 
             return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bitmap.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
         }

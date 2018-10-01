@@ -40,7 +40,10 @@
                 {
                     _maxDate = value;
                     if (MinDate > MaxDate)
+                    {
                         MinDate = MaxDate;
+                    }
+
                     OnNotifyPropertyChanged(() => MaxDate);
                 }
             }
@@ -54,7 +57,10 @@
                 {
                     _minDate = value;
                     if (MinDate > MaxDate)
+                    {
                         MaxDate = MinDate;
+                    }
+
                     OnNotifyPropertyChanged(() => MinDate);
                 }
             }

@@ -45,7 +45,9 @@
         public void BuildSelectAllCommand(IDbCommand cmd)
         {
             if (cmd == null)
+            {
                 throw new ArgumentNullException("cmd");
+            }
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
@@ -53,7 +55,9 @@
         public void BuildDeleteAllCommand(IDbCommand cmd)
         {
             if (cmd == null)
+            {
                 throw new ArgumentNullException("cmd");
+            }
 
             CheckRestriction(Restriction.Delete);
 

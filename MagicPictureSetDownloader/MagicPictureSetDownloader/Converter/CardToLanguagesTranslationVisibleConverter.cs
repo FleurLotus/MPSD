@@ -16,7 +16,9 @@ namespace MagicPictureSetDownloader.Converter
             IDictionary<string, string> dic = base.Convert(value, targetType, parameter, culture) as IDictionary<string, string>;
 
             if (dic == null)
+            {
                 return Visibility.Collapsed;
+            }
 
             return dic.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         }

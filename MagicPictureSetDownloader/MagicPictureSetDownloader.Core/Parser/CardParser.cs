@@ -49,7 +49,9 @@
                 cardWithExtraInfos[1].Name = cardName;
 
                 if (cardName.StartsWith(cardWithExtraInfos[1].PartName))
+                {
                     SwapCards(cardWithExtraInfos);
+                }
             }
             //Recto Verso card
             else if (cardWithExtraInfos[0].CastingCost == null)
@@ -160,17 +162,27 @@
         private void CheckInfos(IDictionary<string, string> infos)
         {
             if (!infos.ContainsKey(NameKey))
+            {
                 throw new ParserException("No name found");
+            }
+
             if (!infos.ContainsKey(TypeKey))
+            {
                 throw new ParserException("No type found");
+            }
+
             if (!infos.ContainsKey(RarityKey))
+            {
                 throw new ParserException("No rarity found");
-            
+            }
+
             string type = infos.GetOrDefault(TypeKey);
             string castingcost = infos.GetOrDefault(ManaCostKey);
             //Add check on casting cost because of second face of Garruk, the Veil-Cursed which has no loyalty counter
             if ((MagicRules.IsCreature(type) || MagicRules.IsPlaneswalker(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
+            {
                 throw new ParserException("No PT/Loyalty found");
+            }
         }
         private string GetPower(string text)
         {

@@ -119,7 +119,9 @@
                     {
                         string res = o.Validate();
                         if (!string.IsNullOrWhiteSpace(res))
+                        {
                             errorMessage.AppendFormat("{0} ---> {1}", prop.Name, res);
+                        }
                     }
                 }
             }

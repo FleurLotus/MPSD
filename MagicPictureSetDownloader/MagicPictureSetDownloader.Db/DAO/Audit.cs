@@ -33,12 +33,14 @@ namespace MagicPictureSetDownloader.Db.DAO
         public override string ToString()
         {
             if (IdGatherer.HasValue)
+            {
                 return string.Format(" {0} card(s) {1} {2}{3} to collection {4} at {5:yyyy-MM-dd HH:mm:ss.ff}", Quantity, 
                                                                                                                 IdGatherer.Value,
                                                                                                                 IsFoil.Value ? "(Foil) " : string.Empty, 
                                                                                                                 IdLanguage.Value, 
                                                                                                                 IdCollection, 
                                                                                                                 OperationDate);
+            }
 
             return string.Format("{0} collection {1} at {2:yyyy-MM-dd HH:mm:ss.ff}", Quantity>0 ?"Create": "Delete", IdCollection, OperationDate);
         }
