@@ -5,7 +5,6 @@
         public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
         public const string SelectTreePicture = @"SELECT Name, Image FROM TreePicture";
 
-
         public const string RemoveDuelDeckFromName =
 @"UPDATE Edition 
 SET NAME = SUBSTR(Name, 13)
@@ -67,5 +66,38 @@ AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdE
 @"UPDATE Edition
 SET ReleaseDate = '2017-07-14 00:00:00'
 WHERE GathererName = 'Hour of Devastation'";
+
+         public static readonly string[] RemoveWrongCardFromGuildOfRavnica = {
+@"DELETE FROM Translate
+WHERE IdCard IN (SELECT Id 
+                 FROM Card 
+                 WHERE Name IN ('Boros Guildgate (b)', 'Dimir Guildgate (b)','Golgari Guildgate (b)', 'Izzet Guildgate (b)', 'Selesnya Guildgate (b)',
+                                'Boros Guildgate (a)', 'Dimir Guildgate (a)','Golgari Guildgate (a)', 'Izzet Guildgate (a)', 'Selesnya Guildgate (a)')
+                )",
+@"DELETE FROM CardEdition
+WHERE IdCard IN (SELECT Id 
+                 FROM Card 
+                 WHERE Name IN ('Boros Guildgate (b)', 'Dimir Guildgate (b)','Golgari Guildgate (b)', 'Izzet Guildgate (b)', 'Selesnya Guildgate (b)')
+                )",
+@"DELETE FROM Card
+WHERE Name IN ('Boros Guildgate (b)', 'Dimir Guildgate (b)','Golgari Guildgate (b)', 'Izzet Guildgate (b)', 'Selesnya Guildgate (b)')",
+@"UPDATE CardEdition 
+SET IdCard = (SELECT Id FROM Card WHERE Name = 'Boros Guildgate')
+WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Boros Guildgate (a)')",
+@"UPDATE CardEdition 
+SET IdCard = (SELECT Id FROM Card WHERE Name = 'Dimir Guildgate')
+WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Dimir Guildgate (a)')",
+@"UPDATE CardEdition 
+SET IdCard = (SELECT Id FROM Card WHERE Name = 'Golgari Guildgate')
+WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Golgari Guildgate (a)')",
+@"UPDATE CardEdition 
+SET IdCard = (SELECT Id FROM Card WHERE Name = 'Izzet Guildgate')
+WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Izzet Guildgate (a)')",
+@"UPDATE CardEdition 
+SET IdCard = (SELECT Id FROM Card WHERE Name = 'Selesnya Guildgate')
+WHERE IdCard = (SELECT Id FROM Card WHERE Name = 'Selesnya Guildgate (a)')",
+@"DELETE FROM Card
+WHERE Name IN ('Boros Guildgate (a)', 'Dimir Guildgate (a)','Golgari Guildgate (a)', 'Izzet Guildgate (a)', 'Selesnya Guildgate (a)')"
+};
     }
 }
