@@ -145,6 +145,27 @@
                 // 9.3
                 repo.ExecuteBatch(UpdateQueries.UpdateHourofDevastationReleaseDate);
             }
+
+            if (dbVersion <= 10)
+            {
+                //10.7
+                Dictionary<string, string> updatedcode = new Dictionary<string, string> {
+                    { "UGL" , "Unglued"},
+                    { "CM2" , "Commander Anthology 2018"},
+                };
+
+                foreach (var kv in updatedcode)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.UpdateEditionMissingCode,
+                       new KeyValuePair<string, object>("@code", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value));
+                }
+
+                foreach (string query in UpdateQueries.RemoveWrongCardFromGuildOfRavnica)
+                {
+                    repo.ExecuteBatch(query);
+                }
+            }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
         {

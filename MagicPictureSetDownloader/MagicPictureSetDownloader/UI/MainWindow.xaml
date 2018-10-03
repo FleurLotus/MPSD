@@ -102,6 +102,7 @@
                 <GridSplitter Grid.Column="1"/>
 
                 <Border Grid.Column="2">
+                    <!-- Card Data display  -->
                     <ContentControl Content="{Binding Hierarchical.Selected}" />
                 </Border>
             </Grid>
