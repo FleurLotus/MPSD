@@ -1,4 +1,4 @@
-﻿ namespace MagicPictureSetDownloader.Interface
+﻿namespace MagicPictureSetDownloader.Interface
 {
     using System.Collections.Generic;
 

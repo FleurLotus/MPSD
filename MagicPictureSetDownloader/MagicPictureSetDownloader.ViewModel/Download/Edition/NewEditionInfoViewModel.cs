@@ -13,6 +13,26 @@
 
     public class NewEditionInfoViewModel : DialogViewModelBase
     {
+        private const int AutoBlockId = int.MaxValue;
+
+        private class AutoBlock : IBlock
+        {
+            public int Id
+            {
+                get { return AutoBlockId; }
+            }
+
+            public string Name
+            {
+                get { return "AutoBlock"; }
+            }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+        }
+
         private string _name;
         private string _code;
         private DateTime? _releaseDate;
@@ -31,7 +51,7 @@
             Name = gathererName;
             HasFoil = true;
             _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
-            Blocks = _magicDatabase.GetAllBlocks().Ordered().ToArray();
+            Blocks = _magicDatabase.GetAllBlocks().Union(new[] { new AutoBlock() }).Ordered().ToArray();
             ResetBlockCommand = new RelayCommand(ResetBlockExecute);
             GetIconCommand = new RelayCommand(GetIconExecute, GetIconCanExecute);
 
@@ -174,7 +194,25 @@
         }
         public void Save()
         {
-            _magicDatabase.InsertNewEdition(GathererName, Name, HasFoil, Code, BlockSelected == null ? (int?)null : BlockSelected.Id, Position, CardNumber, ReleaseDate, Icon);
+            IBlock realBlock = null;
+
+            if (BlockSelected != null && BlockSelected.Id == AutoBlockId)
+            {
+                realBlock = _magicDatabase.GetBlock(GathererName);
+                if (realBlock == null)
+                {
+                    //Create Block with the same name as the Edition
+                    _magicDatabase.InsertNewBlock(GathererName);
+                    realBlock = _magicDatabase.GetBlock(GathererName);
+                    Position = 1;
+                }
+            }
+            else
+            {
+                realBlock = BlockSelected;
+            }
+
+            _magicDatabase.InsertNewEdition(GathererName, Name, HasFoil, Code, realBlock == null ? (int?)null : realBlock.Id, Position, CardNumber, ReleaseDate, Icon);
         }
         public void SaveDefault()
         {
