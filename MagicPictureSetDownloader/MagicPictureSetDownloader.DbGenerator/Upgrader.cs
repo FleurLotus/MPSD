@@ -155,6 +155,8 @@
                     { "V10" , "From the Vault: Relics"},
                     { "V11" , "From the Vault: Legends"},
                     { "V12" , "From the Vault: Realms"},
+                    { "H09" , "Premium Deck Series: Sliverss"},
+                    { "PD3" , "Premium Deck Series: Graveborn"},
                 };
 
                 foreach (var kv in updatedcode)
