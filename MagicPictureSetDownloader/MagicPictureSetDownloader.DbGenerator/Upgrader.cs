@@ -157,6 +157,8 @@
                     { "V12" , "From the Vault: Realms"},
                     { "H09" , "Premium Deck Series: Sliverss"},
                     { "PD3" , "Premium Deck Series: Graveborn"},
+                    { "TSP" , "Time Spiral"},
+                    { "TSB" , @"Time Spiral ""Timeshifted"""},
                 };
 
                 foreach (var kv in updatedcode)
