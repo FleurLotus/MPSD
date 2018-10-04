@@ -45,7 +45,7 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="CredentialRequieredArgs.cs" />
-    <Compile Include="DownloadManager.cs" />
+    <Compile Include="WebAccess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
