@@ -12,10 +12,10 @@
             IdLanguage = idLanguage;
         }
 
-        public int IdGatherer { get; private set; }
+        public int IdGatherer { get; }
         public int Number { get; private set; }
         public int FoilNumber { get; private set; }
-        public int IdLanguage { get; private set; }
+        public int IdLanguage { get; }
 
         internal void Add(int number)
         {

@@ -17,8 +17,8 @@
             Analyser = HierarchicalInfoAnalyserFactory.Instance.Create(name);
         }
 
-        public string Name { get; private set; }
-        public IHierarchicalInfoAnalyser Analyser { get; private set; }
+        public string Name { get; }
+        public IHierarchicalInfoAnalyser Analyser { get; }
 
         public bool IsAscendingOrder
         {

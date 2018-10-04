@@ -20,6 +20,6 @@
             Display.OkCommandLabel = "Update";
             Display.CancelCommandLabel = "Close";
         }
-        public ICardCollection SourceCollection { get; private set; }
+        public ICardCollection SourceCollection { get; }
     }
 }

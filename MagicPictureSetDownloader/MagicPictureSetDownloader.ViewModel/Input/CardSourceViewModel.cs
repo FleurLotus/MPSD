@@ -40,7 +40,7 @@
                 EditionSelected = _editions[0];
             }
         }
-        public ICard Card { get; private set; }
+        public ICard Card { get; }
         public IEdition[] Editions
         {
             get { return _editions; }

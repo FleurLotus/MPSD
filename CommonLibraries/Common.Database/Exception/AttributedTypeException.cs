@@ -6,7 +6,7 @@
     [Serializable]
     internal class AttributedTypeException : ApplicationException
     {
-        public Type Type { get; private set; }
+        public Type Type { get; }
 
         public AttributedTypeException(Type type)
         {

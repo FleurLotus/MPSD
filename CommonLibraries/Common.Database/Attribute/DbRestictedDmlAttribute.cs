@@ -19,6 +19,6 @@
             Restriction = restriction;
         }
 
-        public Restriction Restriction { get; private set; }
+        public Restriction Restriction { get; }
     }
 }

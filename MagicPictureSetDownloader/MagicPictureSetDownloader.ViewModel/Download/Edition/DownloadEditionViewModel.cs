@@ -29,8 +29,8 @@
             FeedEditionsCommand = new RelayCommand(FeedEditionsCommandExecute, FeedEditionsCommandCanExecute);
         }
 
-        public IList<EditionInfoViewModel> Editions { get; private set; }
-        public ICommand FeedEditionsCommand { get; private set; }
+        public IList<EditionInfoViewModel> Editions { get; }
+        public ICommand FeedEditionsCommand { get; }
         public bool HasJob
         {
             get { return _hasJob; }

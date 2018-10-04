@@ -109,7 +109,7 @@
             }
 
 
-            public static string StaticPublicGetPrivateSet { get; private set; }
+            public static string StaticPublicGetPrivateSet { get; }
 
             public static string StaticPrivateGetPublicGet { private get; set; }
             public static string StaticPublicGetInternalSet { get; internal set; }
@@ -119,17 +119,17 @@
             public static string StaticPublicGetProtectedInternalSet { get; protected internal set; }
             public static string StaticProtectedInternalGetPublicSet { protected internal get; set; }
 
-            internal static string StaticInternalGetPrivateSet { get; private set; }
+            internal static string StaticInternalGetPrivateSet { get; }
             internal static string StaticPrivateGetInternalGet { private get; set; }
 
-            protected internal static string StaticProtectedInternalGetPrivateSet { get; private set; }
+            protected internal static string StaticProtectedInternalGetPrivateSet { get; }
             protected internal static string StaticPrivateSetProtectedInternalSet { private get; set; }
             protected internal static string StaticProtectedInternalSetInternalSet { get; internal set; }
             protected internal static string StaticInternalSetProtectedInternalSet { internal get; set; }
             protected internal static string StaticProtectedInternalGetProtectedSet { get; protected set; }
             protected internal static string StaticProtectedSetProtectedInternalSet { protected get; set; }
 
-            protected static string StaticProtectedGetPrivateSet { get; private set; }
+            protected static string StaticProtectedGetPrivateSet { get; }
             protected static string StaticPrivateGetProtectedGet { private get; set; }
 
 
@@ -181,7 +181,7 @@
                 set { }
             }
 
-            public string MemberPublicGetPrivateSet { get; private set; }
+            public string MemberPublicGetPrivateSet { get; }
             public string MemberPrivateGetPublicGet { private get; set; }
             public string MemberPublicGetInternalSet { get; internal set; }
             public string MemberInternalGetPublicSet { internal get; set; }
@@ -190,17 +190,17 @@
             public string MemberPublicGetProtectedInternalSet { get; protected internal set; }
             public string MemberProtectedInternalGetPublicSet { protected internal get; set; }
 
-            internal string MemberInternalGetPrivateSet { get; private set; }
+            internal string MemberInternalGetPrivateSet { get; }
             internal string MemberPrivateGetInternalGet { private get; set; }
 
-            protected internal string MemberProtectedInternalGetPrivateSet { get; private set; }
+            protected internal string MemberProtectedInternalGetPrivateSet { get; }
             protected internal string MemberPrivateSetProtectedInternalSet { private get; set; }
             protected internal string MemberProtectedInternalSetInternalSet { get; internal set; }
             protected internal string MemberInternalSetProtectedInternalSet { internal get; set; }
             protected internal string MemberProtectedInternalGetProtectedSet { get; protected set; }
             protected internal string MemberProtectedSetProtectedInternalSet { protected get; set; }
 
-            protected string MemberProtectedGetPrivateSet { get; private set; }
+            protected string MemberProtectedGetPrivateSet { get; }
             protected string MemberPrivateGetProtectedGet { private get; set; }
         }
         // ReSharper restore UnusedMember.Local

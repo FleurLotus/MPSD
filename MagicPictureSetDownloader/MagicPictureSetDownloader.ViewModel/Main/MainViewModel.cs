@@ -78,8 +78,8 @@
             }
         }
 
-        public ICommand HideResultCommand { get; private set; }
-        public OptionsViewModel Options { get; private set; }
+        public ICommand HideResultCommand { get; }
+        public OptionsViewModel Options { get; }
         public bool ShowFilterConfig
         {
             get { return _showFilterConfig; }

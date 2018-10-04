@@ -59,10 +59,10 @@
             Display.CancelCommandLabel = "Default";
         }
 
-        public ICommand ResetBlockCommand { get; private set; }
-        public ICommand GetIconCommand { get; private set; }
-        public string GathererName { get; private set; }
-        public IBlock[] Blocks { get; private set; }
+        public ICommand ResetBlockCommand { get; }
+        public ICommand GetIconCommand { get; }
+        public string GathererName { get; }
+        public IBlock[] Blocks { get; }
         public byte[] Icon
         {
             get { return _icon; }

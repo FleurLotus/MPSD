@@ -10,7 +10,7 @@
             Edition = edition;
         }
 
-        public IEdition Edition { get; private set; }
-        public string BaseSearchUrl { get; private set; }
+        public IEdition Edition { get; }
+        public string BaseSearchUrl { get; }
     }
 }

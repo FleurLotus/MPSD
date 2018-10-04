@@ -71,14 +71,14 @@
         }
         
         public ICollection<IEdition> Editions { get; private set; }
-        public ICollection<IEdition> EditionsSelected { get; private set; }
+        public ICollection<IEdition> EditionsSelected { get; }
         public ICollection<ICardCollection> Collections { get; private set; }
-        public ICollection<ICardCollection> CollectionsSelected { get; private set; }
-        public ICollection<ShardColor> Colors { get; private set; }
-        public ICollection<ShardColor> ColorsSelected { get; private set; }
-        public ICollection<CardType> Types { get; private set; }
-        public ICollection<CardType> TypesSelected { get; private set; }
-        public string[] CountComparator { get; private set; }
+        public ICollection<ICardCollection> CollectionsSelected { get; }
+        public ICollection<ShardColor> Colors { get; }
+        public ICollection<ShardColor> ColorsSelected { get; }
+        public ICollection<CardType> Types { get; }
+        public ICollection<CardType> TypesSelected { get; }
+        public string[] CountComparator { get; }
 
         public string Name
         {

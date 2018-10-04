@@ -26,6 +26,6 @@
             ExceptionText = sb.ToString();
         }
 
-        public string ExceptionText { get; private set; }
+        public string ExceptionText { get; }
     }
 }

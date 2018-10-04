@@ -10,7 +10,7 @@
         {
             Pages = pages;
         }
-        public int[] Pages { get; private set; }
+        public int[] Pages { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {

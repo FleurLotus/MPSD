@@ -10,10 +10,10 @@
             InnerText = innerText;
         }
         
-        public bool IsHeader { get; private set; }
-        public string InnerText { get; private set; }
-        public int ColSpan { get; private set; }
-        public int RowSpan { get; private set; }
+        public bool IsHeader { get; }
+        public string InnerText { get; }
+        public int ColSpan { get; }
+        public int RowSpan { get; }
         public override string ToString()
         {
             return InnerText;

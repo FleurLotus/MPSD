@@ -17,7 +17,7 @@
             _thread.Start();
             Name = name + ":" + _thread.ManagedThreadId;
         }
-        public string Name { get; private set; }
+        public string Name { get; }
         
         public void Dispose()
         {

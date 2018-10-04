@@ -34,8 +34,8 @@
             get { return _all.AsReadOnly(); }
         }
 
-        public ICommand UpCommand { get; private set; }
-        public ICommand DownCommand { get; private set; }
+        public ICommand UpCommand { get; }
+        public ICommand DownCommand { get; }
 
         public int SelectedIndex
         {

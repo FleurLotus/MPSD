@@ -43,12 +43,12 @@
             List2 = list2;
         }
 
-        public InputMode InputMode { get; private set; }
-        public string Title { get; private set; }
-        public string Label { get; private set; }
-        public string Label2 { get; private set; }
-        public IList<string> List { get; private set; }
-        public IList<string> List2 { get; private set; }
+        public InputMode InputMode { get; }
+        public string Title { get; }
+        public string Label { get; }
+        public string Label2 { get; }
+        public IList<string> List { get; }
+        public IList<string> List2 { get; }
 
         public string Text
         {

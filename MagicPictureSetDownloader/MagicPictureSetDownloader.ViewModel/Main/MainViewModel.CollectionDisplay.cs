@@ -16,7 +16,7 @@
         private HierarchicalViewModel _searchHierarchical;
         private HierarchicalViewModel _hierarchical;
 
-        public HierarchicalInfoAnalysersViewModel Analysers { get; private set; }
+        public HierarchicalInfoAnalysersViewModel Analysers { get; }
 
         public bool Loading
         {

@@ -52,9 +52,9 @@
             }
         }
 
-        public IEdition Edition { get; private set; }
-        public IRarity Rarity { get; private set; }
-        public int IdGatherer { get; private set; }
+        public IEdition Edition { get; }
+        public IRarity Rarity { get; }
+        public int IdGatherer { get; }
         
         public string Name
         {
@@ -102,11 +102,11 @@
             get { return Card.Is90DegreeSide; }
         }
         public bool IsDownSide { get; private set; }
-        public CardViewModel OtherCardPart { get; private set; }
-        public StatisticViewModel[] Statistics { get; private set; }
-        public string PowerToughnessLoyalty { get; private set; }
-        public string PowerToughnessLoyaltyText { get; private set; }
-        public string[] DisplayedCastingCost { get; private set; }
-        internal ICard Card { get; private set; }
+        public CardViewModel OtherCardPart { get; }
+        public StatisticViewModel[] Statistics { get; }
+        public string PowerToughnessLoyalty { get; }
+        public string PowerToughnessLoyaltyText { get; }
+        public string[] DisplayedCastingCost { get; }
+        internal ICard Card { get; }
     }
 }

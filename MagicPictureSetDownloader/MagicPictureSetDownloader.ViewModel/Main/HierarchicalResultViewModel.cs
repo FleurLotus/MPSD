@@ -13,8 +13,8 @@
             Children = new List<HierarchicalResultViewModel>();
         }
 
-        public IComparable Value { get; private set; }
+        public IComparable Value { get; }
         public string DisplayValue { get { return Value.ToString(); } }
-        public IList<HierarchicalResultViewModel> Children { get; private set; }
+        public IList<HierarchicalResultViewModel> Children { get; }
     }
 }
