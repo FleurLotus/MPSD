@@ -39,13 +39,13 @@
             CloseCommand = new RelayCommand(CloseCommandExecute);
         }
 
-        public RangeObservableCollection<T> All { get; private set; }
+        public RangeObservableCollection<T> All { get; }
         public string Title { get; protected set; }
-        public ICommand NewCommand { get; private set; }
-        public ICommand ValidateCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
-        public ICommand UpdateCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
+        public ICommand NewCommand { get; }
+        public ICommand ValidateCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand UpdateCommand { get; }
+        public ICommand CloseCommand { get; }
         public string Name
         {
             get { return _name; }

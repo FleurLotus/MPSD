@@ -22,11 +22,11 @@
             Display = new DisplayInfo();
         }
 
-        public ICommand OkCommand { get; private set; }
-        public ICommand CancelCommand { get; private set; }
-        public ICommand OtherCommand { get; private set; }
-        public ICommand Other2Command { get; private set; }
-        public DisplayInfo Display { get; private set; }
+        public ICommand OkCommand { get; }
+        public ICommand CancelCommand { get; }
+        public ICommand OtherCommand { get; }
+        public ICommand Other2Command { get; }
+        public DisplayInfo Display { get; }
         public bool? Result { get; protected set; }
 
         protected virtual void OkCommandExecute(object o)

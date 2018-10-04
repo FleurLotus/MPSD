@@ -47,11 +47,11 @@
             OpenCommand = new RelayCommand(OpenCommandExecute);
         }
 
-        public ExportFormat[] ExportFormats { get; private set; }
-        public IList<ExportedCollectionViewModel> ExportCollections { get; private set; }
-        public IList<string> ImportCollections { get; private set; }
-        public ICommand OpenCommand { get; private set; }
-        public bool HasCollection { get; private set; }
+        public ExportFormat[] ExportFormats { get; }
+        public IList<ExportedCollectionViewModel> ExportCollections { get; }
+        public IList<string> ImportCollections { get; }
+        public ICommand OpenCommand { get; }
+        public bool HasCollection { get; }
         public string Path
         {
             get { return _path; }

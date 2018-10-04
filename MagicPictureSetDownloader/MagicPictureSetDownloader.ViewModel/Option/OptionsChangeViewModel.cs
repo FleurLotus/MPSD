@@ -10,6 +10,6 @@
 
             Display.Title = "Options";
         }
-        public OptionsViewModel Options { get; private set; }
+        public OptionsViewModel Options { get; }
     }
 }

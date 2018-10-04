@@ -10,8 +10,8 @@
             ErrorMessage = errorMessage;
         }
 
-        public string SourceLine { get; private set; }
-        public string ErrorMessage { get; private set; }
+        public string SourceLine { get; }
+        public string ErrorMessage { get; }
 
         public int IdGatherer
         {

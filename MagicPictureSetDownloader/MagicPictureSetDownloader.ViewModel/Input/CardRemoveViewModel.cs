@@ -11,7 +11,7 @@
 
             Display.Title = "Remove card";
         }
-        public CardSourceViewModel Source { get; private set; }
+        public CardSourceViewModel Source { get; }
         
         protected override bool OkCommandCanExecute(object o)
         {

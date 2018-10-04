@@ -15,10 +15,10 @@
             Language = magicDatabase.GetLanguage(cardInCollectionCount.IdLanguage).Name;
         }
 
-        public int FoilNumber { get; private set; }
-        public int Number { get; private set; }
-        public string Language { get; private set; }
-        public string Edition { get; private set; }
-        public string Collection { get; private set; }
+        public int FoilNumber { get; }
+        public int Number { get; }
+        public string Language { get; }
+        public string Edition { get; }
+        public string Collection { get; }
     }
 }

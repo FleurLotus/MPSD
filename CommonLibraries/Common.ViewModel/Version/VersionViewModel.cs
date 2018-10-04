@@ -25,9 +25,9 @@
             Version = assemblyName.Version.ToString();
         }
 
-        public string Version { get; private set; }
-        public string Name { get; private set; }
-        public string Copyright { get; private set; }
-        public string Description { get; private set; }
+        public string Version { get; }
+        public string Name { get; }
+        public string Copyright { get; }
+        public string Description { get; }
     }
 }

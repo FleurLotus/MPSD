@@ -21,7 +21,7 @@
             _allLanguages = MagicDatabase.GetAllLanguages().Where(l=> !_notUpdatableLanguages.Contains(l)).ToArray();
             Title = "Manage Translate";
         }
-        public ICollection<TranslationViewModel> AllTranslations { get; private set; }
+        public ICollection<TranslationViewModel> AllTranslations { get; }
         public TranslationViewModel DefaultTranslation
         {
             get { return _defaultTranslation; }

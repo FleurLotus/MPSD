@@ -65,7 +65,7 @@
                 }
             }
         }
-        public RangeObservableCollection<AuditInfo> AuditInfos { get; private set; }
+        public RangeObservableCollection<AuditInfo> AuditInfos { get; }
 
         protected override void OkCommandExecute(object o)
         {

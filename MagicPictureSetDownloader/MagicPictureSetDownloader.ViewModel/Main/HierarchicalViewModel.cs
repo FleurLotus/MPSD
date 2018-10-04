@@ -31,7 +31,7 @@
             Root = new List<HierarchicalResultViewModel>();
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
         public IList<HierarchicalResultViewModel> Root
         {

@@ -30,7 +30,7 @@
                 }
             }
         }
-        public CardSourceViewModel Source { get; private set; }
+        public CardSourceViewModel Source { get; }
         public ICardCollection[] Collections
         {
             get { return _collections; }

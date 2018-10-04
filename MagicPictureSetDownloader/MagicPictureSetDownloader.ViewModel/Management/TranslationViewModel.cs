@@ -17,7 +17,7 @@
             _originalTranslation = originalTranslation;
             Translation = originalTranslation;
         }
-        public ILanguage Language { get; private set; }
+        public ILanguage Language { get; }
         public bool Modified
         {
             get { return Translation != _originalTranslation; }

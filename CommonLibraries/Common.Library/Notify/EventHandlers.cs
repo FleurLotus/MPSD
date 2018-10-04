@@ -34,10 +34,10 @@ namespace Common.Library.Notify
             }
         }
 
-        public Action<EventHandler<T>, int> ExecuteOnAdded { get; private set; }
-        public Action<EventHandler<T>, int> ExecuteOnAdding { get; private set; }
-        public Action<EventHandler<T>, int> ExecuteOnRemoved { get; private set; }
-        public Action<EventHandler<T>, int> ExecuteOnRemoving { get; private set; }
+        public Action<EventHandler<T>, int> ExecuteOnAdded { get; }
+        public Action<EventHandler<T>, int> ExecuteOnAdding { get; }
+        public Action<EventHandler<T>, int> ExecuteOnRemoved { get; }
+        public Action<EventHandler<T>, int> ExecuteOnRemoving { get; }
 
         public void Add(EventHandler<T> handler)
         {

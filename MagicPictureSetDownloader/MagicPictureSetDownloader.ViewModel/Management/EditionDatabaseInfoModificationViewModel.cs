@@ -27,8 +27,8 @@
             Title = "Manage Edition";
         }
 
-        public ICommand ResetBlockCommand { get; private set; }
-        public IBlock[] Blocks { get; private set; }
+        public ICommand ResetBlockCommand { get; }
+        public IBlock[] Blocks { get; }
         public int? CardNumber
         {
             get { return _cardNumber; }

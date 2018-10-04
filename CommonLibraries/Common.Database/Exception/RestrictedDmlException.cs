@@ -6,8 +6,8 @@
     [Serializable]
     internal class RestrictedDmlException : ApplicationException
     {
-        public string TableName { get; private set; }
-        public Restriction Restriction { get; private set; }
+        public string TableName { get; }
+        public Restriction Restriction { get; }
 
         public RestrictedDmlException(string tableName, Restriction restriction)
         {

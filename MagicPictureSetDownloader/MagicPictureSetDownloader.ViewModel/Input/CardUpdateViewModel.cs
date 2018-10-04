@@ -26,7 +26,7 @@
 
             Display.Title = "Update infos";
         }
-        public CardSourceViewModel Source { get; private set; }
+        public CardSourceViewModel Source { get; }
         public IEdition[] Editions
         {
             get { return _editions; }

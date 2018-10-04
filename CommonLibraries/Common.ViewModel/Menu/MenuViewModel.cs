@@ -45,10 +45,10 @@
         {
             get { return _children.Count > 0; }
         }
-        public ICommand Command { get; private set; }
-        public string MenuText { get; private set; }
+        public ICommand Command { get; }
+        public string MenuText { get; }
         public bool IsSeparator { get; private set; }
-        public object CommandParameter { get; private set; }
+        public object CommandParameter { get; }
 
         public bool IsChecked
         {

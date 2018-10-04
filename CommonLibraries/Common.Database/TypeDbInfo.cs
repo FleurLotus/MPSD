@@ -15,10 +15,10 @@
             Restriction = restriction;
         }
 
-        public IDictionary<string, PropertyInfo> Columns { get; private set; }
-        public string TableName { get; private set; }
-        public IList<string> Keys { get; private set; }
-        public string Identity { get; private set; }
-        public Restriction Restriction { get; private set; }
+        public IDictionary<string, PropertyInfo> Columns { get; }
+        public string TableName { get; }
+        public IList<string> Keys { get; }
+        public string Identity { get; }
+        public Restriction Restriction { get; }
     }
 }

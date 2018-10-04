@@ -94,11 +94,11 @@
             RebuildOrder();
             InitWindow();
         }
-        public ICommand ChangeCollectionCommand { get; private set; }
-        public ICommand ChangeInputLanguageCommand { get; private set; }
-        public RangeObservableCollection<IEdition> Editions { get; private set; }
-        public RangeObservableCollection<ILanguage> Languages { get; private set; }
-        public RangeObservableCollection<string> Cards { get; private set; }
+        public ICommand ChangeCollectionCommand { get; }
+        public ICommand ChangeInputLanguageCommand { get; }
+        public RangeObservableCollection<IEdition> Editions { get; }
+        public RangeObservableCollection<ILanguage> Languages { get; }
+        public RangeObservableCollection<string> Cards { get; }
 
         public ILanguage LanguageSelected
         {

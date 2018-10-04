@@ -35,7 +35,7 @@ namespace MagicPictureSetDownloader.ViewModel.IO
             ExportOptionSelected = ExportImagesOption.OneByGathererId;
         }
 
-        public ExportImagesOption[] ExportOptions { get; private set; }
+        public ExportImagesOption[] ExportOptions { get; }
         public string Path
         {
             get { return _path; }

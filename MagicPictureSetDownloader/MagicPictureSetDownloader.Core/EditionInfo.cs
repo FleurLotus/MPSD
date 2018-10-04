@@ -8,7 +8,7 @@
             BaseSearchUrl = baseSearchUrl;
         }
 
-        public string BaseSearchUrl { get; private set; }
-        public string Name { get; private set; }
+        public string BaseSearchUrl { get; }
+        public string Name { get; }
     }
 }

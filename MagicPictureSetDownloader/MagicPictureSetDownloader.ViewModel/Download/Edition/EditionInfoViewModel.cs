@@ -22,8 +22,8 @@
             DownloadReporter = new DownloadReporterViewModel();
         }
 
-        public string Url { get; private set; }
-        public DownloadReporterViewModel DownloadReporter { get; private set; }
+        public string Url { get; }
+        public DownloadReporterViewModel DownloadReporter { get; }
         public string Name
         {
             get { return _edition.Name; }

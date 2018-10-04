@@ -18,8 +18,8 @@
             Extension = extension;
             MagicDatabase = MagicDatabaseManager.ReadOnly;
         }
-        public ExportFormat Format { get; private set; }
-        public string Extension { get; private set; }
+        public ExportFormat Format { get; }
+        public string Extension { get; }
 
         protected abstract IImportExportCardCount ParseLine(string line);
         protected abstract string ToLine(IImportExportCardCount cardCount);

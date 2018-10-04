@@ -36,8 +36,8 @@
             DownloadManager.CredentialRequiered += OnCredentialRequiered;
         }
 
-        public DownloadReporterViewModel DownloadReporter { get; private set; }
-        public string Title { get; private set; }
+        public DownloadReporterViewModel DownloadReporter { get; }
+        public string Title { get; }
         public bool IsBusy
         {
             get { return _isBusy; }
