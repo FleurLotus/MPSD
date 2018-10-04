@@ -152,6 +152,9 @@
                 Dictionary<string, string> updatedcode = new Dictionary<string, string> {
                     { "UGL" , "Unglued"},
                     { "CM2" , "Commander Anthology 2018"},
+                    { "V10" , "From the Vault: Relics"},
+                    { "V11" , "From the Vault: Legends"},
+                    { "V12" , "From the Vault: Realms"},
                 };
 
                 foreach (var kv in updatedcode)
