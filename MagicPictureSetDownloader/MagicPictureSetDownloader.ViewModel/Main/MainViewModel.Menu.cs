@@ -282,8 +282,7 @@
 
             if (vm.Result == true)
             {
-                Loading = true;
-                ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(ExportImagesAsync, vm));
+                OnAutoUpdateDatabaseRequested(new ExportImagesProgressViewMode(vm.Path, vm.Suffix, vm.ExportOptionSelected));
             }
         }
         private void CheckNewVersionCommandExecute(object o)
@@ -444,8 +443,7 @@
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
-            //TODO: Disabled - Waiting to finish the development
-            toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute, o => false)));
+            toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute)));
             MenuRoot.AddChild(toolsMenu);
 
             //?
@@ -679,14 +677,6 @@
             vm.ImportExport();
             // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
-        }
-        private void ExportImagesAsync(object obj)
-        {
-            ExportImagesViewModel vm = obj as ExportImagesViewModel;
-            // ReSharper disable PossibleNullReferenceException
-            vm.Export();
-            // ReSharper restore PossibleNullReferenceException
-            Loading = false;
         }
         #endregion
     }

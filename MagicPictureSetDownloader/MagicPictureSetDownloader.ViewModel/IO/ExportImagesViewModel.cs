@@ -1,6 +1,4 @@
-﻿using MagicPictureSetDownloader.Core.IO;
-
-namespace MagicPictureSetDownloader.ViewModel.IO
+﻿namespace MagicPictureSetDownloader.ViewModel.IO
 {
     using System;
     using System.IO;
@@ -8,7 +6,7 @@ namespace MagicPictureSetDownloader.ViewModel.IO
     using Common.Library;
     using Common.Library.Notify;
     using Common.ViewModel.Dialog;
-    using Core.IO;
+
     using MagicPictureSetDownloader.Interface;
 
     public class ExportImagesViewModel : DialogViewModelBase
@@ -84,14 +82,6 @@ namespace MagicPictureSetDownloader.ViewModel.IO
             if (e != null)
             {
                 _dispatcherInvoker.Invoke(() => e(this, new EventArgs<string>(message)));
-            }
-        }
-        public void Export()
-        {
-            if (Result == true)
-            {
-                ExportImagesWorker exportImagesWorker = new ExportImagesWorker();
-                exportImagesWorker.Export(Path, Suffix, ExportOptionSelected);
             }
         }
     }
