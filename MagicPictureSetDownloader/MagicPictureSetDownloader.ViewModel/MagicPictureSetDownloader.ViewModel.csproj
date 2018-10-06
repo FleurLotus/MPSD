@@ -69,6 +69,7 @@
     <Compile Include="Input\SearchViewModel.cs" />
     <Compile Include="Input\CardMoveOrCopyViewModel.cs" />
     <Compile Include="Input\CardInputViewModel.cs" />
+    <Compile Include="IO\ExportImagesProgressViewModel.cs" />
     <Compile Include="IO\ExportedCollectionViewModel.cs" />
     <Compile Include="IO\ImportExportViewModel.cs" />
     <Compile Include="IO\ExportImagesViewModel.cs" />

@@ -1,8 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
-    using System.Collections.Generic;
-    using System.Drawing;
+
     using System.IO;
     using System.Text.RegularExpressions;
     using Common.Drawing;
@@ -13,32 +12,34 @@
     {
         private readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
 
-        public void Export(string outpath, string suffix, ExportImagesOption exportImageOption)
+        public ICardAllDbInfo[] GetAllCardWithPicture()
+        {
+            return MagicDatabase.GetCardsWithPicture();
+        }
+        public void Export(ICardAllDbInfo cardInfo, string outpath, string suffix, ExportImagesOption exportImageOption)
         {
             if (!Directory.Exists(outpath))
             {
                 throw new ArgumentException("output path doesn't exist", "outpath");
             }
 
-            foreach (ICardAllDbInfo cardInfo in MagicDatabase.GetCardsWithPicture())
+            string folder = outpath;
+            if (exportImageOption == ExportImagesOption.OneByGathererId)
             {
-                string folder = outpath;
-                if (exportImageOption == ExportImagesOption.OneByGathererId)
+                //Windows doesn't allow to create a folder with the name CON
+                folder = string.IsNullOrEmpty(cardInfo.Edition.Code) || cardInfo.Edition.Code == "CON" ? cardInfo.Edition.Name : cardInfo.Edition.Code;
+                folder = Path.Combine(outpath, folder);
+                if (!Directory.Exists(folder))
                 {
-                    folder = string.IsNullOrEmpty(cardInfo.Edition.Code) ? cardInfo.Edition.Name : cardInfo.Edition.Code;
-                    folder = Path.Combine(outpath, folder);
-                    if (!Directory.Exists(folder))
-                    {
-                        Directory.CreateDirectory(folder);
-                    }
+                    Directory.CreateDirectory(folder);
                 }
+            }
 
-                Save(folder, suffix, cardInfo.IdGatherer, cardInfo.Card.Name);
+            Save(folder, suffix, cardInfo.IdGatherer, cardInfo.Card.Name);
 
-                if (cardInfo.IdGathererPart2 > 0)
-                {
-                    Save(folder, suffix, cardInfo.IdGathererPart2, cardInfo.CardPart2.Name);
-                }
+            if (cardInfo.IdGathererPart2 > 0)
+            {
+                Save(folder, suffix, cardInfo.IdGathererPart2, cardInfo.CardPart2.Name);
             }
         }
 
@@ -62,7 +63,6 @@
             using (FileStream fs = new FileStream(imagePath, FileMode.CreateNew))
             {
                 fs.Write(img, 0, img.Length);
-
             }
         }
     }

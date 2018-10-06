@@ -75,8 +75,13 @@
                     {
                         _fatalException = true;
                     }
+                    string errormessage = ex.Message;
+                    if (ex.InnerException != null)
+                    {
+                        errormessage = ex.InnerException.Message;
+                    }
 
-                    AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], ex.Message), false);
+                    AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], errormessage), false);
                 }
                 finally
                 {
