@@ -4,11 +4,15 @@
     using System.IO;
     using System.Linq;
     using System.Xml;
+    using System.Text.RegularExpressions;
+
     using Common.Library.Extension;
     using MagicPictureSetDownloader.Core.CardInfo;
 
     internal class CardParser : CardParserBase, IParser<CardWithExtraInfo>
     {
+        private static readonly Regex ParenthesesRegex = new Regex(@"\s+\(\w\)$", RegexOptions.Compiled);
+
         public IEnumerable<CardWithExtraInfo> Parse(string text)
         {
             string[] cutTexts = ExtractCardText(text);
@@ -100,7 +104,7 @@
             //Generate result class
             CardWithExtraInfo cardWithExtraInfo = new CardWithExtraInfo
             {
-                Name = infos.GetOrDefault(NameKey),
+                Name = RemoveParentheses(infos.GetOrDefault(NameKey)),
                 CastingCost = infos.GetOrDefault(ManaCostKey),
                 Text = infos.GetOrDefault(TextKey),
                 Type = infos.GetOrDefault(TypeKey),
@@ -191,6 +195,15 @@
         private string GetToughness(string text)
         {
             return text.Split('/')[1].HtmlTrim();
+        }
+        private string RemoveParentheses(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return name;
+            }
+
+            return ParenthesesRegex.Replace(name, string.Empty).HtmlTrim();
         }
     }
 }
