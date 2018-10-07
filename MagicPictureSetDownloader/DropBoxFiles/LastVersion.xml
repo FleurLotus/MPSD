@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="10.6">
+  <Last Number="11.0">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Guilds of Ravnica</Comment>
+    <Comment>Version with Auto creation of new Block, Card price, Guild Packs, Extract Image</Comment>
   </Last>
+  <Old Number="10.6">
+    <Comment>Version with Guilds of Ravnica</Comment>
+  </Old>
   <Old Number="10.5">
     <Comment>Version with Magic Core 2019 and Commander 2018</Comment>
   </Old>
