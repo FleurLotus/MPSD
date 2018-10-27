@@ -186,6 +186,9 @@
 
                 repo.ExecuteBatch(UpdateQueries.CorrectHasFoilTrue);
                 repo.ExecuteBatch(UpdateQueries.CorrectHasFoilFalse);
+
+                //11.1
+                repo.ExecuteBatch(UpdateQueries.CorrectBattleBondPartnerNotFlipCard);
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
