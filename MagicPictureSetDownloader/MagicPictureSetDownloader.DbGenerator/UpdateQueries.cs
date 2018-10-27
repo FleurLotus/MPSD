@@ -123,5 +123,11 @@ WHERE Code IN ('V15','V16','V17',
 SET HasFoil = 1
 WHERE Code IN ('CNS','EXO')
 ";
+        public const string CorrectBattleBondPartnerNotFlipCard =
+@"UPDATE Card
+SET OtherPartName = NULL 
+WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE IdGatherer between 445969 And 445990)
+";
+
     }
 }
