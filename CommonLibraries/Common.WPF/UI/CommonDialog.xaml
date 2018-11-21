@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:dialog="clr-namespace:Common.ViewModel.Dialog;assembly=Common.ViewModel"
+        xmlns:conv="clr-namespace:Common.WPF.Converter"
         d:DataContext="{d:DesignInstance Type=dialog:DialogViewModelBase}"
         Title="{Binding Display.Title}"
         mc:Ignorable="d" SizeToContent="WidthAndHeight" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
@@ -14,8 +15,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Styles.xaml"/>
-                <ResourceDictionary Source="..\Resources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
+           </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Label">
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
@@ -42,10 +42,10 @@
         <ContentControl Grid.Row="0" Content="{Binding}" />
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="{Binding Display.OkCommandLabel}" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OkCommandLabel, Converter={StaticResource no2vConv} }"/>
-            <Button Content="{Binding Display.OtherCommandLabel}" Command="{Binding OtherCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OtherCommandLabel, Converter={StaticResource no2vConv} }"/>
-            <Button Content="{Binding Display.Other2CommandLabel}" Command="{Binding Other2Command}" Style="{StaticResource BottomButton}"  Visibility="{Binding Display.Other2CommandLabel, Converter={StaticResource no2vConv} }"/>
-            <Button Content="{Binding Display.CancelCommandLabel}" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.CancelCommandLabel, Converter={StaticResource no2vConv} }"/>
+            <Button Content="{Binding Display.OkCommandLabel}" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OkCommandLabel, Converter={conv:AggregateConverter {conv:ObjectNullToBoolConverter}, {conv:BoolInvertConverter}, {conv:BoolToVisibilityConverter}}}"/>
+            <Button Content="{Binding Display.OtherCommandLabel}" Command="{Binding OtherCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.OtherCommandLabel, Converter={conv:AggregateConverter {conv:ObjectNullToBoolConverter}, {conv:BoolInvertConverter}, {conv:BoolToVisibilityConverter}}}"/>
+            <Button Content="{Binding Display.Other2CommandLabel}" Command="{Binding Other2Command}" Style="{StaticResource BottomButton}"  Visibility="{Binding Display.Other2CommandLabel, Converter={conv:AggregateConverter {conv:ObjectNullToBoolConverter}, {conv:BoolInvertConverter}, {conv:BoolToVisibilityConverter}}}"/>
+            <Button Content="{Binding Display.CancelCommandLabel}" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}" Visibility="{Binding Display.CancelCommandLabel, Converter={conv:AggregateConverter {conv:ObjectNullToBoolConverter}, {conv:BoolInvertConverter}, {conv:BoolToVisibilityConverter}}}"/>
         </StackPanel>
     </Grid>
 </Window>

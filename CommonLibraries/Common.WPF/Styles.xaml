@@ -42,7 +42,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type MenuItem}" d:DataContext="{d:DesignInstance menu:MenuViewModel }">
+    <Style TargetType="{x:Type MenuItem}">
         <Setter Property="Header" Value="{Binding Path=MenuText}" />
         <Setter Property="Command" Value="{Binding Path=Command}" />
         <Setter Property="CommandParameter" Value="{Binding Path=CommandParameter}" />

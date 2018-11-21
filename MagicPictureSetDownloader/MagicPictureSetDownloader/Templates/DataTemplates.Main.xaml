@@ -7,12 +7,9 @@
 
                     xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
-
-                    xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
-                    xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-
+                    xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+                    xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
                     xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel"
-                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
 
                     mc:Ignorable="d"
                     >
@@ -24,7 +21,7 @@
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
         <TreeView ItemsSource="{Binding Root}">
             <i:Interaction.Behaviors>
-                <behavior:BindableSelectedItemBehavior SelectedItem="{binding:TwoWayBinding Selected}" />
+                <fl:BindableSelectedItemBehavior SelectedItem="{fl:TwoWayBinding Selected}" />
             </i:Interaction.Behaviors>
             <!-- Keep color when treeview hasn't the focus -->
             <TreeView.Resources>
@@ -37,7 +34,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={StaticResource t2iConv}}" Visibility="{Binding Converter={StaticResource h2vConv}}"/>
+                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={conv:TreeToTreeImageConverter}}" Visibility="{Binding Converter={conv:TreeToVisibleConverter}}"/>
                         <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
                     </Grid>
                 </HierarchicalDataTemplate>
@@ -61,12 +58,12 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Tree Options" Padding="5,0" VerticalAlignment="Center" FontWeight="Bold"  />
                 <Button Grid.Column="1" Grid.Row="0" Command="{Binding UpCommand}">
-                    <Image Source="{Binding Source={x:Static res:ResourceManager.Up}, Converter={StaticResource bm2iConv}}"/>
+                    <Image Source="{Binding Source={x:Static res:ResourceManager.Up}, Converter={conv:BitmapToImageConverter}}"/>
                 </Button>
                 <Button Grid.Column="2" Grid.Row="0" Command="{Binding DownCommand}">
-                    <Image Source="{Binding Source={x:Static res:ResourceManager.Down}, Converter={StaticResource bm2iConv}}"/>
+                    <Image Source="{Binding Source={x:Static res:ResourceManager.Down}, Converter={conv:BitmapToImageConverter}}"/>
                 </Button>
-                <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding All}" SelectedIndex="{binding:TwoWayBinding SelectedIndex}">
+                <ListBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" ItemsSource="{Binding All}" SelectedIndex="{fl:TwoWayBinding SelectedIndex}">
                     <ListBox.ItemContainerStyle>
                         <Style BasedOn="{StaticResource {x:Type ListBoxItem}}" TargetType="ListBoxItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -96,7 +93,7 @@
             <CheckBox Grid.Column="2" Padding="5,0" VerticalAlignment="Center" IsChecked="{Binding IsAscendingOrder}">
                 <CheckBox.Template>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <Image Source="{Binding IsAscendingOrder, Converter={StaticResource b2iConv}}"/>
+                        <Image Source="{Binding IsAscendingOrder, Converter={conv:BoolToOrderImageConverter}}"/>
                     </ControlTemplate>
                 </CheckBox.Template>
             </CheckBox>
@@ -129,27 +126,27 @@
                 <Border Grid.Row="1" Margin="0,10">
                     <Control Template="{StaticResource CardInfoControlTemplate}" />
                 </Border>
-                <Border Grid.Row="2" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}">
+                <Border Grid.Row="2" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}">
                     <Control DataContext="{Binding OtherCardPart}" Template="{StaticResource CardInfoControlTemplate}"/>
                 </Border>
             </Grid>
 
-            <TabControl Grid.Row="2" Margin="10,0" TabStripPlacement="Left" Background="Transparent" wpf:TabControlExtensions.SelectOnlyVisibleTabs="True"
+            <TabControl Grid.Row="2" Margin="10,0" TabStripPlacement="Left" Background="Transparent" fl:TabControlExtensions.SelectOnlyVisibleTabs="True"
                         DataContext="{Binding Path=DataContext, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
                         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}" >
-                <TabItem Header="Picture" wpf:TabItemExtensions.Visibility="{Binding Options.ShowPicture, Converter={StaticResource b2vConv}}">
+                <TabItem Header="Picture" fl:TabItemExtensions.Visibility="{Binding Options.ShowPicture, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource ImageControlTemplate}" Margin="10" HorizontalAlignment="Center" />
                 </TabItem>
-                <TabItem Header="Rules" wpf:TabItemExtensions.Visibility="{Binding Options.ShowRules, Converter={StaticResource b2vConv}}">
+                <TabItem Header="Rules" fl:TabItemExtensions.Visibility="{Binding Options.ShowRules, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource RulesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
-                <TabItem Header="Price" wpf:TabItemExtensions.Visibility="{Binding Options.ShowPrices, Converter={StaticResource b2vConv}}">
+                <TabItem Header="Price" fl:TabItemExtensions.Visibility="{Binding Options.ShowPrices, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource PricesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
-                <TabItem Header="In Collection" wpf:TabItemExtensions.Visibility="{Binding Options.ShowStatistics, Converter={StaticResource b2vConv}}">
+                <TabItem Header="In Collection" fl:TabItemExtensions.Visibility="{Binding Options.ShowStatistics, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource StatisticsControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
-                <TabItem Header="Languages" wpf:TabItemExtensions.Visibility="{Binding Options.ShowOtherLanguages, Converter={StaticResource b2vConv}}">
+                <TabItem Header="Languages" fl:TabItemExtensions.Visibility="{Binding Options.ShowOtherLanguages, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource OtherLanguagesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
             </TabControl>

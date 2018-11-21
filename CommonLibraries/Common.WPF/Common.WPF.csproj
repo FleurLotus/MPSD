@@ -64,13 +64,16 @@
     <Compile Include="Binding\TwoWayBinding.cs" />
     <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
     <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />
-    <Compile Include="Converter\NoConvertBackMultiConverter.cs" />
-    <Compile Include="Converter\NoConvertBackConverter.cs" />
+    <Compile Include="Converter\ConverterBase\Converter.cs" />
+    <Compile Include="Converter\ConverterBase\MultiConverter.cs" />
+    <Compile Include="Converter\ConverterBase\NoConvertBackMultiConverter.cs" />
+    <Compile Include="Converter\ConverterBase\NoConvertBackConverter.cs" />
     <Compile Include="Behavior\FocusBehavior.cs" />
     <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />
     <Compile Include="Converter\ImageSourceConverter.cs" />
     <Compile Include="Converter\ProgressBarFillToRectConverter.cs" />
     <Compile Include="Converter\BoolInvertConverter.cs" />
+    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\AggregateConverter.cs" />
     <Compile Include="Converter\ObjectNullToBoolConverter.cs" />
     <Compile Include="Converter\ValueIsZeroToBoolConverter.cs" />
@@ -103,10 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="DataTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

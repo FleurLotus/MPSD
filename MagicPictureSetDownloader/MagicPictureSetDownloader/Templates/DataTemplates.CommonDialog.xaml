@@ -10,10 +10,8 @@
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
-
-                    xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
-                    xmlns:cwpf="clr-namespace:Common.WPF;assembly=Common.WPF"
+                    xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
+                    xmlns:fl="http://schemas.fleurlotus.com/xaml/"
 
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
 
@@ -42,23 +40,23 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image Grid.Column="0" MaxHeight="15" Source="{Binding Icon, Converter={StaticResource ba2iConv}}" />
+                    <Image Grid.Column="0" MaxHeight="15" Source="{Binding Icon, Converter={conv:ByteArrayToImageConverter}}" />
                     <Label Grid.Column="1" Content="{Binding GathererName}" VerticalAlignment="Center" Padding="5,0" />
                 </Grid>
             </Grid>
             <Label Grid.Column="0" Grid.Row="1" Content="Name"/>
-            <TextBox Grid.Column="1" Grid.Row="1" Text="{binding:TwoWayBinding Name}" />
+            <TextBox Grid.Column="1" Grid.Row="1" Text="{fl:TwoWayBinding Name}" />
             <Label Grid.Column="0" Grid.Row="2" Content="Code"/>
             <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
-                <TextBox Width="80" Text="{binding:TwoWayBinding Code}" MaxLength="10"/>
+                <TextBox Width="80" Text="{fl:TwoWayBinding Code}" MaxLength="10"/>
                 <Button Margin="5,0" Width="60" Content="Get Icon" Command="{Binding GetIconCommand }"/>
-                <CheckBox Margin="5,0" Content="HasFoil" IsChecked="{binding:TwoWayBinding HasFoil}" VerticalAlignment="Center"/>
+                <CheckBox Margin="5,0" Content="HasFoil" IsChecked="{fl:TwoWayBinding HasFoil}" VerticalAlignment="Center"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="3" Content="Block"/>
             <ComboBox  Grid.Column="1" Grid.Row="3" SelectedItem="{Binding BlockSelected}" ItemsSource="{Binding Blocks}" />
             <Label Grid.Column="0" Grid.Row="4" Content="Position in Block"/>
             <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal">
-                <ComboBox Width="100" SelectedItem="{Binding Position}" IsEnabled="{Binding BlockSelected, Converter={StaticResource no2bConv}}">
+                <ComboBox Width="100" SelectedItem="{Binding Position}" IsEnabled="{Binding BlockSelected, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}}}">
                     <system:Int32>1</system:Int32>
                     <system:Int32>2</system:Int32>
                     <system:Int32>3</system:Int32>
@@ -88,13 +86,13 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Show picture" IsChecked="{binding:TwoWayBinding Options.ShowPicture}"/>
-                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show rules" IsChecked="{binding:TwoWayBinding Options.ShowRules}"/>
-                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show prices" IsChecked="{binding:TwoWayBinding Options.ShowPrices}"/>
-                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Show other languages" IsChecked="{binding:TwoWayBinding Options.ShowOtherLanguages}"/>
-                    <CheckBox Grid.Row="4" VerticalAlignment="Center" Content="Show statistics" IsChecked="{binding:TwoWayBinding Options.ShowStatistics}"/>
+                    <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Show picture" IsChecked="{fl:TwoWayBinding Options.ShowPicture}"/>
+                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show rules" IsChecked="{fl:TwoWayBinding Options.ShowRules}"/>
+                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show prices" IsChecked="{fl:TwoWayBinding Options.ShowPrices}"/>
+                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Show other languages" IsChecked="{fl:TwoWayBinding Options.ShowOtherLanguages}"/>
+                    <CheckBox Grid.Row="4" VerticalAlignment="Center" Content="Show statistics" IsChecked="{fl:TwoWayBinding Options.ShowStatistics}"/>
                     <CheckBox Grid.Row="5" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
-                              IsChecked="{binding:TwoWayBinding Options.ShowOnlyCurrentStatistics}" IsEnabled="{Binding Options.ShowStatistics}"/>
+                              IsChecked="{fl:TwoWayBinding Options.ShowOnlyCurrentStatistics}" IsEnabled="{Binding Options.ShowStatistics}"/>
                 </Grid>
             </GroupBox>
          
@@ -103,7 +101,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" /> 
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Auto check upgrade at startup" IsChecked="{binding:TwoWayBinding Options.AutoCheckUpgrade}"/>
+                    <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Auto check upgrade at startup" IsChecked="{fl:TwoWayBinding Options.AutoCheckUpgrade}"/>
                 </Grid>
             </GroupBox>
         </Grid>
@@ -121,11 +119,11 @@
                 <ColumnDefinition Width="*" MinWidth="150"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Grid.Row="0" Content="Path to export"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Text="{binding:TwoWayBinding Path}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Text="{fl:TwoWayBinding Path}"/>
             <Label Grid.Column="0" Grid.Row="1" Content="Type"/>
-            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ExportOptions}" SelectedItem="{binding:TwoWayBinding ExportOptionSelected}"/>
+            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ExportOptions}" SelectedItem="{fl:TwoWayBinding ExportOptionSelected}"/>
             <Label Grid.Column="0" Grid.Row="2" Content="Suffix"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{binding:TwoWayBinding Suffix}"/>
+            <TextBox Grid.Column="1" Grid.Row="2" Text="{fl:TwoWayBinding Suffix}"/>
         </Grid>
     </DataTemplate>
 
@@ -153,11 +151,11 @@
 
                     <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
                     <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding EditionSelected}"  />
-                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{fl:TwoWayBinding EditionSelected}"  />
+                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
-                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}"  />
-                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}"  />
+                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{fl:TwoWayBinding IsFoil}"/>
                 </Grid>
             </GroupBox>
         </Grid>
@@ -200,9 +198,9 @@
                         <ColumnDefinition Width="70"/>
                     </Grid.ColumnDefinitions>
 
-                    <CheckBox Grid.Row="0" Grid.Column="1" Content="For copy" Margin="10,2" FontWeight="Bold" IsChecked="{binding:TwoWayBinding Copy}"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" Content="For copy" Margin="10,2" FontWeight="Bold" IsChecked="{fl:TwoWayBinding Copy}"/>
                     <Label Grid.Column="0" Grid.Row="1" Content="Collection" Padding="10,0,0,0" VerticalContentAlignment="Center" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{binding:TwoWayBinding CardCollectionSelected}" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Collections}" SelectedItem="{fl:TwoWayBinding CardCollectionSelected}" />
 
                     <Control Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
                 </Grid>
@@ -235,10 +233,10 @@
                     <Label Grid.Column="0" Grid.Row="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center" />
                     <Label Grid.Column="0" Grid.Row="1" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center" />
 
-                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{binding:TwoWayBinding EditionSelected}" />
-                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
-                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
-                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{fl:TwoWayBinding EditionSelected}" />
+                    <Image Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}" />
+                    <CheckBox Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" Content="Foil" IsChecked="{fl:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
 
                     <Control Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Template="{StaticResource QuantityControlTemplate}" DataContext="{Binding Source}"/>
                 </Grid>
@@ -280,19 +278,19 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Content="Name"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0" Style="{StaticResource BorderedTextBox}" Text="{binding:TwoWayBinding Name}"/>
-            <CheckBox Grid.Column="2" Grid.Row="0" Content="All languages" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding AllLanguages}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5,0" Style="{StaticResource BorderedTextBox}" Text="{fl:TwoWayBinding Name}"/>
+            <CheckBox Grid.Column="2" Grid.Row="0" Content="All languages" VerticalAlignment="Center" IsChecked="{fl:TwoWayBinding AllLanguages}"/>
 
             <Label Grid.Column="0" Grid.Row="2" Grid.RowSpan="4" Content="Perimeter" />
-            <RadioButton Grid.Column="1" Grid.Row="2" Margin="5,0" GroupName="Perimeter" Content="All existing cards" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=All}"/>
-            <RadioButton Grid.Column="1" Grid.Row="3" Margin="5,0" GroupName="Perimeter" Content="Based on collection" IsChecked="{binding:TwoWayBinding PerimeterScope, Converter={StaticResource e2bConv}, ConverterParameter=CollectionBased}"/>
+            <RadioButton Grid.Column="1" Grid.Row="2" Margin="5,0" GroupName="Perimeter" Content="All existing cards" IsChecked="{fl:TwoWayBinding PerimeterScope, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=All}"/>
+            <RadioButton Grid.Column="1" Grid.Row="3" Margin="5,0" GroupName="Perimeter" Content="Based on collection" IsChecked="{fl:TwoWayBinding PerimeterScope, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=CollectionBased}"/>
 
-            <CheckBox Grid.Column="2" Grid.Row="2" Content="Exclude fun editions" IsChecked="{binding:TwoWayBinding ExcludeFunEditions}"/>
-            <CheckBox Grid.Column="2" Grid.Row="3" Content="Exclude online only editions" IsChecked="{binding:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
-            <CheckBox Grid.Column="2" Grid.Row="4" Content="Exclude special card" IsChecked="{binding:TwoWayBinding ExcludeSpecialCards}"/>
+            <CheckBox Grid.Column="2" Grid.Row="2" Content="Exclude fun editions" IsChecked="{fl:TwoWayBinding ExcludeFunEditions}"/>
+            <CheckBox Grid.Column="2" Grid.Row="3" Content="Exclude online only editions" IsChecked="{fl:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
+            <CheckBox Grid.Column="2" Grid.Row="4" Content="Exclude special card" IsChecked="{fl:TwoWayBinding ExcludeSpecialCards}"/>
 
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,10,5,0" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={StaticResource e2vConv}, ConverterParameter=CollectionBased}"/>
-            <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Margin="5,0" Visibility="{Binding PerimeterScope, Converter={StaticResource e2vConv}, ConverterParameter=CollectionBased}">
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,10,5,0" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}"/>
+            <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Margin="5,0" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -300,25 +298,25 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="0" ItemsSource="{Binding CountComparator}" SelectedItem="{binding:TwoWayBinding CountComparatorSelected}" />
-                <xctk:IntegerUpDown Grid.Column="1" Maximum="99" Minimum="1" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding CountSelected}" />
-                <CheckBox Grid.Column="2" Margin="20,0" Content="Include foil" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding CountIncludeFoil}"/>
-                <CheckBox Grid.Column="3" Content="Use name (all editions)" VerticalAlignment="Center" IsChecked="{binding:TwoWayBinding CountIsNameBased}"/>
+                <ComboBox Grid.Column="0" ItemsSource="{Binding CountComparator}" SelectedItem="{fl:TwoWayBinding CountComparatorSelected}" />
+                <xctk:IntegerUpDown Grid.Column="1" Maximum="99" Minimum="1" HorizontalAlignment="Left" Width="50" Value="{fl:TwoWayBinding CountSelected}" />
+                <CheckBox Grid.Column="2" Margin="20,0" Content="Include foil" VerticalAlignment="Center" IsChecked="{fl:TwoWayBinding CountIncludeFoil}"/>
+                <CheckBox Grid.Column="3" Content="Use name (all editions)" VerticalAlignment="Center" IsChecked="{fl:TwoWayBinding CountIsNameBased}"/>
             </Grid>
             
             <Label Grid.Column="0" Grid.Row="8" Content="Editions"/>
             <xctk:CheckComboBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
 
             <StackPanel Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton GroupName="Color" Width="50" Content="Or" IsChecked="{binding:TwoWayBinding ColorAggregation, Converter={StaticResource e2bConv}, ConverterParameter=Or}"/>
-                <RadioButton GroupName="Color" Width="50" Content="And" IsChecked="{binding:TwoWayBinding ColorAggregation, Converter={StaticResource e2bConv}, ConverterParameter=And}"/>
+                <RadioButton GroupName="Color" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding ColorAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
+                <RadioButton GroupName="Color" Width="50" Content="And" IsChecked="{fl:TwoWayBinding ColorAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="11" Content="Colors" />
             <xctk:CheckComboBox Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}"/>
 
             <StackPanel Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-                <RadioButton GroupName="Type" Width="50" Content="Or" IsChecked="{binding:TwoWayBinding TypeAggregation, Converter={StaticResource e2bConv}, ConverterParameter=Or}"/>
-                <RadioButton GroupName="Type" Width="50" Content="And" IsChecked="{binding:TwoWayBinding TypeAggregation, Converter={StaticResource e2bConv}, ConverterParameter=And}"/>
+                <RadioButton GroupName="Type" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding TypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
+                <RadioButton GroupName="Type" Width="50" Content="And" IsChecked="{fl:TwoWayBinding TypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="14" Content="Types" VerticalAlignment="Center"/>
             <xctk:CheckComboBox Grid.Column="1" Grid.Row="14" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
@@ -354,9 +352,9 @@
                     <StackPanel Grid.Column="0" Grid.Row="0" Margin="0,5" Orientation="Horizontal" HorizontalAlignment="Center"
                                 Grid.ColumnSpan="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ColumnDefinitions.Count, Mode=OneWay}" >
                         <RadioButton Margin="0,0,10,0" GroupName="All" Content="Input by Edition"
-                         IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByEdition}" />
+                         IsChecked="{fl:TwoWayBinding InputMode, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=ByEdition}" />
                         <RadioButton Margin="10,0,0,0" GroupName="All" Content="Input by Card"
-                         IsChecked="{binding:TwoWayBinding InputMode, Converter={StaticResource e2bConv}, ConverterParameter=ByCard}" />
+                         IsChecked="{fl:TwoWayBinding InputMode, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=ByCard}" />
                     </StackPanel>
 
                     <Label Grid.Column="0" Grid.Row="1" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
@@ -377,10 +375,10 @@
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" />
-                    <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
-                              behavior:FocusBehavior.IsFocused="{Binding IsFocused}" >
+                    <Label Grid.Column="0" Grid.Row="0" Content="Card name" Visibility="{Binding InputMode, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=ByCard}" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" IsEditable="True" Visibility="{Binding InputMode, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=ByCard}" 
+                              fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" SelectedValue="{fl:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
+                              fl:FocusBehavior.IsFocused="{Binding IsFocused}" >
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -389,14 +387,14 @@
                     </ComboBox>
 
                     <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" 
-                              SelectedValue="{binding:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
-                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={StaticResource t2iConv}}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
+                              SelectedValue="{fl:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
+                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Card name" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" />
-                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" Visibility="{Binding InputMode, Converter={StaticResource ne2vConv}, ConverterParameter=ByCard}" 
-                              cwpf:AutoComplete.Enabled="True" cwpf:AutoComplete.CaseInsensitive="True" SelectedValue="{binding:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
-                              behavior:FocusBehavior.IsFocused="{Binding IsFocused}" >
+                    <Label Grid.Column="0" Grid.Row="2" Content="Card name" Visibility="{Binding InputMode, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=ByCard}" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" IsEditable="True" Visibility="{Binding InputMode, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=ByCard}" 
+                              fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" SelectedValue="{fl:TwoWayBinding CardSelectedName}" ItemsSource="{Binding Cards}"
+                              fl:FocusBehavior.IsFocused="{Binding IsFocused}" >
                         <ComboBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <VirtualizingStackPanel />
@@ -419,22 +417,22 @@
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Column="0" Grid.Row="0" Content="Language" />
-                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Languages}" SelectedItem="{binding:TwoWayBinding LanguageSelected}" />
+                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}" />
 
-                    <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" Visibility="{Binding LanguageSelected, Converter={StaticResource no2vConv}}">
-                        <Image Width="30" Source="{Binding LanguageSelected.Name, Converter={StaticResource t2iConv}}" />
+                    <Border Grid.Column="0" Grid.Row="1" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" Visibility="{Binding LanguageSelected, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+                        <Image Width="30" Source="{Binding LanguageSelected.Name, Converter={conv:TreeToTreeImageConverter}}" />
                     </Border>
                     <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Translate}" />
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Quantity" />
                     <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
-                        <xctk:IntegerUpDown  Maximum="{Binding MaxCount}" Minimum="{Binding MinCount}" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding Count}" Margin="0,0,10,0"/>
+                        <xctk:IntegerUpDown  Maximum="{Binding MaxCount}" Minimum="{Binding MinCount}" HorizontalAlignment="Left" Width="50" Value="{fl:TwoWayBinding Count}" Margin="0,0,10,0"/>
                         <Button Content="+1" Command="{Binding IncreaseQuantityCommand}" CommandParameter="1" Width="20" Height="20" />
                         <Button Content="+2" Command="{Binding IncreaseQuantityCommand}" CommandParameter="2" Width="20" Height="20" />
                         <Button Content="+3" Command="{Binding IncreaseQuantityCommand}" CommandParameter="3" Width="20" Height="20" />
                         <Button Content="+4" Command="{Binding IncreaseQuantityCommand}" CommandParameter="4" Width="20" Height="20" />
                     </StackPanel>
-                    <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,0,10,0" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
+                    <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,0,10,0" Content="Foil" IsChecked="{fl:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
                 </Grid>
             </GroupBox>
 
@@ -472,7 +470,7 @@
             </Grid>
             <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" MaxHeight="500" RowHeight="25"
                       AlternatingRowBackground="Gainsboro"  AlternationCount="2" SelectionMode="Single" SelectionUnit="FullRow" CanUserSortColumns="False"
-                      ItemsSource="{Binding AuditInfos}" Visibility="{Binding AuditInfos.Count, Converter={StaticResource nz2vConv}}">
+                      ItemsSource="{Binding AuditInfos}" Visibility="{Binding AuditInfos.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="FontWeight" Value="Bold" />
@@ -488,7 +486,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-                                <Image Width="25" VerticalAlignment="Center"  Source="{Binding EditionName, Converter={StaticResource t2iConv}}" />
+                                <Image Width="25" VerticalAlignment="Center"  Source="{Binding EditionName, Converter={conv:TreeToTreeImageConverter}}" />
                                 <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -3,12 +3,10 @@
     using System;
     using System.Globalization;
     using System.Windows;
-    using System.Windows.Data;
 
-
-    public class ProgressBarFillToRectConverter : IMultiValueConverter
+    public class ProgressBarFillToRectConverter : NoConvertBackMultiConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (null != values && values.Length >= 4 && 
                 null != values[0] && null != values[1] && null != values[2] && null != values[3] &&
@@ -25,10 +23,5 @@
             }
             return new Rect(0, 0, 0, 0); // Default Zero size rectangle
         }
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

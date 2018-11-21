@@ -3,14 +3,12 @@
                     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                    
-                    
+                    xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+
                     xmlns:l="clr-namespace:MagicPictureSetDownloader"
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
-                    
-                    xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
-                    xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF"
+                    xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
 
                     mc:Ignorable="d"
                     >
@@ -46,8 +44,8 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Part Name" FontSize="15" HorizontalAlignment="Right" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}" />
-            <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Text="{Binding PartName}" Visibility="{Binding IsMultiPart, Converter={StaticResource b2vConv}}" />
+            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Part Name" FontSize="15" HorizontalAlignment="Right" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}" />
+            <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Text="{Binding PartName}" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}" />
 
             <Label Grid.Column="0" Grid.Row="1" Content="Block"/>
             <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding BlockName}"/>
@@ -57,8 +55,8 @@
             <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Rarity.Name}"/>
             <Label Grid.Column="2" Grid.Row="2" Content="Type"/>
             <TextBlock Grid.Column="3" Grid.Row="2" Text="{Binding Type}"/>
-            <Label Grid.Column="0" Grid.Row="3" Content="Casting Cost" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}"/>
-            <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding DisplayedCastingCost}" Visibility="{Binding CastingCost, Converter={StaticResource no2vConv}}">
+            <Label Grid.Column="0" Grid.Row="3" Content="Casting Cost" Visibility="{Binding CastingCost, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
+            <ItemsControl Grid.Column="1" Grid.Row="3" ItemsSource="{Binding DisplayedCastingCost}" Visibility="{Binding CastingCost, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -66,17 +64,17 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Width="12" Height="12" Source="{Binding Converter={StaticResource s2iConv}}"/>
+                        <Image Width="12" Height="12" Source="{Binding Converter={conv:StringToCastingCostImageConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyText}"
-                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
+                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
             <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding PowerToughnessLoyalty}"
-                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={StaticResource no2vConv}}"/>
+                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
 
             <Label Grid.Column="0" Grid.Row="5" Content="Text"/>
-            <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
+            <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={conv:TextToInlinesConverter }}" />
         </Grid>
     </ControlTemplate>
 
@@ -84,21 +82,21 @@
     <ControlTemplate x:Key="StatisticsControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <ListView.ItemsSource>
-                <MultiBinding Converter="{StaticResource c2sConv}">
+                <MultiBinding Converter="{conv:CardToStatisticsVisibleConverter}">
                     <Binding Path="Hierarchical.Selected"/>
                     <Binding Path="Options.ShowOnlyCurrentStatistics"/>
                     <Binding Path="Hierarchical.Name"/>
                 </MultiBinding>
             </ListView.ItemsSource>
             <ListView.Visibility>
-                <MultiBinding Converter="{StaticResource c2svConv}">
+                <MultiBinding Converter="{conv:CardToStatisticsVisibleConverter}">
                     <Binding Path="Hierarchical.Selected"/>
                     <Binding Path="Options.ShowOnlyCurrentStatistics"/>
                     <Binding Path="Hierarchical.Name"/>
                 </MultiBinding>
             </ListView.Visibility>
             <i:Interaction.Behaviors>
-                <behavior:GridViewColumnResizeBehavior />
+                <fl:GridViewColumnResizeBehavior />
             </i:Interaction.Behaviors>
 
             <ListView.View>
@@ -116,11 +114,11 @@
     <!-- Language Grid display -->
     <ControlTemplate x:Key="OtherLanguagesControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left" 
-                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2tConv}}"
-                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2tvConv}}"
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={conv:CardToLanguagesTranslationConverter}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={conv:CardToLanguagesTranslationVisibleConverter}}"
                   d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <i:Interaction.Behaviors>
-                <behavior:GridViewColumnResizeBehavior />
+                <fl:GridViewColumnResizeBehavior />
             </i:Interaction.Behaviors>
 
             <ListView.View>
@@ -136,7 +134,7 @@
                                     <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
                                     <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                                     <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
-                                        <Image Width="30" Source="{Binding Key, Converter={StaticResource t2iConv}}" />
+                                        <Image Width="30" Source="{Binding Key, Converter={conv:TreeToTreeImageConverter}}" />
                                     </Border>
                                     <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
                                     <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
@@ -154,11 +152,11 @@
     <ControlTemplate x:Key="RulesControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2rConv}}"
-                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2rvConv}}"
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={conv:CardToRulesConverter}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={conv:CardToRulesVisibleConverter}}"
                   d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <i:Interaction.Behaviors>
-                <behavior:GridViewColumnResizeBehavior />
+                <fl:GridViewColumnResizeBehavior />
             </i:Interaction.Behaviors>
             
             <ListView.ItemContainerStyle>
@@ -187,11 +185,11 @@
     <ControlTemplate x:Key="PricesControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ItemsSource="{Binding Hierarchical.Selected, Converter={StaticResource c2pConv}}"
-                  Visibility="{Binding Hierarchical.Selected, Converter={StaticResource c2pvConv}}"
+                  ItemsSource="{Binding Hierarchical.Selected, Converter={conv:CardToPricesConverter}}"
+                  Visibility="{Binding Hierarchical.Selected, Converter={conv:CardToPricesVisibleConverter}}"
                   d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <i:Interaction.Behaviors>
-                <behavior:GridViewColumnResizeBehavior />
+                <fl:GridViewColumnResizeBehavior />
             </i:Interaction.Behaviors>
 
             <ListView.ItemContainerStyle>
@@ -213,7 +211,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource v2pConv}, StringFormat='0.00 $'}"/>
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={conv:ValueToPriceVisibleConverter}, StringFormat='0.00 $'}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -222,14 +220,14 @@
     <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=0}" />
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={StaticResource c2iConv}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={conv:CardToImageConverter}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={StaticResource c2aConv}}" />
+                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={conv:CardToRotationAngleConverter}}" />
                         <TranslateTransform>
                             <TranslateTransform.X>
-                                <MultiBinding Converter="{StaticResource h2mConv}">
+                                <MultiBinding Converter="{conv:HeightToMoveConverter}">
                                     <Binding Path="Hierarchical.Selected"/>
                                     <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
                                     <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
@@ -251,7 +249,7 @@
                 <ColumnDefinition Width="70"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0"  Content="Count" HorizontalAlignment="Center"/>
-            <Slider Grid.Column="1" Margin="0,5"  Value="{binding:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
+            <Slider Grid.Column="1" Margin="0,5"  Value="{fl:TwoWayBinding Count}" Maximum="{Binding MaxCount}"/>
             <StackPanel Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                 <Label Content="{Binding Count}"/>
                 <Label Content="/"/>

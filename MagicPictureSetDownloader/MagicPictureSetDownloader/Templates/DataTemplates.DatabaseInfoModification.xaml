@@ -4,8 +4,8 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
-                    
-                    xmlns:binding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+                    xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
+                    xmlns:fl="http://schemas.fleurlotus.com/xaml/"
                     >
 
     <!-- DatabaseInfoModification -->
@@ -21,9 +21,9 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Name"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={StaticResource roenConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{fl:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterExceptNew}}"/>
             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Alternative Name"/>
-            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{binding:TwoWayBinding AlternativeName}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{fl:TwoWayBinding AlternativeName}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
         </Grid>
     </DataTemplate>
 
@@ -38,7 +38,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Name"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{fl:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
         </Grid>
     </DataTemplate>
 
@@ -58,21 +58,21 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Name"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={StaticResource roenConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{fl:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterExceptNew}}"/>
             <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Content="Code"/>
             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
-                <TextBox Width="110" MaxLength="7" VerticalAlignment="Center" Text="{binding:TwoWayBinding Code}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
-                <CheckBox VerticalAlignment="Center" Margin="5,0" Content="HasFoil" IsChecked="{binding:TwoWayBinding HasFoil}" IsEnabled="{Binding State, Converter={StaticResource eneConv}}"/>
+                <TextBox Width="110" MaxLength="7" VerticalAlignment="Center" Text="{fl:TwoWayBinding Code}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
+                <CheckBox VerticalAlignment="Center" Margin="5,0" Content="HasFoil" IsChecked="{fl:TwoWayBinding HasFoil}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="GathererName"/>
-            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{binding:TwoWayBinding GathererName}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{fl:TwoWayBinding GathererName}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
             <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Release Date"/>
-            <DatePicker Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" SelectedDate="{binding:TwoWayBinding ReleaseDate}" IsEnabled="{Binding State, Converter={StaticResource eneConv}}"/>
+            <DatePicker Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" SelectedDate="{fl:TwoWayBinding ReleaseDate}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Block"/>
-            <ComboBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" SelectedItem="{binding:TwoWayBinding Block}" ItemsSource="{Binding Blocks}" IsEnabled="{Binding State, Converter={StaticResource eneConv}}"/>
+            <ComboBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" SelectedItem="{fl:TwoWayBinding Block}" ItemsSource="{Binding Blocks}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Block Position"/>
             <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal">
-                <ComboBox Width="100" VerticalAlignment="Center" SelectedItem="{binding:TwoWayBinding BlockPosition}" IsEnabled="{Binding State, Converter={StaticResource eneConv}}">
+                <ComboBox Width="100" VerticalAlignment="Center" SelectedItem="{fl:TwoWayBinding BlockPosition}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}">
                     <system:Int32>1</system:Int32>
                     <system:Int32>2</system:Int32>
                     <system:Int32>3</system:Int32>
@@ -80,7 +80,7 @@
                 <Button Content="Reset" Width="70" Margin="5,0" Command="{Binding ResetBlockCommand}"/>
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="Card Number"/>
-            <TextBox Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Text="{binding:TwoWayBinding CardNumber, TargetNullValue={x:Static system:String.Empty}}" IsReadOnly="{Binding State, Converter={StaticResource rofneConv}}"/>
+            <TextBox Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Text="{fl:TwoWayBinding CardNumber, TargetNullValue={x:Static system:String.Empty}}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
         </Grid>
     </DataTemplate>
 
@@ -95,7 +95,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="{Binding DefaultTranslation.Language.Name}"/>
-            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{binding:TwoWayBinding DefaultTranslation.Translation}" IsReadOnly="True" />
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{fl:TwoWayBinding DefaultTranslation.Translation}" IsReadOnly="True" />
 
             <ItemsControl Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0"  ItemsSource="{Binding AllTranslations}">
                 <ItemsControl.ItemsPanel>
@@ -111,7 +111,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Label Grid.Column="0" VerticalAlignment="Center" Content="{Binding Language.Name}"/>
-                            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{binding:TwoWayBinding Translation}" IsReadOnly="{Binding DataContext.State, RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={StaticResource rofneConv}}"/>
+                            <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{fl:TwoWayBinding Translation}" IsReadOnly="{Binding DataContext.State, RelativeSource={RelativeSource AncestorType=ItemsControl}, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

@@ -5,11 +5,12 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:wpfui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
+        xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
         xmlns:edition="clr-namespace:MagicPictureSetDownloader.ViewModel.Download.Edition;assembly=MagicPictureSetDownloader.ViewModel"
-        Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}"
+        Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}"
         d:DataContext="{d:DesignInstance Type=edition:DownloadEditionViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
         Width="600" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
@@ -27,7 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Visibility="{Binding Editions.Count, Converter={StaticResource nz2vConv}}">
+        <Border Grid.Row="0" Visibility="{Binding Editions.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
             <Grid>
                 <Grid.Resources>
                     <CollectionViewSource Source="{Binding Editions}" x:Key="editions">
@@ -43,7 +44,7 @@
                 <Grid Grid.Row="0" Grid.Column="0">
                     <Button Width="72" Content="Go" HorizontalAlignment="Center" Command="{Binding FeedEditionsCommand}" />
 
-                    <wpfui:ProgressBar ShowETA="True" Visibility="{Binding IsBusy, Converter={StaticResource b2vConv}}"
+                    <fl:ProgressBar ShowETA="True" Visibility="{Binding IsBusy, Converter={fl:BoolToVisibilityConverter}}"
                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}"
                                        />
                 </Grid>
@@ -55,7 +56,7 @@
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsEnabled="{Binding Name, Converter={StaticResource no2bConv}}" d:DataContext="{d:DesignInstance Type=edition:EditionInfoViewModel}">
+                            <Grid IsEnabled="{Binding Name, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}}}" d:DataContext="{d:DesignInstance Type=edition:EditionInfoViewModel}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="25" />
@@ -64,12 +65,12 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox Grid.Row="0" Grid.Column="0" IsChecked="{Binding Active}" VerticalAlignment="Center"
-                                          IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={StaticResource nbConv}}"/>
-                                <Image Grid.Row="0" Grid.Column="1" Margin="5,0"  MaxHeight="15" Source="{Binding Name, Converter={StaticResource t2iConv}}" />
+                                          IsEnabled="{Binding DataContext.IsBusy, RelativeSource={RelativeSource AncestorType={x:Type Window}}, Converter={fl:BoolInvertConverter}}"/>
+                                <Image Grid.Row="0" Grid.Column="1" Margin="5,0"  MaxHeight="15" Source="{Binding Name, Converter={conv:TreeToTreeImageConverter}}" />
                                 <Label Grid.Row="0" Grid.Column="2" Content="{Binding Name}" VerticalAlignment="Center" />
                                 <Label Grid.Row="0" Grid.Column="3" Content="{Binding BlockName}" VerticalAlignment="Center" />
-                                <Border Grid.Row="0" Grid.Column="4" Width="200"  Visibility="{Binding Active, Converter={StaticResource b2vConv}}">
-                                    <wpfui:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={StaticResource b2vConv}}"
+                                <Border Grid.Row="0" Grid.Column="4" Width="200"  Visibility="{Binding Active, Converter={fl:BoolToVisibilityConverter}}">
+                                    <fl:ProgressBar Visibility="{Binding DataContext.IsBusy, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Converter={fl:BoolToVisibilityConverter}}"
                                                        Value="{Binding DownloadReporter.Current, Mode=Oneway}"  Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
                                 </Border>
                             </Grid>
@@ -79,7 +80,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="1" Visibility="{Binding Message, Converter={StaticResource no2vConv}}" BorderThickness="2" BorderBrush="Red">
+        <Border Grid.Row="1" Visibility="{Binding Message, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}" BorderThickness="2" BorderBrush="Red">
             <TextBlock Text="{Binding Message}"/>
         </Border>
     </Grid>

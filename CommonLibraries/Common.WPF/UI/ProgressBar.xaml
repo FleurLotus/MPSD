@@ -3,12 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:conv="clr-namespace:Common.WPF.Converter"
              mc:Ignorable="d" d:DesignHeight="175" d:DesignWidth="244"
              FontWeight="Bold">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources.xaml"/>
                 <ResourceDictionary Source="..\Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
@@ -27,7 +27,7 @@
             <Label.Clip>
                 <RectangleGeometry>
                     <RectangleGeometry.Rect>
-                        <MultiBinding Converter="{StaticResource pbf2rectConv}">
+                        <MultiBinding Converter="{conv:ProgressBarFillToRectConverter}">
                             <Binding Path="Value">
                                 <Binding.RelativeSource>
                                     <RelativeSource Mode="FindAncestor" AncestorType="{x:Type UserControl}"/>
