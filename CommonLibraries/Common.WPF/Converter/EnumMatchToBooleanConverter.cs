@@ -6,9 +6,9 @@
     using System.Windows.Data;
 
     [ValueConversion(typeof(Enum), typeof(bool))]
-    public class EnumMatchToBooleanConverter : IValueConverter
+    public class EnumMatchToBooleanConverter : Converter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (null == value || null == parameter)
             {
@@ -20,7 +20,7 @@
             return targetValues.Split(new[] { '@' }, StringSplitOptions.RemoveEmptyEntries)
                                .Any(targetValue => checkValue.Equals(targetValue, StringComparison.InvariantCultureIgnoreCase));
         }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (null == value || null == parameter)
             {

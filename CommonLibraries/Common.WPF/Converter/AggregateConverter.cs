@@ -1,21 +1,29 @@
 ﻿namespace Common.WPF.Converter
 {
     using System;
-    using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Windows.Data;
 
-    public class AggregateConverter : List<IValueConverter>, IValueConverter
+    public class AggregateConverter : NoConvertBackConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return this.Aggregate(value, (current, valueConverter) => valueConverter.Convert(current, targetType, parameter, culture));
-        }
+        private readonly IValueConverter[] _converters;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public AggregateConverter(IValueConverter converter1, IValueConverter converter2)
         {
-            throw new NotImplementedException();
+            _converters = new[] { converter1, converter2 };
+        }
+        public AggregateConverter(IValueConverter converter1, IValueConverter converter2, IValueConverter converter3)
+        {
+            _converters = new[] { converter1, converter2, converter3 };
+        }
+        public AggregateConverter(IValueConverter converter1, IValueConverter converter2, IValueConverter converter3, IValueConverter converter4)
+        {
+            _converters = new[] { converter1, converter2, converter3, converter4 };
+        }
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return _converters.Aggregate(value, (current, valueConverter) => valueConverter.Convert(current, targetType, parameter, culture));
         }
     }
 }

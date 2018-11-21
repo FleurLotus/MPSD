@@ -6,8 +6,7 @@
         xmlns:binding="clr-namespace:Common.WPF.Binding"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:converter="clr-namespace:Common.WPF.Converter"
-        xmlns:wpf="clr-namespace:Common.WPF"
+        xmlns:conv="clr-namespace:Common.WPF.Converter"
         xmlns:input="clr-namespace:Common.ViewModel.Input;assembly=Common.ViewModel"
         xmlns:behavior="clr-namespace:Common.WPF.Behavior"
         mc:Ignorable="d" 
@@ -20,11 +19,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
-            <converter:AggregateConverter x:Key="e2vConv">
-                <converter:EnumMatchToBooleanConverter/>
-                <BooleanToVisibilityConverter/>
-            </converter:AggregateConverter>
+
             <Style TargetType="Label">
                 <Setter Property="FontWeight" Value="Bold"/>
                 <Setter Property="Margin" Value="0,5,0,0"/>
@@ -55,16 +50,16 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="{Binding Label}" />
         <ComboBox Grid.Row="1" ItemsSource="{Binding List}" SelectedItem="{binding:TwoWayBinding Selected}" 
-                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=ChooseInList@MoveFromListToOther@ChooseInListAndTextNeed}"/>
+                  Visibility="{Binding InputMode, Converter={conv:AggregateConverter {conv:EnumMatchToBooleanConverter}, {conv:BoolToVisibilityConverter}}, ConverterParameter=ChooseInList@MoveFromListToOther@ChooseInListAndTextNeed}"/>
         <TextBox Grid.Row="2" Text="{binding:TwoWayBinding Text}" 
-                 Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=TextNeed@ChooseInListAndTextNeed}"/>
-        <Label Grid.Row="3" Content="{Binding Label2}"  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
+                 Visibility="{Binding InputMode, Converter={conv:AggregateConverter {conv:EnumMatchToBooleanConverter}, {conv:BoolToVisibilityConverter}}, ConverterParameter=TextNeed@ChooseInListAndTextNeed}"/>
+        <Label Grid.Row="3" Content="{Binding Label2}"  Visibility="{Binding InputMode, Converter={conv:AggregateConverter {conv:EnumMatchToBooleanConverter}, {conv:BoolToVisibilityConverter}}, ConverterParameter=MoveFromListToOther}"/>
         <ComboBox Grid.Row="4" ItemsSource="{Binding List2}" SelectedItem="{binding:TwoWayBinding Selected2}" 
-                  Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=MoveFromListToOther}"/>
+                  Visibility="{Binding InputMode, Converter={conv:AggregateConverter {conv:EnumMatchToBooleanConverter}, {conv:BoolToVisibilityConverter}}, ConverterParameter=MoveFromListToOther}"/>
         <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Ok" IsDefault="True" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
             <Button Content="Cancel" IsCancel="True" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}" 
-                    Visibility="{Binding InputMode, Converter={StaticResource e2vConv}, ConverterParameter=Question@TextNeed@ChooseInList@ChooseInListAndTextNeed@MoveFromListToOther}"/>
+                    Visibility="{Binding InputMode, Converter={conv:AggregateConverter {conv:EnumMatchToBooleanConverter}, {conv:BoolToVisibilityConverter}}, ConverterParameter=Question@TextNeed@ChooseInList@ChooseInListAndTextNeed@MoveFromListToOther}"/>
         </StackPanel>
     </Grid>
 </Window>

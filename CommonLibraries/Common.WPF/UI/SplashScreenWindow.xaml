@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:conv="clr-namespace:Common.WPF.Converter"
         xmlns:sp="clr-namespace:Common.ViewModel.SplashScreen;assembly=Common.ViewModel"
         xmlns:ui="clr-namespace:Common.WPF.UI"
 
@@ -13,24 +14,16 @@
         WindowStyle="None" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" 
         ShowInTaskbar="False" SizeToContent="WidthAndHeight"
         MaxHeight="500" MaxWidth="500">
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="..\Resources.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid Margin="5">
         <Image Stretch="Uniform" Source="{Binding SourceUri}" />
         <Label VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Margin="50,0,50,50" FontSize="20" Content="{Binding Info}" 
-               Visibility="{Binding ShowProgress, Converter={StaticResource nb2vConv}}" 
+               Visibility="{Binding ShowProgress, Converter={conv:AggregateConverter {conv:BoolInvertConverter}, {conv:BoolToVisibilityConverter}}}" 
                Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}, Path=Foreground}"
                Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}, Path=Background}"
                />
         <ui:ProgressBar ShowPerCent="True" VerticalAlignment="Bottom" Margin="50,0,50,50" Maximum="{Binding MaxValue}" FontSize="20"
                         Value="{Binding CurrentValue}" Text="{Binding Info}" 
-                        Visibility="{Binding ShowProgress, Converter={StaticResource b2vConv}}"
+                        Visibility="{Binding ShowProgress, Converter={conv:BoolToVisibilityConverter}}"
                         Foreground="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}, Path=Foreground}"
                         Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type Window}}, Path=Background}"
                />

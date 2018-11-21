@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:download="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
-        xmlns:ui="clr-namespace:Common.WPF.UI;assembly=Common.WPF"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         d:DataContext="{d:DesignInstance Type=download:DownloadViewModelBase, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
         ResizeMode="NoResize"  SizeToContent="WidthAndHeight"
@@ -25,8 +25,8 @@
             <RowDefinition Height="70"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ui:ProgressBar Grid.Row="0" ShowETA="True" Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
-        <Border Grid.Row="1" Visibility="{Binding Message, Converter={StaticResource no2vConv}}" BorderThickness="2" BorderBrush="Red">
+        <fl:ProgressBar Grid.Row="0" ShowETA="True" Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
+        <Border Grid.Row="1" Visibility="{Binding Message, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}" BorderThickness="2" BorderBrush="Red">
             <TextBlock Text="{Binding Message}"/>
         </Border>
     </Grid>

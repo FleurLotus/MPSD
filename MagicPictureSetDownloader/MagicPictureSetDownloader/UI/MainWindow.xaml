@@ -5,17 +5,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:wpfbinding="clr-namespace:Common.WPF.Binding;assembly=Common.WPF"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
-        xmlns:wpf="clr-namespace:Common.WPF;assembly=Common.WPF"
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
-
+        xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="{Binding Title}" Height="600" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={StaticResource bm2iConv}}" >
+        Title="{Binding Title}" Height="600" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}" >
     <Window.Resources>
         <ResourceDictionary>
-            <wpf:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
+            <fl:SeparatorStyleSelector x:Key="separatorStyleSelector"/>
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Black"/>
                 <Setter Property="BorderThickness" Value="1"/>
@@ -79,11 +78,11 @@
 
             <Border Grid.Column="0">
                 <StackPanel Margin="0,25">
-                    <ToggleButton Content=">>" Height="25" IsChecked="{wpfbinding:TwoWayBinding ShowFilterConfig}" />
+                    <ToggleButton Content=">>" Height="25" IsChecked="{fl:TwoWayBinding ShowFilterConfig}" />
                 </StackPanel>
             </Border>
 
-            <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={StaticResource nbConv}}">
+            <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={fl:BoolInvertConverter}}">
                 <!-- Split Tree/Text/Image -->
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -109,7 +108,7 @@
 
             <!-- Analysers control -->
             <ContentControl Grid.Column="1" Margin="2,25" Width="180" Height="Auto" VerticalAlignment="Top" HorizontalAlignment="Left"
-                            Visibility="{Binding ShowFilterConfig, Converter={StaticResource b2vConv}}" Content="{Binding Analysers}"/>
+                            Visibility="{Binding ShowFilterConfig, Converter={fl:BoolToVisibilityConverter}}" Content="{Binding Analysers}"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.Resources>
@@ -123,13 +122,13 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="{Binding StatusBarInfo}" Visibility="{Binding StatusBarInfo, Converter={StaticResource no2vConv}}"/>
-            <Label Grid.Column="2" Content="New version available!" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated}" />
-            <Label Grid.Column="2" Content="Error while checking" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=CantCheck}" />
-            <Button Grid.Column="3" Content="Hide" Padding="5,0" Command="{Binding HideResultCommand}" Visibility="{Binding UpgradeStatus, Converter={StaticResource e2vConv}, ConverterParameter=NeedToBeUpdated@CantCheck}" />
+            <Label Grid.Column="0" Content="{Binding StatusBarInfo}" Visibility="{Binding StatusBarInfo, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
+            <Label Grid.Column="2" Content="New version available!" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=NeedToBeUpdated}" />
+            <Label Grid.Column="2" Content="Error while checking" Foreground="Red" Visibility="{Binding UpgradeStatus, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CantCheck}" />
+            <Button Grid.Column="3" Content="Hide" Padding="5,0" Command="{Binding HideResultCommand}" Visibility="{Binding UpgradeStatus, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=NeedToBeUpdated@CantCheck}" />
         </Grid>
         <!-- Loading -->
-        <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Visibility="{Binding Loading, Converter={StaticResource b2vConv}}">
+        <Grid Grid.Row="0" Grid.RowSpan="3" Background="White" Visibility="{Binding Loading, Converter={fl:BoolToVisibilityConverter}}">
             <Ellipse x:Name="Ellipse" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Width="300" Height="300">
                 <Ellipse.RenderTransform>
                     <TransformGroup>
