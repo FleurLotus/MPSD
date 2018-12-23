@@ -79,6 +79,20 @@
                 {"W16", "" },
                 //Welcome Deck 2017
                 {"W17", "" },
+                //Guilds of Ravnica Intro pack
+                {"GK1_BOROS", "" },
+                {"GK1_DIMIR", "" },
+                {"GK1_GOLGAR", "" },
+                {"GK1_IZZET", "" },
+                {"GK1_SELESN", "" },
+                //Guild of Ravnica Mythic Edition
+                {"MPS_GRN", "" },
+                 //Ultimate Master Toppers
+                {"UMA_BOX", "" },
+                //Game Night
+                {"GNT", "" },
+                //Gift Pack
+                {"G18", "" },
         };
         private readonly IMagicDatabaseReadOnly _magicDatabase = MagicDatabaseManager.ReadOnly;
 
