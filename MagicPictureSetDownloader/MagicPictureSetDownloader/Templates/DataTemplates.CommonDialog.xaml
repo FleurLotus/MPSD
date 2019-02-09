@@ -427,7 +427,13 @@
                     <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Text="{Binding Translate}" />
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Quantity" />
-                    <xctk:IntegerUpDown Grid.Column="1" Grid.Row="2" Maximum="99" Minimum="-99" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding Count}" />
+                    <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal">
+                        <xctk:IntegerUpDown  Maximum="{Binding MaxCount}" Minimum="{Binding MinCount}" HorizontalAlignment="Left" Width="50" Value="{binding:TwoWayBinding Count}" Margin="0,0,10,0"/>
+                        <Button Content="+1" Command="{Binding IncreaseQuantityCommand}" CommandParameter="1" Width="20" Height="20" />
+                        <Button Content="+2" Command="{Binding IncreaseQuantityCommand}" CommandParameter="2" Width="20" Height="20" />
+                        <Button Content="+3" Command="{Binding IncreaseQuantityCommand}" CommandParameter="3" Width="20" Height="20" />
+                        <Button Content="+4" Command="{Binding IncreaseQuantityCommand}" CommandParameter="4" Width="20" Height="20" />
+                    </StackPanel>
                     <CheckBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"  Margin="0,0,10,0" Content="Foil" IsChecked="{binding:TwoWayBinding IsFoil}" IsEnabled="{Binding EditionSelected.HasFoil}"/>
                 </Grid>
             </GroupBox>

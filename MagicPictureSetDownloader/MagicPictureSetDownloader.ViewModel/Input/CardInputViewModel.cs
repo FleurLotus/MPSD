@@ -45,6 +45,8 @@
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
+        public static int MaxCount = 99;
+        public static int MinCount = -99;
 
         public CardInputViewModel(string name)
         {
@@ -77,6 +79,7 @@
             Display.CancelCommandLabel = "Close";
             ChangeCollectionCommand = new RelayCommand(ChangeCollectionCommandExecute);
             ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
+            IncreaseQuantityCommand = new RelayCommand(IncreaseQuantityCommandExecute);
 
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
             _collections = _magicDatabase.GetAllCollections().ToArray();
@@ -96,6 +99,7 @@
         }
         public ICommand ChangeCollectionCommand { get; }
         public ICommand ChangeInputLanguageCommand { get; }
+        public ICommand IncreaseQuantityCommand { get; }
         public RangeObservableCollection<IEdition> Editions { get; }
         public RangeObservableCollection<ILanguage> Languages { get; }
         public RangeObservableCollection<string> Cards { get; }
@@ -206,7 +210,18 @@
             {
                 if (value != _count)
                 {
-                    _count = value;
+                    if (value > MaxCount)
+                    {
+                        _count = MaxCount;
+                    }
+                    else if (value < MinCount)
+                    {
+                        _count = MinCount;
+                    }
+                    else
+                    {
+                        _count = value;
+                    }
                     OnNotifyPropertyChanged(() => Count);
                 }
             }
@@ -274,7 +289,11 @@
                     SelectInputLanguage(languageName);
                 }
             }
-
+        }
+        private void IncreaseQuantityCommandExecute(object obj)
+        {
+            int inc = int.Parse(obj.ToString());
+            Count += inc;
         }
         private void InitWindow()
         {
