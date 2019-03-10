@@ -45,13 +45,15 @@
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
+        private readonly int _defaultQuantity;
         public static int MaxCount = 99;
         public static int MinCount = -99;
 
-        public CardInputViewModel(string name)
+        public CardInputViewModel(string name, int defaultQuantity)
         {
             _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
             _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
+            _defaultQuantity = defaultQuantity;
 
             //Set directly field and not property to avoid save the retrieve value
             IOption option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Mode");
@@ -335,7 +337,7 @@
             Languages.Clear();
             CurrentCollectionDetail = null;
             LanguageSelected = null;
-            Count = 1;
+            Count = _defaultQuantity;
             IsFoil = false;
             ResetFocus();
         }
