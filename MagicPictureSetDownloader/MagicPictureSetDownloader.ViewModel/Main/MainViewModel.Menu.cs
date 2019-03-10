@@ -218,7 +218,7 @@
         }
         private void CardInputCommandExecute(object o)
         {
-            OnDialogWanted(new CardInputViewModel(Hierarchical.Name));
+            OnDialogWanted(new CardInputViewModel(Hierarchical.Name, (int)o));
             LoadCardsHierarchy();
         }
         private void SearchCommandExecute(object o)
@@ -461,7 +461,8 @@
                 return;
             }
 
-            ContextMenuRoot.AddChild(new MenuViewModel("Input cards", new RelayCommand(CardInputCommandExecute)));
+            ContextMenuRoot.AddChild(new MenuViewModel("Add cards", new RelayCommand(CardInputCommandExecute), 1));
+            ContextMenuRoot.AddChild(new MenuViewModel("Remove cards", new RelayCommand(CardInputCommandExecute), -1));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
 
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
