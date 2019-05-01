@@ -125,6 +125,8 @@
                 httpClientHandler.Credentials = _credentials;
             }
 
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
             return new HttpClient(httpClientHandler);
 
         }
