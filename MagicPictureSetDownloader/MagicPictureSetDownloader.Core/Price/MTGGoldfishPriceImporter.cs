@@ -85,8 +85,18 @@
                 {"GK1_GOLGAR", "" },
                 {"GK1_IZZET", "" },
                 {"GK1_SELESN", "" },
+               //Guilds of Ravnica Allegiance pack
+                {"GK2_GRUUL", "" },
+                {"GK2_AZORIU", "" },
+                {"GK2_ORZHOV", "" },
+                {"GK2_RAKDOS", "" },
+                {"GK2_SIMIC", "" },
                 //Guild of Ravnica Mythic Edition
                 {"MPS_GRN", "" },
+                //Ravnica Allegiance Mythic Edition
+                {"MPS_RNA", "" },
+                //War of the Spark Mythic Edition
+                {"MPS_WAR", "" },
                  //Ultimate Master Toppers
                 {"UMA_BOX", "" },
                 //Game Night
