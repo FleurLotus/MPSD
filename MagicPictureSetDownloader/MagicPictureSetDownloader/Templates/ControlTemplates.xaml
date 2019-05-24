@@ -174,7 +174,7 @@
                     <GridViewColumn Header="Rule">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Text}" TextWrapping="Wrap"/>
+                                <l:PicturedTextBlock TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Threading;
 
@@ -20,6 +21,12 @@
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            //For debugging Binding issue
+            PresentationTraceSources.Refresh();
+            PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
+            PresentationTraceSources.DataBindingSource.Listeners.Add(new DebugTraceListener());
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
+
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
             string softwareRenderMode = ConfigurationManager.AppSettings["SoftwareRenderMode"];
