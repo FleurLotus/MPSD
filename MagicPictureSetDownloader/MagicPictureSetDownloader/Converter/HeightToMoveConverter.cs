@@ -14,14 +14,14 @@ namespace MagicPictureSetDownloader.Converter
         {
             if (value == null || value.Length != 3)
             {
-                return 0;
+                return 0.0;
             }
 
             HierarchicalResultNodeViewModel node = value[0] as HierarchicalResultNodeViewModel;
 
             if (node == null || node.Card.OtherCardPart == null || !node.Card.OtherCardPart.Is90DegreeSide)
             {
-                return 0;
+                return 0.0;
             }
 
             double actualHeight = (double)value[1];
