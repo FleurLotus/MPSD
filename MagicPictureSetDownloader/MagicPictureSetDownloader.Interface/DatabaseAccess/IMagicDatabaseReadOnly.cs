@@ -11,6 +11,7 @@
         ICollection<ICardCollection> GetAllCollections();
         ICollection<IBlock> GetAllBlocks();
         ICollection<IAudit> GetAllAudits();
+        ICollection<IPreconstructedDeck> GetAllPreconstructedDecks();
 
         IList<IOption> GetOptions(TypeOfOption type);
         IOption GetOption(TypeOfOption type, string key);
@@ -34,6 +35,8 @@
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, int idGatherer);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage);
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
+        IPreconstructedDeck GetPreconstructedDeck(string preconstructedDeckName);
+        ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
 
         string[] GetMissingPictureUrls();
         ICardAllDbInfo[] GetCardsWithPicture();

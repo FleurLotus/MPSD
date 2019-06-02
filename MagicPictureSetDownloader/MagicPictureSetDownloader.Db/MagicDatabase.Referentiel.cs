@@ -26,9 +26,13 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<int, IList<IPrice>> _prices = new Dictionary<int, IList<IPrice>>();
         private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, IPreconstructedDeck> _preconstructedDecks = new Dictionary<int, IPreconstructedDeck>();
+        private readonly IDictionary<int, IList<IPreconstructedDeckCardEdition>> _preconstructedDeckCards = new Dictionary<int, IList<IPreconstructedDeckCardEdition>>();
+
         //For quicker access
         private readonly IDictionary<int, ICard> _cardsbyId = new Dictionary<int, ICard>();
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
+
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
@@ -262,6 +266,81 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(DatabaseType.Data, price, InsertInReferential);
             }
         }
+        public void InsertNewPreconstructedDeck(string preconstructedDeckName)
+        {
+            using (new WriterLock(_lock))
+            {
+                if (GetPreconstructedDeck(preconstructedDeckName) != null)
+                {
+                    return;
+                }
+
+                PreconstructedDeck preconstructedDeck = new PreconstructedDeck { Name = preconstructedDeckName };
+                AddToDbAndUpdateReferential(DatabaseType.Data, preconstructedDeck, InsertInReferential);
+            }
+        }
+        public void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, int idGatherer, int count)
+        {
+            using (new WriterLock(_lock))
+            {
+                using (BatchMode())
+                {
+                    if (GetPreconstructedDeck(idPreconstructedDeck) == null)
+                    {
+                        return;
+                    }
+
+                    IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idGatherer);
+                    if (preconstructedDeckCard == null)
+                    {
+                        //Insert new 
+                        if (count <= 0)
+                        {
+                            return;
+                        }
+
+                        PreconstructedDeckCardEdition newPreconstructedDeckCardEdition = new PreconstructedDeckCardEdition
+                        {
+                            IdPreconstructedDeck = idPreconstructedDeck,
+                            IdGatherer = idGatherer,
+                            Number = count
+                        };
+
+
+                        AddToDbAndUpdateReferential(DatabaseType.Data, newPreconstructedDeckCardEdition, InsertInReferential);
+
+                        return;
+                    }
+
+                    //Update
+                    if (count < 0 || count == preconstructedDeckCard.Number)
+                    {
+                        return;
+                    }
+
+                    PreconstructedDeckCardEdition updatePreconstructedDeckCardEdition = preconstructedDeckCard as PreconstructedDeckCardEdition;
+                    if (updatePreconstructedDeckCardEdition == null)
+                    {
+                        return;
+                    }
+
+                    if (count == 0)
+                    {
+                        RemoveFromDbAndUpdateReferential(DatabaseType.Data, updatePreconstructedDeckCardEdition, RemoveFromReferential);
+
+                        return;
+                    }
+
+                    updatePreconstructedDeckCardEdition.Number = count;
+
+                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                    {
+                        Mapper<PreconstructedDeckCardEdition>.UpdateOne(cnx, updatePreconstructedDeckCardEdition);
+                    }
+                }
+            }
+        }
+
         public void DeleteOption(TypeOfOption type, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -332,6 +411,8 @@ namespace MagicPictureSetDownloader.Db
                 _cardEditions.Clear();
                 _collections.Clear();
                 _allCardInCollectionCount.Clear();
+                _preconstructedDecks.Clear();
+                _preconstructedDeckCards.Clear();
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
                 {
@@ -396,6 +477,16 @@ namespace MagicPictureSetDownloader.Db
                 foreach (Price price in Mapper<Price>.LoadAll(cnx))
                 {
                     InsertInReferential(price);
+                }
+
+                foreach (PreconstructedDeck preconstructedDeck in Mapper<PreconstructedDeck>.LoadAll(cnx))
+                {
+                    InsertInReferential(preconstructedDeck);
+                }
+
+                foreach (PreconstructedDeckCardEdition preconstructedDeckCardEdition in Mapper<PreconstructedDeckCardEdition>.LoadAll(cnx))
+                {
+                    InsertInReferential(preconstructedDeckCardEdition);
                 }
             }
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
@@ -523,6 +614,26 @@ namespace MagicPictureSetDownloader.Db
         {
             _blocks.Add(block.Id, block);
         }
+        private void InsertInReferential(IPreconstructedDeck preconstructedDeck)
+        {
+            _preconstructedDecks.Add(preconstructedDeck.Id, preconstructedDeck);
+        }
+        private void InsertInReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
+        {
+            IList<IPreconstructedDeckCardEdition> list;
+            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out list))
+            {
+                list = new List<IPreconstructedDeckCardEdition>();
+                _preconstructedDeckCards.Add(preconstructedDeckCardEdition.IdPreconstructedDeck, list);
+            }
+
+            if (list.Contains(preconstructedDeckCardEdition))
+            {
+                throw new Exception("Invalid addition");
+            }
+
+            list.Add(preconstructedDeckCardEdition);
+        }
 
         private void RemoveFromReferential(IOption option)
         {
@@ -544,6 +655,14 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
 
+        }
+        private void RemoveFromReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
+        {
+            IList<IPreconstructedDeckCardEdition> list;
+            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out list))
+            {
+                list.Remove(preconstructedDeckCardEdition);
+            }
         }
         private void CheckReferentialLoaded()
         {

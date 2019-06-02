@@ -43,6 +43,8 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="IPreconstructedDeckCardEdition.cs" />
+    <Compile Include="IPreconstructedDeck.cs" />
     <Compile Include="IPrice.cs" />
     <Compile Include="IRuling.cs" />
     <Compile Include="IAudit.cs" />
