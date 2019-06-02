@@ -190,6 +190,18 @@
                 //11.1
                 repo.ExecuteBatch(UpdateQueries.CorrectBattleBondPartnerNotFlipCard);
             }
+            if (dbVersion <= 12)
+            {
+                //12.0
+                if (!repo.TableExists("PreconstructedDeck"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.CreatePreconstructedDeckTable);
+                }
+                if (!repo.TableExists("PreconstructedDeckCardEdition"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.CreatePreconstructedDeckCardEditionTable);
+                }
+            }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)
         {

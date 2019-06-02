@@ -176,6 +176,61 @@ namespace MagicPictureSetDownloader.Db
                 return languages;
             }
         }
+        public IPreconstructedDeck GetPreconstructedDeck(string preconstructedDeckName)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _preconstructedDecks.Values.FirstOrDefault(pd => string.Compare(pd.Name, preconstructedDeckName, StringComparison.InvariantCultureIgnoreCase) == 0);
+            }
+        }
+        public ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck)
+        {
+            if (preconstructedDeck == null)
+            {
+                return null;
+            }
+
+            return GetPreconstructedDeckCards(preconstructedDeck.Id);
+        }
+        private ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(int idPreconstructedDeck)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                if (_preconstructedDeckCards.TryGetValue(idPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> preconstructedDeckCards))
+                {
+                    return preconstructedDeckCards.ToArray();
+                }
+                return new IPreconstructedDeckCardEdition[0];
+            }
+        }
+        private IPreconstructedDeckCardEdition GetPreconstructedDeckCard(int idPreconstructedDeck, int idGatherer)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                ICollection<IPreconstructedDeckCardEdition> preconstructedDeckCards = GetPreconstructedDeckCards(idPreconstructedDeck);
+                if (preconstructedDeckCards == null)
+                {
+                    return null;
+                }
+
+                return preconstructedDeckCards.FirstOrDefault(pdc => pdc.IdGatherer == idGatherer);
+            }
+        }
+        public IPreconstructedDeck GetPreconstructedDeck(int idPreconstructedDeck)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                if (_preconstructedDecks.TryGetValue(idPreconstructedDeck, out IPreconstructedDeck preconstructedDeck))
+                {
+                    return preconstructedDeck;
+                }
+                return null;
+            }
+        }
 
         public IOption GetOption(TypeOfOption type, string key)
         {
@@ -343,6 +398,14 @@ namespace MagicPictureSetDownloader.Db
             using (new ReaderLock(_lock))
             {
                 return new List<ILanguage>(_languages.Values).AsReadOnly();
+            }
+        }
+        public ICollection<IPreconstructedDeck> GetAllPreconstructedDecks()
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return new List<IPreconstructedDeck>(_preconstructedDecks.Values).AsReadOnly();
             }
         }
         [SuppressMessage("ReSharper", "UnusedMember.Local")]

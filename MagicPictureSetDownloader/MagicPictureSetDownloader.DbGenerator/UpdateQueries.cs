@@ -129,5 +129,20 @@ SET OtherPartName = NULL
 WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE IdGatherer between 445969 And 445990)
 ";
 
+        public const string CreatePreconstructedDeckTable =
+@"CREATE TABLE [PreconstructedDeck] (
+  [Id] INTEGER PRIMARY KEY NOT NULL 
+, [Name] TEXT NOT NULL
+, [Source] TEXT NOT NULL
+)";
+
+        public const string CreatePreconstructedDeckCardEditionTable =
+@"CREATE TABLE [PreconstructedDeckCardEdition] (
+  [IdPreconstructedDeck] INTEGER NOT NULL 
+, [IdGatherer] INTEGER NOT NULL 
+, [Number] INTEGER NOT NULL
+, FOREIGN KEY([IdGatherer]) REFERENCES `CardEdition`([IdGatherer])
+, FOREIGN KEY([IdPreconstructedDeck]) REFERENCES [PreconstructedDeck]([Id])
+)";
     }
 }
