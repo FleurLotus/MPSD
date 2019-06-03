@@ -88,7 +88,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    OnNotifyPropertyChanged(() => Name);
+                    OnNotifyPropertyChanged(nameof(Name));
                 }
             }
         }
@@ -100,7 +100,7 @@
                 if (value != _excludeFunEditions)
                 {
                     _excludeFunEditions = value;
-                    OnNotifyPropertyChanged(() => ExcludeFunEditions);
+                    OnNotifyPropertyChanged(nameof(ExcludeFunEditions));
                 }
             }
         }
@@ -112,7 +112,7 @@
                 if (value != _excludeOnlineOnlyEditions)
                 {
                     _excludeOnlineOnlyEditions = value;
-                    OnNotifyPropertyChanged(() => ExcludeOnlineOnlyEditions);
+                    OnNotifyPropertyChanged(nameof(ExcludeOnlineOnlyEditions));
                 }
             }
         }
@@ -124,7 +124,7 @@
                 if (value != _excludeSpecialCards)
                 {
                     _excludeSpecialCards = value;
-                    OnNotifyPropertyChanged(() => ExcludeSpecialCards);
+                    OnNotifyPropertyChanged(nameof(ExcludeSpecialCards));
                 }
             }
         }
@@ -143,7 +143,7 @@
                         }
 
                         _countComparatorWanted = (ComparisonType)i;
-                        OnNotifyPropertyChanged(() => CountComparatorSelected);
+                        OnNotifyPropertyChanged(nameof(CountComparatorSelected));
                         break;
                     }
                 }
@@ -157,7 +157,7 @@
                 if (value != _countSelected)
                 {
                     _countSelected = value;
-                    OnNotifyPropertyChanged(() => CountSelected);
+                    OnNotifyPropertyChanged(nameof(CountSelected));
                 }
             }
         }
@@ -169,7 +169,7 @@
                 if (value != _countIsNameBased)
                 {
                     _countIsNameBased = value;
-                    OnNotifyPropertyChanged(() => CountIsNameBased);
+                    OnNotifyPropertyChanged(nameof(CountIsNameBased));
                 }
             }
         }
@@ -181,7 +181,7 @@
                 if (value != _countIncludeFoil)
                 {
                     _countIncludeFoil = value;
-                    OnNotifyPropertyChanged(() => CountIncludeFoil);
+                    OnNotifyPropertyChanged(nameof(CountIncludeFoil));
                 }
             }
         }
@@ -193,7 +193,7 @@
                 if (value != _allLanguages)
                 {
                     _allLanguages = value;
-                    OnNotifyPropertyChanged(() => AllLanguages);
+                    OnNotifyPropertyChanged(nameof(AllLanguages));
                 }
             }
         }
@@ -205,7 +205,7 @@
                 if (value != _perimeterScope)
                 {
                     _perimeterScope = value;
-                    OnNotifyPropertyChanged(() => PerimeterScope);
+                    OnNotifyPropertyChanged(nameof(PerimeterScope));
                 }
             }
         }
@@ -217,7 +217,7 @@
                 if (value != _colorAggregation)
                 {
                     _colorAggregation = value;
-                    OnNotifyPropertyChanged(() => ColorAggregation);
+                    OnNotifyPropertyChanged(nameof(ColorAggregation));
                 }
             }
         }
@@ -229,7 +229,7 @@
                 if (value != _typeAggregation)
                 {
                     _typeAggregation = value;
-                    OnNotifyPropertyChanged(() => TypeAggregation);
+                    OnNotifyPropertyChanged(nameof(TypeAggregation));
                 }
             }
         }

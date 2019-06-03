@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
     using System.Threading;
@@ -42,18 +41,18 @@
             get { return Validate(); }
         }
 
-        protected void AddValidationRule<T>(IEnumerable<Expression<Func<T>>> expressions, Func<string> rule)
+        protected void AddValidationRule(IEnumerable<string> propertyNames, Func<string> rule)
         {
-            if (expressions == null)
+            if (propertyNames == null)
             {
-                throw new ArgumentNullException(nameof(expressions));
+                throw new ArgumentNullException(nameof(propertyNames));
             }
-            foreach (var expression in expressions)
+            foreach (var propertyName in propertyNames)
             {
-                AddValidationRule(expression, rule);
+                AddValidationRule(propertyName, rule);
             }
         }
-        protected void AddValidationRule<T>(Expression<Func<T>> expression, IEnumerable<Func<string>> rules)
+        protected void AddValidationRule(string propertyName, IEnumerable<Func<string>> rules)
         {
             if (rules == null)
             {
@@ -62,17 +61,15 @@
 
             foreach (var rule in rules)
             {
-                AddValidationRule(expression, rule);
+                AddValidationRule(propertyName, rule);
             }
         }
-        protected void AddValidationRule<T>(Expression<Func<T>> expression, Func<string> rule)
+        protected void AddValidationRule(string propertyName, Func<string> rule)
         {
             if (rule == null)
             {
                 throw new ArgumentNullException(nameof(rule));
             }
-
-            string propertyName = expression.GetMemberName();
 
             if (_toBeValidatedProperty.All(pi => pi.Name != propertyName))
             {

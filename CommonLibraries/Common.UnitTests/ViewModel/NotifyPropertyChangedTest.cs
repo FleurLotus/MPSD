@@ -3,7 +3,6 @@
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
-    using System.Linq.Expressions;
 
     using Common.ViewModel;
 
@@ -97,29 +96,29 @@
             public void InitLink()
             {
                 //Test Chaining
-                AddLinkedProperty(() => Property1, () => Property2);
-                AddLinkedProperty(() => Property2, () => Property3);
+                AddLinkedProperty(nameof(Property1), nameof(Property2));
+                AddLinkedProperty(nameof(Property2), nameof(Property3));
 
                 //Test multiple child
-                AddLinkedProperty(() => Property4, new Expression<Func<object>>[] { () => Property5, () => Property6 });
+                AddLinkedProperty(nameof(Property4), new string[] { nameof(Property5), nameof(Property6) });
 
                 //Test no cycle
-                AddLinkedProperty(() => Property7, () => Property8);
-                AddLinkedProperty(() => Property8, () => Property7);
+                AddLinkedProperty(nameof(Property7), nameof(Property8));
+                AddLinkedProperty(nameof(Property8), nameof(Property7));
             }
             public void InitLinkDuplicate()
             {
-                AddLinkedProperty(() => Property1, () => Property1);
+                AddLinkedProperty(nameof(Property1), nameof(Property1));
             }
             public void InitLinkUnknownSource()
             {
                 //Unknown because only instance | public property are allowed
-                AddLinkedProperty(() => Inner, () => Property1);
+                AddLinkedProperty(nameof(Inner), nameof(Property1));
             }
             public void InitLinkUnknownDestination()
             {
                 //Unknown because only instance | public property are allowed
-                AddLinkedProperty(() => Property1, () => Inner);
+                AddLinkedProperty(nameof(Property1), nameof(Inner));
             }
 
             public static string Inner { get; set; }
@@ -142,7 +141,7 @@
                     if (value != _property8)
                     {
                         _property8 = value;
-                        OnNotifyPropertyChanged(() => Property8);
+                        OnNotifyPropertyChanged(nameof(Property8));
                     }
                 }
             }
@@ -154,7 +153,7 @@
                     if (value != _property7)
                     {
                         _property7 = value;
-                        OnNotifyPropertyChanged(() => Property7);
+                        OnNotifyPropertyChanged(nameof(Property7));
                     }
                 }
             }
@@ -166,7 +165,7 @@
                     if (value != _property6)
                     {
                         _property6 = value;
-                        OnNotifyPropertyChanged(() => Property6);
+                        OnNotifyPropertyChanged(nameof(Property6));
                     }
                 }
             }
@@ -178,7 +177,7 @@
                     if (value != _property5)
                     {
                         _property5 = value;
-                        OnNotifyPropertyChanged(() => Property5);
+                        OnNotifyPropertyChanged(nameof(Property5));
                     }
                 }
             }
@@ -190,7 +189,7 @@
                     if (value != _property4)
                     {
                         _property4 = value;
-                        OnNotifyPropertyChanged(() => Property4);
+                        OnNotifyPropertyChanged(nameof(Property4));
                     }
                 }
             }
@@ -202,7 +201,7 @@
                     if (value != _property3)
                     {
                         _property3 = value;
-                        OnNotifyPropertyChanged(() => Property3);
+                        OnNotifyPropertyChanged(nameof(Property3));
                     }
                 }
             }
@@ -215,7 +214,7 @@
                     if (value != _property2)
                     {
                         _property2 = value;
-                        OnNotifyPropertyChanged(() => Property2);
+                        OnNotifyPropertyChanged(nameof(Property2));
                     }
                 }
             }
@@ -227,7 +226,7 @@
                     if (value != _property1)
                     {
                         _property1 = value;
-                        OnNotifyPropertyChanged(() => Property1);
+                        OnNotifyPropertyChanged(nameof(Property1));
                     }
                 }
             }

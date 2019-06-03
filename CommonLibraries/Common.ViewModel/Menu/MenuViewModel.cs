@@ -34,7 +34,7 @@
             Command = command;
             CommandParameter = commandParameter;
             _children = new List<MenuViewModel>();
-            AddLinkedProperty(() => Children, () => HasChild);
+            AddLinkedProperty(nameof(Children), nameof(HasChild));
         }
 
         public IList<MenuViewModel> Children
@@ -58,7 +58,7 @@
                 if (value != _isChecked)
                 {
                     _isChecked = value;
-                    OnNotifyPropertyChanged(() => IsChecked);
+                    OnNotifyPropertyChanged(nameof(IsChecked));
                 }
             }
         }
@@ -70,7 +70,7 @@
                 if (value != _isCheckable)
                 {
                     _isCheckable = value;
-                    OnNotifyPropertyChanged(() => IsCheckable);
+                    OnNotifyPropertyChanged(nameof(IsCheckable));
                 }
             }
         }
@@ -80,7 +80,7 @@
             if (!_children.Contains(child))
             {
                 _children.Add(child);
-                OnNotifyPropertyChanged(() => Children);
+                OnNotifyPropertyChanged(nameof(Children));
             }
         }
         public void RemoveChild(MenuViewModel child)
@@ -88,13 +88,13 @@
             if (_children.Contains(child))
             {
                 _children.Remove(child);
-                OnNotifyPropertyChanged(() => Children);
+                OnNotifyPropertyChanged(nameof(Children));
             }
         }
         public void RemoveAllChildren()
         {
             _children.Clear();
-            OnNotifyPropertyChanged(() => Children);
+            OnNotifyPropertyChanged(nameof(Children));
         }
     }
 }

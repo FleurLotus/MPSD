@@ -36,7 +36,7 @@
                 if (value != _showPicture)
                 {
                     _showPicture = value;
-                    OnNotifyPropertyChanged(() => ShowPicture);
+                    OnNotifyPropertyChanged(nameof(ShowPicture));
                 }
             }
         }
@@ -48,7 +48,7 @@
                 if (value != _showStatistics)
                 {
                     _showStatistics = value;
-                    OnNotifyPropertyChanged(() => ShowStatistics);
+                    OnNotifyPropertyChanged(nameof(ShowStatistics));
                 }
             }
         }
@@ -60,7 +60,7 @@
                 if (value != _showOnlyCurrentStatistics)
                 {
                     _showOnlyCurrentStatistics = value;
-                    OnNotifyPropertyChanged(() => ShowOnlyCurrentStatistics);
+                    OnNotifyPropertyChanged(nameof(ShowOnlyCurrentStatistics));
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _showOtherLanguages)
                 {
                     _showOtherLanguages = value;                  
-                    OnNotifyPropertyChanged(() => ShowOtherLanguages);
+                    OnNotifyPropertyChanged(nameof(ShowOtherLanguages));
                 }
             }
         }
@@ -84,7 +84,7 @@
                 if (value != _showRules)
                 {
                     _showRules = value;
-                    OnNotifyPropertyChanged(() => ShowRules);
+                    OnNotifyPropertyChanged(nameof(ShowRules));
                 }
             }
         }
@@ -96,7 +96,7 @@
                 if (value != _showPrices)
                 {
                     _showPrices = value;
-                    OnNotifyPropertyChanged(() => ShowPrices);
+                    OnNotifyPropertyChanged(nameof(ShowPrices));
                 }
             }
         }
@@ -108,7 +108,7 @@
                 if (value != _autoCheckUpgrade)
                 {
                     _autoCheckUpgrade = value;
-                    OnNotifyPropertyChanged(() => AutoCheckUpgrade);
+                    OnNotifyPropertyChanged(nameof(AutoCheckUpgrade));
                 }
             }
         }

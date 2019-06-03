@@ -28,7 +28,7 @@
                 if (value != _isAscendingOrder)
                 {
                     _isAscendingOrder = value;
-                    OnNotifyPropertyChanged(() => IsAscendingOrder);
+                    OnNotifyPropertyChanged(nameof(IsAscendingOrder));
                 }
             }
         }
@@ -43,7 +43,7 @@
                 if (value != _isActive)
                 {
                     _isActive = value;
-                    OnNotifyPropertyChanged(() => IsActive);
+                    OnNotifyPropertyChanged(nameof(IsActive));
                 }
             }
         }

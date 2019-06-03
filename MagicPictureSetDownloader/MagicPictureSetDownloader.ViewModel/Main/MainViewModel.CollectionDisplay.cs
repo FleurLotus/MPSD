@@ -26,7 +26,7 @@
                 if (value != _loading)
                 {
                     _loading = value;
-                    OnNotifyPropertyChanged(() => Loading);
+                    OnNotifyPropertyChanged(nameof(Loading));
                 }
             }
         }
@@ -50,7 +50,7 @@
 
                     _hierarchical = value;
 
-                    OnNotifyPropertyChanged(() => Hierarchical);
+                    OnNotifyPropertyChanged(nameof(Hierarchical));
                 }
             }
         }

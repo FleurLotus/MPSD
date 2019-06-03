@@ -69,18 +69,18 @@
         {
             public ViewModelWithValidation()
             {
-                AddValidationRule(() => PropertyPublic, () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
-                AddValidationRule(() => PropertyWithProtectedGet, () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null);
+                AddValidationRule(nameof(PropertyPublic), () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
+                AddValidationRule(nameof(PropertyWithProtectedGet), () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null);
             }
 
             public void AddRuleWithUnknownSource()
             {
                 //Unknown because only instance | public property are allowed
-                AddValidationRule(() => Inner, () => PropertyWithProtectedGet);
+                AddValidationRule(nameof(Inner), () => PropertyWithProtectedGet);
             }
             public void AddRuleWithNullRule()
             {
-                AddValidationRule(() => PropertyPublic, (Func<string>)null);
+                AddValidationRule(nameof(PropertyPublic), (Func<string>)null);
             }
 
             public static string Inner { get; set; }
@@ -98,7 +98,7 @@
                     if (value != _propertyWithNoRule)
                     {
                         _propertyWithNoRule = value;
-                        OnNotifyPropertyChanged(() => PropertyWithNoRule);
+                        OnNotifyPropertyChanged(nameof(PropertyWithNoRule));
                     }
                 }
             }
@@ -110,7 +110,7 @@
                     if (value != _propertyPublic)
                     {
                         _propertyPublic = value;
-                        OnNotifyPropertyChanged(() => PropertyPublic);
+                        OnNotifyPropertyChanged(nameof(PropertyPublic));
                     }
                 }
             }
@@ -122,7 +122,7 @@
                     if (value != _propertyWithProtectedSet)
                     {
                         _propertyWithProtectedSet = value;
-                        OnNotifyPropertyChanged(() => PropertyWithProtectedSet);
+                        OnNotifyPropertyChanged(nameof(PropertyWithProtectedSet));
                     }
                 }
             }
@@ -134,7 +134,7 @@
                     if (value != _propertyWithProtectedGet)
                     {
                         _propertyWithProtectedGet = value;
-                        OnNotifyPropertyChanged(() => PropertyWithProtectedGet);
+                        OnNotifyPropertyChanged(nameof(PropertyWithProtectedGet));
                     }
                 }
             }
@@ -143,7 +143,7 @@
         {
             public ViewModelWithValidation2()
             {
-                AddValidationRule(() => PropertyPublic, () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
+                AddValidationRule(nameof(PropertyPublic), () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
               
             }
             
@@ -164,7 +164,7 @@
                     if (value != _propertyPublic)
                     {
                         _propertyPublic = value;
-                        OnNotifyPropertyChanged(() => PropertyPublic);
+                        OnNotifyPropertyChanged(nameof(PropertyPublic));
                     }
                 }
             }

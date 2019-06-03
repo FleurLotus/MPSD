@@ -11,7 +11,7 @@
 
         public TranslationViewModel(ILanguage language, string originalTranslation)
         {
-            AddLinkedProperty(() => Translation, () => Modified);
+            AddLinkedProperty(nameof(Translation), nameof(Modified));
 
             Language = language;
             _originalTranslation = originalTranslation;
@@ -30,7 +30,7 @@
                 if (_translation != value)
                 {
                     _translation = value;
-                    OnNotifyPropertyChanged(() => Translation);
+                    OnNotifyPropertyChanged(nameof(Translation));
                 }
             }
         }

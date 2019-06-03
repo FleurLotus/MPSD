@@ -71,7 +71,7 @@
                 if (value != _icon)
                 {
                     _icon = value;
-                    OnNotifyPropertyChanged(() => Icon);
+                    OnNotifyPropertyChanged(nameof(Icon));
                 }
             }
         }
@@ -84,7 +84,7 @@
                 if (value != _position)
                 {
                     _position = value;
-                    OnNotifyPropertyChanged(() => Position);
+                    OnNotifyPropertyChanged(nameof(Position));
                 }
             }
         }
@@ -96,7 +96,7 @@
                 if (value != _blockSelected)
                 {
                     _blockSelected = value;
-                    OnNotifyPropertyChanged(() => BlockSelected);
+                    OnNotifyPropertyChanged(nameof(BlockSelected));
                 }
             }
         }
@@ -108,7 +108,7 @@
                 if (value != _hasFoil)
                 {
                     _hasFoil = value;
-                    OnNotifyPropertyChanged(() => HasFoil);
+                    OnNotifyPropertyChanged(nameof(HasFoil));
                 }
             }
         }
@@ -120,7 +120,7 @@
                 if (value != _cardNumber)
                 {
                     _cardNumber = value;
-                    OnNotifyPropertyChanged(() => CardNumber);
+                    OnNotifyPropertyChanged(nameof(CardNumber));
                 }
             }
         }
@@ -132,7 +132,7 @@
                 if (value != _releaseDate)
                 {
                     _releaseDate = value;
-                    OnNotifyPropertyChanged(() => ReleaseDate);
+                    OnNotifyPropertyChanged(nameof(ReleaseDate));
                 }
             }
         }
@@ -151,7 +151,7 @@
                     {
                         _code = value.ToUpperInvariant();
                     }
-                    OnNotifyPropertyChanged(() => Code);
+                    OnNotifyPropertyChanged(nameof(Code));
                 }
             }
         }
@@ -163,7 +163,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    OnNotifyPropertyChanged(() => Name);
+                    OnNotifyPropertyChanged(nameof(Name));
                 }
             }
         }

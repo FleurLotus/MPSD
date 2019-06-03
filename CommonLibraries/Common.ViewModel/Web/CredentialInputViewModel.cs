@@ -19,7 +19,7 @@
                 if (_login != value)
                 {
                     _login = value;
-                    OnNotifyPropertyChanged(() => Login);
+                    OnNotifyPropertyChanged(nameof(Login));
                 }
             }
         }
@@ -31,7 +31,7 @@
                 if (_password != value)
                 {
                     _password = value;
-                    OnNotifyPropertyChanged(() => Password);
+                    OnNotifyPropertyChanged(nameof(Password));
                 }
             }
         }

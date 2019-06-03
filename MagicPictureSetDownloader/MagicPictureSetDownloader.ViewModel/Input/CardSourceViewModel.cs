@@ -53,7 +53,7 @@
                 if (value != _languages)
                 {
                     _languages = value;
-                    OnNotifyPropertyChanged(() => Languages);
+                    OnNotifyPropertyChanged(nameof(Languages));
                     if (_languages != null && _languages.Length > 0)
                     {
                         LanguageSelected = _languages[0];
@@ -69,7 +69,7 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged(() => IsFoil);
+                    OnNotifyPropertyChanged(nameof(IsFoil));
                     UpdateMaxCount();
                 }
             }
@@ -82,7 +82,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(() => EditionSelected);
+                    OnNotifyPropertyChanged(nameof(EditionSelected));
                     ChangeLanguage();
                     UpdateMaxCount();
                 }
@@ -96,7 +96,7 @@
                 if (value != _languageSelected)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(() => LanguageSelected);
+                    OnNotifyPropertyChanged(nameof(LanguageSelected));
                     UpdateMaxCount();
                 }
             }
@@ -109,7 +109,7 @@
                 if (value != _maxCount)
                 {
                     _maxCount = value;
-                    OnNotifyPropertyChanged(() => MaxCount);
+                    OnNotifyPropertyChanged(nameof(MaxCount));
 
                     if (value < Count)
                     {
@@ -126,7 +126,7 @@
                 if (value != _count)
                 {
                     _count = value;
-                    OnNotifyPropertyChanged(() => Count);
+                    OnNotifyPropertyChanged(nameof(Count));
                 }
             }
         }

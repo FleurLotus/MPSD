@@ -64,7 +64,6 @@
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\IValidable.cs" />
     <Compile Include="Menu\MenuViewModel.cs" />
-    <Compile Include="Extension.cs" />
     <Compile Include="NotifyPropertyChangedBase.cs" />
     <Compile Include="LinkedProperties.cs" />
     <Compile Include="Validation\NotifyPropertyChangedWithValidationBase.cs" />

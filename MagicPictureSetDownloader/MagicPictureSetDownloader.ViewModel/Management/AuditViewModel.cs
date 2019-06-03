@@ -44,7 +44,7 @@
                         MinDate = MaxDate;
                     }
 
-                    OnNotifyPropertyChanged(() => MaxDate);
+                    OnNotifyPropertyChanged(nameof(MaxDate));
                 }
             }
         }
@@ -61,7 +61,7 @@
                         MaxDate = MinDate;
                     }
 
-                    OnNotifyPropertyChanged(() => MinDate);
+                    OnNotifyPropertyChanged(nameof(MinDate));
                 }
             }
         }

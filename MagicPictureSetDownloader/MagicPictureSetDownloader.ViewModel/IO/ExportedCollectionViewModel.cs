@@ -24,7 +24,7 @@
                 if (value != _isSelected)
                 {
                     _isSelected = value;
-                    OnNotifyPropertyChanged(() => IsSelected);
+                    OnNotifyPropertyChanged(nameof(IsSelected));
                 }
             }
         }

@@ -58,7 +58,7 @@
                 if (value != _text)
                 {
                     _text = value;
-                    OnNotifyPropertyChanged(() => Text);
+                    OnNotifyPropertyChanged(nameof(Text));
                 }
             }
         }
@@ -70,7 +70,7 @@
                 if (value != _selected)
                 {
                     _selected = value;
-                    OnNotifyPropertyChanged(() => Selected);
+                    OnNotifyPropertyChanged(nameof(Selected));
                 }
             }
         }
@@ -82,7 +82,7 @@
                 if (value != _selected2)
                 {
                     _selected2 = value;
-                    OnNotifyPropertyChanged(() => Selected2);
+                    OnNotifyPropertyChanged(nameof(Selected2));
                 }
             }
         }

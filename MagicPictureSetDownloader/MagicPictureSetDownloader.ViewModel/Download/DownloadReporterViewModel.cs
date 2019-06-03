@@ -25,7 +25,7 @@
                 if (value != _total)
                 {
                     _total = value;
-                    OnNotifyPropertyChanged(() => Total);
+                    OnNotifyPropertyChanged(nameof(Total));
                 }
             }
         }
@@ -45,7 +45,7 @@
             _lock.EnterWriteLock();
             _current = 0;
             _lock.ExitWriteLock();
-            OnNotifyPropertyChanged(() => Current);
+            OnNotifyPropertyChanged(nameof(Current));
 
             Total = 1;
         }
@@ -54,7 +54,7 @@
             _lock.EnterWriteLock();
             _current++;
             _lock.ExitWriteLock();
-            OnNotifyPropertyChanged(() => Current);
+            OnNotifyPropertyChanged(nameof(Current));
         }
         public void Dispose()
         {
@@ -66,7 +66,7 @@
             _lock.EnterWriteLock();
             _current = _total;
             _lock.ExitWriteLock();
-            OnNotifyPropertyChanged(() => Current);
+            OnNotifyPropertyChanged(nameof(Current));
 
         }
         protected virtual void Dispose(bool disposing)

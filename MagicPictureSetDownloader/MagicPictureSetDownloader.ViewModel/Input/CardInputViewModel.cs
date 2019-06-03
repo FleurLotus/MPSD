@@ -114,7 +114,7 @@
                 if (value != _languageSelected)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(() => LanguageSelected);
+                    OnNotifyPropertyChanged(nameof(LanguageSelected));
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -132,7 +132,7 @@
                 if (value != _cardCollection)
                 {
                     _cardCollection = value;
-                    OnNotifyPropertyChanged(() => CardCollection);
+                    OnNotifyPropertyChanged(nameof(CardCollection));
                 }
             }
         }
@@ -144,7 +144,7 @@
                 if (value != _currentCollectionDetail)
                 {
                     _currentCollectionDetail = value;
-                    OnNotifyPropertyChanged(() => CurrentCollectionDetail);
+                    OnNotifyPropertyChanged(nameof(CurrentCollectionDetail));
                 }
             }
         }
@@ -156,7 +156,7 @@
                 if (value != _isFocused)
                 {
                     _isFocused = value;
-                    OnNotifyPropertyChanged(() => IsFocused);
+                    OnNotifyPropertyChanged(nameof(IsFocused));
                 }
             }
         }
@@ -168,7 +168,7 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged(() => IsFoil);
+                    OnNotifyPropertyChanged(nameof(IsFoil));
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -181,7 +181,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(() => EditionSelected);
+                    OnNotifyPropertyChanged(nameof(EditionSelected));
                     RefreshDisplayedData(InputMode.ByEdition);
                     if (_editionSelected != null && !_editionSelected.HasFoil)
                     {
@@ -200,7 +200,7 @@
                     _cardSelectedName = value;
                     _cardSelected = _cardSelectedName == null ? null : _allCardSorted.GetOrDefault(_cardSelectedName);
 
-                    OnNotifyPropertyChanged(() => CardSelectedName);
+                    OnNotifyPropertyChanged(nameof(CardSelectedName));
                     RefreshDisplayedData(InputMode.ByCard);
                 }
             }
@@ -224,7 +224,7 @@
                     {
                         _count = value;
                     }
-                    OnNotifyPropertyChanged(() => Count);
+                    OnNotifyPropertyChanged(nameof(Count));
                 }
             }
         }
@@ -237,7 +237,7 @@
                 {
                     _inputMode = value;
                     _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Mode", _inputMode.ToString());
-                    OnNotifyPropertyChanged(() => InputMode);
+                    OnNotifyPropertyChanged(nameof(InputMode));
                     InitWindow();
                 }
             }
@@ -250,7 +250,7 @@
                 if (value != _translate)
                 {
                     _translate = value;
-                    OnNotifyPropertyChanged(() => Translate);
+                    OnNotifyPropertyChanged(nameof(Translate));
                 }
             }
         }
@@ -367,7 +367,7 @@
                 _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Language", _inputLanguage.Id.ToString(CultureInfo.InvariantCulture));
             }
             
-            OnNotifyPropertyChanged(() => InputLanguageName);
+            OnNotifyPropertyChanged(nameof(InputLanguageName));
             RebuildOrder();
             InitWindow();
         }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel;
-    using System.Linq.Expressions;
     using System.Threading;
 
     public class NotifyPropertyChangedBase: INotifyPropertyChanged
@@ -16,22 +15,22 @@
             _lazyLinkedProperties = new Lazy<LinkedProperties>(() => new LinkedProperties(this), LazyThreadSafetyMode.PublicationOnly);
         }
         
-        public void OnNotifyPropertyChanged<T>(Expression<Func<T>> expression)
+        public void OnNotifyPropertyChanged(string propertyName)
         {
             if (_lazyLinkedProperties.IsValueCreated)
             {
-                foreach (string propertyName in _lazyLinkedProperties.Value.GetNotifyList(expression))
+                foreach (string linkedPropertyName in _lazyLinkedProperties.Value.GetNotifyList(propertyName))
                 {
-                    OnNotifyPropertyChanged(propertyName);
+                    RaiseNotifyPropertyChanged(linkedPropertyName);
                 }
             }
             else
             {
-                OnNotifyPropertyChanged(expression.GetMemberName());
+                RaiseNotifyPropertyChanged(propertyName);
             }
         }
         
-        private void OnNotifyPropertyChanged(string propertyName)
+        private void RaiseNotifyPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler e = PropertyChanged;
             if (e != null)
@@ -40,20 +39,20 @@
             }
         }
 
-        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
+        protected void AddLinkedProperty(string source, string destination)
         {
             _lazyLinkedProperties.Value.Add(source, destination);
         }
-        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>>[] sources, Expression<Func<T2>> destination)
+        protected void AddLinkedProperty(string[] sources, string destination)
         {
-            foreach (Expression<Func<T1>> source in sources)
+            foreach (string source in sources)
             {
                 AddLinkedProperty(source, destination);
             }
         }
-        protected void AddLinkedProperty<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>>[] destinations)
+        protected void AddLinkedProperty(string source, string[] destinations)
         {
-            foreach (Expression<Func<T2>> destination in destinations)
+            foreach (string destination in destinations)
             {
                 AddLinkedProperty(source, destination);
             }

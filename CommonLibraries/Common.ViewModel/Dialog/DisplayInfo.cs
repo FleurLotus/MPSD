@@ -24,7 +24,7 @@
                 if (value != _cancelCommandLabel)
                 {
                     _cancelCommandLabel = value;
-                    OnNotifyPropertyChanged(() => CancelCommandLabel);
+                    OnNotifyPropertyChanged(nameof(CancelCommandLabel));
                 }
             }
         }
@@ -36,7 +36,7 @@
                 if (value != _okCommandLabel)
                 {
                     _okCommandLabel = value;
-                    OnNotifyPropertyChanged(() => OkCommandLabel);
+                    OnNotifyPropertyChanged(nameof(OkCommandLabel));
                 }
             }
         }
@@ -48,7 +48,7 @@
                 if (value != _other2CommandLabel)
                 {
                     _other2CommandLabel = value;
-                    OnNotifyPropertyChanged(() => Other2CommandLabel);
+                    OnNotifyPropertyChanged(nameof(Other2CommandLabel));
                 }
             }
         }
@@ -60,7 +60,7 @@
                 if (value != _otherCommandLabel)
                 {
                     _otherCommandLabel = value;
-                    OnNotifyPropertyChanged(() => OtherCommandLabel);
+                    OnNotifyPropertyChanged(nameof(OtherCommandLabel));
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _title)
                 {
                     _title = value;
-                    OnNotifyPropertyChanged(() => Title);
+                    OnNotifyPropertyChanged(nameof(Title));
                 }
             }
         }

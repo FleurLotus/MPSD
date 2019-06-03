@@ -45,7 +45,7 @@
                 if (value != _selectedIndex)
                 {
                     _selectedIndex = value;
-                    OnNotifyPropertyChanged(() => SelectedIndex);
+                    OnNotifyPropertyChanged(nameof(SelectedIndex));
                 }
             }
         }
@@ -91,7 +91,7 @@
 
             index--;
             _all.Insert(index, current);
-            OnNotifyPropertyChanged(() => All);
+            OnNotifyPropertyChanged(nameof(All));
             SelectedIndex= index;
         }
         private bool UpCommandCanExecute(object o)
@@ -106,7 +106,7 @@
 
             index++;
             _all.Insert(index, current);
-            OnNotifyPropertyChanged(() => All);
+            OnNotifyPropertyChanged(nameof(All));
             SelectedIndex = index;
         }
         private bool DownCommandCanExecute(object o)

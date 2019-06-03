@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
-    using System.Linq.Expressions;
 
     using Common.Library.Extension;
 
@@ -24,11 +23,8 @@
             _propertyNameSet = new HashSet<string>(parent.GetPublicInstanceProperties().Select(pi => pi.Name));
         }
 
-        internal void Add<T1, T2>(Expression<Func<T1>> source, Expression<Func<T2>> destination)
+        internal void Add(string sourceName, string destinationName)
         {
-            string sourceName = source.GetMemberName();
-            string destinationName = destination.GetMemberName();
-
             if (!_propertyNameSet.Contains(sourceName))
             {
                 throw new ArgumentException(sourceName + " is not a valid property Name");
@@ -56,12 +52,12 @@
             }
         }
         
-        internal IEnumerable<string> GetNotifyList<T1>(Expression<Func<T1>> expression)
+        internal IEnumerable<string> GetNotifyList(string propertyName)
         {
             HashSet<string> ret = new HashSet<string>();
             lock (_sync)
             {
-                GetNotifyList(expression.GetMemberName(), ret);
+                GetNotifyList(propertyName, ret);
             }
             return ret;
         }
