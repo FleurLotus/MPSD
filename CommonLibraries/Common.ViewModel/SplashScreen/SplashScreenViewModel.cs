@@ -25,7 +25,7 @@
                 if (value != _sourceUri)
                 {
                     _sourceUri = value;
-                    OnNotifyPropertyChanged(() => SourceUri);
+                    OnNotifyPropertyChanged(nameof(SourceUri));
                 }
             }
         }
@@ -37,7 +37,7 @@
                 if (value != _showProgress)
                 {
                     _showProgress = value;
-                    OnNotifyPropertyChanged(() => ShowProgress);
+                    OnNotifyPropertyChanged(nameof(ShowProgress));
                 }
             }
         }
@@ -52,7 +52,7 @@
                     {
                         _currentValue = value;
                     }
-                    OnNotifyPropertyChanged(() => CurrentValue);
+                    OnNotifyPropertyChanged(nameof(CurrentValue));
                 }
             }
         }
@@ -64,7 +64,7 @@
                 if (value != _info)
                 {
                     _info = value;
-                    OnNotifyPropertyChanged(() => Info);
+                    OnNotifyPropertyChanged(nameof(Info));
                 }
             }
         }

@@ -37,7 +37,7 @@
                 if (value != _cardNumber)
                 {
                     _cardNumber = value;
-                    OnNotifyPropertyChanged(() => CardNumber);
+                    OnNotifyPropertyChanged(nameof(CardNumber));
                 }
             }
         }
@@ -49,7 +49,7 @@
                 if (value != _blockPosition)
                 {
                     _blockPosition = value;
-                    OnNotifyPropertyChanged(() => BlockPosition);
+                    OnNotifyPropertyChanged(nameof(BlockPosition));
                 }
             }
         }
@@ -61,7 +61,7 @@
                 if (value != _block)
                 {
                     _block = value;
-                    OnNotifyPropertyChanged(() => Block);
+                    OnNotifyPropertyChanged(nameof(Block));
                 }
             }
         }
@@ -73,7 +73,7 @@
                 if (value != _hasFoil)
                 {
                     _hasFoil = value;
-                    OnNotifyPropertyChanged(() => HasFoil);
+                    OnNotifyPropertyChanged(nameof(HasFoil));
                 }
             }
         }
@@ -85,7 +85,7 @@
                 if (value != _releaseDate)
                 {
                     _releaseDate = value;
-                    OnNotifyPropertyChanged(() => ReleaseDate);
+                    OnNotifyPropertyChanged(nameof(ReleaseDate));
                 }
             }
         }
@@ -97,7 +97,7 @@
                 if (value != _gathererName)
                 {
                     _gathererName = value;
-                    OnNotifyPropertyChanged(() => GathererName);
+                    OnNotifyPropertyChanged(nameof(GathererName));
                 }
             }
         }
@@ -109,7 +109,7 @@
                 if (value != _code)
                 {
                     _code = value;
-                    OnNotifyPropertyChanged(() => Code);
+                    OnNotifyPropertyChanged(nameof(Code));
                 }
             }
         }

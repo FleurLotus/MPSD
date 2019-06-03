@@ -60,7 +60,7 @@
                 if (value != _path)
                 {
                     _path = value;
-                    OnNotifyPropertyChanged(() => Path);
+                    OnNotifyPropertyChanged(nameof(Path));
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _importFilePath)
                 {
                     _importFilePath = value;
-                    OnNotifyPropertyChanged(() => ImportFilePath);
+                    OnNotifyPropertyChanged(nameof(ImportFilePath));
                 }
             }
         }
@@ -84,7 +84,7 @@
                 if (value != _newCollectionName)
                 {
                     _newCollectionName = value;
-                    OnNotifyPropertyChanged(() => NewCollectionName);
+                    OnNotifyPropertyChanged(nameof(NewCollectionName));
                 }
             }
         }
@@ -96,7 +96,7 @@
                 if (value != _selectedIndex)
                 {
                     _selectedIndex = value;
-                    OnNotifyPropertyChanged(() => SelectedIndex);
+                    OnNotifyPropertyChanged(nameof(SelectedIndex));
                 }
             }
         }
@@ -108,7 +108,7 @@
                 if (value != _selectedCollection)
                 {
                     _selectedCollection = value;
-                    OnNotifyPropertyChanged(() => SelectedCollection);
+                    OnNotifyPropertyChanged(nameof(SelectedCollection));
                 }
             }
         }
@@ -120,7 +120,7 @@
                 if (value != _exportFormatSelected)
                 {
                     _exportFormatSelected = value;
-                    OnNotifyPropertyChanged(() => ExportFormatSelected);
+                    OnNotifyPropertyChanged(nameof(ExportFormatSelected));
                 }
             }
         }
@@ -132,7 +132,7 @@
                 if (value != _importType)
                 {
                     _importType = value;
-                    OnNotifyPropertyChanged(() => ImportType);
+                    OnNotifyPropertyChanged(nameof(ImportType));
                     if (_importType == ImportOption.AddToCollection && HasCollection && SelectedCollection == null)
                     {
                         SelectedCollection = ImportCollections[0];

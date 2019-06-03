@@ -59,7 +59,7 @@
                     if (value != _stringValue)
                     {
                         _stringValue = value;
-                        OnNotifyPropertyChanged(() => StringValue);
+                        OnNotifyPropertyChanged(nameof(StringValue));
                     }
                 }
             }
@@ -72,7 +72,7 @@
                     if (value != _objectValue)
                     {
                         _objectValue = value;
-                        OnNotifyPropertyChanged(() => ObjectValue);
+                        OnNotifyPropertyChanged(nameof(ObjectValue));
                     }
                 }
             }
@@ -85,7 +85,7 @@
                     if (value != _intValue)
                     {
                         _intValue = value;
-                        OnNotifyPropertyChanged(() => IntValue);
+                        OnNotifyPropertyChanged(nameof(IntValue));
                     }
                 }
             }

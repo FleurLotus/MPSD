@@ -42,7 +42,7 @@
                 if (value != _path)
                 {
                     _path = value;
-                    OnNotifyPropertyChanged(() => Path);
+                    OnNotifyPropertyChanged(nameof(Path));
                 }
             }
         }
@@ -54,7 +54,7 @@
                 if (value != _suffix)
                 {
                     _suffix = value;
-                    OnNotifyPropertyChanged(() => Suffix);
+                    OnNotifyPropertyChanged(nameof(Suffix));
                 }
             }
         }
@@ -66,7 +66,7 @@
                 if (value != _exportOptionSelected)
                 {
                     _exportOptionSelected = value;
-                    OnNotifyPropertyChanged(() => ExportOptionSelected);
+                    OnNotifyPropertyChanged(nameof(ExportOptionSelected));
                 }
             }
         }

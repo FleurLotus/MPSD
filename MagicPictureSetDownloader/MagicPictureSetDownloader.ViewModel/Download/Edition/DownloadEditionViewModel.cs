@@ -39,7 +39,7 @@
                 if (value != _hasJob)
                 {
                     _hasJob = value;
-                    OnNotifyPropertyChanged(() => HasJob);
+                    OnNotifyPropertyChanged(nameof(HasJob));
                 }
             }
         }

@@ -46,7 +46,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    OnNotifyPropertyChanged(() => IsBusy);
+                    OnNotifyPropertyChanged(nameof(IsBusy));
                 }
             }
         }
@@ -151,7 +151,7 @@
                 _stringBuilder.Append(msg);
             }
 
-            OnNotifyPropertyChanged(() => Message);
+            OnNotifyPropertyChanged(nameof(Message));
         }
         protected void AppendMessage(string msg, bool before)
         {
@@ -172,7 +172,7 @@
                 }
             }
 
-            OnNotifyPropertyChanged(() => Message);
+            OnNotifyPropertyChanged(nameof(Message));
         }
 
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)

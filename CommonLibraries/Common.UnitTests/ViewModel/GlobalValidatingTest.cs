@@ -115,7 +115,7 @@
                     if (value != _name)
                     {
                         _name = value;
-                        OnNotifyPropertyChanged(() => Name);
+                        OnNotifyPropertyChanged(nameof(Name));
                     }
                 }
             }

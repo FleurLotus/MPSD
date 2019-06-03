@@ -41,7 +41,7 @@
                 if (value != _root)
                 {
                     _root = value;
-                    OnNotifyPropertyChanged(() => Root);
+                    OnNotifyPropertyChanged(nameof(Root));
                 }
             }
         }
@@ -53,7 +53,7 @@
                 if (value != _selected)
                 {
                     _selected = value;
-                    OnNotifyPropertyChanged(() => Selected);
+                    OnNotifyPropertyChanged(nameof(Selected));
                 }
             }
         }

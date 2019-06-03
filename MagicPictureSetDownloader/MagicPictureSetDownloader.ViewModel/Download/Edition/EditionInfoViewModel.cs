@@ -52,7 +52,7 @@
                 if (value != _active)
                 {
                     _active = value;
-                    OnNotifyPropertyChanged(() => Active);
+                    OnNotifyPropertyChanged(nameof(Active));
                 }
             }
         }

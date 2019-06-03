@@ -31,7 +31,7 @@
         //TODO: think about adding complete prebuilt deck
         public MainViewModel(IDispatcherInvoker dispatcherInvoker)
         {
-            AddLinkedProperty(() => Hierarchical, () => Title);
+            AddLinkedProperty(nameof(Hierarchical), nameof(Title));
 
             HideResultCommand = new RelayCommand(o => UpgradeStatus = UpgradeStatus.NotChecked);
             _dispatcherInvoker = dispatcherInvoker;
@@ -87,7 +87,7 @@
                 if (value != _showFilterConfig)
                 {
                     _showFilterConfig = value;
-                    OnNotifyPropertyChanged(() => ShowFilterConfig);
+                    OnNotifyPropertyChanged(nameof(ShowFilterConfig));
                     if (!_showFilterConfig)
                     {
                         Analysers.Save();
@@ -109,7 +109,7 @@
                 if (value != _upgradeStatus)
                 {
                     _upgradeStatus = value;
-                    OnNotifyPropertyChanged(() => UpgradeStatus);
+                    OnNotifyPropertyChanged(nameof(UpgradeStatus));
                 }
             }
         }
@@ -121,7 +121,7 @@
                 if (value != _statusBarInfo)
                 {
                     _statusBarInfo = value;
-                    OnNotifyPropertyChanged(() => StatusBarInfo);
+                    OnNotifyPropertyChanged(nameof(StatusBarInfo));
                 }
             }
         }
