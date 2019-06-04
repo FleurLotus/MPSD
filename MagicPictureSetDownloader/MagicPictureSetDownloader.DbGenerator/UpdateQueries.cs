@@ -67,7 +67,7 @@ AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdE
 SET ReleaseDate = '2017-07-14 00:00:00'
 WHERE GathererName = 'Hour of Devastation'";
 
-         public static readonly string[] RemoveWrongCardFromGuildOfRavnica = {
+        public static readonly string[] RemoveWrongCardFromGuildOfRavnica = {
 @"DELETE FROM Translate
 WHERE IdCard IN (SELECT Id 
                  FROM Card 
@@ -132,8 +132,9 @@ WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE 
         public const string CreatePreconstructedDeckTable =
 @"CREATE TABLE [PreconstructedDeck] (
   [Id] INTEGER PRIMARY KEY NOT NULL 
+, [IdEdition] INTEGER NOT NULL 
 , [Name] TEXT NOT NULL
-, [Source] TEXT NOT NULL
+, [Url] TEXT NULL
 )";
 
         public const string CreatePreconstructedDeckCardEditionTable =
@@ -144,5 +145,24 @@ WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE 
 , FOREIGN KEY([IdGatherer]) REFERENCES `CardEdition`([IdGatherer])
 , FOREIGN KEY([IdPreconstructedDeck]) REFERENCES [PreconstructedDeck]([Id])
 )";
+
+        public const string AddSpecialSets =
+@"
+INSERT INTO Edition (Name, Code, GathererName,Completed, HasFoil)
+SELECT @name, @code, @name, 1, 1
+WHERE NOT EXISTS(SELECT 1 FROM Edition WHERE Name = @name)
+";
+
+        public const string InsertSpecialSetsCards =
+@"
+INSERT INTO CardEdition (IdEdition, IdCard, IdRarity, IdGatherer, Url)
+SELECT e.Id, c.Id, r.Id, @id, @url
+FROM Edition e, Card c, Rarity r
+WHERE e.Code = @editionCode 
+AND c.Name = @cardName
+AND r.Code = @rarityCode
+AND NOT EXISTS(SELECT 1 FROM CardEdition WHERE IdGatherer = @id)
+";
+
     }
 }

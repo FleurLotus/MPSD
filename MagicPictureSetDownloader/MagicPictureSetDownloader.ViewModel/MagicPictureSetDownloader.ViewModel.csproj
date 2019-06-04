@@ -57,6 +57,7 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="Download\Auto\AutoDownloadPriceViewModel.cs" />
+    <Compile Include="Download\Auto\AutoDownloadPreconstructedDeckViewModel.cs" />
     <Compile Include="Download\Auto\AutoDownloadViewModelBase.cs" />
     <Compile Include="Download\Auto\AutoDownloadRuleViewModel.cs" />
     <Compile Include="Download\Auto\AutoDownloadImageViewModel.cs" />

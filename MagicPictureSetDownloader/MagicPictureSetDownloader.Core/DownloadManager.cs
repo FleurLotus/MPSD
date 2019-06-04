@@ -6,6 +6,7 @@
     using System.Net;
     using Common.Library.Notify;
     using Common.Web;
+    using MagicPictureSetDownloader.Core.Deck;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
@@ -185,6 +186,30 @@
             }
 
             return null;
+        }
+        public string[] GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter)
+        {
+            string html = _webAccess.GetHtml(preconstructedDeckImporter.GetRootUrl());
+            return preconstructedDeckImporter.GetDeckUrls(html);
+        }
+        public void InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
+        {
+            string html = _webAccess.GetHtml(url);
+
+            DeckInfo deckInfo = preconstructedDeckImporter.ParseDeckPage(html);
+
+            if (deckInfo == null)
+            {
+                return;
+            }
+
+            MagicDatabase.InsertNewPreconstructedDeck(deckInfo.IdEdition, deckInfo.Name, url);
+            IPreconstructedDeck preconstructedDeck = MagicDatabase.GetPreconstructedDeck(deckInfo.IdEdition, deckInfo.Name);
+
+            foreach (DeckCardInfo deckCardInfo in deckInfo.Cards)
+            {
+                MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdGatherer, deckCardInfo.Number);
+            }
         }
 
         private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
