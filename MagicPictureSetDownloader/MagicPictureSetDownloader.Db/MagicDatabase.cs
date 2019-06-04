@@ -176,12 +176,12 @@ namespace MagicPictureSetDownloader.Db
                 return languages;
             }
         }
-        public IPreconstructedDeck GetPreconstructedDeck(string preconstructedDeckName)
+        public IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _preconstructedDecks.Values.FirstOrDefault(pd => string.Compare(pd.Name, preconstructedDeckName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                return _preconstructedDecks.Values.FirstOrDefault(pd => pd.IdEdition == idEdition && string.Compare(pd.Name, preconstructedDeckName, StringComparison.InvariantCultureIgnoreCase) == 0);
             }
         }
         public ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck)

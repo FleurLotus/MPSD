@@ -35,7 +35,7 @@
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, int idGatherer);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, int idGatherer, int idLanguage);
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
-        IPreconstructedDeck GetPreconstructedDeck(string preconstructedDeckName);
+        IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName);
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
 
         string[] GetMissingPictureUrls();

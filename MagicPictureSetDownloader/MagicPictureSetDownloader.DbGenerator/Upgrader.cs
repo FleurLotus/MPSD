@@ -201,6 +201,52 @@
                 {
                     repo.ExecuteBatch(UpdateQueries.CreatePreconstructedDeckCardEditionTable);
                 }
+
+                Dictionary<string, string> specialSets = new Dictionary<string, string> {
+                    { "CP1" , "Magic 2015 Clash Pack"},
+                    { "CP2" , "Fate Reforged Clash Pack"},
+                    { "CP3" , "Magic Origins Clash Packs"},
+                };
+
+                foreach (var kv in specialSets)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.AddSpecialSets,
+                       new KeyValuePair<string, object>("@code", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value));
+                }
+                Tuple<string, string, string, int, string>[] cards = new[]
+                {
+                   new Tuple<string, string, string, int, string>("CP1","Prognostic Sphinx","R",-1,"https://deckmaster.info/images/cards/CP1/-373617-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP1","Fated Intervention","R",-2,"https://deckmaster.info/images/cards/CP1/-378493-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP1","Font of Fertility","C",-3,"https://deckmaster.info/images/cards/CP1/-380417-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP1","Hydra Broodmaster","R",-4,"https://deckmaster.info/images/cards/CP1/-380438-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP1","Prophet of Kruphix","R",-5,"https://deckmaster.info/images/cards/CP1/-373635-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP1","Temple of Mystery","R",-6,"https://deckmaster.info/images/cards/CP1/-373571-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Necropolis Fiend","R",-7,"https://deckmaster.info/images/cards/CP2/-386618-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Hero's Downfall","R",-8,"https://deckmaster.info/images/cards/CP2/-373575-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Sultai Ascendancy","R",-9,"https://deckmaster.info/images/cards/CP2/-386674-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Reaper of the Wilds","R",-10,"https://deckmaster.info/images/cards/CP2/-373570-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Whip of Erebos","R",-11,"https://deckmaster.info/images/cards/CP2/-373709-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP2","Courser of Kruphix","R",-12,"https://deckmaster.info/images/cards/CP2/-378491-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Honored Hierarch","R",-13,"https://deckmaster.info/images/cards/CP3/-398450-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Seeker of the Way","R",-14,"https://deckmaster.info/images/cards/CP3/-386660-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Valorous Stance","U",-15,"https://deckmaster.info/images/cards/CP3/-391950-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Sandsteppe Citadel","U",-16,"https://deckmaster.info/images/cards/CP3/-386649-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Siege Rhino","R",-17,"https://deckmaster.info/images/cards/CP3/-386666-hr.jpg"),
+                   new Tuple<string, string, string, int, string>("CP3","Dromoka, the Eternal","R",-18,"https://deckmaster.info/images/cards/CP3/-391825-hr.jpg"),
+                };
+
+                foreach (var t in cards)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertSpecialSetsCards,
+                       new KeyValuePair<string, object>("@editionCode", t.Item1),
+                       new KeyValuePair<string, object>("@cardName", t.Item2),
+                       new KeyValuePair<string, object>("@rarityCode", t.Item3),
+                       new KeyValuePair<string, object>("@id", t.Item4),
+                       new KeyValuePair<string, object>("@url", t.Item5)
+                        );
+                }
+
             }
         }
         private void UpgradePicture(int dbVersion, IRepository repo)

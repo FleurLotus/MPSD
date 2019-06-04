@@ -128,6 +128,10 @@
             OnAutoUpdateDatabaseRequested(new AutoDownloadPriceViewModel((PriceSource)o));
             LoadCardsHierarchy();
         }
+        private void UpdatePreconstructedDeckCommandExecute(object o)
+        {
+            OnAutoUpdateDatabaseRequested(new AutoDownloadPreconstructedDeckViewModel());
+        }
         private void VersionCommandExecute(object o)
         {
             OnVersionRequested();
@@ -403,6 +407,7 @@
             fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Preconstructed Decks Database..", new RelayCommand(UpdatePreconstructedDeckCommandExecute)));
             fileMenu.AddChild(MenuViewModel.Separator());
             //Price
             MenuViewModel priceMenu = new MenuViewModel("Update _Prices Database");

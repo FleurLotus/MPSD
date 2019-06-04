@@ -266,16 +266,16 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(DatabaseType.Data, price, InsertInReferential);
             }
         }
-        public void InsertNewPreconstructedDeck(string preconstructedDeckName)
+        public void InsertNewPreconstructedDeck(int idEdition, string preconstructedDeckName, string url)
         {
             using (new WriterLock(_lock))
             {
-                if (GetPreconstructedDeck(preconstructedDeckName) != null)
+                if (GetPreconstructedDeck(idEdition, preconstructedDeckName) != null)
                 {
                     return;
                 }
 
-                PreconstructedDeck preconstructedDeck = new PreconstructedDeck { Name = preconstructedDeckName };
+                PreconstructedDeck preconstructedDeck = new PreconstructedDeck { IdEdition = idEdition, Name = preconstructedDeckName, Url = url };
                 AddToDbAndUpdateReferential(DatabaseType.Data, preconstructedDeck, InsertInReferential);
             }
         }

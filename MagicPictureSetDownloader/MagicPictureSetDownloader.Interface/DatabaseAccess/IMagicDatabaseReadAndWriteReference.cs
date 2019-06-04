@@ -15,7 +15,7 @@
         void InsertNewLanguage(string languageName, string alternativeName);
         void InsertNewRuling(int idGatherer, DateTime addDate, string text);
         void InsertNewPrice(int idGatherer, DateTime addDate, string source, bool foil, int value);
-        void InsertNewPreconstructedDeck(string preconstructedDeckName);
+        void InsertNewPreconstructedDeck(int idEdition, string preconstructedDeckName, string url);
         void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, int idGatherer, int count);
         void EditionCompleted(int editionId);
     }
