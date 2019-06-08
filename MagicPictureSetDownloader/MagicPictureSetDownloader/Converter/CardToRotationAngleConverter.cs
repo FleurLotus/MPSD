@@ -17,20 +17,20 @@ namespace MagicPictureSetDownloader.Converter
 
             if (node == null || node.Card.OtherCardPart == null)
             {
-                return 0;
+                return 0.0;
             }
 
             if (node.Card.OtherCardPart.IsDownSide)
             {
-                return 180;
+                return 180.0;
             }
 
             if (node.Card.OtherCardPart.Is90DegreeSide)
             {
-                return -90;
+                return -90.0;
             }
 
-            return 0;
+            return 0.0;
         }
     }
 }
