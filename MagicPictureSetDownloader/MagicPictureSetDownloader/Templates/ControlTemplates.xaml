@@ -82,7 +82,7 @@
     <ControlTemplate x:Key="StatisticsControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
             <ListView.ItemsSource>
-                <MultiBinding Converter="{conv:CardToStatisticsVisibleConverter}">
+                <MultiBinding Converter="{conv:CardToStatisticsConverter}">
                     <Binding Path="Hierarchical.Selected"/>
                     <Binding Path="Options.ShowOnlyCurrentStatistics"/>
                     <Binding Path="Hierarchical.Name"/>
@@ -172,7 +172,7 @@
                     <GridViewColumn Header="Rule">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <l:PicturedTextBlock TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={StaticResource t2inConv}}" />
+                                <l:PicturedTextBlock TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={conv:TextToInlinesConverter}}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
