@@ -42,7 +42,7 @@
         }
         private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, bool isFoil, int countToAdd)
         {
-            if (idCollection <= 0 || countToAdd == 0 || idGatherer <= 0 || idLanguage < 0)
+            if (idCollection <= 0 || countToAdd == 0 || idGatherer == 0 || idLanguage < 0)
             {
                 return;
             }

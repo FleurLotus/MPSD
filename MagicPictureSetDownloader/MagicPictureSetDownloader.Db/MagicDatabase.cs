@@ -280,7 +280,7 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
                     cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
                     cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
-                    cardAllDbInfo.IdGathererPart2 = -1;
+                    cardAllDbInfo.IdGathererPart2 = 0;
                     IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdGatherer);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));

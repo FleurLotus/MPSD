@@ -147,7 +147,7 @@ namespace MagicPictureSetDownloader.Db
                 int idRarity = GetRarityId(rarity);
                 int idCard = GetCard(name, partName).Id;
 
-                if (idGatherer <= 0 || idEdition <= 0)
+                if (idGatherer == 0 || idEdition <= 0)
                 {
                     throw new ApplicationDbException("Data are not filled correctedly");
                 }

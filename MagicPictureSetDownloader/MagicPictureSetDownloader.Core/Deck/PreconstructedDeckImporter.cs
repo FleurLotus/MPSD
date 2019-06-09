@@ -91,13 +91,9 @@
                         
                         ICard card = GetCard(m);
                         IEdition edition = GetEdition(deckName, m);
-                        if (edition == null)
-                        {
-                            edition = deckEdition;
-                        }
 
                         int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
-                        if (idGatherer <= 0)
+                        if (idGatherer == 0)
                         {
                             throw new ParserException(string.Format("Could not find card with idCard {0} and idEdition {1}", card.Id, edition.Id));
 

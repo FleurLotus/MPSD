@@ -37,7 +37,7 @@
 
             Save(folder, suffix, cardInfo.IdGatherer, cardInfo.Card.Name);
 
-            if (cardInfo.IdGathererPart2 > 0)
+            if (cardInfo.IdGathererPart2 != 0)
             {
                 Save(folder, suffix, cardInfo.IdGathererPart2, cardInfo.CardPart2.Name);
             }

@@ -295,7 +295,7 @@ namespace MagicPictureSetDownloader.Db
                 int idGathererSource = GetIdGatherer(card, editionSource);
                 int idGathererDestination = GetIdGatherer(card, editionDestination);
                 ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idGathererSource, languageSource.Id);
-                if (cardInCollectionCount == null || idGathererDestination <= 0)
+                if (cardInCollectionCount == null || idGathererDestination == 0)
                 {
                     return;
                 }
