@@ -52,7 +52,7 @@
             }
 
             int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
-            if (idGatherer <= 0)
+            if (idGatherer == 0)
             {
                 return new ErrorImportExportCardInfo(line, string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
             }

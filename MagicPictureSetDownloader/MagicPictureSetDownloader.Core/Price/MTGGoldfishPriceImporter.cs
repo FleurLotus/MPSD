@@ -264,7 +264,7 @@
                 }
 
                 int idGatherer = _magicDatabase.GetIdGatherer(card, edition);
-                if (idGatherer <= 0)
+                if (idGatherer == 0)
                 {
                     throw new ParserException(string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
                 }

@@ -21,7 +21,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            int idGatherer = -1;
+            int idGatherer = 0;
             if (param == 0)
             {
                 idGatherer = node.Card.IdGatherer;
@@ -31,7 +31,7 @@ namespace MagicPictureSetDownloader.Converter
                 idGatherer = node.Card.OtherCardPart.IsDownSide || node.Card.OtherCardPart.Is90DegreeSide ? node.Card.IdGatherer : node.Card.OtherCardPart.IdGatherer;
             }
 
-            if (idGatherer == -1)
+            if (idGatherer == 0)
             {
                 return null;
             }
