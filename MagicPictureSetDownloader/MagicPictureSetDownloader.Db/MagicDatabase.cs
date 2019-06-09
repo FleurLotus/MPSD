@@ -344,13 +344,17 @@ namespace MagicPictureSetDownloader.Db
                 return _cardEditions.GetOrDefault(idGatherer);
             }
         }
-        private int GetRarityId(string rarity)
+        public IRarity GetRarity(string rarity)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _rarities[rarity].Id;
+                return _rarities.GetOrDefault(rarity);
             }
+        }
+        private int GetRarityId(string rarity)
+        {
+            return GetRarity(rarity).Id;
         }
         private int GetLanguageId(string language)
         {

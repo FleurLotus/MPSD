@@ -9,6 +9,11 @@ namespace MagicPictureSetDownloader.Db.DAO
     [DbTable]
     internal class Edition : IEdition
     {
+        private static readonly string[] SpecialEditionPrefix =
+        {
+            "MTG.WTF-",
+        };
+
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
@@ -80,6 +85,11 @@ namespace MagicPictureSetDownloader.Db.DAO
             }
 
             return Name.CompareTo(e.Name);
+        }
+        public bool IsNoneGatherer()
+        {
+            string name = GathererName.ToUpper();
+            return SpecialEditionPrefix.Any(p => name.StartsWith(p));
         }
     }
 }

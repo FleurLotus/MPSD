@@ -4,6 +4,8 @@ namespace MagicPictureSetDownloader.Db
     using System.Collections.Generic;
     using System.Data;
     using System.Text;
+    using System.Linq;
+    using System.Threading;
 
     using Common.Database;
     using Common.Library.Extension;
@@ -35,6 +37,7 @@ namespace MagicPictureSetDownloader.Db
 
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
+        private int _fakeGathererId = 0;
 
         //Insert one new
         public void InsertNewEdition(string sourceName)
@@ -169,6 +172,43 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(DatabaseType.Data, cardEdition, InsertInReferential);
             }
         }
+        public int InsertNewCardEditionWithFakeGathererId(int idEdition, int idCard, int idRarity, string url)
+        {
+            using (new WriterLock(_lock))
+            {
+                IEdition edition = _editions.FirstOrDefault(e => e.Id == idEdition);
+                IRarity rarity = _rarities.Values.FirstOrDefault(r => r.Id == idRarity);
+                ICard card = _cardsbyId.GetOrDefault(idCard);
+
+                if (rarity == null || card == null || edition == null)
+                {
+                    throw new ApplicationDbException("Data are not filled correctedly");
+                }
+                if (!edition.IsNoneGatherer())
+                {
+                    throw new ApplicationDbException("InsertNewCardEditionWithFakeGathererId could only used for NoneGatherer edition");
+                }
+                if (GetIdGatherer(card, edition) != 0)
+                {
+                    return 0;
+                }
+
+                int idGatherer = GetNextFakeGathererId();
+
+                CardEdition cardEdition = new CardEdition
+                {
+                    IdCard = idCard,
+                    IdGatherer = idGatherer,
+                    IdEdition = idEdition,
+                    IdRarity = idRarity,
+                    Url = url
+                };
+
+                AddToDbAndUpdateReferential(DatabaseType.Data, cardEdition, InsertInReferential);
+
+                return idGatherer;
+            }
+        }
         public void InsertNewOption(TypeOfOption type, string key, string value)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -283,62 +323,63 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                using (BatchMode())
+                if (GetPreconstructedDeck(idPreconstructedDeck) == null)
                 {
-                    if (GetPreconstructedDeck(idPreconstructedDeck) == null)
+                    return;
+                }
+
+                IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idGatherer);
+                if (preconstructedDeckCard == null)
+                {
+                    //Insert new 
+                    if (count <= 0)
                     {
                         return;
                     }
 
-                    IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idGatherer);
-                    if (preconstructedDeckCard == null)
+                    PreconstructedDeckCardEdition newPreconstructedDeckCardEdition = new PreconstructedDeckCardEdition
                     {
-                        //Insert new 
-                        if (count <= 0)
-                        {
-                            return;
-                        }
-
-                        PreconstructedDeckCardEdition newPreconstructedDeckCardEdition = new PreconstructedDeckCardEdition
-                        {
-                            IdPreconstructedDeck = idPreconstructedDeck,
-                            IdGatherer = idGatherer,
-                            Number = count
-                        };
+                        IdPreconstructedDeck = idPreconstructedDeck,
+                        IdGatherer = idGatherer,
+                        Number = count
+                    };
 
 
-                        AddToDbAndUpdateReferential(DatabaseType.Data, newPreconstructedDeckCardEdition, InsertInReferential);
+                    AddToDbAndUpdateReferential(DatabaseType.Data, newPreconstructedDeckCardEdition, InsertInReferential);
 
-                        return;
-                    }
+                    return;
+                }
 
-                    //Update
-                    if (count < 0 || count == preconstructedDeckCard.Number)
-                    {
-                        return;
-                    }
+                //Update
+                if (count < 0 || count == preconstructedDeckCard.Number)
+                {
+                    return;
+                }
 
-                    PreconstructedDeckCardEdition updatePreconstructedDeckCardEdition = preconstructedDeckCard as PreconstructedDeckCardEdition;
-                    if (updatePreconstructedDeckCardEdition == null)
-                    {
-                        return;
-                    }
+                PreconstructedDeckCardEdition updatePreconstructedDeckCardEdition = preconstructedDeckCard as PreconstructedDeckCardEdition;
+                if (updatePreconstructedDeckCardEdition == null)
+                {
+                    return;
+                }
 
-                    if (count == 0)
-                    {
-                        RemoveFromDbAndUpdateReferential(DatabaseType.Data, updatePreconstructedDeckCardEdition, RemoveFromReferential);
+                if (count == 0)
+                {
+                    RemoveFromDbAndUpdateReferential(DatabaseType.Data, updatePreconstructedDeckCardEdition, RemoveFromReferential);
 
-                        return;
-                    }
+                    return;
+                }
 
-                    updatePreconstructedDeckCardEdition.Number = count;
+                updatePreconstructedDeckCardEdition.Number = count;
 
-                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
-                    {
-                        Mapper<PreconstructedDeckCardEdition>.UpdateOne(cnx, updatePreconstructedDeckCardEdition);
-                    }
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                {
+                    Mapper<PreconstructedDeckCardEdition>.UpdateOne(cnx, updatePreconstructedDeckCardEdition);
                 }
             }
+        }
+        private int GetNextFakeGathererId()
+        {
+            return Interlocked.Decrement(ref _fakeGathererId);
         }
 
         public void DeleteOption(TypeOfOption type, string key)
@@ -541,6 +582,11 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICardEdition cardEdition)
         {
+            if (_fakeGathererId > cardEdition.IdGatherer)
+            {
+                _fakeGathererId = cardEdition.IdGatherer;
+            }
+
             _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
             _cacheForAllDbInfos = null;
         }

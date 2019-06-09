@@ -15,10 +15,18 @@
         private readonly Regex _decksRegex = new Regex(@"<a href=""(?<url>/deck/\w+/[^>]+)"">", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _deckNameRegex = new Regex(@"<h4>(?<name>[^<]+)</h4>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _deckEditionRegex = new Regex(@"<a download=""true"" href=""/deck/(?<edition>\w+)/[^>]*"">", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Regex _cardInfoRegex = new Regex(@"<a href=""/card/(?<edition>\w+)/[^>]*"">(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private const string CardSplitter = @"<div class='card_entry'>"; 
+        private readonly Regex _cardInfoRegex = new Regex(@"<a href=""(?<url>/card/(?<edition>\w+)/[^>]*)"">(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly Regex _cardImageRegex = new Regex(@"<img alt=.* src='(?<url>/cards[^>]*)'>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly Regex _cardRarityRegex = new Regex(@"Rarity: (?<rarity>\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private const string CardSplitter = @"<div class='card_entry'>";
+        private readonly Func<string, string> _getExtraInfo;
 
         private IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
+
+        public PreconstructedDeckImporter(Func<string, string> getExtraInfo)
+        {
+            _getExtraInfo = getExtraInfo;
+        }
 
         public string GetRootUrl()
         {
@@ -34,8 +42,11 @@
             
             string htmltext = WebUtility.HtmlDecode(html);
             MatchCollection matches = _decksRegex.Matches(htmltext);
-
-            return matches.OfType<Match>().Select(m => BaseUrl + m.Groups["url"].Value).ToArray();
+            ICollection<IPreconstructedDeck> decks = MagicDatabase.GetAllPreconstructedDecks();
+            return  matches.OfType<Match>()
+                           .Select(m => BaseUrl + m.Groups["url"].Value)
+                           .Where(u => decks.All(d => d.Url != u))
+                           .ToArray();
         }
 
         internal DeckInfo ParseDeckPage(string html)
@@ -68,8 +79,7 @@
             {
                 return null;
             }
-            
-            
+
             //Split in block
             IList<DeckCardInfo> cards = new List<DeckCardInfo>();
             string[] tokens = htmltext.Split(new string[] { CardSplitter }, StringSplitOptions.RemoveEmptyEntries);
@@ -83,24 +93,38 @@
                 {
                     throw new ParserException("Could not find Number");
                 }
+
                 foreach (string line in lines)
                 {
                     m = _cardInfoRegex.Match(line);
                     if (m.Success)
                     {
-                        
                         ICard card = GetCard(m);
                         IEdition edition = GetEdition(deckName, m);
+
+                        if (edition == null)
+                        {
+                            throw new ParserException("Could not find edition for card in " + deckName);
+                        }
 
                         int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
                         if (idGatherer == 0)
                         {
+                            //It is not a gatherer edition, we will add the card to it
+                            if (edition.IsNoneGatherer() && _getExtraInfo != null)
+                            {
+                                Tuple<string, IRarity> t = ExtractExtraInfo(m.Groups["url"].Value);
+                                cards.Add(new DeckCardInfo(edition.Id, card.Id, number, t.Item2.Id, t.Item1));
+                                break;
+                            }
+
                             throw new ParserException(string.Format("Could not find card with idCard {0} and idEdition {1}", card.Id, edition.Id));
-
                         }
-
-                        cards.Add(new DeckCardInfo(idGatherer, number));
-                        break;
+                        else
+                        {
+                            cards.Add(new DeckCardInfo(idGatherer, number));
+                            break;
+                        }
                     }
                 }
             }
@@ -113,11 +137,20 @@
             int cardCount = deckInfo.Count;
             //  60 Usual
             //  75 Usual with side board
+            //  62 Deckmasters
+            //  61 Beatdown
             // 100 Commander
-            //  30 or 26 Welcome Pack
+            //  15 or 22 or 26 or 30 or 35 or 40 or 41 Welcome Pack / Portal
             //  80 Archenemy
-            if (cardCount != 60 && cardCount != 75 && cardCount != 100 &&
-                cardCount != 30 && cardCount != 26 && cardCount != 80)
+            //  70 Planechase
+            if (cardCount != 60 && cardCount != 75 && 
+                cardCount != 62 &&
+                cardCount != 61 &&
+                cardCount != 100 &&
+                cardCount != 15 && cardCount != 22 && cardCount != 26 && cardCount != 30 && cardCount != 35 && cardCount != 40 && cardCount != 41 && 
+                cardCount != 80 &&
+                cardCount != 70 
+                )
             {
                 throw new ParserException(string.Format("Deck {0} countains {1} cards", deckName, cardCount));
             }
@@ -153,11 +186,6 @@
         private IEdition GetEdition(string deckName, Match m)
         {
             string cardEdition = m.Groups["edition"].Value.TrimEnd();
-            //Archenemy
-            if (cardEdition == "oe01")
-            {
-                cardEdition = "e01";
-            }
 
             IEdition edition = MagicDatabase.GetEditionFromCode(cardEdition);
             if (edition == null)
@@ -172,6 +200,39 @@
              }
 
             return edition;
+        }
+        private Tuple<string, IRarity> ExtractExtraInfo(string url)
+        {
+            string extraHtml = WebUtility.HtmlDecode(_getExtraInfo(BaseUrl + url));
+
+            Match m = _cardImageRegex.Match(extraHtml);
+            if (!m.Success)
+            {
+                throw new ParserException("Could not find Card image in with " + url);
+            }
+            string pictureUrl = BaseUrl + m.Groups["url"].Value;
+
+            m = _cardRarityRegex.Match(extraHtml);
+            if (!m.Success)
+            {
+                throw new ParserException("Could not find Card rarity in with " + url);
+            }
+            string rarityString = m.Groups["rarity"].Value.Trim();
+            if (rarityString.ToLower() == "mythic")
+            {
+                rarityString = "mythic rare";
+            }
+            else if (rarityString.ToLower() == "basic")
+            {
+                rarityString = "basic land";
+            }
+            IRarity rarity = MagicDatabase.GetRarity(rarityString);
+            if (rarity == null)
+            {
+                throw new ParserException("Unknown rarity " + rarityString);
+
+            }
+            return new Tuple<string, IRarity>(pictureUrl, rarity);
         }
     }
 }

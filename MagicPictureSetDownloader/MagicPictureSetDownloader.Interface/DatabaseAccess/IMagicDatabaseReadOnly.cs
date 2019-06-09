@@ -22,6 +22,7 @@
         IPicture GetPicture(int idGatherer, bool doNotCache = false);
         IPicture GetDefaultPicture();
         ITreePicture GetTreePicture(string key);
+        IRarity GetRarity(string rarity);
         IEdition GetEdition(string sourceName);
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
