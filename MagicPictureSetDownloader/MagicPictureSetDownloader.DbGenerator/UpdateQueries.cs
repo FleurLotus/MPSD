@@ -146,23 +146,17 @@ WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE 
 , FOREIGN KEY([IdPreconstructedDeck]) REFERENCES [PreconstructedDeck]([Id])
 )";
 
-        public const string AddSpecialSets =
+        public const string AddNoneGtahererSets =
 @"
-INSERT INTO Edition (Name, Code, GathererName,Completed, HasFoil)
-SELECT @name, @code, @name, 1, 1
+INSERT INTO Edition (Name, Code, GathererName, Completed, HasFoil)
+SELECT @name, @code, 'MTG.WTF-' || @name, 0, 1
 WHERE NOT EXISTS(SELECT 1 FROM Edition WHERE Name = @name)
 ";
-
-        public const string InsertSpecialSetsCards =
+        public const string AddAlternativeCode =
 @"
-INSERT INTO CardEdition (IdEdition, IdCard, IdRarity, IdGatherer, Url)
-SELECT e.Id, c.Id, r.Id, @id, @url
-FROM Edition e, Card c, Rarity r
-WHERE e.Code = @editionCode 
-AND c.Name = @cardName
-AND r.Code = @rarityCode
-AND NOT EXISTS(SELECT 1 FROM CardEdition WHERE IdGatherer = @id)
+UPDATE Edition
+SET AlternativeCode = CASE WHEN AlternativeCode IS NULL THEN @code ELSE AlternativeCode || ',' || @code END
+WHERE Name = @name AND NOT IFNULL(AlternativeCode,'') LIKE '%' || @code || '%'
 ";
-
     }
 }

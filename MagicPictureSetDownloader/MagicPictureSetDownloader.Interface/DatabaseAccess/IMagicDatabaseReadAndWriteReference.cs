@@ -5,6 +5,7 @@
 
     public interface IMagicDatabaseReadAndWriteReference : IMagicDatabaseReadOnly
     {
+        int InsertNewCardEditionWithFakeGathererId(int idEdition, int idCard, int idRarity, string url);
         void InsertNewPicture(int idGatherer, byte[] data);
         void InsertNewTreePicture(string key, byte[] data);
         void InsertNewEdition(string sourceName);

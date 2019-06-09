@@ -208,8 +208,20 @@
 
             foreach (DeckCardInfo deckCardInfo in deckInfo.Cards)
             {
-                MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdGatherer, deckCardInfo.Number);
+                if (deckCardInfo.NeedToCreate)
+                {
+                    int idGatherer = MagicDatabase.InsertNewCardEditionWithFakeGathererId(deckCardInfo.IdEdition, deckCardInfo.IdCard, deckCardInfo.IdRarity, deckCardInfo.PictureUrl);
+                    MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, idGatherer, deckCardInfo.Number);
+                }
+                else
+                {
+                    MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdGatherer, deckCardInfo.Number);
+                }
             }
+        }
+        public string GetExtraInfo(string url)
+        {
+            return _webAccess.GetHtml(url);
         }
 
         private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
