@@ -203,7 +203,12 @@
                 }
 
                 Dictionary<string, string> updatedcode = new Dictionary<string, string> {
-                    { "MD1" , "Modern Event Deck 2014"}
+                    { "MD1" , "Modern Event Deck 2014"},
+                    { "DD1" , "Duel Decks: Elves vs. Goblins"},
+                    { "DVD" , "Duel Decks Anthology, Divine vs. Demonic"},
+                    { "GVL" , "Duel Decks Anthology, Garruk vs. Liliana"},
+                    { "JVC" , "Duel Decks Anthology, Jace vs. Chandra"},
+                    { "EVG" , "Duel Decks Anthology, Elves vs. Goblins"},
                 };
 
                 foreach (var kv in updatedcode)
@@ -218,6 +223,10 @@
                     { "CP2" , "Fate Reforged Clash Pack"},
                     { "CP3" , "Magic Origins Clash Packs"},
                     { "TD2" , "Mirrodin Pure vs. New Phyrexia"},
+                    { "DPA" , "Duels of the Planeswalkers"},
+                    { "DKM" , "Deckmasters"},
+                    { "ATH" , "Anthologies"},
+                    { "ITP" , "ntroductory Two-Player Set"},
                 };
 
                 foreach (var kv in specialSets)
@@ -228,10 +237,12 @@
                 }
 
                 Dictionary<string, string> alternativeCodes = new Dictionary<string, string> {
-                    { "DVD" , "Divine vs. Demonic (Anthology)"},
-                    { "GVL" , "Garruk vs. Liliana (Anthology)"},
-                    { "JVC" , "Jace vs. Chandra (Anthology)"},
                     { "OE01" , "Archenemy: Nicol Bolas"},
+                    { "OPC2" , "Planechase 2012 Edition"},
+                    { "OARC" , "Archenemy"},
+                    { "H09" , "Slivers"},
+                    { "OHOP" , "Planechase"},
+                    { "P02" , "Portal Second Age"},
                 };
 
                 foreach (var kv in alternativeCodes)
