@@ -155,7 +155,7 @@ WHERE NOT EXISTS(SELECT 1 FROM Edition WHERE Name = @name)
         public const string AddAlternativeCode =
 @"
 UPDATE Edition
-SET AlternativeCode = CASE WHEN AlternativeCode IS NULL THEN @code ELSE AlternativeCode || ',' || @code END
+SET AlternativeCode = CASE WHEN AlternativeCode IS NULL THEN @code ELSE AlternativeCode || ';' || @code END
 WHERE Name = @name AND NOT IFNULL(AlternativeCode,'') LIKE '%' || @code || '%'
 ";
     }

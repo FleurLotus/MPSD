@@ -19,6 +19,8 @@
         private readonly Regex _cardImageRegex = new Regex(@"<img alt=.* src='(?<url>/cards[^>]*)'>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _cardRarityRegex = new Regex(@"Rarity: (?<rarity>\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private const string CardSplitter = @"<div class='card_entry'>";
+        // Magic Online + Coldsnap + doublon
+        private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0|me2|wth|vis|mir|csp|rqs)/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Func<string, string> _getExtraInfo;
 
         private IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
@@ -45,7 +47,7 @@
             ICollection<IPreconstructedDeck> decks = MagicDatabase.GetAllPreconstructedDecks();
             return  matches.OfType<Match>()
                            .Select(m => BaseUrl + m.Groups["url"].Value)
-                           .Where(u => decks.All(d => d.Url != u))
+                           .Where(u => decks.All(d => d.Url != u) && !_excludedRegex.IsMatch(u))
                            .ToArray();
         }
 
@@ -73,7 +75,7 @@
             IEdition deckEdition = GetEdition(deckName, m);
             if (deckEdition == null)
             {
-                throw new ParserException("Could not find edition with code " + deckEdition);
+                throw new ParserException("Could not find edition with name " + deckName);
             }
             if (MagicDatabase.GetPreconstructedDeck(deckEdition.Id, deckName) != null)
             {
@@ -152,7 +154,7 @@
                 cardCount != 70 
                 )
             {
-                throw new ParserException(string.Format("Deck {0} countains {1} cards", deckName, cardCount));
+                throw new ParserException(string.Format("Deck {0} contains {1} cards", deckName, cardCount));
             }
 
             return deckInfo;
@@ -182,7 +184,6 @@
 
             return card;
         }
-
         private IEdition GetEdition(string deckName, Match m)
         {
             string cardEdition = m.Groups["edition"].Value.TrimEnd();
