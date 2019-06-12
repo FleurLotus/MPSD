@@ -226,7 +226,7 @@
                     { "DPA" , "Duels of the Planeswalkers"},
                     { "DKM" , "Deckmasters"},
                     { "ATH" , "Anthologies"},
-                    { "ITP" , "ntroductory Two-Player Set"},
+                    { "ITP" , "Introductory Two-Player Set"},
                 };
 
                 foreach (var kv in specialSets)
