@@ -59,6 +59,7 @@
     <Compile Include="..\CommonFiles\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="Attach\GridViewSort.cs" />
     <Compile Include="Attach\TabItemExtensions.cs" />
     <Compile Include="Attach\TabControlExtensions.cs" />
     <Compile Include="Binding\TwoWayBinding.cs" />

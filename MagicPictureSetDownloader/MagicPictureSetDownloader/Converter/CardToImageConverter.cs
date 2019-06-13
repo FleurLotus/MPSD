@@ -8,15 +8,15 @@ namespace MagicPictureSetDownloader.Converter
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(BitmapImage))]
+    [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
     public class CardToImageConverter : ImageConverterBase
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
+            CardViewModel card = value as CardViewModel;
             int param = int.Parse(parameter.ToString());
 
-            if (node == null)
+            if (card == null)
             {
                 return null;
             }
@@ -24,11 +24,11 @@ namespace MagicPictureSetDownloader.Converter
             int idGatherer = 0;
             if (param == 0)
             {
-                idGatherer = node.Card.IdGatherer;
+                idGatherer = card.IdGatherer;
             }
-            else if (node.Card.OtherCardPart != null)
+            else if (card.OtherCardPart != null)
             {
-                idGatherer = node.Card.OtherCardPart.IsDownSide || node.Card.OtherCardPart.Is90DegreeSide ? node.Card.IdGatherer : node.Card.OtherCardPart.IdGatherer;
+                idGatherer = card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide ? card.IdGatherer : card.OtherCardPart.IdGatherer;
             }
 
             if (idGatherer == 0)

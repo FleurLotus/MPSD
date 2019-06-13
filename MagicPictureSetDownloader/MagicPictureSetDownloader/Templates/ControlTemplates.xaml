@@ -220,8 +220,8 @@
     <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
-            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={conv:CardToImageConverter}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter}, {conv:CardToImageConverter}}, ConverterParameter=0}" />
+            <Image StretchDirection="DownOnly" Source="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter}, {conv:CardToImageConverter}}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
                         <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={conv:CardToRotationAngleConverter}}" />
@@ -257,5 +257,5 @@
             </StackPanel>
         </Grid>
     </ControlTemplate>
-
+    
 </ResourceDictionary>

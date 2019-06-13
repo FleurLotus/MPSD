@@ -15,6 +15,7 @@
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.Download.Auto;
     using MagicPictureSetDownloader.ViewModel.Download.Edition;
@@ -37,6 +38,7 @@
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
+        public event EventHandler<EventArgs<PreconstructedDecksViewModel>> ShowPreconstructedDecks;
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
@@ -164,6 +166,10 @@
                     GenerateCollectionMenu();
                 }
             }
+        }
+        private void ShowPreconstructedDecksCommandExecute(object o)
+        {
+            OnEventRaise(ShowPreconstructedDecks, new PreconstructedDecksViewModel());
         }
         private void DeleteCollectionCommandExecute(object o)
         {
@@ -510,6 +516,8 @@
             bool hasCollection = cardCollections.Count > 0;
 
             _collectionViewModel.RemoveAllChildren();
+            _collectionViewModel.AddChild(new MenuViewModel("Preconstructed deck...", new RelayCommand(ShowPreconstructedDecksCommandExecute)));
+            _collectionViewModel.AddChild(MenuViewModel.Separator());
             _collectionViewModel.AddChild(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
             if (hasCollection)
             {
