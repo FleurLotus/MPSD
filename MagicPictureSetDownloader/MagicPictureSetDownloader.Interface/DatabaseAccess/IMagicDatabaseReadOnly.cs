@@ -18,6 +18,7 @@
         ICard GetCard(string name, string partName);
         ICard GetCard(int idGatherer);
         IEdition GetEditionFromCode(string code);
+        IEdition GetEditionById(int idEdition);
         int GetIdGatherer(ICard card, IEdition edition);
         IPicture GetPicture(int idGatherer, bool doNotCache = false);
         IPicture GetDefaultPicture();

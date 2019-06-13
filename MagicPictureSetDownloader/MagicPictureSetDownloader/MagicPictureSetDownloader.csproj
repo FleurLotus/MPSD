@@ -109,6 +109,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\HierarchicalResultNodeToCardConverter.cs" />
+    <Compile Include="UI\PreconstructedDecksWindow.xaml.cs">
+      <DependentUpon>PreconstructedDecksWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -202,6 +206,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <Page Include="UI\PreconstructedDecksWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UI\ImportExportWindow.xaml.cs">

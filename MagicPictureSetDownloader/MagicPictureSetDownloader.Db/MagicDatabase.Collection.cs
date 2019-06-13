@@ -40,6 +40,14 @@ namespace MagicPictureSetDownloader.Db
                 return _editions.FirstOrDefault(ed => ed.IsCode(code));
             }
         }
+        public IEdition GetEditionById(int idEdition)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _editions.FirstOrDefault(ed => ed.Id == idEdition);
+            }
+        }
 
         public ICardCollection GetCollection(int collectionId)
         {

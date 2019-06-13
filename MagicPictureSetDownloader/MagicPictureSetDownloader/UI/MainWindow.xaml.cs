@@ -10,6 +10,7 @@
     using Common.WPF;
     using Common.WPF.UI;
 
+    using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Main;
@@ -56,6 +57,10 @@
         public void DatabaseModificationRequested(object sender, EventArgs<INotifyPropertyChanged> args)
         {
             new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
+        }
+        public void ShowPreconstructedDecks(object sender, EventArgs<PreconstructedDecksViewModel> args)
+        {
+            new PreconstructedDecksWindow(args.Data) { Owner = this }.ShowDialog();
         }
     }
 }
