@@ -459,6 +459,31 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
+        public void PreconstructedDeckToCollection(IPreconstructedDeck preconstructedDeck, ICardCollection collection)
+        {
+            using (new WriterLock(_lock))
+            {
+                if (preconstructedDeck == null || collection == null)
+                {
+                    return;
+                }
+                ICollection<IPreconstructedDeckCardEdition> deckComposition = GetPreconstructedDeckCards(preconstructedDeck);
+                if (deckComposition == null || deckComposition.Count == 0)
+                {
+                    return;
+                }
+                int idLanguage = GetDefaultLanguage().Id;
+
+                using (BatchMode())
+                {
+                    foreach (IPreconstructedDeckCardEdition card in deckComposition)
+                    {
+                        InsertOrUpdateCardInCollection(collection.Id, card.IdGatherer, idLanguage, card.Number, 0);
+                    }
+                }
+            }
+        }
+
         private void InsertInReferential(ICardCollection cardCollection)
         {
             _collections.Add(cardCollection);

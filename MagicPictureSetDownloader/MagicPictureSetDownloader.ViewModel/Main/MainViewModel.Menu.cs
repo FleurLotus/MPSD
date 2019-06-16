@@ -169,7 +169,14 @@
         }
         private void ShowPreconstructedDecksCommandExecute(object o)
         {
-            OnEventRaise(ShowPreconstructedDecks, new PreconstructedDecksViewModel());
+            PreconstructedDecksViewModel vm = new PreconstructedDecksViewModel();
+            OnEventRaise(ShowPreconstructedDecks, vm);
+
+            if (vm.Result == true)
+            {
+                Loading = true;
+                ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(AddPreconstructedDeckToCollectionAsync, vm));
+            }
         }
         private void DeleteCollectionCommandExecute(object o)
         {
@@ -689,6 +696,14 @@
             ImportExportViewModel vm = obj as ImportExportViewModel;
             // ReSharper disable PossibleNullReferenceException
             vm.ImportExport();
+            // ReSharper restore PossibleNullReferenceException
+            LoadCardsHierarchy();
+        }
+        private void AddPreconstructedDeckToCollectionAsync(object obj)
+        {
+            PreconstructedDecksViewModel vm = obj as PreconstructedDecksViewModel;
+            // ReSharper disable PossibleNullReferenceException
+            _magicDatabaseForCollection.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected);
             // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
         }

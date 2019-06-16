@@ -23,7 +23,7 @@
             <ColumnDefinition Width="5*"/>
         </Grid.ColumnDefinitions>
 
-        <ListView Grid.Column="0" ItemsSource="{Binding Decks}" SelectedItem="{fl:TwoWayBinding SelectedPreconstructedDeck}" 
+        <ListView Grid.Column="0" ItemsSource="{Binding Decks}" SelectedItem="{fl:TwoWayBinding PreconstructedDeckSelected}" 
                   fl:GridViewSort.AutoSort="True">
             <i:Interaction.Behaviors>
                 <fl:GridViewColumnResizeBehavior />
@@ -42,11 +42,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="1" Margin="10">
-                <TextBlock HorizontalAlignment="Center" Text="{Binding SelectedPreconstructedDeck}" Style="{StaticResource Title}"
-                           Visibility="{Binding SelectedPreconstructedDeck, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}" />
+            <Border Grid.Row="0" HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="1" Margin="10"
+                     Visibility="{Binding PreconstructedDeckSelected, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+                <TextBlock HorizontalAlignment="Center" Text="{Binding PreconstructedDeckSelected}" Style="{StaticResource Title}" />
             </Border>
-            <Grid Grid.Row="1" Margin="10" DataContext="{Binding SelectedPreconstructedDeck}" Visibility="{Binding Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+            <Grid Grid.Row="1" Margin="10" DataContext="{Binding PreconstructedDeckSelected}" Visibility="{Binding Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -87,7 +87,11 @@
                 <Image Grid.Column="1" Margin="10" StretchDirection="DownOnly" Source="{Binding SelectedItem.Key, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
             </Grid>
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="Ok" Command="{Binding OkCommand}" Style="{StaticResource BottomButton}"/>
+                <StackPanel Orientation="Horizontal" Visibility="{Binding Collections.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+                    <Button Content="Add to collection" Margin="10" Width="100" Command="{Binding OkCommand}"/>
+                    <ComboBox Margin="10" Width="70" VerticalContentAlignment="Center"
+                              ItemsSource="{Binding Collections}" SelectedItem="{fl:TwoWayBinding CardCollectionSelected}" />
+                </StackPanel>
                 <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
             </StackPanel>
         </Grid>

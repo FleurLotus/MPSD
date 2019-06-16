@@ -4,15 +4,17 @@
     using System.Collections.ObjectModel;
 
     using Common.ViewModel;
+    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
     public class PreconstructedDeckViewModel: NotifyPropertyChangedBase
     {
         private KeyValuePair<CardViewModel, int> _selectedItem;
 
-        public PreconstructedDeckViewModel(string edition, string name, IEnumerable<KeyValuePair<CardViewModel, int>> cards)
+        public PreconstructedDeckViewModel(IPreconstructedDeck preconstructedDeck, string edition, IEnumerable<KeyValuePair<CardViewModel, int>> cards)
         {
-            Name = name;
+            PreconstructedDeck = preconstructedDeck;
+            Name = preconstructedDeck.Name;
             Edition = edition;
             IDictionary<CardViewModel, int> temp = new Dictionary<CardViewModel, int>();
             foreach (KeyValuePair<CardViewModel, int> kv in cards)
@@ -24,6 +26,7 @@
 
         public string Name { get; }
         public string Edition { get; }
+        public IPreconstructedDeck PreconstructedDeck { get; }
         public IDictionary<CardViewModel, int> Composition { get; }
 
         public KeyValuePair<CardViewModel, int> SelectedItem
