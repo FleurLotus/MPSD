@@ -10,28 +10,46 @@
 
     public class PreconstructedDecksViewModel: DialogViewModelBase
     {
-        private PreconstructedDeckViewModel _selectedPreconstructedDeck;
+        private PreconstructedDeckViewModel _preconstructedDeckSelected;
+        private ICardCollection _cardCollectionSelected;
         private readonly IMagicDatabaseReadOnly _magicDatabase;
-        
+
         public PreconstructedDecksViewModel()
         {
             _magicDatabase = MagicDatabaseManager.ReadOnly;
             Decks = LoadReferentialData();
+            Collections = new List<ICardCollection>(_magicDatabase.GetAllCollections()).AsReadOnly();
         }
         public IList<PreconstructedDeckViewModel> Decks { get; }
+        public IList<ICardCollection> Collections { get; }
 
-        public PreconstructedDeckViewModel SelectedPreconstructedDeck
+        public PreconstructedDeckViewModel PreconstructedDeckSelected
         {
             get
             {
-                return _selectedPreconstructedDeck;
+                return _preconstructedDeckSelected;
             }
             set
             {
-                if (_selectedPreconstructedDeck != value)
+                if (_preconstructedDeckSelected != value)
                 {
-                    _selectedPreconstructedDeck = value;
-                    OnNotifyPropertyChanged(nameof(SelectedPreconstructedDeck));
+                    _preconstructedDeckSelected = value;
+                    OnNotifyPropertyChanged(nameof(PreconstructedDeckSelected));
+                }
+            }
+        }
+        public ICardCollection CardCollectionSelected
+        {
+            get
+            {
+                return _cardCollectionSelected;
+            }
+            set
+            {
+                if (_cardCollectionSelected != value)
+                {
+                    _cardCollectionSelected = value;
+                    OnNotifyPropertyChanged(nameof(CardCollectionSelected));
                 }
             }
         }
@@ -46,13 +64,17 @@
                 ICollection<IPreconstructedDeckCardEdition> deckComposition = _magicDatabase.GetPreconstructedDeckCards(preconstructedDeck);
                 string edition = _magicDatabase.GetEditionById(preconstructedDeck.IdEdition).Name;
 
-                ret.Add(new PreconstructedDeckViewModel(edition, preconstructedDeck.Name, 
+                ret.Add(new PreconstructedDeckViewModel(preconstructedDeck, edition, 
                             deckComposition.Select(pdce => new KeyValuePair<CardViewModel, int>(allCardsViewModel[pdce.IdGatherer], pdce.Number))));
             }
 
             return ret.AsReadOnly();
         }
 
+        protected override bool OkCommandCanExecute(object o)
+        {
+            return CardCollectionSelected != null && PreconstructedDeckSelected != null;
+        }
 
     }
 }
