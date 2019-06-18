@@ -27,6 +27,7 @@
         IEdition GetEdition(string sourceName);
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
+        ICardEdition GetCardEditionFromPictureUrl(string pictureUrl);
         ILanguage GetDefaultLanguage();
         ILanguage GetEnglishLanguage();
         IBlock GetBlock(string blockName);

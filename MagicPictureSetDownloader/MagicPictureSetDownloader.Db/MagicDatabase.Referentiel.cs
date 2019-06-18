@@ -188,9 +188,11 @@ namespace MagicPictureSetDownloader.Db
                 {
                     throw new ApplicationDbException("InsertNewCardEditionWithFakeGathererId could only used for NoneGatherer edition");
                 }
-                if (GetIdGatherer(card, edition) != 0)
+                int existingIdGatherer = GetIdGatherer(card, edition);
+                if (existingIdGatherer != 0)
                 {
-                    return 0;
+                    // could have been inserted by another thread
+                    return existingIdGatherer;
                 }
 
                 int idGatherer = GetNextFakeGathererId();

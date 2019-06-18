@@ -118,15 +118,19 @@
         }
         public void InsertPictureInDb(string pictureUrl)
         {
-            int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
+            ICardEdition cardEdition =  MagicDatabase.GetCardEditionFromPictureUrl(pictureUrl);
+            if (cardEdition == null)
+            {
+                throw new ApplicationException("Could not find CardEdition with url: " + pictureUrl); 
+            }
 
-            IPicture picture = MagicDatabase.GetPicture(idGatherer);
+            IPicture picture = MagicDatabase.GetPicture(cardEdition.IdGatherer);
             if (picture == null)
             {
                 //No id found try insert
                 byte[] pictureData = _webAccess.GetFile(pictureUrl);
 
-                MagicDatabase.InsertNewPicture(idGatherer, pictureData);
+                MagicDatabase.InsertNewPicture(cardEdition.IdGatherer, pictureData);
             }
         }
         public void InsertRuleInDb(string rulesUrl)
