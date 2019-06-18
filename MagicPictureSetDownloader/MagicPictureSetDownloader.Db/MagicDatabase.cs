@@ -429,6 +429,14 @@ namespace MagicPictureSetDownloader.Db
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
             }
         }
+        public ICardEdition GetCardEditionFromPictureUrl(string pictureUrl)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _cardEditions.Values.FirstOrDefault(ce => ce.Url == pictureUrl);
+            }
+        }
         private ICollection<int> GetAllPicturesId()
         {
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
@@ -481,7 +489,7 @@ namespace MagicPictureSetDownloader.Db
                     }
                 }
 
-                return temp.Values.Select(ce => ce.IdGatherer).ToArray();
+                return temp.Values.Select(ce => ce.IdGatherer).Where(id => id > 0).ToArray();
             }
         }
 

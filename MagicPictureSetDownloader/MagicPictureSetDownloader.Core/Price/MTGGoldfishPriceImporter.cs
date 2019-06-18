@@ -103,6 +103,21 @@
                 {"GNT", "" },
                 //Gift Pack
                 {"G18", "" },
+                //DD Anthology
+                {"DVD", "" },
+                {"GVL", "" },
+                {"JVC", "" },
+                {"EVG", "" },
+                {"DD1", "" },
+                 //Special Set
+                {"CP1", "" },
+                {"CP2", "" },
+                {"CP3", "" },
+                {"DPA", "" },
+                {"DKM", "" },
+                {"ATH", "" },
+                {"ITP", "" },
+                {"TD2", "" },
         };
         private readonly IMagicDatabaseReadOnly _magicDatabase = MagicDatabaseManager.ReadOnly;
 
