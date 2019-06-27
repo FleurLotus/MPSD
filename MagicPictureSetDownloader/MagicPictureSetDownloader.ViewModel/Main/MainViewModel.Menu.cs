@@ -420,7 +420,10 @@
             fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
+            //Not Allowed in release version, the update is done by copy of referential
+#if DEBUG
             fileMenu.AddChild(new MenuViewModel("Update _Preconstructed Decks Database..", new RelayCommand(UpdatePreconstructedDeckCommandExecute)));
+#endif
             fileMenu.AddChild(MenuViewModel.Separator());
             //Price
             MenuViewModel priceMenu = new MenuViewModel("Update _Prices Database");

@@ -5,6 +5,50 @@
         public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
         public const string SelectTreePicture = @"SELECT Name, Image FROM TreePicture";
 
+        public const string SelectPreconstuctedDeckCards =
+@"SELECT pdce.IdGatherer, pd.Name, e.GathererName, pdce.Number
+FROM PreconstructedDeckCardEdition pdce
+INNER JOIN PreconstructedDeck pd ON pd.id = pdce.IdPreconstructedDeck
+INNER JOIN Edition e ON e.id = pd.IdEdition";
+
+        public const string InsertPreconstructedDeckCards =
+@"INSERT INTO PreconstructedDeckCardEdition(IdGatherer,IdPreconstructedDeck,Number)
+SELECT @idgatherer, pd.Id, @number
+FROM PreconstructedDeck pd
+INNER JOIN Edition e ON e.id = pd.IdEdition
+WHERE e.GathererName = @gatherername
+AND pd.Name = @name
+";
+        public const string SelectPreconstuctedDecks =
+@"SELECT pd.Url, pd.Name, e.GathererName
+FROM PreconstructedDeck pd
+INNER JOIN Edition e ON e.Id = pd.IdEdition";
+
+        public const string InsertNewPreconstuctedDecks =
+@"INSERT INTO PreconstructedDeck(IdEdition, Name, Url)
+SELECT Id, @name, @url
+FROM Edition
+WHERE GathererName = @gatherername";
+
+        public const string SelectFakeIdGathererCardEdition =
+@"SELECT ce.IdGatherer, e.GathererName, r.Code, c.Name, c.PartName, ce.Url
+FROM CardEdition ce
+INNER JOIN Edition e ON e.Id = ce.IdEdition
+INNER JOIN Card c ON c.Id = ce.IdCard
+INNER JOIN Rarity r ON r.Id = ce.IdRarity
+WHERE IdGatherer < 0";
+
+        public const string InsertFakeIdGathererCardEdition =
+@"INSERT INTO CardEdition(IdGatherer, IdEdition, IdCard, IdRarity, Url)
+SELECT @idgatherer, e.Id, c.Id, r.Id, @url
+FROM Edition e
+CROSS JOIN Rarity r
+CROSS JOIN Card c
+WHERE e.GathererName = @gatherername
+AND r.Code = @raritycode
+ANd c.Name = @cardname 
+AND c.PartName = @cardpartname ";
+
         public const string RemoveDuelDeckFromName =
 @"UPDATE Edition 
 SET NAME = SUBSTR(Name, 13)

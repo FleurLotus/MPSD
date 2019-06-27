@@ -83,8 +83,8 @@
                     UpgradePicture(dbVersion, repo);
                     break;
             }
-            
-#if !DEBUG 
+
+#if !DEBUG
             //No update of Version in debug
             if (_applicationVersion.Major != dbVersion)
             {
@@ -253,7 +253,79 @@
                 }
 
             }
+
+            AddPreconstructedDeckFromReference(repo);
         }
+        private void AddPreconstructedDeckFromReference(IRepository repo)
+        {
+            string temporaryDatabasePath = new Generator(DatabaseType.Data).Generate(true);
+            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabaseType.Data));
+            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = temporaryDatabasePath }).ToString();
+
+            Dictionary<string, Tuple<string, string>> referencePreconstructedDecks = GetPreconstructedDecks(connectionString);
+            Dictionary<int, string[]> referenceFakeIdGathererCardEdition = GetFakeIdGathererCardEdition(connectionString);
+            Dictionary<Tuple<int, string, string>, int> referencePreconstructedDeckCards = GetPreconstructedDeckCards(connectionString);
+
+            File.Delete(temporaryDatabasePath);
+
+            Dictionary<string, Tuple<string, string>> currentPreconstructedDecks = GetPreconstructedDecks(_connectionString);
+            Dictionary<int, string[]> currentFakeIdGathererCardEdition = GetFakeIdGathererCardEdition(_connectionString);
+            Dictionary<Tuple<int, string, string>, int> currentPreconstructedDeckCards = GetPreconstructedDeckCards(_connectionString);
+
+            var parameters = new List<KeyValuePair<string, object>[]>();
+
+            foreach (var kv in referencePreconstructedDecks)
+            {
+                if (!currentPreconstructedDecks.ContainsKey(kv.Key))
+                {
+                    parameters.Add(new KeyValuePair<string, object>[] {
+                        new KeyValuePair<string, object>("@url", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value.Item1),
+                       new KeyValuePair<string, object>("@gatherername", kv.Value.Item2)});
+                }
+            }
+            if (parameters.Count > 0)
+            {
+                repo.ExecuteParametrizeCommandMulti(UpdateQueries.InsertNewPreconstuctedDecks, parameters);
+                parameters.Clear();
+            }
+
+            foreach (var kv in referenceFakeIdGathererCardEdition)
+            {
+                if (!currentFakeIdGathererCardEdition.ContainsKey(kv.Key))
+                {
+                    parameters.Add(new KeyValuePair<string, object>[] {
+                       new KeyValuePair<string, object>("@idgatherer", kv.Key),
+                       new KeyValuePair<string, object>("@gatherername", kv.Value[0]),
+                       new KeyValuePair<string, object>("@raritycode", kv.Value[1]),
+                       new KeyValuePair<string, object>("@cardname", kv.Value[2]),
+                       new KeyValuePair<string, object>("@cardpartname", kv.Value[3]),
+                       new KeyValuePair<string, object>("@url", kv.Value[4]) });
+                }
+            }
+            if (parameters.Count > 0)
+            {
+                repo.ExecuteParametrizeCommandMulti(UpdateQueries.InsertFakeIdGathererCardEdition, parameters);
+                parameters.Clear();
+            }
+            foreach (var kv in referencePreconstructedDeckCards)
+            {
+                if (!currentPreconstructedDeckCards.ContainsKey(kv.Key))
+                {
+                    parameters.Add(new KeyValuePair<string, object>[] {
+                       new KeyValuePair<string, object>("@idgatherer", kv.Key.Item1),
+                       new KeyValuePair<string, object>("@name", kv.Key.Item2),
+                       new KeyValuePair<string, object>("@gatherername", kv.Key.Item3),
+                       new KeyValuePair<string, object>("@number", kv.Value) });
+                }
+            }
+            if (parameters.Count > 0)
+            {
+                repo.ExecuteParametrizeCommandMulti(UpdateQueries.InsertPreconstructedDeckCards, parameters);
+                parameters.Clear();
+            }
+        }
+
         private void UpgradePicture(int dbVersion, IRepository repo)
         {
             AddMissingPictureFromReference(repo);
@@ -268,8 +340,8 @@
             File.Delete(temporaryDatabasePath);
 
             Dictionary<string, byte[]> current = GetTreePictures(_connectionString);
-            
-            foreach (var kv in reference) 
+
+            foreach (var kv in reference)
             {
                 if (!current.ContainsKey(kv.Key))
                 {
@@ -278,6 +350,75 @@
                        new KeyValuePair<string, object>("@value", kv.Value));
                 }
             }
+        }
+        private Dictionary<string, Tuple<string, string>> GetPreconstructedDecks(string connectionString)
+        {
+            Dictionary<string, Tuple<string, string>> ret = new Dictionary<string, Tuple<string, string>>(StringComparer.InvariantCultureIgnoreCase);
+
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectPreconstuctedDecks;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret.Add(reader.GetString(0), new Tuple<string, string>(reader.GetString(1), reader.GetString(2)));
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        private Dictionary<Tuple<int, string, string>, int> GetPreconstructedDeckCards(string connectionString)
+        {
+            Dictionary<Tuple<int, string, string>, int> ret = new Dictionary<Tuple<int, string, string>, int>();
+
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectPreconstuctedDeckCards;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret.Add(new Tuple<int, string, string>(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)), reader.GetInt32(3));
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        private Dictionary<int, string[]> GetFakeIdGathererCardEdition(string connectionString)
+        {
+            Dictionary<int, string[]> ret = new Dictionary<int, string[]>();
+
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectFakeIdGathererCardEdition;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret.Add(reader.GetInt32(0), new string[] { reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
+                        }
+                    }
+                }
+            }
+            return ret;
         }
         private Dictionary<string, byte[]> GetTreePictures(string connectionString)
         {

@@ -22,5 +22,6 @@ namespace Common.SQL
         void ExecuteBatch(string sqlcommand, params string[] parameters);
 
         void ExecuteParametrizeCommand(string sqlcommand, params KeyValuePair<string, object>[] parameters);
+        void ExecuteParametrizeCommandMulti(string sqlcommand, IEnumerable<KeyValuePair<string, object>[]> executionParameters);
     }
 }
