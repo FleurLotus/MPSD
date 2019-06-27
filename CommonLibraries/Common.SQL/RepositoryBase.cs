@@ -176,6 +176,42 @@
             }
         }
 
+        public void ExecuteParametrizeCommandMulti(string sqlcommand, IEnumerable<KeyValuePair<string, object>[]> executionParameters)
+        {
+            using (IDbConnection cnx = GetConnection())
+            {
+                cnx.Open();
+                using (IDbTransaction transaction = cnx.BeginTransaction())
+                {
+                    using (IDbCommand cmd = cnx.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        cmd.Transaction = transaction;
+                        string trimcommand = sqlcommand.TrimEnd('\r', '\n');
+                        if (!string.IsNullOrWhiteSpace(trimcommand))
+                        {
+                            cmd.CommandText = trimcommand;
+                            foreach (var parameters in executionParameters)
+                            {
+                                cmd.Parameters.Clear();
+                                foreach (var kv in parameters)
+                                {
+                                    IDbDataParameter parameter = cmd.CreateParameter();
+                                    parameter.ParameterName = kv.Key;
+                                    object value = kv.Value;
+                                    parameter.Value = value ?? DBNull.Value;
+                                    cmd.Parameters.Add(parameter);
+                                }
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
         public abstract void Refresh();
         protected abstract IDbConnection GetConnection();
     }
