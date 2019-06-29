@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="12.0">
+  <Last Number="12.1">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Preconstructed Decks</Comment>
+    <Comment>Version with Fixed Preconstructed Decks</Comment>
   </Last>
+  <Old Number="12.0">
+    <Comment>Version with Preconstructed Decks</Comment>
+  </Old>
   <Old Number="11.3">
     <Comment>Version with Ravnica Allegience Guild Packs, War of the Spark and War of the Spark Mythic Edition</Comment>
   </Old>
