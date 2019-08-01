@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="12.1">
+  <Last Number="12.2">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Fixed Preconstructed Decks</Comment>
+    <Comment>Version with Modern Horizons, Magic Core 2020, Signature Spellbook: Gideon</Comment>
   </Last>
+  <Old Number="12.1">
+    <Comment>Version with Fixed Preconstructed Decks</Comment>
+  </Old>
   <Old Number="12.0">
     <Comment>Version with Preconstructed Decks</Comment>
   </Old>
