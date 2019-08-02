@@ -69,7 +69,7 @@
             {
                 if (DownloadManager != null)
                 {
-                    DownloadManager.NewEditionCreated += OnNewEditionCreated;
+                    DownloadManager.NewEditionCreated -= OnNewEditionCreated;
                 }
             }
             _disposed = true;
