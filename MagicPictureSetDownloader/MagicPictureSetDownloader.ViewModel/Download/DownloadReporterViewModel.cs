@@ -4,8 +4,9 @@
     using System.Threading;
 
     using Common.ViewModel;
+    using MagicPictureSetDownloader.Interface;
 
-    public class DownloadReporterViewModel : NotifyPropertyChangedBase, IDisposable
+    public class DownloadReporterViewModel : NotifyPropertyChangedBase, IDisposable, IProgressReporter
     {
         private bool _disposed;
         private int _current;
@@ -61,7 +62,7 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        internal void Finish()
+        public void Finish()
         {
             _lock.EnterWriteLock();
             _current = _total;

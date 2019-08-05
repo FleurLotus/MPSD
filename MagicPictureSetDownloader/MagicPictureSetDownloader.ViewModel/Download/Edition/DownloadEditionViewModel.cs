@@ -20,7 +20,8 @@
 
         private bool _disposed;
         private bool _hasJob;
-        
+        private DownloadManagerEdition _downloadManagerEdition;
+
         public DownloadEditionViewModel()
             : base("Download new editions")
         {
@@ -116,6 +117,9 @@
         private void FeedEditionsCallBack(object state)
         {
             DownloadReporter.Reset();
+            _downloadManagerEdition = new DownloadManagerEdition(DownloadManager, DownloadReporter);
+            _downloadManagerEdition.Finished += DownloadManagerEditionFinished;
+            _downloadManagerEdition.Error += DownloadManagerEditionError;
 
             foreach (EditionInfoViewModel editionInfoViewModel in Editions.Where(s => s.Active))
             {
@@ -133,58 +137,37 @@
                         AppendMessage(string.Format("{0}: {1} urls while cardnumber is set to {2}", model.Name, cardInfos.Length, model.CardNumber.Value), false);
                     }
                 }
-                ThreadPool.QueueUserWorkItem(RetrieveEditionDataCallBack, new object[] { model.DownloadReporter, model.EditionId, cardInfos.Select(s => WebAccess.ToAbsoluteUrl(model.Url, s)) });
+
+                _downloadManagerEdition.AddRange(cardInfos.Select(s => WebAccess.ToAbsoluteUrl(model.Url, s)), model.EditionId, model.DownloadReporter);
             }
+
+            _downloadManagerEdition.Start();
         }
-        private void RetrieveEditionDataCallBack(object state)
+        private void DownloadManagerEditionFinished(object sender, EventArgs e)
         {
-            object[] args = (object[])state;
+            _downloadManagerEdition.Finished -= DownloadManagerEditionFinished;
+            _downloadManagerEdition.Error -= DownloadManagerEditionError;
+            _downloadManagerEdition = null;
+            //Keep previous error
+            string msg = Message;
+            Start(DispatcherInvoker);
 
-            DownloadReporterViewModel editionDownloadReporter = (DownloadReporterViewModel)args[0];
-            int editionId = (int)args[1];
-            IEnumerable<string> urls = (IEnumerable<string>)args[2];
-
-            try
+            if (!string.IsNullOrWhiteSpace(msg))
             {
-                bool hasCard = false;
-                foreach (string cardUrl in urls)
-                {
-                    if (IsStopping)
-                    {
-                        break;
-                    }
-
-                    DownloadManager.GetCardInfo(cardUrl, editionId);
-                    hasCard = true;
-                    editionDownloadReporter.Progress();
-                    DownloadReporter.Progress();
-                }
-                if (!IsStopping && hasCard)
-                {
-                    DownloadManager.EditionCompleted(editionId);
-                }
-            }
-            catch (Exception ex)
-            {
-                AppendMessage(ex.Message, false);
+                AppendMessage(msg, true);
             }
 
-            editionDownloadReporter.Finish();
-            Interlocked.Decrement(ref CountDown);
-            if (CountDown == 0)
+            JobFinished();
+        }
+        private void DownloadManagerEditionError(object sender, EventArgs<string> e)
+        {
+            AppendMessage(e.Data, false);
+        }
+        protected override void OnStopRequested()
+        {
+            if (_downloadManagerEdition != null)
             {
-                DownloadReporter.Finish();
-                
-                //Keep previous error
-                string msg = Message;
-                Start(DispatcherInvoker);
-
-                if (!string.IsNullOrWhiteSpace(msg))
-                {
-                    AppendMessage(msg, true);
-                }
-
-                JobFinished();
+                _downloadManagerEdition.Stop();
             }
         }
         private void EditionInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

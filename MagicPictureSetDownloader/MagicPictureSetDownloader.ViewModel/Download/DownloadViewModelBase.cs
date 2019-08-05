@@ -137,12 +137,15 @@
                 }
 
                 IsStopping = true;
+                OnStopRequested();
                 FinishedStopping.WaitOne();
                 FinishedStopping.Dispose();
             }
             _disposed = true;
         }
-        
+        protected virtual void OnStopRequested()
+        {
+        }
         protected void SetMessage(string msg)
         {
             lock (_stringBuilder)
