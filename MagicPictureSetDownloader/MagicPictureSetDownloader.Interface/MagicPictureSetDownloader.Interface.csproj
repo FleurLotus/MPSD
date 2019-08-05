@@ -43,34 +43,35 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="IPreconstructedDeckCardEdition.cs" />
-    <Compile Include="IPreconstructedDeck.cs" />
-    <Compile Include="IPrice.cs" />
-    <Compile Include="IRuling.cs" />
-    <Compile Include="IAudit.cs" />
+    <Compile Include="DAO\IPreconstructedDeckCardEdition.cs" />
+    <Compile Include="DAO\IPreconstructedDeck.cs" />
+    <Compile Include="DAO\IPrice.cs" />
+    <Compile Include="DAO\IRuling.cs" />
+    <Compile Include="DAO\IAudit.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndUpdate.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteOption.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCardInCollection.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteReference.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCollection.cs" />
-    <Compile Include="IImportExportCardInCollectionCount.cs" />
+    <Compile Include="DAO\IImportExportCardInCollectionCount.cs" />
     <Compile Include="Enum.cs" />
-    <Compile Include="ICardInCollectionCount.cs" />
-    <Compile Include="ICardCollection.cs" />
-    <Compile Include="IIdName.cs" />
+    <Compile Include="DAO\ICardInCollectionCount.cs" />
+    <Compile Include="DAO\ICardCollection.cs" />
+    <Compile Include="DAO\IIdName.cs" />
     <Compile Include="IImportExportFormatter.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadOnly.cs" />
-    <Compile Include="IOption.cs" />
-    <Compile Include="IPictureKey.cs" />
-    <Compile Include="ILanguage.cs" />
-    <Compile Include="ITreePicture.cs" />
-    <Compile Include="IBlock.cs" />
-    <Compile Include="ICard.cs" />
-    <Compile Include="ICardAllDbInfo.cs" />
-    <Compile Include="ICardEdition.cs" />
-    <Compile Include="IEdition.cs" />
-    <Compile Include="IPicture.cs" />
-    <Compile Include="IRarity.cs" />
+    <Compile Include="DAO\IOption.cs" />
+    <Compile Include="DAO\IPictureKey.cs" />
+    <Compile Include="DAO\ILanguage.cs" />
+    <Compile Include="DAO\ITreePicture.cs" />
+    <Compile Include="DAO\IBlock.cs" />
+    <Compile Include="DAO\ICard.cs" />
+    <Compile Include="DAO\ICardAllDbInfo.cs" />
+    <Compile Include="DAO\ICardEdition.cs" />
+    <Compile Include="DAO\IEdition.cs" />
+    <Compile Include="DAO\IPicture.cs" />
+    <Compile Include="DAO\IRarity.cs" />
+    <Compile Include="IProgressReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

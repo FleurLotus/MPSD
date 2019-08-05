@@ -83,7 +83,7 @@
                 InsertCardEditionInDb(editionId, cardWithExtraInfo, pictureUrl);
             }
         }
-        private void ManageMultiPage(string baseUrl, Action<string> workOnHtml)
+        internal void ManageMultiPage(string baseUrl, Action<string> workOnHtml)
         {
             int page = 0;
             bool hasnextpage;
@@ -228,7 +228,7 @@
             return _webAccess.GetHtml(url);
         }
 
-        private void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
+        internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
@@ -247,7 +247,7 @@
             }
         }
 
-        private void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
+        internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
             MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Type,
