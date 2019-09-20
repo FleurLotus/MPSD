@@ -271,6 +271,7 @@
             Dictionary<string, Tuple<string, string>> currentPreconstructedDecks = GetPreconstructedDecks(_connectionString);
             Dictionary<int, string[]> currentFakeIdGathererCardEdition = GetFakeIdGathererCardEdition(_connectionString);
             Dictionary<Tuple<int, string, string>, int> currentPreconstructedDeckCards = GetPreconstructedDeckCards(_connectionString);
+            HashSet<int> currentIdGatherers = GetAllIdGatherer(_connectionString);
 
             var parameters = new List<KeyValuePair<string, object>[]>();
 
@@ -310,7 +311,7 @@
             }
             foreach (var kv in referencePreconstructedDeckCards)
             {
-                if (!currentPreconstructedDeckCards.ContainsKey(kv.Key))
+                if (!currentPreconstructedDeckCards.ContainsKey(kv.Key) && currentIdGatherers.Contains(kv.Key.Item1))
                 {
                     parameters.Add(new KeyValuePair<string, object>[] {
                        new KeyValuePair<string, object>("@idgatherer", kv.Key.Item1),
@@ -414,6 +415,29 @@
                         while (reader.Read())
                         {
                             ret.Add(reader.GetInt32(0), new string[] { reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        private HashSet<int> GetAllIdGatherer(string connectionString)
+        {
+            HashSet<int> ret = new HashSet<int>();
+
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectAllIdGathererCards;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            ret.Add(reader.GetInt32(0));
                         }
                     }
                 }
