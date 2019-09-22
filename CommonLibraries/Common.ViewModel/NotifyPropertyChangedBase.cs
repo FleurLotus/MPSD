@@ -4,6 +4,8 @@
     using System.ComponentModel;
     using System.Threading;
 
+    using Common.Library.Notify;
+
     public class NotifyPropertyChangedBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -15,7 +17,7 @@
             _lazyLinkedProperties = new Lazy<LinkedProperties>(() => new LinkedProperties(this), LazyThreadSafetyMode.PublicationOnly);
         }
         
-        public void OnNotifyPropertyChanged(string propertyName)
+        protected void OnNotifyPropertyChanged(string propertyName)
         {
             if (_lazyLinkedProperties.IsValueCreated)
             {
@@ -29,7 +31,21 @@
                 RaiseNotifyPropertyChanged(propertyName);
             }
         }
-        
+        protected void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg)
+        {
+            if (ev != null && arg != null)
+            {
+                ev(this, new EventArgs<T>(arg));
+            }
+        }
+        protected void OnEventRaise(EventHandler ev)
+        {
+            if (ev != null)
+            {
+                ev(this, EventArgs.Empty);
+            }
+        }
+
         private void RaiseNotifyPropertyChanged(string propertyName)
         {
             PropertyChangedEventHandler e = PropertyChanged;
