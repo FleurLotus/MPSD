@@ -94,21 +94,6 @@
 
         #endregion
 
-        private void OnEventRaise<T>(EventHandler<EventArgs<T>> ev, T arg)
-        {
-            if (ev != null && arg != null)
-            {
-                ev(this, new EventArgs<T>(arg));
-            }
-        }
-        private void OnEventRaise(EventHandler ev)
-        {
-            if (ev != null)
-            {
-                ev(this, EventArgs.Empty);
-            }
-        }
-
         #region Command
 
         private void UpdateDatabaseCommandExecute(object o)
