@@ -17,9 +17,10 @@ INNER JOIN Edition e ON e.id = pd.IdEdition";
 
         public const string InsertPreconstructedDeckCards =
 @"INSERT INTO PreconstructedDeckCardEdition(IdGatherer,IdPreconstructedDeck,Number)
-SELECT @idgatherer, pd.Id, @number
+SELECT ce.IdGatherer, pd.Id, @number
 FROM PreconstructedDeck pd
 INNER JOIN Edition e ON e.id = pd.IdEdition
+INNER JOIN CardEdition ce ON ce.IdGatherer = @idgatherer
 WHERE e.GathererName = @gatherername
 AND pd.Name = @name
 ";
