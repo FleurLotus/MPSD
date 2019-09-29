@@ -64,6 +64,11 @@
         {
             get { return IsSplitted && Text != null && Text.StartsWith("Aftermath"); }
         }
+        //Adventure
+        public bool IsSameDisplay
+        {
+            get { return IsMultiPart && Type.EndsWith("Adventure"); }
+        }
         public IRuling[] Rulings
         {
             get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }
