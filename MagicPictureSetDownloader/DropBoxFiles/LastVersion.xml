@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="12.2">
+  <Last Number="12.3">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Modern Horizons, Magic Core 2020, Signature Spellbook: Gideon</Comment>
+    <Comment>Version with Commander 2019 and Trone of Eldraine</Comment>
   </Last>
+  <Old Number="12.2">
+    <Comment>Version with Modern Horizons, Magic Core 2020, Signature Spellbook: Gideon</Comment>
+  </Old>
   <Old Number="12.1">
     <Comment>Version with Fixed Preconstructed Decks</Comment>
   </Old>

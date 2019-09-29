@@ -252,6 +252,7 @@
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
 
+                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilFalse2);
             }
 
             AddPreconstructedDeckFromReference(repo);
