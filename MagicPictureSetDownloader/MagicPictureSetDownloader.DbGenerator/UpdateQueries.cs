@@ -167,6 +167,13 @@ WHERE Code IN ('V15','V16','V17',
 'DDO','DDP','DDQ','DDR','DDS','DDT','DDU','GS1',
 'E01','PCA'
 )";
+
+        public const string CorrectHasFoilFalse2 =
+@"UPDATE Edition
+SET HasFoil = 0
+WHERE Code IN ('C19'
+)";
+
         public const string CorrectHasFoilTrue =
 @"UPDATE Edition
 SET HasFoil = 1
