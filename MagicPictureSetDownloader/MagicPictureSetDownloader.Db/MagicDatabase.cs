@@ -297,7 +297,7 @@ namespace MagicPictureSetDownloader.Db
                         ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
                         cardAllDbInfo.CardPart2 = cardPart2;
 
-                        //Be sure to get the other part (Up/Down and Splitted have the same gatherer id so no return)
+                        //Be sure to get the other part (Up/Down, Splitted and Adventure have the same gatherer id so no return)
                         ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id && ce.IdGatherer != edition.IdGatherer);
 
                         //Verso of Reserse Card and Multi-card

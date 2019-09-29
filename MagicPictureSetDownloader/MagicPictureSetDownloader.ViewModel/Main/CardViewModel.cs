@@ -44,7 +44,8 @@
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
-                if (!cardAllDbInfo.CardPart2.IsSplitted && !cardAllDbInfo.CardPart2.IsReverseSide && !cardAllDbInfo.CardPart2.IsMultiCard)
+                if (!cardAllDbInfo.CardPart2.IsSplitted && !cardAllDbInfo.CardPart2.IsReverseSide 
+                    && !cardAllDbInfo.CardPart2.IsMultiCard && !cardAllDbInfo.CardPart2.IsSameDisplay)
                 {
                     OtherCardPart.IsDownSide = true;
                 }

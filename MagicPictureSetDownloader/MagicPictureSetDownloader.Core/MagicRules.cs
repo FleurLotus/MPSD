@@ -45,6 +45,7 @@
         Phenomenon = 1 << 13,
         Contraption = 1 << 14,
         Saga = 1 << 15,
+        Adventure = 1 << 16,
         //Must be constistante with GetCardType
     }
 
@@ -350,6 +351,11 @@
                 cardType |= CardType.Saga;
             }
 
+            if (IsAdventure(type))
+            {
+                cardType |= CardType.Adventure;
+            }
+
             return cardType;
         }
         public static ShardColor GetColor(string castingCost)
@@ -425,6 +431,10 @@
         public static bool IsSaga(string type)
         {
             return type.ToLowerInvariant().Contains("saga");
+        }
+        public static bool IsAdventure(string type)
+        {
+            return type.ToLowerInvariant().Contains("adventure");
         }
     }
 }

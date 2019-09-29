@@ -18,6 +18,7 @@
         bool IsReverseSide { get; }
         bool IsSplitted { get; }
         bool Is90DegreeSide { get; }
+        bool IsSameDisplay { get; }
         bool IsMultiCard { get; }
         string ToString(int? languageId);
         bool HasTranslation(int languageId);
