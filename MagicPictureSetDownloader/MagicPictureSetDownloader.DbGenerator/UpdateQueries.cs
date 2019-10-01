@@ -5,10 +5,6 @@
         public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
         public const string SelectTreePicture = @"SELECT Name, Image FROM TreePicture";
 
-        public const string SelectAllIdGathererCards =
-@"SELECT ce.IdGatherer
-FROM CardEdition ce";
-
         public const string SelectPreconstuctedDeckCards =
 @"SELECT pdce.IdGatherer, pd.Name, e.GathererName, pdce.Number
 FROM PreconstructedDeckCardEdition pdce
@@ -162,22 +158,13 @@ WHERE Name IN ('Boros Guildgate (a)', 'Dimir Guildgate (a)','Golgari Guildgate (
         public const string CorrectHasFoilFalse =
 @"UPDATE Edition
 SET HasFoil = 0
-WHERE Code IN ('V15','V16','V17',
-'C15','C16','CMA','C17','CM2','C18',
-'DDO','DDP','DDQ','DDR','DDS','DDT','DDU','GS1',
-'E01','PCA'
-)";
-
-        public const string CorrectHasFoilFalse2 =
-@"UPDATE Edition
-SET HasFoil = 0
-WHERE Code IN ('C19'
-)";
+WHERE Code = @code
+";
 
         public const string CorrectHasFoilTrue =
 @"UPDATE Edition
 SET HasFoil = 1
-WHERE Code IN ('CNS','EXO')
+WHERE Code = @code
 ";
         public const string CorrectBattleBondPartnerNotFlipCard =
 @"UPDATE Card

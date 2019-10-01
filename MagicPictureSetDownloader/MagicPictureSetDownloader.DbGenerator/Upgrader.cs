@@ -184,8 +184,17 @@
                     repo.ExecuteBatch(UpdateQueries.CreatePriceTable);
                 }
 
-                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilTrue);
-                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilFalse);
+                foreach (string code in new[] { "'CNS","EXO" })
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.CorrectHasFoilTrue,
+                       new KeyValuePair<string, object>("@code", code));
+                }
+
+                foreach (string code in new[] { "V15", "V16", "V17", "C15", "C16", "CMA", "C17", "CM2", "C18", "DDO", "DDP", "DDQ", "DDR", "DDS", "DDT", "DDU", "GS1", "E01", "PCA" })
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.CorrectHasFoilFalse,
+                       new KeyValuePair<string, object>("@code", code));
+                }
 
                 //11.1
                 repo.ExecuteBatch(UpdateQueries.CorrectBattleBondPartnerNotFlipCard);
@@ -252,7 +261,11 @@
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
 
-                repo.ExecuteBatch(UpdateQueries.CorrectHasFoilFalse2);
+                foreach (string code in new[] { "C19" })
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.CorrectHasFoilFalse,
+                       new KeyValuePair<string, object>("@code", code));
+                }
             }
 
             AddPreconstructedDeckFromReference(repo);
