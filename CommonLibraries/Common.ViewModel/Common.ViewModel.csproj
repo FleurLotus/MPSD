@@ -48,8 +48,10 @@
     <Compile Include="Dialog\DisplayInfo.cs" />
     <Compile Include="Exception\ExceptionViewModel.cs" />
     <Compile Include="Dialog\DialogViewModelBase.cs" />
+    <Compile Include="IAsyncCommand.cs" />
     <Compile Include="Input\InputViewModel.cs" />
     <Compile Include="Input\InputViewModelFactory.cs" />
+    <Compile Include="AsyncCommand.cs" />
     <Compile Include="SplashScreen\SplashScreenFactory.cs" />
     <Compile Include="SplashScreen\SplashScreenViewModel.cs" />
     <Compile Include="Validation\Attributes\StringRegExValidationAttribute.cs" />
