@@ -2,16 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using System.Net;
     using System.Net.Http;
     using Common.Library.Notify;
+    using Common.Library.Threading;
 
     public class WebAccess
     {
         public event EventHandler<EventArgs<CredentialRequieredArgs>> CredentialRequiered;
 
+        private HttpClient _httpClient;
         private ICredentials _credentials;
-        private readonly IDictionary<string, string> _htmlCache = new Dictionary<string, string>();
+        private readonly IDictionary<string, string> _htmlCache;
+        private readonly object _lock = new object();
+
+        public WebAccess()
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            _httpClient = GetHttpClient();
+            _htmlCache = new Dictionary<string, string>();
+        }
 
         public static string ToAbsoluteUrl(string baseurl, string relativeurl, bool useOnlyDomain = false)
         {
@@ -106,6 +117,11 @@
                 if (!string.IsNullOrEmpty(args.Login))
                 {
                     _credentials = new NetworkCredential { UserName = args.Login, Password = args.Password };
+                    lock (_lock)
+                    {
+                        _httpClient = NewHttpClient();
+                    }
+
                     return true;
                 }
             }
@@ -115,56 +131,60 @@
 
         private HttpClient GetHttpClient()
         {
-            HttpClientHandler httpClientHandler = new HttpClientHandler();
+            lock(_lock)
+            {
+                if (_httpClient == null)
+                {
+                    _httpClient = NewHttpClient();
+                }
+
+                return _httpClient;
+            }
+        }
+
+        private HttpClient NewHttpClient()
+        {
             if (_credentials == null)
             {
-                httpClientHandler.UseDefaultCredentials = true;
+                return new HttpClient(new HttpClientHandler { UseDefaultCredentials = true });
             }
-            else
-            {
-                httpClientHandler.Credentials = _credentials;
-            }
-
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
-            return new HttpClient(httpClientHandler);
-
+            return new HttpClient(new HttpClientHandler { Credentials = _credentials });
         }
+
+
         public string GetHtml(string url, bool forceRefresh = false)
+        {
+            return AsyncHelper.RunSync(() => GetHtmlAsync(url, forceRefresh));
+        }
+
+        public async Task<string> GetHtmlAsync(string url, bool forceRefresh = false)
         {
             string html;
             if (forceRefresh || !_htmlCache.TryGetValue(url, out html))
             {
-                html = GetDataWithProxyFallBack(() =>
-                {
-                    using (HttpClient httpClient = GetHttpClient())
-                    {
-                        return httpClient.GetStringAsync(url).Result;
-                    }
-                });
+                html = await GetDataWithProxyFallBack(() => GetHttpClient().GetStringAsync(url));
                 _htmlCache[url] = html;
             }
             return html;
         }
+
         public byte[] GetFile(string url)
         {
-            return GetDataWithProxyFallBack(
-                () =>
-                    {
-                        using (HttpClient httpClient = GetHttpClient())
-                        {
-                            return httpClient.GetByteArrayAsync(url).Result;
-                        }
-                    }
-               );
+            return AsyncHelper.RunSync(() => GetFileAsync(url));
         }
-        private T GetDataWithProxyFallBack<T>(Func<T> getdata)
+
+        public async Task<byte[]> GetFileAsync(string url)
+        {
+            return await GetDataWithProxyFallBack(() => GetHttpClient().GetByteArrayAsync(url));
+        }
+
+        private async Task<T> GetDataWithProxyFallBack<T>(Func<Task<T>> getdata)
         {
             do
             {
                 try
                 {
-                    return getdata();
+                    return await getdata();
                 }
                 catch (WebException wex)
                 {

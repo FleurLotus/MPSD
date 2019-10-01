@@ -75,9 +75,12 @@
     <Compile Include="Notify\EventDispatcher.cs" />
     <Compile Include="Notify\IEventDispatcher.cs" />
     <Compile Include="Notify\EventHandlers.cs" />
+    <Compile Include="Threading\AsyncHelper.cs" />
+    <Compile Include="Threading\IErrorHandler.cs" />
     <Compile Include="Threading\Flag.cs" />
     <Compile Include="Threading\FlagCount.cs" />
     <Compile Include="Threading\FlagExtension.cs" />
+    <Compile Include="Threading\SafeFireAndForgetExtensions.cs" />
     <Compile Include="Threading\UpgradeableReadLock.cs" />
     <Compile Include="Threading\ThreadPoolArgs.cs" />
     <Compile Include="Threading\WriterLock.cs" />
