@@ -189,7 +189,7 @@ WHERE OtherPartName IS NOT NULL AND Id IN (SELECT IdCard FROM CardEdition WHERE 
 , FOREIGN KEY([IdPreconstructedDeck]) REFERENCES [PreconstructedDeck]([Id])
 )";
 
-        public const string AddNoneGtahererSets =
+        public const string AddNoneGathererSets =
 @"
 INSERT INTO Edition (Name, Code, GathererName, Completed, HasFoil)
 SELECT @name, @code, 'MTG.WTF-' || @name, 0, 1
