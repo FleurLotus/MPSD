@@ -65,6 +65,8 @@
     <Compile Include="Download\Auto\AutoDownloadImageViewModel.cs" />
     <Compile Include="Download\DownloadViewModelBase.cs" />
     <Compile Include="Download\Edition\NewEditionInfoViewModel.cs" />
+    <Compile Include="Input\CardCollectionInputGraphicViewModel.cs" />
+    <Compile Include="Input\CollectionInputGraphicViewModel.cs" />
     <Compile Include="Input\CardSourceViewModel.cs" />
     <Compile Include="Input\CardRemoveViewModel.cs" />
     <Compile Include="Input\UpdateViewModelCommun.cs" />

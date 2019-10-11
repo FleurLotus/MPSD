@@ -523,4 +523,69 @@
             </DataGrid>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type input:CollectionInputGraphicViewModel}" d:IsDesignTimeCreatable="False">
+        <DataTemplate.Resources>
+            <Style TargetType="Label">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Margin" Value="5,0"/>
+            </Style>
+        </DataTemplate.Resources>
+        <Grid MinWidth="500" MaxWidth="800" MaxHeight="600">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <GroupBox Grid.Row="0" Header="Input options">
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="30"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
+                    <Button Grid.Column="1" Grid.Row="0" Content="Change" Command="{Binding ChangeInputLanguageCommand}" Width="70" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <Border Grid.Column="2" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" Visibility="{Binding InputLanguage, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+                        <Image Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
+                    </Border>
+                    <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
+                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
+                              SelectedValue="{fl:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
+                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <Label Grid.Column="0" Grid.Row="2" Content="Filter" />
+                    <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Filter}" />
+                </Grid>
+            </GroupBox>
+            <ListBox Grid.Row="1" ItemsSource="{Binding Cards}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type input:CardCollectionInputGraphicViewModel}" d:IsDesignTimeCreatable="False">
+        <Grid>
+            <Grid.InputBindings>
+                <MouseBinding Gesture="RightClick" Command="{Binding RemoveCommand}" />
+                <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" />
+            </Grid.InputBindings>
+            <Image Height="176" Width="132" ToolTip="{Binding NameInLanguage}" Source="{Binding Card, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
+            <Label Height="176" Width="132" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Foreground="OrangeRed"
+                    Background="{x:Null}" FontSize="20" Content="{Binding CountLabel}" />
+        </Grid>
+    </DataTemplate>
 </ResourceDictionary>

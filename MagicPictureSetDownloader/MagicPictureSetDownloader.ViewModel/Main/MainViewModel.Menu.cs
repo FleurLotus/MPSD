@@ -223,6 +223,11 @@
             OnDialogWanted(new CardInputViewModel(Hierarchical.Name, (int)o));
             LoadCardsHierarchy();
         }
+        private void CollectionInputGraphicCommandExecute(object o)
+        {
+            OnDialogWanted(new CollectionInputGraphicViewModel(Hierarchical.Name));
+            LoadCardsHierarchy();
+        }
         private void SearchCommandExecute(object o)
         {
             if (_searchViewModel == null)
@@ -478,6 +483,8 @@
 
             ContextMenuRoot.AddChild(new MenuViewModel("Add cards", new RelayCommand(CardInputCommandExecute), 1));
             ContextMenuRoot.AddChild(new MenuViewModel("Remove cards", new RelayCommand(CardInputCommandExecute), -1));
+            ContextMenuRoot.AddChild(MenuViewModel.Separator());
+            ContextMenuRoot.AddChild(new MenuViewModel("Add cards (Graphic)", new RelayCommand(CollectionInputGraphicCommandExecute)));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
 
             HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
