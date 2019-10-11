@@ -465,14 +465,14 @@ namespace MagicPictureSetDownloader.Db
         }
         public string[] GetMissingPictureUrls()
         {
-            ICollection<int> idGatherers = GetAllPicturesId();
+            HashSet<int> idGatherers = new HashSet<int>(GetAllPicturesId());
 
             return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
                                     .Select(ce => ce.Url).ToArray();
         }
         public ICardAllDbInfo[] GetCardsWithPicture()
         {
-            ICollection<int> idGatherers = GetAllPicturesId();
+            HashSet<int> idGatherers = new HashSet<int>(GetAllPicturesId());
 
             return GetAllInfos().Where(ce => idGatherers.Contains(ce.IdGatherer) || idGatherers.Contains(ce.IdGathererPart2)).ToArray();
         }

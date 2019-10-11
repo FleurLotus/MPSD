@@ -240,7 +240,7 @@
 
                 foreach (var kv in specialSets)
                 {
-                    repo.ExecuteParametrizeCommand(UpdateQueries.AddNoneGtahererSets,
+                    repo.ExecuteParametrizeCommand(UpdateQueries.AddNoneGathererSets,
                        new KeyValuePair<string, object>("@code", kv.Key),
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
