@@ -20,7 +20,7 @@
             _language = language;
             AddCommand = new RelayCommand(AddCommandExecute);
             RemoveCommand = new RelayCommand(RemoveCommandExecute);
-            AddLinkedProperty(nameof(Count), nameof(CountLabel));
+            AddLinkedProperty(nameof(ChangedCount), new [] { nameof(Count), nameof(CountLabel) });
         }
 
         public ICommand AddCommand { get; }
@@ -30,38 +30,54 @@
 
         public int Count
         {
-            get { return _cardInCollection + _changedCount; }
+            get { return _cardInCollection + ChangedCount; }
         }
         public string CountLabel
         {
             get
             {
-                if (_changedCount == 0)
+                if (ChangedCount == 0)
                 {
                     return _cardInCollection.ToString();
                 }
-                return string.Format("{0} {1:+0;-0}", _cardInCollection, _changedCount);
+                return string.Format("{0} {1:+0;-0}", _cardInCollection, ChangedCount);
+            }
+        }
+        public int ChangedCount
+        {
+            get
+            {
+                return _changedCount;
+            }
+            private set
+            {
+                if (_changedCount!= value)
+                {
+                    _changedCount = value;
+                    OnNotifyPropertyChanged(nameof(ChangedCount));
+                }
             }
         }
 
         private void RemoveCommandExecute(object obj)
         {
-            if (_changedCount + _cardInCollection > 0)
+            if (ChangedCount + _cardInCollection > 0)
             {
-                _changedCount--;
-                OnNotifyPropertyChanged(nameof(Count));
+                ChangedCount--;
             }
         }
-
         private void AddCommandExecute(object obj)
         {
-            _changedCount++;
-            OnNotifyPropertyChanged(nameof(Count));
+            ChangedCount++;
         }
-
         public int CompareTo(CardCollectionInputGraphicViewModel other)
         {
             return NameInLanguage.CompareTo(other.NameInLanguage);
         }
+        public void Reset()
+        {
+            ChangedCount = 0;
+        }
+
     }
 }

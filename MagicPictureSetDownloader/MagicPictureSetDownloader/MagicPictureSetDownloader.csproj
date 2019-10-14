@@ -116,6 +116,7 @@
     <Compile Include="Converter\GathererIdToImageConverter.cs" />
     <Compile Include="Converter\CardToVariationsConverter.cs" />
     <Compile Include="Converter\HierarchicalResultNodeToCardConverter.cs" />
+    <Compile Include="Converter\Coef.cs" />
     <Compile Include="UI\PreconstructedDecksWindow.xaml.cs">
       <DependentUpon>PreconstructedDecksWindow.xaml</DependentUpon>
     </Compile>

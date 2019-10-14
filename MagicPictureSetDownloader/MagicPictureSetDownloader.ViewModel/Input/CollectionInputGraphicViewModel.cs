@@ -1,8 +1,10 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Windows.Data;
     using System.Windows.Input;
 
     using Common.Library.Collection;
@@ -20,7 +22,11 @@
         private IEdition _editionSelected;
         private ILanguage _inputLanguage;
         private string _filter;
+        private bool _foil;
+        private bool _hasChange;
+        private int _size;
         private IDictionary<string, ICard> _allCardSorted;
+        private readonly RangeObservableCollection<CardCollectionInputGraphicViewModel> _cards;
 
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
@@ -50,23 +56,64 @@
             _allLanguages = _magicDatabase.GetAllLanguages().ToArray();
 
             Editions = _magicDatabase.GetAllEditionsOrdered();
-            Cards = new RangeObservableCollection<CardCollectionInputGraphicViewModel>();
+            _cards = new RangeObservableCollection<CardCollectionInputGraphicViewModel>();
+            Cards = CollectionViewSource.GetDefaultView(_cards);
+            Cards.Filter = ToDisplay;
             ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
+            ResetCommand = new RelayCommand(ResetCommandExecute);
             CardCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == name);
-
+            Size = 10;
             AddLinkedProperty(nameof(InputLanguage), nameof(InputLanguageName));
 
             RebuildOrder();
         }
 
         public ICommand ChangeInputLanguageCommand { get; }
+        public ICommand ResetCommand { get; }
         public IEdition[] Editions { get; }
         public ICardCollection CardCollection { get; }
-        public RangeObservableCollection<CardCollectionInputGraphicViewModel> Cards { get; private set; }
+        public ICollectionView Cards { get; private set; }
 
         public string InputLanguageName
         {
             get { return _inputLanguage == null ? "Default" : _inputLanguage.Name; }
+        }
+        public bool Foil
+        {
+            get { return _foil; }
+            set
+            {
+                if (value != _foil)
+                {
+                    _foil = value;
+                    OnNotifyPropertyChanged(nameof(Foil));
+                    RefreshDisplayedData();
+                }
+            }
+        }
+        public bool HasChange
+        {
+            get { return _hasChange; }
+            set
+            {
+                if (value != _hasChange)
+                {
+                    _hasChange = value;
+                    OnNotifyPropertyChanged(nameof(HasChange));
+                }
+            }
+        }
+        public int Size
+        {
+            get { return _size; }
+            set
+            {
+                if (_size != value)
+                {
+                    _size = value;
+                    OnNotifyPropertyChanged(nameof(Size));
+                }
+            }
         }
         public ILanguage InputLanguage
         {
@@ -81,7 +128,6 @@
                 }
             }
         }
-        //ALERT-FBO TO BE CODED
         public string Filter
         {
             get { return _filter; }
@@ -91,6 +137,7 @@
                 {
                     _filter = value;
                     OnNotifyPropertyChanged(nameof(Filter));
+                    Cards.Refresh();
                 }
             }
         }
@@ -108,6 +155,13 @@
             }
         }
 
+        private void ResetCommandExecute(object obj)
+        {
+            foreach (CardCollectionInputGraphicViewModel card in _cards)
+            {
+                card.Reset();
+            }
+        }
         private void ChangeInputLanguageCommandExecute(object obj)
         {
             InputViewModel vm = InputViewModelFactory.Instance.CreateChooseInListViewModel("Input language", "Choose input language", _allLanguages.Select(c => c.Name).ToList());
@@ -148,10 +202,27 @@
         {
             _allCardSorted = _allCardInfos.GetAllCardsOrderByTranslation(_inputLanguage);
         }
+        private bool ToDisplay(object o)
+        {
+            if (string.IsNullOrEmpty(Filter))
+            {
+                return true;
+            }
+
+            return ((CardCollectionInputGraphicViewModel)o).NameInLanguage.Contains(Filter);
+        }
+        private void ItemChanged(object sender, PropertyChangedEventArgs e)
+        {
+            HasChange = _cards.Any(c => c.ChangedCount != 0);
+        }
         private void RefreshDisplayedData()
         {
             IEdition editionSelected = EditionSelected;
-            Cards.Clear();
+            foreach (CardCollectionInputGraphicViewModel c in _cards)
+            {
+                c.PropertyChanged -= ItemChanged;
+            }
+            _cards.Clear();
             if (editionSelected == null)
             {
                 return;
@@ -161,12 +232,15 @@
             foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => cadi.Edition == editionSelected))
             {
                 string name = _allCardSorted.First(acsKv => cardInfo.Card == acsKv.Value).Key;
-                //ALERT-FBO mettre la bonne quantité
-                sorted.Add(new CardCollectionInputGraphicViewModel(new CardViewModel(cardInfo), InputLanguage, name, 0));
+                //ALERT-FBO mettre la bonne quantité avec foil flag
+                CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(new CardViewModel(cardInfo), InputLanguage, name, 0);
+                newCard.PropertyChanged += ItemChanged;
+                sorted.Add(newCard);
   
             }
             sorted.Sort();
-            Cards.AddRange(sorted);
+            _cards.AddRange(sorted);
+            Cards.Filter = ToDisplay;
         }
     }
 }
