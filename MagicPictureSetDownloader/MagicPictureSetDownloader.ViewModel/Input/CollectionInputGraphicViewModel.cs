@@ -62,7 +62,7 @@
             ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
             ResetCommand = new RelayCommand(ResetCommandExecute);
             CardCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == name);
-            Size = 10;
+            Size = 126;
             AddLinkedProperty(nameof(InputLanguage), nameof(InputLanguageName));
 
             RebuildOrder();
@@ -217,6 +217,10 @@
         }
         private void RefreshDisplayedData()
         {
+            //ALERT-FBO: Better management of reload.
+            //Foil only refesh count
+            //Language refresh count and order (akways keep english name for reference)
+            //Edition full refresh
             IEdition editionSelected = EditionSelected;
             foreach (CardCollectionInputGraphicViewModel c in _cards)
             {
@@ -231,16 +235,23 @@
             List<CardCollectionInputGraphicViewModel> sorted = new List<CardCollectionInputGraphicViewModel>();
             foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => cadi.Edition == editionSelected))
             {
+                CardViewModel card = new CardViewModel(cardInfo);
                 string name = _allCardSorted.First(acsKv => cardInfo.Card == acsKv.Value).Key;
-                //ALERT-FBO mettre la bonne quantité avec foil flag
-                CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(new CardViewModel(cardInfo), InputLanguage, name, 0);
+                int count = 0;
+
+                foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, cardInfo.Card)
+                                .Where(cicc =>  cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEdition(cicc.IdGatherer).Id == editionSelected.Id))
+                {
+                    count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
+
+                }
+                CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(card, InputLanguage, name, count);
                 newCard.PropertyChanged += ItemChanged;
                 sorted.Add(newCard);
   
             }
             sorted.Sort();
             _cards.AddRange(sorted);
-            Cards.Filter = ToDisplay;
         }
     }
 }

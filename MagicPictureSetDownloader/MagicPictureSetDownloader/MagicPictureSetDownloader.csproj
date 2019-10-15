@@ -100,6 +100,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="VirtualizingWrapPanel, Version=1.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\Packages\VirtualizingWrapPanel.1.3.3\lib\net45\VirtualizingWrapPanel.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -116,7 +119,7 @@
     <Compile Include="Converter\GathererIdToImageConverter.cs" />
     <Compile Include="Converter\CardToVariationsConverter.cs" />
     <Compile Include="Converter\HierarchicalResultNodeToCardConverter.cs" />
-    <Compile Include="Converter\Coef.cs" />
+    <Compile Include="Converter\ToSize.cs" />
     <Compile Include="UI\PreconstructedDecksWindow.xaml.cs">
       <DependentUpon>PreconstructedDecksWindow.xaml</DependentUpon>
     </Compile>

@@ -14,7 +14,7 @@
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
 
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-
+                    xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                     mc:Ignorable="d"
                    >
      <!-- CommonDialog -->
@@ -531,57 +531,50 @@
                 <Setter Property="Margin" Value="5,0"/>
             </Style>
         </DataTemplate.Resources>
-        <Grid Width="800" MaxHeight="600">
+        <Grid MaxWidth="800" MaxHeight="600">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" MinHeight="50"/>
             </Grid.RowDefinitions>
-            <GroupBox Grid.Row="0" Header="Input options" Width="500" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}">
+            <GroupBox Grid.Row="0" Header="Display" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
-                    <Button Grid.Column="1" Grid.Row="0" Content="Change" Width="70" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
+                    <Button Grid.Column="2" Grid.Row="0" Content="Change" Width="70" VerticalAlignment="Center" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}"
                             Command="{Binding ChangeInputLanguageCommand}"/>
-                    <Border Grid.Column="2" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" Visibility="{Binding InputLanguage, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
+                    <Border Grid.Column="3" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" 
+                            Visibility="{Binding InputLanguage, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                         <Image Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
                     </Border>
+                    
                     <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
-                              SelectedValue="{fl:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" />
-                    <Image Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
+                              SelectedValue="{fl:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" 
+                              IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
+                    <Image Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
-                    <CheckBox Grid.Column="1" Grid.Row="2" Content="Foil" VerticalAlignment="Center" IsChecked="{Binding Foil}"/> 
-                </Grid>
-            </GroupBox>
-            <GroupBox Grid.Row="1" Header="Filter" Width="500">
-                <Grid Margin="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="70"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Column="1" Grid.Row="2" Content="Foil" VerticalAlignment="Center" IsChecked="{Binding Foil}"
+                              IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" /> 
 
-                    <Label Grid.Column="0" Grid.Row="0" Content="Filter" />
-                    <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Grid.Column="0" Grid.Row="1" Content="Image Size" />
-                    <Slider Grid.Column="1" Grid.Row="1" Minimum="1" Maximum="50" TickFrequency="5" TickPlacement="Both" SmallChange="1" LargeChange="5" 
+                    <Label Grid.Column="0" Grid.Row="3" Content="Filter" />
+                    <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Grid.Column="0" Grid.Row="4" Content="Image Size" />
+                    <Slider Grid.Column="1" Grid.Row="4" Minimum="25" Maximum="300" TickFrequency="5" TickPlacement="Both" SmallChange="1" LargeChange="5" 
                             Value="{Binding Size}" />
-                    <Button Grid.Column="2" Grid.Row="1" Content="Reset" Width="70" VerticalAlignment="Center" HorizontalAlignment="Right"
+                    <Button Grid.Column="2" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" HorizontalAlignment="Right"
                             Command="{Binding ResetCommand}" />
                 </Grid>
             </GroupBox>
@@ -593,7 +586,7 @@
                 </ListBox.ItemTemplate>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel IsItemsHost="True" Orientation="Horizontal"  />
+                        <controls:VirtualizingWrapPanel IsItemsHost="True" Orientation="Vertical" ItemSize="{Binding Size, Converter={conv:ToSize}}" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
             </ListBox>
@@ -601,23 +594,24 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type input:CardCollectionInputGraphicViewModel}" d:IsDesignTimeCreatable="False">
-        <Grid>
-            <Grid.InputBindings>
-                <MouseBinding Gesture="RightClick" Command="{Binding RemoveCommand}" />
-                <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" />
-            </Grid.InputBindings>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Border BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.InputBindings>
+                    <MouseBinding Gesture="RightClick" Command="{Binding RemoveCommand}" />
+                    <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" />
+                </Grid.InputBindings>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
             
-            <Image Grid.Row="0"
-                   ToolTip="{Binding NameInLanguage}" Source="{Binding Card, Converter={conv:CardToImageConverter}, ConverterParameter=0}" 
-                   Height="{Binding DataContext.Size, Converter={conv:Coef}, ConverterParameter=8.8, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" 
-                   Width="{Binding DataContext.Size, Converter={conv:Coef}, ConverterParameter=6.3, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" 
-                   />
-            <Label Grid.Row="1" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Foreground="OrangeRed"
-                   Background="{x:Null}" FontSize="14" Content="{Binding CountLabel}" />
-        </Grid>
+                <Image Grid.Row="0" Stretch="Uniform"
+                       ToolTip="{Binding NameInLanguage}" Source="{Binding Card, Converter={conv:CardToImageConverter}, ConverterParameter=0}" 
+                       Width="{Binding DataContext.Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" 
+                       />
+                <Label Grid.Row="1" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Foreground="OrangeRed"
+                       Background="{x:Null}" FontSize="10" Content="{Binding CountLabel}" />
+            </Grid>
+        </Border>
     </DataTemplate>
 </ResourceDictionary>
