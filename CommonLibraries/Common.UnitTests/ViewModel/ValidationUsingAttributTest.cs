@@ -13,31 +13,31 @@
         {
             ViewModelWithValidation vm = new ViewModelWithValidation { StringValue = "123456", IntValue = 0, ObjectValue = new object() };
             
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
             vm.ObjectValue = null;
-            Assert.IsNotNullOrEmpty(vm.Error, "Must have error an other null error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error an other null error");
             vm.ObjectValue = "derfgtyhjuikl";
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
             vm.IntValue = -10;
-            Assert.IsNotNullOrEmpty(vm.Error, "Must have error a greather than error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error a greather than error");
             vm.IntValue = -5;
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
             vm.IntValue = 10;
-            Assert.IsNotNullOrEmpty(vm.Error, "Must have error a less than error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error a less than error");
             vm.IntValue = 5;
-            Assert.IsNotNullOrEmpty(vm.Error, "Must still have error a less than error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must still have error a less than error");
             vm.IntValue = 0;
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
             vm.StringValue = null;
-            Assert.IsNotNullOrEmpty(vm.Error, "Must have error a min len  error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error a min len  error");
             vm.StringValue = "aze";
-            Assert.IsNotNullOrEmpty(vm.Error, "Must still have error a min len  error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must still have error a min len  error");
             vm.StringValue = "azert";
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
             vm.StringValue = "azertazertazert";
-            Assert.IsNotNullOrEmpty(vm.Error, "Must have error a max len  error");
+            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error a max len  error");
             vm.StringValue = "azertazert";
-            Assert.IsNullOrEmpty(vm.Error, "Must not have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), "Must not have error");
         }
 
         //Used by reflection

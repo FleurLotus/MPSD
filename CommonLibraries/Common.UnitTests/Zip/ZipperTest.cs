@@ -10,6 +10,14 @@
     {
         private const string ZipFileName = @"ZipTest.zip";
 
+        [OneTimeSetUp]
+        public void RunBeforeAnyTests()
+        {
+            var dir = Path.GetDirectoryName(typeof(ZipperTest).Assembly.Location);
+
+            Directory.SetCurrentDirectory(dir);
+        }
+
         [Test]
         public void TestUnzipAll()
         {
