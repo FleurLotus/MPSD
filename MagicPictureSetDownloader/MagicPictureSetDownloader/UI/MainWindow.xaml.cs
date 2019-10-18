@@ -58,7 +58,7 @@
         {
             new DatabaseInfoModificationWindow(args.Data) { Owner = this }.ShowDialog();
         }
-        public void ShowPreconstructedDecks(object sender, EventArgs<PreconstructedDecksViewModel> args)
+        public void PreconstructedDecksRequested(object sender, EventArgs<PreconstructedDecksViewModel> args)
         {
             new PreconstructedDecksWindow(args.Data) { Owner = this }.ShowDialog();
         }

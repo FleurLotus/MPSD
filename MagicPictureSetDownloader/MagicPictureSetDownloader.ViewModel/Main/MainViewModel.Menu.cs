@@ -38,7 +38,7 @@
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
-        public event EventHandler<EventArgs<PreconstructedDecksViewModel>> ShowPreconstructedDecks;
+        public event EventHandler<EventArgs<PreconstructedDecksViewModel>> PreconstructedDecksRequested;
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
@@ -155,7 +155,7 @@
         private void ShowPreconstructedDecksCommandExecute(object o)
         {
             PreconstructedDecksViewModel vm = new PreconstructedDecksViewModel();
-            OnEventRaise(ShowPreconstructedDecks, vm);
+            OnEventRaise(PreconstructedDecksRequested, vm);
 
             if (vm.Result == true)
             {

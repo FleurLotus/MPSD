@@ -56,8 +56,8 @@
         <i:EventTrigger EventName="DatabaseModificationRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="DatabaseModificationRequested" />
         </i:EventTrigger>
-        <i:EventTrigger EventName="ShowPreconstructedDecks" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="ShowPreconstructedDecks" />
+        <i:EventTrigger EventName="PreconstructedDecksRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="PreconstructedDecksRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="ExceptionOccured" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="ExceptionOccured" />
