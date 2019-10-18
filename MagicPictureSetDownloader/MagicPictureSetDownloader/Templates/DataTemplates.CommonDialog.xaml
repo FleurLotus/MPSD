@@ -14,7 +14,6 @@
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
 
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
                     mc:Ignorable="d"
                    >
      <!-- CommonDialog -->
@@ -521,75 +520,6 @@
                     <DataGridCheckBoxColumn Header="IsAltArt" Binding="{Binding IsAltArt}" CellStyle="{StaticResource DataGridCellVCenter}"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Grid>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type input:CollectionInputGraphicViewModel}" d:IsDesignTimeCreatable="False">
-        <DataTemplate.Resources>
-            <Style TargetType="Label">
-                <Setter Property="FontWeight" Value="Bold"/>
-                <Setter Property="Margin" Value="5,0"/>
-            </Style>
-        </DataTemplate.Resources>
-        <Grid MaxWidth="800" MaxHeight="600">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*" MinHeight="50"/>
-            </Grid.RowDefinitions>
-            <GroupBox Grid.Row="0" Header="Display" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Grid Margin="5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="40"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
-                    <Button Grid.Column="2" Grid.Row="0" Content="Change" Width="70" VerticalAlignment="Center" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}"
-                            Command="{Binding ChangeInputLanguageCommand}"/>
-                    <Border Grid.Column="3" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" 
-                            Visibility="{Binding InputLanguage, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
-                        <Image Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
-                    </Border>
-                    
-                    <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
-                              SelectedValue="{fl:TwoWayBinding EditionSelected}" ItemsSource="{Binding Editions}" 
-                              IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <Image Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
-
-                    <CheckBox Grid.Column="1" Grid.Row="2" Content="Foil" VerticalAlignment="Center" IsChecked="{Binding Foil}"
-                              IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" /> 
-
-                    <Label Grid.Column="0" Grid.Row="3" Content="Filter" />
-                    <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
-                    <Label Grid.Column="0" Grid.Row="4" Content="Image Size" />
-                    <Slider Grid.Column="1" Grid.Row="4" Minimum="25" Maximum="300" TickFrequency="5" TickPlacement="Both" SmallChange="1" LargeChange="5" 
-                            Value="{Binding Size}" />
-                    <Button Grid.Column="2" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" HorizontalAlignment="Right"
-                            Command="{Binding ResetCommand}" />
-                </Grid>
-            </GroupBox>
-            <ListBox Grid.Row="2" ItemsSource="{Binding Cards}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <controls:VirtualizingWrapPanel IsItemsHost="True" Orientation="Vertical" ItemSize="{Binding Size, Converter={conv:ToSize}}" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
         </Grid>
     </DataTemplate>
 

@@ -39,6 +39,7 @@
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
         public event EventHandler<EventArgs<PreconstructedDecksViewModel>> PreconstructedDecksRequested;
+        public event EventHandler<EventArgs<CollectionInputGraphicViewModel>> CollectionInputGraphicRequested;
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
@@ -225,7 +226,7 @@
         }
         private void CollectionInputGraphicCommandExecute(object o)
         {
-            OnDialogWanted(new CollectionInputGraphicViewModel(Hierarchical.Name));
+            OnEventRaise(CollectionInputGraphicRequested, new CollectionInputGraphicViewModel(Hierarchical.Name));
             LoadCardsHierarchy();
         }
         private void SearchCommandExecute(object o)

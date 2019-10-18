@@ -59,6 +59,9 @@
         <i:EventTrigger EventName="PreconstructedDecksRequested" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="PreconstructedDecksRequested" />
         </i:EventTrigger>
+        <i:EventTrigger EventName="CollectionInputGraphicRequested" SourceObject="{Binding}">
+            <ei:CallMethodAction MethodName="CollectionInputGraphicRequested" />
+        </i:EventTrigger>
         <i:EventTrigger EventName="ExceptionOccured" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="ExceptionOccured" />
         </i:EventTrigger>

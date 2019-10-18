@@ -14,6 +14,7 @@
     using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Main;
+    using MagicPictureSetDownloader.ViewModel.Input;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -61,6 +62,10 @@
         public void PreconstructedDecksRequested(object sender, EventArgs<PreconstructedDecksViewModel> args)
         {
             new PreconstructedDecksWindow(args.Data) { Owner = this }.ShowDialog();
+        }
+        public void CollectionInputGraphicRequested(object sender, EventArgs<CollectionInputGraphicViewModel> args)
+        {
+            new CollectionInputGraphicWindow(args.Data) { Owner = this }.ShowDialog();
         }
     }
 }
