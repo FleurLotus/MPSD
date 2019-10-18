@@ -86,7 +86,7 @@
 
                 <Image Grid.Column="1" Margin="10" StretchDirection="DownOnly" Source="{Binding SelectedItem.Key, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
             </Grid>
-            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Visibility="{Binding Collections.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                     <Button Content="Add to collection" Margin="10" Width="100" Command="{Binding OkCommand}"/>
                     <ComboBox Margin="10" Width="70" VerticalContentAlignment="Center"
