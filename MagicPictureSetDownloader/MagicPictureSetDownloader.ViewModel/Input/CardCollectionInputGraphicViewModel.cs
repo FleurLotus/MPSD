@@ -3,30 +3,26 @@
     using System;
     using System.Windows.Input;
     using Common.ViewModel;
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
     public class CardCollectionInputGraphicViewModel : NotifyPropertyChangedBase, IComparable<CardCollectionInputGraphicViewModel>
     {
-        private readonly int _cardInCollection;
-        private readonly ILanguage _language;
+        private int _cardInCollection;
         private int _changedCount;
 
-        public CardCollectionInputGraphicViewModel(CardViewModel card, ILanguage language, string nameInLanguage, int cardInCollection)
+        public CardCollectionInputGraphicViewModel(CardViewModel card)
         {
             Card = card;
-            NameInLanguage = nameInLanguage;
-            _cardInCollection = cardInCollection;
-            _language = language;
             AddCommand = new RelayCommand(AddCommandExecute);
             RemoveCommand = new RelayCommand(RemoveCommandExecute);
             AddLinkedProperty(nameof(ChangedCount), new [] { nameof(Count), nameof(CountLabel) });
         }
-
+        
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public CardViewModel Card { get; }
-        public string NameInLanguage { get; }
+        public string NameInLanguage { get; private set; }
+        public string Name { get { return Card.Name; } }
 
         public int Count
         {
@@ -57,6 +53,13 @@
                     OnNotifyPropertyChanged(nameof(ChangedCount));
                 }
             }
+        }
+
+        public void SetInfo(string nameInLanguage, int cardInCollection)
+        {
+            NameInLanguage = nameInLanguage;
+            _cardInCollection = cardInCollection;
+            ChangedCount = 0;
         }
 
         private void RemoveCommandExecute(object obj)

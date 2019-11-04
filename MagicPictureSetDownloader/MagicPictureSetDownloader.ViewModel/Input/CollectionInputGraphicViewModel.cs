@@ -25,7 +25,7 @@
         private bool _foil;
         private bool _hasChange;
         private int _size;
-        private IDictionary<string, ICard> _allCardSorted;
+        private IDictionary<ICard, string> _allCardTranslation;
         private readonly RangeObservableCollection<CardCollectionInputGraphicViewModel> _cards;
 
         private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
@@ -87,7 +87,7 @@
                 {
                     _foil = value;
                     OnNotifyPropertyChanged(nameof(Foil));
-                    RefreshDisplayedData();
+                    RefreshDisplayedData(false);
                 }
             }
         }
@@ -124,7 +124,8 @@
                 {
                     _inputLanguage = value;
                     OnNotifyPropertyChanged(nameof(InputLanguage));
-                    RefreshDisplayedData();
+                    RebuildOrder();
+                    RefreshDisplayedData(false);
                 }
             }
         }
@@ -150,7 +151,7 @@
                 {
                     _editionSelected = value;
                     OnNotifyPropertyChanged(nameof(EditionSelected));
-                    RefreshDisplayedData();
+                    RefreshDisplayedData(true);
                 }
             }
         }
@@ -191,16 +192,24 @@
         }
         protected override void OkCommandExecute(object o)
         {
-            //ALERT-FBO TO BE CODED
+            foreach (CardCollectionInputGraphicViewModel card in _cards.Where(c => c.ChangedCount != 0))
+            {
+                CardCount cardCount = new CardCount();
+                cardCount.Add(new CardCountKey(Foil, false), card.ChangedCount);
+
+                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdGatherer, InputLanguage.Id, cardCount);
+            }
+
+            RefreshDisplayedData(true);
+            HasChange = false;
         }
         protected override bool OkCommandCanExecute(object o)
         {
-            //ALERT-FBO TO BE CODED
-            return false;
+            return HasChange;
         }
         private void RebuildOrder()
         {
-            _allCardSorted = _allCardInfos.GetAllCardsOrderByTranslation(_inputLanguage);
+            _allCardTranslation = _allCardInfos.GetAllCardWithTranslation(_inputLanguage).ToDictionary(kv => kv.Value, kv => kv.Key);
         }
         private bool ToDisplay(object o)
         {
@@ -215,43 +224,57 @@
         {
             HasChange = _cards.Any(c => c.ChangedCount != 0);
         }
-        private void RefreshDisplayedData()
+        private void RefreshDisplayedData(bool full)
         {
-            //ALERT-FBO: Better management of reload.
-            //Foil only refesh count
-            //Language refresh count and order (akways keep english name for reference)
-            //Edition full refresh
             IEdition editionSelected = EditionSelected;
-            foreach (CardCollectionInputGraphicViewModel c in _cards)
+            if (full)
             {
-                c.PropertyChanged -= ItemChanged;
+                foreach (CardCollectionInputGraphicViewModel c in _cards)
+                {
+                    c.PropertyChanged -= ItemChanged;
+                }
+                _cards.Clear();
             }
-            _cards.Clear();
+
             if (editionSelected == null)
             {
                 return;
             }
 
-            List<CardCollectionInputGraphicViewModel> sorted = new List<CardCollectionInputGraphicViewModel>();
-            foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => cadi.Edition == editionSelected))
+            List<CardCollectionInputGraphicViewModel> toSort = new List<CardCollectionInputGraphicViewModel>();
+            if (full)
             {
-                CardViewModel card = new CardViewModel(cardInfo);
-                string name = _allCardSorted.First(acsKv => cardInfo.Card == acsKv.Value).Key;
+                foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => cadi.Edition == editionSelected))
+                {
+                    CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(new CardViewModel(cardInfo));
+                    newCard.PropertyChanged += ItemChanged;
+                    toSort.Add(newCard);
+                }
+            }
+            else
+            {
+                toSort.AddRange(_cards);
+                _cards.Clear();
+            }
+
+            foreach (CardCollectionInputGraphicViewModel ccigvm in toSort)
+            {
+                CardViewModel card = ccigvm.Card;
+                _allCardTranslation.TryGetValue(card.Card, out string name);
                 int count = 0;
 
-                foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, cardInfo.Card)
+                foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, card.Card)
                                 .Where(cicc =>  cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEdition(cicc.IdGatherer).Id == editionSelected.Id))
                 {
                     count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
 
                 }
-                CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(card, InputLanguage, name, count);
-                newCard.PropertyChanged += ItemChanged;
-                sorted.Add(newCard);
-  
+                ccigvm.SetInfo(name, count);
+
             }
-            sorted.Sort();
-            _cards.AddRange(sorted);
+
+            toSort.Sort();
+            _cards.AddRange(toSort);
         }
     }
 }
