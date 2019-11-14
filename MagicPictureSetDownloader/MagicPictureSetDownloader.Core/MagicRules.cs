@@ -1,12 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Common.Library.Enums;
-
-    using MagicPictureSetDownloader.Core.CardInfo;
     
     public enum DisplayCardType
     {
@@ -78,27 +75,8 @@
         Special,
     }
 
-    [Flags]
-    public enum ShardColor
-    {
-        Colorless = 0,
-        White = 1,
-        Blue = 1 << 1,
-        Black = 1 << 2,
-        Red = 1 << 3,
-        Green = 1 << 4
-    }
-
     public static class MagicRules
     {
-        private const string White = "W";
-        private const string Blue = "U";
-        private const string Black = "B";
-        private const string Red = "R";
-        private const string Green = "G";
-        private const string Colorless = "C";
-        private static readonly string[] Generics = { "X", "Y", "Z" };
-
         public static DisplayColor GetDisplayColor(string castingCost)
         {
             ShardColor color = GetColor(castingCost);
@@ -136,38 +114,7 @@
         }
         public static int GetConvertedCastCost(string castingCost)
         {
-            int ccm = 0;
-            foreach (string shard in GetShards(castingCost))
-            {
-                if (shard == White || shard == Blue || shard == Black || shard == Red || shard == Green || shard == Colorless)
-                {
-                    ccm += 1;
-                }
-                else
-                {
-                    int newccm;
-                    if (int.TryParse(shard, out newccm))
-                    {
-                        ccm += newccm;
-                    }
-                    else if (Generics.Contains(shard))
-                    {
-                        //CCM of generics is 0.
-                    }
-                    else if (shard.StartsWith("2"))
-                    {
-                        // 2W, 2U, 2B, 2R, 2G
-                        ccm += 2;
-                    }
-                    else
-                    {
-                        //Hybrid mana / Phyraxian mana
-                        ccm ++;
-                    }
-                }
-            }
-
-            return ccm;
+            return Shard.GetShards(castingCost).Sum(shard => shard.ConvertedCastingCost);
         }
         public static DisplayCardType GetDisplayCardType(string type, string castingCost)
         {
@@ -239,54 +186,6 @@
 
             return DisplayCardType.Token;
         }
-        private static IEnumerable<string> GetShards(string castingCost)
-        {
-            if (string.IsNullOrWhiteSpace(castingCost))
-            {
-                return new string[0];
-            }
-
-            return castingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                           .Select(s => s.StartsWith(SymbolParser.Prefix) ? s.Substring(SymbolParser.Prefix.Length) : s);
-        }
-        private static ShardColor GetShardColor(string shard)
-        {
-            if (string.IsNullOrWhiteSpace(shard))
-            {
-                return ShardColor.Colorless;
-            }
-
-            string shardup = shard.ToUpperInvariant();
-            
-            ShardColor ret = ShardColor.Colorless;
-            if (shardup.Contains(White))
-            {
-                ret |= ShardColor.White;
-            }
-
-            if (shardup.Contains(Blue))
-            {
-                ret |= ShardColor.Blue;
-            }
-
-            if (shardup.Contains(Black))
-            {
-                ret |= ShardColor.Black;
-            }
-
-            if (shardup.Contains(Red))
-            {
-                ret |= ShardColor.Red;
-            }
-
-            if (shardup.Contains(Green))
-            {
-                ret |= ShardColor.Green;
-            }
-
-            return ret;
-        }
-
         //For search 
         public static CardType GetCardType(string type, string castingCost)
         {
@@ -432,8 +331,8 @@
         }
         public static ShardColor GetColor(string castingCost)
         {
-            return GetShards(castingCost).Select(GetShardColor)
-                                         .Aggregate(ShardColor.Colorless, (current, newColor) => current | newColor);
+            return Shard.GetShards(castingCost).Select(shard => shard.Color)
+                                               .Aggregate(ShardColor.Colorless, (current, newColor) => current | newColor);
         }
         public static bool IsSorcery(string type)
         {

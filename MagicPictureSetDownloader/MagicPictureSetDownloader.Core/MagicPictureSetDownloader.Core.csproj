@@ -118,6 +118,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Parser\Parser.cs" />
     <Compile Include="EditionInfo.cs" />
+    <Compile Include="Shard.cs" />
     <Compile Include="Upgrade\ProgramUpgrader.cs" />
     <Compile Include="Upgrade\ProgramUpgraderException.cs" />
   </ItemGroup>
