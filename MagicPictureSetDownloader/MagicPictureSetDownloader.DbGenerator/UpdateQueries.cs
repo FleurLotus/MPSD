@@ -201,5 +201,11 @@ UPDATE Edition
 SET AlternativeCode = CASE WHEN AlternativeCode IS NULL THEN @code ELSE AlternativeCode || ';' || @code END
 WHERE Name = @name AND NOT IFNULL(AlternativeCode,'') LIKE '%' || @code || '%'
 ";
+        public const string CorrectVehicle =
+@"
+UPDATE Card
+SET Power = @power, Toughness = @toughness
+WHERE Name = @name AND Power IS NULL AND Toughness IS NULL
+";
     }
 }

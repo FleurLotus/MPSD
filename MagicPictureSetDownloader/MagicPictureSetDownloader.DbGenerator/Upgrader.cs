@@ -184,7 +184,7 @@
                     repo.ExecuteBatch(UpdateQueries.CreatePriceTable);
                 }
 
-                foreach (string code in new[] { "'CNS","EXO" })
+                foreach (string code in new[] { "'CNS", "EXO" })
                 {
                     repo.ExecuteParametrizeCommand(UpdateQueries.CorrectHasFoilTrue,
                        new KeyValuePair<string, object>("@code", code));
@@ -261,10 +261,53 @@
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
 
+                //12.4
                 foreach (string code in new[] { "C19" })
                 {
                     repo.ExecuteParametrizeCommand(UpdateQueries.CorrectHasFoilFalse,
                        new KeyValuePair<string, object>("@code", code));
+                }
+
+                //12.5
+                Dictionary<string, Tuple<string, string>> vehicleCorrections = new Dictionary<string, Tuple<string, string>>
+                {
+                    {"Aethersphere Harvester", new Tuple<string, string>("3", "5")},
+                    {"Aradara Express", new Tuple<string, string>("8", "6")},
+                    {"Ballista Charger", new Tuple<string, string>("6", "6")},
+                    {"Bomat Bazaar Barge", new Tuple<string, string>("5", "5")},
+                    {"Conqueror's Galleon", new Tuple<string, string>("2", "10")},
+                    {"Consulate Dreadnought", new Tuple<string, string>("7", "11")},
+                    {"Cultivator's Caravan", new Tuple<string, string>("5", "5")},
+                    {"Daredevil Dragster", new Tuple<string, string>("4", "4")},
+                    {"Demolition Stomper", new Tuple<string, string>("10", "7")},
+                    {"Dusk Legion Dreadnought", new Tuple<string, string>("4", "6")},
+                    {"Enchanted Carriage", new Tuple<string, string>("4", "4")},
+                    {"Fell Flagship", new Tuple<string, string>("3", "3")},
+                    {"Fleetwheel Cruiser", new Tuple<string, string>("5", "3")},
+                    {"Heart of Kiran", new Tuple<string, string>("4", "4")},
+                    {"Irontread Crusher", new Tuple<string, string>("6", "6")},
+                    {"Mizzium Tank", new Tuple<string, string>("3", "2")},
+                    {"Mobile Garrison", new Tuple<string, string>("3", "4")},
+                    {"Ovalchase Dragster", new Tuple<string, string>("6", "1")},
+                    {"Parhelion II", new Tuple<string, string>("5", "5")},
+                    {"Peacewalker Colossus", new Tuple<string, string>("6", "6")},
+                    {"Renegade Freighter", new Tuple<string, string>("4", "3")},
+                    {"Shadowed Caravel", new Tuple<string, string>("2", "2")},
+                    {"Silent Submersible", new Tuple<string, string>("2", "3")},
+                    {"Sky Skiff", new Tuple<string, string>("2", "3")},
+                    {"Skysovereign, Consul Flagship", new Tuple<string, string>("6", "5")},
+                    {"Sleek Schooner", new Tuple<string, string>("4", "3")},
+                    {"Smuggler's Copter", new Tuple<string, string>("3", "3")},
+                    {"Untethered Express", new Tuple<string, string>("4", "4")},
+                    {"Weatherlight", new Tuple<string, string>("4", "5")}
+                };
+
+                foreach (var kv in vehicleCorrections)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.CorrectVehicle,
+                       new KeyValuePair<string, object>("@name", kv.Key),
+                       new KeyValuePair<string, object>("@power", kv.Value.Item1),
+                       new KeyValuePair<string, object>("@toughness", kv.Value.Item2));
                 }
             }
 

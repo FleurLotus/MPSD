@@ -112,7 +112,7 @@
                 Rarity = infos.GetOrDefault(RarityKey)
             };
 
-            if (MagicRules.IsCreature(cardWithExtraInfo.Type))
+            if (MagicRules.IsCreature(cardWithExtraInfo.Type) || MagicRules.IsVehicle(cardWithExtraInfo.Type))
             {
                 string htmlTrim = infos.GetOrDefault(PTKey).HtmlTrim();
                 cardWithExtraInfo.Power = GetPower(htmlTrim);
@@ -183,7 +183,7 @@
             string type = infos.GetOrDefault(TypeKey);
             string castingcost = infos.GetOrDefault(ManaCostKey);
             //Add check on casting cost because of second face of Garruk, the Veil-Cursed which has no loyalty counter
-            if ((MagicRules.IsCreature(type) || MagicRules.IsPlaneswalker(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
+            if ((MagicRules.IsCreature(type) || MagicRules.IsPlaneswalker(type) || MagicRules.IsVehicle(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
             {
                 throw new ParserException("No PT/Loyalty found");
             }
