@@ -24,7 +24,26 @@
         Contraption,
         Token,
     }
-    
+
+    [Flags]
+    public enum CardSubType
+    {
+        None = 0,
+        Vehicle = 1,
+        Host = 1 << 1,
+        Aura = 1 << 2,
+        Snow = 1 << 3,
+        Legendary = 1 << 4,
+        Curse = 1 << 5,
+        Trap = 1 << 6,
+        Arcane = 1 << 7,
+        Tribal = 1 << 8,
+        Saga = 1 << 9,
+        Adventure = 1 << 10,
+        Equipment = 1 << 11,
+        //Must be constistante with GetCardType
+    }
+
     [Flags]
     public enum CardType
     {
@@ -36,16 +55,11 @@
         Creature = 1 << 4,
         Artifact = 1 << 5,
         Planeswalker = 1 << 6,
-        Tribal = 1 << 7,
-        Arcane = 1 << 8,
-        Legendary = 1 << 9,
-        Plane = 1 << 10,
-        Scheme = 1 << 11,
-        Conspiracy = 1 << 12,
-        Phenomenon = 1 << 13,
-        Contraption = 1 << 14,
-        Saga = 1 << 15,
-        Adventure = 1 << 16,
+        Plane = 1 << 7,
+        Scheme = 1 << 8,
+        Conspiracy = 1 << 9,
+        Phenomenon = 1 << 10,
+        Contraption = 1 << 11,
         //Must be constistante with GetCardType
     }
 
@@ -172,11 +186,6 @@
                 return DisplayCardType.Planeswalker;
             }
 
-            if (Matcher<CardType>.HasValue(card, CardType.Enchantment))
-            {
-                return DisplayCardType.Enchantment;
-            }
-
             if (Matcher<CardType>.HasValue(card, CardType.Instant))
             {
                 return DisplayCardType.Instant;
@@ -190,6 +199,11 @@
             if (Matcher<CardType>.HasValue(card, CardType.Creature))
             {
                 return DisplayCardType.Creature;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Enchantment))
+            {
+                return DisplayCardType.Enchantment;
             }
 
             if (Matcher<CardType>.HasValue(card, CardType.Plane))
@@ -306,20 +320,6 @@
                 cardType |= CardType.Planeswalker;
             }
 
-            if (IsTribal(type))
-            {
-                cardType |= CardType.Tribal;
-            }
-
-            if (IsArcane(type))
-            {
-                cardType |= CardType.Arcane;
-            }
-
-            if (IsLegendary(type))
-            {
-                cardType |= CardType.Legendary;
-            }
 
             if (IsPhenomenon(type))
             {
@@ -346,17 +346,71 @@
                 cardType |= CardType.Contraption;
             }
 
+            return cardType;
+        }
+        public static CardSubType GetCardSubType(string type)
+        {
+            CardSubType cardSubType = CardSubType.None;
+            if (IsVehicle(type))
+            {
+                cardSubType |= CardSubType.Vehicle;
+            }
+
+            if (IsHost(type))
+            {
+                cardSubType |= CardSubType.Host;
+            }
+
+            if (IsAura(type))
+            {
+                cardSubType |= CardSubType.Aura;
+            }
+
+            if (IsSnow(type))
+            {
+                cardSubType |= CardSubType.Snow;
+            }
+
+            if (IsLegendary(type))
+            {
+                cardSubType |= CardSubType.Legendary;
+            }
+
+            if (IsCurse(type))
+            {
+                cardSubType |= CardSubType.Curse;
+            }
+
+            if (IsTrap(type))
+            {
+                cardSubType |= CardSubType.Trap;
+            }
+
+            if (IsArcane(type))
+            {
+                cardSubType |= CardSubType.Arcane;
+            }
+
+            if (IsTribal(type))
+            {
+                cardSubType |= CardSubType.Tribal;
+            }
+
             if (IsSaga(type))
             {
-                cardType |= CardType.Saga;
+                cardSubType |= CardSubType.Saga;
             }
 
             if (IsAdventure(type))
             {
-                cardType |= CardType.Adventure;
+                cardSubType |= CardSubType.Adventure;
             }
 
-            return cardType;
+            if (IsEquipment(type))
+            {
+                cardSubType |= CardSubType.Equipment;
+            }
+            return cardSubType;
         }
         public static ShardColor GetColor(string castingCost)
         {
@@ -435,6 +489,34 @@
         public static bool IsAdventure(string type)
         {
             return type.ToLowerInvariant().Contains("adventure");
+        }
+        public static bool IsVehicle(string type)
+        {
+            return type.ToLowerInvariant().Contains("vehicle");
+        } 
+        public static bool IsHost(string type)
+        {
+            return type.ToLowerInvariant().Contains("host");
+        }
+        public static bool IsAura(string type)
+        {
+            return type.ToLowerInvariant().Contains("aura");
+        }
+        public static bool IsSnow(string type)
+        {
+            return type.ToLowerInvariant().Contains("snow");
+        }
+        public static bool IsCurse(string type)
+        {
+            return type.ToLowerInvariant().Contains("curse");
+        }
+        public static bool IsTrap(string type)
+        {
+            return type.ToLowerInvariant().Contains("trap");
+        }
+        public static bool IsEquipment(string type)
+        {
+            return type.ToLowerInvariant().Contains("equipment");
         }
     }
 }
