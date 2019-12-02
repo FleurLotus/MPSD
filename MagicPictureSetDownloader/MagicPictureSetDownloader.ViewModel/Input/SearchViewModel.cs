@@ -35,6 +35,7 @@
         private readonly IMagicDatabaseReadOnly _magicDatabase;
         private MultiSelectedAggregation _colorAggregation;
         private MultiSelectedAggregation _typeAggregation;
+        private MultiSelectedAggregation _subTypeAggregation;
         private PerimeterScope _perimeterScope;
         private bool _excludeFunEditions;
         private bool _excludeOnlineOnlyEditions;
@@ -56,6 +57,8 @@
             Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
             Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token)
                                                                   .ToArray();
+            SubTypes = ((CardSubType[])Enum.GetValues(typeof(CardSubType))).Where(t => t != CardSubType.None)
+                                                                           .ToArray();
 
             Display.Title = "Search";
             Display.OkCommandLabel = "Search";
@@ -66,6 +69,7 @@
             CollectionsSelected = new ObservableCollection<ICardCollection>();
             ColorsSelected = new ObservableCollection<ShardColor>();
             TypesSelected = new ObservableCollection<CardType>();
+            SubTypesSelected = new ObservableCollection<CardSubType>();
             ReInit();
             Reuse();
         }
@@ -78,6 +82,8 @@
         public ICollection<ShardColor> ColorsSelected { get; }
         public ICollection<CardType> Types { get; }
         public ICollection<CardType> TypesSelected { get; }
+        public ICollection<CardSubType> SubTypes { get; }
+        public ICollection<CardSubType> SubTypesSelected { get; }
         public string[] CountComparator { get; }
 
         public string Name
@@ -234,9 +240,22 @@
             }
         }
 
+        public MultiSelectedAggregation SubTypeAggregation
+        {
+            get { return _subTypeAggregation; }
+            set
+            {
+                if (value != _subTypeAggregation)
+                {
+                    _subTypeAggregation = value;
+                    OnNotifyPropertyChanged(nameof(SubTypeAggregation));
+                }
+            }
+        }
+
         protected override bool OkCommandCanExecute(object o)
         {
-            return ((!string.IsNullOrWhiteSpace(Name) || EditionsSelected.Count > 0 || ColorsSelected.Count > 0 || TypesSelected.Count > 0) && PerimeterScope == PerimeterScope.All) || 
+            return ((!string.IsNullOrWhiteSpace(Name) || EditionsSelected.Count > 0 || ColorsSelected.Count > 0 || TypesSelected.Count > 0 || SubTypesSelected.Count > 0) && PerimeterScope == PerimeterScope.All) || 
                 CollectionsSelected.Count > 0;
         }
         protected override void OtherCommandExecute(object o)
@@ -281,15 +300,17 @@
             PerimeterScope = PerimeterScope.All;
             ColorAggregation = MultiSelectedAggregation.Or;
             TypeAggregation = MultiSelectedAggregation.Or;
+            SubTypeAggregation = MultiSelectedAggregation.Or;
             EditionsSelected.Clear();
             CollectionsSelected.Clear();
             ColorsSelected.Clear();
             TypesSelected.Clear();
+            SubTypesSelected.Clear();
         }
        
         internal IEnumerable<CardViewModel> SearchResultAsViewModel()
         {
-            return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai))
+            return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai) && CheckSubType(cai))
                                                .Select(cai => new CardViewModel(cai));
         }
 
@@ -406,7 +427,7 @@
                 type |= MagicRules.GetCardType(cai.CardPart2.Type);
             }
 
-            CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newColor) => current | newColor);
+            CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newtype) => current | newtype);
 
             if (TypeAggregation == MultiSelectedAggregation.And)
             {
@@ -414,6 +435,29 @@
             }
             //TypeAggregation == MultiSelectedAggregation.Or
             return Matcher<CardType>.HasValue(type, wantedType);
+        }
+
+        private bool CheckSubType(ICardAllDbInfo cai)
+        {
+            if (SubTypesSelected.Count == 0)
+            {
+                return true;
+            }
+
+            CardSubType subType = MagicRules.GetCardSubType(cai.Card.Type);
+            if (cai.Card.IsSplitted)
+            {
+                subType |= MagicRules.GetCardSubType(cai.CardPart2.Type);
+            }
+
+            CardSubType wantedSubType = SubTypesSelected.Aggregate(CardSubType.None, (current, newsubtype) => current | newsubtype);
+
+            if (SubTypeAggregation == MultiSelectedAggregation.And)
+            {
+                return Matcher<CardSubType>.IncludeValue(subType, wantedSubType);
+            }
+            //SubTypeAggregation == MultiSelectedAggregation.Or
+            return Matcher<CardSubType>.HasValue(subType, wantedSubType);
         }
     }
 }

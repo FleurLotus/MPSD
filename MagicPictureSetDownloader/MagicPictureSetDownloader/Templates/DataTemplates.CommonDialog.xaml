@@ -275,6 +275,9 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Content="Name"/>
@@ -320,6 +323,13 @@
             </StackPanel>
             <Label Grid.Column="0" Grid.Row="14" Content="Types" VerticalAlignment="Center"/>
             <xctk:CheckComboBox Grid.Column="1" Grid.Row="14" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
+ 
+            <StackPanel Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton GroupName="SubType" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding SubTypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
+                <RadioButton GroupName="SubType" Width="50" Content="And" IsChecked="{fl:TwoWayBinding SubTypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
+            </StackPanel>
+            <Label Grid.Column="0" Grid.Row="17" Content="SubTypes" VerticalAlignment="Center"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="17" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding SubTypes}" SelectedItemsOverride="{Binding SubTypesSelected}"/>
         </Grid>
     </DataTemplate>
 
