@@ -22,6 +22,7 @@
         Conspiracy,
         Phenomenon,
         Contraption,
+        Vanguard,
         Token,
     }
 
@@ -60,6 +61,7 @@
         Conspiracy = 1 << 9,
         Phenomenon = 1 << 10,
         Contraption = 1 << 11,
+        Vanguard = 1 << 12,
         //Must be constistante with GetCardType
     }
 
@@ -230,6 +232,10 @@
             {
                 return DisplayCardType.Contraption;
             }
+            if (Matcher<CardType>.HasValue(card, CardType.Vanguard))
+            {
+                return DisplayCardType.Vanguard;
+            }
 
             return DisplayCardType.Token;
         }
@@ -344,6 +350,11 @@
             if (IsContraption(type))
             {
                 cardType |= CardType.Contraption;
+            }
+
+            if (IsVanguard(type))
+            {
+                cardType |= CardType.Vanguard;
             }
 
             return cardType;
@@ -517,6 +528,10 @@
         public static bool IsEquipment(string type)
         {
             return type.ToLowerInvariant().Contains("equipment");
+        }
+        public static bool IsVanguard(string type)
+        {
+            return type.ToLowerInvariant().Contains("vanguard");
         }
     }
 }
