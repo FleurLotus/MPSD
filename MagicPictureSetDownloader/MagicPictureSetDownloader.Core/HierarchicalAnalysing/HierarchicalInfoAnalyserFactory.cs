@@ -67,7 +67,7 @@ namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
         }
         private static IComparable GetCardType(ICardInfo card)
         {
-            return MagicRules.GetDisplayCardType(card.Type);
+            return MagicRules.GetDisplayCardType(card.Type, card.CastingCost);
         }
     }
 }
