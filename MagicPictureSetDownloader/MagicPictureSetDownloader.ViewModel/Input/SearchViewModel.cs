@@ -421,10 +421,10 @@
                 return true;
             }
 
-            CardType type = MagicRules.GetCardType(cai.Card.Type);
+            CardType type = MagicRules.GetCardType(cai.Card.Type, cai.Card.CastingCost);
             if (cai.Card.IsSplitted)
             {
-                type |= MagicRules.GetCardType(cai.CardPart2.Type);
+                type |= MagicRules.GetCardType(cai.CardPart2.Type, cai.CardPart2.CastingCost);
             }
 
             CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newtype) => current | newtype);

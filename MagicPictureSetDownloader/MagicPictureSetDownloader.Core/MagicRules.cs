@@ -169,9 +169,9 @@
 
             return ccm;
         }
-        public static DisplayCardType GetDisplayCardType(string type)
+        public static DisplayCardType GetDisplayCardType(string type, string castingCost)
         {
-            CardType card = GetCardType(type);
+            CardType card = GetCardType(type, castingCost);
 
             if (Matcher<CardType>.HasValue(card, CardType.Land))
             {
@@ -288,9 +288,16 @@
         }
 
         //For search 
-        public static CardType GetCardType(string type)
+        public static CardType GetCardType(string type, string castingCost)
         {
             CardType cardType = CardType.Token;
+            
+            if (IsToken(type) || string.IsNullOrEmpty(castingCost) && IsCreature(type))
+            {
+                return CardType.Token;
+            }
+
+
             if (IsLand(type))
             {
                 cardType |= CardType.Land;
@@ -471,7 +478,7 @@
         }
         public static bool IsSpecial(string type)
         {
-            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type);
+            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type) || IsVanguard(type);
         }
         public static bool IsContraption(string type)
         {
@@ -532,6 +539,10 @@
         public static bool IsVanguard(string type)
         {
             return type.ToLowerInvariant().Contains("vanguard");
+        }
+        public static bool IsToken(string type)
+        {
+            return type.ToLowerInvariant().Contains("token");
         }
     }
 }
