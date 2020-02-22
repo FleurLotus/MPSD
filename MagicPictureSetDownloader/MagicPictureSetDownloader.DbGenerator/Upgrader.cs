@@ -309,6 +309,9 @@
                        new KeyValuePair<string, object>("@power", kv.Value.Item1),
                        new KeyValuePair<string, object>("@toughness", kv.Value.Item2));
                 }
+                //12.6
+
+                repo.ExecuteBatch(UpdateQueries.CorrectMystericBoosterText);
             }
 
             AddPreconstructedDeckFromReference(repo);

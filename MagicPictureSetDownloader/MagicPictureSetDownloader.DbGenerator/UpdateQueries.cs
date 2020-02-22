@@ -207,5 +207,11 @@ UPDATE Card
 SET Power = @power, Toughness = @toughness
 WHERE Name = @name AND Power IS NULL AND Toughness IS NULL
 ";
+        public const string CorrectMystericBoosterText =
+@"
+UPDATE Card
+SET Text = REPLACE(REPLACE(REPLACE(Text, '&lt;i&gt;', ''), '&lt;/i&gt;', ''), '&lt;i/&gt;', '')
+WHERE Text like '%&lt;%'
+";
     }
 }
