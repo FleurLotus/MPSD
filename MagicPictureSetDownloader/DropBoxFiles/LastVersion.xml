@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="12.5">
+  <Last Number="12.6">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
-    <Comment>Version with Fix for Vehicle management</Comment>
+    <Comment>Version with Secret Lair Drop, Game Night 2019, Mystey Booster and Theros Beyond Death</Comment>
   </Last>
+  <Old Number="12.5">
+    <Comment>Version with Fix for Vehicle management</Comment>
+  </Old>
   <Old Number="12.4">
     <Comment>Version with Preconstructed Deck of Trone of Eldraine</Comment>
   </Old>
