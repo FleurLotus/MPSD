@@ -125,8 +125,10 @@
                 if (!string.IsNullOrWhiteSpace(htmlTrim))
                 {
                     htmlTrim = htmlTrim.ToUpper();
-                    //Special case for Nissa, Steward of Elements with loyalty to X
-                    if (htmlTrim == "X")
+                    //Special case for:
+                    //  Nissa, Steward of Elements with loyalty to X
+                    //  B.O.B. (Bevy of Beebles) with loyalty to *
+                    if (htmlTrim == "X" || htmlTrim == "*")
                     {
                         cardWithExtraInfo.Loyalty = htmlTrim;
                     }
