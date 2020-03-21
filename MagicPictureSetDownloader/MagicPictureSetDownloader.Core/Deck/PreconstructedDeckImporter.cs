@@ -168,8 +168,12 @@
             if (cardName.Contains("/"))
             {
                 string[] c = cardName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                cardName = c[0].Trim();
-                cardName2 = c[1].Trim();
+                // Special case for Who / What / When / Where / Why that is considered as 1 card with no second card 
+                if (c.Length == 2)
+                {
+                    cardName = c[0].Trim();
+                    cardName2 = c[1].Trim();
+                }
             }
 
             ICard card = MagicDatabase.GetCard(cardName, cardName2);
