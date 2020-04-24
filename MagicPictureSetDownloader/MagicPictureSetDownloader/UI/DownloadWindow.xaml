@@ -13,7 +13,7 @@
         Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}"
         d:DataContext="{d:DesignInstance Type=edition:DownloadEditionViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Width="600" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
+        Width="650" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
