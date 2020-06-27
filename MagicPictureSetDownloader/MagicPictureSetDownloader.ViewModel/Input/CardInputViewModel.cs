@@ -27,6 +27,7 @@
     {
         private InputMode _inputMode = InputMode.ByEdition;
         private bool _isFoil;
+        private bool _isAltArt;
         private bool _isFocused;
         private int _count;
         private ICard _cardSelected;
@@ -169,6 +170,19 @@
                 {
                     _isFoil = value;
                     OnNotifyPropertyChanged(nameof(IsFoil));
+                    RefreshDisplayedData(InputMode.None);
+                }
+            }
+        }
+        public bool IsAltArt
+        {
+            get { return _isAltArt; }
+            set
+            {
+                if (value != _isAltArt)
+                {
+                    _isAltArt = value;
+                    OnNotifyPropertyChanged(nameof(IsAltArt));
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -339,15 +353,34 @@
             LanguageSelected = null;
             Count = _defaultQuantity;
             IsFoil = false;
+            IsAltArt = false;
             ResetFocus();
         }
         private void AddNewCard()
         {
-            int count = IsFoil ? 0 : Count;
-            int foilCount = IsFoil ? Count: 0;
+            int count = 0;
+            int foilCount = 0;
+            int altArtCount = 0;
+            int foilAltArtCount = 0; 
+            if (IsAltArt && IsFoil)
+            {
+                foilAltArtCount = Count;
+            }
+            else if (IsAltArt)
+            {
+                altArtCount = Count;
+            }
+            else if (IsFoil)
+            {
+                foilCount = Count;
+            }
+            else
+            {
+                count = Count;
+            }
 
             ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
-            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, count, foilCount);
+            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
         }
         private void SelectCardCollection(string name)
         {
@@ -490,26 +523,34 @@
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;
-            int totalInEditionAndLanguageInCollectionNotFoil = 0;
-            int totalInEditionAndLanguageInCollectionFoil = 0;
+            int totalInEditionAndLanguageInCollectionNotFoilNotAltArt = 0;
+            int totalInEditionAndLanguageInCollectionFoilNotAltArt = 0;
+            int totalInEditionAndLanguageInCollectionNotFoilAltArt = 0;
+            int totalInEditionAndLanguageInCollectionFoilAltArt = 0;
 
             foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, _cardSelected))
             {
-                int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
+                int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber + cardInCollectionCount.AltArtNumber + cardInCollectionCount.FoilAltArtNumber;
                 totalInCollection += inCollection;
                 if (_magicDatabase.GetEdition(cardInCollectionCount.IdGatherer) == EditionSelected)
                 {
                     totalInEditionInCollection += inCollection;
                     if (cardInCollectionCount.IdLanguage == LanguageSelected.Id)
                     {
-                        totalInEditionAndLanguageInCollectionNotFoil += cardInCollectionCount.Number;
-                        totalInEditionAndLanguageInCollectionFoil += cardInCollectionCount.FoilNumber;
+                        totalInEditionAndLanguageInCollectionNotFoilNotAltArt += cardInCollectionCount.Number;
+                        totalInEditionAndLanguageInCollectionFoilNotAltArt += cardInCollectionCount.FoilNumber;
+                        totalInEditionAndLanguageInCollectionNotFoilAltArt += cardInCollectionCount.AltArtNumber;
+                        totalInEditionAndLanguageInCollectionFoilAltArt += cardInCollectionCount.FoilAltArtNumber;
                     }
                 }
             }
 
-            CurrentCollectionDetail = string.Format("{2}+{3}(Foil) {0} {1}\n{4} {0}\n{5} All Edition", EditionSelected.Code, LanguageSelected.Name, totalInEditionAndLanguageInCollectionNotFoil,
-                                                                                                       totalInEditionAndLanguageInCollectionFoil, totalInEditionInCollection, totalInCollection);
+            CurrentCollectionDetail = string.Format("{2}{3}{4}{5} {0} {1}\n{6} {0}\n{7} All Edition", EditionSelected.Code, LanguageSelected.Name, 
+                                                                                                       totalInEditionAndLanguageInCollectionNotFoilNotAltArt,
+                                                                                                       totalInEditionAndLanguageInCollectionFoilNotAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionFoilNotAltArt + "(Foil)" : string.Empty,
+                                                                                                       totalInEditionAndLanguageInCollectionNotFoilAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionNotFoilAltArt + "(AltArt)" : string.Empty,
+                                                                                                       totalInEditionAndLanguageInCollectionFoilAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionFoilAltArt + "(FoilAltArt)" : string.Empty,
+                                                                                                       totalInEditionInCollection, totalInCollection);
         }
         private void ResetFocus()
         {

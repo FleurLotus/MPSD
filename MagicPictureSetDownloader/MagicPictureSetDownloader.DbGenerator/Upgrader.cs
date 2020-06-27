@@ -314,6 +314,25 @@
                 repo.ExecuteBatch(UpdateQueries.CorrectMystericBoosterText);
             }
 
+            if (dbVersion <= 13)
+            {
+                //13.0
+                if (!repo.ColumnExists("CardEditionsInCollection", "AltArtNumber"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.AddAltArtColumnToCollection);
+                }
+                if (!repo.ColumnExists("CardEditionsInCollection", "FoilAltArtNumber"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.AddFoilAltArtColumnToCollection);
+                }
+                if (!repo.ColumnExists("Audit", "IsAltArt"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.AddIsAltArtColumnToAudit);
+                    repo.ExecuteBatch(UpdateQueries.UpdateAltArtColumn);
+                }
+
+            }
+
             AddPreconstructedDeckFromReference(repo);
         }
         private void AddPreconstructedDeckFromReference(IRepository repo)

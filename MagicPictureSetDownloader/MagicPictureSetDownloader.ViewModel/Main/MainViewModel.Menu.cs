@@ -319,7 +319,7 @@
 
             if (vm.Result == true)
             {
-                _magicDatabaseForCardInCollection.ChangeCardEditionFoilLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.LanguageSelected);
+                _magicDatabaseForCardInCollection.ChangeCardEditionFoilAltArtLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.IsAltArt, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.IsAltArt, vm.LanguageSelected);
                 LoadCardsHierarchy();
             }
         }
@@ -337,7 +337,29 @@
 
             if (vm.Result == true)
             {
-                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : -vm.Source.Count, vm.Source.IsFoil ? -vm.Source.Count : 0);
+                int count = 0;
+                int foilCount = 0;
+                int altArtCount = 0;
+                int foilAltArtCount = 0;
+
+                if (vm.Source.IsFoil && vm.Source.IsAltArt)
+                {
+                    foilAltArtCount = -vm.Source.Count;
+                }
+                else if (vm.Source.IsAltArt)
+                {
+                    altArtCount = -vm.Source.Count;
+                }
+                else if (vm.Source.IsFoil)
+                {
+                    foilCount = -vm.Source.Count;
+                }
+                else
+                {
+                    count = -vm.Source.Count;
+                }
+
+                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
                 LoadCardsHierarchy();
             }
         }
@@ -380,7 +402,7 @@
                 {
                     foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
                     {
-                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, -cicc.Number, -cicc.FoilNumber);
+                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, -cicc.Number, -cicc.FoilNumber, -cicc.AltArtNumber, -cicc.FoilAltArtNumber);
                     }
                 }
 
@@ -501,7 +523,7 @@
                 ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCardCommandExecute)));
                 ContextMenuRoot.AddChild(new MenuViewModel("Move card to other collection", new RelayCommand(MoveCardCommandExecute)));
                 ContextMenuRoot.AddChild(MenuViewModel.Separator());
-                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil", new RelayCommand(ChangeCardCommandExecute)));
+                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil/alt art", new RelayCommand(ChangeCardCommandExecute)));
             }
         }
         private void GenerateCollectionMenu()
@@ -548,13 +570,35 @@
 
             if (vm.Result == true)
             {
-                if (vm.Copy)
+                int count = 0;
+                int foilCount = 0;
+                int altArtCount = 0;
+                int foilAltArtCount = 0;
+
+                if (vm.Source.IsFoil && vm.Source.IsAltArt)
                 {
-                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, vm.Source.IsFoil ? 0 : vm.Source.Count, vm.Source.IsFoil ? vm.Source.Count : 0);
+                    foilAltArtCount = vm.Source.Count;
+                }
+                else if (vm.Source.IsAltArt)
+                {
+                    altArtCount = vm.Source.Count;
+                }
+                else if (vm.Source.IsFoil)
+                {
+                    foilCount = vm.Source.Count;
                 }
                 else
                 {
-                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.CardCollectionSelected);
+                    count = vm.Source.Count;
+                }
+
+                if (vm.Copy)
+                {
+                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
+                }
+                else
+                {
+                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.Source.IsAltArt, vm.CardCollectionSelected);
                 }
 
                 LoadCardsHierarchy();
@@ -581,12 +625,14 @@
                     {
                         if (copy)
                         {
-                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, cicc.FoilNumber);
+                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, cicc.FoilNumber, cicc.AltArtNumber, cicc.FoilAltArtNumber);
                         }
                         else
                         {
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, false, destCollection);
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilNumber, true, destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, false, false, destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilNumber, true, false, destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.AltArtNumber, false, true, destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilAltArtNumber, true, true, destCollection);
                         }
                     }
                 }

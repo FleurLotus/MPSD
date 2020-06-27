@@ -8,6 +8,8 @@
         public StatisticViewModel(ICardInCollectionCount cardInCollectionCount)
         {
             IMagicDatabaseReadOnly magicDatabase = MagicDatabaseManager.ReadOnly;
+            FoilAltArtNumber = cardInCollectionCount.FoilAltArtNumber;
+            AltArtNumber = cardInCollectionCount.AltArtNumber;
             FoilNumber = cardInCollectionCount.FoilNumber;
             Number = cardInCollectionCount.Number;
             Collection = magicDatabase.GetCollection(cardInCollectionCount.IdCollection).Name;
@@ -15,6 +17,8 @@
             Language = magicDatabase.GetLanguage(cardInCollectionCount.IdLanguage).Name;
         }
 
+        public int FoilAltArtNumber { get; }
+        public int AltArtNumber { get; }
         public int FoilNumber { get; }
         public int Number { get; }
         public string Language { get; }

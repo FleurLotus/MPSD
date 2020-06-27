@@ -38,14 +38,21 @@
                 string key = string.Format("{0}¤{1}", importExportCardCount.IdGatherer, importExportCardCount.IdLanguage);
                 if (ret.TryGetValue(key, out cardInfo))
                 {
+                    if (importExportCardCount.Number > 0)
+                    {
+                        cardInfo.Add(importExportCardCount.Number);
+                    }
                     if (importExportCardCount.FoilNumber > 0)
                     {
                         cardInfo.AddFoil(importExportCardCount.FoilNumber);
                     }
-
-                    if (importExportCardCount.Number > 0)
+                    if (importExportCardCount.AltArtNumber > 0)
                     {
-                        cardInfo.Add(importExportCardCount.Number);
+                        cardInfo.AddAltArt(importExportCardCount.AltArtNumber);
+                    }
+                    if (importExportCardCount.FoilAltArtNumber > 0)
+                    {
+                        cardInfo.AddFoilAltArt(importExportCardCount.FoilAltArtNumber);
                     }
                 }
                 else

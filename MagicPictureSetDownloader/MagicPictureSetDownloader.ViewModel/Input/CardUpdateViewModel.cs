@@ -12,6 +12,7 @@
         private ILanguage[] _languages;
 
         private bool _isFoil;
+        private bool _isAltArt;
         private readonly IEdition[] _editions;
 
         public CardUpdateViewModel(string collectionName, ICard card)
@@ -59,6 +60,18 @@
                 }
             }
         }
+        public bool IsAltArt
+        {
+            get { return _isAltArt; }
+            set
+            {
+                if (value != _isAltArt)
+                {
+                    _isAltArt = value;
+                    OnNotifyPropertyChanged(nameof(IsAltArt));
+                }
+            }
+        }
         public IEdition EditionSelected
         {
             get { return _editionSelected; }
@@ -102,7 +115,7 @@
             }
 
             return EditionSelected != null && LanguageSelected!= null &&
-                   (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil) && 
+                   (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil || IsAltArt != Source.IsAltArt) && 
                    (EditionSelected.HasFoil || !IsFoil);
         }
     }

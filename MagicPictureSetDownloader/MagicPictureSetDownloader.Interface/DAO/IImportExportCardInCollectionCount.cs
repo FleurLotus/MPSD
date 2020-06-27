@@ -5,6 +5,8 @@ namespace MagicPictureSetDownloader.Interface
         int IdGatherer { get; }
         int Number { get; }
         int FoilNumber { get; }
+        int AltArtNumber { get; }
+        int FoilAltArtNumber { get; }
         int IdLanguage { get; }
     }
 }
