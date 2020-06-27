@@ -25,6 +25,14 @@
         {
             get { return -1; }
         }
+        public int AltArtNumber
+        {
+            get { return -1; }
+        }
+        public int FoilAltArtNumber
+        {
+            get { return -1; }
+        }
         public int IdLanguage
         {
             get { return -1; }

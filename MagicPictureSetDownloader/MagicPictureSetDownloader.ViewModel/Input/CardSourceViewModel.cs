@@ -14,6 +14,7 @@
         private ILanguage[] _languages;
 
         private bool _isFoil;
+        private bool _isAltArt;
         private int _maxCount;
         private int _count;
         private readonly IEdition[] _editions;
@@ -70,6 +71,19 @@
                 {
                     _isFoil = value;
                     OnNotifyPropertyChanged(nameof(IsFoil));
+                    UpdateMaxCount();
+                }
+            }
+        }
+        public bool IsAltArt
+        {
+            get { return _isAltArt; }
+            set
+            {
+                if (value != _isAltArt)
+                {
+                    _isAltArt = value;
+                    OnNotifyPropertyChanged(nameof(IsAltArt));
                     UpdateMaxCount();
                 }
             }
@@ -147,7 +161,23 @@
                 MaxCount = 0;
                 return;
             }
-            MaxCount = IsFoil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
+            if (IsAltArt && IsFoil)
+            {
+                MaxCount = cardInCollectionCount.FoilAltArtNumber;
+            }
+            else if (IsAltArt)
+            {
+                MaxCount = cardInCollectionCount.AltArtNumber;
+            }
+            else if (IsFoil)
+            {
+                MaxCount = cardInCollectionCount.FoilNumber;
+            }
+            else
+            {
+                MaxCount = cardInCollectionCount.Number;
+            }
+        
         }
         private void ChangeLanguage()
         {

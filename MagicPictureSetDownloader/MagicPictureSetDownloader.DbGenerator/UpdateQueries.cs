@@ -213,5 +213,26 @@ UPDATE Card
 SET Text = REPLACE(REPLACE(REPLACE(Text, '&lt;i&gt;', ''), '&lt;/i&gt;', ''), '&lt;i/&gt;', '')
 WHERE Text like '%&lt;%'
 ";
+        public const string AddAltArtColumnToCollection =
+@"
+ALTER TABLE CardEditionsInCollection
+ADD COLUMN [AltArtNumber] INTEGER NOT NULL DEFAULT 0
+";
+        public const string AddFoilAltArtColumnToCollection =
+@"
+ALTER TABLE CardEditionsInCollection
+ADD COLUMN [FoilAltArtNumber] INTEGER NOT NULL DEFAULT 0
+";
+        public const string AddIsAltArtColumnToAudit =
+@"
+ALTER TABLE Audit
+ADD COLUMN [IsAltArt] INTEGER NULL
+";
+        public const string UpdateAltArtColumn =
+@"
+UPDATE Audit
+SET [IsAltArt] = 0
+WHERE [IsAltArt] IS NULL AND [IsFoil] IS NOT NULL
+";
     }
 }

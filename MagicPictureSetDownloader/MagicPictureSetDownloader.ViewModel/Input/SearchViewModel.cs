@@ -41,6 +41,7 @@
         private bool _excludeOnlineOnlyEditions;
         private bool _excludeSpecialCards;
         private bool _countIncludeFoil;
+        private bool _countIncludeAltArt;
         private bool _countIsNameBased;
         private bool _allLanguages;
         private ComparisonType _countComparatorWanted;
@@ -191,6 +192,18 @@
                 }
             }
         }
+        public bool CountIncludeAltArt
+        {
+            get { return _countIncludeAltArt; }
+            set
+            {
+                if (value != _countIncludeAltArt)
+                {
+                    _countIncludeAltArt = value;
+                    OnNotifyPropertyChanged(nameof(CountIncludeAltArt));
+                }
+            }
+        }
         public bool AllLanguages
         {
             get { return _allLanguages; }
@@ -332,6 +345,14 @@
             if (CountIncludeFoil)
             {
                 count += statistics.Sum(stat => stat.FoilNumber);
+            }
+            if (CountIncludeAltArt)
+            {
+                count += statistics.Sum(stat => stat.AltArtNumber);
+            }
+            if (CountIncludeAltArt && CountIncludeFoil)
+            {
+                count += statistics.Sum(stat => stat.FoilAltArtNumber);
             }
 
             return _countComparatorWanted == ComparisonType.GreaterOrEquals ? count >= CountSelected : count < CountSelected;

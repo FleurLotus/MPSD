@@ -35,7 +35,7 @@
                 if (okCard != null)
                 {
                     list.Add(okCard);
-                    totalCard += okCard.FoilNumber + okCard.Number;
+                    totalCard += okCard.FoilNumber + okCard.Number + okCard.AltArtNumber + okCard.FoilAltArtNumber;
                     continue;
                 }
 

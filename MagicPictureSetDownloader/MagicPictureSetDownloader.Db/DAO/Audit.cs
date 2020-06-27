@@ -24,6 +24,8 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public bool? IsFoil { get; set; }
         [DbColumn]
+        public bool? IsAltArt { get; set; }
+        [DbColumn]
         public int? IdLanguage { get; set; }
         [DbColumn]
         public int Quantity { get; set; }
@@ -34,15 +36,16 @@ namespace MagicPictureSetDownloader.Db.DAO
         {
             if (IdGatherer.HasValue)
             {
-                return string.Format(" {0} card(s) {1} {2}{3} to collection {4} at {5:yyyy-MM-dd HH:mm:ss.ff}", Quantity, 
+                return string.Format(" {0} card(s) {1} {2}{3}{4} to collection {5} at {6:yyyy-MM-dd HH:mm:ss.ff}", Quantity, 
                                                                                                                 IdGatherer.Value,
-                                                                                                                IsFoil.Value ? "(Foil) " : string.Empty, 
+                                                                                                                IsFoil.Value ? "(Foil)" : string.Empty, 
+                                                                                                                IsAltArt.Value ? "(AltArt)" : string.Empty, 
                                                                                                                 IdLanguage.Value, 
                                                                                                                 IdCollection, 
                                                                                                                 OperationDate);
             }
 
-            return string.Format("{0} collection {1} at {2:yyyy-MM-dd HH:mm:ss.ff}", Quantity>0 ?"Create": "Delete", IdCollection, OperationDate);
+            return string.Format("{0} collection {1} at {2:yyyy-MM-dd HH:mm:ss.ff}", Quantity > 0 ? "Create" : "Delete", IdCollection, OperationDate);
         }
     }
 }

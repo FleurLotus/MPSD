@@ -77,7 +77,13 @@
         {
             foreach (IAudit audit in _allAudit.Where(a => a.OperationDate >= MinDate && a.OperationDate < MaxDate.AddDays(1)))
             {
-                AuditInfo info = new AuditInfo { Quantity = audit.Quantity, OperationDate = audit.OperationDate.ToLocalTime().ToString("G"), IsFoil = audit.IsFoil.HasValue && audit.IsFoil.Value };
+                AuditInfo info = new AuditInfo
+                {
+                    Quantity = audit.Quantity,
+                    OperationDate = audit.OperationDate.ToLocalTime().ToString("G"),
+                    IsFoil = audit.IsFoil.HasValue && audit.IsFoil.Value,
+                    IsAltArt = audit.IsAltArt.HasValue && audit.IsAltArt.Value,
+                };
                 
                 ICardCollection cardCollection = _magicDatabase.GetCollection(audit.IdCollection);
                 info.CollectionName = cardCollection == null ? "(Deleted) " + audit.IdCollection : cardCollection.Name;

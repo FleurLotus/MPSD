@@ -81,6 +81,12 @@
     <!-- Statistics display -->
     <ControlTemplate x:Key="StatisticsControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemsSource>
                 <MultiBinding Converter="{conv:CardToStatisticsConverter}">
                     <Binding Path="Hierarchical.Selected"/>
@@ -104,8 +110,34 @@
                     <GridViewColumn Header="Collection" DisplayMemberBinding="{Binding Collection}"/>
                     <GridViewColumn Header="Edition" DisplayMemberBinding="{Binding Edition}"/>
                     <GridViewColumn Header="Language" DisplayMemberBinding="{Binding Language}"/>
-                    <GridViewColumn Header="Number" DisplayMemberBinding="{Binding Number}"/>
-                    <GridViewColumn Header="FoilNumber" DisplayMemberBinding="{Binding FoilNumber}"/>
+                    <GridViewColumn Header="Number" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Number}" HorizontalAlignment="Right"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Foil" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FoilNumber}" HorizontalAlignment="Right"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Alt Art" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding AltArtNumber}" HorizontalAlignment="Right"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Foil Alt" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FoilAltArtNumber}" HorizontalAlignment="Right"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

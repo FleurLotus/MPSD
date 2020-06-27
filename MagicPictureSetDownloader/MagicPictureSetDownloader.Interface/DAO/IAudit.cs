@@ -9,6 +9,7 @@
         int IdCollection { get; }
         int? IdGatherer { get; }
         bool? IsFoil { get; }
+        bool? IsAltArt { get; }
         int? IdLanguage { get; }
         int Quantity { get; }
     }

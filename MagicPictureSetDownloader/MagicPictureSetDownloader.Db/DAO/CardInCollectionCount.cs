@@ -15,6 +15,10 @@
         public int Number { get; set; }
         [DbColumn]
         public int FoilNumber { get; set; }
+        [DbColumn]
+        public int AltArtNumber { get; set; }
+        [DbColumn]
+        public int FoilAltArtNumber { get; set; }
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdLanguage { get; set; }
         

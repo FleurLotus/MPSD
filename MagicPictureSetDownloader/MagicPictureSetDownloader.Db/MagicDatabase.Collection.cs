@@ -162,7 +162,7 @@ namespace MagicPictureSetDownloader.Db
                 return collection;
             }
         }
-        public void InsertOrUpdateCardInCollection(int idCollection, int idGatherer, int idLanguage, int countToAdd, int foilCountToAdd)
+        public void InsertOrUpdateCardInCollection(int idCollection, int idGatherer, int idLanguage, int countToAdd, int foilCountToAdd, int altArtCountToAdd, int foilAltArtCountToAdd)
         {
             using (new WriterLock(_lock))
             {
@@ -172,7 +172,8 @@ namespace MagicPictureSetDownloader.Db
                     if (cardInCollection == null)
                     {
                         //Insert new 
-                        if (countToAdd < 0 || foilCountToAdd < 0 || countToAdd + foilCountToAdd == 0)
+                        if (countToAdd < 0 || foilCountToAdd < 0 || altArtCountToAdd < 0 || foilAltArtCountToAdd < 0 ||
+                            countToAdd + foilCountToAdd + altArtCountToAdd + foilAltArtCountToAdd == 0)
                         {
                             return;
                         }
@@ -183,22 +184,28 @@ namespace MagicPictureSetDownloader.Db
                                                                                  IdGatherer = idGatherer,
                                                                                  Number = countToAdd,
                                                                                  FoilNumber = foilCountToAdd,
+                                                                                 AltArtNumber = altArtCountToAdd,
+                                                                                 FoilAltArtNumber = foilAltArtCountToAdd,
                                                                                  IdLanguage = idLanguage
                                                                              };
 
 
                         AddToDbAndUpdateReferential(DatabaseType.Data, newCardInCollectionCount, InsertInReferential);
 
-                        AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
-                        AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, false, false, countToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, true, false, foilCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, false, true, altArtCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, true, true, foilAltArtCountToAdd);
                         return;
                     }
 
                     //Update
                     int newCount = countToAdd + cardInCollection.Number;
                     int newFoilCount = foilCountToAdd + cardInCollection.FoilNumber;
+                    int newAltArtCountToAdd = altArtCountToAdd + cardInCollection.AltArtNumber;
+                    int newFoilAltArtCount = foilAltArtCountToAdd + cardInCollection.FoilAltArtNumber;
 
-                    if (newCount < 0 || newFoilCount < 0)
+                    if (newCount < 0 || newFoilCount < 0 || newAltArtCountToAdd < 0 || newFoilAltArtCount < 0)
                     {
                         return;
                     }
@@ -209,28 +216,36 @@ namespace MagicPictureSetDownloader.Db
                         return;
                     }
 
-                    if (newCount + newFoilCount == 0)
+                    if (newCount + newFoilCount + newAltArtCountToAdd + newFoilAltArtCount == 0)
                     {
                         RemoveFromDbAndUpdateReferential(DatabaseType.Data, updateCardInCollectionCount, RemoveFromReferential);
 
-                        AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
-                        AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, false, false, countToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, true, false, foilCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, false, true, altArtCountToAdd);
+                        AuditAddCard(idCollection, idGatherer, idLanguage, true, true, foilAltArtCountToAdd);
+
                         return;
                     }
 
                     updateCardInCollectionCount.Number = newCount;
                     updateCardInCollectionCount.FoilNumber = newFoilCount;
+                    updateCardInCollectionCount.AltArtNumber = newAltArtCountToAdd;
+                    updateCardInCollectionCount.FoilAltArtNumber = newFoilAltArtCount;
 
                     using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
                     {
                         Mapper<CardInCollectionCount>.UpdateOne(cnx, updateCardInCollectionCount);
                     }
-                    AuditAddCard(idCollection, idGatherer, idLanguage, false, countToAdd);
-                    AuditAddCard(idCollection, idGatherer, idLanguage, true, foilCountToAdd);
+
+                    AuditAddCard(idCollection, idGatherer, idLanguage, false, false, countToAdd);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, true, false, foilCountToAdd);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, false, true, altArtCountToAdd);
+                    AuditAddCard(idCollection, idGatherer, idLanguage, true, true, foilAltArtCountToAdd);
                 }
             }
         }
-        public void MoveCardToOtherCollection(ICardCollection collection, int idGatherer, int idLanguage, int countToMove, bool isFoil, ICardCollection collectionDestination)
+        public void MoveCardToOtherCollection(ICardCollection collection, int idGatherer, int idLanguage, int countToMove, bool isFoil, bool isAltArt, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
             {
@@ -247,8 +262,28 @@ namespace MagicPictureSetDownloader.Db
 
                 int count = 0;
                 int foilCount = 0;
+                int altArtCount = 0;
+                int foilAltArtCount = 0;
 
-                if (isFoil)
+                if (isAltArt && isFoil)
+                {
+                    foilAltArtCount = countToMove;
+
+                    if (cardInCollectionCount.FoilAltArtNumber < foilAltArtCount)
+                    {
+                        return;
+                    }
+                }
+                else if (isAltArt)
+                {
+                    altArtCount = countToMove;
+
+                    if (cardInCollectionCount.AltArtNumber < altArtCount)
+                    {
+                        return;
+                    }
+                }
+                else if (isFoil)
                 {
                     foilCount = countToMove;
 
@@ -267,11 +302,11 @@ namespace MagicPictureSetDownloader.Db
                     }
                 }
 
-                InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount);
-                InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, idLanguage, count, foilCount);
+                InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, -count, -foilCount, -altArtCount, -foilAltArtCount);
+                InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, idLanguage, count, foilCount, altArtCount, foilAltArtCount);
             }
         }
-        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, ICardCollection collectionDestination)
+        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, int countToMove, bool isFoil, bool isAltArt, ICardCollection collectionDestination)
         {
             if (countToMove <= 0)
             {
@@ -282,11 +317,11 @@ namespace MagicPictureSetDownloader.Db
             {
                 int idGatherer = GetIdGatherer(card, edition);
                 int idLanguage = language.Id;
-                MoveCardToOtherCollection(collection, idGatherer, idLanguage, countToMove, isFoil, collectionDestination);
+                MoveCardToOtherCollection(collection, idGatherer, idLanguage, countToMove, isFoil, isAltArt, collectionDestination);
             }
         }
-        public void ChangeCardEditionFoilLanguage(ICardCollection collection, ICard card, int countToChange, IEdition editionSource, bool isFoilSource, ILanguage languageSource,
-                                                  IEdition editionDestination, bool isFoilDestination, ILanguage languageDestination)
+        public void ChangeCardEditionFoilAltArtLanguage(ICardCollection collection, ICard card, int countToChange, IEdition editionSource, bool isFoilSource, bool isAltArtSource, ILanguage languageSource,
+                                                  IEdition editionDestination, bool isFoilDestination, bool isAltArtDestination, ILanguage languageDestination)
         {
             if (countToChange <= 0)
             {
@@ -310,10 +345,33 @@ namespace MagicPictureSetDownloader.Db
 
                 int count = 0;
                 int foilCount = 0;
+                int altArtCount = 0;
+                int foilAltArtCount = 0;
                 int countDestination = 0;
                 int foilCountDestination = 0;
+                int altArtCountDestination = 0;
+                int foilAltArtCountDestination = 0;
 
-                if (isFoilSource)
+
+                if (isAltArtSource && isFoilSource)
+                {
+                    foilAltArtCount = -countToChange;
+
+                    if (cardInCollectionCount.FoilAltArtNumber < countToChange)
+                    {
+                        return;
+                    }
+                }
+                else if (isAltArtSource)
+                {
+                    altArtCount = -countToChange;
+
+                    if (cardInCollectionCount.AltArtNumber < countToChange)
+                    {
+                        return;
+                    }
+                }
+                else if (isFoilSource)
                 {
                     foilCount = -countToChange;
 
@@ -332,7 +390,15 @@ namespace MagicPictureSetDownloader.Db
                     }
                 }
 
-                if (isFoilDestination)
+                if (isAltArtDestination && isFoilDestination)
+                {
+                    foilAltArtCountDestination = countToChange;
+                }
+                else if (isAltArtDestination)
+                {
+                    altArtCountDestination = countToChange;
+                }
+                else if (isFoilDestination)
                 {
                     foilCountDestination = countToChange;
                 }
@@ -341,8 +407,8 @@ namespace MagicPictureSetDownloader.Db
                     countDestination = countToChange;
                 }
 
-                InsertOrUpdateCardInCollection(collection.Id, idGathererSource, languageSource.Id, count, foilCount);
-                InsertOrUpdateCardInCollection(collection.Id, idGathererDestination, languageDestination.Id, countDestination, foilCountDestination);
+                InsertOrUpdateCardInCollection(collection.Id, idGathererSource, languageSource.Id, count, foilCount, altArtCount, foilAltArtCount);
+                InsertOrUpdateCardInCollection(collection.Id, idGathererDestination, languageDestination.Id, countDestination, foilCountDestination, altArtCountDestination, foilAltArtCountDestination);
             }
         }
 
@@ -403,7 +469,7 @@ namespace MagicPictureSetDownloader.Db
                 {
                     foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
                     {
-                        InsertOrUpdateCardInCollection(toAddCollection.Id, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, cardInCollectionCount.Number, cardInCollectionCount.FoilNumber);
+                        InsertOrUpdateCardInCollection(toAddCollection.Id, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, cardInCollectionCount.Number, cardInCollectionCount.FoilNumber, cardInCollectionCount.AltArtNumber, cardInCollectionCount.FoilAltArtNumber);
                     }
 
                     DeleteAllCardInCollection(toBeDeletedCollectionName);
@@ -436,8 +502,10 @@ namespace MagicPictureSetDownloader.Db
 
                     foreach (ICardInCollectionCount cardInCollectionCount in collection)
                     {
-                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, false, -cardInCollectionCount.Number);
-                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, true, -cardInCollectionCount.FoilNumber);
+                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, false, false, -cardInCollectionCount.Number);
+                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, true, false, -cardInCollectionCount.FoilNumber);
+                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, false, true, -cardInCollectionCount.AltArtNumber);
+                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdGatherer, cardInCollectionCount.IdLanguage, true, true, -cardInCollectionCount.FoilAltArtNumber);
 
                         RemoveFromReferential(cardInCollectionCount);
                     }
@@ -478,7 +546,7 @@ namespace MagicPictureSetDownloader.Db
                 {
                     foreach (IPreconstructedDeckCardEdition card in deckComposition)
                     {
-                        InsertOrUpdateCardInCollection(collection.Id, card.IdGatherer, idLanguage, card.Number, 0);
+                        InsertOrUpdateCardInCollection(collection.Id, card.IdGatherer, idLanguage, card.Number, 0, 0, 0);
                     }
                 }
             }
