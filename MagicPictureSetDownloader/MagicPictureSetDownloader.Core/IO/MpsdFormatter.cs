@@ -60,7 +60,13 @@
                 return new ErrorImportExportCardInfo(line, "Invalid idLanguage");
             }
 
-            return new ImportExportCardInfo(idGatherer, count, foilCount, altArtCount, foilAltArtCount, idLanguage);
+            CardCount cardCount = new CardCount();
+            cardCount.Add(CardCountKeys.Standard, count);
+            cardCount.Add(CardCountKeys.Foil, foilCount);
+            cardCount.Add(CardCountKeys.AltArt, altArtCount);
+            cardCount.Add(CardCountKeys.FoilAltArt, foilAltArtCount);
+
+            return new ImportExportCardInfo(idGatherer, cardCount, idLanguage);
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {

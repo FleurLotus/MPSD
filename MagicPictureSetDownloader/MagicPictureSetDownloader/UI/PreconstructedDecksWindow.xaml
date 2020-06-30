@@ -10,7 +10,7 @@
         xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:PreconstructedDecksViewModel, IsDesignTimeCreatable=False}"
-        Title="Preconstructed Decks" Height="600" Width="1000">
+        Title="Preconstructed Decks" Height="600" Width="1100">
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
             <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
@@ -18,9 +18,9 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="350"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <ListView Grid.Column="0" ItemsSource="{Binding Decks}" SelectedItem="{fl:TwoWayBinding PreconstructedDeckSelected}" 
@@ -49,7 +49,7 @@
             <Grid Grid.Row="1" Margin="10" DataContext="{Binding PreconstructedDeckSelected}" Visibility="{Binding Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="300"/>
                 </Grid.ColumnDefinitions>
                 
                 <ListView Grid.Column="0" Margin="10" ItemsSource="{Binding Composition}" SelectedItem="{fl:TwoWayBinding SelectedItem}"

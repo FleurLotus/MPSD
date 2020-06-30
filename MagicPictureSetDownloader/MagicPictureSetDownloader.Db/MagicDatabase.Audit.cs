@@ -40,9 +40,16 @@
 
             InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = -1});
         }
-        private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, bool isFoil, bool IsAltArt, int countToAdd)
+        private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, ICardCount cardCount)
         {
-            if (idCollection <= 0 || countToAdd == 0 || idGatherer == 0 || idLanguage < 0)
+            foreach (KeyValuePair<ICardCountKey, int> kv in cardCount)
+            {
+                AuditAddCard(idCollection, idGatherer, idLanguage, kv.Key, kv.Value);
+            }
+        }
+        private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, ICardCountKey cardCountKey, int countToAdd)
+        {
+            if (idCollection <= 0 || countToAdd == 0 || idGatherer == 0 || idLanguage < 0 || cardCountKey == null)
             {
                 return;
             }
@@ -52,8 +59,8 @@
                                    IdCollection = idCollection,
                                    Quantity = countToAdd,
                                    IdGatherer = idGatherer,
-                                   IsFoil = isFoil,
-                                   IsAltArt = IsAltArt,
+                                   IsFoil = cardCountKey.IsFoil,
+                                   IsAltArt = cardCountKey.IsAltArt,
                                    IdLanguage = idLanguage
                                });
         }

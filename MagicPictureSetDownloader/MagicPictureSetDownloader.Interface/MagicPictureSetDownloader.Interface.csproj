@@ -58,6 +58,7 @@
     <Compile Include="DAO\ICardInCollectionCount.cs" />
     <Compile Include="DAO\ICardCollection.cs" />
     <Compile Include="DAO\IIdName.cs" />
+    <Compile Include="ICardCount.cs" />
     <Compile Include="IImportExportFormatter.cs" />
     <Compile Include="DatabaseAccess\IMagicDatabaseReadOnly.cs" />
     <Compile Include="DAO\IOption.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="DAO\IPicture.cs" />
     <Compile Include="DAO\IRarity.cs" />
     <Compile Include="IProgressReporter.cs" />
+    <Compile Include="ICardCountKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

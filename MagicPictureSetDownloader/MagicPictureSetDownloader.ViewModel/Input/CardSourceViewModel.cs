@@ -161,23 +161,7 @@
                 MaxCount = 0;
                 return;
             }
-            if (IsAltArt && IsFoil)
-            {
-                MaxCount = cardInCollectionCount.FoilAltArtNumber;
-            }
-            else if (IsAltArt)
-            {
-                MaxCount = cardInCollectionCount.AltArtNumber;
-            }
-            else if (IsFoil)
-            {
-                MaxCount = cardInCollectionCount.FoilNumber;
-            }
-            else
-            {
-                MaxCount = cardInCollectionCount.Number;
-            }
-        
+            MaxCount = cardInCollectionCount.GetCount(new CardCountKey(IsFoil, IsAltArt));
         }
         private void ChangeLanguage()
         {
