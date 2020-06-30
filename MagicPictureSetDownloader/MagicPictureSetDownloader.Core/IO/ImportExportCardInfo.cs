@@ -4,39 +4,35 @@
 
     internal class ImportExportCardInfo : IImportExportCardCount
     {
-        internal ImportExportCardInfo(int idGatherer, int number, int foilNumber, int altArtNumber, int foilAltArtNumber, int idLanguage)
+        private readonly CardCount _cardCount;
+
+        internal ImportExportCardInfo(int idGatherer, ICardCount cardCount, int idLanguage)
         {
             IdGatherer = idGatherer;
-            Number = number;
-            FoilNumber = foilNumber;
-            AltArtNumber = altArtNumber;
-            FoilAltArtNumber = foilAltArtNumber;
             IdLanguage = idLanguage;
+            _cardCount = new CardCount(cardCount);
         }
 
         public int IdGatherer { get; }
-        public int Number { get; private set; }
-        public int FoilNumber { get; private set; }
-        public int AltArtNumber { get; private set; }
-        public int FoilAltArtNumber { get; private set; }
         public int IdLanguage { get; }
 
-        internal void Add(int number)
+        public int Number { get { return GetCount(CardCountKeys.Standard); } }
+        public int FoilNumber { get { return GetCount(CardCountKeys.Foil); } }
+        public int AltArtNumber { get { return GetCount(CardCountKeys.AltArt); } }
+        public int FoilAltArtNumber { get { return GetCount(CardCountKeys.FoilAltArt); } }
+
+        internal void Add(ICardCountKey key, int number)
         {
-            Number += number;
-        }
-        internal void AddFoil(int foilNumber)
-        {
-            FoilNumber += foilNumber;
-        }
-        internal void AddAltArt(int altArtNumber)
-        {
-            AltArtNumber += altArtNumber;
-        }
-        internal void AddFoilAltArt(int foilAltArtNumber)
-        {
-            FoilAltArtNumber += foilAltArtNumber;
+            _cardCount.Add(key, number);
         }
 
+        public int GetCount(ICardCountKey key)
+        {
+            return _cardCount.GetCount(key);
+        }
+        public ICardCount GetCardCount()
+        {
+            return new CardCount(_cardCount);
+        }
     }
 }

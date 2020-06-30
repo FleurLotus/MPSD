@@ -37,5 +37,14 @@
         {
             get { return -1; }
         }
+
+        public int GetCount(ICardCountKey key)
+        {
+            return -1;
+        }
+        public ICardCount GetCardCount()
+        {
+            return null;
+        }
     }
 }

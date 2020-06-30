@@ -88,7 +88,7 @@
                 //Add in database the good one
                 foreach (IImportExportCardCount importExportCardCount in status.ReadyToBeInserted)
                 {
-                    magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.Number, importExportCardCount.FoilNumber, importExportCardCount.AltArtNumber, importExportCardCount.FoilAltArtNumber);
+                    magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdGatherer, importExportCardCount.IdLanguage, importExportCardCount.GetCardCount());
                 }
             }
 

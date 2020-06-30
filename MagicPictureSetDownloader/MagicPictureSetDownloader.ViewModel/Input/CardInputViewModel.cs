@@ -358,29 +358,11 @@
         }
         private void AddNewCard()
         {
-            int count = 0;
-            int foilCount = 0;
-            int altArtCount = 0;
-            int foilAltArtCount = 0; 
-            if (IsAltArt && IsFoil)
-            {
-                foilAltArtCount = Count;
-            }
-            else if (IsAltArt)
-            {
-                altArtCount = Count;
-            }
-            else if (IsFoil)
-            {
-                foilCount = Count;
-            }
-            else
-            {
-                count = Count;
-            }
+            CardCount cardCount = new CardCount();
+            cardCount.Add(new CardCountKey(IsFoil, IsAltArt), Count);
 
             ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
-            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
+            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, cardCount);
         }
         private void SelectCardCollection(string name)
         {

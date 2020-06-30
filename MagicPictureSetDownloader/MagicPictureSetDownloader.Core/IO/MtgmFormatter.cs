@@ -57,7 +57,11 @@
                 return new ErrorImportExportCardInfo(line, string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
             }
 
-            return new ImportExportCardInfo(idGatherer, count, foilCount, 0, 0, 0);
+            CardCount cardCount = new CardCount();
+            cardCount.Add(CardCountKeys.Standard, count);
+            cardCount.Add(CardCountKeys.Foil, foilCount);
+
+            return new ImportExportCardInfo(idGatherer, cardCount, 0);
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {

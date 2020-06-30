@@ -319,7 +319,7 @@
 
             if (vm.Result == true)
             {
-                _magicDatabaseForCardInCollection.ChangeCardEditionFoilAltArtLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, vm.Source.IsFoil, vm.Source.IsAltArt, vm.Source.LanguageSelected, vm.EditionSelected, vm.IsFoil, vm.IsAltArt, vm.LanguageSelected);
+                _magicDatabaseForCardInCollection.ChangeCardEditionFoilAltArtLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.LanguageSelected, vm.EditionSelected, new CardCountKey(vm.IsFoil, vm.IsAltArt), vm.LanguageSelected);
                 LoadCardsHierarchy();
             }
         }
@@ -337,29 +337,10 @@
 
             if (vm.Result == true)
             {
-                int count = 0;
-                int foilCount = 0;
-                int altArtCount = 0;
-                int foilAltArtCount = 0;
+                CardCount cardCount = new CardCount();
+                cardCount.Add(new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), -vm.Source.Count);
 
-                if (vm.Source.IsFoil && vm.Source.IsAltArt)
-                {
-                    foilAltArtCount = -vm.Source.Count;
-                }
-                else if (vm.Source.IsAltArt)
-                {
-                    altArtCount = -vm.Source.Count;
-                }
-                else if (vm.Source.IsFoil)
-                {
-                    foilCount = -vm.Source.Count;
-                }
-                else
-                {
-                    count = -vm.Source.Count;
-                }
-
-                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
+                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
                 LoadCardsHierarchy();
             }
         }
@@ -402,7 +383,13 @@
                 {
                     foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
                     {
-                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, -cicc.Number, -cicc.FoilNumber, -cicc.AltArtNumber, -cicc.FoilAltArtNumber);
+                        ICardCount cardCount = new CardCount();
+                        foreach (KeyValuePair<ICardCountKey, int> kv in cicc.GetCardCount())
+                        {
+                            cardCount.Add(kv.Key, -kv.Value);
+                        }
+
+                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cardCount);
                     }
                 }
 
@@ -570,35 +557,16 @@
 
             if (vm.Result == true)
             {
-                int count = 0;
-                int foilCount = 0;
-                int altArtCount = 0;
-                int foilAltArtCount = 0;
-
-                if (vm.Source.IsFoil && vm.Source.IsAltArt)
-                {
-                    foilAltArtCount = vm.Source.Count;
-                }
-                else if (vm.Source.IsAltArt)
-                {
-                    altArtCount = vm.Source.Count;
-                }
-                else if (vm.Source.IsFoil)
-                {
-                    foilCount = vm.Source.Count;
-                }
-                else
-                {
-                    count = vm.Source.Count;
-                }
+                CardCount cardCount = new CardCount();
+                cardCount.Add(new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.Count);
 
                 if (vm.Copy)
                 {
-                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, count, foilCount, altArtCount, foilAltArtCount);
+                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
                 }
                 else
                 {
-                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, vm.Source.Count, vm.Source.IsFoil, vm.Source.IsAltArt, vm.CardCollectionSelected);
+                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, cardCount, vm.CardCollectionSelected);
                 }
 
                 LoadCardsHierarchy();
@@ -625,14 +593,11 @@
                     {
                         if (copy)
                         {
-                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, cicc.FoilNumber, cicc.AltArtNumber, cicc.FoilAltArtNumber);
+                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.GetCardCount());
                         }
                         else
                         {
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.Number, false, false, destCollection);
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilNumber, true, false, destCollection);
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.AltArtNumber, false, true, destCollection);
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.FoilAltArtNumber, true, true, destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.GetCardCount(), destCollection);
                         }
                     }
                 }

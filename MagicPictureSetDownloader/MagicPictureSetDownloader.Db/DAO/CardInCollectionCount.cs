@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System;
     using System.Diagnostics.CodeAnalysis;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
@@ -39,5 +40,43 @@
         {
             return IdCollection * 23 + IdGatherer;
         }
+
+        public int GetCount(ICardCountKey key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (CardCountKeys.Standard.Equals(key))
+            {
+                return Number;
+            }
+            if (CardCountKeys.Foil.Equals(key))
+            {
+                return FoilNumber;
+            }
+            if (CardCountKeys.AltArt.Equals(key))
+            {
+                return AltArtNumber;
+            }
+            if (CardCountKeys.FoilAltArt.Equals(key))
+            {
+                return FoilAltArtNumber;
+            }
+
+            throw new ArgumentException("Unmanaged type of key", nameof(key));
+        }
+        public ICardCount GetCardCount()
+        {
+            CardCount cardCount = new CardCount();
+            cardCount.Add(CardCountKeys.Standard, Number);
+            cardCount.Add(CardCountKeys.Foil, FoilNumber);
+            cardCount.Add(CardCountKeys.AltArt, AltArtNumber);
+            cardCount.Add(CardCountKeys.FoilAltArt, FoilAltArtNumber);
+
+            return cardCount;
+        }
+
     }
 }

@@ -8,5 +8,8 @@ namespace MagicPictureSetDownloader.Interface
         int AltArtNumber { get; }
         int FoilAltArtNumber { get; }
         int IdLanguage { get; }
+
+        int GetCount(ICardCountKey key);
+        ICardCount GetCardCount();
     }
 }
