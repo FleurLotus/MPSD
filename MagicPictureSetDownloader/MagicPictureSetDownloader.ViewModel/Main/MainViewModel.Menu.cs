@@ -702,7 +702,7 @@
         {
             PreconstructedDecksViewModel vm = obj as PreconstructedDecksViewModel;
             // ReSharper disable PossibleNullReferenceException
-            _magicDatabaseForCollection.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected);
+            _magicDatabaseForCollection.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected, vm.LanguageSelected);
             // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
         }

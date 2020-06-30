@@ -12,6 +12,7 @@
     {
         private PreconstructedDeckViewModel _preconstructedDeckSelected;
         private ICardCollection _cardCollectionSelected;
+        private ILanguage _languageSelected;
         private readonly IMagicDatabaseReadOnly _magicDatabase;
 
         public PreconstructedDecksViewModel()
@@ -19,9 +20,11 @@
             _magicDatabase = MagicDatabaseManager.ReadOnly;
             Decks = LoadReferentialData();
             Collections = new List<ICardCollection>(_magicDatabase.GetAllCollections()).AsReadOnly();
+            Languages = new List<ILanguage>(_magicDatabase.GetAllLanguages()).AsReadOnly();
         }
         public IList<PreconstructedDeckViewModel> Decks { get; }
         public IList<ICardCollection> Collections { get; }
+        public IList<ILanguage> Languages { get; }
 
         public PreconstructedDeckViewModel PreconstructedDeckSelected
         {
@@ -50,6 +53,21 @@
                 {
                     _cardCollectionSelected = value;
                     OnNotifyPropertyChanged(nameof(CardCollectionSelected));
+                }
+            }
+        }
+        public ILanguage LanguageSelected
+        {
+            get
+            {
+                return _languageSelected;
+            }
+            set
+            {
+                if (_languageSelected != value)
+                {
+                    _languageSelected = value;
+                    OnNotifyPropertyChanged(nameof(LanguageSelected));
                 }
             }
         }
@@ -86,8 +104,7 @@
 
         protected override bool OkCommandCanExecute(object o)
         {
-            return CardCollectionSelected != null && PreconstructedDeckSelected != null;
+            return CardCollectionSelected != null && PreconstructedDeckSelected != null && LanguageSelected != null;
         }
-
     }
 }
