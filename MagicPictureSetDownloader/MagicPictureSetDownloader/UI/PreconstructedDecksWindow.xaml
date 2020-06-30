@@ -91,6 +91,8 @@
                     <Button Content="Add to collection" Margin="10" Width="100" Command="{Binding OkCommand}"/>
                     <ComboBox Margin="10" Width="70" VerticalContentAlignment="Center"
                               ItemsSource="{Binding Collections}" SelectedItem="{fl:TwoWayBinding CardCollectionSelected}" />
+                    <ComboBox Margin="10" Width="70" VerticalContentAlignment="Center"
+                              ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}" />
                 </StackPanel>
                 <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource BottomButton}"/>
             </StackPanel>

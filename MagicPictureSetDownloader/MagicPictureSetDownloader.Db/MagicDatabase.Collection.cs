@@ -458,11 +458,11 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void PreconstructedDeckToCollection(IPreconstructedDeck preconstructedDeck, ICardCollection collection)
+        public void PreconstructedDeckToCollection(IPreconstructedDeck preconstructedDeck, ICardCollection collection, ILanguage language)
         {
             using (new WriterLock(_lock))
             {
-                if (preconstructedDeck == null || collection == null)
+                if (preconstructedDeck == null || collection == null || language == null)
                 {
                     return;
                 }
@@ -471,7 +471,7 @@ namespace MagicPictureSetDownloader.Db
                 {
                     return;
                 }
-                int idLanguage = GetDefaultLanguage().Id;
+                int idLanguage = language.Id;
 
                 using (BatchMode())
                 {
