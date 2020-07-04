@@ -85,6 +85,5 @@
         {
             return _parent != null ? _parent.GetAttribute(key) : _reader.GetAttribute(key); 
         }
-
     }
 }

@@ -7,6 +7,7 @@
 
     internal static class Parser
     {
+        public static readonly string AlternativePictureUrl = @"/Handlers/Image.ashx?type=card&multiverseid={0}";
         private static readonly Regex _idRegex = new Regex(@"multiverseid=(?<id>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         internal static IEnumerable<EditionInfo> ParseEditionsList(string htmltext)

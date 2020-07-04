@@ -7,6 +7,7 @@
     internal class CardWithExtraInfo
     {
         private readonly IDictionary<string, string> _cardLanguage = new Dictionary<string, string>();
+        private readonly HashSet<int> _otherIdGatherer = new HashSet<int>();
         private string _name;
 
         public string Name
@@ -28,10 +29,19 @@
         public string Rarity { get; set; }
         public string PartName { get; set; }
         public string OtherPathName { get; set; }
+        public IList<int> OtherIdGatherer
+        {
+            get { return new List<int>(_otherIdGatherer).AsReadOnly(); }
+        }
         public IDictionary<string, string> Languages
         {
             get { return new Dictionary<string, string>(_cardLanguage); }
         }
+        public void Add(int otherIdGatherer)
+        {
+            _otherIdGatherer.Add(otherIdGatherer);
+        }
+
         public void Add(CardLanguageInfo language)
         {
             _cardLanguage[language.Language] = language.Name;

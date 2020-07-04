@@ -130,6 +130,11 @@
 
                         _downloadManager.InsertCardInDb(cardWithExtraInfo);
                         _downloadManager.InsertCardEditionInDb(jobData.EditionId, cardWithExtraInfo, pictureUrl);
+
+                        foreach (int otherIdGatherer in cardWithExtraInfo.OtherIdGatherer)
+                        {
+                            _downloadManager.InsertCardEditionVariationInDb(idGatherer, otherIdGatherer, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdGatherer), true));
+                        }
                     }
                     _editions[jobData.EditionId].Progress();
                     _globalProgressReporter.Progress();

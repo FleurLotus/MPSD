@@ -26,12 +26,14 @@
             switch (classValue.ToLowerInvariant())
             {
                 case "communityratings":
-                case "variations":
                     return new SkipWorker();
 
                 case "row":
                 case "row manarow":
                     return new RowWorker(xmlReader);
+
+                case "variations":
+                    return new VariationsWorker(xmlReader);
 
                 default:
                     return null;

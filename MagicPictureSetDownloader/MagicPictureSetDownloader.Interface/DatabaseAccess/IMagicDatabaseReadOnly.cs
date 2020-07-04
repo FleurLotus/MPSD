@@ -28,6 +28,8 @@
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
         ICardEdition GetCardEditionFromPictureUrl(string pictureUrl);
+        ICardEditionVariation GetCardEditionVariationFromPictureUrl(string pictureUrl);
+        IList<ICardEditionVariation> GetCardEditionVariation(int idGatherer);
         ILanguage GetDefaultLanguage();
         ILanguage GetEnglishLanguage();
         IBlock GetBlock(string blockName);

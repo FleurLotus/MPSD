@@ -25,6 +25,7 @@
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
             IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
+            VariationIdGatherers = cardAllDbInfo.VariationIdGatherers.ToArray();
             if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
             {
                 PowerToughnessLoyalty = string.Format("{0}/{1}", Card.Power, Card.Toughness);
@@ -108,6 +109,7 @@
         public string PowerToughnessLoyalty { get; }
         public string PowerToughnessLoyaltyText { get; }
         public string[] DisplayedCastingCost { get; }
+        public int[] VariationIdGatherers { get; }
         internal ICard Card { get; }
     }
 }

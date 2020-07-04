@@ -43,6 +43,7 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
+    <Compile Include="DAO\ICardEditionVariation.cs" />
     <Compile Include="DAO\IPreconstructedDeckCardEdition.cs" />
     <Compile Include="DAO\IPreconstructedDeck.cs" />
     <Compile Include="DAO\IPrice.cs" />

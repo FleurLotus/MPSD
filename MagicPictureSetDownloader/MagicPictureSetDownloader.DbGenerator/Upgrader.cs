@@ -19,6 +19,24 @@
         private readonly DatabaseType _data;
         private static readonly Version _applicationVersion;
 
+        private class TemporaryDatabase : IDisposable
+        {
+            private readonly string _temporaryDatabasePath;
+                        
+            public TemporaryDatabase(DatabaseType databaseType)
+            {
+                _temporaryDatabasePath = new Generator(databaseType).Generate(true);
+                _temporaryDatabasePath = Path.Combine(_temporaryDatabasePath, DatabaseGenerator.GetResourceName(databaseType));
+                ConnectionString = (new SQLiteConnectionStringBuilder { DataSource = _temporaryDatabasePath }).ToString();
+            }
+            public string ConnectionString { get; }
+
+            public void Dispose()
+            {
+                File.Delete(_temporaryDatabasePath);
+            }
+        }
+
         static Upgrader()
         {
             Assembly entryAssembly = Assembly.GetExecutingAssembly();
@@ -328,24 +346,83 @@
                 if (!repo.ColumnExists("Audit", "IsAltArt"))
                 {
                     repo.ExecuteBatch(UpdateQueries.AddIsAltArtColumnToAudit);
-                    repo.ExecuteBatch(UpdateQueries.UpdateAltArtColumn);
+                    repo.ExecuteBatch(UpdateQueries.UpdateAltArtColumnOfAudit);
                 }
 
+                if (!repo.TableExists("CardEditionVariation"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.CreateCardEditionVariationTable);
+                }
             }
 
-            AddPreconstructedDeckFromReference(repo);
+            using (var temporaryDabase = new TemporaryDatabase(DatabaseType.Data))
+            {
+                AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
+                AddCardEditionVariationFromReference(repo, temporaryDabase.ConnectionString);
+            }
         }
-        private void AddPreconstructedDeckFromReference(IRepository repo)
+        private void AddCardEditionVariationFromReference(IRepository repo, string connectionString)
         {
-            string temporaryDatabasePath = new Generator(DatabaseType.Data).Generate(true);
-            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabaseType.Data));
-            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = temporaryDatabasePath }).ToString();
+            Dictionary<int, List<Tuple<int, string>>> referenceCardEditionVariations = GetCardEditionVariations(connectionString);
+            Dictionary<int, List<Tuple<int, string>>> currentCardEditionVariations = GetCardEditionVariations(_connectionString);
 
+            var parameters = new List<KeyValuePair<string, object>[]>();
+
+            foreach (var kv in referenceCardEditionVariations)
+            {
+                if (!currentCardEditionVariations.ContainsKey(kv.Key))
+                {
+                    foreach (var tuple in kv.Value)
+                    {
+                        parameters.Add(new KeyValuePair<string, object>[] {
+                            new KeyValuePair<string, object>("@idGatherer", kv.Key),
+                            new KeyValuePair<string, object>("@otherIdGatherer", tuple.Item1),
+                            new KeyValuePair<string, object>("@url", tuple.Item2)});
+                    }
+                }
+            }
+            if (parameters.Count > 0)
+            {
+                repo.ExecuteParametrizeCommandMulti(UpdateQueries.InsertNewCardEditionVariation, parameters);
+                parameters.Clear();
+            }
+        }
+        private Dictionary<int, List<Tuple<int, string>>> GetCardEditionVariations(string connectionString)
+        {
+            Dictionary<int, List<Tuple<int, string>>> ret = new Dictionary<int, List<Tuple<int, string>>>();
+
+            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
+            {
+                cnx.Open();
+                using (DbCommand cmd = cnx.CreateCommand())
+                {
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = UpdateQueries.SelectCardEditionVariation;
+
+                    using (IDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int idGatherer = reader.GetInt32(0);
+                            if (!ret.TryGetValue(idGatherer, out List<Tuple<int, string>> list))
+                            {
+                                list = new List<Tuple<int, string>>();
+                                ret.Add(idGatherer, list);
+                            }
+
+                            list.Add(new Tuple<int, string>(reader.GetInt32(1), reader.GetString(2)));
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+
+        private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)
+        {
             Dictionary<string, Tuple<string, string>> referencePreconstructedDecks = GetPreconstructedDecks(connectionString);
             Dictionary<int, string[]> referenceFakeIdGathererCardEdition = GetFakeIdGathererCardEdition(connectionString);
             Dictionary<Tuple<int, string, string>, int> referencePreconstructedDeckCards = GetPreconstructedDeckCards(connectionString);
-
-            File.Delete(temporaryDatabasePath);
 
             Dictionary<string, Tuple<string, string>> currentPreconstructedDecks = GetPreconstructedDecks(_connectionString);
             Dictionary<int, string[]> currentFakeIdGathererCardEdition = GetFakeIdGathererCardEdition(_connectionString);

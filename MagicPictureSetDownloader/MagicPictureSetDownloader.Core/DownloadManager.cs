@@ -59,30 +59,6 @@
 
             return ret.ToArray();
         }
-        public void GetCardInfo(string url, int editionId)
-        {
-            string htmltext = _webAccess.GetHtml(url);
-
-            foreach (CardWithExtraInfo cardWithExtraInfo in Parser.ParseCardInfo(htmltext))
-            {
-                string pictureUrl = WebAccess.ToAbsoluteUrl(url, cardWithExtraInfo.PictureUrl);
-                int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
-                string baseUrl = WebAccess.ToAbsoluteUrl(url, string.Format("Languages.aspx?multiverseid={0}", idGatherer));
-
-                CardWithExtraInfo info = cardWithExtraInfo;
-
-                ManageMultiPage(baseUrl, html =>
-                {
-                    foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
-                    {
-                        info.Add(language);
-                    }
-                });
-
-                InsertCardInDb(cardWithExtraInfo);
-                InsertCardEditionInDb(editionId, cardWithExtraInfo, pictureUrl);
-            }
-        }
         internal void ManageMultiPage(string baseUrl, Action<string> workOnHtml)
         {
             int page = 0;
@@ -118,19 +94,33 @@
         }
         public void InsertPictureInDb(string pictureUrl)
         {
+            int gathererId;
             ICardEdition cardEdition =  MagicDatabase.GetCardEditionFromPictureUrl(pictureUrl);
-            if (cardEdition == null)
+            if (cardEdition != null)
             {
-                throw new ApplicationException("Could not find CardEdition with url: " + pictureUrl); 
+                gathererId = cardEdition.IdGatherer;
+            }
+            else 
+            { 
+                ICardEditionVariation cardEditionVariation = MagicDatabase.GetCardEditionVariationFromPictureUrl(pictureUrl);
+                if (cardEditionVariation != null)
+                {
+                    gathererId = cardEditionVariation.OtherIdGatherer;
+                }
+                else
+                {
+                    throw new ApplicationException("Could not find IdGatherer from url: " + pictureUrl);
+                }
+
             }
 
-            IPicture picture = MagicDatabase.GetPicture(cardEdition.IdGatherer);
+            IPicture picture = MagicDatabase.GetPicture(gathererId);
             if (picture == null)
             {
                 //No id found try insert
                 byte[] pictureData = _webAccess.GetFile(pictureUrl);
 
-                MagicDatabase.InsertNewPicture(cardEdition.IdGatherer, pictureData);
+                MagicDatabase.InsertNewPicture(gathererId, pictureData);
             }
         }
         public void InsertRuleInDb(string rulesUrl)
@@ -227,12 +217,18 @@
         {
             return _webAccess.GetHtml(url);
         }
-
         internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
 
             MagicDatabase.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
+        }
+        internal void InsertCardEditionVariationInDb(int idGatherer, int otherIdGatherer, string pictureUrl)
+        {
+            if (idGatherer != otherIdGatherer)
+            {
+                MagicDatabase.InsertNewCardEditionVariation(idGatherer, otherIdGatherer, pictureUrl);
+            }
         }
         public void EditionCompleted(int editionId)
         {

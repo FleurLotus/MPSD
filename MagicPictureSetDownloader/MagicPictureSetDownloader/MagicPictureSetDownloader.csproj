@@ -111,6 +111,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\CardToVariationsVisibleConverter.cs" />
+    <Compile Include="Converter\GathererIdToImageConverter.cs" />
+    <Compile Include="Converter\CardToVariationsConverter.cs" />
     <Compile Include="Converter\HierarchicalResultNodeToCardConverter.cs" />
     <Compile Include="UI\PreconstructedDecksWindow.xaml.cs">
       <DependentUpon>PreconstructedDecksWindow.xaml</DependentUpon>
