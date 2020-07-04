@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text;
 
     internal class CardParserBase
     {
@@ -22,6 +23,7 @@
         public const string RarityKey = "Rarity";
         public const string NumberKey = "Number";
         public const string ArtistKey = "Artist";
+        public const string VariationsKey = "Variations";
 
         protected CardParserBase()
         {
@@ -70,22 +72,59 @@
 
         protected string SpecialXMLCorrection(string text)
         {
+            StringBuilder sb = new StringBuilder();
+
             //Ensure unique root element because of fragment file
-            text = "<root>" + text + "</root>";
+            sb.Append("<root>").Append(text).Append("</root>");
 
             //For XmlTextReader which doesn't support & caracter
-            text = text.Replace("&nbsp;", " ");
-            text = text.Replace("&amp;", "&");
-            text = text.Replace("&", "&amp;");
-            text = text.Replace("<</i>", "&lt;</i>");
-            text = text.Replace("<</div>", "&lt;</div>");
+            sb.Replace("&nbsp;", " ");
+            sb.Replace("&amp;", "&");
+            sb.Replace("&", "&amp;");
+            sb.Replace("<</i>", "&lt;</i>");
+            sb.Replace("<</div>", "&lt;</div>");
 
             //Known XML issues in file
-            text = text.Replace("<div>", "<tr>");
-            text = text.Replace("</div\r\n", "</div>");
-            text = text.Replace("<i>", "");
-            text = text.Replace("</i>", "");
-            text = text.Replace("--->", "-->");
+            sb.Replace("<div>", "<tr>");
+            sb.Replace("</div\r\n", "</div>");
+            sb.Replace("<i>", "");
+            sb.Replace("</i>", "");
+            sb.Replace("--->", "-->");
+            
+            return CardSpecificCorrection(sb.ToString());
+        }
+
+        private string CardSpecificCorrection(string text)
+        {
+
+            if (text.Contains(@"Teferi, Master of Time</div>"))
+            {
+                //Missing the loyauty
+                const string Start = @"Loyalty:</div>";
+                const string End = @"</div>";
+                const string Middle = @"<div class=""value"">";
+
+                int index = text.IndexOf(Start);
+                if (index >= 0)
+                {
+                    int endIndex = text.IndexOf(End, index + Start.Length);
+                    if (endIndex >= 0)
+                    {
+                        string toreplace = text.Substring(index, endIndex - index + End.Length);
+                        int subIndex = toreplace.IndexOf(Middle);
+                        if (subIndex >= 0)
+                        {
+                            string tocheck = toreplace.Substring(subIndex + Middle.Length, toreplace.Length - subIndex - Middle.Length - End.Length);
+                            if (string.IsNullOrWhiteSpace(tocheck))
+                            {
+                                //Confirm no  loyauty
+                                return text.Replace(toreplace, toreplace.Substring(0,toreplace.Length - End.Length) + "3" + End);
+                            }
+                        }
+                        //string tocheck = text.Substring(index + 14, endIndex - index - 14);
+                    }
+                }
+            }
 
             return text;
         }

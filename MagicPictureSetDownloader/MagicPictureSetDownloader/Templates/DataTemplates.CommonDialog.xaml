@@ -85,13 +85,15 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <CheckBox Grid.Row="0" VerticalAlignment="Center" Content="Show picture" IsChecked="{fl:TwoWayBinding Options.ShowPicture}"/>
-                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show rules" IsChecked="{fl:TwoWayBinding Options.ShowRules}"/>
-                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show prices" IsChecked="{fl:TwoWayBinding Options.ShowPrices}"/>
-                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Show other languages" IsChecked="{fl:TwoWayBinding Options.ShowOtherLanguages}"/>
-                    <CheckBox Grid.Row="4" VerticalAlignment="Center" Content="Show statistics" IsChecked="{fl:TwoWayBinding Options.ShowStatistics}"/>
-                    <CheckBox Grid.Row="5" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
+                    <CheckBox Grid.Row="1" VerticalAlignment="Center" Content="Show picture variations" IsChecked="{fl:TwoWayBinding Options.ShowVariationPicture}"/>
+                    <CheckBox Grid.Row="2" VerticalAlignment="Center" Content="Show rules" IsChecked="{fl:TwoWayBinding Options.ShowRules}"/>
+                    <CheckBox Grid.Row="3" VerticalAlignment="Center" Content="Show prices" IsChecked="{fl:TwoWayBinding Options.ShowPrices}"/>
+                    <CheckBox Grid.Row="4" VerticalAlignment="Center" Content="Show other languages" IsChecked="{fl:TwoWayBinding Options.ShowOtherLanguages}"/>
+                    <CheckBox Grid.Row="5" VerticalAlignment="Center" Content="Show statistics" IsChecked="{fl:TwoWayBinding Options.ShowStatistics}"/>
+                    <CheckBox Grid.Row="6" VerticalAlignment="Center" Content="Only current collection" Margin="20,0,0,0" 
                               IsChecked="{fl:TwoWayBinding Options.ShowOnlyCurrentStatistics}" IsEnabled="{Binding Options.ShowStatistics}"/>
                 </Grid>
             </GroupBox>

@@ -50,6 +50,16 @@ AND r.Code = @raritycode
 ANd c.Name = @cardname 
 AND c.PartName = @cardpartname ";
 
+        public const string SelectCardEditionVariation =
+@"SELECT cev.IdGatherer, cev.OtherIdGatherer, cev.Url
+FROM CardEditionVariation cev
+";
+        public const string InsertNewCardEditionVariation =
+@"INSERT INTO CardEditionVariation(IdGatherer, OtherIdGatherer, Url)
+SELECT IdGatherer, @otherIdGatherer, @url
+FROM CardEdition
+WHERE IdGatherer = @idGatherer";
+
         public const string RemoveDuelDeckFromName =
 @"UPDATE Edition 
 SET NAME = SUBSTR(Name, 13)
@@ -228,11 +238,20 @@ ADD COLUMN [FoilAltArtNumber] INTEGER NOT NULL DEFAULT 0
 ALTER TABLE Audit
 ADD COLUMN [IsAltArt] INTEGER NULL
 ";
-        public const string UpdateAltArtColumn =
+        public const string UpdateAltArtColumnOfAudit =
 @"
 UPDATE Audit
 SET [IsAltArt] = 0
 WHERE [IsAltArt] IS NULL AND [IsFoil] IS NOT NULL
 ";
+
+        public const string CreateCardEditionVariationTable =
+@"CREATE TABLE [CardEditionVariation] (
+  [IdGatherer] INTEGER NOT NULL 
+, [OtherIdGatherer] INTEGER NOT NULL 
+, [Url]	TEXT NOT NULL
+, PRIMARY KEY([IdGatherer], [OtherIdGatherer])
+, FOREIGN KEY([IdGatherer]) REFERENCES `CardEdition`([IdGatherer])
+)";
     }
 }

@@ -272,6 +272,25 @@
         </StackPanel>
     </ControlTemplate>
 
+    <!-- Card picture display variations -->
+    <ControlTemplate x:Key="VariationImageControlTemplate">
+        <TabControl TabStripPlacement="Bottom" Background="Transparent" fl:TabControlExtensions.SelectOnlyVisibleTabs="True" 
+                    ItemsSource="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter},{conv:CardToVariationsConverter}}}"
+                    Visibility="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter},{conv:CardToVariationsVisibleConverter}}}"
+                    d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}" >
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="Alt"/>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Image StretchDirection="DownOnly" Source="{Binding Converter={conv:GathererIdToImageConverter}}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </ControlTemplate>
+
     <!-- Quantity for card change -->
     <ControlTemplate x:Key="QuantityControlTemplate">
         <Grid Margin="5" d:DataContext="{d:DesignInstance Type=input:CardSourceViewModel, IsDesignTimeCreatable=False}">

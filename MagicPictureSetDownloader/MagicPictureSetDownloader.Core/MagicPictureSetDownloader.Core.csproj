@@ -62,6 +62,7 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="CardInfo\AwareXmlTextReader.cs" />
+    <Compile Include="CardInfo\VariationWorker.cs" />
     <Compile Include="CardInfo\SymbolParser.cs" />
     <Compile Include="CardInfo\TextRowWorker.cs" />
     <Compile Include="CardInfo\ManaRowWorker.cs" />

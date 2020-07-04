@@ -36,6 +36,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
 
         private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
+        private readonly IDictionary<int, IList<ICardEditionVariation>> _cardEditionVariations = new Dictionary<int, IList<ICardEditionVariation>>();
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
         private int _fakeGathererId = 0;
 
@@ -170,6 +171,35 @@ namespace MagicPictureSetDownloader.Db
                 };
 
                 AddToDbAndUpdateReferential(DatabaseType.Data, cardEdition, InsertInReferential);
+            }
+        }
+        public void InsertNewCardEditionVariation(int idGatherer, int otherGathererId, string url)
+        {
+            using (new WriterLock(_lock))
+            {
+                if (idGatherer == 0 || otherGathererId <= 0)
+                {
+                    throw new ApplicationDbException("Data are not filled correctedly");
+                }
+
+                if (GetCardEdition(idGatherer) == null)
+                {
+                    return;
+                }
+
+                if (GetCardEditionVariation(idGatherer).Any(cev => cev.OtherIdGatherer == otherGathererId))
+                {
+                    return;
+                }
+
+                CardEditionVariation cardEditionVariation = new CardEditionVariation
+                {
+                    IdGatherer = idGatherer,
+                    OtherIdGatherer = otherGathererId,
+                    Url = url
+                };
+
+                AddToDbAndUpdateReferential(DatabaseType.Data, cardEditionVariation, InsertInReferential);
             }
         }
         public int InsertNewCardEditionWithFakeGathererId(int idEdition, int idCard, int idRarity, string url)
@@ -452,6 +482,7 @@ namespace MagicPictureSetDownloader.Db
                 _cardsbyId.Clear();
                 _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
+                _cardEditionVariations.Clear();
                 _collections.Clear();
                 _allCardInCollectionCount.Clear();
                 _preconstructedDecks.Clear();
@@ -505,6 +536,11 @@ namespace MagicPictureSetDownloader.Db
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                 {
                     InsertInReferential(cardEdition);
+                }
+
+                foreach (CardEditionVariation cardEditionVariation in Mapper<CardEditionVariation>.LoadAll(cnx))
+                {
+                    InsertInReferential(cardEditionVariation);
                 }
 
                 foreach (CardCollection cardCollection in Mapper<CardCollection>.LoadAll(cnx))
@@ -592,6 +628,23 @@ namespace MagicPictureSetDownloader.Db
             _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
             _cacheForAllDbInfos = null;
         }
+        private void InsertInReferential(ICardEditionVariation cardEditionVariation)
+        {
+            if (_cardEditions.GetOrDefault(cardEditionVariation.IdGatherer) == null)
+            {
+                throw new ApplicationDbException("Can't find CardEdition with id " + cardEditionVariation.IdGatherer);
+            }
+
+            if (!_cardEditionVariations.TryGetValue(cardEditionVariation.IdGatherer, out IList<ICardEditionVariation> variations))
+            {
+                variations = new List<ICardEditionVariation>();
+                _cardEditionVariations.Add(cardEditionVariation.IdGatherer, variations);
+            }
+
+            variations.Add(cardEditionVariation);
+            _cacheForAllDbInfos = null;
+        }
+
         private void InsertInReferential(IOption option)
         {
             IList<IOption> options;

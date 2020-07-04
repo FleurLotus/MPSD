@@ -284,6 +284,16 @@ namespace MagicPictureSetDownloader.Db
                     IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdGatherer);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
+                    IList<ICardEditionVariation> other;
+                    if (_cardEditionVariations.TryGetValue(cardEdition.IdGatherer, out other))
+                    {
+                        cardAllDbInfo.VariationIdGatherers = other.Select(cev => cev.OtherIdGatherer).ToArray();
+                    }
+                    else
+                    {
+                        cardAllDbInfo.VariationIdGatherers = new int[0];
+                    }
+
 
                     //For Multipart card
                     if (card.IsMultiPart)
@@ -344,6 +354,22 @@ namespace MagicPictureSetDownloader.Db
                 return _cardEditions.GetOrDefault(idGatherer);
             }
         }
+        public IList<ICardEditionVariation> GetCardEditionVariation(int idGatherer)
+        {
+            CheckReferentialLoaded();
+
+            using (new ReaderLock(_lock))
+            {
+                IList<ICardEditionVariation> variations = _cardEditionVariations.GetOrDefault(idGatherer);
+                if (variations == null)
+                {
+                    return new List<ICardEditionVariation>().AsReadOnly();
+                }
+
+                return new List<ICardEditionVariation>(variations).AsReadOnly();
+            }
+        }
+
         public IRarity GetRarity(string rarity)
         {
             CheckReferentialLoaded();
@@ -429,6 +455,15 @@ namespace MagicPictureSetDownloader.Db
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
             }
         }
+        private ICollection<ICardEditionVariation> AllCardEditionVariations()
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return new List<ICardEditionVariation>(_cardEditionVariations.SelectMany(kv => kv.Value)).AsReadOnly();
+            }
+        }
+
         public ICardEdition GetCardEditionFromPictureUrl(string pictureUrl)
         {
             CheckReferentialLoaded();
@@ -437,6 +472,15 @@ namespace MagicPictureSetDownloader.Db
                 return _cardEditions.Values.FirstOrDefault(ce => ce.Url == pictureUrl);
             }
         }
+        public ICardEditionVariation GetCardEditionVariationFromPictureUrl(string pictureUrl)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _cardEditionVariations.Values.SelectMany(cevs => cevs).FirstOrDefault(cev => cev.Url == pictureUrl);
+            }
+        }
+
         private ICollection<int> GetAllPicturesId()
         {
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
@@ -467,8 +511,9 @@ namespace MagicPictureSetDownloader.Db
         {
             HashSet<int> idGatherers = new HashSet<int>(GetAllPicturesId());
 
-            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
-                                    .Select(ce => ce.Url).ToArray();
+            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer)).Select(ce => ce.Url)
+                          .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer)).Select(cev => cev.Url))
+                          .ToArray();
         }
         public ICardAllDbInfo[] GetCardsWithPicture()
         {

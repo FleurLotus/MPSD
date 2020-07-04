@@ -66,7 +66,6 @@
                     }
                 }
             }
-
         }
 
         private CardRuleInfo WorkOnRow(IAwareXmlTextReader xmlReader)
@@ -95,7 +94,6 @@
                     }
                 }
             }
-
 
             if (rule == null || date == new DateTime())
             {

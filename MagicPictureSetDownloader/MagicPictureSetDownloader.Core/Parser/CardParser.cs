@@ -138,7 +138,17 @@
                     }
                 }
             }
-
+            string variations = infos.GetOrDefault(VariationsKey);
+            if (!string.IsNullOrWhiteSpace(variations))
+            {
+                foreach (string variation in variations.Split(new[] { VariationsWorker.Separator }, System.StringSplitOptions.RemoveEmptyEntries))
+                {
+                    if (int.TryParse(variation, out int gatherid))
+                    {
+                        cardWithExtraInfo.Add(gatherid);
+                    }
+                }
+            }
             cardWithExtraInfo.Type = infos.GetOrDefault(TypeKey);
             return cardWithExtraInfo;
         }
