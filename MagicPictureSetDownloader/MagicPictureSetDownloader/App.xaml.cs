@@ -38,7 +38,7 @@
             base.OnStartup(e);
 
             MainWindow mainWindow;
-
+#if !DEBUG
             SplashScreenViewModel splashScreen = SplashScreenFactory.CreateOrGetSplashScreen();
             splashScreen.SourceUri = new Uri("pack://application:,,,/Resources/Splash.jpg");
             splashScreen.ShowProgress = false;
@@ -48,12 +48,15 @@
             try
             {
                 splashScreenWindow.Show();
+#endif
                 mainWindow = new MainWindow();
+#if !DEBUG
             }
             finally
             {
                 splashScreenWindow.Close();
             }
+#endif
             _started = true;
             mainWindow.Show();
         }

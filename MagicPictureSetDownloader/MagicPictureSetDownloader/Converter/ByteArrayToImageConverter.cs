@@ -8,6 +8,11 @@ namespace MagicPictureSetDownloader.Converter
     [ValueConversion(typeof(byte[]), typeof(BitmapImage))]
     public class ByteArrayToImageConverter : ImageConverterBase
     {
+        protected override string GetCachePrefix()
+        {
+            return "ByteImage";
+        }
+
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             byte[] data = value as byte[];
@@ -17,7 +22,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            return BytesToImage(data);
+            return BytesToImage(data, null);
         }
     }
 }

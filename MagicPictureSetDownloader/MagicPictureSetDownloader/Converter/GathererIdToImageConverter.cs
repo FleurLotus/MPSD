@@ -3,14 +3,16 @@ namespace MagicPictureSetDownloader.Converter
     using System;
     using System.Globalization;
     using System.Windows.Data;
-    using System.Collections.Generic;
     using System.Windows.Media.Imaging;
 
-    using MagicPictureSetDownloader.Interface;
-
-    [ValueConversion(typeof(int), typeof(IList<BitmapImage>))]
+    [ValueConversion(typeof(int), typeof(BitmapImage))]
     public class GathererIdToImageConverter : ImageConverterBase
     {
+        protected override string GetCachePrefix()
+        {
+            return "CardImage";
+        }
+
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
@@ -25,18 +27,19 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            IPicture picture = MagicDatabase.GetPicture(idGatherer);
-            if (null == picture || picture.Image == null || picture.Image.Length == 0)
+            BitmapImage image = GetImage(idGatherer.ToString());
+            if (image != null)
             {
-                picture = MagicDatabase.GetDefaultPicture();
+                return image;
             }
 
-            if (null == picture || picture.Image == null || picture.Image.Length == 0)
+            byte[] bytes = MagicDatabase.GetPicture(idGatherer)?.Image;
+            if (null != bytes && bytes.Length != 0)
             {
-                return null;
+                return BytesToImage(bytes, idGatherer.ToString());
             }
 
-            return BytesToImage(picture.Image);
+            return GetDefaultCardImage();
         }
     }
 }
