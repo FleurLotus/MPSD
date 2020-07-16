@@ -5,11 +5,14 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
 
-    using MagicPictureSetDownloader.Interface;
-
     [ValueConversion(typeof(string), typeof(BitmapImage))]
     public class TreeToTreeImageConverter : ImageConverterBase
     {
+        protected override string GetCachePrefix()
+        {
+            return "TreeImage";
+        }
+
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string data = value as string;
@@ -19,11 +22,16 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            ITreePicture treepicture = MagicDatabase.GetTreePicture(data);
-            if (null != treepicture && treepicture.Image.Length > 0)
+            BitmapImage image = GetImage(data);
+            if (image != null)
             {
-                BitmapImage image = BytesToImage(treepicture.Image);
                 return image;
+            }
+
+            byte[] bytes = MagicDatabase.GetTreePicture(data)?.Image;
+            if (null != bytes && bytes.Length > 0)
+            {
+                return BytesToImage(bytes, data);
             }
 
             return null;

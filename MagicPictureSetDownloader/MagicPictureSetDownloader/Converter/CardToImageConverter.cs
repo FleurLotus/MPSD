@@ -5,11 +5,10 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
 
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
-    public class CardToImageConverter : ImageConverterBase
+    public class CardToImageConverter : GathererIdToImageConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -36,18 +35,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            IPicture picture = MagicDatabase.GetPicture(idGatherer);
-            if (null == picture || picture.Image == null || picture.Image.Length == 0)
-            {
-                picture = MagicDatabase.GetDefaultPicture();
-            }
-
-            if (null == picture || picture.Image == null || picture.Image.Length == 0)
-            {
-                return null;
-            }
-
-            return BytesToImage(picture.Image);
+            return base.Convert(idGatherer, targetType, parameter, culture); 
         }
     }
 }
