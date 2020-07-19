@@ -21,11 +21,13 @@
 
         protected override void OnStartup(StartupEventArgs e)
         {
+#if DEBUG
             //For debugging Binding issue
             PresentationTraceSources.Refresh();
             PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
             PresentationTraceSources.DataBindingSource.Listeners.Add(new DebugTraceListener());
             PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
+#endif
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainUnhandledException;
             DispatcherUnhandledException += ApplicationDispatcherUnhandledException;
