@@ -88,6 +88,7 @@
 
             ret.Sort((x, y) =>
             {
+                //Most recent set first
                 if (!x.EditionDate.HasValue)
                 {
                     return y.EditionDate.HasValue ? 1 : 0;
@@ -96,7 +97,15 @@
                 {
                     return -1;
                 }
-                return y.EditionDate.Value.CompareTo(x.EditionDate.Value);
+                int comp = y.EditionDate.Value.CompareTo(x.EditionDate.Value);
+                if (comp == 0)
+                {
+                    //Alphabet order
+                    comp = x.Name.CompareTo(y.Name);
+                }
+
+
+                return comp;
             });
 
             return ret.AsReadOnly();
