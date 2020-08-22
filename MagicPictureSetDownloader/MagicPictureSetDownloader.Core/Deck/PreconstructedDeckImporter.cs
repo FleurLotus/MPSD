@@ -20,7 +20,7 @@
         private readonly Regex _cardRarityRegex = new Regex(@"Rarity: (?<rarity>\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private const string CardSplitter = @"<div class='card_entry'>";
         // Magic Online + Coldsnap + doublon
-        private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0|me2|wth|vis|mir|csp|rqs)/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0|me2|wth|vis|mir|csp|rqs|wc\d{2})/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Func<string, string> _getExtraInfo;
 
         private IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
@@ -145,13 +145,15 @@
             //  15 or 22 or 26 or 30 or 35 or 40 or 41 Welcome Pack / Portal
             //  80 Archenemy
             //  70 Planechase
+            //  20 Jumpstart
             if (cardCount != 60 && cardCount != 75 && 
                 cardCount != 62 &&
                 cardCount != 61 &&
                 cardCount != 100 &&
                 cardCount != 15 && cardCount != 22 && cardCount != 26 && cardCount != 30 && cardCount != 35 && cardCount != 40 && cardCount != 41 && 
                 cardCount != 80 &&
-                cardCount != 70 
+                cardCount != 70 &&
+                cardCount != 20
                 )
             {
                 throw new ParserException(string.Format("Deck {0} contains {1} cards", deckName, cardCount));
