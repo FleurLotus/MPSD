@@ -75,6 +75,7 @@
     <Compile Include="Deck\DeckInfo.cs" />
     <Compile Include="Deck\PreconstructedDeckImporter.cs" />
     <Compile Include="DownloadManagerEdition.cs" />
+    <Compile Include="MultiPartCardManager.cs" />
     <Compile Include="Parser\TableParserBase.cs" />
     <Compile Include="PriceInfo.cs" />
     <Compile Include="CardRuleInfo.cs" />

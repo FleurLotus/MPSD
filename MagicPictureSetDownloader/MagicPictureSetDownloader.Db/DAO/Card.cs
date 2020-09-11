@@ -36,39 +36,6 @@
         [DbColumn]
         public string OtherPartName { get; set; }
 
-        public bool IsMultiPart
-        {
-            get { return OtherPartName != null; }
-        }
-        //Recto-Verso
-        public bool IsReverseSide
-        {
-            //Exclude land because of Westvale Abbey and Hanweir Battlements
-            //But keep transformed to land
-            get { return IsMultiPart && CastingCost == null && 
-                    (!Type.ToLowerInvariant().Contains("land") || (Text != null && Text.StartsWith("(Transforms from")));
-            }
-        }
-        //Multiple part on the same side (Not Up/Down)
-        public bool IsSplitted
-        {
-            get { return IsMultiPart && PartName != Name && OtherPartName != Name; }
-        }
-        //B.F.M. (Big Furry Monster)
-        public bool IsMultiCard
-        {
-            get { return IsMultiPart && PartName == Name && OtherPartName == Name && CastingCost != null; }
-        }
-        //Aftermath
-        public bool Is90DegreeSide
-        {
-            get { return IsSplitted && Text != null && Text.StartsWith("Aftermath"); }
-        }
-        //Adventure
-        public bool IsSameDisplay
-        {
-            get { return IsMultiPart && Type.EndsWith("Adventure"); }
-        }
         public IRuling[] Rulings
         {
             get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }

@@ -1,5 +1,8 @@
-﻿namespace MagicPictureSetDownloader.Interface
+﻿namespace MagicPictureSetDownloader.Db
 {
+
+    using MagicPictureSetDownloader.Interface;
+
     public class CardCountKey : ICardCountKey
     {
         public CardCountKey(bool isFoil, bool isAltArt)

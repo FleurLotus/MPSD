@@ -409,11 +409,8 @@
                 return true;
             }
 
-            ShardColor color = MagicRules.GetColor(cai.Card.CastingCost);
-            if (cai.Card.IsSplitted)
-            {
-                color |= MagicRules.GetColor(cai.CardPart2.CastingCost);
-            }
+            
+            ShardColor color = MultiPartCardManager.Instance.GetColor(cai); 
 
             bool wantedColorless = ColorsSelected.Contains(ShardColor.Colorless);
 
@@ -442,11 +439,7 @@
                 return true;
             }
 
-            CardType type = MagicRules.GetCardType(cai.Card.Type, cai.Card.CastingCost);
-            if (cai.Card.IsSplitted)
-            {
-                type |= MagicRules.GetCardType(cai.CardPart2.Type, cai.CardPart2.CastingCost);
-            }
+            CardType type = MultiPartCardManager.Instance.GetCardType(cai);
 
             CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newtype) => current | newtype);
 
@@ -465,11 +458,7 @@
                 return true;
             }
 
-            CardSubType subType = MagicRules.GetCardSubType(cai.Card.Type);
-            if (cai.Card.IsSplitted)
-            {
-                subType |= MagicRules.GetCardSubType(cai.CardPart2.Type);
-            }
+            CardSubType subType = MultiPartCardManager.Instance.GetCardSubType(cai);
 
             CardSubType wantedSubType = SubTypesSelected.Aggregate(CardSubType.None, (current, newsubtype) => current | newsubtype);
 

@@ -4,6 +4,7 @@
     using System.Text.RegularExpressions;
 
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.Db;
 
     internal class MpsdFormatter : FormatterBase
     {

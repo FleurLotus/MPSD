@@ -21,24 +21,16 @@ namespace MagicPictureSetDownloader.Db
                                            IMagicDatabaseReadAndUpdate
 
     {
-        private static readonly Lazy<MagicDatabase> _lazyIntance = new Lazy<MagicDatabase>(() => new MagicDatabase());
-
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly DatabaseConnection _databaseConnection;
+        private readonly IMultiPartCardManager _multiPartCardManager;
         //To optimize display
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
         
-        private MagicDatabase()
+        internal MagicDatabase(IMultiPartCardManager multiPartCardManager)
         {
             _databaseConnection = new DatabaseConnection();
-        }
-
-        internal static MagicDatabase DbInstance
-        {
-            get
-            {
-                return _lazyIntance.Value;
-            }
+            _multiPartCardManager = multiPartCardManager;
         }
 
         //Unitary Get
@@ -296,15 +288,14 @@ namespace MagicPictureSetDownloader.Db
 
 
                     //For Multipart card
-                    if (card.IsMultiPart)
+                    if (_multiPartCardManager.HasMultiPart(card))
                     {
                         //This is the reverse side of a recto-verso card no need to do anything
-                        if (card.IsReverseSide)
+                        if (_multiPartCardManager.ShouldIgnore(card))
                         {
                             continue;
                         }
-
-                        ICard cardPart2 = card.IsSplitted ? GetCard(card.Name, card.OtherPartName) : GetCard(card.OtherPartName, null);
+                        ICard cardPart2 = _multiPartCardManager.GetOtherPartCard(card, GetCard);
                         cardAllDbInfo.CardPart2 = cardPart2;
 
                         //Be sure to get the other part (Up/Down, Splitted and Adventure have the same gatherer id so no return)

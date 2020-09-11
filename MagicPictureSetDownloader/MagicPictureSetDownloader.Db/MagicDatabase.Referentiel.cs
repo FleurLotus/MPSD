@@ -610,7 +610,7 @@ namespace MagicPictureSetDownloader.Db
             }
 
             _cards.Add(key, card);
-            if (!card.IsSplitted || card.Name.StartsWith(card.PartName))
+            if (!_multiPartCardManager.IsSecondPartOfSplitted(card))
             {
                 //Remove second part of splitted card for search
                 _cardsWithoutSpecialCharacters.Add(LowerCaseWithoutSpecialCharacters(card.Name), card);
