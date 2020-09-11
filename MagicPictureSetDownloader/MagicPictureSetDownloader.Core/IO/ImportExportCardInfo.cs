@@ -1,5 +1,6 @@
 ﻿ namespace MagicPictureSetDownloader.Core.IO
 {
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
     internal class ImportExportCardInfo : IImportExportCardCount

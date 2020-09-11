@@ -6,6 +6,7 @@
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.Db;
 
     public class CardSourceViewModel : NotifyPropertyChangedBase
     {

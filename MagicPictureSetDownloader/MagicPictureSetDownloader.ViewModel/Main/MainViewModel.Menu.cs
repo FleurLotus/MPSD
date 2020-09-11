@@ -13,6 +13,7 @@
     using Common.ViewModel.Input;
     using Common.ViewModel.Dialog;
 
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Deck;

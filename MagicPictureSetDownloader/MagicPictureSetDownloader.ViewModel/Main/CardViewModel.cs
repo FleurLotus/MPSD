@@ -5,6 +5,7 @@
 
     using Common.ViewModel;
 
+    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
     using MagicPictureSetDownloader.Interface;
 
@@ -26,6 +27,8 @@
             Rarity = cardAllDbInfo.Rarity;
             IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
             VariationIdGatherers = cardAllDbInfo.VariationIdGatherers.ToArray();
+            IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
+            Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card);
             if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
             {
                 PowerToughnessLoyalty = string.Format("{0}/{1}", Card.Power, Card.Toughness);
@@ -45,8 +48,7 @@
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
-                if (!cardAllDbInfo.CardPart2.IsSplitted && !cardAllDbInfo.CardPart2.IsReverseSide 
-                    && !cardAllDbInfo.CardPart2.IsMultiCard && !cardAllDbInfo.CardPart2.IsSameDisplay)
+                if (MultiPartCardManager.Instance.IsDownSide(cardAllDbInfo.CardPart2))
                 {
                     OtherCardPart.IsDownSide = true;
                 }
@@ -77,11 +79,6 @@
         {
             get { return IsMultiPart ? CastingCost + " " + OtherCardPart.CastingCost : CastingCost; }
         }
-
-        public bool IsMultiPart
-        {
-            get { return Card.IsMultiPart; }
-        }
         public string PartName
         {
             get { return Card.PartName; }
@@ -98,10 +95,8 @@
         {
             return Card.ToString(languageId);
         }
-        public bool Is90DegreeSide
-        {
-            get { return Card.Is90DegreeSide; }
-        }
+        public bool IsMultiPart { get; }
+        public bool Is90DegreeSide { get; }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; }
         public StatisticViewModel[] Statistics { get; }

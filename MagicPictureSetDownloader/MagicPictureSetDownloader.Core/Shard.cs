@@ -4,18 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Core.CardInfo;
-
-    [Flags]
-    public enum ShardColor
-    {
-        Colorless = 0,
-        White = 1,
-        Blue = 1 << 1,
-        Black = 1 << 2,
-        Red = 1 << 3,
-        Green = 1 << 4
-    }
 
     public class Shard
     {

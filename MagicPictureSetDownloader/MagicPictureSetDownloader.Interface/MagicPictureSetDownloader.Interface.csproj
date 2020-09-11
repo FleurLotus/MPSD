@@ -73,6 +73,7 @@
     <Compile Include="DAO\IEdition.cs" />
     <Compile Include="DAO\IPicture.cs" />
     <Compile Include="DAO\IRarity.cs" />
+    <Compile Include="IMultiPartCardManager.cs" />
     <Compile Include="IProgressReporter.cs" />
     <Compile Include="ICardCountKey.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

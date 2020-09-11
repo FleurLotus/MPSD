@@ -1,9 +1,11 @@
-﻿namespace MagicPictureSetDownloader.Interface
+﻿namespace MagicPictureSetDownloader.Db
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
+
+    using MagicPictureSetDownloader.Interface;
 
     public class CardCount: ICardCount
     {
