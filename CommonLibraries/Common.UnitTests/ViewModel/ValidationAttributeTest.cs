@@ -37,7 +37,7 @@
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(null), "Null reg string must not be valid argument");
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(string.Empty), "Empty reg string must not be valid argument");
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute("   "), "Blank reg string must not be valid argument");
-            Assert.Throws<ArgumentException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
+            AssertEx.ThrowsOfType<ArgumentException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
             Assert.IsNotNull(new StringRegExValidationAttribute(".*"), "0 is valid argument");
         }
 

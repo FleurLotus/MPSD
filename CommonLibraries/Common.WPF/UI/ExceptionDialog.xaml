@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:exception="clr-namespace:Common.ViewModel.Exception;assembly=Common.ViewModel"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=exception:ExceptionViewModel}"
@@ -22,7 +21,7 @@
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction MethodName="Close"/>
+            <i:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

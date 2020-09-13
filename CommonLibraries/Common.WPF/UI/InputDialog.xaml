@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:binding="clr-namespace:Common.WPF.Binding"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:conv="clr-namespace:Common.WPF.Converter"
         xmlns:input="clr-namespace:Common.ViewModel.Input;assembly=Common.ViewModel"
         xmlns:behavior="clr-namespace:Common.WPF.Behavior"
@@ -35,7 +34,7 @@
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction MethodName="Close"/>
+            <i:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

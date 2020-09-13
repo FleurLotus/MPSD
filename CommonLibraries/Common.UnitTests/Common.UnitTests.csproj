@@ -1,106 +1,36 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\Packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\..\Packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props')" />
-  <Import Project="..\..\Packages\NUnit.3.13.1\build\NUnit.props" Condition="Exists('..\..\Packages\NUnit.3.13.1\build\NUnit.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.UnitTests</RootNamespace>
-    <AssemblyName>Common.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyTitle>Common.UnitTests</AssemblyTitle>
+    <Product>Common.UnitTests</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.13.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\NUnit.3.13.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonFiles\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="CSV\CsvReaderTest.cs" />
-    <Compile Include="Library\LibExtensionTest.Reflection.cs">
+    <Compile Update="Library\LibExtensionTest.Reflection.cs">
       <DependentUpon>LibExtensionTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Library\LibExtensionTest.cs" />
-    <Compile Include="ViewModel\ValidationUsingAttributTest.cs" />
-    <Compile Include="ViewModel\ValidationAttributeTest.cs" />
-    <Compile Include="ViewModel\GlobalValidatingTest.cs" />
-    <Compile Include="ViewModel\NotifyPropertyChangedTest.cs" />
-    <Compile Include="ViewModel\ValidationUsingRulesTest.cs" />
-    <Compile Include="Xml\XMLTest.cs" />
-    <Compile Include="Library\MatcherTest.cs" />
-    <Compile Include="Html\HtmlTest.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Zip\ZipperTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Database\Common.Database.csproj">
-      <Project>{c1458f9b-0a59-49b0-b5ac-4f85e2c8203e}</Project>
-      <Name>Common.Database</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Library\Common.Library.csproj">
-      <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj">
-      <Project>{770cd409-408d-44b1-84ae-b96513d9d7c7}</Project>
-      <Name>Common.ViewModel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.XML\Common.XML.csproj">
-      <Project>{c695020a-1108-41bf-8494-34bdefc30581}</Project>
-      <Name>Common.XML</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Zip\Common.Zip.csproj">
-      <Project>{ff762f87-3489-497f-b350-bc58a6abc48e}</Project>
-      <Name>Common.Zip</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Common.Database\Common.Database.csproj" />
+    <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
+    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
+    <ProjectReference Include="..\Common.XML\Common.XML.csproj" />
+    <ProjectReference Include="..\Common.Zip\Common.Zip.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="ZipTest.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\Packages\NUnit.3.13.1\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\NUnit.3.13.1\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\..\Packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\NUnit3TestAdapter.3.17.0\build\net35\NUnit3TestAdapter.props'))" />
-  </Target>
 </Project>

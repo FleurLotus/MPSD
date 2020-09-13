@@ -1,145 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{528D3805-C009-4AB4-9481-20F2106EFDE8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.Core</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyTitle>MagicPictureSetDownloader.Core</AssemblyTitle>
+    <Product>MagicPictureSetDownloader.Core</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Drawing">
-      <HintPath>..\..\CommonLibraries\Common.Drawing\bin\$(Configuration)\Common.Drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Library">
-      <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Web">
-      <HintPath>..\..\CommonLibraries\Common.Web\bin\$(Configuration)\Common.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.XML">
-      <HintPath>..\..\CommonLibraries\Common.XML\bin\$(Configuration)\Common.XML.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Zip">
-      <HintPath>..\..\CommonLibraries\Common.Zip\bin\$(Configuration)\Common.Zip.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Common.Drawing" Version="7.0.0" />
+    <PackageReference Include="Common.Web" Version="7.0.0" />
+    <PackageReference Include="Common.XML" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="CardInfo\AwareXmlTextReader.cs" />
-    <Compile Include="CardInfo\VariationWorker.cs" />
-    <Compile Include="CardInfo\SymbolParser.cs" />
-    <Compile Include="CardInfo\TextRowWorker.cs" />
-    <Compile Include="CardInfo\ManaRowWorker.cs" />
-    <Compile Include="CardInfo\SimpleValueRowWorker.cs" />
-    <Compile Include="CardInfo\IAwareXmlTextReader.cs" />
-    <Compile Include="CardInfo\RowWorker.cs" />
-    <Compile Include="CardInfo\SkipWorker.cs" />
-    <Compile Include="CardInfo\ImageWorker.cs" />
-    <Compile Include="Deck\DeckCardInfo.cs" />
-    <Compile Include="Deck\DeckInfo.cs" />
-    <Compile Include="Deck\PreconstructedDeckImporter.cs" />
-    <Compile Include="DownloadManagerEdition.cs" />
-    <Compile Include="MultiPartCardManager.cs" />
-    <Compile Include="Parser\TableParserBase.cs" />
-    <Compile Include="PriceInfo.cs" />
-    <Compile Include="CardRuleInfo.cs" />
-    <Compile Include="CardLanguageInfo.cs" />
-    <Compile Include="EnhancedDatabaseRequest.cs" />
-    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyser.cs" />
-    <Compile Include="HierarchicalAnalysing\HierarchicalInfoAnalyserFactory.cs" />
-    <Compile Include="HierarchicalAnalysing\ICardInfo.cs" />
-    <Compile Include="HierarchicalAnalysing\IHierarchicalInfoAnalyser.cs" />
-    <Compile Include="IO\FormatterBase.cs" />
-    <Compile Include="IO\ErrorImportExportCardInfo.cs" />
-    <Compile Include="IO\ImportExportCardInfo.cs" />
-    <Compile Include="IO\ImportExportException.cs" />
-    <Compile Include="IO\ExportImagesWorker.cs" />
-    <Compile Include="IO\ImportStatus.cs" />
-    <Compile Include="IO\MtgmFormatter.cs" />
-    <Compile Include="IO\ImportExportFormatterFactory.cs" />
-    <Compile Include="IO\ImportExportWorker.cs" />
-    <Compile Include="IO\MpsdFormatter.cs" />
-    <Compile Include="MagicRules.cs" />
-    <Compile Include="Parser\CardLanguageParser.cs" />
-    <Compile Include="Parser\CardParserBase.cs" />
-    <Compile Include="Parser\CardRuleParser.cs" />
-    <Compile Include="Parser\CardUrlParser.cs" />
-    <Compile Include="Parser\CardParser.cs" />
-    <Compile Include="CardInfo\CardInfoParserWorkerFactory.cs" />
-    <Compile Include="CardInfo\ICardInfoParserWorker.cs" />
-    <Compile Include="CardWithExtraInfo.cs" />
-    <Compile Include="Parser\CardNameParser.cs" />
-    <Compile Include="Parser\IParser.cs" />
-    <Compile Include="Parser\NextPageChecker.cs" />
-    <Compile Include="Parser\NextPageException.cs" />
-    <Compile Include="Parser\EditionParser.cs" />
-    <Compile Include="EditionInfoWithBlock.cs" />
-    <Compile Include="DownloadManager.cs" />
-    <Compile Include="Parser\ParserException.cs" />
-    <Compile Include="Price\IPriceImporter.cs" />
-    <Compile Include="Price\MTGGoldfishPriceImporter.cs" />
-    <Compile Include="Price\PriceImporterException.cs" />
-    <Compile Include="Price\PriceImporterFactory.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Parser\Parser.cs" />
-    <Compile Include="EditionInfo.cs" />
-    <Compile Include="Shard.cs" />
-    <Compile Include="Upgrade\ProgramUpgrader.cs" />
-    <Compile Include="Upgrade\ProgramUpgraderException.cs" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj">
-      <Project>{1F2678D5-43D0-402E-AA40-2B0AA06C9292}</Project>
-      <Name>MagicPictureSetDownloader.Db</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
-      <Project>{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}</Project>
-      <Name>MagicPictureSetDownloader.Interface</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

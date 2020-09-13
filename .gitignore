@@ -11,3 +11,5 @@ packages/
 *.orig
 Matrix*/
 save/*
+/LocalPackages/*
+FolderProfile.pubxml.user

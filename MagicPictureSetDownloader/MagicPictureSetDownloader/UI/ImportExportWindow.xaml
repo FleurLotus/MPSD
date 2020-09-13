@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         d:DataContext="{d:DesignInstance Type=io:ImportExportViewModel, IsDesignTimeCreatable=False}"
@@ -13,13 +12,13 @@
         >
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction MethodName="Close"/>
+            <i:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="OpenFileDialog" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="OpenFileDialog" />
+            <i:CallMethodAction MethodName="OpenFileDialog" />
         </i:EventTrigger>
         <i:EventTrigger EventName="DisplayResult" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="DisplayResult" />
+            <i:CallMethodAction MethodName="DisplayResult" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <TabControl SelectedIndex="{fl:TwoWayBinding SelectedIndex}">

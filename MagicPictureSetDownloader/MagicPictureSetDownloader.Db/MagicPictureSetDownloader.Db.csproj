@@ -1,154 +1,47 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1F2678D5-43D0-402E-AA40-2B0AA06C9292}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.Db</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.Db</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyTitle>MagicPictureSetDownloader.Db</AssemblyTitle>
+    <Product>MagicPictureSetDownloader.Db</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Database">
-      <HintPath>..\..\CommonLibraries\Common.Database\bin\$(Configuration)\Common.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Library">
-      <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Drawing">
-      <HintPath>..\..\CommonLibraries\Common.Drawing\bin\$(Configuration)\Common.Drawing.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.111.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\System.Data.SQLite.Core.1.0.111.0\lib\net451\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Drawing" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="CardCountKeys.cs" />
-    <Compile Include="DAO\BackSideModalDoubleFacedCard.cs" />
-    <Compile Include="DAO\CardEditionVariation.cs" />
-    <Compile Include="DAO\PreconstructedDeckCardEdition.cs" />
-    <Compile Include="DAO\PreconstructedDeck.cs" />
-    <Compile Include="DAO\Price.cs" />
-    <Compile Include="DAO\Ruling.cs" />
-    <Compile Include="DAO\Audit.cs" />
-    <Compile Include="DAO\Block.cs" />
-    <Compile Include="DAO\Translate.cs" />
-    <Compile Include="DAO\Card.cs" />
-    <Compile Include="DAO\CardEdition.cs" />
-    <Compile Include="DAO\CardAllDbInfo.cs" />
-    <Compile Include="DAO\CardCollection.cs" />
-    <Compile Include="DAO\CardInCollectionCount.cs" />
-    <Compile Include="DAO\Language.cs" />
-    <Compile Include="DAO\Option.cs" />
-    <Compile Include="DAO\PictureKey.cs" />
-    <Compile Include="DAO\TreePicture.cs" />
-    <Compile Include="DAO\Edition.cs" />
-    <Compile Include="DatabaseConnection.cs" />
-    <Compile Include="DatabaseConnection.ConnectionWrapper.cs">
+    <Compile Update="DatabaseConnection.ConnectionWrapper.cs">
       <DependentUpon>DatabaseConnection.cs</DependentUpon>
     </Compile>
-    <Compile Include="CardCount.cs" />
-    <Compile Include="CardCountKey.cs" />
-    <Compile Include="MagicDatabase.Audit.cs">
+    <Compile Update="MagicDatabase.Audit.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="MagicDatabase.cs" />
-    <Compile Include="MagicDatabase.Batch.cs">
+    <Compile Update="MagicDatabase.Batch.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="MagicDatabase.Collection.cs">
+    <Compile Update="MagicDatabase.Collection.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="MagicDatabase.Referentiel.cs">
+    <Compile Update="MagicDatabase.Referentiel.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="MagicDatabase.UpdateManagement.cs">
+    <Compile Update="MagicDatabase.UpdateManagement.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="DAO\Picture.cs" />
-    <Compile Include="MagicDatabaseManager.cs" />
-    <Compile Include="PictureDatabase.cs" />
-    <Compile Include="PictureDatabaseMigration.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DAO\Rarity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj">
-      <Project>{dac42afe-dcfb-4fec-90c9-1c26f6d4aab9}</Project>
-      <Name>MagicPictureSetDownloader.DbGenerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
-      <Project>{eddebc12-cd36-49ce-a47d-ac5e903ab47b}</Project>
-      <Name>MagicPictureSetDownloader.Interface</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\..\Packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\..\Packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\Packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\Packages\System.Data.SQLite.Core.1.0.111.0\build\net451\System.Data.SQLite.Core.targets'))" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <PackageReference Include="Common.Database" Version="7.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Common.Drawing" Version="7.0.0" />
+  </ItemGroup>
 </Project>

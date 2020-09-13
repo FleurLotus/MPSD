@@ -1,76 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Database</RootNamespace>
-    <AssemblyName>Common.Database</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyTitle>Common.Database</AssemblyTitle>
+    <Product>Common.Database</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonFiles\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="Attribute\DbRestictedDmlAttribute.cs" />
-    <Compile Include="CommandBuilder.cs" />
-    <Compile Include="DbAttributAnalyser.cs" />
-    <Compile Include="Exception\RestrictedDmlException.cs" />
-    <Compile Include="Exception\AttributedTypeException.cs" />
-    <Compile Include="Attribute\DbTableAttribute.cs" />
-    <Compile Include="Attribute\DbColumnAttribute.cs" />
-    <Compile Include="Exception\ApplicationDbException.cs" />
-    <Compile Include="Properties\GlobalSuppressions.cs" />
-    <Compile Include="IdentityRetriever.cs" />
-    <Compile Include="Mapper.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLQueryTools.cs" />
-    <Compile Include="TypeDbInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common.Library\Common.Library.csproj">
-      <Project>{9aa9549e-0dab-4e5a-a8bf-3f92be765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

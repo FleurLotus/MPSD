@@ -1,92 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.Interface</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.Interface</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyTitle>MagicPictureSetDownloader.Interface</AssemblyTitle>
+    <Product>MagicPictureSetDownloader.Interface</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <Folder Include="Properties\" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="DAO\IBackSideModalDoubleFacedCard.cs" />
-    <Compile Include="DAO\ICardEditionVariation.cs" />
-    <Compile Include="DAO\IPreconstructedDeckCardEdition.cs" />
-    <Compile Include="DAO\IPreconstructedDeck.cs" />
-    <Compile Include="DAO\IPrice.cs" />
-    <Compile Include="DAO\IRuling.cs" />
-    <Compile Include="DAO\IAudit.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndUpdate.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteOption.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCardInCollection.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteReference.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadAndWriteCollection.cs" />
-    <Compile Include="DAO\IImportExportCardInCollectionCount.cs" />
-    <Compile Include="DatabaseAccess\IPictureDatabaseMigration.cs" />
-    <Compile Include="Enum.cs" />
-    <Compile Include="DAO\ICardInCollectionCount.cs" />
-    <Compile Include="DAO\ICardCollection.cs" />
-    <Compile Include="DAO\IIdName.cs" />
-    <Compile Include="ICardCount.cs" />
-    <Compile Include="IImportExportFormatter.cs" />
-    <Compile Include="DatabaseAccess\IMagicDatabaseReadOnly.cs" />
-    <Compile Include="DAO\IOption.cs" />
-    <Compile Include="DAO\IPictureKey.cs" />
-    <Compile Include="DAO\ILanguage.cs" />
-    <Compile Include="DAO\ITreePicture.cs" />
-    <Compile Include="DAO\IBlock.cs" />
-    <Compile Include="DAO\ICard.cs" />
-    <Compile Include="DAO\ICardAllDbInfo.cs" />
-    <Compile Include="DAO\ICardEdition.cs" />
-    <Compile Include="DAO\IEdition.cs" />
-    <Compile Include="DAO\IPicture.cs" />
-    <Compile Include="DAO\IRarity.cs" />
-    <Compile Include="IMultiPartCardManager.cs" />
-    <Compile Include="IProgressReporter.cs" />
-    <Compile Include="ICardCountKey.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

@@ -1,103 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.Library</RootNamespace>
-    <AssemblyName>Common.Library</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyTitle>Common.Library</AssemblyTitle>
+    <Product>Common.Library</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonFiles\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="AssemblyResolver.cs" />
-    <Compile Include="Collection\AsyncObservableCollection.cs" />
-    <Compile Include="Collection\MultiThreadedObservableCollection.cs" />
-    <Compile Include="Collection\RangeObservableCollection.cs" />
-    <Compile Include="CSV\CsvReader.cs" />
-    <Compile Include="CSV\ICsvReader.cs" />
-    <Compile Include="Enums\Matcher.cs" />
-    <Compile Include="Exception\CsvReaderBadClosingEscapeException.cs" />
-    <Compile Include="Exception\CsvReaderErrorStateException.cs" />
-    <Compile Include="Exception\CsvReaderNoReadException.cs" />
-    <Compile Include="Exception\CsvReaderUnclosedEscapeException.cs" />
-    <Compile Include="Exception\CsvReaderWrongNumberOfColumnsException.cs" />
-    <Compile Include="Exception\HandlerNotKnownException.cs" />
-    <Compile Include="Exception\HandlerAlreadyKnownException.cs" />
-    <Compile Include="Exception\CsvReaderExceptionBase.cs" />
-    <Compile Include="Exception\HtmlTableParserNoRowClosingTagException.cs" />
-    <Compile Include="Exception\HtmlTableParserNoTagEndException.cs" />
-    <Compile Include="Exception\HtmlTableParserNoCellClosingTagException.cs" />
-    <Compile Include="Exception\HtmlTableParserNoTableClosingTagException.cs" />
-    <Compile Include="Exception\HtmlTableParserMultiTableException.cs" />
-    <Compile Include="Exception\HtmlTableParserExceptionBase.cs" />
-    <Compile Include="Extension\DictionaryExtension.cs" />
-    <Compile Include="Extension\StringExtension.cs" />
-    <Compile Include="Html\HtmlCell.cs" />
-    <Compile Include="Html\HtmlTable.cs" />
-    <Compile Include="Html\HtmlTableParser.cs" />
-    <Compile Include="Html\IHtmlCell.cs" />
-    <Compile Include="Html\IHtmlTable.cs" />
-    <Compile Include="Notify\EventDispatcher.cs" />
-    <Compile Include="Notify\IEventDispatcher.cs" />
-    <Compile Include="Notify\EventHandlers.cs" />
-    <Compile Include="Threading\AsyncHelper.cs" />
-    <Compile Include="Threading\IErrorHandler.cs" />
-    <Compile Include="Threading\Flag.cs" />
-    <Compile Include="Threading\FlagCount.cs" />
-    <Compile Include="Threading\FlagExtension.cs" />
-    <Compile Include="Threading\SafeFireAndForgetExtensions.cs" />
-    <Compile Include="Threading\UpgradeableReadLock.cs" />
-    <Compile Include="Threading\ThreadPoolArgs.cs" />
-    <Compile Include="Threading\WriterLock.cs" />
-    <Compile Include="Threading\ReaderLock.cs" />
-    <Compile Include="HashHelper.cs" />
-    <Compile Include="Extension\ReflectionExtension.cs" />
-    <Compile Include="Notify\EventArgs.cs" />
-    <Compile Include="IDispatcherInvoker.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

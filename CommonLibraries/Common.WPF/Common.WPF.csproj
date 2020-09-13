@@ -1,159 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common.WPF</RootNamespace>
-    <AssemblyName>Common.WPF</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile />
+    <AssemblyTitle>Common.WPF</AssemblyTitle>
+    <Product>Common.WPF</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Expression.Interaction.3.0.40218.0\lib\net45\Microsoft.Expression.Interactions.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\Packages\Expression.Interaction.3.0.40218.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
+    <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
+    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonFiles\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="Attach\GridViewSort.cs" />
-    <Compile Include="Attach\TabItemExtensions.cs" />
-    <Compile Include="Attach\TabControlExtensions.cs" />
-    <Compile Include="Binding\TwoWayBinding.cs" />
-    <Compile Include="Behavior\BindableSelectedItemBehavior.cs" />
-    <Compile Include="Behavior\GridViewColumnResizeBehavior.cs" />
-    <Compile Include="Converter\ConverterBase\Converter.cs" />
-    <Compile Include="Converter\ConverterBase\MultiConverter.cs" />
-    <Compile Include="Converter\ConverterBase\NoConvertBackMultiConverter.cs" />
-    <Compile Include="Converter\ConverterBase\NoConvertBackConverter.cs" />
-    <Compile Include="Behavior\FocusBehavior.cs" />
-    <Compile Include="Converter\EnumMatchToBooleanConverter.cs" />
-    <Compile Include="Converter\ImageSourceConverter.cs" />
-    <Compile Include="Converter\ProgressBarFillToRectConverter.cs" />
-    <Compile Include="Converter\BoolInvertConverter.cs" />
-    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converter\AggregateConverter.cs" />
-    <Compile Include="Converter\ObjectNullToBoolConverter.cs" />
-    <Compile Include="Converter\ValueIsZeroToBoolConverter.cs" />
-    <Compile Include="Extension.cs" />
-    <Compile Include="Lib.cs" />
-    <Compile Include="Attach\PasswordHelper.cs" />
-    <Compile Include="DispatcherInvoker.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SeparatorStyleSelector.cs" />
-    <Compile Include="Attach\AutoComplete.cs" />
-    <Compile Include="UI\CommonDialog.xaml.cs">
-      <DependentUpon>CommonDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ExceptionDialog.xaml.cs">
-      <DependentUpon>ExceptionDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\InputDialog.xaml.cs">
-      <DependentUpon>InputDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ProgressBar.xaml.cs">
-      <DependentUpon>ProgressBar.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\SplashScreenWindow.xaml.cs">
-      <DependentUpon>SplashScreenWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UI\VersionWindow.xaml.cs">
-      <DependentUpon>VersionWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="VisualTreeExtension.cs" />
+    <Compile Remove="Converter\TreeViewLineConverter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="DataTemplate.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Styles.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\CommonDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ExceptionDialog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\InputDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\ProgressBar.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\SplashScreenWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\VersionWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common.Library\Common.Library.csproj">
-      <Project>{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}</Project>
-      <Name>Common.Libray</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj">
-      <Project>{770CD409-408D-44B1-84AE-B96513D9D7C7}</Project>
-      <Name>Common.ViewModel</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

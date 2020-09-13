@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:dialog="clr-namespace:Common.ViewModel.Dialog;assembly=Common.ViewModel"
         xmlns:conv="clr-namespace:Common.WPF.Converter"
         d:DataContext="{d:DesignInstance Type=dialog:DialogViewModelBase}"
@@ -23,13 +22,13 @@
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction MethodName="Close"/>
+            <i:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="DialogWanted" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="DialogWanted" />
+            <i:CallMethodAction MethodName="DialogWanted" />
         </i:EventTrigger>
         <i:EventTrigger EventName="InputRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="InputRequested" />
+            <i:CallMethodAction MethodName="InputRequested" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

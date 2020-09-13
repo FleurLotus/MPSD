@@ -4,7 +4,7 @@
     using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
     using System.Windows.Media;
 
     //From http://stackoverflow.com/questions/11065995/binding-selecteditem-in-a-hierarchicaldatatemplate-applied-wpf-treeview/18700099#18700099

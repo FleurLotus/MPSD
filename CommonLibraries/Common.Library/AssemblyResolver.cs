@@ -57,7 +57,7 @@
         {
             if (_logTextWriter != null)
             {
-                Console.Error.WriteLine("AssemblyResolver: Loaded assembly '{0}' ({1})", new AssemblyName(args.LoadedAssembly.FullName).Name, args.LoadedAssembly.CodeBase);
+                Console.Error.WriteLine("AssemblyResolver: Loaded assembly '{0}' ({1})", new AssemblyName(args.LoadedAssembly.FullName).Name, args.LoadedAssembly.Location);
             }
         }
         private Assembly OnCurrentDomainAssemblyResolve(object sender, ResolveEventArgs args)

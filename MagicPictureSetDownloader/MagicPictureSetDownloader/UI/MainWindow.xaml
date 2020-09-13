@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
@@ -33,34 +32,34 @@
     </Window.Triggers>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="DialogWanted" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="DialogWanted" />
+            <i:CallMethodAction MethodName="DialogWanted" />
         </i:EventTrigger>
         <i:EventTrigger EventName="VersionRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="VersionRequested" />
+            <i:CallMethodAction MethodName="VersionRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="AutoUpdateDatabaseRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="AutoUpdateDatabaseRequested" />
+            <i:CallMethodAction MethodName="AutoUpdateDatabaseRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="UpdateDatabaseRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="UpdateDatabaseRequested" />
+            <i:CallMethodAction MethodName="UpdateDatabaseRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="CloseRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="Close" />
+            <i:CallMethodAction MethodName="Close" />
         </i:EventTrigger>
         <i:EventTrigger EventName="InputRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="InputRequested" />
+            <i:CallMethodAction MethodName="InputRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="ImportExportRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="ImportExportRequested" />
+            <i:CallMethodAction MethodName="ImportExportRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="DatabaseModificationRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="DatabaseModificationRequested" />
+            <i:CallMethodAction MethodName="DatabaseModificationRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="PreconstructedDecksRequested" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="PreconstructedDecksRequested" />
+            <i:CallMethodAction MethodName="PreconstructedDecksRequested" />
         </i:EventTrigger>
         <i:EventTrigger EventName="ExceptionOccured" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="ExceptionOccured" />
+            <i:CallMethodAction MethodName="ExceptionOccured" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 

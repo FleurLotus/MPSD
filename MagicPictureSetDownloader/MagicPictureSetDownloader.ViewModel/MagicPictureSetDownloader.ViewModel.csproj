@@ -1,132 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{473562B3-1A2B-4F43-BA88-613C35D15AAC}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MagicPictureSetDownloader.ViewModel</RootNamespace>
-    <AssemblyName>MagicPictureSetDownloader.ViewModel</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <AssemblyTitle>MagicPictureSetDownloader.ViewModel</AssemblyTitle>
+    <Product>MagicPictureSetDownloader.ViewModel</Product>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Library">
-      <HintPath>..\..\CommonLibraries\Common.Library\bin\$(Configuration)\Common.Library.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.ViewModel">
-      <HintPath>..\..\CommonLibraries\Common.ViewModel\bin\$(Configuration)\Common.ViewModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Web">
-      <HintPath>..\..\CommonLibraries\Common.Web\bin\$(Configuration)\Common.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonLibraries\CommonFiles\Copyright.cs">
-      <Link>Properties\Copyright.cs</Link>
-    </Compile>
-    <Compile Include="..\Version.cs">
-      <Link>Properties\Version.cs</Link>
-    </Compile>
-    <Compile Include="Deck\PreconstructedDeckViewModel.cs" />
-    <Compile Include="Deck\PreconstructedDecksViewModel.cs" />
-    <Compile Include="Download\Auto\AutoDownloadPriceViewModel.cs" />
-    <Compile Include="Download\Auto\AutoDownloadPreconstructedDeckViewModel.cs" />
-    <Compile Include="Download\Auto\AutoDownloadViewModelBase.cs" />
-    <Compile Include="Download\Auto\AutoDownloadRuleViewModel.cs" />
-    <Compile Include="Download\Auto\AutoDownloadImageViewModel.cs" />
-    <Compile Include="Download\DownloadViewModelBase.cs" />
-    <Compile Include="Download\Edition\NewEditionInfoViewModel.cs" />
-    <Compile Include="Input\CardSourceViewModel.cs" />
-    <Compile Include="Input\CardRemoveViewModel.cs" />
-    <Compile Include="Input\UpdateViewModelCommun.cs" />
-    <Compile Include="Input\CardUpdateViewModel.cs" />
-    <Compile Include="Input\SearchViewModel.cs" />
-    <Compile Include="Input\CardMoveOrCopyViewModel.cs" />
-    <Compile Include="Input\CardInputViewModel.cs" />
-    <Compile Include="IO\MigrationPictureDatabaseProgressViewModel.cs" />
-    <Compile Include="IO\ExportedCollectionViewModel.cs" />
-    <Compile Include="IO\ImportExportViewModel.cs" />
-    <Compile Include="Main\GlobalStatictics.cs" />
-    <Compile Include="Main\MainViewModel.Menu.cs">
+    <Compile Update="Main\MainViewModel.Menu.cs">
       <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\MainViewModel.CollectionDisplay.cs">
+    <Compile Update="Main\MainViewModel.CollectionDisplay.cs">
       <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main\CardViewModel.cs" />
-    <Compile Include="Main\HierarchicalInfoAnalysersViewModel.cs" />
-    <Compile Include="Main\HierarchicalResultNodeViewModel.cs" />
-    <Compile Include="Main\HierarchicalInfoAnalyserViewModel.cs" />
-    <Compile Include="Main\HierarchicalResultViewModel.cs" />
-    <Compile Include="Main\HierarchicalViewModel.cs" />
-    <Compile Include="Main\MainViewModel.cs" />
-    <Compile Include="Download\DownloadReporterViewModel.cs" />
-    <Compile Include="Download\Edition\DownloadEditionViewModel.cs" />
-    <Compile Include="Main\PriceViewModel.cs" />
-    <Compile Include="Main\StatisticViewModel.cs" />
-    <Compile Include="Management\TranslationViewModel.cs" />
-    <Compile Include="Management\AuditInfo.cs" />
-    <Compile Include="Management\AuditViewModel.cs" />
-    <Compile Include="Management\BlockDatabaseInfoModificationViewModel.cs" />
-    <Compile Include="Management\TranslateDatabaseInfoModificationViewModel.cs" />
-    <Compile Include="Management\LanguageDatabaseInfoModificationViewModel.cs" />
-    <Compile Include="Management\EditionDatabaseInfoModificationViewModel.cs" />
-    <Compile Include="Management\DatabaseInfoModificationViewModelBase.cs" />
-    <Compile Include="Option\OptionsChangeViewModel.cs" />
-    <Compile Include="Option\OptionsViewModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Download\Edition\EditionInfoViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj">
-      <Project>{528D3805-C009-4AB4-9481-20F2106EFDE8}</Project>
-      <Name>MagicPictureSetDownloader.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj">
-      <Project>{1F2678D5-43D0-402E-AA40-2B0AA06C9292}</Project>
-      <Name>MagicPictureSetDownloader.Db</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj">
-      <Project>{eddebc12-cd36-49ce-a47d-ac5e903ab47b}</Project>
-      <Name>MagicPictureSetDownloader.Interface</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Common.ViewModel" Version="7.0.0" />
+  </ItemGroup>
 </Project>
