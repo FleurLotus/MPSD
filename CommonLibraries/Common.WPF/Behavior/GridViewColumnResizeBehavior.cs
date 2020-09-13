@@ -4,7 +4,7 @@
     using System.Collections.Specialized;
     using System.Linq;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     //From http://stackoverflow.com/questions/845269/force-resize-of-gridview-columns-inside-listview
     public class GridViewColumnResizeBehavior : Behavior<ListView>

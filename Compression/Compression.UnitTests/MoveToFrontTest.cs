@@ -41,7 +41,7 @@ namespace Compression.UnitTests
 
             Assert.IsTrue(Compare.ByteArrayValueEquals(source, ret), "Not the expected value after reversetransform");
         }
-        public IEnumerable<object[]> TestCases()
+        public static IEnumerable<object[]> TestCases()
         {
             byte[] source = new byte[256];
             byte[] expected = new byte[256];

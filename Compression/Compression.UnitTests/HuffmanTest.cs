@@ -38,7 +38,7 @@ namespace Compression.UnitTests
             Assert.IsNotNull(ret, "ret is null");
             Assert.IsTrue(Compare.ByteArrayValueEquals(source, ret), "Not the expected value after reversetransform");
         }
-        public IEnumerable<object[]> TestCases()
+        public static IEnumerable<object[]> TestCases()
         {
             byte[] source = new byte[256];
             byte[] expected = new byte[259];

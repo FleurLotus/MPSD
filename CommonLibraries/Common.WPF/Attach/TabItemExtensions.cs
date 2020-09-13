@@ -3,7 +3,7 @@
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Interactivity;
+    using Microsoft.Xaml.Behaviors;
 
     //base on http://stackoverflow.com/questions/9825622/silverlight-tabitem-visibility-not-changing/13276564#13276564
     public static class TabItemExtensions

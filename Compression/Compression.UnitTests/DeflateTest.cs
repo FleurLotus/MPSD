@@ -23,7 +23,7 @@ namespace Compression.UnitTests
             Assert.IsTrue(ret2.Read(tmp, 0, tmp.Length) == tmp.Length);
             Assert.IsTrue(Compare.ByteArrayValueEquals(source, tmp), "Not the expected value after transform");
         }
-        public IEnumerable<object[]> TestCases()
+        public static IEnumerable<object[]> TestCases()
         {
             byte[] source = new byte[256];
 
@@ -44,9 +44,9 @@ namespace Compression.UnitTests
             yield return new object[] { source};
             yield return new object[] { Encoding.ASCII.GetBytes("abbbaabbbbaccabbaaabc")};
             yield return new object[] { Encoding.ASCII.GetBytes("aaaaaaaaaaaaa")};
+            
 
-
-            FileStream fs = new FileStream(@"..\..\..\..\MagicPictureSetDownloader\ExternalReference\Xceed.Wpf.Toolkit.dll", FileMode.Open);
+            FileStream fs = new FileStream(@"..\..\..\..\..\MagicPictureSetDownloader\DropBoxFiles\MPSD.zip", FileMode.Open);
             byte[] temp = new byte[fs.Length];
             //byte[] temp = new byte[65000];
             fs.Read(temp, 0, temp.Length);

@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <AssemblyVersion>6.3</AssemblyVersion>
+    <Version>6.3</Version>
+    <FileVersion>6.3</FileVersion>
+    <Copyright>Blue Force Inc.</Copyright>
+  </PropertyGroup>
+</Project>

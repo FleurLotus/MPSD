@@ -2,9 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Windows.Markup;
 
-[assembly: AssemblyTitle("Common.WPF")]
-[assembly: AssemblyProduct("Common.WPF")]
-
 [assembly: XmlnsDefinition("http://schemas.fleurlotus.com/xaml/", "Common.WPF")]
 [assembly: XmlnsDefinition("http://schemas.fleurlotus.com/xaml/", "Common.WPF.Behavior")]
 [assembly: XmlnsDefinition("http://schemas.fleurlotus.com/xaml/", "Common.WPF.Binding")]

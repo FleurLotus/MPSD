@@ -1,28 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30309.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader", "MagicPictureSetDownloader\MagicPictureSetDownloader.csproj", "{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader", "MagicPictureSetDownloader\MagicPictureSetDownloader.csproj", "{C7574D77-E38C-44CB-AD3D-471CDEBD6D78}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.ViewModel", "MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj", "{473562B3-1A2B-4F43-BA88-613C35D15AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader.ViewModel", "MagicPictureSetDownloader.ViewModel\MagicPictureSetDownloader.ViewModel.csproj", "{473562B3-1A2B-4F43-BA88-613C35D15AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Core", "MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj", "{528D3805-C009-4AB4-9481-20F2106EFDE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader.Core", "MagicPictureSetDownloader.Core\MagicPictureSetDownloader.Core.csproj", "{528D3805-C009-4AB4-9481-20F2106EFDE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Db", "MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj", "{1F2678D5-43D0-402E-AA40-2B0AA06C9292}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader.Db", "MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj", "{1F2678D5-43D0-402E-AA40-2B0AA06C9292}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.Interface", "MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj", "{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader.Interface", "MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj", "{EDDEBC12-CD36-49CE-A47D-AC5E903AB47B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D00700D7-C608-4B74-B712-CF8C773A975C}"
 	ProjectSection(SolutionItems) = preProject
-		..\CommonLibraries\CommonFiles\Copyright.cs = ..\CommonLibraries\CommonFiles\Copyright.cs
 		MagicData.sqlite = MagicData.sqlite
 		MagicPicture.sqlite = MagicPicture.sqlite
-		Settings.StyleCop = Settings.StyleCop
-		Version.cs = Version.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MagicPictureSetDownloader.DbGenerator", "MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj", "{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MagicPictureSetDownloader.DbGenerator", "MagicPictureSetDownloader.DbGenerator\MagicPictureSetDownloader.DbGenerator.csproj", "{DAC42AFE-DCFB-4FEC-90C9-1C26F6D4AAB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,5 +54,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A0B29529-EE36-4DF3-BABE-5D86ACE4C991}
 	EndGlobalSection
 EndGlobal

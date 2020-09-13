@@ -44,7 +44,7 @@
 
             Assert.AreEqual(circularData1.CompareTo(circularData2), expectedResult);
         }
-        public IEnumerable<object[]> TestCases()
+        public static IEnumerable<object[]> TestCases()
         {
             byte[] source1 = { 1, 2, 3, 1, 2, 3 };
             byte[] source2 = { 1, 2, 3 };

@@ -1,8 +1,7 @@
 ﻿<Window x:Class="MagicPictureSetDownloader.UI.DownloadWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:fl="http://schemas.fleurlotus.com/xaml/"
@@ -17,10 +16,10 @@
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="CredentialRequiered" />
+            <i:CallMethodAction MethodName="CredentialRequiered" />
         </i:EventTrigger>
         <i:EventTrigger EventName="NewEditionCreated" SourceObject="{Binding}">
-            <ei:CallMethodAction MethodName="NewEditionCreated" />
+            <i:CallMethodAction MethodName="NewEditionCreated" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
