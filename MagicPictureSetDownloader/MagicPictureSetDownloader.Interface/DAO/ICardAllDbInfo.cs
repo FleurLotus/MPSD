@@ -13,5 +13,6 @@
         IEnumerable<ICardInCollectionCount> Statistics { get; }
         ICollection<IPrice> Prices { get; }
         ICollection<int> VariationIdGatherers { get; }
+        ICollection<int> VariationIdGatherers2 { get; set; }
     }
 }

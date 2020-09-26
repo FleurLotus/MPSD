@@ -286,6 +286,7 @@ namespace MagicPictureSetDownloader.Db
                         cardAllDbInfo.VariationIdGatherers = new int[0];
                     }
 
+                    cardAllDbInfo.VariationIdGatherers2 = new int[0];
 
                     //For Multipart card
                     if (_multiPartCardManager.HasMultiPart(card))
@@ -305,6 +306,11 @@ namespace MagicPictureSetDownloader.Db
                         if (cardEdition2 != null)
                         {
                             cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
+                            IList<ICardEditionVariation> other2;
+                            if (_cardEditionVariations.TryGetValue(cardEdition2.IdGatherer, out other2))
+                            {
+                                cardAllDbInfo.VariationIdGatherers2 = other2.Select(cev => cev.OtherIdGatherer).ToArray();
+                            }
                         }
                     }
 
