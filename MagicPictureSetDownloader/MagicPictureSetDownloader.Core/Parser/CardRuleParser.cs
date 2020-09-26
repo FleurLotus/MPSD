@@ -14,8 +14,8 @@
     {
         //Use class instead of id
         //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_rulingsContainer for normal card
-        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl02_rulingsContainer for part A of multi part card
-        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl03_rulingsContainer for part B of multi part card
+        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl03_rulingsContainer for part A of multi part card
+        //ctl00_ctl00_ctl00_MainContent_SubContent_SubContent_ctl04_rulingsContainer for part B of multi part card
         //private const string KeyStart = "ctl00_ctl00_ctl00_maincontent_subcontent_subcontent";
         //private const string KeyEnd = "rulingsContainer";
 

@@ -4,27 +4,39 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
     using System.Collections.Generic;
-    using System.Linq;
 
     using MagicPictureSetDownloader.ViewModel.Main;
 
     using Common.WPF.Converter;
+    using System.Linq;
 
     [ValueConversion(typeof(CardViewModel), typeof(IList<int>))]
     public class CardToVariationsConverter : NoConvertBackConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IList<int> ret = new List<int>();
-
             CardViewModel card = value as CardViewModel;
 
             if (card == null)
             {
-                return ret;
+                return new int[0];
             }
 
-            return card.VariationIdGatherers.ToArray();
+            HashSet<int> ret = new HashSet<int>();
+            foreach (int idGatherer in card.VariationIdGatherers)
+            {
+                ret.Add(idGatherer);
+            }
+
+            if (card.OtherCardPart != null)
+            {
+                foreach (int idGatherer in card.OtherCardPart.VariationIdGatherers)
+                {
+                    ret.Add(idGatherer);
+                }
+            }
+
+            return ret.ToArray();
         }
     }
 }

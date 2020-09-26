@@ -16,6 +16,7 @@
         //For Multipart card
         public int IdGathererPart2 { get; set; }
         public ICard CardPart2 { get; set; }
+        public ICollection<int> VariationIdGatherers2 { get; set; }
         public IEnumerable<ICardInCollectionCount> Statistics
         {
             get { return _statistics; }

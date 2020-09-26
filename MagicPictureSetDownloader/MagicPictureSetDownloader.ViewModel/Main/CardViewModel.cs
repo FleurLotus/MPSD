@@ -26,7 +26,7 @@
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
             IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
-            VariationIdGatherers = cardAllDbInfo.VariationIdGatherers.ToArray();
+            VariationIdGatherers = otherPart ? cardAllDbInfo.VariationIdGatherers2.ToArray() : cardAllDbInfo.VariationIdGatherers.ToArray();
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
             Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card);
             if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
