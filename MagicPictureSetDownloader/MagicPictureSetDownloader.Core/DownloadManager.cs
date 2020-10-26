@@ -92,7 +92,7 @@
                 }
             } while (hasnextpage);
         }
-        public void InsertPictureInDb(string pictureUrl)
+        public string InsertPictureInDb(string pictureUrl)
         {
             int gathererId;
             ICardEdition cardEdition =  MagicDatabase.GetCardEditionFromPictureUrl(pictureUrl);
@@ -122,8 +122,10 @@
 
                 MagicDatabase.InsertNewPicture(gathererId, pictureData);
             }
+
+            return null;
         }
-        public void InsertRuleInDb(string rulesUrl)
+        public string InsertRuleInDb(string rulesUrl)
         {
             int idGatherer = Parser.ExtractIdGatherer(rulesUrl);
 
@@ -133,19 +135,25 @@
             {
                 MagicDatabase.InsertNewRuling(idGatherer, cardRuleInfo.Date, cardRuleInfo.Text);
             }
+
+            return null;
         }
         public string[] GetRulesUrls()
         {
             return MagicDatabase.GetRulesId().Select(idGatherer => WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer))).ToArray();
         }
-        public void InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl)
+        public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl)
         {
             string htmltext = _webAccess.GetHtml(pricesUrl);
 
-            foreach (PriceInfo priceInfo in priceImporter.Parse(htmltext))
+            string importErrorMessage;
+
+            foreach (PriceInfo priceInfo in priceImporter.Parse(htmltext, out importErrorMessage))
             {
                 MagicDatabase.InsertNewPrice(priceInfo.IdGatherer, DateTime.Today, priceImporter.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
             }
+
+            return importErrorMessage;
         }
         public string[] GetPricesUrls(IPriceImporter priceImporter)
         {
@@ -186,7 +194,7 @@
             string html = _webAccess.GetHtml(preconstructedDeckImporter.GetRootUrl());
             return preconstructedDeckImporter.GetDeckUrls(html);
         }
-        public void InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
+        public string InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
         {
             string html = _webAccess.GetHtml(url);
 
@@ -194,7 +202,7 @@
 
             if (deckInfo == null)
             {
-                return;
+                return null;
             }
 
             MagicDatabase.InsertNewPreconstructedDeck(deckInfo.IdEdition, deckInfo.Name, url);
@@ -212,6 +220,7 @@
                     MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdGatherer, deckCardInfo.Number);
                 }
             }
+            return null;
         }
         public string GetExtraInfo(string url)
         {

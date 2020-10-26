@@ -18,7 +18,7 @@
         }
 
         protected abstract string[] GetUrls();
-        protected abstract void Download(string url);
+        protected abstract string Download(string url);
 
         protected override bool StartImpl()
         {
@@ -64,10 +64,13 @@
                             break;
                         }
 
-                        Download(_urls[currentJob]);
+                        string errors = Download(_urls[currentJob]);
+                        if (!string.IsNullOrWhiteSpace(errors))
+                        {
+                            AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], errors), false);
+                        }
                     }
                     DownloadReporter.Progress();
-
                 }
                 catch (Exception ex)
                 {
