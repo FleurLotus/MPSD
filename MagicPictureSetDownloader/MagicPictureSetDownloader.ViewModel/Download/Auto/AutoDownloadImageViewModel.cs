@@ -10,9 +10,9 @@
         {
             return DownloadManager.GetMissingPictureUrls();
         }
-        protected override void Download(string url)
+        protected override string Download(string url)
         {
-            DownloadManager.InsertPictureInDb(url);
+            return DownloadManager.InsertPictureInDb(url);
         }
     }
 }

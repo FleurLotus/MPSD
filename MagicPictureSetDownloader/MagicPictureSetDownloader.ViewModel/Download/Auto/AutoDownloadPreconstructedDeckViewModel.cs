@@ -15,9 +15,9 @@
         {
             return DownloadManager.GetPreconstructedDecksUrls(_preconstructedDeckImporter);
         }
-        protected override void Download(string url)
+        protected override string Download(string url)
         {
-            DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter);
+            return DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter);
         }
         private string GetExtraInfo(string url)
         {

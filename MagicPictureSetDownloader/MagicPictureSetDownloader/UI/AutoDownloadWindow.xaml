@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"  SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow"
-        MinWidth="250"
+        MinWidth="250" MaxHeight="800"
         Title="{Binding Title}" >
 
     <i:Interaction.Triggers>
@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
         <fl:ProgressBar Grid.Row="0" ShowETA="True" Value="{Binding DownloadReporter.Current, Mode=Oneway}" Maximum="{Binding DownloadReporter.Total, Mode=Oneway}" />
         <Border Grid.Row="1" Visibility="{Binding Message, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}" BorderThickness="2" BorderBrush="Red">
-            <TextBlock Text="{Binding Message}"/>
+            <TextBox IsReadOnly="True" VerticalScrollBarVisibility="Auto" Text="{Binding Message, Mode=OneWay}" />
         </Border>
     </Grid>
 </Window>

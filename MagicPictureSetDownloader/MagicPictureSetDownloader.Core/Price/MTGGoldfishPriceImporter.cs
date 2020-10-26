@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Text;
     using System.Linq;
     using System.Text.RegularExpressions;
     using MagicPictureSetDownloader.Db;
@@ -16,7 +17,7 @@
         private const string End = @"<div class='index-price-table-online'>";
 
         private static readonly Regex _titleRegex = new Regex(@"<title>.*</title>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex _cardNameRegex = new Regex(@"<a[^>]*>(?<name>.*?)(\s+\(.+\))?</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex _cardNameRegex = new Regex(@"<a.*>(?<name>.*?)(\s+\(.+\))?</a>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex _dataRegex = new Regex(@"<td[^>]*>(?<value>.*)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private readonly string[] _excluded = new[] {
@@ -126,10 +127,10 @@
             get { return PriceSource.MTGGoldfish; }
         }
 
-        public IEnumerable<PriceInfo> Parse(string text)
+        public IEnumerable<PriceInfo> Parse(string text, out string errorMessage)
         {
             bool isFoil = IsFoil(text);
-            return GetPrice(text, isFoil);
+            return GetPrice(text, isFoil, out errorMessage);
         }
         public string[] GetUrls()
         {
@@ -191,15 +192,19 @@
             return !string.IsNullOrWhiteSpace(m.Value) && m.Value.ToUpper().Contains("FOILS");
         }
 
-        private IEnumerable<PriceInfo> GetPrice(string text, bool isFoil)
+        private IEnumerable<PriceInfo> GetPrice(string text, bool isFoil, out string errorMessage)
         {
             string cutText = Parser.ExtractContent(text, Start, End, true, false);
 
             bool header = true;
+            int line = 0;
             int priceIndex = -1;
             int cardNameIndex = -1;
             int editionCodeIndex = -1;
             IEdition edition = null;
+
+            StringBuilder sb = new StringBuilder();
+            IList<PriceInfo> ret = new List<PriceInfo>();
 
             foreach (string row in GetTableRow(cutText))
             {
@@ -233,78 +238,90 @@
                     header = false;
                     continue;
                 }
-                //Edition
-                Match m = _dataRegex.Match(columns[editionCodeIndex]);
-                if (!m.Success)
-                {
-                    throw new ParserException("Can't find edition code");
-                }
 
-                string editionCode = GetEditionCodeFromWebSite(m.Groups["value"].Value.Trim());
-                if (string.IsNullOrWhiteSpace(editionCode))
-                {
-                    throw new ParserException("Edition code is null or empty");
-                }
-                if (edition == null || edition.Code != editionCode)
-                {
-                   edition = _magicDatabase.GetEditionFromCode(editionCode);
-                }
-                if (edition == null)
-                {
-                    throw new ParserException("Unknown edition : " + editionCode);
-                }
+                line++;
 
-                //Card
-                m = _cardNameRegex.Match(columns[cardNameIndex]);
-                if (!m.Success)
+                try
                 {
-                    throw new ParserException("Can't find card name");
-                }
-
-                string cardName = m.Groups["name"].Value.Trim();
-                if (string.IsNullOrWhiteSpace(cardName))
-                {
-                    throw new ParserException("Card name is null or empty");
-                }
-
-                ICard card = _magicDatabase.GetCard(cardName, null);
-                if (card == null)
-                {
-                    if (_excluded.Contains(cardName))
+                    //Edition
+                    Match m = _dataRegex.Match(columns[editionCodeIndex]);
+                    if (!m.Success)
                     {
-                        continue;
+                        throw new ParserException("Can't find edition code");
                     }
 
-                     throw new ParserException("Unknown card : " + cardName);
-                }
+                    string editionCode = GetEditionCodeFromWebSite(m.Groups["value"].Value.Trim());
+                    if (string.IsNullOrWhiteSpace(editionCode))
+                    {
+                        throw new ParserException("Edition code is null or empty");
+                    }
+                    if (edition == null || edition.Code != editionCode)
+                    {
+                        edition = _magicDatabase.GetEditionFromCode(editionCode);
+                    }
+                    if (edition == null)
+                    {
+                        throw new ParserException("Unknown edition : " + editionCode);
+                    }
 
-                int idGatherer = _magicDatabase.GetIdGatherer(card, edition);
-                if (idGatherer == 0)
+                    //Card
+                    m = _cardNameRegex.Match(columns[cardNameIndex]);
+                    if (!m.Success)
+                    {
+                        throw new ParserException("Can't find card name");
+                    }
+
+                    string cardName = m.Groups["name"].Value.Trim();
+                    if (string.IsNullOrWhiteSpace(cardName))
+                    {
+                        throw new ParserException("Card name is null or empty");
+                    }
+
+                    ICard card = _magicDatabase.GetCard(cardName, null);
+                    if (card == null)
+                    {
+                        if (_excluded.Contains(cardName))
+                        {
+                            continue;
+                        }
+
+                        throw new ParserException("Unknown card : " + cardName);
+                    }
+
+                    int idGatherer = _magicDatabase.GetIdGatherer(card, edition);
+                    if (idGatherer == 0)
+                    {
+                        throw new ParserException(string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
+                    }
+
+                    //Price
+                    m = _dataRegex.Match(columns[priceIndex]);
+                    if (!m.Success)
+                    {
+                        throw new ParserException("Can't find price");
+                    }
+
+                    string priceString = m.Groups["value"].Value.Trim();
+                    if (string.IsNullOrWhiteSpace(priceString))
+                    {
+                        throw new ParserException("Price is null or empty");
+                    }
+
+                    if (!int.TryParse(priceString.Replace(".", string.Empty).Replace(",", string.Empty), out int price))
+                    {
+                        throw new ParserException("Price is not a number");
+                    }
+
+                    ret.Add(new PriceInfo { Foil = isFoil, Value = price, IdGatherer = idGatherer });
+                }
+                catch (ParserException ex)
                 {
-                    throw new ParserException(string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
+                    sb.AppendLine($"Line {line}: {ex.Message}");
                 }
-
-                //Price
-                m = _dataRegex.Match(columns[priceIndex]);
-                if (!m.Success)
-                {
-                    throw new ParserException("Can't find price");
-                }
-
-                string priceString = m.Groups["value"].Value.Trim();
-                if (string.IsNullOrWhiteSpace(priceString))
-                {
-                    throw new ParserException("Price is null or empty");
-                }
-
-                if (!int.TryParse(priceString.Replace(".", string.Empty).Replace(",", string.Empty), out int price))
-                {
-                    throw new ParserException("Price is not a number");
-                }
-
-                //TODO: check if price null is a failure or not
-                yield return new PriceInfo { Foil = isFoil, Value = price, IdGatherer = idGatherer };
             }
+
+            errorMessage = sb.ToString();
+            return ret;
         }
     }
 }

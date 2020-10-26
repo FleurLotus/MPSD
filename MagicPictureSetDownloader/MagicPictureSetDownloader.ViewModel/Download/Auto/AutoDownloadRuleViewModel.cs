@@ -10,9 +10,9 @@
         {
             return DownloadManager.GetRulesUrls();
         }
-        protected override void Download(string url)
+        protected override string Download(string url)
         {
-            DownloadManager.InsertRuleInDb(url);
+            return DownloadManager.InsertRuleInDb(url);
         }
     }
 }

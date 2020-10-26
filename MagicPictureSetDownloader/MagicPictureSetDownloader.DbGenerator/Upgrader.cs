@@ -353,6 +353,9 @@
                 {
                     repo.ExecuteBatch(UpdateQueries.CreateCardEditionVariationTable);
                 }
+
+                //13.2
+                repo.ExecuteBatch(UpdateQueries.UpdateSecretLairDropMissingCard);
             }
 
             using (var temporaryDabase = new TemporaryDatabase(DatabaseType.Data))

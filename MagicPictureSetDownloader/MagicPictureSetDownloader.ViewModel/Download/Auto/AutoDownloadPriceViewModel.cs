@@ -16,9 +16,9 @@
         {
             return DownloadManager.GetPricesUrls(_priceImporter);
         }
-        protected override void Download(string url)
+        protected override string Download(string url)
         {
-            DownloadManager.InsertPriceInDb(_priceImporter, url);
+            return DownloadManager.InsertPriceInDb(_priceImporter, url);
         }
     }
 }
