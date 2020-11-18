@@ -13,7 +13,7 @@
         >
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+            <ei:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="OpenFileDialog" SourceObject="{Binding}">
             <ei:CallMethodAction MethodName="OpenFileDialog" />

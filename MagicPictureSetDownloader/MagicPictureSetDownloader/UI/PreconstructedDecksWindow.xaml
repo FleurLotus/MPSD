@@ -13,7 +13,7 @@
         Title="Preconstructed Decks" Height="600" Width="1100">
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+            <ei:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
