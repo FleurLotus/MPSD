@@ -38,7 +38,7 @@
     <!-- Using BlockDatabaseInfoModificationViewModel as DesignInstanbce because DatabaseInfoModificationViewModelBase<T> is not allowed -->
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
-            <ei:CallMethodAction TargetObject="{Binding ElementName=this}" MethodName="Close"/>
+            <ei:CallMethodAction MethodName="Close"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
