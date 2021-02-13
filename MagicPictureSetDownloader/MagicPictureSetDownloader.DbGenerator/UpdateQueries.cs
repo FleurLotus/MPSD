@@ -256,8 +256,8 @@ WHERE [IsAltArt] IS NULL AND [IsFoil] IS NOT NULL
     
     public const string UpdateSecretLairDropMissingCard =
 @"UPDATE Edition 
-SET Completed = 0, CardNumber = 95
+SET Completed = 0, CardNumber = 99
 WHERE GathererName = 'Secret Lair Drop' 
-AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Secret Lair Drop') < 95";
+AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Secret Lair Drop') < 99";
     }
 }

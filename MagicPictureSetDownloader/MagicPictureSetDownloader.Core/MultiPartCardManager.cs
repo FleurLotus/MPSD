@@ -17,6 +17,7 @@
         private MultiPartCardManager()
         {
             _reverseSideOfFlipLand = new Dictionary<string, string> {
+                //Zendikar Rising
                 {"Agadeem, the Undercrypt","Agadeem's Awakening"},
                 {"Akoum Teeth","Akoum Warrior"},
                 {"Bala Ged Sanctuary","Bala Ged Recovery"},
@@ -53,6 +54,23 @@
                 {"Vastwood Thicket","Vastwood Fortification"},
                 {"Valakut Stoneforge","Valakut Awakening"},
                 {"Zof Bloodbog","Zof Consumption"},
+                //Kaldheim
+                {"Hakka, Whispering Raven","Alrund, God of the Cosmos"},
+                {"Tidechannel Pathway","Barkchannel Pathway"},
+                {"Harnfel, Horn of Bounty","Birgi, God of Storytelling"},
+                {"Searstep Pathway","Blightstep Pathway"},
+                {"The Omenkeel","Cosima, God of the Voyage"},
+                {"Slitherbore Pathway","Darkbore Pathway"},
+                {"Throne of Death","Egon, God of Death"},
+                {"The Prismatic Bridge","Esika, God of the Tree"},
+                {"Sword of the Realms","Halvar, God of Battle"},
+                {"Mistgate Pathway","Hengegate Pathway"},
+                {"Kaldring, the Rimestaff","Jorn, God of Winter"},
+                {"The Ringhart Crest","Kolvori, God of Kinship"},
+                {"Valkmira, Protector's Shield","Reidane, God of the Worthy"},
+                {"Tergrid's Lantern","Tergrid, God of Fright"},
+                {"Toralf's Hammer","Toralf, God of Fury"},
+                {"Tibalt, Cosmic Impostor","Valki, God of Lies"},
             };
         }
 
@@ -73,10 +91,10 @@
              return HasMultiPart(card) && card.Type.EndsWith("Adventure"); 
         }
 
-        //Recto-Verso from Zendikar Rising
+        //Recto-Verso from Zendikar Rising and Kaldheim
         private bool IsReverseSideOfFlipLand(ICard card)
         {
-            //There is no way to know the recto from verso on Zendikar Rising Flip Land so we keep a hard coded list
+            //There is no way to know the recto from verso on Zendikar Rising and Kaldheim Flip card so we keep a hard coded list
             return _reverseSideOfFlipLand.ContainsKey(card.Name);
         }
 
