@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <Version>
-  <Last Number="13.1">
+    <Last Number="13.2">
     <Url>https://www.dropbox.com/s/karmt4vwfuungqo/MPSD.zip?dl=1</Url>
+    <Comment>Version with Commander Legends, Kaldheim, Kaldheim Commander, Commander Green</Comment>
+  </Last>
+  <Old Number="13.1">
     <Comment>Version with management of flip card and Double Master, Zendikar Rising, Zendikar Rising Expeditionsa and Zendikar Rising Commander</Comment>
   </Last>
   <Old Number="13.0">
