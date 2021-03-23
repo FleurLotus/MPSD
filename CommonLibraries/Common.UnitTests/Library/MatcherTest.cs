@@ -30,6 +30,11 @@
             Value5 = 5,
             Value6 = 6,
         }
+        [Test]
+        public void TestWrongType()
+        {
+            Assert.Throws<TypeInitializationException>(() => Matcher<int>.HasValue(1,1));
+        }
 
         #region TestCase List
         //Test
