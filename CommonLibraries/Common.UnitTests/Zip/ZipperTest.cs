@@ -19,7 +19,7 @@
         }
 
         [Test]
-        public void TestUnzipAll()
+        public void TestUnzipAll([Values(true, false)] bool fromStream)
         {
             Assert.IsTrue(File.Exists(ZipFileName), "Can't find the test file");
             string temporyDirectory = Path.Combine(Path.GetTempPath(), "TestUnzip");
@@ -33,9 +33,17 @@
                     Directory.Delete(temporyDirectory, true);
                 }
 
-                using (Stream fs = new FileStream(ZipFileName, FileMode.Open))
+                if (fromStream)
                 {
-                    Zipper.UnZipAll(fs, temporyDirectory);
+                    using (Stream fs = new FileStream(ZipFileName, FileMode.Open))
+                    {
+                        Zipper.UnZipAll(fs, temporyDirectory);
+                    }
+                }
+                else
+                {
+                    byte[] bytes = File.ReadAllBytes(ZipFileName);
+                    Zipper.UnZipAll(bytes, temporyDirectory);
                 }
 
                 string[] files = Directory.GetFiles(temporyDirectory);

@@ -26,6 +26,56 @@
         {
             Assert.Throws<HtmlTableParserNoTableClosingTagException>(() => HtmlTableParser.Parse("<TABLE>skdsdkskdksd"), "A HtmlTableParserNoTableClosingTagException should have be thrown");
         }
+        [Test]
+        public void TestNoCloseRowTag()
+        {
+            Assert.Throws<HtmlTableParserNoRowClosingTagException>(() => HtmlTableParser.Parse("<TABLE><TR></TABLE>"), "A HtmlTableParserNoRowClosingTagException should have be thrown");
+        }
+        [Test]
+        public void TestNoCloseCellTag()
+        {
+            Assert.Throws<HtmlTableParserNoCellClosingTagException>(() => HtmlTableParser.Parse("<TABLE><TR><TD></TR></TABLE>"), "A HtmlTableParserNoCellClosingTagException should have be thrown");
+        }
+        [Test]
+        public void TestNullArgument()
+        {
+            Assert.Throws<ArgumentNullException>(() => new HtmlTable(null), "Null argument should have thrown ArgumentNullException");
+        }
+        [Test]
+        public void TestInvalidCell()
+        {
+            Assert.Throws<HtmlTableParserNoTagEndException>(() => HtmlTableParser.ExtractCell("<td"), "Should throw HtmlTableParserNoTagEndException");
+        }
+        [Test]
+        public void TestGetColrCount()
+        {
+            IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
+            Assert.IsNotNull(ret, "ret must be not null");
+
+            Assert.AreEqual(ret.GetColCount(-1), 0, "Negative index for Row should return 0");
+            Assert.AreEqual(ret.GetColCount(2), 0, "Too large index for Row should return 0");
+
+            Assert.AreEqual(ret.GetColCount(0), 2, "Not the expected value for GetColCount");
+            Assert.AreEqual(ret.GetColCount(1), 2, "Not the expected value for GetColCount");
+        }
+
+        [Test]
+        public void TestRangeGet()
+        {
+            IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
+            Assert.IsNotNull(ret, "ret must be not null");
+            
+            Assert.IsNull(ret[-1, 0], "Negative index for Row should return null");
+            Assert.IsNull(ret[0, -1], "Negative index for Col should return null");
+            Assert.IsNull(ret[2, 0], "Too large index for Row should return null");
+            Assert.IsNull(ret[0, 2], "Too large index for Col should return null");
+
+            Assert.IsNotNull(ret[0,0] , "In range index for Row and Col should not return null");
+            Assert.IsNotNull(ret[1,0] , "In range index for Row and Col should not return null");
+            Assert.IsNotNull(ret[0,1] , "In range index for Row and Col should not return null");
+            Assert.IsNotNull(ret[1,1] , "In range index for Row and Col should not return null");
+
+        }
 
         #region TestCase List
         [TestCase("azertyuiop <a azertyuiop /> azertyuiop", 0, 25)]
@@ -188,9 +238,9 @@
                     IHtmlCell cell = ret[i, j];
                     string value = cell == null ? null : cell.InnerText;
                     Assert.AreEqual(expectedValue[i, j], value, "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
+                    Assert.AreEqual(cell == null ? null : cell.ToString(), value);
                 }
             }
-
         }
     }
 }

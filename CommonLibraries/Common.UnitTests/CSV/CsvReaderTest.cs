@@ -55,6 +55,28 @@
             Assert.Throws<ObjectDisposedException>(() => reader.Read(), "Access to Read() should throw ObjectDisposedException after call to Dispose");
         }
         [Test]
+        public void TestMultipleCallToDisposed()
+        {
+            ICsvReader reader = new CsvReader(new MemoryStream(), false);
+            reader.Dispose();
+
+            Assert.DoesNotThrow(() => reader.Dispose());
+        }
+        [Test]
+        public void TestExistingFile()
+        {
+            string tempFile = Path.GetTempFileName();
+            try
+            {
+                ICsvReader reader = new CsvReader(tempFile, false);
+                reader.Dispose();
+            }
+            finally
+            {
+                File.Delete(tempFile);
+            }
+        }
+        [Test]
         [SuppressMessage("ReSharper", "UnusedVariable")]
         public void TestCheckNoRead([Values(true, false)] bool withHeader)
         {

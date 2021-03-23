@@ -41,5 +41,20 @@
                 Assert.IsTrue(reader.Name == "Element", "Not back to the element");
             }
         }
+        [Test]
+        public void TestNoAttributes()
+        {
+            using (XmlTextReader reader = new XmlTextReader(new StringReader(@"<Element />")))
+            {
+                Assert.IsTrue(reader.Read(), "Can't read");
+                Assert.IsTrue(reader.Name == "Element", "Not the good tag");
+                IDictionary<string, string> attributes = reader.GetAttributes();
+
+                Assert.IsNotNull(attributes, "attributes is null");
+                Assert.IsTrue(attributes.Count == 0, "Not the good number of attributes");
+                Assert.IsTrue(reader.Name == "Element", "Not back to the element");
+            }
+        }
+
     }
 }
