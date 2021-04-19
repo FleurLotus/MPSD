@@ -355,7 +355,47 @@
                 }
 
                 //13.2
-                repo.ExecuteBatch(UpdateQueries.UpdateSecretLairDropMissingCard);
+                repo.ExecuteParametrizeCommand(UpdateQueries.UpdateSecretLairDropMissingCard,
+                    new KeyValuePair<string, object>("@value", 99));
+
+
+                //13.4
+                if (!repo.TableExists("BackSideModalDoubleFacedCard"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.CreateBackSideModalDoubleFacedCardTable);
+                }
+
+                repo.ExecuteParametrizeCommand(UpdateQueries.UpdateSecretLairDropMissingCard,
+                    new KeyValuePair<string, object>("@value", 122));
+
+                HashSet<string> reverseSideOfFlipLand = new HashSet<string>(new[]
+                { 
+                    //Zendikar Rising
+                    "Agadeem, the Undercrypt", "Akoum Teeth", "Bala Ged Sanctuary", "Beyeen Coast", 
+                    "Blackbloom Bog", "Boulderloft Pathway", "Emeria, Shattered Skyclave", "Glasspool Shore", 
+                    "Grimclimb Pathway", "Hagra Broodpit", "Jwari Ruins", "Kabira Plateau", 
+                    "Kazandu Valley", "Kazuul's Cliffs", "Khalni Territory","Lavaglide Pathway", 
+                    "Makindi Mesas", "Malakir Mire", "Murkwater Pathway", "Ondu Skyruins", 
+                    "Pelakka Caverns", "Pillarverge Pathway", "Sea Gate, Reborn", "Sejiri Glacier", 
+                    "Shatterskull, the Hammer Pass", "Silundi Isle", "Skyclave Basilica", "Song-Mad Ruins", 
+                    "Spikefield Cave", "Tangled Vale", "Timbercrown Pathway", "Turntimber, Serpentine Wood", 
+                    "Umara Skyfalls", "Vastwood Thicket", "Valakut Stoneforge", "Zof Bloodbog",
+                    //Kaldheim
+                    "Hakka, Whispering Raven", "Harnfel, Horn of Bounty", "Kaldring, the Rimestaff", "Mistgate Pathway", 
+                    "Searstep Pathway", "Slitherbore Pathway", "Sword of the Realms", "Tergrid's Lantern", 
+                    "The Omenkeel", "The Prismatic Bridge", "The Ringhart Crest", "Throne of Death", 
+                    "Tibalt, Cosmic Impostor", "Tidechannel Pathway", "Toralf's Hammer", "Valkmira, Protector's Shield",
+                    //StixHaven: School of Mages
+                    "Augusta, Dean of Order", "Awaken the Blood Avatar", "Deadly Vanity", "Echoing Equation", 
+                    "Embrose, Dean of Shadow", "Explore the Vastlands", "Flamethrower Sonata", "Imbraham, Dean of Theory", 
+                    "Journey to the Oracle", "Lisette, Dean of the Root", "Lukka, Wayward Bonder", "Nassari, Dean of Expression", 
+                    "Restorative Burst", "Revel in Silence", "Search for Blex", "Will, Scholar of Frost",
+                });
+                foreach (string s in reverseSideOfFlipLand)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertBackSideModalDoubleFacedCard,
+                       new KeyValuePair<string, object>("@name", s));
+                }
             }
 
             using (var temporaryDabase = new TemporaryDatabase(DatabaseType.Data))

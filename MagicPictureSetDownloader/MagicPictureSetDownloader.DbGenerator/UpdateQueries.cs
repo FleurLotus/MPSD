@@ -253,11 +253,23 @@ WHERE [IsAltArt] IS NULL AND [IsFoil] IS NOT NULL
 , PRIMARY KEY([IdGatherer], [OtherIdGatherer])
 , FOREIGN KEY([IdGatherer]) REFERENCES `CardEdition`([IdGatherer])
 )";
-    
-    public const string UpdateSecretLairDropMissingCard =
-@"UPDATE Edition 
-SET Completed = 0, CardNumber = 99
+
+        public const string UpdateSecretLairDropMissingCard =
+    @"UPDATE Edition 
+SET Completed = 0, CardNumber = @value
 WHERE GathererName = 'Secret Lair Drop' 
-AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Secret Lair Drop') < 99";
+AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdEdition WHERE  GathererName = 'Secret Lair Drop') < @value";
+
+        public const string CreateBackSideModalDoubleFacedCardTable =
+    @"CREATE TABLE [BackSideModalDoubleFacedCard] (
+  [Name] TEXT NOT NULL 
+, PRIMARY KEY([Name])
+)";
+
+        public const string InsertBackSideModalDoubleFacedCard =
+@"INSERT INTO BackSideModalDoubleFacedCard (Name)
+SELECT @name
+WHERE NOT EXISTS(SELECT 1 FROM BackSideModalDoubleFacedCard WHERE Name = @name)";
+
     }
 }

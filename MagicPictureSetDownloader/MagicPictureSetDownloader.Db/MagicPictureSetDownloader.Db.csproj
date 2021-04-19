@@ -71,6 +71,7 @@
       <Link>Properties\Version.cs</Link>
     </Compile>
     <Compile Include="CardCountKeys.cs" />
+    <Compile Include="DAO\BackSideModalDoubleFacedCard.cs" />
     <Compile Include="DAO\CardEditionVariation.cs" />
     <Compile Include="DAO\PreconstructedDeckCardEdition.cs" />
     <Compile Include="DAO\PreconstructedDeck.cs" />

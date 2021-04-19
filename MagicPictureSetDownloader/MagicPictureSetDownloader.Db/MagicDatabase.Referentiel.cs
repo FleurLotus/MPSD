@@ -487,6 +487,7 @@ namespace MagicPictureSetDownloader.Db
                 _allCardInCollectionCount.Clear();
                 _preconstructedDecks.Clear();
                 _preconstructedDeckCards.Clear();
+                _multiPartCardManager.ClearBackSideModalDoubleFacedCards();
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
                 {
@@ -567,6 +568,12 @@ namespace MagicPictureSetDownloader.Db
                 {
                     InsertInReferential(preconstructedDeckCardEdition);
                 }
+
+                foreach (BackSideModalDoubleFacedCard modalDoubleFacedCardEdition in Mapper<BackSideModalDoubleFacedCard>.LoadAll(cnx))
+                {
+                    InsertInReferential(modalDoubleFacedCardEdition);
+                }
+
             }
             using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
             {
@@ -734,6 +741,10 @@ namespace MagicPictureSetDownloader.Db
             }
 
             list.Add(preconstructedDeckCardEdition);
+        }
+        private void InsertInReferential(IBackSideModalDoubleFacedCard modalDoubleFacedCardEdition)
+        {
+            _multiPartCardManager.AddBackSideModalDoubleFacedCard(modalDoubleFacedCardEdition.Name);
         }
 
         private void RemoveFromReferential(IOption option)

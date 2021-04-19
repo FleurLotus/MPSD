@@ -4,10 +4,11 @@
 
     public interface IMultiPartCardManager
     {
+        void AddBackSideModalDoubleFacedCard(string backSideModalDoubleFacedCard);
+        void ClearBackSideModalDoubleFacedCards();
         bool HasMultiPart(ICard card);
         bool IsDownSide(ICard card);
         bool Is90DegreeSide(ICard card);
-
         bool ShouldIgnore(ICard card);
         bool IsSecondPartOfSplitted(ICard card);
         ICard GetOtherPartCard(ICard card, Func<string, string, ICard> getCard);
