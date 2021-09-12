@@ -25,6 +25,18 @@
         public const string ArtistKey = "Artist";
         public const string VariationsKey = "Variations";
 
+        private static readonly IDictionary<string, string> _missingLoyalty = new Dictionary<string, string>
+        {
+            // Core Set 2021
+            {@"Teferi, Master of Time</div>", "3" },
+            // Jumpstart: Historic Horizons
+            {@"Sarkhan, Wanderer to Shiv</div>", "4" },
+            {@"Davriel, Soul Broker</div>", "4" },
+            {@"Freyalise, Skyshroud Partisan</div>", "4" },
+            {@"Kiora, the Tide's Fury</div>", "4" },
+            {@"Teyo, Aegis Adept</div>", "4" },
+        };
+
         protected CardParserBase()
         {
         }
@@ -96,32 +108,34 @@
 
         private string CardSpecificCorrection(string text)
         {
-
-            if (text.Contains(@"Teferi, Master of Time</div>"))
+            foreach (var kv in _missingLoyalty)
             {
-                //Missing the loyauty
-                const string Start = @"Loyalty:</div>";
-                const string End = @"</div>";
-                const string Middle = @"<div class=""value"">";
-
-                int index = text.IndexOf(Start);
-                if (index >= 0)
+                if (text.Contains(kv.Key))
                 {
-                    int endIndex = text.IndexOf(End, index + Start.Length);
-                    if (endIndex >= 0)
+                    //Missing the loyauty
+                    const string Start = @"Loyalty:</div>";
+                    const string End = @"</div>";
+                    const string Middle = @"<div class=""value"">";
+
+                    int index = text.IndexOf(Start);
+                    if (index >= 0)
                     {
-                        string toreplace = text.Substring(index, endIndex - index + End.Length);
-                        int subIndex = toreplace.IndexOf(Middle);
-                        if (subIndex >= 0)
+                        int endIndex = text.IndexOf(End, index + Start.Length);
+                        if (endIndex >= 0)
                         {
-                            string tocheck = toreplace.Substring(subIndex + Middle.Length, toreplace.Length - subIndex - Middle.Length - End.Length);
-                            if (string.IsNullOrWhiteSpace(tocheck))
+                            string toreplace = text.Substring(index, endIndex - index + End.Length);
+                            int subIndex = toreplace.IndexOf(Middle);
+                            if (subIndex >= 0)
                             {
-                                //Confirm no  loyauty
-                                return text.Replace(toreplace, toreplace.Substring(0,toreplace.Length - End.Length) + "3" + End);
+                                string tocheck = toreplace.Substring(subIndex + Middle.Length, toreplace.Length - subIndex - Middle.Length - End.Length);
+                                if (string.IsNullOrWhiteSpace(tocheck))
+                                {
+                                    //Confirm no  loyauty
+                                    return text.Replace(toreplace, toreplace.Substring(0, toreplace.Length - End.Length) + kv.Value + End);
+                                }
                             }
+                            //string tocheck = text.Substring(index + 14, endIndex - index - 14);
                         }
-                        //string tocheck = text.Substring(index + 14, endIndex - index - 14);
                     }
                 }
             }
