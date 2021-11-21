@@ -46,7 +46,7 @@
         {
             if (cmd == null)
             {
-                throw new ArgumentNullException("cmd");
+                throw new ArgumentNullException(nameof(cmd));
             }
 
             cmd.CommandType = CommandType.Text;
@@ -56,7 +56,7 @@
         {
             if (cmd == null)
             {
-                throw new ArgumentNullException("cmd");
+                throw new ArgumentNullException(nameof(cmd));
             }
 
             CheckRestriction(Restriction.Delete);
@@ -161,7 +161,7 @@
             StringBuilder sbDelete = new StringBuilder();
             sbDelete.Append("DELETE FROM [");
             sbDelete.Append(_typeDbInfo.TableName);
-            sbDelete.Append("]");
+            sbDelete.Append(']');
 
             string[] allColums = _typeDbInfo.Columns.Keys.ToArray();
             _notKeycolumns = _typeDbInfo.Columns.Keys.Where(s => !_typeDbInfo.Keys.Contains(s)).ToArray();
@@ -179,7 +179,7 @@
 
             sbSelect.Append(" FROM [");
             sbSelect.Append(_typeDbInfo.TableName);
-            sbSelect.Append("]");
+            sbSelect.Append(']');
 
             _selectQuery = sbSelect.ToString();
 

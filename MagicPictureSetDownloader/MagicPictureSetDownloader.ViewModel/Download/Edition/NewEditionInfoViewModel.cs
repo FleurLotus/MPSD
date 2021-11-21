@@ -194,7 +194,7 @@
         }
         public void Save()
         {
-            IBlock realBlock = null;
+            IBlock realBlock;
 
             if (BlockSelected != null && BlockSelected.Id == AutoBlockId)
             {

@@ -91,7 +91,7 @@
         {
             if (string.IsNullOrWhiteSpace(castingCost))
             {
-                return new Shard[0];
+                return Array.Empty<Shard>();
             }
 
             return castingCost.Split(new[] { ' ' },StringSplitOptions.RemoveEmptyEntries)

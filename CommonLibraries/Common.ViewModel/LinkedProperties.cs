@@ -42,8 +42,7 @@
 
             lock (_sync)
             {
-                HashSet<string> linked;
-                if (!_linkedProperties.TryGetValue(sourceName, out linked))
+                if (!_linkedProperties.TryGetValue(sourceName, out HashSet<string> linked))
                 {
                     linked = new HashSet<string>();
                     _linkedProperties.Add(sourceName, linked);
@@ -67,8 +66,7 @@
             {
                 notifylist.Add(propertyName);
 
-                HashSet<string> linked;
-                if (_linkedProperties.TryGetValue(propertyName, out linked))
+                if (_linkedProperties.TryGetValue(propertyName, out HashSet<string> linked))
                 {
                     foreach (string linkedPropertyName in linked)
                     {

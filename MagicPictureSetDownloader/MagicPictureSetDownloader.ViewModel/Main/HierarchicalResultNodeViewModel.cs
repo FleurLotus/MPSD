@@ -16,7 +16,7 @@
         {
             if (card == null)
             {
-                throw new ArgumentNullException("card");
+                throw new ArgumentNullException(nameof(card));
             }
 
             _allCards.Add(card);

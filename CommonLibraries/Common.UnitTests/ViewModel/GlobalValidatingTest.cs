@@ -7,7 +7,6 @@
     using NUnit.Framework;
 
     [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class GlobalValidatingTest
     {
         private const string MessageFormat = "Global validation ---> {0}\r\n";

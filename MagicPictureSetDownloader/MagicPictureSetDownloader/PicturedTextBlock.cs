@@ -18,15 +18,12 @@
 
         public static void InlineCollectionCallback(DependencyObject sender, DependencyPropertyChangedEventArgs args)
         {
-            PicturedTextBlock textBlock = sender as PicturedTextBlock;
-
-            if (textBlock != null)
+            if (sender is PicturedTextBlock textBlock)
             {
                 textBlock.Inlines.Clear();
 
-                List<Inline> inlines = args.NewValue as List<Inline>;
 
-                if (inlines != null)
+                if (args.NewValue is List<Inline> inlines)
                 {
                     textBlock.Inlines.AddRange(inlines);
                 }

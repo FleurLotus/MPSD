@@ -15,9 +15,7 @@ namespace MagicPictureSetDownloader.Converter
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string data = value as string;
-
-            if (data == null)
+            if (value is not string data)
             {
                 return null;
             }

@@ -15,8 +15,7 @@
 
             while (item != null)
             {
-                T itemAsT = item as T;
-                if (itemAsT != null)
+                if (item is T itemAsT)
                 {
                     return itemAsT;
                 }
@@ -55,9 +54,9 @@
             {
                 DependencyObject child = VisualTreeHelper.GetChild(d, n);
 
-                if (child is T)
+                if (child is T t)
                 {
-                    yield return (T)child;
+                    yield return t;
                 }
 
                 foreach (T match in GetVisualDescendants<T>(child))

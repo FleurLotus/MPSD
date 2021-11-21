@@ -49,8 +49,7 @@
         }
         private TValue Get<TKey, TValue>(IDictionary<TKey, TValue> dic, TKey key)
         {
-            TValue value;
-            if (!dic.TryGetValue(key, out value))
+            if (!dic.TryGetValue(key, out TValue value))
             {
                 throw new ParserException("Missing info " + value);
             }

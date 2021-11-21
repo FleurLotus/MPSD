@@ -27,8 +27,7 @@
 
         public static void VisibilityChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
-            var tabItem = sender as TabItem;
-            if (tabItem == null)
+            if (sender is not TabItem tabItem)
             {
                 return;
             }

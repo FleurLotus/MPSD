@@ -53,19 +53,19 @@
                 return NullString;
             }
 
-            if (o is int)
+            if (o is int i)
             {
-                return ((int)o).ToString(CultureInfo.InvariantCulture);
+                return i.ToString(CultureInfo.InvariantCulture);
             }
 
-            if (o is double)
+            if (o is double d)
             {
-                return ((double)o).ToString(CultureInfo.InvariantCulture);
+                return d.ToString(CultureInfo.InvariantCulture);
             }
 
-            if (o is DateTime)
+            if (o is DateTime dt)
             {
-                return ((DateTime)o).ToString("yyyyMMdd HH:mm:ss");
+                return dt.ToString("yyyyMMdd HH:mm:ss");
             }
 
             return string.Format("'{0}'", o.ToString().ToSqlStringEscaped());
@@ -77,8 +77,7 @@
 
         public static DbType? ToDbType(this Type type)
         {
-            DbType dbType;
-            if (!_typeToDbTypes.TryGetValue(type, out dbType))
+            if (!_typeToDbTypes.TryGetValue(type, out DbType dbType))
             {
                 return null;
             }

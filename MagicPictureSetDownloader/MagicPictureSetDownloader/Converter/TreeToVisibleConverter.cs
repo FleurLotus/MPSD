@@ -14,9 +14,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            HierarchicalResultNodeViewModel node = value as HierarchicalResultNodeViewModel;
-
-            return node == null ? Visibility.Visible : Visibility.Collapsed;
+            return value is HierarchicalResultNodeViewModel ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

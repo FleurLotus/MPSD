@@ -7,7 +7,6 @@
     using NUnit.Framework;
 
     [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class ValidationAttributeTest
     {
         [Test]

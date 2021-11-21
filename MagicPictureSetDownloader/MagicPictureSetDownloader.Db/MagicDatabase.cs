@@ -176,7 +176,7 @@ namespace MagicPictureSetDownloader.Db
                 {
                     return preconstructedDeckCards.ToArray();
                 }
-                return new IPreconstructedDeckCardEdition[0];
+                return Array.Empty<IPreconstructedDeckCardEdition>();
             }
         }
         private IPreconstructedDeckCardEdition GetPreconstructedDeckCard(int idPreconstructedDeck, int idGatherer)
@@ -258,17 +258,16 @@ namespace MagicPictureSetDownloader.Db
                     IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdGatherer);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
-                    IList<ICardEditionVariation> other;
-                    if (_cardEditionVariations.TryGetValue(cardEdition.IdGatherer, out other))
+                    if (_cardEditionVariations.TryGetValue(cardEdition.IdGatherer, out IList<ICardEditionVariation> other))
                     {
                         cardAllDbInfo.VariationIdGatherers = other.Select(cev => cev.OtherIdGatherer).ToArray();
                     }
                     else
                     {
-                        cardAllDbInfo.VariationIdGatherers = new int[0];
+                        cardAllDbInfo.VariationIdGatherers = Array.Empty<int>();
                     }
 
-                    cardAllDbInfo.VariationIdGatherers2 = new int[0];
+                    cardAllDbInfo.VariationIdGatherers2 = Array.Empty<int>();
 
                     //For Multipart card
                     if (_multiPartCardManager.HasMultiPart(card))
@@ -288,8 +287,7 @@ namespace MagicPictureSetDownloader.Db
                         if (cardEdition2 != null)
                         {
                             cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
-                            IList<ICardEditionVariation> other2;
-                            if (_cardEditionVariations.TryGetValue(cardEdition2.IdGatherer, out other2))
+                            if (_cardEditionVariations.TryGetValue(cardEdition2.IdGatherer, out IList<ICardEditionVariation> other2))
                             {
                                 cardAllDbInfo.VariationIdGatherers2 = other2.Select(cev => cev.OtherIdGatherer).ToArray();
                             }
@@ -314,8 +312,7 @@ namespace MagicPictureSetDownloader.Db
 
             using (new ReaderLock(_lock))
             {
-                IList<IOption> options;
-                if (!_allOptions.TryGetValue(type, out options))
+                if (!_allOptions.TryGetValue(type, out IList<IOption> options))
                 {
                     return null;
                 }
@@ -370,8 +367,7 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                ILanguage lang;
-                if (_languages.TryGetValue(language, out lang) && lang != null)
+                if (_languages.TryGetValue(language, out ILanguage lang) && lang != null)
                 {
                     return lang;
                 }
@@ -417,6 +413,8 @@ namespace MagicPictureSetDownloader.Db
                 return new List<IPreconstructedDeck>(_preconstructedDecks.Values).AsReadOnly();
             }
         }
+
+        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
@@ -463,8 +461,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                Edition newEdition = _editions.FirstOrDefault(e => e.Id == editionId) as Edition;
-                if (newEdition == null || newEdition.Completed)
+                if (_editions.FirstOrDefault(e => e.Id == editionId) is not Edition newEdition || newEdition.Completed)
                 {
                     return;
                 }

@@ -12,10 +12,9 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            CardViewModel card = value as CardViewModel;
             int param = int.Parse(parameter.ToString());
 
-            if (card == null)
+            if (value is not CardViewModel card)
             {
                 return null;
             }

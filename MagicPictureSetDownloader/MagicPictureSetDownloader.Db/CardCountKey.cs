@@ -16,8 +16,7 @@
 
         public override bool Equals(object o)
         {
-            ICardCountKey other = o as ICardCountKey;
-            if (other == null)
+            if (o is not ICardCountKey other)
             {
                 return false;
             }

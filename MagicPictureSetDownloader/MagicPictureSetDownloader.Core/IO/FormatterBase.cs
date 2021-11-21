@@ -34,9 +34,8 @@
             //Merge if multiple lines from file like in mtgm format
             foreach (IImportExportCardCount importExportCardCount in enumerable)
             {
-                ImportExportCardInfo cardInfo;
                 string key = string.Format("{0}¤{1}", importExportCardCount.IdGatherer, importExportCardCount.IdLanguage);
-                if (ret.TryGetValue(key, out cardInfo))
+                if (ret.TryGetValue(key, out ImportExportCardInfo cardInfo))
                 {
                     foreach (KeyValuePair<ICardCountKey, int> kv in importExportCardCount.GetCardCount())
                     {

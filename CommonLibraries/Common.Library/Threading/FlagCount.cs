@@ -17,16 +17,14 @@
         {
             lock (_count)
             {
-                int value;
-                return _count.TryGetValue(source, out value) && value > 0;
+                return _count.TryGetValue(source, out int value) && value > 0;
             }
         }
         public void Increment(object source)
         {
             lock (_count)
             {
-                int value;
-                if (!_count.TryGetValue(source, out value))
+                if (!_count.TryGetValue(source, out int value))
                 {
                     value = 0;
                 }
@@ -39,8 +37,7 @@
         {
             lock (_count)
             {
-                int value;
-                if (!_count.TryGetValue(source, out value) || value <= 0)
+                if (!_count.TryGetValue(source, out int value) || value <= 0)
                 {
                     throw new Exception("Can't decrement");
                 }

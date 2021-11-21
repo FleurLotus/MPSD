@@ -36,8 +36,7 @@
 
         protected override void OnClosed(EventArgs e)
         {
-            IDisposable disposable = DataContext as IDisposable;
-            if (disposable != null)
+            if (DataContext is IDisposable disposable)
             {
                 disposable.Dispose();
             }

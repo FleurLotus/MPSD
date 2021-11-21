@@ -8,7 +8,7 @@
         #region GetOrDefault
         public static string GetStringOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(string) : dr.GetString(index);
+            return dr.IsDBNull(index) ? default : dr.GetString(index);
         }
         public static bool GetBoolOrDefault(this IDataRecord dr, int index)
         {
@@ -16,31 +16,31 @@
         }
         public static int GetInt32OrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(int) : dr.GetInt32(index);
+            return dr.IsDBNull(index) ? default : dr.GetInt32(index);
         }
         public static short GetInt16OrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(short) : dr.GetInt16(index);
+            return dr.IsDBNull(index) ? default : dr.GetInt16(index);
         }
         public static long GetInt64OrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(long) : dr.GetInt64(index);
+            return dr.IsDBNull(index) ? default : dr.GetInt64(index);
         }
         public static double GetDoubleOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(double) : dr.GetDouble(index);
+            return dr.IsDBNull(index) ? default : dr.GetDouble(index);
         }
         public static DateTime GetDateTimeOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(DateTime) : dr.GetDateTime(index);
+            return dr.IsDBNull(index) ? default : dr.GetDateTime(index);
         }
         public static byte GetByteOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(byte) : dr.GetByte(index);
+            return dr.IsDBNull(index) ? default : dr.GetByte(index);
         }
         public static char GetCharOrDefault(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? default(char) : dr.GetChar(index);
+            return dr.IsDBNull(index) ? default : dr.GetChar(index);
         }
         #endregion
 

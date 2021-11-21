@@ -83,8 +83,7 @@ namespace Common.WPF.UI
         #region Private/Protected methods
         private static object CoerceValueCallback(DependencyObject dependencyObject, object baseValue)
         {
-            ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb)
+            if (dependencyObject is not ProgressBar pb)
             {
                 return baseValue;
             }
@@ -104,8 +103,7 @@ namespace Common.WPF.UI
         }
         private static object CoerceMaximumCallback(DependencyObject dependencyObject, object baseValue)
         {
-            ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb)
+            if (dependencyObject is not ProgressBar pb)
             {
                 return baseValue;
             }
@@ -125,15 +123,14 @@ namespace Common.WPF.UI
         }
         private static void PropertyChangedCallback(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
-            ProgressBar pb = dependencyObject as ProgressBar;
-            if (null == pb)
+            if (dependencyObject is not ProgressBar pb)
             {
                 return;
             }
 
             pb.SetDisplayText();
         }
-        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
+
         private void SetDisplayText()
         {
             lock (_synch)

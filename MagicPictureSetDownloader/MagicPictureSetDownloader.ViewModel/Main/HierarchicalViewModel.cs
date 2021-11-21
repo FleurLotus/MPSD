@@ -60,8 +60,7 @@
         public void MakeHierarchy(IHierarchicalInfoAnalyser[] analysers, bool[] orders)
         {
             CardViewModel saveSelected = null;
-            HierarchicalResultNodeViewModel selected = Selected as HierarchicalResultNodeViewModel;
-            if (selected != null)
+            if (Selected is HierarchicalResultNodeViewModel selected)
             {
                 saveSelected = selected.Card;
             }

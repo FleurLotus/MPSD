@@ -27,7 +27,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         public IBlock Block { get; set; }
         public string BlockName
         {
-            get { return Block == null ? null : Block.Name; }
+            get { return Block?.Name; }
         }
         [DbColumn]
         public int? BlockPosition { get; set; }
@@ -77,9 +77,7 @@ namespace MagicPictureSetDownloader.Db.DAO
 
         public int CompareTo(object obj)
         {
-            Edition e = obj as Edition;
-
-            if (e == null)
+            if (obj is not Edition e)
             {
                 return -1;
             }

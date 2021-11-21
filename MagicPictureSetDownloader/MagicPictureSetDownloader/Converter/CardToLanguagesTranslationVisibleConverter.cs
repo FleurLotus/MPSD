@@ -13,9 +13,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IDictionary<string, string> dic = base.Convert(value, targetType, parameter, culture) as IDictionary<string, string>;
-
-            if (dic == null)
+            if (base.Convert(value, targetType, parameter, culture) is not IDictionary<string, string> dic)
             {
                 return Visibility.Collapsed;
             }

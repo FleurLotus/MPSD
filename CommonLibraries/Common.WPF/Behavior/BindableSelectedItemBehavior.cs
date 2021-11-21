@@ -40,8 +40,7 @@
 
         private static Action<int> GetBringIndexIntoView(Panel itemsHostPanel)
         {
-            VirtualizingStackPanel virtualizingPanel = itemsHostPanel as VirtualizingStackPanel;
-            if (virtualizingPanel == null)
+            if (itemsHostPanel is not VirtualizingStackPanel virtualizingPanel)
             {
                 return null;
             }
@@ -64,7 +63,7 @@
                 }
 
                 // Expand the current container
-                if (container is TreeViewItem && !((TreeViewItem)container).IsExpanded)
+                if (container is TreeViewItem treeViewItem && !treeViewItem.IsExpanded)
                 {
                     container.SetValue(TreeViewItem.IsExpandedProperty, true);
                 }
@@ -95,11 +94,9 @@
                 Panel itemsHostPanel = (Panel)VisualTreeHelper.GetChild(itemsPresenter, 0);
 
                 // Ensure that the generator for this panel has been created.
-#pragma warning disable 168
                 // ReSharper disable UnusedVariable
                 UIElementCollection children = itemsHostPanel.Children;
                 // ReSharper restore UnusedVariable
-#pragma warning restore 168
 
                 Action<int> bringIndexIntoView = GetBringIndexIntoView(itemsHostPanel);
                 for (int i = 0, count = container.Items.Count; i < count; i++)
@@ -144,8 +141,7 @@
 
         private static void OnSelectedItemChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            TreeViewItem item = e.NewValue as TreeViewItem;
-            if (item != null)
+            if (e.NewValue is TreeViewItem item)
             {
                 item.SetValue(TreeViewItem.IsSelectedProperty, true);
                 return;

@@ -23,7 +23,7 @@
         private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0|me2|wth|vis|mir|csp|rqs|wc\d{2})/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Func<string, string> _getExtraInfo;
 
-        private IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
+        private readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
 
         public PreconstructedDeckImporter(Func<string, string> getExtraInfo)
         {
@@ -39,7 +39,7 @@
         {
             if (string.IsNullOrWhiteSpace(html))
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
             
             string htmltext = WebUtility.HtmlDecode(html);

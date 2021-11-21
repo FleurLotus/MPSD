@@ -159,8 +159,7 @@
 
         public async Task<string> GetHtmlAsync(string url, bool forceRefresh = false)
         {
-            string html;
-            if (forceRefresh || !_htmlCache.TryGetValue(url, out html))
+            if (forceRefresh || !_htmlCache.TryGetValue(url, out string html))
             {
                 html = await GetDataWithProxyFallBack(() => GetHttpClient().GetStringAsync(url));
                 _htmlCache[url] = html;

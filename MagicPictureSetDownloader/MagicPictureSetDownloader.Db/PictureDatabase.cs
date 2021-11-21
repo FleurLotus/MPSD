@@ -119,7 +119,7 @@
             string ext = GetExtension(data);
             string filePath = Path.Combine(_treePath, path + ext);
 
-            if (Directory.GetFiles(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(filePath) + ".*").Length> 0)
+            if (Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length> 0)
             {
                 return;
             }
@@ -140,7 +140,7 @@
             string ext = GetExtension(data);
             string filePath = Path.Combine(_cardPath, path + ext);
 
-            if (Directory.GetFiles(Path.GetDirectoryName(path), Path.GetFileNameWithoutExtension(filePath) + ".*").Length > 0)
+            if (Directory.Exists(Path.GetDirectoryName(filePath)) && Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length > 0)
             {
                 return;
             }

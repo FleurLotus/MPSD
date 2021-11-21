@@ -15,9 +15,7 @@ namespace MagicPictureSetDownloader.Converter
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            byte[] data = value as byte[];
-
-            if (data == null)
+            if (value is not byte[] data)
             {
                 return null;
             }

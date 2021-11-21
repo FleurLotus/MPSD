@@ -13,8 +13,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IList<int> ids = base.Convert(value, targetType, parameter, culture) as IList<int>;
-            if (ids == null || ids.Count == 0)
+            if (base.Convert(value, targetType, parameter, culture) is not IList<int> ids || ids.Count == 0)
             {
                 return Visibility.Collapsed;
             }

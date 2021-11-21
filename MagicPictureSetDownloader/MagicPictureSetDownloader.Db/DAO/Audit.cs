@@ -31,7 +31,6 @@ namespace MagicPictureSetDownloader.Db.DAO
         public int Quantity { get; set; }
 
         //IdGather, IsFoil, IdLanguage null or not are linked
-        [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
         public override string ToString()
         {
             if (IdGatherer.HasValue)

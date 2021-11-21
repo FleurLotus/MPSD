@@ -28,10 +28,9 @@
             {
                 throw new ArgumentNullException(nameof(t));
             }
-            PropertyInfo[] ret;
 
             // ReSharper disable once InconsistentlySynchronizedField
-            if (!_propertiesCache.TryGetValue(t, out ret))
+            if (!_propertiesCache.TryGetValue(t, out PropertyInfo[] ret))
             {
                 lock (_propertiesCache)
                 {

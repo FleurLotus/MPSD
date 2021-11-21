@@ -33,7 +33,7 @@
                     return new RowWorker(xmlReader);
 
                 case "variations":
-                    return new VariationsWorker(xmlReader);
+                    return new VariationsWorker();
 
                 default:
                     return null;

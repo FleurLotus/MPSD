@@ -8,7 +8,6 @@
     {
         private readonly static bool _withFlag;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
         static Matcher()
         {
             Type t = typeof(T);
@@ -17,7 +16,7 @@
                 throw new ArgumentException("T could only be a Enum and not a " + t);
             }
 
-            _withFlag = t.GetCustomAttributes<FlagsAttribute>().Count() > 0;
+            _withFlag = t.GetCustomAttributes<FlagsAttribute>().Any();
         }
 
         public static bool HasValue(T source, T matching)

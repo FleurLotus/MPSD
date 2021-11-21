@@ -13,9 +13,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            IRuling[] rules = base.Convert(value, targetType, parameter, culture) as IRuling[];
-
-            if (rules == null || rules.Length == 0)
+            if (base.Convert(value, targetType, parameter, culture) is not IRuling[] rules || rules.Length == 0)
             {
                 return Visibility.Collapsed;
             }

@@ -11,7 +11,7 @@
         }
         protected override void DisplayCurrent()
         {
-            Name = Selected == null ? null : Selected.Name;
+            Name = Selected?.Name;
         }
         protected override bool ApplyEditionToDatabase()
         {

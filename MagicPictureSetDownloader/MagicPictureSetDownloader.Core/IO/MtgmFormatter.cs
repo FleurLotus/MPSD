@@ -23,13 +23,12 @@
 
             int count = 0;
             int foilCount = 0;
-            int tmpcount;
 
-            if (!int.TryParse(m.Groups["Count"].Value, out tmpcount) || tmpcount <= 0)
+            if (!int.TryParse(m.Groups["Count"].Value, out int tmpcount) || tmpcount <= 0)
             {
                 return new ErrorImportExportCardInfo(line, "Invalid value for count");
             }
-            
+
             if (m.Groups["Foil"].Value.ToUpper() == "TRUE")
             {
                 foilCount = tmpcount;
@@ -58,9 +57,11 @@
                 return new ErrorImportExportCardInfo(line, string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
             }
 
-            CardCount cardCount = new CardCount();
-            cardCount.Add(CardCountKeys.Standard, count);
-            cardCount.Add(CardCountKeys.Foil, foilCount);
+            CardCount cardCount = new CardCount
+            {
+                { CardCountKeys.Standard, count },
+                { CardCountKeys.Foil, foilCount }
+            };
 
             return new ImportExportCardInfo(idGatherer, cardCount, 0);
         }

@@ -31,16 +31,14 @@
 
             foreach (IImportExportCardCount importExportCardCount in cardsImport)
             {
-                ImportExportCardInfo okCard = importExportCardCount as ImportExportCardInfo;
-                if (okCard != null)
+                if (importExportCardCount is ImportExportCardInfo okCard)
                 {
                     list.Add(okCard);
                     totalCard += okCard.FoilNumber + okCard.Number + okCard.AltArtNumber + okCard.FoilAltArtNumber;
                     continue;
                 }
 
-                ErrorImportExportCardInfo koCard = importExportCardCount as ErrorImportExportCardInfo;
-                if (koCard != null)
+                if (importExportCardCount is ErrorImportExportCardInfo koCard)
                 {
                     sbErrorMessage.AppendLine(string.Format("{0} -> {1}", koCard.SourceLine, koCard.ErrorMessage));
                     sbFile.AppendLine(koCard.SourceLine);

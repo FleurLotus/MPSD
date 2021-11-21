@@ -38,8 +38,7 @@
         }
         private static void OnPasswordPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            PasswordBox passwordBox = sender as PasswordBox;
-            if (passwordBox == null)
+            if (sender is not PasswordBox passwordBox)
             {
                 return;
             }
@@ -53,8 +52,7 @@
         }
         private static void Attach(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            PasswordBox passwordBox = sender as PasswordBox;
-            if (passwordBox == null)
+            if (sender is not PasswordBox passwordBox)
             {
                 return;
             }
@@ -71,8 +69,7 @@
         }
         private static void PasswordChanged(object sender, RoutedEventArgs e)
         {
-            PasswordBox passwordBox = sender as PasswordBox;
-            if (passwordBox == null)
+            if (sender is not PasswordBox passwordBox)
             {
                 return;
             }

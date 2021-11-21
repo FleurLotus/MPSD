@@ -13,10 +13,6 @@ namespace MagicPictureSetDownloader.Core.CardInfo
 
         public const char Separator = ';';
 
-        public VariationsWorker(IAwareXmlTextReader xmlReader)
-        {
-            //
-        }
         public bool WorkOnCurrentAtStart
         {
             get { return false; }

@@ -1,31 +1,36 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.ViewModel", "Common.ViewModel\Common.ViewModel.csproj", "{770CD409-408D-44B1-84AE-B96513D9D7C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.ViewModel", "Common.ViewModel\Common.ViewModel.csproj", "{770CD409-408D-44B1-84AE-B96513D9D7C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.WPF", "Common.WPF\Common.WPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WPF", "Common.WPF\Common.WPF.csproj", "{0DB07B4A-35FE-4B4D-A7F1-82519772E0ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Library", "Common.Library\Common.Library.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Library", "Common.Library\Common.Library.csproj", "{9AA9549E-0DAB-4E5A-A8BF-3F92BE765217}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Database", "Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Database", "Common.Database\Common.Database.csproj", "{C1458F9B-0A59-49B0-B5AC-4F85E2C8203E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.XML", "Common.XML\Common.XML.csproj", "{C695020A-1108-41BF-8494-34BDEFC30581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.XML", "Common.XML\Common.XML.csproj", "{C695020A-1108-41BF-8494-34BDEFC30581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Zip", "Common.Zip\Common.Zip.csproj", "{FF762F87-3489-497F-B350-BC58A6ABC48E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Zip", "Common.Zip\Common.Zip.csproj", "{FF762F87-3489-497F-B350-BC58A6ABC48E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.UnitTests", "Common.UnitTests\Common.UnitTests.csproj", "{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.UnitTests", "Common.UnitTests\Common.UnitTests.csproj", "{C45B28DC-B3D9-4411-AAC0-9E75EFA84CCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{F42F032C-75B0-4B96-8936-09566943FE17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Configuration", "Common.Configuration\Common.Configuration.csproj", "{F42F032C-75B0-4B96-8936-09566943FE17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Drawing", "Common.Drawing\Common.Drawing.csproj", "{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Drawing", "Common.Drawing\Common.Drawing.csproj", "{C1F1EF32-E4A7-4DF7-A009-E4E3F2BE6174}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.SQLite", "Common.SQLite\Common.SQLite.csproj", "{4324D0F9-3736-43F6-8288-F92FF7636E4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.SQLite", "Common.SQLite\Common.SQLite.csproj", "{4324D0F9-3736-43F6-8288-F92FF7636E4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.SQL", "Common.SQL\Common.SQL.csproj", "{7A790459-8DE4-413A-820C-95320B91C1BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.SQL", "Common.SQL\Common.SQL.csproj", "{7A790459-8DE4-413A-820C-95320B91C1BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Web", "Common.Web\Common.Web.csproj", "{AC9EEF4C-FAD3-44E5-A97A-73F7DCDD9753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Web", "Common.Web\Common.Web.csproj", "{AC9EEF4C-FAD3-44E5-A97A-73F7DCDD9753}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BDBA9739-DF5B-4700-A03D-3BE2161A5FBD}"
+	ProjectSection(SolutionItems) = preProject
+		..\.editorconfig = ..\.editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,5 +89,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86770675-18BE-468D-8338-48E5D6094AEE}
 	EndGlobalSection
 EndGlobal

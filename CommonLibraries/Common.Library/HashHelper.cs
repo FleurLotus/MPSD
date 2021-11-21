@@ -26,7 +26,7 @@
                 foreach (object t in input.Where(t => t != null))
                 {
                     hash = hash * a + t.GetHashCode();
-                    a = a * b;
+                    a *= b;
                 }
             }
 

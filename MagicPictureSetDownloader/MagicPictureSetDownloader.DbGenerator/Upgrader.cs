@@ -390,6 +390,10 @@
                 }
             }
 
+            if (dbVersion <= 14)
+            {
+            }
+
             using (var temporaryDabase = new TemporaryDatabase())
             {
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);

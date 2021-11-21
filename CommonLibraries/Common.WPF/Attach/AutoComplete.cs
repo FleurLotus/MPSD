@@ -30,8 +30,7 @@
 
         private static void EnabledValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ComboBox combo = sender as ComboBox;
-            if (combo != null)
+            if (sender is ComboBox combo)
             {
                 if (combo.Template != null)
                 {
@@ -45,8 +44,7 @@
         }
         private static void ComboLoaded(object sender, RoutedEventArgs e)
         {
-            ComboBox combo = sender as ComboBox;
-            if (combo == null)
+            if (sender is not ComboBox combo)
             {
                 return;
             }
@@ -60,8 +58,7 @@
 
         private static void CaseInsensitiveValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ComboBox combo = sender as ComboBox;
-            if (combo != null && combo.Template != null && GetEnabled(combo))
+            if (sender is ComboBox combo && combo.Template != null && GetEnabled(combo))
             {
                 TextBoxTextChanged(combo, new RoutedEventArgs());
             }
@@ -69,8 +66,7 @@
 
         private static void SetTextChangedHandler(ComboBox combo)
         {
-            TextBox textBox = combo.Template.FindName("PART_EditableTextBox", combo) as TextBox;
-            if (textBox != null)
+            if (combo.Template.FindName("PART_EditableTextBox", combo) is TextBox textBox)
             {
                 bool enabled = GetEnabled(combo);
                 if (enabled)
@@ -86,15 +82,13 @@
 
         private static void TextBoxTextChanged(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            if (textBox == null)
+            if (sender is not TextBox textBox)
             {
                 return;
             }
 
-            ComboBox combo = textBox.TemplatedParent as ComboBox;
             //combo.IsDropDownOpen = true;
-            if (combo == null)
+            if (textBox.TemplatedParent is not ComboBox combo)
             {
                 return;
             }

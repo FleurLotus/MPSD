@@ -10,11 +10,11 @@
         {
             return new T();
         }
-        [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
+
         protected override object GetElementKey(ConfigurationElement element)
         {
             IHasKey key = element as IHasKey;
-            return null == key ? null : key.Key;
+            return key?.Key;
         }
         public void Add(T element)
         {

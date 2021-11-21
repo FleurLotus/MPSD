@@ -251,7 +251,7 @@
                 return (string[])_headers.Clone();
             }
 
-            return new string[0];
+            return Array.Empty<string>();
         }
         public string GetValue(int index)
         {
@@ -277,7 +277,7 @@
 
             if (EndOfStream)
             {
-                _currentData = new string[0];
+                _currentData = Array.Empty<string>();
                 return false;
             }
 

@@ -17,9 +17,8 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            HierarchicalResultNodeViewModel node = value[0] as HierarchicalResultNodeViewModel;
             string name = value[2] as string;
-            if (node == null || !(value[1] is bool) || string.IsNullOrWhiteSpace(name))
+            if (value[0] is not HierarchicalResultNodeViewModel node || value[1] is not bool || string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }

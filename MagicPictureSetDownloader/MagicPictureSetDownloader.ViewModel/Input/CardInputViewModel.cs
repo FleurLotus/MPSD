@@ -60,8 +60,7 @@
             IOption option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Mode");
             if (option != null)
             {
-                InputMode mode;
-                if (Enum.TryParse(option.Value, out mode))
+                if (Enum.TryParse(option.Value, out InputMode mode))
                 {
                     _inputMode = mode;
                 }
@@ -70,8 +69,7 @@
             option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Language");
             if (option != null)
             {
-                int id;
-                if (int.TryParse(option.Value, out id))
+                if (int.TryParse(option.Value, out int id))
                 {
                     _inputLanguage = _magicDatabase.GetLanguage(id);
                 }
@@ -358,8 +356,10 @@
         }
         private void AddNewCard()
         {
-            CardCount cardCount = new CardCount();
-            cardCount.Add(new CardCountKey(IsFoil, IsAltArt), Count);
+            CardCount cardCount = new CardCount
+            {
+                { new CardCountKey(IsFoil, IsAltArt), Count }
+            };
 
             ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
             _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, cardCount);

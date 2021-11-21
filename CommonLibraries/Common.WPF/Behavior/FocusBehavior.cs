@@ -20,8 +20,7 @@
 
         private static void OnFocusFirstChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Control control = obj as Control;
-            if (control == null || !(args.NewValue is bool))
+            if (obj is not Control control || args.NewValue is not bool)
             {
                 return;
             }
@@ -49,8 +48,7 @@
 
         public static void OnIsFocusedChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Control control = obj as Control;
-            if (control == null || !(args.NewValue is bool))
+            if (obj is not Control control || args.NewValue is not bool)
             {
                 return;
             }

@@ -101,8 +101,7 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardEdition cardEdition = GetCardEdition(idGatherer);
 
-                IList<ICardInCollectionCount> list;
-                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out list))
+                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
                 {
                     return list.Where(cicc => cicc.IdCollection == idCollection && cicc.IdGatherer == idGatherer).ToArray();
                 }
@@ -124,8 +123,7 @@ namespace MagicPictureSetDownloader.Db
             {
                 ICardEdition cardEdition = GetCardEdition(idGatherer);
 
-                IList<ICardInCollectionCount> list;
-                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out list))
+                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
                 {
                     return list.FirstOrDefault(cicc => cicc.IdCollection == idCollection && cicc.IdGatherer == idGatherer && cicc.IdLanguage == idLanguage);
                 }
@@ -136,8 +134,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new ReaderLock(_lock))
             {
-                IList<ICardInCollectionCount> list;
-                if (_allCardInCollectionCount.TryGetValue(card.Id, out list))
+                if (_allCardInCollectionCount.TryGetValue(card.Id, out IList<ICardInCollectionCount> list))
                 {
                     return new List<ICardInCollectionCount>(list).AsReadOnly();
                 }
@@ -215,8 +212,7 @@ namespace MagicPictureSetDownloader.Db
                         return;
                     }
 
-                    CardInCollectionCount updateCardInCollectionCount = cardInCollection as CardInCollectionCount;
-                    if (updateCardInCollectionCount == null)
+                    if (cardInCollection is not CardInCollectionCount updateCardInCollectionCount)
                     {
                         return;
                     }
@@ -276,11 +272,15 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                CardCount cardCountSource = new CardCount();
-                cardCountSource.Add(cardCountKey, -countToMove);
+                CardCount cardCountSource = new CardCount
+                {
+                    { cardCountKey, -countToMove }
+                };
 
-                CardCount cardCountDestination = new CardCount();
-                cardCountDestination.Add(cardCountKey, countToMove);
+                CardCount cardCountDestination = new CardCount
+                {
+                    { cardCountKey, countToMove }
+                };
 
                 InsertOrUpdateCardInCollection(collection.Id, idGatherer, idLanguage, cardCountSource);
                 InsertOrUpdateCardInCollection(collectionDestination.Id, idGatherer, idLanguage, cardCountDestination);
@@ -329,11 +329,15 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                CardCount cardCountSource = new CardCount();
-                cardCountSource.Add(cardCountKeySource, -countToChange);
+                CardCount cardCountSource = new CardCount
+                {
+                    { cardCountKeySource, -countToChange }
+                };
 
-                CardCount cardCountDestination = new CardCount();
-                cardCountDestination.Add(cardCountKeyDestination, countToChange);
+                CardCount cardCountDestination = new CardCount
+                {
+                    { cardCountKeyDestination, countToChange }
+                };
 
                 InsertOrUpdateCardInCollection(collection.Id, idGathererSource, languageSource.Id, cardCountSource);
                 InsertOrUpdateCardInCollection(collection.Id, idGathererDestination, languageDestination.Id, cardCountDestination);
@@ -353,9 +357,8 @@ namespace MagicPictureSetDownloader.Db
                     return collection;
                 }
 
-                CardCollection newCollection = collection as CardCollection;
 
-                if (newCollection == null)
+                if (collection is not CardCollection newCollection)
                 {
                     return collection;
                 }
@@ -476,8 +479,10 @@ namespace MagicPictureSetDownloader.Db
                 {
                     foreach (IPreconstructedDeckCardEdition card in deckComposition)
                     {
-                        CardCount cardCount = new CardCount();
-                        cardCount.Add(CardCountKeys.Standard, card.Number);
+                        CardCount cardCount = new CardCount
+                        {
+                            { CardCountKeys.Standard, card.Number }
+                        };
 
                         InsertOrUpdateCardInCollection(collection.Id, card.IdGatherer, idLanguage, cardCount);
                     }
@@ -494,8 +499,7 @@ namespace MagicPictureSetDownloader.Db
             //No call to private ICardEdition GetCardEdition(int idGatherer) because call in CheckReferentialLoaded()
             ICardEdition cardEdition = _cardEditions.GetOrDefault(cardInCollectionCount.IdGatherer);
 
-            IList<ICardInCollectionCount> list;
-            if (!_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out list))
+            if (!_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
             {
                 list = new List<ICardInCollectionCount>();
                 _allCardInCollectionCount.Add(cardEdition.IdCard, list);
@@ -518,8 +522,7 @@ namespace MagicPictureSetDownloader.Db
             //No call to private ICardEdition GetCardEdition(int idGatherer) because call in CheckReferentialLoaded()
             ICardEdition cardEdition = _cardEditions.GetOrDefault(cardInCollectionCount.IdGatherer);
 
-            IList<ICardInCollectionCount> list;
-            if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out list))
+            if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
             {
                 list.Remove(cardInCollectionCount);
             }

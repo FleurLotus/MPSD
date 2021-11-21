@@ -91,7 +91,7 @@ namespace MagicPictureSetDownloader.Db
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             using (new WriterLock(_lock))
@@ -367,8 +367,7 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                PreconstructedDeckCardEdition updatePreconstructedDeckCardEdition = preconstructedDeckCard as PreconstructedDeckCardEdition;
-                if (updatePreconstructedDeckCardEdition == null)
+                if (preconstructedDeckCard is not PreconstructedDeckCardEdition updatePreconstructedDeckCardEdition)
                 {
                     return;
                 }
@@ -617,8 +616,7 @@ namespace MagicPictureSetDownloader.Db
 
         private void InsertInReferential(IOption option)
         {
-            IList<IOption> options;
-            if (!_allOptions.TryGetValue(option.Type, out options))
+            if (!_allOptions.TryGetValue(option.Type, out IList<IOption> options))
             {
                 options = new List<IOption>();
                 _allOptions.Add(option.Type, options);
@@ -628,8 +626,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(Translate translate)
         {
-            Card card = _cardsbyId.GetOrDefault(translate.IdCard) as Card;
-            if (card == null)
+            if (_cardsbyId.GetOrDefault(translate.IdCard) is not Card card)
             {
                 throw new ApplicationDbException("Can't find card with id " + translate.IdCard);
             }
@@ -640,8 +637,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(Ruling ruling)
         {
-            Card card = _cardsbyId.GetOrDefault(ruling.IdCard) as Card;
-            if (card == null)
+            if (_cardsbyId.GetOrDefault(ruling.IdCard) is not Card card)
             {
                 throw new ApplicationDbException("Can't find card with id " + ruling.IdCard);
             }
@@ -691,8 +687,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
         {
-            IList<IPreconstructedDeckCardEdition> list;
-            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out list))
+            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> list))
             {
                 list = new List<IPreconstructedDeckCardEdition>();
                 _preconstructedDeckCards.Add(preconstructedDeckCardEdition.IdPreconstructedDeck, list);
@@ -733,8 +728,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void RemoveFromReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
         {
-            IList<IPreconstructedDeckCardEdition> list;
-            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out list))
+            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> list))
             {
                 list.Remove(preconstructedDeckCardEdition);
             }

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.DbGenerator</AssemblyTitle>
     <Product>MagicPictureSetDownloader.DbGenerator</Product>
     <OutputPath>bin\$(Configuration)\</OutputPath>

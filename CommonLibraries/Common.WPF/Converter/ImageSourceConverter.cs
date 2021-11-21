@@ -13,8 +13,7 @@ namespace Common.WPF.Converter
         {
             if (targetType == typeof(ImageSource))
             {
-                string str = value as string;
-                if (str != null)
+                if (value is string str)
                 {
                     return new BitmapImage(new Uri(str, UriKind.RelativeOrAbsolute));
                 }

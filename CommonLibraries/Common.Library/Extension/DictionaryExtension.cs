@@ -13,10 +13,9 @@
         }
         public static TValue GetOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key)
         {
-            TValue ret;
-            if (!source.TryGetValue(key, out ret))
+            if (!source.TryGetValue(key, out TValue ret))
             {
-                ret = default(TValue);
+                ret = default;
             }
 
             return ret;

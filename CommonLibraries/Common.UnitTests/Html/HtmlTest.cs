@@ -236,9 +236,9 @@
                 for (int j = 0; j < expectedValue.GetLength(1); j++)
                 {
                     IHtmlCell cell = ret[i, j];
-                    string value = cell == null ? null : cell.InnerText;
+                    string value = cell?.InnerText;
                     Assert.AreEqual(expectedValue[i, j], value, "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
-                    Assert.AreEqual(cell == null ? null : cell.ToString(), value);
+                    Assert.AreEqual(cell?.ToString(), value);
                 }
             }
         }

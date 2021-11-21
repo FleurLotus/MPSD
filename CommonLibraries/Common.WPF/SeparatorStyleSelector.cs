@@ -10,9 +10,7 @@
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            MenuViewModel menu = item as MenuViewModel;
-
-            if (menu != null && menu.IsSeparator)
+            if (item is MenuViewModel menu && menu.IsSeparator)
             {
                 ResourceDictionary resourceDictionary = Application.Current.Resources;
                 if (resourceDictionary.Contains("separatorStyle"))

@@ -23,8 +23,7 @@
 
         protected override bool IsValide(object instance)
         {
-            string s = instance as string;
-            if (s == null)
+            if (instance is not string s)
             {
                 return true;
             }

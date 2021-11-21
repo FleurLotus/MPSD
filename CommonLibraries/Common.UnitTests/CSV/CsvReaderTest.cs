@@ -11,7 +11,6 @@
     using NUnit.Framework;
 
     [TestFixture]
-    [SuppressMessage("ReSharper", "ObjectCreationAsStatement")]
     public class CsvReaderTest
     {
         #region Args Tests
@@ -39,7 +38,6 @@
 
         #region Behavior
         [Test]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void TestCheckDisposed()
         {
             ICsvReader reader = new CsvReader(new MemoryStream(), false);
@@ -77,7 +75,6 @@
             }
         }
         [Test]
-        [SuppressMessage("ReSharper", "UnusedVariable")]
         public void TestCheckNoRead([Values(true, false)] bool withHeader)
         {
             const string input = "azerty\nazerty";
@@ -157,7 +154,7 @@
         {
             const string input = "azerty,azerty\r\ntttt,ttttt";
 
-            string[] exceptedResult = withHeader ? new[] { "azerty", "azerty" } : new string[0];
+            string[] exceptedResult = withHeader ? new[] { "azerty", "azerty" } : Array.Empty<string>();
             
             using (ICsvReader reader = CreateCsvReader(input, withHeader))
             {

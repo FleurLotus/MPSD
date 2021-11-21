@@ -44,8 +44,7 @@
 
         private static void OnCommandChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ItemsControl listView = sender as ItemsControl;
-            if (listView != null)
+            if (sender is ItemsControl listView)
             {
                 if (!GetAutoSort(listView)) // Don't change click handler if AutoSort enabled
                 {
@@ -62,8 +61,7 @@
         }
         private static void OnAutoSortChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            ListView listView = sender as ListView;
-            if (listView != null)
+            if (sender is ListView listView)
             {
                 if (GetCommand(listView) == null) // Don't change click handler if a command is set
                 {
@@ -84,8 +82,7 @@
 
         private static void ColumnHeader_Click(object sender, RoutedEventArgs e)
         {
-            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
-            if (headerClicked != null)
+            if (e.OriginalSource is GridViewColumnHeader headerClicked)
             {
                 string propertyName = GetPropertyName(headerClicked.Column);
                 if (!string.IsNullOrEmpty(propertyName))

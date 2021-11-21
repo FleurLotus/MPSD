@@ -19,8 +19,7 @@
         {
             CheckArgs(source, name);
 
-            FlagCount flagCount;
-            if (!_flags.TryGetValue(name, out flagCount))
+            if (!_flags.TryGetValue(name, out FlagCount flagCount))
             {
                 return false;
             }
@@ -28,7 +27,6 @@
             return flagCount.IsFlagSet(source);
         }
 
-        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private static void CheckArgs(object source, string name)
         {
             if (string.IsNullOrWhiteSpace(name))

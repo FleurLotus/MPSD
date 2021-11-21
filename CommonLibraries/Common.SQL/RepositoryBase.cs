@@ -50,8 +50,7 @@
         {
             string tablekey = Table.TableKey(schemaName, name, IsCaseSensitive);
 
-            ITable table;
-            Tables.TryGetValue(tablekey, out table);
+            Tables.TryGetValue(tablekey, out ITable table);
             return table;
         }
         public bool RowExists(string schemaName, string tableName, string[] columnNames, object[] values)

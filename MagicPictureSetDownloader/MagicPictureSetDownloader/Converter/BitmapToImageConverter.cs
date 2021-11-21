@@ -14,8 +14,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Bitmap bitmap = value as Bitmap;
-            if (bitmap == null)
+            if (value is not Bitmap bitmap)
             {
                 return null;
             }

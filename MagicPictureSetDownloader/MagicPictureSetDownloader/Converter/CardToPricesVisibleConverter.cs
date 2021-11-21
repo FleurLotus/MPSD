@@ -12,9 +12,7 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            PriceViewModel[] prices = base.Convert(value, targetType, parameter, culture) as PriceViewModel[];
-
-            if (prices == null || prices.Length == 0)
+            if (base.Convert(value, targetType, parameter, culture) is not PriceViewModel[] prices || prices.Length == 0)
             {
                 return Visibility.Collapsed;
             }

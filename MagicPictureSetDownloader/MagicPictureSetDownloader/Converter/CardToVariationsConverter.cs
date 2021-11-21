@@ -15,11 +15,9 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            CardViewModel card = value as CardViewModel;
-
-            if (card == null)
+            if (value is not CardViewModel card)
             {
-                return new int[0];
+                return Array.Empty<int>();
             }
 
             HashSet<int> ret = new HashSet<int>();

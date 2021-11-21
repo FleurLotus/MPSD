@@ -70,7 +70,7 @@
         {
             if (null == dispatcherInvoker)
             {
-                throw new ArgumentNullException("dispatcherInvoker");
+                throw new ArgumentNullException(nameof(dispatcherInvoker));
             }
 
             DispatcherInvoker = dispatcherInvoker;

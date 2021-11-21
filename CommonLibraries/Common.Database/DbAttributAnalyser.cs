@@ -13,9 +13,7 @@
 
         public static TypeDbInfo Analyse(Type type)
         {
-            TypeDbInfo typeDbInfo;
-
-            if (_analysied.TryGetValue(type, out typeDbInfo))
+            if (_analysied.TryGetValue(type, out TypeDbInfo typeDbInfo))
             {
                 return typeDbInfo;
             }

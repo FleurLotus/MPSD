@@ -21,7 +21,7 @@
         {
             if (column == null)
             {
-                throw new ArgumentNullException("column");
+                throw new ArgumentNullException(nameof(column));
             }
 
             _columns[index] = column;

@@ -41,7 +41,7 @@
 
         protected override void DisplayCurrent()
         {
-            Name = Selected == null ? null : Selected.ToString();
+            Name = Selected?.ToString();
             BuildAllTranslations();
         }
         protected override bool CouldBeUpdated()

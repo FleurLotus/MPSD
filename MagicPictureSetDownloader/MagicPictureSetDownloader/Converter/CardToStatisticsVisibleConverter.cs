@@ -10,9 +10,7 @@ namespace MagicPictureSetDownloader.Converter
     {
        public override object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
-            StatisticViewModel[] stats = base.Convert(value, targetType, parameter, culture) as StatisticViewModel[];
-
-            if (stats == null || stats.Length == 0)
+            if (base.Convert(value, targetType, parameter, culture) is not StatisticViewModel[] stats || stats.Length == 0)
             {
                 return Visibility.Collapsed;
             }

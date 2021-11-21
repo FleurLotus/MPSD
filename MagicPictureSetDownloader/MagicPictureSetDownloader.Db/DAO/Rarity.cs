@@ -22,9 +22,7 @@
 
         public int CompareTo(object obj)
         {
-            Rarity r = obj as Rarity;
-
-            if (r == null)
+            if (obj is not Rarity r)
             {
                 return -1;
             }

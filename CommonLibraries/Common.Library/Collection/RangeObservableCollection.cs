@@ -24,7 +24,7 @@
         {
             if (list == null)
             {
-                throw new ArgumentNullException("list");
+                throw new ArgumentNullException(nameof(list));
             }
 
             using (this.SetFlag(SuppressNotification))

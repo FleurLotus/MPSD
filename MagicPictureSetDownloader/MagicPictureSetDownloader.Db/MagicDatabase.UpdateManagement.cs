@@ -16,8 +16,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                Edition edition = iedition as Edition;
-                if (edition == null || string.IsNullOrWhiteSpace(sourceName) || string.IsNullOrWhiteSpace(name))
+                if (iedition is not Edition edition || string.IsNullOrWhiteSpace(sourceName) || string.IsNullOrWhiteSpace(name))
                 {
                     return;
                 }
@@ -50,8 +49,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                Block block = iblock as Block;
-                if (block == null ||string.IsNullOrWhiteSpace(blockName))
+                if (iblock is not Block block || string.IsNullOrWhiteSpace(blockName))
                 {
                     return;
                 }
@@ -75,8 +73,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                Language language = ilanguage as Language;
-                if (language == null || string.IsNullOrWhiteSpace(languageName))
+                if (ilanguage is not Language language || string.IsNullOrWhiteSpace(languageName))
                 {
                     return;
                 }

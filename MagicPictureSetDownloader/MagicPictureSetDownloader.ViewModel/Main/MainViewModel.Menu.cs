@@ -303,8 +303,7 @@
         }
         private void ChangeCardCommandExecute(object o)
         {
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel == null)
+            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
             {
                 return;
             }
@@ -321,8 +320,7 @@
 
         private void RemoveCardCommandExecute(object o)
         {
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel == null)
+            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
             {
                 return;
             }
@@ -332,8 +330,10 @@
 
             if (vm.Result == true)
             {
-                CardCount cardCount = new CardCount();
-                cardCount.Add(new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), -vm.Source.Count);
+                CardCount cardCount = new CardCount
+                {
+                    { new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), -vm.Source.Count }
+                };
 
                 _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
                 LoadCardsHierarchy();
@@ -341,8 +341,7 @@
         }
         private void CopyCardCommandExecute(object o)
         {
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel == null)
+            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
             {
                 return;
             }
@@ -351,8 +350,7 @@
         }
         private void MoveCardCommandExecute(object o)
         {
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel == null)
+            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
             {
                 return;
             }
@@ -478,8 +476,7 @@
             ContextMenuRoot.AddChild(new MenuViewModel("Remove cards", new RelayCommand(CardInputCommandExecute), -1));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
 
-            HierarchicalResultNodeViewModel nodeViewModel = Hierarchical.Selected as HierarchicalResultNodeViewModel;
-            if (nodeViewModel == null)
+            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
             {
                 MenuViewModel copyMenu = new MenuViewModel("Copy to ..");
                 ContextMenuRoot.AddChild(copyMenu);
@@ -555,8 +552,10 @@
 
             if (vm.Result == true)
             {
-                CardCount cardCount = new CardCount();
-                cardCount.Add(new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.Count);
+                CardCount cardCount = new CardCount
+                {
+                    { new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.Count }
+                };
 
                 if (vm.Copy)
                 {
@@ -609,8 +608,7 @@
                 yield break;
             }
 
-            HierarchicalResultNodeViewModel node = vm as HierarchicalResultNodeViewModel;
-            if (node == null)
+            if (vm is not HierarchicalResultNodeViewModel node)
             {
                 foreach (ICardInCollectionCount cicc in vm.Children.SelectMany(c => GetCardInCollectionInSelected(c, collection)))
                 {
@@ -638,8 +636,7 @@
         {
             try
             {
-                ThreadPoolArgs args = state as ThreadPoolArgs;
-                if (args != null)
+                if (state is ThreadPoolArgs args)
                 {
                     args.Invoke();
                 }

@@ -61,6 +61,8 @@
         private class ReflectionInfo
         {
             public static string StaticPublicGetSet { get; set; }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateGetSet { get; set; }
             internal static string StaticInternalGetSet { get; set; }
             protected static string StaticProtectedGetSet { get; set; }
@@ -70,6 +72,8 @@
             {
                 get { return null; }
             }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateGet
             {
                 get { return null; }
@@ -91,6 +95,8 @@
             {
                 set { }
             }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateSet
             {
                 set { }
@@ -134,6 +140,8 @@
 
 
             public string MemberPublicGetSet { get; set; }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateGetSet { get; set; }
             internal string MemberInternalGetSet { get; set; }
             protected string MemberProtectedGetSet { get; set; }
@@ -143,6 +151,8 @@
             {
                 get { return null; }
             }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateGet
             {
                 get { return null; }
@@ -164,6 +174,8 @@
             {
                 set { }
             }
+
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateSet
             {
                 set { }

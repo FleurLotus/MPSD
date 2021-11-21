@@ -78,8 +78,7 @@
 
             using (new WriterLock(_lazyLock.Value))
             {
-                IList<Func<string>> list;
-                if (!_rules.TryGetValue(propertyName, out list))
+                if (!_rules.TryGetValue(propertyName, out IList<Func<string>> list))
                 {
                     list = new List<Func<string>>();
                     _rules[propertyName] = list;
@@ -111,8 +110,7 @@
                 MethodInfo getter = prop.GetGetMethod();
                 if (getter != null)
                 {
-                    IValidable o = getter.Invoke(this, null) as IValidable;
-                    if (o != null)
+                    if (getter.Invoke(this, null) is IValidable o)
                     {
                         string res = o.Validate();
                         if (!string.IsNullOrWhiteSpace(res))

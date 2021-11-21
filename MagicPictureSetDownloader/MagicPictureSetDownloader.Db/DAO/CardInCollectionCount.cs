@@ -25,8 +25,7 @@
         
         public override bool Equals(object obj)
         {
-            CardInCollectionCount cicc = obj as CardInCollectionCount;
-            if (null == cicc)
+            if (obj is not CardInCollectionCount cicc)
             {
                 return false;
             }
@@ -35,7 +34,6 @@
         }
 
         //There are not readonly because of reflection feeding by they never change after instance creation
-        [SuppressMessage("ReSharper", "NonReadonlyMemberInGetHashCode")]
         public override int GetHashCode()
         {
             return IdCollection * 23 + IdGatherer;
@@ -69,11 +67,13 @@
         }
         public ICardCount GetCardCount()
         {
-            CardCount cardCount = new CardCount();
-            cardCount.Add(CardCountKeys.Standard, Number);
-            cardCount.Add(CardCountKeys.Foil, FoilNumber);
-            cardCount.Add(CardCountKeys.AltArt, AltArtNumber);
-            cardCount.Add(CardCountKeys.FoilAltArt, FoilAltArtNumber);
+            CardCount cardCount = new CardCount
+            {
+                { CardCountKeys.Standard, Number },
+                { CardCountKeys.Foil, FoilNumber },
+                { CardCountKeys.AltArt, AltArtNumber },
+                { CardCountKeys.FoilAltArt, FoilAltArtNumber }
+            };
 
             return cardCount;
         }

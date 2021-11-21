@@ -39,8 +39,7 @@
                 return;
             }
 
-            var gridView = listView.View as GridView;
-            if (gridView == null)
+            if (listView.View is not GridView gridView)
             {
                 return;
             }
