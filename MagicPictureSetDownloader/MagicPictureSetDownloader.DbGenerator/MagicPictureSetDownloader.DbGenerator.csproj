@@ -58,7 +58,6 @@
     <Compile Include="..\Version.cs">
       <Link>Properties\Version.cs</Link>
     </Compile>
-    <Compile Include="Enum.cs" />
     <Compile Include="Generator.cs" />
     <Compile Include="DatabaseGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,7 +75,7 @@
   <PropertyGroup>
     <PreBuildEvent>
 "C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)MagicData.zip" "$(SolutionDir)MagicData.sqlite"
-"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)MagicPicture.zip" "$(SolutionDir)MagicPicture.sqlite"</PreBuildEvent>
+"C:\Program Files\7-Zip\7z.exe" a -tzip "$(ProjectDir)MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>del "$(ProjectDir)MagicData.zip"

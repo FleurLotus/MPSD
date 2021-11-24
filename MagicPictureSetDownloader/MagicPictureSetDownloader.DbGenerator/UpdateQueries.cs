@@ -2,9 +2,6 @@
 {
     internal static class UpdateQueries
     {
-        public const string InsertNewTreePicture = @"INSERT INTO TreePicture VALUES (@name , @value)";
-        public const string SelectTreePicture = @"SELECT Name, Image FROM TreePicture";
-
         public const string SelectPreconstuctedDeckCards =
 @"SELECT pdce.IdGatherer, pd.Name, e.GathererName, pdce.Number
 FROM PreconstructedDeckCardEdition pdce

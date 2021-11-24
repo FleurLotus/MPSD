@@ -12,7 +12,6 @@ namespace MagicPictureSetDownloader.Db
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
-    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollection,
@@ -23,6 +22,7 @@ namespace MagicPictureSetDownloader.Db
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly DatabaseConnection _databaseConnection;
+        private readonly PictureDatabase _pictureDatabase;
         private readonly IMultiPartCardManager _multiPartCardManager;
         //To optimize display
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
@@ -30,8 +30,12 @@ namespace MagicPictureSetDownloader.Db
         internal MagicDatabase(IMultiPartCardManager multiPartCardManager)
         {
             _databaseConnection = new DatabaseConnection();
+            _pictureDatabase = new PictureDatabase();
             _multiPartCardManager = multiPartCardManager;
+            PictureDatabaseMigration = new PictureDatabaseMigration();
         }
+
+        public IPictureDatabaseMigration PictureDatabaseMigration { get; }
 
         //Unitary Get
         public ICard GetCard(string name, string partName)
@@ -58,33 +62,11 @@ namespace MagicPictureSetDownloader.Db
         }
         public IPicture GetPicture(int idGatherer, bool doNotCache = false)
         {
-            IPicture picture;
-
-            if (!_pictures.TryGetValue(idGatherer, out picture))
-            {
-                using (new WriterLock(_lock))
-                {
-                    if (!_pictures.TryGetValue(idGatherer, out picture))
-                    {
-                        picture = LoadImage(idGatherer);
-                        if (picture != null && !doNotCache)
-                        {
-                            _pictures.Add(picture.IdGatherer, picture);
-                        }
-                    }
-                }
-            }
-
-            return picture;
+            return _pictureDatabase.GetPicture(idGatherer, doNotCache);
         }
         public ITreePicture GetTreePicture(string key)
         {
-            CheckReferentialLoaded();
-
-            using (new ReaderLock(_lock))
-            {
-                return _treePictures.GetOrDefault(key);
-            }
+            return _pictureDatabase.GetTreePicture(key);
         }
         public IEdition GetEdition(string sourceName)
         {
@@ -435,7 +417,6 @@ namespace MagicPictureSetDownloader.Db
                 return new List<IPreconstructedDeck>(_preconstructedDecks.Values).AsReadOnly();
             }
         }
-        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private ICollection<IRarity> AllRarities()
         {
             CheckReferentialLoaded();
@@ -478,14 +459,6 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        private ICollection<int> GetAllPicturesId()
-        {
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
-            {
-                return Mapper<PictureKey>.LoadAll(cnx).Select(pk => pk.IdGatherer).ToList();
-            }
-        }
-
         public void EditionCompleted(int editionId)
         {
             using (new WriterLock(_lock))
@@ -498,7 +471,7 @@ namespace MagicPictureSetDownloader.Db
 
                 newEdition.Completed = true;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Edition>.UpdateOne(cnx, newEdition);
                 }
@@ -506,17 +479,11 @@ namespace MagicPictureSetDownloader.Db
         }
         public string[] GetMissingPictureUrls()
         {
-            HashSet<int> idGatherers = new HashSet<int>(GetAllPicturesId());
+            HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());
 
             return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer)).Select(ce => ce.Url)
                           .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer)).Select(cev => cev.Url))
                           .ToArray();
-        }
-        public ICardAllDbInfo[] GetCardsWithPicture()
-        {
-            HashSet<int> idGatherers = new HashSet<int>(GetAllPicturesId());
-
-            return GetAllInfos().Where(ce => idGatherers.Contains(ce.IdGatherer) || idGatherers.Contains(ce.IdGathererPart2)).ToArray();
         }
         public int[] GetRulesId()
         {
@@ -537,12 +504,7 @@ namespace MagicPictureSetDownloader.Db
 
         private IPicture LoadImage(int idGatherer)
         {
-            Picture picture = new Picture { IdGatherer = idGatherer };
-
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
-            {
-                return Mapper<Picture>.Load(cnx, picture);
-            }
+            return _pictureDatabase.GetPicture(idGatherer);
         }
     }
 }

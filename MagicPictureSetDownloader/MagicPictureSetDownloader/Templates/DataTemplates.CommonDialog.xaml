@@ -109,26 +109,6 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type io:ExportImagesViewModel}" d:IsDesignTimeCreatable="False">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*" MinWidth="150"/>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" Content="Path to export"/>
-            <TextBox Grid.Column="1" Grid.Row="0" Text="{fl:TwoWayBinding Path}"/>
-            <Label Grid.Column="0" Grid.Row="1" Content="Type"/>
-            <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding ExportOptions}" SelectedItem="{fl:TwoWayBinding ExportOptionSelected}"/>
-            <Label Grid.Column="0" Grid.Row="2" Content="Suffix"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{fl:TwoWayBinding Suffix}"/>
-        </Grid>
-    </DataTemplate>
-
     <!-- Part source of Card move -->
     <DataTemplate DataType="{x:Type input:CardSourceViewModel}" d:IsDesignTimeCreatable="False">
         <Grid>

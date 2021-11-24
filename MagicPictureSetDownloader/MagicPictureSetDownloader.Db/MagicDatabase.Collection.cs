@@ -10,7 +10,6 @@ namespace MagicPictureSetDownloader.Db
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
-    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -157,7 +156,7 @@ namespace MagicPictureSetDownloader.Db
                 }
 
                 CardCollection collection = new CardCollection { Name = name };
-                AddToDbAndUpdateReferential(DatabaseType.Data, collection, InsertInReferential);
+                AddToDbAndUpdateReferential(collection, InsertInReferential);
                 AuditAddCollection(collection.Id);
                 return collection;
             }
@@ -199,7 +198,7 @@ namespace MagicPictureSetDownloader.Db
                                                                              };
 
 
-                        AddToDbAndUpdateReferential(DatabaseType.Data, newCardInCollectionCount, InsertInReferential);
+                        AddToDbAndUpdateReferential(newCardInCollectionCount, InsertInReferential);
 
                         AuditAddCard(idCollection, idGatherer, idLanguage, cardCount);
                         return;
@@ -224,7 +223,7 @@ namespace MagicPictureSetDownloader.Db
 
                     if (newCount + newFoilCount + newAltArtCountToAdd + newFoilAltArtCount == 0)
                     {
-                        RemoveFromDbAndUpdateReferential(DatabaseType.Data, updateCardInCollectionCount, RemoveFromReferential);
+                        RemoveFromDbAndUpdateReferential(updateCardInCollectionCount, RemoveFromReferential);
 
                         AuditAddCard(idCollection, idGatherer, idLanguage, cardCount);
 
@@ -236,7 +235,7 @@ namespace MagicPictureSetDownloader.Db
                     updateCardInCollectionCount.AltArtNumber = newAltArtCountToAdd;
                     updateCardInCollectionCount.FoilAltArtNumber = newFoilAltArtCount;
 
-                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                     {
                         Mapper<CardInCollectionCount>.UpdateOne(cnx, updateCardInCollectionCount);
                     }
@@ -363,7 +362,7 @@ namespace MagicPictureSetDownloader.Db
 
                 newCollection.Name = name;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<CardCollection>.UpdateOne(cnx, newCollection);
                 }
@@ -424,7 +423,7 @@ namespace MagicPictureSetDownloader.Db
 
                 using (BatchMode())
                 {
-                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                     {
                         Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Cast<CardInCollectionCount>());
                     }
@@ -453,7 +452,7 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                RemoveFromDbAndUpdateReferential(DatabaseType.Data, cardCollection as CardCollection, RemoveFromReferential);
+                RemoveFromDbAndUpdateReferential(cardCollection as CardCollection, RemoveFromReferential);
                 AuditRemoveCollection(cardCollection.Id);
             }
         }

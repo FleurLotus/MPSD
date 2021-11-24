@@ -278,15 +278,9 @@
                 Options.GetDbOptions();
             }
         }
-        private void ExtractImagesCommandExecute(object o)
+        private void MigrationPictureDatabaseCommandExecute(object o)
         {
-            ExportImagesViewModel vm = new ExportImagesViewModel(_dispatcherInvoker);
-            OnDialogWanted(vm);
-
-            if (vm.Result == true)
-            {
-                OnAutoUpdateDatabaseRequested(new ExportImagesProgressViewMode(vm.Path, vm.Suffix, vm.ExportOptionSelected));
-            }
+            OnAutoUpdateDatabaseRequested(new MigrationPictureDatabaseProgressViewModel());
         }
         private void CheckNewVersionCommandExecute(object o)
         {
@@ -458,8 +452,11 @@
             toolsMenu.AddChild(new MenuViewModel("_Options", new RelayCommand(OptionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
-            toolsMenu.AddChild(MenuViewModel.Separator());
-            toolsMenu.AddChild(new MenuViewModel("_Extract images", new RelayCommand(ExtractImagesCommandExecute)));
+            if (_magicDatabase.PictureDatabaseMigration.CouldMigrate)
+            {
+                toolsMenu.AddChild(MenuViewModel.Separator());
+                toolsMenu.AddChild(new MenuViewModel("_Migrate pictures database images", new RelayCommand(MigrationPictureDatabaseCommandExecute)));
+            }
             MenuRoot.AddChild(toolsMenu);
 
             //?

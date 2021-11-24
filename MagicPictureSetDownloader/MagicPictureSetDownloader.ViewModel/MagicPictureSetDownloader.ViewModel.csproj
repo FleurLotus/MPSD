@@ -72,10 +72,9 @@
     <Compile Include="Input\SearchViewModel.cs" />
     <Compile Include="Input\CardMoveOrCopyViewModel.cs" />
     <Compile Include="Input\CardInputViewModel.cs" />
-    <Compile Include="IO\ExportImagesProgressViewModel.cs" />
+    <Compile Include="IO\MigrationPictureDatabaseProgressViewModel.cs" />
     <Compile Include="IO\ExportedCollectionViewModel.cs" />
     <Compile Include="IO\ImportExportViewModel.cs" />
-    <Compile Include="IO\ExportImagesViewModel.cs" />
     <Compile Include="Main\GlobalStatictics.cs" />
     <Compile Include="Main\MainViewModel.Menu.cs">
       <DependentUpon>MainViewModel.cs</DependentUpon>

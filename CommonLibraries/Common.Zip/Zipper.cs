@@ -5,15 +5,15 @@
 
     public static class Zipper
     {
-        public static void UnZipAll(byte[] stream, string outputDirectory)
+        public static void UnZipAll(byte[] stream, string outputDirectory, bool overrideExisting = false)
         {
             using (MemoryStream ms = new MemoryStream())
             {
                 ms.Write(stream, 0, stream.Length);
-                UnZipAll(ms, outputDirectory);
+                UnZipAll(ms, outputDirectory, overrideExisting);
             }
         }
-        public static void UnZipAll(Stream stream, string outputDirectory)
+        public static void UnZipAll(Stream stream, string outputDirectory, bool overrideExisting = false)
         {
             ZipFile zipFile = null;
             try
@@ -32,9 +32,12 @@
                     string filePath = Path.Combine(outputDirectory, entry.Name);
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
-                    using (FileStream sw = new FileStream(filePath, FileMode.CreateNew))
+                    if (!File.Exists(filePath) || overrideExisting)
                     {
-                        zstream.CopyTo(sw);
+                        using (FileStream sw = new FileStream(filePath, FileMode.Create))
+                        {
+                            zstream.CopyTo(sw);
+                        }
                     }
                 }
             }

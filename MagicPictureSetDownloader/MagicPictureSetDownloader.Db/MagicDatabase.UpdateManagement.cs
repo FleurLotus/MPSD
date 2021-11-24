@@ -8,7 +8,6 @@ namespace MagicPictureSetDownloader.Db
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
-    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -41,7 +40,7 @@ namespace MagicPictureSetDownloader.Db
                 edition.CardNumber = cardNumber;
                 edition.ReleaseDate = releaseDate;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Edition>.UpdateOne(cnx, edition);
                 }
@@ -66,7 +65,7 @@ namespace MagicPictureSetDownloader.Db
                 //No need to update referencial because id do not change
                 block.Name = blockName;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Block>.UpdateOne(cnx, block);
                 }
@@ -100,7 +99,7 @@ namespace MagicPictureSetDownloader.Db
 
                 InsertInReferential(language);
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Language>.UpdateOne(cnx, language);
                 }
@@ -122,7 +121,7 @@ namespace MagicPictureSetDownloader.Db
                 //No need to remove, the insert overrides existing value
                 InsertInReferential(translate);
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Translate>.UpdateOne(cnx, translate);
                 }

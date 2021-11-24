@@ -1,29 +1,22 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
-    using System;
-
     public static class DatabaseGenerator
     {
-        public static void Generate(DatabaseType databaseType)
+        public static void Generate()
         {
-            new Generator(databaseType).Generate();
+            new Generator().Generate();
         }
-        public static void VersionVerify(string connectionString, DatabaseType databaseType)
+        public static void GeneratePictures()
         {
-            new Upgrader(connectionString, databaseType).Upgrade();
+            new Generator().GeneratePictures();
         }
-        public static string GetResourceName(DatabaseType databaseType)
+        public static void VersionVerify(string connectionString)
         {
-            switch (databaseType)
-            {
-                case DatabaseType.Data:
-                    return "MagicData.sqlite";
-                case DatabaseType.Picture:
-                    return "MagicPicture.sqlite";
-                default:
-                    throw new ArgumentException("Unknown DatabaseType type");
-            }
+            new Upgrader(connectionString).Upgrade();
         }
-
+        public static string GetResourceName()
+        {
+            return "MagicData.sqlite";
+        }
     }
 }

@@ -14,19 +14,20 @@
     public class Upgrader
     {
         private const string VersionQuery = "SELECT Major FROM Version";
+#if !DEBUG
         private const string UpdateVersionQuery = "UPDATE Version Set Major = ";
+#endif
         private readonly string _connectionString;
-        private readonly DatabaseType _data;
         private static readonly Version _applicationVersion;
 
         private class TemporaryDatabase : IDisposable
         {
             private readonly string _temporaryDatabasePath;
                         
-            public TemporaryDatabase(DatabaseType databaseType)
+            public TemporaryDatabase()
             {
-                _temporaryDatabasePath = new Generator(databaseType).Generate(true);
-                _temporaryDatabasePath = Path.Combine(_temporaryDatabasePath, DatabaseGenerator.GetResourceName(databaseType));
+                _temporaryDatabasePath = new Generator().Generate(true);
+                _temporaryDatabasePath = Path.Combine(_temporaryDatabasePath, DatabaseGenerator.GetResourceName());
                 ConnectionString = (new SQLiteConnectionStringBuilder { DataSource = _temporaryDatabasePath }).ToString();
             }
             public string ConnectionString { get; }
@@ -43,10 +44,9 @@
             AssemblyName assemblyName = entryAssembly.GetName();
             _applicationVersion = assemblyName.Version;
         }
-        internal Upgrader(string connectionString, DatabaseType data)
+        internal Upgrader(string connectionString)
         {
             _connectionString = connectionString;
-            _data = data;
         }
 
         internal void Upgrade()
@@ -92,15 +92,7 @@
             }
 
             Repository repo = new Repository(_connectionString);
-            switch (_data)
-            {
-                case DatabaseType.Data:
-                    UpgradeData(dbVersion, repo);
-                    break;
-                case DatabaseType.Picture:
-                    UpgradePicture(dbVersion, repo);
-                    break;
-            }
+            UpgradeData(dbVersion, repo);
 
 #if !DEBUG
             //No update of Version in debug
@@ -398,7 +390,7 @@
                 }
             }
 
-            using (var temporaryDabase = new TemporaryDatabase(DatabaseType.Data))
+            using (var temporaryDabase = new TemporaryDatabase())
             {
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
                 AddCardEditionVariationFromReference(repo, temporaryDabase.ConnectionString);
@@ -524,32 +516,6 @@
                 parameters.Clear();
             }
         }
-
-        private void UpgradePicture(int dbVersion, IRepository repo)
-        {
-            AddMissingPictureFromReference(repo);
-        }
-        private void AddMissingPictureFromReference(IRepository repo)
-        {
-            string temporaryDatabasePath = new Generator(DatabaseType.Picture).Generate(true);
-            temporaryDatabasePath = Path.Combine(temporaryDatabasePath, DatabaseGenerator.GetResourceName(DatabaseType.Picture));
-            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = temporaryDatabasePath }).ToString();
-
-            Dictionary<string, byte[]> reference = GetTreePictures(connectionString);
-            File.Delete(temporaryDatabasePath);
-
-            Dictionary<string, byte[]> current = GetTreePictures(_connectionString);
-
-            foreach (var kv in reference)
-            {
-                if (!current.ContainsKey(kv.Key))
-                {
-                    repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewTreePicture,
-                       new KeyValuePair<string, object>("@name", kv.Key),
-                       new KeyValuePair<string, object>("@value", kv.Value));
-                }
-            }
-        }
         private Dictionary<string, Tuple<string, string>> GetPreconstructedDecks(string connectionString)
         {
             Dictionary<string, Tuple<string, string>> ret = new Dictionary<string, Tuple<string, string>>(StringComparer.InvariantCultureIgnoreCase);
@@ -613,29 +579,6 @@
                         while (reader.Read())
                         {
                             ret.Add(reader.GetInt32(0), new string[] { reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(5) });
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
-        private Dictionary<string, byte[]> GetTreePictures(string connectionString)
-        {
-            Dictionary<string, byte[]> ret = new Dictionary<string, byte[]>(StringComparer.InvariantCultureIgnoreCase);
-           
-            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
-            {
-                cnx.Open();
-                using (DbCommand cmd = cnx.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = UpdateQueries.SelectTreePicture;
-
-                    using (IDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            ret.Add(reader.GetString(0), (byte[])reader.GetValue(1));
                         }
                     }
                 }

@@ -44,8 +44,8 @@
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
 
         string[] GetMissingPictureUrls();
-        ICardAllDbInfo[] GetCardsWithPicture();
         int[] GetRulesId();
         IDisposable BatchMode();
+        IPictureDatabaseMigration PictureDatabaseMigration { get; }
     }
 }

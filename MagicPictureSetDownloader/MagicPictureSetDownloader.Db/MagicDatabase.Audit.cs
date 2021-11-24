@@ -8,7 +8,6 @@
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
-    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -16,7 +15,7 @@
         public ICollection<IAudit> GetAllAudits()
         {
             using (new ReaderLock(_lock))
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
                 return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
             }
@@ -74,7 +73,7 @@
 
             using (new WriterLock(_lock))
             {
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<Audit>.InsertOne(cnx, audit);
                 }

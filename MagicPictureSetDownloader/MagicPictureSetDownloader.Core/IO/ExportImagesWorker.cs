@@ -10,59 +10,30 @@
 
     public class ExportImagesWorker
     {
-        private readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
+        private readonly IMagicDatabaseReadAndWriteReference MagicDatabase = MagicDatabaseManager.ReadAndWriteReference;
+        private readonly IPictureDatabaseMigration PictureDatabase = MagicDatabaseManager.ReadOnly.PictureDatabaseMigration;
 
-        public ICardAllDbInfo[] GetAllCardWithPicture()
+        public Tuple<bool, object>[] GetAllPicture()
         {
-            return MagicDatabase.GetCardsWithPicture();
+            return PictureDatabase.GetMigrationPictures();
         }
-        public void Export(ICardAllDbInfo cardInfo, string outpath, string suffix, ExportImagesOption exportImageOption)
+        public void Export(bool forTree, object id)
         {
-            if (!Directory.Exists(outpath))
+            if (forTree)
             {
-                throw new ArgumentException("output path doesn't exist", "outpath");
-            }
-
-            string folder = outpath;
-            if (exportImageOption == ExportImagesOption.OneByGathererId)
-            {
-                //Windows doesn't allow to create a folder with the name CON
-                folder = string.IsNullOrEmpty(cardInfo.Edition.Code) || cardInfo.Edition.Code == "CON" ? cardInfo.Edition.Name : cardInfo.Edition.Code;
-                folder = Path.Combine(outpath, folder);
-                if (!Directory.Exists(folder))
+                ITreePicture treePicture = PictureDatabase.LoadTreePicture(id.ToString());
+                if (treePicture != null)
                 {
-                    Directory.CreateDirectory(folder);
+                    MagicDatabase.InsertNewTreePicture(treePicture.Name, treePicture.Image);
                 }
             }
-
-            Save(folder, suffix, cardInfo.IdGatherer, cardInfo.Card.Name);
-
-            if (cardInfo.IdGathererPart2 != 0)
+            else if (id is int i)
             {
-                Save(folder, suffix, cardInfo.IdGathererPart2, cardInfo.CardPart2.Name);
-            }
-        }
-
-        private void Save(string folder, string suffix, int idGatherer, string cardName)
-        {
-            IPicture picture = MagicDatabase.GetPicture(idGatherer, true);
-            if (picture == null)
-            {
-                return;
-            }
-
-            byte[] img = picture.Image;
-            cardName = Regex.Replace(cardName, @"[/:""\?]", string.Empty);
-            string imagePath = Path.Combine(folder, string.Format("{0}{1}{2}", cardName, suffix, img.ToImage().GetFileExtension()));
-
-            if (File.Exists(imagePath))
-            {
-                return;
-            }
-
-            using (FileStream fs = new FileStream(imagePath, FileMode.CreateNew))
-            {
-                fs.Write(img, 0, img.Length);
+                IPicture picture = PictureDatabase.LoadPicture(i);
+                if (picture != null)
+                {
+                    MagicDatabase.InsertNewPicture(picture.IdGatherer, picture.Image);
+                }
             }
         }
     }

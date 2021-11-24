@@ -12,7 +12,6 @@ namespace MagicPictureSetDownloader.Db
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
-    using MagicPictureSetDownloader.DbGenerator;
     using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
@@ -24,10 +23,8 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ILanguage> _alternativeNameLanguages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
-        private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
-        private readonly IDictionary<int, IList<IPrice>> _prices = new Dictionary<int, IList<IPrice>>();
-        private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, IList<IPrice>> _prices = new Dictionary<int, IList<IPrice>>();
         private readonly IDictionary<int, IPreconstructedDeck> _preconstructedDecks = new Dictionary<int, IPreconstructedDeck>();
         private readonly IDictionary<int, IList<IPreconstructedDeckCardEdition>> _preconstructedDeckCards = new Dictionary<int, IList<IPreconstructedDeckCardEdition>>();
 
@@ -49,7 +46,7 @@ namespace MagicPictureSetDownloader.Db
                 if (edition == null)
                 {
                     Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
-                    AddToDbAndUpdateReferential(DatabaseType.Data, realEdition, InsertInReferential);
+                    AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
             }
         }
@@ -77,36 +74,18 @@ namespace MagicPictureSetDownloader.Db
                         realEdition.Block = _blocks.GetOrDefault(realEdition.IdBlock.Value);
                     }
 
-                    AddToDbAndUpdateReferential(DatabaseType.Data, realEdition, InsertInReferential);
+                    AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
                 InsertNewTreePicture(name, icon);
             }
         }
         public void InsertNewPicture(int idGatherer, byte[] data)
         {
-            using (new WriterLock(_lock))
-            {
-                if (GetPicture(idGatherer) != null || data == null || data.Length == 0)
-                {
-                    return;
-                }
-
-                Picture picture = new Picture { IdGatherer = idGatherer, Image = data };
-                AddToDbAndUpdateReferential(DatabaseType.Picture, picture, InsertInReferential);
-            }
+            _pictureDatabase.InsertNewPicture(idGatherer, data);
         }
         public void InsertNewTreePicture(string name, byte[] data)
         {
-            using (new WriterLock(_lock))
-            {
-                if (GetTreePicture(name) != null || data == null || data.Length == 0)
-                {
-                    return;
-                }
-
-                TreePicture treepicture = new TreePicture { Name = name, Image = data };
-                AddToDbAndUpdateReferential(DatabaseType.Picture, treepicture, InsertInReferential);
-            }
+            _pictureDatabase.InsertNewTreePicture(name, data);
         }
         public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
         {
@@ -133,7 +112,7 @@ namespace MagicPictureSetDownloader.Db
                         OtherPartName = otherPartName
                     };
 
-                    AddToDbAndUpdateReferential(DatabaseType.Data, card, InsertInReferential);
+                    AddToDbAndUpdateReferential(card, InsertInReferential);
                     refCard = card;
                 }
 
@@ -170,7 +149,7 @@ namespace MagicPictureSetDownloader.Db
                     Url = url
                 };
 
-                AddToDbAndUpdateReferential(DatabaseType.Data, cardEdition, InsertInReferential);
+                AddToDbAndUpdateReferential(cardEdition, InsertInReferential);
             }
         }
         public void InsertNewCardEditionVariation(int idGatherer, int otherGathererId, string url)
@@ -199,7 +178,7 @@ namespace MagicPictureSetDownloader.Db
                     Url = url
                 };
 
-                AddToDbAndUpdateReferential(DatabaseType.Data, cardEditionVariation, InsertInReferential);
+                AddToDbAndUpdateReferential(cardEditionVariation, InsertInReferential);
             }
         }
         public int InsertNewCardEditionWithFakeGathererId(int idEdition, int idCard, int idRarity, string url)
@@ -236,7 +215,7 @@ namespace MagicPictureSetDownloader.Db
                     Url = url
                 };
 
-                AddToDbAndUpdateReferential(DatabaseType.Data, cardEdition, InsertInReferential);
+                AddToDbAndUpdateReferential(cardEdition, InsertInReferential);
 
                 return idGatherer;
             }
@@ -255,14 +234,14 @@ namespace MagicPictureSetDownloader.Db
                 if (option == null)
                 {
                     Option newoption = new Option { Type = type, Key = key, Value = value };
-                    AddToDbAndUpdateReferential(DatabaseType.Data, newoption, InsertInReferential);
+                    AddToDbAndUpdateReferential(newoption, InsertInReferential);
                 }
                 else if (option.Value != value)
                 {
-                    RemoveFromDbAndUpdateReferential(DatabaseType.Data, option as Option, RemoveFromReferential);
+                    RemoveFromDbAndUpdateReferential(option as Option, RemoveFromReferential);
 
                     Option newoption = new Option { Type = type, Key = key, Value = value };
-                    AddToDbAndUpdateReferential(DatabaseType.Data, newoption, InsertInReferential);
+                    AddToDbAndUpdateReferential(newoption, InsertInReferential);
                 }
             }
         }
@@ -276,7 +255,7 @@ namespace MagicPictureSetDownloader.Db
                 }
 
                 Block block = new Block { Name = blockName };
-                AddToDbAndUpdateReferential(DatabaseType.Data, block, InsertInReferential);
+                AddToDbAndUpdateReferential(block, InsertInReferential);
             }
         }
         public void InsertNewLanguage(string languageName, string alternativeName)
@@ -289,7 +268,7 @@ namespace MagicPictureSetDownloader.Db
                 }
 
                 Language language = new Language { Name = languageName, AlternativeName = alternativeName };
-                AddToDbAndUpdateReferential(DatabaseType.Data, language, InsertInReferential);
+                AddToDbAndUpdateReferential(language, InsertInReferential);
             }
         }
         private void InsertNewTranslate(ICard card, int idLanguage, string name)
@@ -304,7 +283,7 @@ namespace MagicPictureSetDownloader.Db
                 if (!card.HasTranslation(idLanguage))
                 {
                     Translate translate = new Translate { IdCard = card.Id, IdLanguage = idLanguage, Name = name };
-                    AddToDbAndUpdateReferential(DatabaseType.Data, translate, InsertInReferential);
+                    AddToDbAndUpdateReferential(translate, InsertInReferential);
                 }
             }
         }
@@ -321,7 +300,7 @@ namespace MagicPictureSetDownloader.Db
                 if (!card.HasRuling(addDate, text))
                 {
                     Ruling ruling = new Ruling { IdCard = card.Id, AddDate = addDate, Text = text };
-                    AddToDbAndUpdateReferential(DatabaseType.Data, ruling, InsertInReferential);
+                    AddToDbAndUpdateReferential(ruling, InsertInReferential);
                 }
             }
         }
@@ -335,7 +314,7 @@ namespace MagicPictureSetDownloader.Db
             using (new WriterLock(_lock))
             {
                 Price price = new Price { IdGatherer = idGatherer, AddDate = addDate, Source = source, Foil = foil, Value = value };
-                AddToDbAndUpdateReferential(DatabaseType.Data, price, InsertInReferential);
+                AddToDbAndUpdateReferential(price, InsertInReferential);
             }
         }
         public void InsertNewPreconstructedDeck(int idEdition, string preconstructedDeckName, string url)
@@ -348,7 +327,7 @@ namespace MagicPictureSetDownloader.Db
                 }
 
                 PreconstructedDeck preconstructedDeck = new PreconstructedDeck { IdEdition = idEdition, Name = preconstructedDeckName, Url = url };
-                AddToDbAndUpdateReferential(DatabaseType.Data, preconstructedDeck, InsertInReferential);
+                AddToDbAndUpdateReferential(preconstructedDeck, InsertInReferential);
             }
         }
         public void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, int idGatherer, int count)
@@ -377,7 +356,7 @@ namespace MagicPictureSetDownloader.Db
                     };
 
 
-                    AddToDbAndUpdateReferential(DatabaseType.Data, newPreconstructedDeckCardEdition, InsertInReferential);
+                    AddToDbAndUpdateReferential(newPreconstructedDeckCardEdition, InsertInReferential);
 
                     return;
                 }
@@ -396,14 +375,14 @@ namespace MagicPictureSetDownloader.Db
 
                 if (count == 0)
                 {
-                    RemoveFromDbAndUpdateReferential(DatabaseType.Data, updatePreconstructedDeckCardEdition, RemoveFromReferential);
+                    RemoveFromDbAndUpdateReferential(updatePreconstructedDeckCardEdition, RemoveFromReferential);
 
                     return;
                 }
 
                 updatePreconstructedDeckCardEdition.Number = count;
 
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
                 {
                     Mapper<PreconstructedDeckCardEdition>.UpdateOne(cnx, updatePreconstructedDeckCardEdition);
                 }
@@ -430,11 +409,11 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                RemoveFromDbAndUpdateReferential(DatabaseType.Data, option as Option, RemoveFromReferential);
+                RemoveFromDbAndUpdateReferential(option as Option, RemoveFromReferential);
             }
         }
 
-        private void AddToDbAndUpdateReferential<T>(DatabaseType databaseType, T value, Action<T> addToReferential)
+        private void AddToDbAndUpdateReferential<T>(T value, Action<T> addToReferential)
             where T : class, new()
         {
             //Lock write on calling
@@ -443,14 +422,14 @@ namespace MagicPictureSetDownloader.Db
                 return;
             }
 
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
                 Mapper<T>.InsertOne(cnx, value);
             }
 
             addToReferential(value);
         }
-        private void RemoveFromDbAndUpdateReferential<T>(DatabaseType databaseType, T value, Action<T> removeFromReferential)
+        private void RemoveFromDbAndUpdateReferential<T>(T value, Action<T> removeFromReferential)
             where T : class, new()
         {
             //Lock write on calling
@@ -459,7 +438,7 @@ namespace MagicPictureSetDownloader.Db
                 return;
             }
 
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(databaseType))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
                 Mapper<T>.DeleteOne(cnx, value);
             }
@@ -470,7 +449,7 @@ namespace MagicPictureSetDownloader.Db
         private void LoadReferentials()
         {
             //Lock Write on calling
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Data))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
                 _allOptions.Clear();
                 _rarities.Clear();
@@ -573,27 +552,11 @@ namespace MagicPictureSetDownloader.Db
                 {
                     InsertInReferential(modalDoubleFacedCardEdition);
                 }
-
             }
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection(DatabaseType.Picture))
-            {
-                _treePictures.Clear();
 
-                foreach (TreePicture treePicture in Mapper<TreePicture>.LoadAll(cnx))
-                {
-                    InsertInReferential(treePicture);
-                }
-            }
+            _pictureDatabase.LoadAllTreePicture();
 
             _referentialLoaded = true;
-        }
-        private void InsertInReferential(IPicture picture)
-        {
-            _pictures.Add(picture.IdGatherer, picture);
-        }
-        private void InsertInReferential(ITreePicture treepicture)
-        {
-            _treePictures.Add(treepicture.Name, treepicture);
         }
         private void InsertInReferential(IRarity rarity)
         {
