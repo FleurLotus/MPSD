@@ -55,9 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Common.WPF" Version="7.0.0" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.1.0" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
+    <PackageReference Include="VirtualizingWrapPanel" Version="1.5.6" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Splash.jpg" />

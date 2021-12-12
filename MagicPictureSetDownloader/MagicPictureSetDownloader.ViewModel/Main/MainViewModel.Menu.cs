@@ -40,6 +40,7 @@
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<INotifyPropertyChanged>> DatabaseModificationRequested;
         public event EventHandler<EventArgs<PreconstructedDecksViewModel>> PreconstructedDecksRequested;
+        public event EventHandler<EventArgs<CollectionInputGraphicViewModel>> CollectionInputGraphicRequested;
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
@@ -222,6 +223,11 @@
         private void CardInputCommandExecute(object o)
         {
             OnDialogWanted(new CardInputViewModel(Hierarchical.Name, (int)o));
+            LoadCardsHierarchy();
+        }
+        private void CollectionInputGraphicCommandExecute(object o)
+        {
+            OnEventRaise(CollectionInputGraphicRequested, new CollectionInputGraphicViewModel(Hierarchical.Name));
             LoadCardsHierarchy();
         }
         private void SearchCommandExecute(object o)
@@ -474,6 +480,8 @@
 
             ContextMenuRoot.AddChild(new MenuViewModel("Add cards", new RelayCommand(CardInputCommandExecute), 1));
             ContextMenuRoot.AddChild(new MenuViewModel("Remove cards", new RelayCommand(CardInputCommandExecute), -1));
+            ContextMenuRoot.AddChild(MenuViewModel.Separator());
+            ContextMenuRoot.AddChild(new MenuViewModel("Add cards (Graphic)", new RelayCommand(CollectionInputGraphicCommandExecute)));
             ContextMenuRoot.AddChild(MenuViewModel.Separator());
 
             if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)

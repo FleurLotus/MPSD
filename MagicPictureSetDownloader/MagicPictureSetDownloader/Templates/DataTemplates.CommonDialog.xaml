@@ -9,7 +9,6 @@
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
-                    xmlns:io="clr-namespace:MagicPictureSetDownloader.ViewModel.IO;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
 
@@ -501,5 +500,27 @@
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type input:CardCollectionInputGraphicViewModel}" d:IsDesignTimeCreatable="False">
+        <Border BorderBrush="Black" BorderThickness="1">
+            <Grid>
+                <Grid.InputBindings>
+                    <MouseBinding Gesture="RightClick" Command="{Binding RemoveCommand}" />
+                    <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" />
+                </Grid.InputBindings>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+            
+                <Image Grid.Row="0" Stretch="Uniform"
+                       ToolTip="{Binding NameInLanguage}" Source="{Binding Card, Converter={conv:CardToImageConverter}, ConverterParameter=0}" 
+                       Width="{Binding DataContext.Size, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}" 
+                       />
+                <Label Grid.Row="1" VerticalContentAlignment="Center"  HorizontalContentAlignment="Center" Foreground="OrangeRed"
+                       Background="{x:Null}" FontSize="10" Content="{Binding CountLabel}" />
+            </Grid>
+        </Border>
     </DataTemplate>
 </ResourceDictionary>
