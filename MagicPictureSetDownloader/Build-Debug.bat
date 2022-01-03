@@ -1,23 +1,33 @@
 @echo off
-@SET MSBUILD="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe"
 
-@pushd ..\CommonLibraries
+SET LOCAL=%~dp0
 
-@call :build Common.sln
-@popd
-@call :build  MagicPictureSetDownloader.sln
+pushd %LOCAL%
 
-@goto end
+call SetBuildEnvironment.bat
+
+pushd ..\CommonLibraries
+
+echo *****************************************************
+echo **               BUILDING DEBUG COMMON             **
+echo *****************************************************
+
+call :build Common.sln
+popd
+
+echo *****************************************************
+echo **                BUILDING DEBUG GUI               **
+echo *****************************************************
+
+call :build  MagicPictureSetDownloader.sln
+popd
+
+goto end
 
 :build
-@ECHO **** Building %1 ****
-@call :build2 Debug %1
-@exit /B 0
+%MSBUILD% /v:q /t:Rebuild  /p:Configuration=Debug %1
+exit /B 0
 
-:build2
-@ECHO --^> %1
-@%MSBUILD% /v:q /t:Rebuild  /p:Configuration=%1 %2
-@exit /B 0
 
 :end
 pause

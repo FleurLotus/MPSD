@@ -1,10 +1,20 @@
 @echo off
-@SET MSBUILD="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe"
 
-@pushd ..\CommonLibraries
+SET LOCAL=%~dp0
 
-ECHO --^> Package Common
-@dotnet pack --configuration Release --output ..\LocalPackages Common.sln
-@popd
+pushd %LOCAL%
+
+call SetBuildEnvironment.bat
+
+echo *****************************************************
+echo **                 PACKAGING COMMON                **
+echo *****************************************************
+
+
+pushd ..\CommonLibraries
+
+dotnet pack --configuration Release --output ..\LocalPackages Common.sln
+popd
+popd
 
 pause

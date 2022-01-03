@@ -13,8 +13,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>$(ProjectDir)
-"C:\Program Files\7-Zip\7z.exe" a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicData.zip" "$(SolutionDir)MagicData.sqlite"
-"C:\Program Files\7-Zip\7z.exe" a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
+%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicData.zip" "$(SolutionDir)MagicData.sqlite"
+%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>

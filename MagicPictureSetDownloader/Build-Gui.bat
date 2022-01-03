@@ -1,7 +1,16 @@
 @echo off
-@SET MSBUILD="C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\msbuild.exe"
 
-@ECHO --^> MagicPictureSetDownloader
-@%MSBUILD% /v:q /t:Rebuild  /p:Configuration=Release MagicPictureSetDownloader.sln
+SET LOCAL=%~dp0
+
+pushd %LOCAL%
+
+call SetBuildEnvironment.bat
+
+echo *****************************************************
+echo **               BUILDING RELEASE GUI              **
+echo *****************************************************
+
+%MSBUILD% /v:q /t:Rebuild  /p:Configuration=Release MagicPictureSetDownloader.sln
+popd
 
 pause
