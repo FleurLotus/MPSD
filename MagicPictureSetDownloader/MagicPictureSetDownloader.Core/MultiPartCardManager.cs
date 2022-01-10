@@ -87,6 +87,14 @@
         {
             return IsSplitted(card) && !card.Name.StartsWith(card.PartName);
         }
+        public bool IsSpecial(ICardAllDbInfo cai)
+        {
+            if (MagicRules.IsSpecial(cai.Card.Type))
+            {
+                return true;
+            }
+            return IsSplitted(cai.Card) && MagicRules.IsSpecial(cai.CardPart2.Type);
+        }
 
         public ICard GetOtherPartCard(ICard card, Func<string, string, ICard> getCard)
         {

@@ -1,11 +1,14 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
-    using System;
     using System.Windows.Input;
+
     using Common.ViewModel;
+
+    using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    public class CardCollectionInputGraphicViewModel : NotifyPropertyChangedBase, IComparable<CardCollectionInputGraphicViewModel>
+    public partial class CardCollectionInputGraphicViewModel : NotifyPropertyChangedBase
     {
         private int _cardInCollection;
         private int _changedCount;
@@ -73,14 +76,18 @@
         {
             ChangedCount++;
         }
-        public int CompareTo(CardCollectionInputGraphicViewModel other)
-        {
-            return NameInLanguage.CompareTo(other.NameInLanguage);
-        }
         public void Reset()
         {
             ChangedCount = 0;
         }
 
+        internal CardType GetCardType()
+        {
+            return MultiPartCardManager.Instance.GetCardType(Card.CardAllDbInfo);
+        }
+        internal ShardColor GetColor()
+        {
+            return MultiPartCardManager.Instance.GetColor(Card.CardAllDbInfo);
+        }
     }
 }

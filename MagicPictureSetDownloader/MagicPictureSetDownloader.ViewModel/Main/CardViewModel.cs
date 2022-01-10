@@ -18,6 +18,7 @@
 
         private CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart)
         {
+            CardAllDbInfo = cardAllDbInfo;
             Card = otherPart ? cardAllDbInfo.CardPart2 : cardAllDbInfo.Card;
             IEdition edition = cardAllDbInfo.Edition;
             Statistics = cardAllDbInfo.Statistics.Select(s => new StatisticViewModel(s)).ToArray();
@@ -55,6 +56,7 @@
             }
         }
 
+        public ICardAllDbInfo CardAllDbInfo { get; }
         public IEdition Edition { get; }
         public IRarity Rarity { get; }
         public int IdGatherer { get; }

@@ -29,7 +29,8 @@
         private bool _foil;
         private bool _altArt;
         private bool _hasChange;
-        private int _size;
+        private int _size = 126;
+        private DisplayOrder _displayOrder;
         private IDictionary<ICard, string> _allCardTranslation;
         private readonly RangeObservableCollection<CardCollectionInputGraphicViewModel> _cards;
 
@@ -52,6 +53,23 @@
                     _inputLanguage = _magicDatabase.GetLanguage(id);
                 }
             }
+            option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Order");
+            if (option != null)
+            {
+                if (Enum.TryParse(option.Value, out DisplayOrder order))
+                {
+                    _displayOrder = order;
+                }
+            }
+            option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "ImageSize");
+            if (option != null)
+            {
+                int size;
+                if (int.TryParse(option.Value, out size))
+                {
+                    _size = size;
+                }
+            }
 
             Display.Title = "Input cards";
             Display.OkCommandLabel = "Add";
@@ -66,6 +84,7 @@
             Cards.Filter = ToDisplay;
 
             Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
+            DisplayOrders = (DisplayOrder[])Enum.GetValues(typeof(DisplayOrder));
             Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token).ToArray();
 
             ObservableCollection<ShardColor> colorsSelected = new ObservableCollection<ShardColor>();
@@ -77,7 +96,6 @@
             ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
             ResetCommand = new RelayCommand(ResetCommandExecute);
             CardCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == name);
-            Size = 126;
             AddLinkedProperty(nameof(InputLanguage), nameof(InputLanguageName));
 
             RebuildOrder();
@@ -86,6 +104,7 @@
         public ICommand ChangeInputLanguageCommand { get; }
         public ICommand ResetCommand { get; }
         public IEdition[] Editions { get; }
+        public DisplayOrder[] DisplayOrders { get; }
         public ICardCollection CardCollection { get; }
         public ICollectionView Cards { get; private set; }
         public ICollection<ShardColor> Colors { get; }
@@ -143,6 +162,7 @@
                 if (_size != value)
                 {
                     _size = value;
+                    _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "ImageSize", _size.ToString());
                     OnNotifyPropertyChanged(nameof(Size));
                 }
             }
@@ -184,6 +204,20 @@
                     _editionSelected = value;
                     OnNotifyPropertyChanged(nameof(EditionSelected));
                     RefreshDisplayedData(true);
+                }
+            }
+        }
+        public DisplayOrder DisplayOrder
+        {
+            get { return _displayOrder; }
+            set
+            {
+                if (value != _displayOrder)
+                {
+                    _displayOrder = value;
+                    _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Order", _displayOrder.ToString("g"));
+                    OnNotifyPropertyChanged(nameof(DisplayOrder));
+                    RefreshDisplayedData(false);
                 }
             }
         }
@@ -262,20 +296,11 @@
                 return true;
             }
 
-            ShardColor color = GetColor(vm.Card);
+            ShardColor color = vm.GetColor();
             bool wantedColorless = ColorsSelected.Contains(ShardColor.Colorless);
             ShardColor wantedColor = ColorsSelected.Aggregate(ShardColor.Colorless, (current, newColor) => current | newColor);
 
             return Matcher<ShardColor>.HasValue(color, wantedColor) || (wantedColorless && color == ShardColor.Colorless);
-        }
-        private ShardColor GetColor(CardViewModel cvm)
-        {
-            ShardColor color = MagicRules.GetColor(cvm.CastingCost);
-            if (cvm.OtherCardPart != null)
-            {
-                color |= MagicRules.GetColor(cvm.OtherCardPart.CastingCost);
-            }
-            return color;
         }
         private bool CheckType(CardCollectionInputGraphicViewModel vm)
         {
@@ -284,19 +309,10 @@
                 return true;
             }
 
-            CardType type = GetCardType(vm.Card);
+            CardType type = vm.GetCardType();
             CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newType) => current | newType);
 
             return Matcher<CardType>.HasValue(type, wantedType);
-        }
-        private CardType GetCardType(CardViewModel cvm)
-        {
-            CardType type = MagicRules.GetCardType(cvm.Card.Type, cvm.Card.CastingCost);
-            if (cvm.OtherCardPart != null)
-            {
-                type |= MagicRules.GetCardType(cvm.OtherCardPart.Card.Type, cvm.OtherCardPart.Card.CastingCost);
-            }
-            return type;
         }
         private bool CheckName(CardCollectionInputGraphicViewModel vm)
         {
@@ -367,7 +383,7 @@
 
             }
 
-            toSort.Sort();
+            toSort.Sort(CardCollectionInputGraphicViewModel.GetComparer(DisplayOrder));
             _cards.AddRange(toSort);
         }
     }

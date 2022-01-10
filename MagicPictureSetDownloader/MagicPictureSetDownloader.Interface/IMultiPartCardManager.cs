@@ -11,6 +11,7 @@
         bool Is90DegreeSide(ICard card);
         bool ShouldIgnore(ICard card);
         bool IsSecondPartOfSplitted(ICard card);
+        bool IsSpecial(ICardAllDbInfo cai);
         ICard GetOtherPartCard(ICard card, Func<string, string, ICard> getCard);
         ShardColor GetColor(ICardAllDbInfo cai);
         CardType GetCardType(ICardAllDbInfo cai);

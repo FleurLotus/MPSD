@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         Title="Database Info Modification"
         ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
-        Height="475" Width="618"
+        Height="475" Width="900"
         d:DataContext="{d:DesignInstance Type=management:BlockDatabaseInfoModificationViewModel, IsDesignTimeCreatable=False}"
         Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}">
     <Window.Resources>

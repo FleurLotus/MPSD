@@ -23,7 +23,6 @@
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Margin" Value="5,0"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -39,8 +38,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <GroupBox Grid.Column="1" Header="Display">
+            <GroupBox Grid.Column="1" Header="Select">
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="80"/>
@@ -49,14 +50,15 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding InputLanguageName}" ContentStringFormat="{}Language: {0}"/>
+                    <Label Grid.Column="0" Grid.Row="0" Content="Language:"/>
+                    <Label Grid.Column="1" Grid.Row="0" Content="{Binding InputLanguageName}"/>
                     <Button Grid.Column="2" Grid.Row="0" Content="Change" Width="70" VerticalAlignment="Center" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}"
                         Command="{Binding ChangeInputLanguageCommand}"/>
                     <Border Grid.Column="3" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" 
@@ -64,40 +66,58 @@
                         <Image Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
                     </Border>
 
-                    <Label Grid.Column="0" Grid.Row="1" Content="Edition" />
-                    <ComboBox Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
+                    <Label Grid.Column="0" Grid.Row="2" Content="Edition" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
                             SelectedValue="{fl:TwoWayBinding Path=EditionSelected}" ItemsSource="{Binding Editions}" 
                             IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <Image Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <Image Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
-                    <CheckBox Grid.Column="1" Grid.Row="2" Content="Foil" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <CheckBox Grid.Column="2" Grid.Row="2" Content="AltArt" VerticalAlignment="Center" IsChecked="{Binding AltArt}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-
-                    <Label Grid.Column="0" Grid.Row="3" Content="Image Size" />
-                    <Slider Grid.Column="1" Grid.Row="3" Minimum="60" Maximum="300" TickFrequency="5" TickPlacement="Both" SmallChange="1" LargeChange="5" Value="{Binding Size}" />
-                    <Button Grid.Column="2" Grid.Row="3" Content="Reset" Width="70" VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding ResetCommand}" />
+                    <Button Grid.Column="0" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" Command="{Binding ResetCommand}" />
+                    <CheckBox Grid.Column="1" Grid.Row="4" Content="Foil" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
+                    <CheckBox Grid.Column="2" Grid.Row="4" Content="AltArt" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding AltArt}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Column="3" Header="Filter">
+            <GroupBox Grid.Column="3" Header="Display">
+                <Grid Margin="5,0,5,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="170"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Content="Image Size" />
+                    <Slider Grid.Column="1" Grid.Row="0" Minimum="60" Maximum="300" TickFrequency="5" TickPlacement="Both" SmallChange="1" LargeChange="5" Value="{Binding Size}" />
+
+                    <Label Grid.Column="0" Grid.Row="2" Content="Order" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" SelectedValue="{fl:TwoWayBinding Path=DisplayOrder}" ItemsSource="{Binding DisplayOrders}"/>
+                </Grid>
+            </GroupBox>
+            <GroupBox Grid.Column="5" Header="Filter">
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="70"/>
                         <ColumnDefinition Width="170"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
                 
                     <Label Grid.Column="0" Grid.Row="0" Content="Name" />
                     <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Filter, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Label Grid.Column="0" Grid.Row="1" Content="Colors" />
-                    <xctk:CheckComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}" />
+                    <Label Grid.Column="0" Grid.Row="2" Content="Colors" />
+                    <xctk:CheckComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}" />
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Types" />
-                    <xctk:CheckComboBox Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}" />
+                    <Label Grid.Column="0" Grid.Row="4" Content="Types" />
+                    <xctk:CheckComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}" />
                 </Grid>
             </GroupBox>
         </Grid>

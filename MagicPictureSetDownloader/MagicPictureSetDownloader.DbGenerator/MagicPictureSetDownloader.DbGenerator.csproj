@@ -12,9 +12,10 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>$(ProjectDir)
-%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicData.zip" "$(SolutionDir)MagicData.sqlite"
-%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
+    <PreBuildEvent>
+		call $(SolutionDir)SetBuildEnvironment.bat
+		%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicData.zip" "$(SolutionDir)MagicData.sqlite"
+		%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>

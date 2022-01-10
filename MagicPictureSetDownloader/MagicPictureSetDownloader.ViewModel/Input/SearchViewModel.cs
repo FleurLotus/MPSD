@@ -428,7 +428,7 @@
         {
             if (ExcludeSpecialCards)
             {
-                if (MagicRules.IsSpecial(cai.Card.Type))
+                if (MultiPartCardManager.Instance.IsSpecial(cai))
                 {
                     return false;
                 }

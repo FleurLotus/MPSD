@@ -37,7 +37,7 @@
         Special,
     }
 
-    public static class MagicRules
+    internal static class MagicRules
     {
         public static DisplayColor GetDisplayColor(string castingCost)
         {
