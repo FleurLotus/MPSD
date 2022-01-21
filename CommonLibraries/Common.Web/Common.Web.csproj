@@ -4,6 +4,7 @@
     <AssemblyTitle>Common.Web</AssemblyTitle>
     <Product>Common.Web</Product>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <Version>7.0.1</Version>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>

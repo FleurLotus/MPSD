@@ -21,6 +21,7 @@
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             _httpClient = GetHttpClient();
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
             _htmlCache = new Dictionary<string, string>();
         }
 
