@@ -35,6 +35,9 @@
             {@"Freyalise, Skyshroud Partisan</div>", "4" },
             {@"Kiora, the Tide's Fury</div>", "4" },
             {@"Teyo, Aegis Adept</div>", "4" },
+            // Innistrad: Midnight Hunt Alchemy
+            {@"Garruk, Wrath of the Wilds</div>", "3" },
+            {@"Tibalt, Wicked Tormentor</div>", "3" },
         };
 
         protected CardParserBase()
@@ -91,6 +94,8 @@
 
             //For XmlTextReader which doesn't support & caracter
             sb.Replace("&nbsp;", " ");
+            sb.Replace("&lt;i&gt;", "<i>");
+            sb.Replace("&lt;/i&gt;", "</i>");
             sb.Replace("&amp;", "&");
             sb.Replace("&", "&amp;");
             sb.Replace("<</i>", "&lt;</i>");

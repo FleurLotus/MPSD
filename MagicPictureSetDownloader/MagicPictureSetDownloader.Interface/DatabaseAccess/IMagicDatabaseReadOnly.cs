@@ -27,8 +27,6 @@
         IEdition GetEdition(string sourceName);
         IEdition GetEdition(int idGatherer);
         ILanguage GetLanguage(int idLanguage);
-        ICardEdition GetCardEditionFromPictureUrl(string pictureUrl);
-        ICardEditionVariation GetCardEditionVariationFromPictureUrl(string pictureUrl);
         IList<ICardEditionVariation> GetCardEditionVariation(int idGatherer);
         ILanguage GetDefaultLanguage();
         ILanguage GetEnglishLanguage();
@@ -42,8 +40,7 @@
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
         IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName);
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
-
-        string[] GetMissingPictureUrls();
+        IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls();
         int[] GetRulesId();
         IDisposable BatchMode();
         IPictureDatabaseMigration PictureDatabaseMigration { get; }

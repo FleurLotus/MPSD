@@ -1,12 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
-    using MagicPictureSetDownloader.Interface;
     using System.Collections.Generic;
+
+    using Common.Web;
 
     public interface IPriceImporter
     {
-        PriceSource PriceSource { get; }
-        string[] GetUrls();
-        IEnumerable<PriceInfo> Parse(string text, out string errorMessage);
+        IReadOnlyList<KeyValuePair<string, object>> GetUrls(WebAccess webAccess);
+        IEnumerable<PriceInfo> Parse(WebAccess webAccess, string url, object param, out string errorMessage);
     }
 }

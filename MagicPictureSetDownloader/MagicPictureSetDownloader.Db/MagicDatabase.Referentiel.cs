@@ -306,7 +306,7 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewPrice(int idGatherer, DateTime addDate, string source, bool foil, int value)
         {
-             if (GetCardEdition(idGatherer) == null)
+            if (GetCardEdition(idGatherer) == null)
             {
                 return;
             }

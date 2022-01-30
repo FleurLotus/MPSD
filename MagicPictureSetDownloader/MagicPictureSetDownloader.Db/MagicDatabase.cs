@@ -440,23 +440,6 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public ICardEdition GetCardEditionFromPictureUrl(string pictureUrl)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return _cardEditions.Values.FirstOrDefault(ce => ce.Url == pictureUrl);
-            }
-        }
-        public ICardEditionVariation GetCardEditionVariationFromPictureUrl(string pictureUrl)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return _cardEditionVariations.Values.SelectMany(cevs => cevs).FirstOrDefault(cev => cev.Url == pictureUrl);
-            }
-        }
-
         public void EditionCompleted(int editionId)
         {
             using (new WriterLock(_lock))
@@ -474,13 +457,14 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public string[] GetMissingPictureUrls()
+        public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {
             HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());
 
-            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer)).Select(ce => ce.Url)
-                          .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer)).Select(cev => cev.Url))
-                          .ToArray();
+            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
+                                        .Select(ce => new KeyValuePair<string, object>(ce.Url, ce.IdGatherer))
+                          .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer))
+                                        .Select(cev => new KeyValuePair<string, object>(cev.Url, cev.OtherIdGatherer))).ToList();
         }
         public int[] GetRulesId()
         {
@@ -497,11 +481,6 @@ namespace MagicPictureSetDownloader.Db
 
                 return temp.Values.Select(ce => ce.IdGatherer).Where(id => id > 0).ToArray();
             }
-        }
-
-        private IPicture LoadImage(int idGatherer)
-        {
-            return _pictureDatabase.GetPicture(idGatherer);
         }
     }
 }

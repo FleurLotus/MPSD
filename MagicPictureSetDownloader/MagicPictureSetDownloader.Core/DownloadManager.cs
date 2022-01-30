@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
+
     using Common.Library.Notify;
     using Common.Web;
     using MagicPictureSetDownloader.Core.Deck;
@@ -92,27 +93,9 @@
                 }
             } while (hasnextpage);
         }
-        public string InsertPictureInDb(string pictureUrl)
+        public string InsertPictureInDb(string pictureUrl, object param)
         {
-            int gathererId;
-            ICardEdition cardEdition =  MagicDatabase.GetCardEditionFromPictureUrl(pictureUrl);
-            if (cardEdition != null)
-            {
-                gathererId = cardEdition.IdGatherer;
-            }
-            else 
-            { 
-                ICardEditionVariation cardEditionVariation = MagicDatabase.GetCardEditionVariationFromPictureUrl(pictureUrl);
-                if (cardEditionVariation != null)
-                {
-                    gathererId = cardEditionVariation.OtherIdGatherer;
-                }
-                else
-                {
-                    throw new ApplicationException("Could not find IdGatherer from url: " + pictureUrl);
-                }
-
-            }
+            int gathererId = (int)param;
 
             IPicture picture = MagicDatabase.GetPicture(gathererId);
             if (picture == null)
@@ -125,41 +108,41 @@
 
             return null;
         }
-        public string InsertRuleInDb(string rulesUrl)
+        public string InsertRuleInDb(string rulesUrl, object param)
         {
-            int idGatherer = Parser.ExtractIdGatherer(rulesUrl);
+            int gathererId = (int)param;
 
             string htmltext = _webAccess.GetHtml(rulesUrl);
 
             foreach (CardRuleInfo cardRuleInfo in Parser.ParseCardRule(htmltext))
             {
-                MagicDatabase.InsertNewRuling(idGatherer, cardRuleInfo.Date, cardRuleInfo.Text);
+                MagicDatabase.InsertNewRuling(gathererId, cardRuleInfo.Date, cardRuleInfo.Text);
             }
 
             return null;
         }
-        public string[] GetRulesUrls()
+        public IReadOnlyList<KeyValuePair<string, object>> GetRulesUrls()
         {
-            return MagicDatabase.GetRulesId().Select(idGatherer => WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer))).ToArray();
+            return MagicDatabase.GetRulesId()
+                            .Select(idGatherer => new KeyValuePair<string, object>(WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer)), idGatherer))
+                            .ToList();
         }
-        public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl)
+        public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl, object param)
         {
-            string htmltext = _webAccess.GetHtml(pricesUrl);
-
             string importErrorMessage;
 
-            foreach (PriceInfo priceInfo in priceImporter.Parse(htmltext, out importErrorMessage))
+            foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param, out importErrorMessage))
             {
-                MagicDatabase.InsertNewPrice(priceInfo.IdGatherer, DateTime.Today, priceImporter.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
+                MagicDatabase.InsertNewPrice(priceInfo.IdGatherer, priceInfo.UpdateDate.Date, priceInfo.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
             }
 
             return importErrorMessage;
         }
-        public string[] GetPricesUrls(IPriceImporter priceImporter)
+        public IReadOnlyList<KeyValuePair<string, object>> GetPricesUrls(IPriceImporter priceImporter)
         {
-            return priceImporter.GetUrls();
+            return priceImporter.GetUrls(_webAccess);
         }
-        public string[] GetMissingPictureUrls()
+        public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {
             return MagicDatabase.GetMissingPictureUrls();
         }
@@ -189,10 +172,10 @@
 
             return null;
         }
-        public string[] GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter)
+        public IReadOnlyList<KeyValuePair<string, object>> GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter)
         {
             string html = _webAccess.GetHtml(preconstructedDeckImporter.GetRootUrl());
-            return preconstructedDeckImporter.GetDeckUrls(html);
+            return preconstructedDeckImporter.GetDeckUrls(html).Select( s => new KeyValuePair<string, object>(s, null)).ToList();
         }
         public string InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
         {

@@ -13,8 +13,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Common.Drawing" Version="7.0.0" />
-    <PackageReference Include="Common.Web" Version="7.0.0" />
+    <PackageReference Include="Common.Web" Version="7.0.2" />
     <PackageReference Include="Common.XML" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />

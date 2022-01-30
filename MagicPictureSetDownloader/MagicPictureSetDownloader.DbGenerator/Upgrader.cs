@@ -320,7 +320,6 @@
                        new KeyValuePair<string, object>("@toughness", kv.Value.Item2));
                 }
                 //12.6
-
                 repo.ExecuteBatch(UpdateQueries.CorrectMystericBoosterText);
             }
 
@@ -392,6 +391,11 @@
 
             if (dbVersion <= 14)
             {
+                //14.1
+                repo.ExecuteBatch(UpdateQueries.CorrectAECardName);
+                repo.ExecuteBatch(UpdateQueries.CorrectAECardPartName);
+                repo.ExecuteBatch(UpdateQueries.CorrectKillDestroyCard);
+
             }
 
             using (var temporaryDabase = new TemporaryDatabase())

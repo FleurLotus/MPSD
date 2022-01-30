@@ -1,12 +1,13 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download.Auto
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
 
     public abstract class AutoDownloadViewModelBase : DownloadViewModelBase
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private string[] _urls;
+        private IReadOnlyList<KeyValuePair<string, object>> _urls;
         private int _nextJob;
         private volatile bool _fatalException;
         private const int NbThread = 5;
@@ -17,13 +18,13 @@
         {
         }
 
-        protected abstract string[] GetUrls();
-        protected abstract string Download(string url);
+        protected abstract IReadOnlyList<KeyValuePair<string, object>> GetUrls();
+        protected abstract string Download(string url, object param);
 
         protected override bool StartImpl()
         {
             _urls = GetUrls();
-            CountDown = _urls.Length;
+            CountDown = _urls.Count;
             DownloadReporter.Total = CountDown;
 
             if (CountDown == 0)
@@ -41,6 +42,8 @@
         }
         private void Downloader(object state)
         {
+            string url = null;
+
             while (true)
             {
                 int currentJob = -1;
@@ -51,10 +54,13 @@
                     _nextJob++;
                     _lock.ExitWriteLock();
 
-                    if (currentJob >= _urls.Length || IsStopping)
+                    if (currentJob >= _urls.Count || IsStopping)
                     {
                         break;
                     }
+
+                    KeyValuePair<string, object> kv = _urls[currentJob];
+                    url = kv.Key;
 
                     //Do the first alone to wait for proxy if needed
                     if (currentJob == 0 || _firstDoneEvent.WaitOne())
@@ -64,10 +70,10 @@
                             break;
                         }
 
-                        string errors = Download(_urls[currentJob]);
+                        string errors = Download(url, kv.Value);
                         if (!string.IsNullOrWhiteSpace(errors))
                         {
-                            AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], errors), false);
+                            AppendMessage(string.Format("{0} -> {1}", url, errors), false);
                         }
                     }
                     DownloadReporter.Progress();
@@ -84,7 +90,7 @@
                         errormessage = ex.InnerException.Message;
                     }
 
-                    AppendMessage(string.Format("{0} -> {1}", _urls[currentJob], errormessage), false);
+                    AppendMessage(string.Format("{0} -> {1}", url, errormessage), false);
                 }
                 finally
                 {

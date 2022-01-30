@@ -234,8 +234,6 @@
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridViewColumn Header="Edtion" DisplayMemberBinding="{Binding EditionName}" />
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
-                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}"/>
                     <GridViewColumn Header="Foil">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -243,7 +241,9 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={conv:ValueToPriceVisibleConverter}, StringFormat='0.00 $'}"/>
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Converter={conv:ValueToPriceDisplayConverter}}"/>
+                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
+                    <GridViewColumn Header="Source" DisplayMemberBinding="{Binding Source}"/>
                 </GridView>
             </ListView.View>
         </ListView>

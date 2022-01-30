@@ -29,8 +29,15 @@ namespace MagicPictureSetDownloader.Interface
     }
     public enum PriceSource
     {
-        MTGGoldfish
+        Scryfall,
     }
+    public enum PriceValueSource
+    {
+        Unknown,
+        Cardmarket,
+        TCGplayer
+    }
+
 
     [Flags]
     public enum CardSubType

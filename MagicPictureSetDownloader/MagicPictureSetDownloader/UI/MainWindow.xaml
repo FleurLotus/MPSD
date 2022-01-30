@@ -10,7 +10,7 @@
         xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
         d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="{Binding Title}" Height="600" Width="1000" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}" >
+        Title="{Binding Title}" Height="800" Width="1300" Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}" >
     <Window.Resources>
         <ResourceDictionary>
             <fl:SeparatorStyleSelector x:Key="separatorStyleSelector"/>

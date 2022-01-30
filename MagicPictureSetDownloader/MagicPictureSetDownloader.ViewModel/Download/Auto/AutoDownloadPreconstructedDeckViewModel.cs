@@ -1,5 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download.Auto
 {
+    using System.Collections.Generic;
+
     using MagicPictureSetDownloader.Core.Deck;
 
     public class AutoDownloadPreconstructedDeckViewModel : AutoDownloadViewModelBase
@@ -11,11 +13,11 @@
         {
             _preconstructedDeckImporter = new PreconstructedDeckImporter(GetExtraInfo);
         }
-        protected override string[] GetUrls()
+        protected override IReadOnlyList<KeyValuePair<string, object>> GetUrls()
         {
             return DownloadManager.GetPreconstructedDecksUrls(_preconstructedDeckImporter);
         }
-        protected override string Download(string url)
+        protected override string Download(string url, object param)
         {
             return DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter);
         }

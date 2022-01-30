@@ -268,5 +268,19 @@ AND  (SELECT COUNT(*) FROM CardEdition ce  INNER JOIN Edition e ON e.Id = ce.IdE
 SELECT @name
 WHERE NOT EXISTS(SELECT 1 FROM BackSideModalDoubleFacedCard WHERE Name = @name)";
 
+        public const string CorrectAECardName =
+@"UPDATE Card
+SET Name =  REPLACE(Name, 'Æ', 'Ae')
+WHERE Name LIKE '%Æ%'";
+
+        public const string CorrectAECardPartName =
+@"UPDATE Card
+SET PartName =  REPLACE(PartName, 'Æ', 'Ae')
+WHERE PartName LIKE '%Æ%'";
+
+        public const string CorrectKillDestroyCard =
+@"UPDATE Card
+SET PartName =  'Kill! Destroy!', Name = 'Kill! Destroy!'
+WHERE Name = 'Kill Destroy'";
     }
 }
