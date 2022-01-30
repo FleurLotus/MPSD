@@ -5,6 +5,8 @@
     using System.Threading.Tasks;
     using System.Net;
     using System.Net.Http;
+    using System.IO;
+
     using Common.Library.Notify;
     using Common.Library.Threading;
 
@@ -152,7 +154,6 @@
             return new HttpClient(new HttpClientHandler { Credentials = _credentials });
         }
 
-
         public string GetHtml(string url, bool forceRefresh = false)
         {
             return AsyncHelper.RunSync(() => GetHtmlAsync(url, forceRefresh));
@@ -168,6 +169,25 @@
             return html;
         }
 
+        public void DownloadFile(string url, string outfilepath)
+        {
+            AsyncHelper.RunSync(() => DownloadFileAsync(url, outfilepath));
+        }
+
+        public async Task DownloadFileAsync(string url, string outfilepath)
+        {
+            await GetDataWithProxyFallBack(() => DownloadFileInternalAsync(url, outfilepath));
+        }
+
+        private async Task DownloadFileInternalAsync(string url, string outfilepath)
+        {
+            HttpResponseMessage response = await GetHttpClient().GetAsync(url);
+            using (FileStream fs = new FileStream(outfilepath, FileMode.CreateNew))
+            {
+                await response.Content.CopyToAsync(fs);
+            }
+        }
+
         public byte[] GetFile(string url)
         {
             return AsyncHelper.RunSync(() => GetFileAsync(url));
@@ -176,6 +196,26 @@
         public async Task<byte[]> GetFileAsync(string url)
         {
             return await GetDataWithProxyFallBack(() => GetHttpClient().GetByteArrayAsync(url));
+        }
+
+        private async Task GetDataWithProxyFallBack(Func<Task> getdata)
+        {
+            do
+            {
+                try
+                {
+                    await getdata();
+                    return;
+                }
+                catch (WebException wex)
+                {
+                    if (!wex.Message.Contains("407") || !OnCredentialRequiered())
+                    {
+                        throw;
+                    }
+                }
+
+            } while (true);
         }
 
         private async Task<T> GetDataWithProxyFallBack<T>(Func<Task<T>> getdata)
