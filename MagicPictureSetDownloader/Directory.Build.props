@@ -1,8 +1,8 @@
 <Project>
   <PropertyGroup>
-    <AssemblyVersion>14.1.0</AssemblyVersion>
-    <Version>14.1.0</Version>
-    <FileVersion>14.1.0</FileVersion>
+    <AssemblyVersion>14.2.0</AssemblyVersion>
+    <Version>14.2.0</Version>
+    <FileVersion>14.2.0</FileVersion>
     <Copyright>Blue Force Inc.</Copyright>
   </PropertyGroup>
 </Project>
