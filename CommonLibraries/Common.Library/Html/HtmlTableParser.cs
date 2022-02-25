@@ -45,7 +45,7 @@ namespace Common.Library.Html
                 return null;
             }
 
-            string workingText = htmlText.Substring(start);
+            string workingText = htmlText[start..];
 
             //Multi start tag
             if (workingText.IndexOf(TableStart, TableStart.Length, StringComparison.InvariantCultureIgnoreCase) >= 0)
@@ -59,7 +59,7 @@ namespace Common.Library.Html
                 throw new HtmlTableParserNoTableClosingTagException();
             }
 
-            return workingText.Substring(0, end);
+            return workingText[..end];
         }
         private static IEnumerable<string> ExtractRows(string htmlText)
         {
@@ -75,7 +75,7 @@ namespace Common.Library.Html
                     throw new HtmlTableParserNoRowClosingTagException();
                 }
 
-                rows.Add(htmlText.Substring(lastindex, end - lastindex));
+                rows.Add(htmlText[lastindex..end]);
                 lastindex = end;
             }
             return rows;
@@ -117,7 +117,7 @@ namespace Common.Library.Html
                     throw new HtmlTableParserNoCellClosingTagException();
                 }
 
-                cells.Add(ExtractCell(htmlRow.Substring(lastindex, end - lastindex)));
+                cells.Add(ExtractCell(htmlRow[lastindex..end]));
                 lastindex = end;
             }
 
@@ -133,7 +133,7 @@ namespace Common.Library.Html
                 throw new HtmlTableParserNoTagEndException();
             }
 
-            string tag = htmlCell.Substring(0, tagIndex + Close.Length);
+            string tag = htmlCell[..(tagIndex + Close.Length)];
 
             int colspan = 1;
             Match m = _colSpanRegex.Match(tag);

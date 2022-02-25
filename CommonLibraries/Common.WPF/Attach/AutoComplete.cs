@@ -96,7 +96,7 @@
             {
                 return;
             }
-            string text = combo.IsTextSearchEnabled ? textBox.Text.Substring(0, textBox.SelectionStart) : textBox.Text;
+            string text = combo.IsTextSearchEnabled ? textBox.Text[..textBox.SelectionStart] : textBox.Text;
             bool caseInsensitive = GetCaseInsensitive(combo);
             
             combo.Items.Filter = value => value.ToString().StartsWith(text, caseInsensitive, CultureInfo.InvariantCulture);

@@ -47,8 +47,8 @@
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
         private readonly int _defaultQuantity;
-        public static int MaxCount = 99;
-        public static int MinCount = -99;
+        private const int MaxCount = 99;
+        private const int MinCount = -99;
 
         public CardInputViewModel(string name, int defaultQuantity)
         {

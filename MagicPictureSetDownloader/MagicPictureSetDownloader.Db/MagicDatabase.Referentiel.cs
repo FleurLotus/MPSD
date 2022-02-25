@@ -840,7 +840,7 @@ namespace MagicPictureSetDownloader.Db
             //Case for token
             if (ret.EndsWith(" card"))
             {
-                ret = ret.Substring(0, ret.Length - 5);
+                ret = ret[0..^5];
             }
             foreach (string s in new []{" // ","//", " / ", "/"})
             {

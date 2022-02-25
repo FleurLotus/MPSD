@@ -68,7 +68,7 @@
                 return htmltext;
             }
 
-            return htmltext.Substring(startIndex, endIndex - startIndex);
+            return htmltext[startIndex..endIndex];
         }
     }
 }

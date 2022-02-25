@@ -201,7 +201,7 @@
                 string cardEdition2 = cardEdition + "_" + deckName;
                 if (cardEdition2.Length > 10)
                 {
-                    cardEdition2 = cardEdition2.Substring(0, 10);
+                    cardEdition2 = cardEdition2[..10];
                 }
                 edition = MagicDatabase.GetEditionFromCode(cardEdition2);
              }

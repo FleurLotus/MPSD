@@ -23,7 +23,7 @@
                 throw new ParserException("Error while parsing, can't retrieve ");
             }
 
-            return newtext.Substring(index + 1).Replace(@" // ", @"//");
+            return newtext[(index + 1)..].Replace(@" // ", @"//");
         }
     }
 }

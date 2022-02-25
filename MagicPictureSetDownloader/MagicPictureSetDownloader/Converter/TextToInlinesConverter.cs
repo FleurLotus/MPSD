@@ -48,7 +48,7 @@ namespace MagicPictureSetDownloader.Converter
                 if (pos > 0)
                 {
 
-                    newList.Add(new Run((previousIsPicture ? " " : string.Empty) + text.Substring(0, pos)));
+                    newList.Add(new Run((previousIsPicture ? " " : string.Empty) + text[..pos]));
                     previousIsPicture = false;
                 }
 
@@ -58,11 +58,11 @@ namespace MagicPictureSetDownloader.Converter
                     end = text.Length;
                 }
 
-                string symbol = text.Substring(pos, end - pos);
+                string symbol = text[pos..end];
                 BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
-                    text = text.Substring(pos + SymbolParser.Prefix.Length);
+                    text = text[(pos + SymbolParser.Prefix.Length)..];
                 }
                 else
                 {
@@ -71,7 +71,7 @@ namespace MagicPictureSetDownloader.Converter
                     newList.Add(new InlineUIContainer(image));
                     if (text.Length > end)
                     {
-                        text = text.Substring(end + 1);
+                        text = text[(end + 1)..];
                     }
                     else
                     {

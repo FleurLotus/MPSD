@@ -109,9 +109,8 @@
             }
             foreach (int id in ids)
             {
-                double price;
                 int p;
-                if (double.TryParse(scryfallCard.Prices.Usd, out price))
+                if (double.TryParse(scryfallCard.Prices.Usd, out double price))
                 {
                     p = (int) (price * 100);
                     yield return new PriceInfo { UpdateDate = updatedAt, IdGatherer = id, PriceSource = PriceValueSource.TCGplayer, Foil = false, Value = p };

@@ -47,8 +47,7 @@
             IOption option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Language");
             if (option != null)
             {
-                int id;
-                if (int.TryParse(option.Value, out id))
+                if (int.TryParse(option.Value, out int id))
                 {
                     _inputLanguage = _magicDatabase.GetLanguage(id);
                 }
@@ -64,8 +63,7 @@
             option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "ImageSize");
             if (option != null)
             {
-                int size;
-                if (int.TryParse(option.Value, out size))
+                if (int.TryParse(option.Value, out int size))
                 {
                     _size = size;
                 }
@@ -263,8 +261,10 @@
         {
             foreach (CardCollectionInputGraphicViewModel card in _cards.Where(c => c.ChangedCount != 0))
             {
-                CardCount cardCount = new CardCount();
-                cardCount.Add(new CardCountKey(Foil, AltArt), card.ChangedCount);
+                CardCount cardCount = new CardCount
+                {
+                    { new CardCountKey(Foil, AltArt), card.ChangedCount }
+                };
 
                 _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdGatherer, InputLanguage.Id, cardCount);
             }

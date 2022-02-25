@@ -95,7 +95,7 @@
             }
 
             return castingCost.Split(new[] { ' ' },StringSplitOptions.RemoveEmptyEntries)
-                              .Select(s => s.StartsWith(SymbolParser.Prefix)? s.Substring(SymbolParser.Prefix.Length).ToUpperInvariant(): s.ToUpperInvariant())
+                              .Select(s => s.StartsWith(SymbolParser.Prefix)? s[SymbolParser.Prefix.Length..].ToUpperInvariant(): s.ToUpperInvariant())
                               .Select(GetShard);
         }
 
@@ -148,19 +148,19 @@
             if (workingShardCastingCost.StartsWith(Half))
             {
                 isHalf = true;
-                workingShardCastingCost = workingShardCastingCost.Substring(Half.Length);
+                workingShardCastingCost = workingShardCastingCost[Half.Length..];
             }
 
             if (workingShardCastingCost.EndsWith(Phyrexian))
             {
                 isPhyrexian = true;
-                workingShardCastingCost = workingShardCastingCost.Substring(0, workingShardCastingCost.Length - Phyrexian.Length);
+                workingShardCastingCost = workingShardCastingCost[..^Phyrexian.Length];
             }
 
             if (workingShardCastingCost.StartsWith(TwoHybrid))
             {
                 is2Hybrid = true;
-                workingShardCastingCost = workingShardCastingCost.Substring(TwoHybrid.Length);
+                workingShardCastingCost = workingShardCastingCost[TwoHybrid.Length..];
             }
 
             if (workingShardCastingCost.Length == 0)

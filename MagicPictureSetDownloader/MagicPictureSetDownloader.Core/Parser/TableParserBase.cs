@@ -22,7 +22,7 @@
                     yield break;
                 }
 
-                yield return newtext.Substring(pos, end - pos);
+                yield return newtext[pos..end];
 
                 pos = end;
             }

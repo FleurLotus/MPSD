@@ -75,7 +75,7 @@
                     int endpos = tmpString.LastIndexOf(LastCardEndData, StringComparison.InvariantCulture);
                     if (endpos >= 0)
                     {
-                        tmpString = tmpString.Substring(0, endpos + LastCardEndData.Length);
+                        tmpString = tmpString[..(endpos + LastCardEndData.Length)];
                     }
                 }
 
@@ -136,7 +136,7 @@
                                 if (string.IsNullOrWhiteSpace(tocheck))
                                 {
                                     //Confirm no  loyauty
-                                    return text.Replace(toreplace, toreplace.Substring(0, toreplace.Length - End.Length) + kv.Value + End);
+                                    return text.Replace(toreplace, toreplace[..^End.Length] + kv.Value + End);
                                 }
                             }
                             //string tocheck = text.Substring(index + 14, endIndex - index - 14);

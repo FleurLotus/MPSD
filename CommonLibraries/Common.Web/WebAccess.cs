@@ -51,12 +51,12 @@
 
             if (!baseurl.EndsWith("/"))
             {
-                baseurl = baseurl.Substring(0, baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1);
+                baseurl = baseurl[..(baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1)];
             }
 
             if (relativeurl.StartsWith("/"))
             {
-                relativeurl = relativeurl.Substring(1);
+                relativeurl = relativeurl[1..];
             }
 
             return RemovePathBack(baseurl + relativeurl);
@@ -79,7 +79,7 @@
                     continue;
                 }
 
-                url = url.Substring(0, start + 1) + url.Substring(index + pathBack.Length);
+                url = url[..(start + 1)] + url[(index + pathBack.Length)..];
             }
             return url;
 
@@ -105,7 +105,7 @@
                 return url;
             }
 
-            return url.Substring(0, index + 1);
+            return url[..(index + 1)];
         }       
 
         private bool OnCredentialRequiered()

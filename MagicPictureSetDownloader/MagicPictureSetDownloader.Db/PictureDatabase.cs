@@ -60,9 +60,7 @@
         }
         public IPicture GetPicture(int idGatherer, bool doNotCache = false)
         {
-            IPicture picture;
-
-            if (!_pictures.TryGetValue(idGatherer, out picture))
+            if (!_pictures.TryGetValue(idGatherer, out IPicture picture))
             {
                 string path = GeneratePath(idGatherer);
                 path = Path.GetDirectoryName(Path.Combine(_cardPath, path));

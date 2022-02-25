@@ -30,7 +30,7 @@
         {
             if (!CouldMigrate)
             {
-                return new Tuple<bool, object>[0];
+                return Array.Empty<Tuple<bool, object>>();
             }
 
             using (IDbConnection cnx = GetPictureConnectionInternal())

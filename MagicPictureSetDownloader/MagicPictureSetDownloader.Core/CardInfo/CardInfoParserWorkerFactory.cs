@@ -53,7 +53,7 @@
                 return null;
             }
 
-            string infoType = lowerClassValue.Substring(lowerClassValue.LastIndexOf('_') + 1);
+            string infoType = lowerClassValue[(lowerClassValue.LastIndexOf('_') + 1)..];
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_* for normalcard
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl03_* for part A off multi part card
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl04_* for part B off multi part card
