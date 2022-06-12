@@ -396,6 +396,10 @@
                 repo.ExecuteBatch(UpdateQueries.CorrectAECardPartName);
                 repo.ExecuteBatch(UpdateQueries.CorrectKillDestroyCard);
 
+                //14.2
+                repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess1);
+                repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess2);
+                repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess3);
             }
 
             using (var temporaryDabase = new TemporaryDatabase())

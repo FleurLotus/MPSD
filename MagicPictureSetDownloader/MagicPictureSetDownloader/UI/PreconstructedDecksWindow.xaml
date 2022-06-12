@@ -9,7 +9,7 @@
         xmlns:fl="http://schemas.fleurlotus.com/xaml/"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=vm:PreconstructedDecksViewModel, IsDesignTimeCreatable=False}"
-        Title="Preconstructed Decks" Height="600" Width="1100">
+        Title="Preconstructed Decks" Height="600" Width="1300">
     <i:Interaction.Triggers>
         <i:EventTrigger SourceObject="{Binding}" EventName="Closing">
             <i:CallMethodAction MethodName="Close"/>
@@ -17,7 +17,7 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="350"/>
+            <ColumnDefinition Width="450"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>

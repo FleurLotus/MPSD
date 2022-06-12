@@ -282,5 +282,31 @@ WHERE PartName LIKE '%Æ%'";
 @"UPDATE Card
 SET PartName =  'Kill! Destroy!', Name = 'Kill! Destroy!'
 WHERE Name = 'Kill Destroy'";
+
+
+        public const string InsertMissingCardIndulgeExcess1 =
+@"
+INSERT INTO Card(Name, Text, CastingCost, Type, PartName, OtherPartName)
+SELECT 'Indulge//Excess', 'Whenever a creature you control attacks this turn, create a 1/1 green and white Citizen creature token that''s tapped and attacking.', '@2 @R', 'Sorcery', 'Indulge', 'Excess'
+WHERE NOT EXISTS(SELECT 1 FROM Card WHERE Name = 'Indulge//Excess' AND PartName = 'Indulge')
+";
+
+        public const string InsertMissingCardIndulgeExcess2 =
+@"
+INSERT INTO Card(Name, Text, CastingCost, Type, PartName, OtherPartName)
+SELECT 'Indulge//Excess', 'Aftermath (Cast this spell only from your graveyard. Then exile it.) 
+Create a Treasure token for each creature you controlled that dealt combat damage to a player this turn.', '@1 @R', 'Sorcery', 'Excess', 'Indulge'
+WHERE NOT EXISTS(SELECT 1 FROM Card WHERE Name = 'Indulge//Excess' AND PartName = 'Excess')
+";
+        public const string InsertMissingCardIndulgeExcess3 =
+@"
+INSERT into CardEdition
+SELECT e.Id, c.Id,  r.id, MIN(ce.IdGatherer) - 1, 'http://mtg.wtf/cards/ncc/46a.png'
+FROM Edition e, Card c, Rarity r, CardEdition ce
+WHERE e.Name = 'Streets of New Capenna Commander' AND c.Name = 'Indulge//Excess' AND PartName = 'Indulge'
+AND r.Name = 'Rare' AND NOT EXISTS(SELECT 1 FROM CardEdition WHERE Url = 'http://mtg.wtf/cards/ncc/46a.png')
+GROUP BY e.Id, c.Id,  r.id
+";
+
     }
 }
