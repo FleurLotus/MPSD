@@ -38,6 +38,8 @@
             // Innistrad: Midnight Hunt Alchemy
             {@"Garruk, Wrath of the Wilds</div>", "3" },
             {@"Tibalt, Wicked Tormentor</div>", "3" },
+            // Alchemy Horizons: Baldur's Gate
+            {@"Tasha, Unholy Archmage</div>", "4" },
         };
 
         protected CardParserBase()
