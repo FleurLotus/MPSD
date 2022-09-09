@@ -308,5 +308,13 @@ AND r.Name = 'Rare' AND NOT EXISTS(SELECT 1 FROM CardEdition WHERE Url = 'http:/
 GROUP BY e.Id, c.Id,  r.id
 ";
 
+        public const string AddNoneGathererSetsWithDate =
+@"
+INSERT INTO Edition (Name, Code, GathererName, Completed, HasFoil, ReleaseDate)
+SELECT @name, @code, 'MTG.WTF-' || @name, 0, 1, @date
+WHERE NOT EXISTS(SELECT 1 FROM Edition WHERE Name = @name)
+";
+
+
     }
 }

@@ -400,6 +400,18 @@
                 repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess1);
                 repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess2);
                 repo.ExecuteBatch(UpdateQueries.InsertMissingCardIndulgeExcess3);
+
+                Dictionary<string, Tuple<string, string>> specialSets = new Dictionary<string, Tuple<string, string>> {
+                    { "Q06" , Tuple.Create("Pioneer Challenger Decks 2021", "2022-01-01 00:00:00") }
+                };
+
+                foreach (var kv in specialSets)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.AddNoneGathererSetsWithDate,
+                       new KeyValuePair<string, object>("@code", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value.Item1),
+                       new KeyValuePair<string, object>("@date", kv.Value.Item2));
+                }
             }
 
             using (var temporaryDabase = new TemporaryDatabase())
