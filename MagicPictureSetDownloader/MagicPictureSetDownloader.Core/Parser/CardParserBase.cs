@@ -40,6 +40,8 @@
             {@"Tibalt, Wicked Tormentor</div>", "3" },
             // Alchemy Horizons: Baldur's Gate
             {@"Tasha, Unholy Archmage</div>", "4" },
+            // Dominaria United
+            {@"Ajani, Sleeper Agent</div>", "4" },
         };
 
         protected CardParserBase()
