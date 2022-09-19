@@ -3,17 +3,10 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyTitle>Common.Web</AssemblyTitle>
     <Product>Common.Web</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <Version>7.0.2</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Library\Common.Library.csproj" />

@@ -3,13 +3,6 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.Db</AssemblyTitle>
     <Product>MagicPictureSetDownloader.Db</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="DatabaseConnection.ConnectionWrapper.cs">
@@ -36,9 +29,7 @@
     <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Database" Version="7.0.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Common.Drawing" Version="7.0.0" />
+    <PackageReference Include="Common.Database" />
+    <PackageReference Include="Common.Drawing" />
   </ItemGroup>
 </Project>

@@ -3,13 +3,6 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.DbGenerator</AssemblyTitle>
     <Product>MagicPictureSetDownloader.DbGenerator</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
@@ -23,8 +16,8 @@
     <EmbeddedResource Include="MagicPicture.zip" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.SQLite" Version="7.0.0" />
-    <PackageReference Include="Common.Zip" Version="7.0.0" />
+    <PackageReference Include="Common.SQLite" />
+    <PackageReference Include="Common.Zip" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="del &quot;$(ProjectDir)MagicData.zip&quot;&#xD;&#xA;del &quot;$(ProjectDir)MagicPicture.zip&quot;" />

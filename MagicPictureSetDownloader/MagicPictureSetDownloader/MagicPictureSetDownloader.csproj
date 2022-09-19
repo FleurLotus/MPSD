@@ -7,29 +7,10 @@
     <AssemblyTitle>MagicPictureSetDownloader</AssemblyTitle>
     <Product>MagicPictureSetDownloader</Product>
     <Description>Cards pictures coming from http://gatherer.wizards.com site</Description>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <Target Name="BeforeBuildMigrated" BeforeTargets="PreBuildEvent" />
   <ItemGroup>
@@ -40,30 +21,18 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Down.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Up.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Asc.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Desc.png" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Common.WPF" Version="7.0.0" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Include="System.Runtime.Caching" Version="6.0.0" />
-    <PackageReference Include="VirtualizingWrapPanel" Version="1.5.7" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Splash.jpg" />
+    <Resource Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icon.ico" />
+    <PackageReference Include="Common.WPF" />
+    <PackageReference Include="Extended.Wpf.Toolkit" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="System.Runtime.Caching" />
+    <PackageReference Include="VirtualizingWrapPanel"  />
   </ItemGroup>
 </Project>

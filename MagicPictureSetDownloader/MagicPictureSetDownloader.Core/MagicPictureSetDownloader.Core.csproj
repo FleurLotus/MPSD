@@ -3,19 +3,12 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.Core</AssemblyTitle>
     <Product>MagicPictureSetDownloader.Core</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Drawing" Version="7.0.0" />
-    <PackageReference Include="Common.Web" Version="7.0.2" />
-    <PackageReference Include="Common.XML" Version="7.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Common.Drawing" />
+    <PackageReference Include="Common.Web" />
+    <PackageReference Include="Common.XML" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />

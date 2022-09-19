@@ -3,20 +3,13 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.ViewModel</AssemblyTitle>
     <Product>MagicPictureSetDownloader.ViewModel</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
   <ItemGroup>
-	  <Compile Update="Input\CardCollectionInputGraphicViewModel.Comparer.cs">
-		  <DependentUpon>CardCollectionInputGraphicViewModel.cs</DependentUpon>
-	  </Compile>
-	  <Compile Update="Main\MainViewModel.Menu.cs">
+    <Compile Update="Input\CardCollectionInputGraphicViewModel.Comparer.cs">
+      <DependentUpon>CardCollectionInputGraphicViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Main\MainViewModel.Menu.cs">
       <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
     <Compile Update="Main\MainViewModel.CollectionDisplay.cs">
@@ -29,6 +22,6 @@
     <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.ViewModel" Version="7.0.0" />
+    <PackageReference Include="Common.ViewModel" />
   </ItemGroup>
 </Project>

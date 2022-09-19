@@ -3,12 +3,5 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.Interface</AssemblyTitle>
     <Product>MagicPictureSetDownloader.Interface</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 </Project>

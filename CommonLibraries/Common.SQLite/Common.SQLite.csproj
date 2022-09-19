@@ -3,20 +3,10 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyTitle>Common.SQLite</AssemblyTitle>
     <Product>Common.SQLite</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <Target Name="BeforeBuildMigrated" BeforeTargets="PreBuildEvent" />
   <ItemGroup>
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SQLite.Core" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.SQL\Common.SQL.csproj" />

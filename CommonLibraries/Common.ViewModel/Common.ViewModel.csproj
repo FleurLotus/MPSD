@@ -3,14 +3,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <AssemblyTitle>Common.ViewModel</AssemblyTitle>
     <Product>Common.ViewModel</Product>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
