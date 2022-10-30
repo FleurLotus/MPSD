@@ -22,6 +22,7 @@
         Contraption,
         Vanguard,
         Token,
+        Stickers,
     }
 
     public enum DisplayColor
@@ -141,9 +142,15 @@
             {
                 return DisplayCardType.Contraption;
             }
+
             if (Matcher<CardType>.HasValue(card, CardType.Vanguard))
             {
                 return DisplayCardType.Vanguard;
+            }
+
+            if (Matcher<CardType>.HasValue(card, CardType.Stickers))
+            {
+                return DisplayCardType.Stickers;
             }
 
             return DisplayCardType.Token;
@@ -157,7 +164,6 @@
             {
                 return CardType.Token;
             }
-
 
             if (IsLand(type))
             {
@@ -223,6 +229,11 @@
             if (IsVanguard(type))
             {
                 cardType |= CardType.Vanguard;
+            }
+
+            if (IsStickers(type))
+            {
+                cardType |= CardType.Stickers;
             }
 
             return cardType;
@@ -339,7 +350,7 @@
         }
         public static bool IsSpecial(string type)
         {
-            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type) || IsVanguard(type);
+            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type) || IsVanguard(type) || IsStickers(type) ;
         }
         public static bool IsContraption(string type)
         {
@@ -400,6 +411,10 @@
         public static bool IsVanguard(string type)
         {
             return type.ToLowerInvariant().Contains("vanguard");
+        }
+        public static bool IsStickers(string type)
+        {
+            return type.ToLowerInvariant().Contains("stickers");
         }
         public static bool IsToken(string type)
         {

@@ -38,7 +38,6 @@ namespace MagicPictureSetDownloader.Interface
         TCGplayer
     }
 
-
     [Flags]
     public enum CardSubType
     {
@@ -75,6 +74,7 @@ namespace MagicPictureSetDownloader.Interface
         Phenomenon = 1 << 10,
         Contraption = 1 << 11,
         Vanguard = 1 << 12,
+        Stickers = 1 << 13,
         //Must be constistante with MagicRules.GetCardType
     }
 

@@ -25,23 +25,33 @@
         public const string ArtistKey = "Artist";
         public const string VariationsKey = "Variations";
 
-        private static readonly IDictionary<string, string> _missingLoyalty = new Dictionary<string, string>
+        private static readonly IDictionary<string, IDictionary<string, string>> _missingProperty = new Dictionary<string, IDictionary<string, string>>
         {
-            // Core Set 2021
-            {@"Teferi, Master of Time</div>", "3" },
-            // Jumpstart: Historic Horizons
-            {@"Sarkhan, Wanderer to Shiv</div>", "4" },
-            {@"Davriel, Soul Broker</div>", "4" },
-            {@"Freyalise, Skyshroud Partisan</div>", "4" },
-            {@"Kiora, the Tide's Fury</div>", "4" },
-            {@"Teyo, Aegis Adept</div>", "4" },
-            // Innistrad: Midnight Hunt Alchemy
-            {@"Garruk, Wrath of the Wilds</div>", "3" },
-            {@"Tibalt, Wicked Tormentor</div>", "3" },
-            // Alchemy Horizons: Baldur's Gate
-            {@"Tasha, Unholy Archmage</div>", "4" },
-            // Dominaria United
-            {@"Ajani, Sleeper Agent</div>", "4" },
+            { "Loyalty:", new Dictionary<string, string>
+                {
+                    // Core Set 2021
+                    {@"Teferi, Master of Time", "3" },
+                    // Jumpstart: Historic Horizons
+                    {@"Sarkhan, Wanderer to Shiv", "4" },
+                    {@"Davriel, Soul Broker", "4" },
+                    {@"Freyalise, Skyshroud Partisan", "4" },
+                    {@"Kiora, the Tide's Fury", "4" },
+                    {@"Teyo, Aegis Adept", "4" },
+                    // Innistrad: Midnight Hunt Alchemy
+                    {@"Garruk, Wrath of the Wilds", "3" },
+                    {@"Tibalt, Wicked Tormentor", "3" },
+                    // Alchemy Horizons: Baldur's Gate
+                    {@"Tasha, Unholy Archmage", "4" },
+                    // Dominaria United
+                    {@"Ajani, Sleeper Agent", "4" },
+                }
+            },
+            { "Rarity:", new Dictionary<string, string>
+                {
+                    //Warhammer 40,000 Commander
+                    {"Fabricate", "Rare" }
+                }
+            },
         };
 
         protected CardParserBase()
@@ -117,33 +127,37 @@
 
         private string CardSpecificCorrection(string text)
         {
-            foreach (var kv in _missingLoyalty)
+            foreach (string property in _missingProperty.Keys)
             {
-                if (text.Contains(kv.Key))
+                foreach (var kv in _missingProperty[property])
                 {
-                    //Missing the loyauty
-                    const string Start = @"Loyalty:</div>";
-                    const string End = @"</div>";
-                    const string Middle = @"<div class=""value"">";
-
-                    int index = text.IndexOf(Start);
-                    if (index >= 0)
+                    string key = kv.Key + "</div>";
+                    if (text.Contains(key))
                     {
-                        int endIndex = text.IndexOf(End, index + Start.Length);
-                        if (endIndex >= 0)
+                        //Missing the property
+                        string Start = property + "</div>";
+                        const string End = @"</div>";
+                        const string Middle = @"<div class=""value"">";
+
+                        int index = text.IndexOf(Start);
+                        if (index >= 0)
                         {
-                            string toreplace = text.Substring(index, endIndex - index + End.Length);
-                            int subIndex = toreplace.IndexOf(Middle);
-                            if (subIndex >= 0)
+                            int endIndex = text.IndexOf(End, index + Start.Length);
+                            if (endIndex >= 0)
                             {
-                                string tocheck = toreplace.Substring(subIndex + Middle.Length, toreplace.Length - subIndex - Middle.Length - End.Length);
-                                if (string.IsNullOrWhiteSpace(tocheck))
+                                string toreplace = text.Substring(index, endIndex - index + End.Length);
+                                int subIndex = toreplace.IndexOf(Middle);
+                                if (subIndex >= 0)
                                 {
-                                    //Confirm no  loyauty
-                                    return text.Replace(toreplace, toreplace[..^End.Length] + kv.Value + End);
+                                    string tocheck = toreplace.Substring(subIndex + Middle.Length, toreplace.Length - subIndex - Middle.Length - End.Length);
+                                    if (string.IsNullOrWhiteSpace(tocheck))
+                                    {
+                                        //Confirm no property
+                                        return text.Replace(toreplace, toreplace[..^End.Length] + kv.Value + End);
+                                    }
                                 }
+                                //string tocheck = text.Substring(index + 14, endIndex - index - 14);
                             }
-                            //string tocheck = text.Substring(index + 14, endIndex - index - 14);
                         }
                     }
                 }
