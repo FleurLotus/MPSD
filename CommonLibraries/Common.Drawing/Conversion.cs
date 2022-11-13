@@ -67,12 +67,12 @@
             if (nPercentH < nPercentW)
             {
                 nPercent = nPercentH;
-                destX = System.Convert.ToInt16((newWidth - (sourceWidth * nPercent)) / 2);
+                destX = Convert.ToInt16((newWidth - (sourceWidth * nPercent)) / 2);
             }
             else
             {
                 nPercent = nPercentW;
-                destY = System.Convert.ToInt16((newHeight - (sourceHeight * nPercent)) / 2);
+                destY = Convert.ToInt16((newHeight - (sourceHeight * nPercent)) / 2);
             }
 
             int destWidth = (int)(sourceWidth * nPercent);

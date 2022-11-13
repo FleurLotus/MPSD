@@ -1,19 +1,19 @@
 <Project>
   <ItemGroup>
 
-    <PackageReference Update="Common.Database" Version="7.1.0" />
-    <PackageReference Update="Common.Drawing" Version="7.1.0" />
-    <PackageReference Update="Common.SQLite" Version="7.1.0" />
-    <PackageReference Update="Common.ViewModel" Version="7.1.0" />
-    <PackageReference Update="Common.Web" Version="7.1.0" />
-    <PackageReference Update="Common.WPF" Version="7.1.0" />
-    <PackageReference Update="Common.XML" Version="7.1.0" />
-    <PackageReference Update="Common.Zip" Version="7.1.0" />
+    <PackageReference Update="Common.Database" Version="7.2.0" />
+    <PackageReference Update="Common.Drawing" Version="7.2.0" />
+    <PackageReference Update="Common.SQLite" Version="7.2.0" />
+    <PackageReference Update="Common.ViewModel" Version="7.2.0" />
+    <PackageReference Update="Common.Web" Version="7.2.0" />
+    <PackageReference Update="Common.WPF" Version="7.2.0" />
+    <PackageReference Update="Common.XML" Version="7.2.0" />
+    <PackageReference Update="Common.Zip" Version="7.2.0" />
 
-    <PackageReference Update="Extended.Wpf.Toolkit" Version="4.2.0" />
+    <PackageReference Update="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-    <PackageReference Update="System.Runtime.Caching" Version="6.0.0" />
+    <PackageReference Update="System.Runtime.Caching" Version="7.0.0" />
     <PackageReference Update="VirtualizingWrapPanel" Version="1.5.7" />
   </ItemGroup>
 </Project>

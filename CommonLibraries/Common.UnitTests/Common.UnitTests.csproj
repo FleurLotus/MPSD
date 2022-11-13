@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFrameworks>net6.0-windows;net7.0-windows</TargetFrameworks>
     <AssemblyTitle>Common.UnitTests</AssemblyTitle>
     <Product>Common.UnitTests</Product>
   </PropertyGroup>
@@ -17,7 +17,6 @@
     <ProjectReference Include="..\Common.Zip\Common.Zip.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
