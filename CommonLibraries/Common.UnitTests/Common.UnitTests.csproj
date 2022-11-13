@@ -4,7 +4,7 @@
     <AssemblyTitle>Common.UnitTests</AssemblyTitle>
     <Product>Common.UnitTests</Product>
   </PropertyGroup>
-  <ItemGroup>
+   <ItemGroup>
     <Compile Update="Library\LibExtensionTest.Reflection.cs">
       <DependentUpon>LibExtensionTest.cs</DependentUpon>
     </Compile>
@@ -15,8 +15,10 @@
     <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
     <ProjectReference Include="..\Common.XML\Common.XML.csproj" />
     <ProjectReference Include="..\Common.Zip\Common.Zip.csproj" />
+    <ProjectReference Include="..\MockDbData\MockDbData.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>

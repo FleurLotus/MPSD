@@ -47,7 +47,7 @@
             Assert.Throws<HtmlTableParserNoTagEndException>(() => HtmlTableParser.ExtractCell("<td"), "Should throw HtmlTableParserNoTagEndException");
         }
         [Test]
-        public void TestGetColrCount()
+        public void TestGetColCount()
         {
             IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
             Assert.IsNotNull(ret, "ret must be not null");
