@@ -250,7 +250,8 @@
 
                 foreach (var kv in specialSets)
                 {
-                    repo.ExecuteParametrizeCommand(UpdateQueries.AddNoneGathererSets,
+                    repo.ExecuteParametrizeCommand(UpdateQueries.
+                        AddNoneGathererSets,
                        new KeyValuePair<string, object>("@code", kv.Key),
                        new KeyValuePair<string, object>("@name", kv.Value));
                 }
@@ -412,6 +413,20 @@
                        new KeyValuePair<string, object>("@name", kv.Value.Item1),
                        new KeyValuePair<string, object>("@date", kv.Value.Item2));
                 }
+
+                //14.3
+                Dictionary<string, Tuple<string, string>> specialSets2 = new Dictionary<string, Tuple<string, string>> {
+                    { "SCD" , Tuple.Create("Starter Commander Decks", "2022-12-02 00:00:00") }
+                };
+
+                foreach (var kv in specialSets2)
+                {
+                    repo.ExecuteParametrizeCommand(UpdateQueries.AddNoneGathererSetsWithDate,
+                       new KeyValuePair<string, object>("@code", kv.Key),
+                       new KeyValuePair<string, object>("@name", kv.Value.Item1),
+                       new KeyValuePair<string, object>("@date", kv.Value.Item2));
+                }
+
             }
 
             using (var temporaryDabase = new TemporaryDatabase())

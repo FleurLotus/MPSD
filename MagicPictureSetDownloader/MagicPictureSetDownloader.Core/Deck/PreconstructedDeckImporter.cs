@@ -146,6 +146,7 @@
             //  80 Archenemy
             //  70 Planechase
             //  20 Jumpstart
+            //  19 Jumpstart (+1 semi-random)
             if (cardCount != 60 && cardCount != 75 && 
                 cardCount != 62 &&
                 cardCount != 61 &&
@@ -153,7 +154,7 @@
                 cardCount != 15 && cardCount != 22 && cardCount != 26 && cardCount != 30 && cardCount != 35 && cardCount != 40 && cardCount != 41 && 
                 cardCount != 80 &&
                 cardCount != 70 &&
-                cardCount != 20
+                cardCount != 20 && cardCount != 19
                 )
             {
                 throw new ParserException(string.Format("Deck {0} contains {1} cards", deckName, cardCount));
