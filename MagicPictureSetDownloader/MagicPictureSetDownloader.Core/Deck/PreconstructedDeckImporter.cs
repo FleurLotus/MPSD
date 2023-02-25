@@ -110,6 +110,11 @@
                         }
 
                         int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
+                        if (idGatherer == 0 && deckEdition.IsNoneGatherer())
+                        {
+                            edition = deckEdition;
+                            idGatherer = MagicDatabase.GetIdGatherer(card, edition);
+                        }
                         if (idGatherer == 0)
                         {
                             //It is not a gatherer edition, we will add the card to it

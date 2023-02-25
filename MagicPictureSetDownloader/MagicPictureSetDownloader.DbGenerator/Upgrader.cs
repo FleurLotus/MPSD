@@ -416,7 +416,8 @@
 
                 //14.3
                 Dictionary<string, Tuple<string, string>> specialSets2 = new Dictionary<string, Tuple<string, string>> {
-                    { "SCD" , Tuple.Create("Starter Commander Decks", "2022-12-02 00:00:00") }
+                    { "SCD" , Tuple.Create("Starter Commander Decks", "2022-12-02 00:00:00") },
+                    { "PHED" , Tuple.Create("Heads I Win, Tails You Lose", "2022-04-22 00:00:00") }
                 };
 
                 foreach (var kv in specialSets2)

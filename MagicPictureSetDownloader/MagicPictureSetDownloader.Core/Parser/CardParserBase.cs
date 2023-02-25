@@ -44,6 +44,17 @@
                     {@"Tasha, Unholy Archmage", "4" },
                     // Dominaria United
                     {@"Ajani, Sleeper Agent", "4" },
+                    // Phyrexia: All Will Be One
+                    {@"Jace, the Perfected Mind", "5" },
+                    {@"Kaito, Dancing Shadow", "3" },
+                    {@"Kaya, Intangible Slayer", "6" },
+                    {@"Koth, Fire of Resistance", "4" },
+                    {@"Vraska, Betrayal's Sting", "6" },
+                    {@"Lukka, Bound to Ruin", "5" },
+                    {@"Nahiri, the Unforgiving", "5" },
+                    {@"The Eternal Wanderer", "5" },
+                    {@"Nissa, Ascended Animist", "7" },
+                    {@"Tyvar, Jubilant Brawler", "3" },
                 }
             },
             { "Rarity:", new Dictionary<string, string>

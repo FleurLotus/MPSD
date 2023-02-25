@@ -83,7 +83,7 @@
                     </ListView.View>
                 </ListView>
 
-                <Image Grid.Column="1" Margin="10" StretchDirection="DownOnly" Source="{Binding SelectedItem.Key, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
+                <Image Grid.Column="1" Margin="10" Source="{Binding SelectedItem.Key, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
             </Grid>
             <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Orientation="Horizontal" Visibility="{Binding Collections.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
