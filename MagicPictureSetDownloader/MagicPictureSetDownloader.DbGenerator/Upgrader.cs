@@ -427,7 +427,14 @@
                        new KeyValuePair<string, object>("@name", kv.Value.Item1),
                        new KeyValuePair<string, object>("@date", kv.Value.Item2));
                 }
-
+            }
+            if (dbVersion <= 15)
+            {
+                //15.0
+                if (!repo.ColumnExists("Card", "Defense"))
+                {
+                    repo.ExecuteBatch(UpdateQueries.AddDefenseColumnToCard);
+                }
             }
 
             using (var temporaryDabase = new TemporaryDatabase())

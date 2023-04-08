@@ -9,6 +9,7 @@
         bool HasMultiPart(ICard card);
         bool IsDownSide(ICard card);
         bool Is90DegreeSide(ICard card);
+        bool Is90DegreeFrontSide(ICard card);
         bool ShouldIgnore(ICard card);
         bool IsSecondPartOfSplitted(ICard card);
         bool IsSpecial(ICardAllDbInfo cai);

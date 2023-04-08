@@ -315,6 +315,11 @@ SELECT @name, @code, 'MTG.WTF-' || @name, 0, 1, @date
 WHERE NOT EXISTS(SELECT 1 FROM Edition WHERE Name = @name)
 ";
 
+        public const string AddDefenseColumnToCard =
+@"
+ALTER TABLE Card
+ADD COLUMN [Defense] TEXT NULL
+";
 
     }
 }

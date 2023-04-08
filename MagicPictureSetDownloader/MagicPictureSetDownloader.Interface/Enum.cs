@@ -54,6 +54,7 @@ namespace MagicPictureSetDownloader.Interface
         Saga = 1 << 9,
         Adventure = 1 << 10,
         Equipment = 1 << 11,
+        Siege = 1 << 12,
         //Must be constistante with MagicRules.GetCardSubType
     }
 
@@ -75,6 +76,7 @@ namespace MagicPictureSetDownloader.Interface
         Contraption = 1 << 11,
         Vanguard = 1 << 12,
         Stickers = 1 << 13,
+        Battle = 1 << 14,
         //Must be constistante with MagicRules.GetCardType
     }
 

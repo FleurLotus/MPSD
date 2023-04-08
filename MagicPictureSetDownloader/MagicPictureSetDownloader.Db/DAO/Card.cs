@@ -30,6 +30,8 @@
         [DbColumn]
         public string Loyalty { get; set; }
         [DbColumn]
+        public string Defense { get; set; }
+        [DbColumn]
         public string Type { get; set; }
         [DbColumn]
         public string PartName { get; set; }

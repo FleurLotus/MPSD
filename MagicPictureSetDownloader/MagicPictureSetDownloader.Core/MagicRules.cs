@@ -23,6 +23,7 @@
         Vanguard,
         Token,
         Stickers,
+        Battle,
     }
 
     public enum DisplayColor
@@ -82,6 +83,11 @@
         public static DisplayCardType GetDisplayCardType(string type, string castingCost)
         {
             CardType card = GetCardType(type, castingCost);
+
+            if (Matcher<CardType>.HasValue(card, CardType.Battle))
+            {
+                return DisplayCardType.Battle;
+            }
 
             if (Matcher<CardType>.HasValue(card, CardType.Land))
             {
@@ -236,6 +242,11 @@
                 cardType |= CardType.Stickers;
             }
 
+            if (IsBattle(type))
+            {
+                cardType |= CardType.Battle;
+            }
+
             return cardType;
         }
         public static CardSubType GetCardSubType(string type)
@@ -300,6 +311,12 @@
             {
                 cardSubType |= CardSubType.Equipment;
             }
+
+            if (IsSiege(type))
+            {
+                cardSubType |= CardSubType.Siege;
+            }
+
             return cardSubType;
         }
         public static ShardColor GetColor(string castingCost)
@@ -408,6 +425,10 @@
         {
             return type.ToLowerInvariant().Contains("equipment");
         }
+        public static bool IsSiege(string type)
+        {
+            return type.ToLowerInvariant().Contains("siege");
+        }
         public static bool IsVanguard(string type)
         {
             return type.ToLowerInvariant().Contains("vanguard");
@@ -419,6 +440,10 @@
         public static bool IsToken(string type)
         {
             return type.ToLowerInvariant().Contains("token");
+        }
+        public static bool IsBattle(string type)
+        {
+            return type.ToLowerInvariant().Contains("battle");
         }
     }
 }

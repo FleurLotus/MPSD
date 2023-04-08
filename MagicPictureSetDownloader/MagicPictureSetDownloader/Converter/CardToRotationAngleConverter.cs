@@ -18,14 +18,26 @@ namespace MagicPictureSetDownloader.Converter
                 return 0.0;
             }
 
-            if (node.Card.OtherCardPart.IsDownSide)
-            {
-                return 180.0;
-            }
+            int param = int.Parse(parameter.ToString());
 
-            if (node.Card.OtherCardPart.Is90DegreeSide)
+            if (param == 0)
             {
-                return -90.0;
+                if (node.Card.Is90DegreeSide)
+                {
+                    return 90.0;
+                }
+            }
+            else if (param == 1)
+            {
+                if (node.Card.OtherCardPart.IsDownSide)
+                {
+                    return 180.0;
+                }
+
+                if (node.Card.OtherCardPart.Is90DegreeSide)
+                {
+                    return -90.0;
+                }
             }
 
             return 0.0;

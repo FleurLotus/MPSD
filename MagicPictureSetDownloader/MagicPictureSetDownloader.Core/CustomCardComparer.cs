@@ -54,7 +54,7 @@
             }
 
             //Rule 4: for Creature and Vehicule: by force increasing, then endurance increasing
-            comp = ComparePTLoyalty(x, y);
+            comp = ComparePTLoyaltyDefense(x, y);
             if (comp.HasValue && comp.Value != 0)
             {
                 return comp.Value;
@@ -111,8 +111,8 @@
                 return c;
             }
 
-            //Rule 5: By P/T, Loyalty for Creature, Vehicule: by force increasing, then endurance increasing
-            c = ComparePTLoyalty(x, y);
+            //Rule 5: By P/T, Loyalty, Defense for Creature, Vehicule: by force increasing, then endurance increasing
+            c = ComparePTLoyaltyDefense(x, y);
             if (c != 0)
             {
                 return c;
@@ -184,10 +184,8 @@
             CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
             CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
 
-
-            //  a) By Type for all no Artifact: Instant, Sorcery, Enchantment, Creature, Planeswalker, others
-
-            foreach (CardType cardType in new[] { CardType.Instant, CardType.Sorcery, CardType.Enchantment, CardType.Creature, CardType.Planeswalker })
+            //  a) By Type for all no Artifact: Instant, Sorcery, Enchantment, Creature, Planeswalker, Battle, others
+            foreach (CardType cardType in new[] { CardType.Instant, CardType.Sorcery, CardType.Enchantment, CardType.Creature, CardType.Planeswalker, CardType.Battle })
             {
                 int? comp = CompareHasValue(xCardType, yCardType, cardType, true);
                 if (comp.HasValue)
@@ -310,7 +308,22 @@
 
             return int.MaxValue;
         }
-        private int ComparePTLoyalty(ICardAllDbInfo x, ICardAllDbInfo y)
+        private int GetDefense(ICardAllDbInfo cardAllDbInfo)
+        {
+            string defense = cardAllDbInfo.Card.Defense;
+            if (string.IsNullOrWhiteSpace(defense) && MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
+            {
+                defense = cardAllDbInfo.CardPart2.Defense;
+            }
+
+            if (int.TryParse(defense, out int ret))
+            {
+                return ret;
+            }
+
+            return int.MaxValue;
+        }
+        private int ComparePTLoyaltyDefense(ICardAllDbInfo x, ICardAllDbInfo y)
         {
             CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
             CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
@@ -349,6 +362,19 @@
                     return comp;
                 }
             }
+
+            if (Matcher<CardType>.HasValue(xCardType, CardType.Battle) && Matcher<CardType>.HasValue(yCardType, CardType.Battle))
+            {
+                int xDefense = GetDefense(x);
+                int yDefense = GetDefense(y);
+
+                int comp = xDefense.CompareTo(yDefense);
+                if (comp != 0)
+                {
+                    return comp;
+                }
+            }
+
 
             return 0;
         }

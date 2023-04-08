@@ -87,7 +87,7 @@ namespace MagicPictureSetDownloader.Db
         {
             _pictureDatabase.InsertNewTreePicture(name, data);
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string type, string partName, string otherPartName, IDictionary<string, string> languages)
+        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string partName, string otherPartName, IDictionary<string, string> languages)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -108,6 +108,7 @@ namespace MagicPictureSetDownloader.Db
                         Toughness = toughness,
                         CastingCost = castingcost,
                         Loyalty = loyalty,
+                        Defense = defense,
                         Type = type,
                         OtherPartName = otherPartName
                     };

@@ -35,7 +35,7 @@
         public bool IsDownSide(ICard card)
         {
             return HasMultiPart(card) &&
-                  !IsSplitted(card) && !IsReverseSide(card) && !IsBackSideOfModalDoubleFacedCard(card) && !IsMultiCard(card) && !IsSameDisplay(card) ;
+                  !IsSplitted(card) && !IsReverseSide(card) && !IsBackSideOfModalDoubleFacedCard(card) && !IsMultiCard(card) && !IsSameDisplay(card);
         }
 
         //Adventure
@@ -75,6 +75,12 @@
         public bool Is90DegreeSide(ICard card)
         {
             return IsSplitted(card) && card.Text != null && card.Text.StartsWith("Aftermath");
+        }
+
+        //Battle
+        public bool Is90DegreeFrontSide(ICard card)
+        {
+            return HasMultiPart(card) && MagicRules.IsBattle(card.Type);
         }
 
         public bool ShouldIgnore(ICard card)

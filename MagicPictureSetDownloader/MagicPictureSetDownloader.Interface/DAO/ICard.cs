@@ -9,6 +9,7 @@
         string Toughness { get; }
         string CastingCost { get; }
         string Loyalty { get; }
+        string Defense { get; }
         string Type { get; }
         string PartName { get; }
         string OtherPartName { get; }

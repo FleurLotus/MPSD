@@ -68,10 +68,10 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyText}"
-                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
-            <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding PowerToughnessLoyalty}"
-                   Visibility="{Binding PowerToughnessLoyaltyText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
+            <Label Grid.Column="2" Grid.Row="3" Content="{Binding PowerToughnessLoyaltyDefenseText}"
+                   Visibility="{Binding PowerToughnessLoyaltyDefenseText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
+            <TextBlock Grid.Column="3" Grid.Row="3" Text="{Binding PowerToughnessLoyaltyDefense}"
+                   Visibility="{Binding PowerToughnessLoyaltyDefenseText, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}"/>
 
             <Label Grid.Column="0" Grid.Row="5" Content="Text"/>
             <l:PicturedTextBlock Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={conv:TextToInlinesConverter }}" />
@@ -252,14 +252,29 @@
     <!-- Card picture display -->
     <ControlTemplate x:Key="ImageControlTemplate">
         <StackPanel Orientation="Horizontal" d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <Image Source="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter}, {conv:CardToImageConverter}}, ConverterParameter=0}" />
+            <Image Source="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter}, {conv:CardToImageConverter}}, ConverterParameter=0}" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={conv:CardToRotationAngleConverter}, ConverterParameter=0}" />
+                        <TranslateTransform>
+                            <TranslateTransform.X>
+                                <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="0">
+                                    <Binding Path="Hierarchical.Selected"/>
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                </MultiBinding>
+                            </TranslateTransform.X>
+                        </TranslateTransform>
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image>
             <Image Source="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter}, {conv:CardToImageConverter}}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={conv:CardToRotationAngleConverter}}" />
+                        <RotateTransform Angle="{Binding Hierarchical.Selected, Converter={conv:CardToRotationAngleConverter}, ConverterParameter=1}" />
                         <TranslateTransform>
                             <TranslateTransform.X>
-                                <MultiBinding Converter="{conv:HeightToMoveConverter}">
+                                <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="1">
                                     <Binding Path="Hierarchical.Selected"/>
                                     <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
                                     <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
