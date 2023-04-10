@@ -115,7 +115,7 @@
 
                         // Bring the item into view to maintain the 
                         // same behavior as with a virtualizing panel.
-                        subContainer.BringIntoView();
+                        subContainer?.BringIntoView();
                     }
 
                     if (subContainer == null)
