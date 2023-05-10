@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <AssemblyTitle>ScryfallTest</AssemblyTitle>
+    <Product>ScryfallTest</Product>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Source\**" />
+    <EmbeddedResource Remove="Source\**" />
+    <None Remove="Source\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Common.Database" Version="7.2.0" />
+    <PackageReference Include="Common.SQLite" Version="7.2.0" />
+    <PackageReference Include="Macross.Json.Extensions" Version="3.0.0" />
+  </ItemGroup>
+</Project>
