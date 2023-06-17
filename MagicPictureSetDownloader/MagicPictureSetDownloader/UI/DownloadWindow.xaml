@@ -12,7 +12,7 @@
         Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}"
         d:DataContext="{d:DesignInstance Type=edition:DownloadEditionViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
-        Width="650" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
+        Width="850" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="CredentialRequiered" SourceObject="{Binding}">
@@ -59,7 +59,7 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="25" />
-                                    <ColumnDefinition Width="200" />
+                                    <ColumnDefinition Width="320" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>

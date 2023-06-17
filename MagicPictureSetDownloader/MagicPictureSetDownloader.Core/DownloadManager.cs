@@ -67,7 +67,8 @@
             do
             {
                 hasnextpage = false;
-                string realUrl = string.Format("{0}&page={1}", baseUrl, page);
+                
+                string realUrl = page == 0 ? baseUrl : string.Format("{0}&page={1}", baseUrl, page);
                 string html = _webAccess.GetHtml(realUrl);
                 try
                 {
