@@ -4,6 +4,7 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using Common.Library.Notify;
     using Common.Web;
@@ -98,7 +99,26 @@
                 }
                 catch (Exception ex)
                 {
-                    SendError(ex);
+                    SendError(ex, jobData.Url + " ReTrying .. ");
+
+                    if (_isStopping)
+                    {
+                        return;
+                    }
+                    Thread.Sleep(2000);
+                    try
+                    {
+                        if (_isStopping)
+                        {
+                            return;
+                        }
+                        jobData.AddHtml(_downloadManager.GetExtraInfo(jobData.Url));
+                        _inputsWithHtml.Add(jobData);
+                    }
+                    catch (Exception ex2)
+                    {
+                        SendError(ex2, jobData.Url + " Final Failure");
+                    }
                 }
             }
         }
@@ -141,7 +161,7 @@
                 }
                 catch (Exception ex)
                 {
-                    SendError(ex);
+                    SendError(ex, jobData.Url);
                 }
             }
         }
@@ -149,9 +169,9 @@
         {
             _isStopping = true;
         }
-        private void SendError(Exception ex)
+        private void SendError(Exception ex, string url)
         {
-            OnError(ex.Message);
+            OnError($"{url} -> {ex.Message}");
         }
         private void OnError(string message)
         {

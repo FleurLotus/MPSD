@@ -23,21 +23,13 @@
                 return ImageWorker.IsWorkingInfo(xmlReader.GetAttribute("id")) ? new ImageWorker() : null;
             }
 
-            switch (classValue.ToLowerInvariant())
+            return classValue.ToLowerInvariant() switch
             {
-                case "communityratings":
-                    return new SkipWorker();
-
-                case "row":
-                case "row manarow":
-                    return new RowWorker(xmlReader);
-
-                case "variations":
-                    return new VariationsWorker();
-
-                default:
-                    return null;
-            }
+                "communityratings" => new SkipWorker(),
+                "row" or "row manarow" => new RowWorker(xmlReader),
+                "variations" => new VariationsWorker(),
+                _ => null,
+            };
         }
         public ICardInfoParserWorker CreateParserRowSubWorker(IAwareXmlTextReader xmlReader)
         {
@@ -58,32 +50,19 @@
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl03_* for part A off multi part card
             //ctl00_ctl00_ctl00_maincontent_subcontent_subcontent_ctl04_* for part B off multi part card
 
-            switch (infoType)
+            return infoType switch
             {
-                case "namerow":
-                    return new SimpleValueRowWorker(CardParserBase.NameKey);
-                case "manarow":
-                    return new ManaRowWorker();
-                case "cmcrow":
-                    return new SimpleValueRowWorker(CardParserBase.CmcKey);
-                case "ptrow":
-                    return new SimpleValueRowWorker(CardParserBase.PTKey);
-                case "typerow":
-                    return new SimpleValueRowWorker(CardParserBase.TypeKey);
-                case "rarityrow":
-                    return new SimpleValueRowWorker(CardParserBase.RarityKey);
-                case "textrow":
-                    return new TextRowWorker();
-
+                "namerow" => new SimpleValueRowWorker(CardParserBase.NameKey),
+                "manarow" => new ManaRowWorker(),
+                "cmcrow" => new SimpleValueRowWorker(CardParserBase.CmcKey),
+                "ptrow" => new SimpleValueRowWorker(CardParserBase.PTKey),
+                "typerow" => new SimpleValueRowWorker(CardParserBase.TypeKey),
+                "rarityrow" => new SimpleValueRowWorker(CardParserBase.RarityKey),
+                "textrow" => new TextRowWorker(),
                 //Not used
-                case "setrow":
-                case "numberrow":
-                case "artistrow":
-                case "flavorRow":
-                    return null;
-                default:
-                    return null;
-            }
+                "setrow" or "numberrow" or "artistrow" or "flavorRow" => null,
+                _ => null,
+            };
         }
     }
 }

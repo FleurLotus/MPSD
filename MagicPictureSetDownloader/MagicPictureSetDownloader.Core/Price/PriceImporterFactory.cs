@@ -6,13 +6,11 @@
     {
         public static IPriceImporter Create(PriceSource pricesource)
         {
-            switch (pricesource)
+            return pricesource switch
             {
-                case PriceSource.Scryfall:
-                    return new ScryfallPriceImporter();
-                default:
-                    throw new PriceImporterException("Unknown PriceSource type:" + pricesource);
-            }
+                PriceSource.Scryfall => new ScryfallPriceImporter(),
+                _ => throw new PriceImporterException("Unknown PriceSource type:" + pricesource),
+            };
         }
     }
 }

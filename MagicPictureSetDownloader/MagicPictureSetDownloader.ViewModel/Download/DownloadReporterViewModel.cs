@@ -79,10 +79,7 @@
 
             if (disposing)
             {
-                if (_lock != null)
-                {
-                    _lock.Dispose();
-                }
+                _lock?.Dispose();
             }
             _disposed = true;
         }

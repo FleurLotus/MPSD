@@ -165,10 +165,7 @@
         }
         protected override void OnStopRequested()
         {
-            if (_downloadManagerEdition != null)
-            {
-                _downloadManagerEdition.Stop();
-            }
+            _downloadManagerEdition?.Stop();
         }
         private void EditionInfoViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {

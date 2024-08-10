@@ -189,12 +189,12 @@
 
             if (!infos.ContainsKey(TypeKey))
             {
-                throw new ParserException("No type found");
+                throw new ParserException($"No type found for {infos.GetOrDefault(NameKey)}");
             }
 
             if (!infos.ContainsKey(RarityKey))
             {
-                throw new ParserException("No rarity found");
+                throw new ParserException($"No rarity found for {infos.GetOrDefault(NameKey)}");
             }
 
             string type = infos.GetOrDefault(TypeKey);
@@ -202,7 +202,8 @@
             //Add check on casting cost because of second face of Garruk, the Veil-Cursed which has no loyalty counter
             if ((MagicRules.IsCreature(type) || MagicRules.IsPlaneswalker(type) || MagicRules.IsVehicle(type) || MagicRules.IsBattle(type)) && !infos.ContainsKey(PTKey) && !string.IsNullOrWhiteSpace(castingcost))
             {
-                throw new ParserException("No PT/Loyalty/Defense found");
+                throw new ParserException($"No PT/Loyalty/Defense found for {infos.GetOrDefault(NameKey)}");
+
             }
         }
         private string GetPower(string text)

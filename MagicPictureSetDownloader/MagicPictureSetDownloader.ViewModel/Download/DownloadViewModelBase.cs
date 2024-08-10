@@ -90,10 +90,7 @@
 
             lock (_sync)
             {
-                if (_batch == null)
-                {
-                    _batch = MagicDatabaseManager.ReadAndUpdate.BatchMode();
-                }
+                _batch ??= MagicDatabaseManager.ReadAndUpdate.BatchMode();
             }
 
             FinishedStopping.Reset();

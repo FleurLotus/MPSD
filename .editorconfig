@@ -217,3 +217,12 @@ dotnet_naming_style.begins_with_i.required_prefix = I
 dotnet_naming_style.begins_with_i.required_suffix = 
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+
+# Ignore Warning
+# CA1847: Use char literal for a single character lookup
+dotnet_diagnostic.CA1847.severity = none
+# CA1822: Mark members as static
+dotnet_diagnostic.CA1822.severity = none
+# CA2249: Consider using 'string.Contains' instead of 'string.IndexOf'
+dotnet_diagnostic.CA2249.severity = none

@@ -18,21 +18,12 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            string currency;
-            switch (data.Source)
+            string currency = data.Source switch
             {
-                case PriceValueSource.Cardmarket:
-                    currency = "€";
-                    break;
-                case PriceValueSource.TCGplayer:
-                    currency = "$";
-                    break;
-                case PriceValueSource.Unknown:
-                default:
-                    currency = "";
-                    break;
-            }
-
+                PriceValueSource.Cardmarket => "€",
+                PriceValueSource.TCGplayer => "$",
+                _ => "",
+            };
             return string.Format("{0:###,##0.00} {1}", data.Value / 100.0, currency);
         }
     }

@@ -31,7 +31,9 @@
             { "Rarity:", new Dictionary<string, string>
                 {
                     //Warhammer 40,000 Commander
-                    {"Fabricate", "Rare" }
+                    {"Fabricate", "Rare" },
+                    //Magic The Gathering—Fallout
+                    {"War Room", "Rare" }
                 }
             },
         };
@@ -524,7 +526,8 @@
                 foreach (var kv in _missingPropertyValue[property])
                 {
                     string key = kv.Key + " </div>";
-                    if (text.Contains(key))
+                    string key2 = kv.Key + "</div>";
+                    if (text.Contains(key) || text.Contains(key2))
                     {
                         //Missing the property
                         string start = property + "</div>";

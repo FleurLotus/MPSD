@@ -147,11 +147,13 @@
             Assembly entryAssembly = Assembly.GetEntryAssembly();
 
             //From http://www.codeproject.com/Articles/31454/How-To-Make-Your-Application-Delete-Itself-Immedia
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.Arguments = string.Format("/C choice /C Y /N /D Y /T 5 & copy /Y \"{0}\" \"{1}\"", Path.Combine(temporyDirectory, "*.*"), Path.GetDirectoryName(entryAssembly.Location));
-            info.WindowStyle = ProcessWindowStyle.Hidden;
-            info.CreateNoWindow = true;
-            info.FileName = "cmd.exe";
+            ProcessStartInfo info = new ProcessStartInfo
+            {
+                Arguments = string.Format("/C choice /C Y /N /D Y /T 5 & copy /Y \"{0}\" \"{1}\"", Path.Combine(temporyDirectory, "*.*"), Path.GetDirectoryName(entryAssembly.Location)),
+                WindowStyle = ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                FileName = "cmd.exe"
+            };
             Process.Start(info);
         }
     }

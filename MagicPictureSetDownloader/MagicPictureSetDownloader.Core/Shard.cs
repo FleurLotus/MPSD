@@ -172,26 +172,15 @@
             {
                 isHybrid = color != ShardColor.Colorless;
 
-                switch (c)
+                color |= c switch
                 {
-                    case White:
-                        color |= ShardColor.White;
-                        break;
-                    case Blue:
-                        color |= ShardColor.Blue;
-                        break;
-                    case Black:
-                        color |= ShardColor.Black;
-                        break;
-                    case Red:
-                        color |= ShardColor.Red;
-                        break;
-                    case Green:
-                        color |= ShardColor.Green;
-                        break;
-                    default:
-                        throw new Exception($"Unknown element in shard cast cost {shardCastingCost}: {c}");
-                }
+                    White => ShardColor.White,
+                    Blue => ShardColor.Blue,
+                    Black => ShardColor.Black,
+                    Red => ShardColor.Red,
+                    Green => ShardColor.Green,
+                    _ => throw new Exception($"Unknown element in shard cast cost {shardCastingCost}: {c}"),
+                };
             }
 
             shard = new Shard(shardCastingCost, color, isPhyrexian, isHybrid, is2Hybrid, isHalf);

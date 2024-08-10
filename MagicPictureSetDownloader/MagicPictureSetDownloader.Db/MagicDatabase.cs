@@ -209,7 +209,7 @@ namespace MagicPictureSetDownloader.Db
         public IOption GetOption(TypeOfOption type, string key)
         {
             IList<IOption> options = GetOptions(type);
-            return options == null ? null : options.FirstOrDefault(o => o.Key == key);
+            return options?.FirstOrDefault(o => o.Key == key);
         }
 
         //Ensembly Get
