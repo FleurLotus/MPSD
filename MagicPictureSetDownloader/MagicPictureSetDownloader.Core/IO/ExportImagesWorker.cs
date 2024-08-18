@@ -27,12 +27,12 @@
                     MagicDatabase.InsertNewTreePicture(treePicture.Name, treePicture.Image);
                 }
             }
-            else if (id is int i)
+            else if (id is string i)
             {
                 IPicture picture = PictureDatabase.LoadPicture(i);
                 if (picture != null)
                 {
-                    MagicDatabase.InsertNewPicture(picture.IdGatherer, picture.Image);
+                    MagicDatabase.InsertNewPicture(picture.IdScryFall, picture.Image);
                 }
             }
         }

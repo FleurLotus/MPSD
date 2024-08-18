@@ -60,7 +60,7 @@
                     IDictionary<string, object> dic = propvalue as IDictionary<string, object>;
                     if (dic != null && dic.Count > 0)
                     {
-                        ret.Add($"{path} => {string.Join(",", dic.Select(kv => kv.Key.ToString() + ":" + kv.Value.ToString()))}");
+                        ret.Add($"{path} => {string.Join(",", dic.Select(kv => $"{kv.Key}:{kv.Value}"))}");
                         continue;
                     }
                 }

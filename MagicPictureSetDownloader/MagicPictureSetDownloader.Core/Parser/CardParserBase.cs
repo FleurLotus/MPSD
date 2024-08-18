@@ -525,12 +525,12 @@
             {
                 foreach (var kv in _missingPropertyValue[property])
                 {
-                    string key = kv.Key + " </div>";
-                    string key2 = kv.Key + "</div>";
+                    string key = $"{kv.Key} </div>";
+                    string key2 = $"{kv.Key}</div>";
                     if (text.Contains(key) || text.Contains(key2))
                     {
                         //Missing the property
-                        string start = property + "</div>";
+                        string start = $"{property}</div>";
                         const string end = @"</div>";
                         const string middle = @"<div class=""value"">";
 

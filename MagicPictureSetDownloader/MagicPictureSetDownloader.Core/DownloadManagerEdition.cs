@@ -99,7 +99,7 @@
                 }
                 catch (Exception ex)
                 {
-                    SendError(ex, jobData.Url + " ReTrying .. ");
+                    SendError(ex, $"{jobData.Url} ReTrying .. ");
 
                     if (_isStopping)
                     {
@@ -117,7 +117,7 @@
                     }
                     catch (Exception ex2)
                     {
-                        SendError(ex2, jobData.Url + " Final Failure");
+                        SendError(ex2, $"{jobData.Url} Final Failure");
                     }
                 }
             }

@@ -36,7 +36,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         public bool HasFoil { get; set; }
         public bool IsCode(string code)
         {
-            string tmp = Code + ";" + AlternativeCode;
+            string tmp = $"{Code};{AlternativeCode}";
             return tmp.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Any(c => string.Equals(c, code, StringComparison.InvariantCultureIgnoreCase));
         }
 

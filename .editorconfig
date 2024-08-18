@@ -226,3 +226,5 @@ dotnet_diagnostic.CA1847.severity = none
 dotnet_diagnostic.CA1822.severity = none
 # CA2249: Consider using 'string.Contains' instead of 'string.IndexOf'
 dotnet_diagnostic.CA2249.severity = none
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = none

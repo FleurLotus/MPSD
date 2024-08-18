@@ -5,7 +5,7 @@
     {
         bool CouldMigrate { get; }
         Tuple<bool, object>[] GetMigrationPictures();
-        IPicture LoadPicture(int idGatherer);
+        IPicture LoadPicture(string idScryFall);
         ITreePicture LoadTreePicture(string name);
     }
 }

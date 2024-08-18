@@ -228,9 +228,9 @@
             {
                 string directoryName = System.IO.Path.GetDirectoryName(importFilePath);
                 string timestamp = DateTime.Now.ToString("yyyMMddHHmmss");
-                string errorFileName = "Error" + timestamp + ".txt";
+                string errorFileName = $"Error{timestamp}.txt";
 
-                string rebuiltFileName = "Error" + fileName;
+                string rebuiltFileName = $"Error{fileName}";
                 using (StreamWriter sw = new StreamWriter(System.IO.Path.Combine(directoryName, errorFileName)))
                 {
                     sw.Write(status.ErrorMessage);

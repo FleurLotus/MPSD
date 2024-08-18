@@ -35,7 +35,7 @@
         {
             if (onlyCount)
             {
-                return _countDistinct + " distinct card(s)";
+                return $"{_countDistinct} distinct card(s)";
             }
 
             return string.Format("{0} card(s) ({1} distinct)", _countTotal, _countDistinct);

@@ -7,16 +7,14 @@
     internal class CardAllDbInfo : ICardAllDbInfo
     {
         private ICollection<ICardInCollectionCount> _statistics;
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         public ICard Card { get; set; }
+        public ICollection<ICardFace> CardFaces { get; set; }
+        public ICardFace MainCardFace { get; set; }
         public IRarity Rarity { get; set; }
         public IEdition Edition { get; set; }
         public ICollection<IPrice> Prices { get; set; }
-        public ICollection<int> VariationIdGatherers { get; set; }
-        //For Multipart card
-        public int IdGathererPart2 { get; set; }
-        public ICard CardPart2 { get; set; }
-        public ICollection<int> VariationIdGatherers2 { get; set; }
+        public ICollection<string> VariationIdScryFalls { get; set; }
         public IEnumerable<ICardInCollectionCount> Statistics
         {
             get { return _statistics; }

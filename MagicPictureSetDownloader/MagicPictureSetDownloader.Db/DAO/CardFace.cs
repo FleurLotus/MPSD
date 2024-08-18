@@ -27,5 +27,7 @@
         public string Type { get; set; }
         [DbColumn]
         public string Url { get; set; }
+        [DbColumn]
+        public string IdScryFall { get; set; }
     }
 }

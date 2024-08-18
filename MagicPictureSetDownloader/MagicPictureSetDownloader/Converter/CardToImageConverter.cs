@@ -8,7 +8,7 @@ namespace MagicPictureSetDownloader.Converter
     using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
-    public class CardToImageConverter : GathererIdToImageConverter
+    public class CardToImageConverter : ScryFallIdToImageConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,7 +19,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            int idGatherer = 0;
+            string idScryFall = null;
             if (param == 0)
             {
                 idGatherer = card.IdGatherer;

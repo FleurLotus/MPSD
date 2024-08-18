@@ -38,31 +38,31 @@ namespace MagicPictureSetDownloader.Db
         public IPictureDatabaseMigration PictureDatabaseMigration { get; }
 
         //Unitary Get
-        public ICard GetCard(string name, string partName)
+        public ICard GetCard(string name)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                string key;
-                if (partName == null || partName == name)
-                {
-                    key = name;
-                }
-                else
-                {
-                    key = name + partName;
-                }
-
-                return _cards.GetOrDefault(key) ?? _cardsWithoutSpecialCharacters.GetOrDefault(LowerCaseWithoutSpecialCharacters(key));
+                return _cards.GetOrDefault(name);
             }
         }
+        //Unitary Get
+        public ICardFace GetCardFace(string idScryFall)
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _cardFaces.GetOrDefault(idScryFall);
+            }
+        }
+
         public IPicture GetDefaultPicture()
         {
-            return GetPicture(0);
+            return GetPicture("");
         }
-        public IPicture GetPicture(int idGatherer, bool doNotCache = false)
+        public IPicture GetPicture(string idScryFall, bool doNotCache = false)
         {
-            return _pictureDatabase.GetPicture(idGatherer, doNotCache);
+            return _pictureDatabase.GetPicture(idScryFall, doNotCache);
         }
         public ITreePicture GetTreePicture(string key)
         {
@@ -74,14 +74,14 @@ namespace MagicPictureSetDownloader.Db
 
             using (new ReaderLock(_lock))
             {
-                return _editions.FirstOrDefault(ed => string.Equals(ed.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase));
+                return _editions.FirstOrDefault(ed => string.Equals(ed.Name, sourceName, StringComparison.InvariantCultureIgnoreCase));
             }
         }
-        public IEdition GetEdition(int idGatherer)
+        public IEdition GetEditionByIdScryFall(string idScryFall)
         {
             using (new ReaderLock(_lock))
             {
-                ICardEdition cardEdition = GetCardEdition(idGatherer);
+                ICardEdition cardEdition = GetCardEdition(idScryFall);
                 if (cardEdition == null)
                 {
                     return null;
@@ -90,11 +90,11 @@ namespace MagicPictureSetDownloader.Db
                 return _editions.FirstOrDefault(e => e.Id == cardEdition.IdEdition);
             }
         }
-        public ICard GetCard(int idGatherer)
+        public ICard GetCardByIdScryFall(string idScryFall)
         {
             using (new ReaderLock(_lock))
             {
-                ICardEdition cardEdition = GetCardEdition(idGatherer);
+                ICardEdition cardEdition = GetCardEdition(idScryFall);
                 if (cardEdition == null)
                 {
                     return null;
@@ -129,13 +129,13 @@ namespace MagicPictureSetDownloader.Db
         {
             return GetLanguage(Constants.English);
         }
-        public IList<ILanguage> GetLanguages(int idGatherer)
+        public IList<ILanguage> GetLanguages(string idScryFall)
         {
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
             {
-                ICard card = GetCard(idGatherer);
+                ICard card = GetCardByIdScryFall(idScryFall);
                 if (card == null)
                 {
                     return null;
@@ -179,7 +179,7 @@ namespace MagicPictureSetDownloader.Db
                 return Array.Empty<IPreconstructedDeckCardEdition>();
             }
         }
-        private IPreconstructedDeckCardEdition GetPreconstructedDeckCard(int idPreconstructedDeck, int idGatherer)
+        private IPreconstructedDeckCardEdition GetPreconstructedDeckCard(int idPreconstructedDeck, string idScryFall)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
@@ -190,7 +190,7 @@ namespace MagicPictureSetDownloader.Db
                     return null;
                 }
 
-                return preconstructedDeckCards.FirstOrDefault(pdc => pdc.IdGatherer == idGatherer);
+                return preconstructedDeckCards.FirstOrDefault(pdc => pdc.IdScryFall == idScryFall);
             }
         }
         public IPreconstructedDeck GetPreconstructedDeck(int idPreconstructedDeck)
@@ -242,7 +242,7 @@ namespace MagicPictureSetDownloader.Db
                     CardAllDbInfo cardAllDbInfo = new CardAllDbInfo();
                     if (collection != null)
                     {
-                        if (collection.All(cicc => cicc.IdGatherer != cardEdition.IdGatherer))
+                        if (collection.All(cicc => cicc.IdScryFall != cardEdition.IdScryFall))
                         {
                             continue;
                         }
@@ -253,22 +253,23 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.Card = card;
                     cardAllDbInfo.Edition = _editions.FirstOrDefault(e => e.Id == edition.IdEdition);
                     cardAllDbInfo.Rarity = _rarities.Values.FirstOrDefault(r => r.Id == edition.IdRarity);
-                    cardAllDbInfo.IdGatherer = cardEdition.IdGatherer;
-                    cardAllDbInfo.IdGathererPart2 = 0;
-                    IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdGatherer);
+                    cardAllDbInfo.IdScryFall = cardEdition.IdScryFall;
+                    IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdScryFall);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
-                    if (_cardEditionVariations.TryGetValue(cardEdition.IdGatherer, out IList<ICardEditionVariation> other))
+                    if (_cardEditionVariations.TryGetValue(cardEdition.IdScryFall, out IList<ICardEditionVariation> other))
                     {
-                        cardAllDbInfo.VariationIdGatherers = other.Select(cev => cev.OtherIdGatherer).ToArray();
+                        cardAllDbInfo.VariationIdScryFalls = other.Select(cev => cev.OtherIdScryFall).ToArray();
                     }
                     else
                     {
-                        cardAllDbInfo.VariationIdGatherers = Array.Empty<int>();
+                        cardAllDbInfo.VariationIdScryFalls = Array.Empty<string>();
                     }
+                    ICardFace[] cardFaces = card.CardFaceIds.Select(id => _cardFacesbyId.GetOrDefault(id)).ToArray();
+                    cardAllDbInfo.CardFaces = cardFaces;
+                    cardAllDbInfo.MainCardFace = cardFaces[0];
 
-                    cardAllDbInfo.VariationIdGatherers2 = Array.Empty<int>();
-
+                    /* ALERT to review
                     //For Multipart card
                     if (_multiPartCardManager.HasMultiPart(card))
                     {
@@ -293,7 +294,7 @@ namespace MagicPictureSetDownloader.Db
                             }
                         }
                     }
-
+                    */
                     ret.Add(cardAllDbInfo);
                 }
 
@@ -321,22 +322,22 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        private ICardEdition GetCardEdition(int idGatherer)
+        private ICardEdition GetCardEdition(string idScryFall)
         {
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
             {
-                return _cardEditions.GetOrDefault(idGatherer);
+                return _cardEditions.GetOrDefault(idScryFall);
             }
         }
-        public IList<ICardEditionVariation> GetCardEditionVariation(int idGatherer)
+        public IList<ICardEditionVariation> GetCardEditionVariation(string idScryFall)
         {
             CheckReferentialLoaded();
 
             using (new ReaderLock(_lock))
             {
-                IList<ICardEditionVariation> variations = _cardEditionVariations.GetOrDefault(idGatherer);
+                IList<ICardEditionVariation> variations = _cardEditionVariations.GetOrDefault(idScryFall);
                 if (variations == null)
                 {
                     return new List<ICardEditionVariation>().AsReadOnly();
@@ -461,12 +462,15 @@ namespace MagicPictureSetDownloader.Db
         {
             HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());
 
-            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdGatherer))
+            /* ALERT: TO REVIEW
+            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdScryFall))
                                         .Select(ce => new KeyValuePair<string, object>(ce.Url, ce.IdGatherer))
                           .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer))
                                         .Select(cev => new KeyValuePair<string, object>(cev.Url, cev.OtherIdGatherer))).ToList();
+            */
+            return Array.Empty<KeyValuePair<string, object>>();
         }
-        public int[] GetRulesId()
+        public string[] GetRulesId()
         {
             using (new ReaderLock(_lock))
             {
@@ -479,7 +483,7 @@ namespace MagicPictureSetDownloader.Db
                     }
                 }
 
-                return temp.Values.Select(ce => ce.IdGatherer).Where(id => id > 0).ToArray();
+                return temp.Values.Select(ce => ce.IdScryFall).Where(id => !string.IsNullOrEmpty(id)).ToArray();
             }
         }
     }

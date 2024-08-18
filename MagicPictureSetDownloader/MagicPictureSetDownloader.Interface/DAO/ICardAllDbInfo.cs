@@ -7,12 +7,11 @@
         ICard Card { get; }
         IRarity Rarity { get; }
         IEdition Edition { get; }
-        int IdGatherer { get; }
-        ICard CardPart2 { get; }
-        int IdGathererPart2 { get; }
+        string IdScryFall { get; }
+        ICardFace MainCardFace { get; }
+        ICollection<ICardFace> CardFaces { get; }
         IEnumerable<ICardInCollectionCount> Statistics { get; }
         ICollection<IPrice> Prices { get; }
-        ICollection<int> VariationIdGatherers { get; }
-        ICollection<int> VariationIdGatherers2 { get; set; }
+        ICollection<string> VariationIdScryFalls { get; }
     }
 }

@@ -22,7 +22,7 @@
             {
                 return new ErrorImportExportCardInfo(line, "Can't parse line");
             }
-            if (!int.TryParse(m.Groups["IdGatherer"].Value, out int idGatherer) || MagicDatabase.GetCard(idGatherer) == null)
+            if (!int.TryParse(m.Groups["IdGatherer"].Value, out int idGatherer) || MagicDatabase.GetCardByScryFallId(idGatherer) == null)
             {
                 return new ErrorImportExportCardInfo(line, "Invalid IdGatherer");
             }

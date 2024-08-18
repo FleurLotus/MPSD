@@ -36,7 +36,7 @@
             using (IDbConnection cnx = GetPictureConnectionInternal())
             {
                 return Mapper<TreePicture>.LoadAll(cnx).Select(tp => new Tuple<bool, object>(true, tp.Name)).Union(
-                       Mapper<PictureKey>.LoadAll(cnx).Select(pk => new Tuple<bool, object>(false, pk.IdGatherer))).ToArray();
+                       Mapper<PictureKey>.LoadAll(cnx).Select(pk => new Tuple<bool, object>(false, pk.IdScryFall))).ToArray();
             }
         }
         private IDbConnection GetPictureConnectionInternal()
@@ -45,14 +45,14 @@
             cnx.Open();
             return cnx;
         }
-        public IPicture LoadPicture(int idGatherer)
+        public IPicture LoadPicture(string idScryFall)
         {
             if (!CouldMigrate)
             {
                 return null;
             }
 
-            Picture picture = new Picture { IdGatherer = idGatherer };
+            Picture picture = new Picture { IdScryFall = idScryFall };
 
             using (IDbConnection cnx = GetPictureConnectionInternal())
             {

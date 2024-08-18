@@ -2,7 +2,7 @@
 {
     using System;
     using System.Linq;
-
+    
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
@@ -11,38 +11,37 @@
 
     public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
-        public CardViewModel(ICardAllDbInfo cardAllDbInfo)
-            : this(cardAllDbInfo, false)
-        {
-        }
+        private readonly ICardFace[] _cardFaces;
 
-        private CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart)
+        public CardViewModel(ICardAllDbInfo cardAllDbInfo)
         {
             CardAllDbInfo = cardAllDbInfo;
-            Card = otherPart ? cardAllDbInfo.CardPart2 : cardAllDbInfo.Card;
+            Card = cardAllDbInfo.Card;
+            _cardFaces = cardAllDbInfo.CardFaces.ToArray(); ;
+            MainCardFace = cardAllDbInfo.MainCardFace;
             IEdition edition = cardAllDbInfo.Edition;
             Statistics = cardAllDbInfo.Statistics.Select(s => new StatisticViewModel(s)).ToArray();
             Prices = cardAllDbInfo.Prices.Select(p => new PriceViewModel(p,edition)).ToArray();
             IsDownSide = false;
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
-            IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
-            VariationIdGatherers = otherPart ? cardAllDbInfo.VariationIdGatherers2.ToArray() : cardAllDbInfo.VariationIdGatherers.ToArray();
+            IdScryFall = cardAllDbInfo.IdScryFall;
+            VariationIdScryFalls = cardAllDbInfo.VariationIdScryFalls.ToArray();
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
             Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card) || MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
-            if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
+            if (!string.IsNullOrWhiteSpace(MainCardFace.Power) && !string.IsNullOrWhiteSpace(MainCardFace.Toughness))
             {
-                PowerToughnessLoyaltyDefense = string.Format("{0}/{1}", Card.Power, Card.Toughness);
+                PowerToughnessLoyaltyDefense = string.Format("{0}/{1}", MainCardFace.Power, MainCardFace.Toughness);
                 PowerToughnessLoyaltyDefenseText = "Power/Toughness";
             }
-            else if (!string.IsNullOrWhiteSpace(Card.Loyalty))
+            else if (!string.IsNullOrWhiteSpace(MainCardFace.Loyalty))
             {
-                PowerToughnessLoyaltyDefense = Card.Loyalty;
+                PowerToughnessLoyaltyDefense = MainCardFace.Loyalty;
                 PowerToughnessLoyaltyDefenseText = "Loyalty";
             }
-            else if (!string.IsNullOrWhiteSpace(Card.Defense))
+            else if (!string.IsNullOrWhiteSpace(MainCardFace.Defense))
             {
-                PowerToughnessLoyaltyDefense = Card.Defense;
+                PowerToughnessLoyaltyDefense = MainCardFace.Defense;
                 PowerToughnessLoyaltyDefenseText = "Defense";
             }
 
@@ -51,6 +50,8 @@
                 DisplayedCastingCost = CastingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             }
 
+            //ALERT TO BE REVIEW
+            /*
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
@@ -59,12 +60,13 @@
                     OtherCardPart.IsDownSide = true;
                 }
             }
+            */
         }
 
         public ICardAllDbInfo CardAllDbInfo { get; }
         public IEdition Edition { get; }
         public IRarity Rarity { get; }
-        public int IdGatherer { get; }
+        public string IdScryFall { get; }
         
         public string Name
         {
@@ -76,23 +78,19 @@
         }
         public string Type
         {
-            get { return Card.Type; }
+            get { return MainCardFace.Type; }
         }
         public string CastingCost
         {
-            get { return Card.CastingCost; }
+            get { return MainCardFace.CastingCost; }
         }
         public string AllPartCastingCost
         {
-            get { return IsMultiPart ? CastingCost + " " + OtherCardPart.CastingCost : CastingCost; }
-        }
-        public string PartName
-        {
-            get { return Card.PartName; }
+            get { return IsMultiPart ? $"{CastingCost} {OtherCardPart.CastingCost}" : CastingCost; }
         }
         public string Text
         {
-            get { return Card.Text; }
+            get { return MainCardFace.Text; }
         }
         public IRuling[] Rulings
         {
@@ -111,7 +109,8 @@
         public string PowerToughnessLoyaltyDefense { get; }
         public string PowerToughnessLoyaltyDefenseText { get; }
         public string[] DisplayedCastingCost { get; }
-        public int[] VariationIdGatherers { get; }
+        public string[] VariationIdScryFalls { get; }
         internal ICard Card { get; }
+        internal ICardFace MainCardFace { get; }
     }
 }

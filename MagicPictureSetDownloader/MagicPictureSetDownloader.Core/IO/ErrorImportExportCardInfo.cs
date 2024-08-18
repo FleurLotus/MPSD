@@ -13,9 +13,9 @@
         public string SourceLine { get; }
         public string ErrorMessage { get; }
 
-        public int IdGatherer
+        public string IdScryFall
         {
-            get { return -1; }
+            get { return null; }
         }
         public int Number
         {

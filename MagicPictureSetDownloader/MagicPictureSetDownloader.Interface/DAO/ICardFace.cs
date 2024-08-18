@@ -10,5 +10,6 @@
         string Defense { get; }
         string Type { get; }
         string Url { get; }
+        string IdScryFall { get; }
     }
 }

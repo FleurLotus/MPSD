@@ -300,7 +300,7 @@
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <Image StretchDirection="DownOnly" Source="{Binding Converter={conv:GathererIdToImageConverter}}" />
+                    <Image StretchDirection="DownOnly" Source="{Binding Converter={conv:ScryFallIdToImageConverter}}" />
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

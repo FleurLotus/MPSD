@@ -38,7 +38,7 @@ namespace MagicPictureSetDownloader.Core.CardInfo
                 }
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ParserException("No Text element found in Element for Key: " + _key);
+                    throw new ParserException($"No Text element found in Element for Key: {_key}");
                 }
 
                 return new Dictionary<string, string> {{_key, value}};

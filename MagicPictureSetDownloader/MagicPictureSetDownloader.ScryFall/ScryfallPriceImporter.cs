@@ -70,7 +70,7 @@
         }
         private static FullCard[] GetCardsInfo(WebAccess webAccess, string url)
         {
-            string filePath = Path.Combine(Path.GetTempPath(), DefaultCard + ".json");
+            string filePath = Path.Combine(Path.GetTempPath(), $"{DefaultCard}.json");
             try
             {
                 if (File.Exists(filePath))
@@ -94,137 +94,38 @@
 
         private IEnumerable<PriceInfo> ExtractCardPrice(FullCard scryfallCard, DateTime updatedAt)
         {
-            List<int> ids = scryfallCard.MultiverseIds;
-
-            IList<ICard> cards = new List<ICard>();
-            foreach (int id in ids)
-            {
-                //ALERT: to put back
-                ICard c = null; // _magicDatabase.GetCard(id);
-                if (c != null)
-                {
-                    cards.Add(c);
-                }
-            }
-
-            if (cards.Count == 0)
+            //ALERT: to put back
+            ICard c = null; //_magicDatabase.GetCard(scryfallCard.Id);
+            if (c == null)
             {
                 yield break;
             }
-
-            CheckCard(scryfallCard, cards);
 
             if (scryfallCard.Prices == null)
             {
                 yield break;
             }
-            foreach (int id in ids)
+            int p;
+            if (double.TryParse(scryfallCard.Prices.Usd, out double price))
             {
-                int p;
-                if (double.TryParse(scryfallCard.Prices.Usd, out double price))
-                {
-                    p = (int) (price * 100);
-                    yield return new PriceInfo { UpdateDate = updatedAt, IdGatherer = id, PriceSource = PriceValueSource.TCGplayer, Foil = false, Value = p };
-                }
-                if (double.TryParse(scryfallCard.Prices.UsdFoil, out price))
-                {
-                    p = (int)(price * 100);
-                    yield return new PriceInfo { UpdateDate = updatedAt, IdGatherer = id, PriceSource = PriceValueSource.TCGplayer, Foil = true, Value = p };
-                }
-                if (double.TryParse(scryfallCard.Prices.Eur, out price))
-                {
-                    p = (int)(price * 100);
-                    yield return new PriceInfo { UpdateDate = updatedAt, IdGatherer = id, PriceSource = PriceValueSource.Cardmarket, Foil = false, Value = p };
-                }
-                if (double.TryParse(scryfallCard.Prices.EurFoil, out price))
-                {
-                    p = (int)(price * 100);
-                    yield return new PriceInfo { UpdateDate = updatedAt, IdGatherer = id, PriceSource = PriceValueSource.Cardmarket, Foil = true, Value = p };
-                }
+                p = (int)(price * 100);
+                yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.TCGplayer, Foil = false, Value = p };
             }
-        }
-        private void CheckCard(FullCard scryfallCard, IList<ICard> cards)
-        {
-            ICard card = cards[0];
-
-            if (!CheckCardName(scryfallCard, card))
+            if (double.TryParse(scryfallCard.Prices.UsdFoil, out price))
             {
-                _errorMessages.Add($"Missmatching card name for {scryfallCard.Id} : {scryfallCard.Name} vs {card.Name}");
+                p = (int)(price * 100);
+                yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.TCGplayer, Foil = true, Value = p };
             }
-                      
-
-            if (cards.Count > 1)
+            if (double.TryParse(scryfallCard.Prices.Eur, out price))
             {
-                if (card.OtherPartName == null)
-                {
-                    _errorMessages.Add($"Card {scryfallCard.Id} : {scryfallCard.Name} is multipart in scryfall but not in MPSD");
-
-                }
-                else
-                {
-                    for (int i = 1; i < cards.Count; i++)
-                    {
-                        ICard c = cards[i];
-                        if (c.Name == card.Name || (card.OtherPartName == c.PartName && card.PartName == c.OtherPartName))
-                        {
-                            continue;
-                        }
-
-                        _errorMessages.Add($"Card {scryfallCard.Id} : {scryfallCard.Name} is referencing {c.Name} in scryfall");
-                    }
-                }
+                p = (int)(price * 100);
+                yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.Cardmarket, Foil = false, Value = p };
             }
-        }
-        private bool CheckCardName(FullCard scryfallCard, ICard card)
-        {
-            string cardName = card.Name;
-            string scryfallCardName = scryfallCard.Name;
-
-            if (scryfallCardName == cardName)
+            if (double.TryParse(scryfallCard.Prices.EurFoil, out price))
             {
-                return true;
+                p = (int)(price * 100);
+                yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.Cardmarket, Foil = true, Value = p };
             }
-            
-            if (scryfallCardName.Contains("//"))
-            {
-                //Split card 
-                if (scryfallCardName.Replace(" // ", "//") == cardName)
-                {
-                    return true;
-                }
-
-                //double face card
-                if (scryfallCardName == string.Format("{0} // {1}", card.PartName, card.OtherPartName) ||
-                    scryfallCardName == string.Format("{0} // {1}", card.OtherPartName, card.PartName))
-                {
-                    return true;
-                }
-                //Up-down
-                string name = scryfallCardName[..scryfallCardName.IndexOf("/")].TrimEnd();
-                if (name == cardName)
-                {
-                    return true;
-                }
-                //Who/What/When/Where/Why
-                if (cardName.Contains("/") && !cardName.Contains("//"))
-                {
-                    if (scryfallCardName.Replace(" // ", "//") == cardName.Replace("/", "//"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            //Special card with multiple version
-            if (cardName.Contains("("))
-            {
-                string name = cardName[..cardName.IndexOf("(")].TrimEnd();
-                if (scryfallCardName == name)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

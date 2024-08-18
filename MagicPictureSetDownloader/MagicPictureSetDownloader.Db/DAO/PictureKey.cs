@@ -4,7 +4,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{IdGatherer}")]
+    [DebuggerDisplay("{IdScryFall}")]
     [DbTable(Name = "Picture")]
     [DbRestictedDml(Restriction.Insert | Restriction.Delete | Restriction.Update)]
     internal class PictureKey : IPictureKey

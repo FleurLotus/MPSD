@@ -5,15 +5,14 @@ namespace MagicPictureSetDownloader.Db
     using System.Data;
     using System.Text;
     using System.Linq;
-    using System.Threading;
-
+    
     using Common.Database;
     using Common.Library.Extension;
     using Common.Library.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;
-
+    
     internal partial class MagicDatabase
     {
         private bool _referentialLoaded;
@@ -24,18 +23,19 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<int, IList<IPrice>> _prices = new Dictionary<int, IList<IPrice>>();
+        private readonly IDictionary<string, ICardFace> _cardFaces = new Dictionary<string, ICardFace>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, IList<IPrice>> _prices = new Dictionary<string, IList<IPrice>>();
         private readonly IDictionary<int, IPreconstructedDeck> _preconstructedDecks = new Dictionary<int, IPreconstructedDeck>();
         private readonly IDictionary<int, IList<IPreconstructedDeckCardEdition>> _preconstructedDeckCards = new Dictionary<int, IList<IPreconstructedDeckCardEdition>>();
 
         //For quicker access
         private readonly IDictionary<int, ICard> _cardsbyId = new Dictionary<int, ICard>();
+        private readonly IDictionary<int, ICardFace> _cardFacesbyId = new Dictionary<int, ICardFace>();
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
 
-        private readonly IDictionary<int, ICardEdition> _cardEditions = new Dictionary<int, ICardEdition>();
-        private readonly IDictionary<int, IList<ICardEditionVariation>> _cardEditionVariations = new Dictionary<int, IList<ICardEditionVariation>>();
+        private readonly IDictionary<string, ICardEdition> _cardEditions = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, IList<ICardEditionVariation>> _cardEditionVariations = new Dictionary<string, IList<ICardEditionVariation>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
-        private int _fakeGathererId = 0;
 
         //Insert one new
         public void InsertNewEdition(string sourceName)
@@ -45,7 +45,7 @@ namespace MagicPictureSetDownloader.Db
                 IEdition edition = GetEdition(sourceName);
                 if (edition == null)
                 {
-                    Edition realEdition = new Edition { Name = sourceName, GathererName = sourceName, Completed = false, HasFoil = true };
+                    Edition realEdition = new Edition { Name = sourceName, Completed = false, HasFoil = true };
                     AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
             }
@@ -60,7 +60,6 @@ namespace MagicPictureSetDownloader.Db
                     Edition realEdition = new Edition
                     {
                         Name = name,
-                        GathererName = sourceName,
                         Completed = false,
                         HasFoil = hasFoil,
                         Code = code,
@@ -79,64 +78,96 @@ namespace MagicPictureSetDownloader.Db
                 InsertNewTreePicture(name, icon);
             }
         }
-        public void InsertNewPicture(int idGatherer, byte[] data)
+        public void InsertNewPicture(string idScryFall, byte[] data)
         {
-            _pictureDatabase.InsertNewPicture(idGatherer, data);
+            _pictureDatabase.InsertNewPicture(idScryFall, data);
         }
         public void InsertNewTreePicture(string name, byte[] data)
         {
             _pictureDatabase.InsertNewTreePicture(name, data);
         }
-        public void InsertNewCard(string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string partName, string otherPartName, IDictionary<string, string> languages)
+        public void InsertNewCard(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
             }
-
             using (new WriterLock(_lock))
             {
-                ICard refCard = GetCard(name, partName);
-                if (null == refCard)
+                ICard card = GetCard(name);
+                if (null == card)
                 {
-                    Card card = new Card
-                    {
-                        PartName = partName ?? name,
-                        Name = name,
-                        Text = text,
-                        Power = power,
-                        Toughness = toughness,
-                        CastingCost = castingcost,
-                        Loyalty = loyalty,
-                        Defense = defense,
-                        Type = type,
-                        OtherPartName = otherPartName
-                    };
-
-                    AddToDbAndUpdateReferential(card, InsertInReferential);
-                    refCard = card;
-                }
-
-                foreach (KeyValuePair<string, string> kv in languages)
-                {
-                    int idlanguage = GetLanguageId(kv.Key);
-                    InsertNewTranslate(refCard, idlanguage, kv.Value);
+                    Card c = new Card { Name = name };
+                    AddToDbAndUpdateReferential(c, InsertInReferential);
                 }
             }
         }
-        public void InsertNewCardEdition(int idGatherer, int idEdition, string name, string partName, string rarity, string url)
+
+        public void InsertNewCardFace(int idCard, string idScryFall, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url, IDictionary<string, string> languages)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+            if (string.IsNullOrWhiteSpace(idScryFall))
+            {
+                throw new ArgumentNullException(nameof(idScryFall));
+            }
+
+            using (new WriterLock(_lock))
+            {
+                ICard refCard = _cardsbyId.GetOrDefault(idCard);
+                if (null == refCard)
+                {
+                    ICardFace cardface = GetCardFace(idScryFall);
+                    if (cardface == null)
+                    {
+
+                        CardFace cardFace = new CardFace
+                        {
+                            Name = name,
+                            Text = text,
+                            Power = power,
+                            Toughness = toughness,
+                            CastingCost = castingcost,
+                            Loyalty = loyalty,
+                            Defense = defense,
+                            Type = type,
+                            Url = url,
+                        };
+
+                        AddToDbAndUpdateReferential(cardFace, InsertInReferential);
+
+                        CardCardFace cardCardFace = new CardCardFace
+                        {
+                            IdCard = idCard,
+                            IdCardFace = cardFace.Id
+                        };
+
+                        AddToDbAndUpdateReferential(cardCardFace, InsertInReferential);
+                    }
+
+                    foreach (KeyValuePair<string, string> kv in languages)
+                    {
+                        int idlanguage = GetLanguageId(kv.Key);
+                        InsertNewTranslate(refCard, idlanguage, kv.Value);
+                    }
+                }
+            }
+        }
+        public void InsertNewCardEdition(string idScryFall, int idEdition, string name, string rarity)
         {
             using (new WriterLock(_lock))
             {
                 int idRarity = GetRarityId(rarity);
-                int idCard = GetCard(name, partName).Id;
+                int idCard = GetCard(name).Id;
 
-                if (idGatherer == 0 || idEdition <= 0)
+                if (string.IsNullOrEmpty(idScryFall) || idEdition <= 0)
                 {
                     throw new ApplicationDbException("Data are not filled correctedly");
                 }
 
-                if (GetCardEdition(idGatherer) != null)
+                if (GetCardEdition(idScryFall) != null)
                 {
                     return;
                 }
@@ -144,81 +175,41 @@ namespace MagicPictureSetDownloader.Db
                 CardEdition cardEdition = new CardEdition
                 {
                     IdCard = idCard,
-                    IdGatherer = idGatherer,
+                    IdScryFall = idScryFall,
                     IdEdition = idEdition,
                     IdRarity = idRarity,
-                    Url = url
                 };
 
                 AddToDbAndUpdateReferential(cardEdition, InsertInReferential);
             }
         }
-        public void InsertNewCardEditionVariation(int idGatherer, int otherGathererId, string url)
+        public void InsertNewCardEditionVariation(string idScryFall, string otherIdScryFall, string url)
         {
             using (new WriterLock(_lock))
             {
-                if (idGatherer == 0 || otherGathererId <= 0)
+                if (string.IsNullOrEmpty(idScryFall) || string.IsNullOrEmpty(otherIdScryFall))
                 {
                     throw new ApplicationDbException("Data are not filled correctedly");
                 }
 
-                if (GetCardEdition(idGatherer) == null)
+                if (GetCardEdition(idScryFall) == null)
                 {
                     return;
                 }
 
-                if (GetCardEditionVariation(idGatherer).Any(cev => cev.OtherIdGatherer == otherGathererId))
+                if (GetCardEditionVariation(idScryFall).Any(cev => cev.OtherIdScryFall == otherIdScryFall))
                 {
                     return;
                 }
 
                 CardEditionVariation cardEditionVariation = new CardEditionVariation
                 {
-                    IdGatherer = idGatherer,
-                    OtherIdGatherer = otherGathererId,
+                    IdScryFall = idScryFall,
+                    OtherIdScryFall = otherIdScryFall,
                     Url = url
                 };
 
                 AddToDbAndUpdateReferential(cardEditionVariation, InsertInReferential);
-            }
-        }
-        public int InsertNewCardEditionWithFakeGathererId(int idEdition, int idCard, int idRarity, string url)
-        {
-            using (new WriterLock(_lock))
-            {
-                IEdition edition = _editions.FirstOrDefault(e => e.Id == idEdition);
-                IRarity rarity = _rarities.Values.FirstOrDefault(r => r.Id == idRarity);
-                ICard card = _cardsbyId.GetOrDefault(idCard);
-
-                if (rarity == null || card == null || edition == null)
-                {
-                    throw new ApplicationDbException("Data are not filled correctedly");
-                }
-                if (!edition.IsNoneGatherer())
-                {
-                    throw new ApplicationDbException("InsertNewCardEditionWithFakeGathererId could only used for NoneGatherer edition");
-                }
-                int existingIdGatherer = GetIdGatherer(card, edition);
-                if (existingIdGatherer != 0)
-                {
-                    // could have been inserted by another thread
-                    return existingIdGatherer;
-                }
-
-                int idGatherer = GetNextFakeGathererId();
-
-                CardEdition cardEdition = new CardEdition
-                {
-                    IdCard = idCard,
-                    IdGatherer = idGatherer,
-                    IdEdition = idEdition,
-                    IdRarity = idRarity,
-                    Url = url
-                };
-
-                AddToDbAndUpdateReferential(cardEdition, InsertInReferential);
-
-                return idGatherer;
             }
         }
         public void InsertNewOption(TypeOfOption type, string key, string value)
@@ -288,9 +279,9 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public void InsertNewRuling(int idGatherer, DateTime addDate, string text)
+        public void InsertNewRuling(string idScryFall, DateTime addDate, string text)
         {
-            ICard card = GetCard(idGatherer);
+            ICard card = GetCardByIdScryFall(idScryFall);
             if (card == null || string.IsNullOrWhiteSpace(text))
             {
                 return;
@@ -305,16 +296,16 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public void InsertNewPrice(int idGatherer, DateTime addDate, string source, bool foil, int value)
+        public void InsertNewPrice(string idScryFall, DateTime addDate, string source, bool foil, int value)
         {
-            if (GetCardEdition(idGatherer) == null)
+            if (GetCardEdition(idScryFall) == null)
             {
                 return;
             }
 
             using (new WriterLock(_lock))
             {
-                Price price = new Price { IdGatherer = idGatherer, AddDate = addDate, Source = source, Foil = foil, Value = value };
+                Price price = new Price { IdScryFall = idScryFall, AddDate = addDate, Source = source, Foil = foil, Value = value };
                 AddToDbAndUpdateReferential(price, InsertInReferential);
             }
         }
@@ -331,7 +322,7 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(preconstructedDeck, InsertInReferential);
             }
         }
-        public void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, int idGatherer, int count)
+        public void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, string idScryFall, int count)
         {
             using (new WriterLock(_lock))
             {
@@ -340,7 +331,7 @@ namespace MagicPictureSetDownloader.Db
                     return;
                 }
 
-                IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idGatherer);
+                IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idScryFall);
                 if (preconstructedDeckCard == null)
                 {
                     //Insert new 
@@ -352,7 +343,7 @@ namespace MagicPictureSetDownloader.Db
                     PreconstructedDeckCardEdition newPreconstructedDeckCardEdition = new PreconstructedDeckCardEdition
                     {
                         IdPreconstructedDeck = idPreconstructedDeck,
-                        IdGatherer = idGatherer,
+                        IdScryFall = idScryFall,
                         Number = count
                     };
 
@@ -388,11 +379,6 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        private int GetNextFakeGathererId()
-        {
-            return Interlocked.Decrement(ref _fakeGathererId);
-        }
-
         public void DeleteOption(TypeOfOption type, string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -459,6 +445,8 @@ namespace MagicPictureSetDownloader.Db
                 _alternativeNameLanguages.Clear();
                 _cards.Clear();
                 _cardsbyId.Clear();
+                _cardFaces.Clear();
+                _cardFacesbyId.Clear();
                 _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
                 _cardEditionVariations.Clear();
@@ -501,6 +489,16 @@ namespace MagicPictureSetDownloader.Db
                 foreach (Card card in Mapper<Card>.LoadAll(cnx))
                 {
                     InsertInReferential(card);
+                }
+
+                foreach (CardFace cardFace in Mapper<CardFace>.LoadAll(cnx))
+                {
+                    InsertInReferential(cardFace);
+                }
+
+                foreach (CardCardFace cardCardFace in Mapper<CardCardFace>.LoadAll(cnx))
+                {
+                    InsertInReferential(cardCardFace);
                 }
 
                 foreach (Translate translate in Mapper<Translate>.LoadAll(cnx))
@@ -569,46 +567,42 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICard card)
         {
-            string key;
-            if (card.PartName == null || card.Name == card.PartName)
-            {
-                key = card.Name;
-            }
-            else
-            {
-                key = card.Name + card.PartName;
-            }
-
-            _cards.Add(key, card);
-            if (!_multiPartCardManager.IsSecondPartOfSplitted(card))
-            {
-                //Remove second part of splitted card for search
-                _cardsWithoutSpecialCharacters.Add(LowerCaseWithoutSpecialCharacters(card.Name), card);
-            }
+            _cards.Add(card.Name, card);
             _cardsbyId.Add(card.Id, card);
+            _cacheForAllDbInfos = null;
+        }
+        private void InsertInReferential(CardCardFace cardCardFace)
+        {
+            if (_cardsbyId.GetOrDefault(cardCardFace.IdCard) is not Card card)
+            {
+                throw new ApplicationDbException($"Can't find card with id {cardCardFace.IdCard}");
+            }
+            card.AddCardFace(cardCardFace);
+            _cacheForAllDbInfos = null;
+        }
+
+        private void InsertInReferential(ICardFace cardFace)
+        {
+            _cardFaces.Add(cardFace.IdScryFall, cardFace);
+            _cardFacesbyId.Add(cardFace.Id, cardFace);
             _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ICardEdition cardEdition)
         {
-            if (_fakeGathererId > cardEdition.IdGatherer)
-            {
-                _fakeGathererId = cardEdition.IdGatherer;
-            }
-
-            _cardEditions.Add(cardEdition.IdGatherer, cardEdition);
+            _cardEditions.Add(cardEdition.IdScryFall, cardEdition);
             _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ICardEditionVariation cardEditionVariation)
         {
-            if (_cardEditions.GetOrDefault(cardEditionVariation.IdGatherer) == null)
+            if (_cardEditions.GetOrDefault(cardEditionVariation.IdScryFall) == null)
             {
-                throw new ApplicationDbException("Can't find CardEdition with id " + cardEditionVariation.IdGatherer);
+                throw new ApplicationDbException($"Can't find CardEdition with id {cardEditionVariation.IdScryFall}");
             }
 
-            if (!_cardEditionVariations.TryGetValue(cardEditionVariation.IdGatherer, out IList<ICardEditionVariation> variations))
+            if (!_cardEditionVariations.TryGetValue(cardEditionVariation.IdScryFall, out IList<ICardEditionVariation> variations))
             {
                 variations = new List<ICardEditionVariation>();
-                _cardEditionVariations.Add(cardEditionVariation.IdGatherer, variations);
+                _cardEditionVariations.Add(cardEditionVariation.IdScryFall, variations);
             }
 
             variations.Add(cardEditionVariation);
@@ -629,7 +623,7 @@ namespace MagicPictureSetDownloader.Db
         {
             if (_cardsbyId.GetOrDefault(translate.IdCard) is not Card card)
             {
-                throw new ApplicationDbException("Can't find card with id " + translate.IdCard);
+                throw new ApplicationDbException($"Can't find card with id {translate.IdCard}");
             }
 
             card.AddTranslate(translate);
@@ -640,7 +634,7 @@ namespace MagicPictureSetDownloader.Db
         {
             if (_cardsbyId.GetOrDefault(ruling.IdCard) is not Card card)
             {
-                throw new ApplicationDbException("Can't find card with id " + ruling.IdCard);
+                throw new ApplicationDbException($"Can't find card with id {ruling.IdCard}");
             }
 
             card.AddRuling(ruling);
@@ -649,15 +643,15 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(Price price)
         {
-            if (_cardEditions.GetOrDefault(price.IdGatherer) == null)
+            if (_cardEditions.GetOrDefault(price.IdScryFall) == null)
             {
-                throw new ApplicationDbException("Can't find CardEdition with id " + price.IdGatherer);
+                throw new ApplicationDbException($"Can't find CardEdition with id {price.IdScryFall}");
             }
 
-            if (!_prices.TryGetValue(price.IdGatherer, out IList<IPrice> prices))
+            if (!_prices.TryGetValue(price.IdScryFall, out IList<IPrice> prices))
             {
                 prices = new List<IPrice>();
-                _prices.Add(price.IdGatherer, prices);
+                _prices.Add(price.IdScryFall, prices);
             }
 
             prices.Add(price);
@@ -725,7 +719,6 @@ namespace MagicPictureSetDownloader.Db
                     _alternativeNameLanguages.Remove(name);
                 }
             }
-
         }
         private void RemoveFromReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
         {

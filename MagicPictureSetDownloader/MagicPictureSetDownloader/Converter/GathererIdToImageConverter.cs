@@ -6,7 +6,7 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Media.Imaging;
 
     [ValueConversion(typeof(int), typeof(BitmapImage))]
-    public class GathererIdToImageConverter : ImageConverterBase
+    public class ScryFallIdToImageConverter : ImageConverterBase
     {
         protected override string GetCachePrefix()
         {
@@ -20,23 +20,23 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            int idGatherer = System.Convert.ToInt32(value);
+            string idScryFall = (string)value;
 
-            if (idGatherer == 0)
+            if (string.IsNullOrEmpty(idScryFall))
             {
                 return null;
             }
 
-            BitmapImage image = GetImage(idGatherer.ToString());
+            BitmapImage image = GetImage(idScryFall);
             if (image != null)
             {
                 return image;
             }
 
-            byte[] bytes = MagicDatabase.GetPicture(idGatherer)?.Image;
+            byte[] bytes = MagicDatabase.GetPicture(idScryFall)?.Image;
             if (null != bytes && bytes.Length != 0)
             {
-                return BytesToImage(bytes, idGatherer.ToString());
+                return BytesToImage(bytes, idScryFall);
             }
 
             return GetDefaultCardImage();

@@ -233,13 +233,14 @@
 
         private (int, int, int) GetWeightedCCM(ICardAllDbInfo cardAllDbInfo)
         {
-            string castingCost = cardAllDbInfo.Card.CastingCost;
+            string castingCost = cardAllDbInfo.MainCardFace.CastingCost;
 
+            /* ALERT TO BE REVIEWED
             if (MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
             {
-
                 castingCost += $" {cardAllDbInfo.CardPart2.CastingCost}";
             }
+            */
             int noGenerics = 0;
             int generics = 0;
             int countXYZ = 0;
@@ -265,12 +266,13 @@
 
         private int GetToughness(ICardAllDbInfo cardAllDbInfo)
         {
-            string toughness = cardAllDbInfo.Card.Toughness;
+            string toughness = cardAllDbInfo.MainCardFace.Toughness;
+            /* ALERT TO BE REVIEWED
             if (string.IsNullOrWhiteSpace(toughness) && MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
             {
                 toughness = cardAllDbInfo.CardPart2.Toughness;
             }
-
+            */
             if (int.TryParse(toughness, out int ret))
             {
                 return ret;
@@ -280,11 +282,13 @@
         }
         private int GetPower(ICardAllDbInfo cardAllDbInfo)
         {
-            string power = cardAllDbInfo.Card.Power;
+            string power = cardAllDbInfo.MainCardFace.Power;
+            /* ALERT TO BE REVIEWED
             if (string.IsNullOrWhiteSpace(power) && MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
             {
                 power = cardAllDbInfo.CardPart2.Power;
             }
+            */
 
             if (int.TryParse(power, out int ret))
             {
@@ -295,12 +299,13 @@
         }
         private int GetLoyalty(ICardAllDbInfo cardAllDbInfo)
         {
-            string loyalty = cardAllDbInfo.Card.Loyalty;
+            string loyalty = cardAllDbInfo.MainCardFace.Loyalty;
+            /* ALERT TO BE REVIEWED
             if (string.IsNullOrWhiteSpace(loyalty) && MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
             {
                 loyalty = cardAllDbInfo.CardPart2.Loyalty;
             }
-
+            */
             if (int.TryParse(loyalty, out int ret))
             {
                 return ret;
@@ -310,12 +315,13 @@
         }
         private int GetDefense(ICardAllDbInfo cardAllDbInfo)
         {
-            string defense = cardAllDbInfo.Card.Defense;
+            string defense = cardAllDbInfo.MainCardFace.Defense;
+            /* ALERT TO BE REVIEWED
             if (string.IsNullOrWhiteSpace(defense) && MultiPartCardManager.Instance.HasMultiPart(cardAllDbInfo.Card) && cardAllDbInfo.CardPart2 != null)
             {
                 defense = cardAllDbInfo.CardPart2.Defense;
             }
-
+            */
             if (int.TryParse(defense, out int ret))
             {
                 return ret;
