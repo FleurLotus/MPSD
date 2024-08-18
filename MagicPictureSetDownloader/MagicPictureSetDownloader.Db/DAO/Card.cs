@@ -14,33 +14,23 @@
     {
         private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
         private readonly IList<IRuling> _rulings = new List<IRuling>();
+        private readonly List<int> _faces = new List<int>();
 
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
-        [DbColumn]
-        public string Text { get; set; }
-        [DbColumn]
-        public string Power { get; set; }
-        [DbColumn]
-        public string Toughness { get; set; }
-        [DbColumn]
-        public string CastingCost { get; set; }
-        [DbColumn]
-        public string Loyalty { get; set; }
-        [DbColumn]
-        public string Defense { get; set; }
-        [DbColumn]
-        public string Type { get; set; }
-        [DbColumn]
-        public string PartName { get; set; }
-        [DbColumn]
-        public string OtherPartName { get; set; }
 
         public IRuling[] Rulings
         {
             get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }
+        }
+        public IReadOnlyList<int> CardFaceIds
+        {
+            get
+            {
+                return _faces.AsReadOnly();
+            }
         }
 
         public string ToString(int? languageId)
@@ -83,6 +73,14 @@
         public bool HasRuling(DateTime addDate, string text)
         {
             return _rulings.Any(r => r.AddDate == addDate && r.Text == text);
+        }
+        internal void AddCardFace(CardCardFace cardCardFace)
+        {
+            if (cardCardFace == null || cardCardFace.IdCard != Id)
+            {
+                return;
+            }
+            _faces.Add(cardCardFace.IdCardFace);
         }
     }
 }

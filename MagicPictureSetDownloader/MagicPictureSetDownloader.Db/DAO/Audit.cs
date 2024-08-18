@@ -1,7 +1,6 @@
 namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
@@ -20,7 +19,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public int IdCollection { get; set; }
         [DbColumn]
-        public int? IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         [DbColumn]
         public bool? IsFoil { get; set; }
         [DbColumn]
@@ -30,21 +29,16 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public int Quantity { get; set; }
 
-        //IdGather, IsFoil, IdLanguage null or not are linked
+        //IdScryFall, IsFoil, IdLanguage null or not are linked
         public override string ToString()
         {
-            if (IdGatherer.HasValue)
-            {
-                return string.Format(" {0} card(s) {1} {2}{3}{4} to collection {5} at {6:yyyy-MM-dd HH:mm:ss.ff}", Quantity, 
-                                                                                                                IdGatherer.Value,
-                                                                                                                IsFoil.Value ? "(Foil)" : string.Empty, 
-                                                                                                                IsAltArt.Value ? "(AltArt)" : string.Empty, 
-                                                                                                                IdLanguage.Value, 
-                                                                                                                IdCollection, 
-                                                                                                                OperationDate);
-            }
-
-            return string.Format("{0} collection {1} at {2:yyyy-MM-dd HH:mm:ss.ff}", Quantity > 0 ? "Create" : "Delete", IdCollection, OperationDate);
+            return string.Format(" {0} card(s) {1}{2}{3}{4} to collection {5} at {6:yyyy-MM-dd HH:mm:ss.ff}", Quantity,
+                                                                                                            IdScryFall + " ",
+                                                                                                            IsFoil.Value ? "(Foil)" : string.Empty,
+                                                                                                            IsAltArt.Value ? "(AltArt)" : string.Empty,
+                                                                                                            IdLanguage.Value,
+                                                                                                            IdCollection,
+                                                                                                            OperationDate);
         }
     }
 }

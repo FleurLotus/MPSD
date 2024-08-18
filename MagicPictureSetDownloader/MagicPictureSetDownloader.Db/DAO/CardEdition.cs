@@ -13,8 +13,6 @@
         [DbColumn]
         public int IdRarity { get; set; }
         [DbColumn]
-        public int IdGatherer { get; set; }
-        [DbColumn]
-        public string Url { get; set; }
+        public string IdScryFall { get; set; }
     }
 }

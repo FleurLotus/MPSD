@@ -7,9 +7,9 @@
     internal class CardEditionVariation : ICardEditionVariation
     {
         [DbColumn]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         [DbColumn]
-        public int OtherIdGatherer { get; set; }
+        public string OtherIdScryFall { get; set; }
         [DbColumn]
         public string Url { get; set; }
     }

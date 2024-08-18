@@ -2,8 +2,8 @@
 {
     public interface ICardEditionVariation
     {
-        int IdGatherer { get; }
-        int OtherIdGatherer { get; }
+        string IdScryFall { get; }
+        string OtherIdScryFall { get; }
         string Url { get; }
     }
 }

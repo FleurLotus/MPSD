@@ -1,7 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
@@ -11,7 +10,7 @@
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdCollection { get; set; }
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         [DbColumn]
         public int Number { get; set; }
         [DbColumn]
@@ -30,13 +29,13 @@
                 return false;
             }
 
-            return cicc.IdCollection == IdCollection && cicc.IdGatherer == IdGatherer && cicc.IdLanguage == IdLanguage;
+            return cicc.IdCollection == IdCollection && cicc.IdScryFall == IdScryFall && cicc.IdLanguage == IdLanguage;
         }
 
         //There are not readonly because of reflection feeding by they never change after instance creation
         public override int GetHashCode()
         {
-            return IdCollection * 23 + IdGatherer;
+            return IdCollection * 23 + IdScryFall.GetHashCode();
         }
 
         public int GetCount(ICardCountKey key)

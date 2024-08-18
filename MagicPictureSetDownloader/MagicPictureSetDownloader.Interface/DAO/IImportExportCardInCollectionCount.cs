@@ -2,7 +2,7 @@ namespace MagicPictureSetDownloader.Interface
 {
     public interface IImportExportCardCount 
     {
-        int IdGatherer { get; }
+        string IdScryFall { get; }
         int Number { get; }
         int FoilNumber { get; }
         int AltArtNumber { get; }

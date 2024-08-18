@@ -7,7 +7,7 @@
         int Id { get; }
         DateTime OperationDate { get; }
         int IdCollection { get; }
-        int? IdGatherer { get; }
+        string IdScryFall { get; }
         bool? IsFoil { get; }
         bool? IsAltArt { get; }
         int? IdLanguage { get; }

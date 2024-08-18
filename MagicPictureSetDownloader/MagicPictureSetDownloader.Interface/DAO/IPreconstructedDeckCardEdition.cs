@@ -3,7 +3,7 @@
     public interface IPreconstructedDeckCardEdition
     {
         int IdPreconstructedDeck { get; }
-        int IdGatherer { get; }
+        string IdScryFall { get; }
         int Number { get; }
     }
 }

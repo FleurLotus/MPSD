@@ -11,6 +11,6 @@ namespace MagicPictureSetDownloader.Db.DAO
     {
         //Use for light load
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
     }
 }

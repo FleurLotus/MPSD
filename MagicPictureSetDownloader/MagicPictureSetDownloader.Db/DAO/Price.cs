@@ -14,7 +14,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public string Source { get; set; }
         [DbColumn]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         [DbColumn]
         public bool Foil { get; set; }
         [DbColumn]
