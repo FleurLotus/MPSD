@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyTitle>MagicPictureSetDownloader.ScryFall</AssemblyTitle>
+    <Product>MagicPictureSetDownloader.ScryFall</Product>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Common.Web" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Macross.Json.Extensions" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
+	</ItemGroup>
+</Project>

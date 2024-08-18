@@ -8,10 +8,9 @@
     <PackageReference Include="Common.Drawing" />
     <PackageReference Include="Common.Web" />
     <PackageReference Include="Common.XML" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />
-    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
+    <ProjectReference Include="..\MagicPictureSetDownloader.ScryFall\MagicPictureSetDownloader.ScryFall.csproj" />
   </ItemGroup>
 </Project>

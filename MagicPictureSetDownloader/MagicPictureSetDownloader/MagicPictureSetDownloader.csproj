@@ -32,7 +32,8 @@
     <PackageReference Include="Common.WPF" />
     <PackageReference Include="Extended.Wpf.Toolkit" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="SharpVectors.Wpf" />
     <PackageReference Include="System.Runtime.Caching" />
-    <PackageReference Include="VirtualizingWrapPanel"  />
+    <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
     using MagicPictureSetDownloader.Core.Deck;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
+    using MagicPictureSetDownloader.ScryFall;
 
     public class DownloadManager
     {
@@ -141,7 +142,7 @@
         }
         public IReadOnlyList<KeyValuePair<string, object>> GetPricesUrls(IPriceImporter priceImporter)
         {
-            return priceImporter.GetUrls(_webAccess);
+            return priceImporter.GetDefaultCardUrls(_webAccess);
         }
         public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {

@@ -4,6 +4,7 @@
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.ScryFall;
 
     public class AutoDownloadPriceViewModel : AutoDownloadViewModelBase
     {
