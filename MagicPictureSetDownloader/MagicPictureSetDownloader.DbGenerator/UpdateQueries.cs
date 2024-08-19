@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
+    /* ALERT to remove ?
     internal static class UpdateQueries
     {
         public const string SelectPreconstuctedDeckCards =
@@ -322,4 +323,5 @@ ADD COLUMN [Defense] TEXT NULL
 ";
 
     }
+    */
 }

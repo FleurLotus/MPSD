@@ -64,8 +64,8 @@
                 <TextBox Width="110" MaxLength="7" VerticalAlignment="Center" Text="{fl:TwoWayBinding Code}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
                 <CheckBox VerticalAlignment="Center" Margin="5,0" Content="HasFoil" IsChecked="{fl:TwoWayBinding HasFoil}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             </StackPanel>
-            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="GathererName"/>
-            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{fl:TwoWayBinding GathererName}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
+            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Content="Name"/>
+            <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Text="{fl:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
             <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" Content="Release Date"/>
             <DatePicker Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" SelectedDate="{fl:TwoWayBinding ReleaseDate}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Block"/>

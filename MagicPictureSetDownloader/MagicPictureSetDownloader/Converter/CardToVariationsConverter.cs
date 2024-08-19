@@ -17,20 +17,20 @@ namespace MagicPictureSetDownloader.Converter
         {
             if (value is not CardViewModel card)
             {
-                return Array.Empty<int>();
+                return Array.Empty<string>();
             }
 
-            HashSet<int> ret = new HashSet<int>();
-            foreach (int idGatherer in card.VariationIdGatherers)
+            HashSet<string> ret = new HashSet<string>();
+            foreach (string idScryFall in card.VariationIdScryFalls)
             {
-                ret.Add(idGatherer);
+                ret.Add(idScryFall);
             }
 
             if (card.OtherCardPart != null)
             {
-                foreach (int idGatherer in card.OtherCardPart.VariationIdGatherers)
+                foreach (string idScryFall in card.OtherCardPart.VariationIdScryFalls)
                 {
-                    ret.Add(idGatherer);
+                    ret.Add(idScryFall);
                 }
             }
 

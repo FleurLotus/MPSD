@@ -37,11 +37,6 @@
                 throw new ParserException("Wrong number of parsed cards in a single block of multipart card! Check HTML source");
             }
 
-            cardWithExtraInfos[0].PartName = cardWithExtraInfos[0].Name;
-            cardWithExtraInfos[1].PartName = cardWithExtraInfos[1].Name;
-            cardWithExtraInfos[1].OtherPathName = cardWithExtraInfos[0].PartName;
-            cardWithExtraInfos[0].OtherPathName = cardWithExtraInfos[1].PartName;
-
             string cardName = CardNameParser.Parse(text);
 
             //Manage first
@@ -52,10 +47,12 @@
                 cardWithExtraInfos[0].Name = cardName;
                 cardWithExtraInfos[1].Name = cardName;
 
+                /*
                 if (cardName.StartsWith(cardWithExtraInfos[1].PartName))
                 {
                     SwapCards(cardWithExtraInfos);
                 }
+                */
             }
             //Recto Verso card
             else if (cardWithExtraInfos[0].CastingCost == null)
@@ -148,10 +145,7 @@
             {
                 foreach (string variation in variations.Split(new[] { VariationsWorker.Separator }, System.StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (int.TryParse(variation, out int gatherid))
-                    {
-                        cardWithExtraInfo.Add(gatherid);
-                    }
+                    cardWithExtraInfo.Add(variation);
                 }
             }
             cardWithExtraInfo.Type = infos.GetOrDefault(TypeKey);

@@ -31,7 +31,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" Content="Gatherer Name"/>
+            <Label Grid.Column="0" Grid.Row="0" Content="Name"/>
             <Grid Grid.Column="1" Grid.Row="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -39,7 +39,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Image Grid.Column="0" MaxHeight="15" Source="{Binding Icon, Converter={conv:ByteArrayToImageConverter}}" />
-                    <Label Grid.Column="1" Content="{Binding GathererName}" VerticalAlignment="Center" Padding="5,0" />
+                    <Label Grid.Column="1" Content="{Binding Name}" VerticalAlignment="Center" Padding="5,0" />
                 </Grid>
             </Grid>
             <Label Grid.Column="0" Grid.Row="1" Content="Name"/>

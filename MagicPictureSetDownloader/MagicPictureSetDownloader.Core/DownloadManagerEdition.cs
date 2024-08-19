@@ -136,6 +136,8 @@
                     {
                         string pictureUrl = WebAccess.ToAbsoluteUrl(jobData.Url, cardWithExtraInfo.PictureUrl);
                         int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
+                        //ALERT temp 
+                        string idScryFall = idGatherer.ToString();
                         string baseUrl = WebAccess.ToAbsoluteUrl(jobData.Url, string.Format("Languages.aspx?multiverseid={0}", idGatherer));
 
                         CardWithExtraInfo info = cardWithExtraInfo;
@@ -149,11 +151,11 @@
                         });
 
                         _downloadManager.InsertCardInDb(cardWithExtraInfo);
-                        _downloadManager.InsertCardEditionInDb(jobData.EditionId, cardWithExtraInfo, pictureUrl);
+                        _downloadManager.InsertCardEditionInDb(jobData.EditionId, cardWithExtraInfo);
 
-                        foreach (int otherIdGatherer in cardWithExtraInfo.OtherIdGatherer)
+                        foreach (string otherIdScryFall in cardWithExtraInfo.OtherIdScryFall)
                         {
-                            _downloadManager.InsertCardEditionVariationInDb(idGatherer, otherIdGatherer, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdGatherer), true));
+                            _downloadManager.InsertCardEditionVariationInDb(idScryFall, otherIdScryFall, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdScryFall), true));
                         }
                     }
                     _editions[jobData.EditionId].Progress();

@@ -18,6 +18,76 @@
         {
         }
 
+        public void AddBackSideModalDoubleFacedCard(string backSideModalDoubleFacedCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearBackSideModalDoubleFacedCards()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasMultiPart(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDownSide(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Is90DegreeSide(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Is90DegreeFrontSide(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ShouldIgnore(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSecondPartOfSplitted(ICard card)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsSpecial(ICardAllDbInfo cai)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICard GetOtherPartCard(ICard card, Func<string, string, ICard> getCard)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ShardColor GetColor(ICardAllDbInfo cai)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CardType GetCardType(ICardAllDbInfo cai)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CardSubType GetCardSubType(ICardAllDbInfo cai)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        //ALERT: Need to be tatally reviewed
+        /*
+
+
         public void ClearBackSideModalDoubleFacedCards()
         {
             _backSideModalDoubleFacedCards.Clear();
@@ -29,7 +99,7 @@
 
         public bool HasMultiPart(ICard card)
         {
-            return card.OtherPartName != null;
+            return card.CardFaceIds.Count > 1;
         }
 
         public bool IsDownSide(ICard card)
@@ -143,6 +213,6 @@
 
             return subType;
 
-        }
+        }*/
     }
 }

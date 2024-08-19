@@ -336,7 +336,7 @@
 
             IEnumerable<ICardInCollectionCount> cardStats = CountIsNameBased ? cai.Statistics :
                                                                      //We filter statitiscs on only current version of the card 
-                                                                     cai.Statistics.Where(s => s.IdGatherer == cai.IdGatherer);
+                                                                     cai.Statistics.Where(s => s.IdScryFall == cai.IdScryFall);
 
             //Filter on collection
             ICardInCollectionCount[] statistics = cardStats.Where(s => CollectionsSelected.Any(cc => cc.Id == s.IdCollection)).ToArray();
@@ -366,8 +366,7 @@
 
             if (!AllLanguages)
             {
-                return (cai.Card.Name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0) ||
-                       (cai.CardPart2 != null && cai.CardPart2.Name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0);
+                return (cai.Card.Name.IndexOf(Name, StringComparison.InvariantCultureIgnoreCase) >= 0);
             }
 
             return _magicDatabase.GetAllLanguages().Any(l =>
@@ -380,14 +379,14 @@
         {
             if (ExcludeFunEditions)
             {
-                if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockFun)
+                if (_magicDatabase.GetEditionByIdScryFall(cai.IdScryFall).IdBlock == _idBlockFun)
                 {
                     return false;
                 }
             }
             if (ExcludeOnlineOnlyEditions)
             {
-                if (_magicDatabase.GetEdition(cai.IdGatherer).IdBlock == _idBlockOnlineOnly)
+                if (_magicDatabase.GetEditionByIdScryFall(cai.IdScryFall).IdBlock == _idBlockOnlineOnly)
                 {
                     return false;
                 }
@@ -398,7 +397,7 @@
                 return true;
             }
 
-            IEdition edition = _magicDatabase.GetEdition(cai.IdGatherer);
+            IEdition edition = _magicDatabase.GetEditionByIdScryFall(cai.IdScryFall);
 
             return EditionsSelected.Contains(edition);
         }

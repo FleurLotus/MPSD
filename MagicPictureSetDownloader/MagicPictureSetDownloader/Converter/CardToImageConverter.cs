@@ -22,19 +22,15 @@ namespace MagicPictureSetDownloader.Converter
             string idScryFall = null;
             if (param == 0)
             {
-                idGatherer = card.IdGatherer;
-            }
-            else if (card.OtherCardPart != null)
-            {
-                idGatherer = card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide ? card.IdGatherer : card.OtherCardPart.IdGatherer;
+                idScryFall = card.IdScryFall;
             }
 
-            if (idGatherer == 0)
+            if (string.IsNullOrEmpty(idScryFall))
             {
                 return null;
             }
 
-            return base.Convert(idGatherer, targetType, parameter, culture); 
+            return base.Convert(idScryFall, targetType, parameter, culture); 
         }
     }
 }

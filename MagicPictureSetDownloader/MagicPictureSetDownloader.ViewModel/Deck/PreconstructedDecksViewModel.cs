@@ -75,7 +75,7 @@
         private IList<PreconstructedDeckViewModel> LoadReferentialData()
         {
             List<PreconstructedDeckViewModel> ret = new List<PreconstructedDeckViewModel>();
-            IDictionary<int, CardViewModel> allCardsViewModel = _magicDatabase.GetAllInfos().ToDictionary(cai => cai.IdGatherer, cai => new CardViewModel(cai));
+            IDictionary<string, CardViewModel> allCardsViewModel = _magicDatabase.GetAllInfos().ToDictionary(cai => cai.IdScryFall, cai => new CardViewModel(cai));
 
             foreach (IPreconstructedDeck preconstructedDeck in _magicDatabase.GetAllPreconstructedDecks())
             {
@@ -83,7 +83,7 @@
                 IEdition edition = _magicDatabase.GetEditionById(preconstructedDeck.IdEdition);
 
                 ret.Add(new PreconstructedDeckViewModel(preconstructedDeck, edition, 
-                            deckComposition.Select(pdce => new KeyValuePair<CardViewModel, int>(allCardsViewModel[pdce.IdGatherer], pdce.Number))));
+                            deckComposition.Select(pdce => new KeyValuePair<CardViewModel, int>(allCardsViewModel[pdce.IdScryFall], pdce.Number))));
             }
 
             ret.Sort((x, y) =>

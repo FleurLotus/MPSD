@@ -12,7 +12,6 @@
     public class EditionDatabaseInfoModificationViewModel : DatabaseInfoModificationViewModelBase<IEdition>
     {
         private string _code;
-        private string _gathererName;
         private DateTime? _releaseDate;
         private bool _hasFoil;
         private IBlock _block;
@@ -89,18 +88,6 @@
                 }
             }
         }
-        public string GathererName
-        {
-            get { return _gathererName; }
-            set
-            {
-                if (value != _gathererName)
-                {
-                    _gathererName = value;
-                    OnNotifyPropertyChanged(nameof(GathererName));
-                }
-            }
-        }
         public string Code
         {
             get { return _code; }
@@ -129,7 +116,7 @@
         }
         protected override bool ValidateCurrent()
         {
-            return base.ValidateCurrent() && !string.IsNullOrWhiteSpace(GathererName);
+            return base.ValidateCurrent() && !string.IsNullOrWhiteSpace(Name);
         }
         protected override void DisplayCurrent()
         {
@@ -137,7 +124,6 @@
             {
                 Name = null;
                 Code = null;
-                GathererName = null;
                 ReleaseDate = null;
                 HasFoil = false;
                 Block = null;
@@ -148,7 +134,6 @@
             {
                 Name = Selected.Name;
                 Code = Selected.Code;
-                GathererName = Selected.GathererName;
                 ReleaseDate = Selected.ReleaseDate;
                 HasFoil = Selected.HasFoil;
                 Block = Selected.IdBlock.HasValue ? Blocks.FirstOrDefault(b => b.Id == Selected.IdBlock.Value) : null;
@@ -164,7 +149,7 @@
                 return false;
             }
 
-            MagicDatabase.UpdateEdition(Selected, GathererName, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, BlockPosition, CardNumber, ReleaseDate);
+            MagicDatabase.UpdateEdition(Selected, Name, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, BlockPosition, CardNumber, ReleaseDate);
             All.Clear();
             All.AddRange(MagicDatabase.GetAllEditionsOrdered());
             return true;

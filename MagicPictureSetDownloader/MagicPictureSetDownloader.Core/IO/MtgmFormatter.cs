@@ -39,7 +39,7 @@
             }
 
 
-            ICard card = MagicDatabase.GetCard(m.Groups["Name"].Value, null);
+            ICard card = MagicDatabase.GetCard(m.Groups["Name"].Value);
             if (card == null)
             {
                 return new ErrorImportExportCardInfo(line, string.Format("Can't find card named {0}", m.Groups["Name"].Value));
@@ -51,10 +51,10 @@
                 return new ErrorImportExportCardInfo(line, string.Format("Can't find edition named {0}", m.Groups["Edition"].Value));
             }
 
-            int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
-            if (idGatherer == 0)
+            string idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+            if (string.IsNullOrEmpty(idScryFall))
             {
-                return new ErrorImportExportCardInfo(line, string.Format("Can't find gatherer id for card {0} edition {1}", card, edition));
+                return new ErrorImportExportCardInfo(line, string.Format("Can't find id ScryFall for card {0} edition {1}", card, edition));
             }
 
             CardCount cardCount = new CardCount
@@ -63,7 +63,7 @@
                 { CardCountKeys.Foil, foilCount }
             };
 
-            return new ImportExportCardInfo(idGatherer, cardCount, 0);
+            return new ImportExportCardInfo(idScryFall, cardCount, 0);
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {
@@ -73,11 +73,11 @@
                 return null;
             }
 
-            ICard card = MagicDatabase.GetCard(cardCount.IdGatherer);
-            IEdition edition = MagicDatabase.GetEdition(cardCount.IdGatherer);
+            ICard card = MagicDatabase.GetCardByIdScryFall(cardCount.IdScryFall);
+            IEdition edition = MagicDatabase.GetEditionByIdScryFall(cardCount.IdScryFall);
             if (card == null || edition == null)
             {
-                throw new ImportExportException("Can't find card with IdGatherer={0}", cardCount.IdGatherer);
+                throw new ImportExportException("Can't find card with IdScryFall={0}", cardCount.IdScryFall);
             }
 
             string ret = string.Empty;

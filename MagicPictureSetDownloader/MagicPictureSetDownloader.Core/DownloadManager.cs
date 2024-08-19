@@ -97,28 +97,28 @@
         }
         public string InsertPictureInDb(string pictureUrl, object param)
         {
-            int gathererId = (int)param;
+            string idScryFall = (string)param;
 
-            IPicture picture = MagicDatabase.GetPicture(gathererId);
+            IPicture picture = MagicDatabase.GetPicture(idScryFall);
             if (picture == null)
             {
                 //No id found try insert
                 byte[] pictureData = _webAccess.GetFile(pictureUrl);
 
-                MagicDatabase.InsertNewPicture(gathererId, pictureData);
+                MagicDatabase.InsertNewPicture(idScryFall, pictureData);
             }
 
             return null;
         }
         public string InsertRuleInDb(string rulesUrl, object param)
         {
-            int gathererId = (int)param;
+            string idScryFall = (string)param;
 
             string htmltext = _webAccess.GetHtml(rulesUrl);
 
             foreach (CardRuleInfo cardRuleInfo in Parser.ParseCardRule(htmltext))
             {
-                MagicDatabase.InsertNewRuling(gathererId, cardRuleInfo.Date, cardRuleInfo.Text);
+                MagicDatabase.InsertNewRuling(idScryFall, cardRuleInfo.Date, cardRuleInfo.Text);
             }
 
             return null;
@@ -126,7 +126,7 @@
         public IReadOnlyList<KeyValuePair<string, object>> GetRulesUrls()
         {
             return MagicDatabase.GetRulesId()
-                            .Select(idGatherer => new KeyValuePair<string, object>(WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idGatherer)), idGatherer))
+                            .Select(idScryFall => new KeyValuePair<string, object>(WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idScryFall)), idScryFall))
                             .ToList();
         }
         public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl, object param)
@@ -135,7 +135,7 @@
 
             foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param, out importErrorMessage))
             {
-                MagicDatabase.InsertNewPrice(priceInfo.IdGatherer, priceInfo.UpdateDate.Date, priceInfo.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
+                MagicDatabase.InsertNewPrice(priceInfo.IdScryFall, priceInfo.UpdateDate.Date, priceInfo.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
             }
 
             return importErrorMessage;
@@ -197,12 +197,11 @@
             {
                 if (deckCardInfo.NeedToCreate)
                 {
-                    int idGatherer = MagicDatabase.InsertNewCardEditionWithFakeGathererId(deckCardInfo.IdEdition, deckCardInfo.IdCard, deckCardInfo.IdRarity, deckCardInfo.PictureUrl);
-                    MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, idGatherer, deckCardInfo.Number);
+                    throw new Exception("Could not create");
                 }
                 else
                 {
-                    MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdGatherer, deckCardInfo.Number);
+                    MagicDatabase.InsertOrUpdatePreconstructedDeckCardEdition(preconstructedDeck.Id, deckCardInfo.IdScryFall, deckCardInfo.Number);
                 }
             }
             return null;
@@ -211,17 +210,18 @@
         {
             return _webAccess.GetHtml(url);
         }
-        internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo, string pictureUrl)
+        internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo)
         {
             int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
-
-            MagicDatabase.InsertNewCardEdition(idGatherer, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.PartName, cardWithExtraInfo.Rarity, pictureUrl);
+            //ALERT: temp
+            string idScryFall = idGatherer.ToString();
+            MagicDatabase.InsertNewCardEdition(idScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
         }
-        internal void InsertCardEditionVariationInDb(int idGatherer, int otherIdGatherer, string pictureUrl)
+        internal void InsertCardEditionVariationInDb(string idScryFall, string otherIdScryFall, string pictureUrl)
         {
-            if (idGatherer != otherIdGatherer)
+            if (idScryFall != otherIdScryFall)
             {
-                MagicDatabase.InsertNewCardEditionVariation(idGatherer, otherIdGatherer, pictureUrl);
+                MagicDatabase.InsertNewCardEditionVariation(idScryFall, otherIdScryFall, pictureUrl);
             }
         }
         public void EditionCompleted(int editionId)
@@ -236,12 +236,14 @@
                 e(this, new EventArgs<string>(name));
             }
         }
-
+        
         internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
+            /* ALERT: To be review
             MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Defense, cardWithExtraInfo.Type,
-                                        cardWithExtraInfo.PartName, cardWithExtraInfo.OtherPathName, cardWithExtraInfo.Languages);
+                                        cardWithExtraInfo.Languages);
+                */
         }
     }
 }

@@ -145,7 +145,7 @@
                 return Matching.None;
             }
 
-            return card.IdGatherer == saveSelected.IdGatherer ? Matching.Full : Matching.Name;
+            return card.IdScryFall == saveSelected.IdScryFall ? Matching.Full : Matching.Name;
         }
         private HierarchicalResultNodeViewModel FindBestName(HierarchicalResultViewModel toInspect, CardViewModel saveSelected)
         {

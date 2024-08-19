@@ -18,7 +18,7 @@
         {
             _countDistinct++;
 
-            //Statitics are Card name based not idgatherer based, we need to filter 
+            //Statitics are Card name based not idScryFall based, we need to filter 
             int toAdd = card.Statistics.Where(s => s.Collection == _name && s.Edition == card.Edition.Name).Aggregate(0, (p, s) => p + s.FoilNumber + s.Number + s.AltArtNumber + s.FoilAltArtNumber);
             if (toAdd > 0)
             {

@@ -92,7 +92,8 @@
             }
 
             Repository repo = new Repository(_connectionString);
-            UpgradeData(dbVersion, repo);
+            //ALERT: to remove
+            //UpgradeData(dbVersion, repo);
 
 #if !DEBUG
             //No update of Version in debug
@@ -102,7 +103,7 @@
             }
 #endif
         }
-
+        /*
         private void UpgradeData(int dbVersion, IRepository repo)
         {
             if (dbVersion <= 8)
@@ -632,5 +633,6 @@
             }
             return ret;
         }
+        */
     }
 }

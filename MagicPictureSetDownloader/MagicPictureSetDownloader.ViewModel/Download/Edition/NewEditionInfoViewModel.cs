@@ -44,11 +44,10 @@
         private readonly IMagicDatabaseReadAndWriteReference _magicDatabase;
         private readonly Func<string, byte[]> _getIcon;
 
-        public NewEditionInfoViewModel(string gathererName, Func<string, byte[]> getIcon)
+        public NewEditionInfoViewModel(string name, Func<string, byte[]> getIcon)
         {
             _getIcon = getIcon;
-            GathererName = gathererName;
-            Name = gathererName;
+            Name = name;
             HasFoil = true;
             _magicDatabase = MagicDatabaseManager.ReadAndWriteReference;
             Blocks = _magicDatabase.GetAllBlocks().Union(new[] { new AutoBlock() }).Ordered().ToArray();
@@ -61,7 +60,6 @@
 
         public ICommand ResetBlockCommand { get; }
         public ICommand GetIconCommand { get; }
-        public string GathererName { get; }
         public IBlock[] Blocks { get; }
         public byte[] Icon
         {
@@ -198,12 +196,12 @@
 
             if (BlockSelected != null && BlockSelected.Id == AutoBlockId)
             {
-                realBlock = _magicDatabase.GetBlock(GathererName);
+                realBlock = _magicDatabase.GetBlock(Name);
                 if (realBlock == null)
                 {
                     //Create Block with the same name as the Edition
-                    _magicDatabase.InsertNewBlock(GathererName);
-                    realBlock = _magicDatabase.GetBlock(GathererName);
+                    _magicDatabase.InsertNewBlock(Name);
+                    realBlock = _magicDatabase.GetBlock(Name);
                     Position = 1;
                 }
             }
@@ -212,11 +210,11 @@
                 realBlock = BlockSelected;
             }
 
-            _magicDatabase.InsertNewEdition(GathererName, Name, HasFoil, Code, realBlock == null ? (int?)null : realBlock.Id, Position, CardNumber, ReleaseDate, Icon);
+            _magicDatabase.InsertNewEdition(Name, Name, HasFoil, Code, realBlock == null ? (int?)null : realBlock.Id, Position, CardNumber, ReleaseDate, Icon);
         }
         public void SaveDefault()
         {
-            _magicDatabase.InsertNewEdition(GathererName);
+            _magicDatabase.InsertNewEdition(Name);
         }
     }
 }

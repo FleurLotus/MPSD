@@ -13,7 +13,7 @@
             FoilNumber = cardInCollectionCount.FoilNumber;
             Number = cardInCollectionCount.Number;
             Collection = magicDatabase.GetCollection(cardInCollectionCount.IdCollection).Name;
-            Edition = magicDatabase.GetEdition(cardInCollectionCount.IdGatherer).Name;
+            Edition = magicDatabase.GetEditionByIdScryFall(cardInCollectionCount.IdScryFall).Name;
             Language = magicDatabase.GetLanguage(cardInCollectionCount.IdLanguage).Name;
         }
 

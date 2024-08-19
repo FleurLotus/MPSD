@@ -8,7 +8,7 @@
 
     internal class MpsdFormatter : FormatterBase
     {
-        private readonly Regex _regLine = new Regex(@"^(?<IdGatherer>\d+)#(?<Count>\d+)#(?<FoilCount>\d+)(#(?<AltArtCount>\d+)#(?<FoilAltArtCount>\d+))?#(?<Language>\d+)?$", RegexOptions.Compiled);
+        private readonly Regex _regLine = new Regex(@"^(?<IdScryFall>[0-9a-f\-]\+)#(?<Count>\d+)#(?<FoilCount>\d+)(#(?<AltArtCount>\d+)#(?<FoilAltArtCount>\d+))?#(?<Language>\d+)?$", RegexOptions.Compiled);
 
         public MpsdFormatter()
             : base(ExportFormat.MPSD, ".mpsd")
@@ -22,9 +22,10 @@
             {
                 return new ErrorImportExportCardInfo(line, "Can't parse line");
             }
-            if (!int.TryParse(m.Groups["IdGatherer"].Value, out int idGatherer) || MagicDatabase.GetCardByScryFallId(idGatherer) == null)
+            string idScryFall = m.Groups["IdScryFall"].Value;
+            if (MagicDatabase.GetCardByIdScryFall(idScryFall) == null)
             {
-                return new ErrorImportExportCardInfo(line, "Invalid IdGatherer");
+                return new ErrorImportExportCardInfo(line, "Invalid IdScryFall");
             }
             if (!int.TryParse(m.Groups["Count"].Value, out int count) || count < 0)
             {
@@ -52,7 +53,7 @@
                     return new ErrorImportExportCardInfo(line, "Invalid FoilAltArtCount");
                 }
             }
-            if (!int.TryParse(m.Groups["Language"].Value, out int idLanguage) || MagicDatabase.GetLanguages(idGatherer).All(l => l.Id != idLanguage))
+            if (!int.TryParse(m.Groups["Language"].Value, out int idLanguage) || MagicDatabase.GetLanguages(idScryFall).All(l => l.Id != idLanguage))
             {
                 return new ErrorImportExportCardInfo(line, "Invalid idLanguage");
             }
@@ -65,7 +66,7 @@
                 { CardCountKeys.FoilAltArt, foilAltArtCount }
             };
 
-            return new ImportExportCardInfo(idGatherer, cardCount, idLanguage);
+            return new ImportExportCardInfo(idScryFall, cardCount, idLanguage);
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {
@@ -74,7 +75,7 @@
                 return null;
             }
 
-            return string.Format("{0}#{1}#{2}#{3}#{4}#{5}\n", cardCount.IdGatherer, cardCount.Number, cardCount.FoilNumber, cardCount.AltArtNumber, cardCount.FoilAltArtNumber, cardCount.IdLanguage);
+            return string.Format("{0}#{1}#{2}#{3}#{4}#{5}\n", cardCount.IdScryFall, cardCount.Number, cardCount.FoilNumber, cardCount.AltArtNumber, cardCount.FoilAltArtNumber, cardCount.IdLanguage);
         }
         public override bool IsMatchingPattern(string line)
         {
