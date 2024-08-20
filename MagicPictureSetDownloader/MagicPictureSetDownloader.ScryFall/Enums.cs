@@ -1,4 +1,4 @@
-﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
+﻿namespace MagicPictureSetDownloader.ScryFall
 {
     using System.Runtime.Serialization;
     using System.Text.Json.Serialization;

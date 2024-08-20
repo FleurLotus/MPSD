@@ -8,7 +8,7 @@
         {
             return pricesource switch
             {
-                PriceSource.Scryfall => new ScryfallPriceImporter(),
+                PriceSource.Scryfall => new ScryFallPriceImporter(),
                 _ => throw new PriceImporterException("Unknown PriceSource type:" + pricesource),
             };
         }

@@ -7,18 +7,15 @@
 
     using Common.Library.Notify;
     using Common.Web;
+
     using MagicPictureSetDownloader.Core.Deck;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall;
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
 
     public class DownloadManager
     {
-        public event EventHandler<EventArgs<string>> NewEditionCreated;
-
-        public const string BaseEditionUrl = @"http://gatherer.wizards.com/Pages/Default.aspx";
-        private const string BaseIconUrl = @"http://gatherer.wizards.com/Handlers/Image.ashx?type=symbol&size=small&rarity={0}&set={1}";
-
         private readonly WebAccess _webAccess = new WebAccess();
         private readonly Lazy<IMagicDatabaseReadAndWriteReference> _lazy = new Lazy<IMagicDatabaseReadAndWriteReference>(() => MagicDatabaseManager.ReadAndWriteReference);
 
@@ -33,68 +30,41 @@
             remove { _webAccess.CredentialRequiered -= value; }
         }
 
-        public IEnumerable<EditionInfoWithBlock> GetEditionList(string url)
+        public void GetAndSaveEditions()
         {
-            string htmltext = _webAccess.GetHtml(url);
-            foreach (EditionInfo editionInfo in Parser.ParseEditionsList(htmltext))
+            Set[] sets = ScryFallDataRetriever.GetBulkSets(_webAccess);
+
+            foreach (Set set in sets)
             {
-                IEdition edition = MagicDatabase.GetEdition(editionInfo.Name);
+                IEdition edition = MagicDatabase.GetEdition(set.Name);
                 if (edition == null)
                 {
-                    OnNewEditionCreated(editionInfo.Name);
-                    edition = MagicDatabase.GetEdition(editionInfo.Name);
+                    IBlock block = GetOrAddBlock(set.Block);
+                    byte[] icon = GetEditionIcon(set.IconSvgUri);
+
+                    MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code, block.Id, set.CardCount, set.ReleasedAt, icon);
                 }
-                yield return new EditionInfoWithBlock(editionInfo, edition);
             }
         }
-        public string[] GetCardUrls(string url)
+        private IBlock GetOrAddBlock(string name)
         {
-            List<string> ret = new List<string>();
-
-            ManageMultiPage(url, html =>
+            IBlock block = null;
+            if (!string.IsNullOrEmpty(name))
             {
-                foreach (string cardurl in Parser.ParseCardUrls(html))
+                block = MagicDatabase.GetBlock(name);
+                if (block == null)
                 {
-                    ret.Add(cardurl);
+                    MagicDatabase.InsertNewBlock(name);
+                    block = MagicDatabase.GetBlock(name);
                 }
-            });
-
-            return ret.ToArray();
+            }
+            return block;
         }
-        internal void ManageMultiPage(string baseUrl, Action<string> workOnHtml)
+        public Card[] GetCards()
         {
-            int page = 0;
-            bool hasnextpage;
-            do
-            {
-                hasnextpage = false;
-                
-                string realUrl = page == 0 ? baseUrl : string.Format("{0}&page={1}", baseUrl, page);
-                string html = _webAccess.GetHtml(realUrl);
-                try
-                {
-                    workOnHtml(html);
-                }
-                catch (NextPageException ex)
-                {
-                    int index;
-                    int[] pages = ex.Pages;
-                    for (index = 0; index < pages.Length; index++)
-                    {
-                        if (page == pages[index])
-                        {
-                            break;
-                        }
-                    }
-
-                    hasnextpage = (index + 1 < pages.Length);
-                    if (hasnextpage)
-                    {
-                        page = pages[index + 1];
-                    }
-                }
-            } while (hasnextpage);
+            return ScryFallDataRetriever.GetCardsInfo(_webAccess, out _);
         }
+
         public string InsertPictureInDb(string pictureUrl, object param)
         {
             string idScryFall = (string)param;
@@ -110,35 +80,13 @@
 
             return null;
         }
-        public string InsertRuleInDb(string rulesUrl, object param)
-        {
-            string idScryFall = (string)param;
-
-            string htmltext = _webAccess.GetHtml(rulesUrl);
-
-            foreach (CardRuleInfo cardRuleInfo in Parser.ParseCardRule(htmltext))
-            {
-                MagicDatabase.InsertNewRuling(idScryFall, cardRuleInfo.Date, cardRuleInfo.Text);
-            }
-
-            return null;
-        }
-        public IReadOnlyList<KeyValuePair<string, object>> GetRulesUrls()
-        {
-            return MagicDatabase.GetRulesId()
-                            .Select(idScryFall => new KeyValuePair<string, object>(WebAccess.ToAbsoluteUrl(BaseEditionUrl, string.Format("Card/Details.aspx?multiverseid={0}", idScryFall)), idScryFall))
-                            .ToList();
-        }
         public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl, object param)
         {
-            string importErrorMessage;
-
-            foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param, out importErrorMessage))
+            foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param))
             {
                 MagicDatabase.InsertNewPrice(priceInfo.IdScryFall, priceInfo.UpdateDate.Date, priceInfo.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
             }
-
-            return importErrorMessage;
+            return null;
         }
         public IReadOnlyList<KeyValuePair<string, object>> GetPricesUrls(IPriceImporter priceImporter)
         {
@@ -148,28 +96,25 @@
         {
             return MagicDatabase.GetMissingPictureUrls();
         }
-        public byte[] GetEditionIcon(string code)
+        private byte[] GetEditionIcon(Uri uri)
         {
-            if (string.IsNullOrWhiteSpace(code))
+            if (uri == null)
             {
                 return null;
             }
 
             byte[] editionIcon = null;
-            foreach (string rarity in new[] { "C", "U", "R", "M" })
+            try
             {
-                try
-                {
-                    editionIcon = _webAccess.GetFile(string.Format(BaseIconUrl, rarity, code));
-                }
-                catch (WebException)
-                {
-                    //Manage file not found error
-                }
-                if (editionIcon != null && editionIcon.Length > 0)
-                {
-                    return editionIcon;
-                }
+                editionIcon = _webAccess.GetFile(uri.ToString());
+            }
+            catch (WebException)
+            {
+                //Manage file not found error
+            }
+            if (editionIcon != null && editionIcon.Length > 0)
+            {
+                return editionIcon;
             }
 
             return null;
@@ -212,10 +157,7 @@
         }
         internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo)
         {
-            int idGatherer = Parser.ExtractIdGatherer(cardWithExtraInfo.PictureUrl);
-            //ALERT: temp
-            string idScryFall = idGatherer.ToString();
-            MagicDatabase.InsertNewCardEdition(idScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
+            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
         }
         internal void InsertCardEditionVariationInDb(string idScryFall, string otherIdScryFall, string pictureUrl)
         {
@@ -224,22 +166,9 @@
                 MagicDatabase.InsertNewCardEditionVariation(idScryFall, otherIdScryFall, pictureUrl);
             }
         }
-        public void EditionCompleted(int editionId)
-        {
-            MagicDatabase.EditionCompleted(editionId);
-        }
-        private void OnNewEditionCreated(string name)
-        {
-            var e = NewEditionCreated;
-            if (e != null)
-            {
-                e(this, new EventArgs<string>(name));
-            }
-        }
-        
         internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
-            /* ALERT: To be review
+            /* ALERT: To be review InsertCardInDb
             MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
                                         cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Defense, cardWithExtraInfo.Type,
                                         cardWithExtraInfo.Languages);

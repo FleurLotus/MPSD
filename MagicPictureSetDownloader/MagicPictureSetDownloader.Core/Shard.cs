@@ -5,10 +5,11 @@
     using System.Linq;
 
     using MagicPictureSetDownloader.Interface;
-    using MagicPictureSetDownloader.Core.CardInfo;
 
     public class Shard
     {
+        public const string Prefix = "@";
+
         private const char White = 'W';
         private const char Blue = 'U';
         private const char Black = 'B';
@@ -95,7 +96,7 @@
             }
 
             return castingCost.Split(new[] { ' ' },StringSplitOptions.RemoveEmptyEntries)
-                              .Select(s => s.StartsWith(SymbolParser.Prefix)? s[SymbolParser.Prefix.Length..].ToUpperInvariant(): s.ToUpperInvariant())
+                              .Select(s => s.StartsWith(Prefix)? s[Prefix.Length..].ToUpperInvariant(): s.ToUpperInvariant())
                               .Select(GetShard);
         }
 

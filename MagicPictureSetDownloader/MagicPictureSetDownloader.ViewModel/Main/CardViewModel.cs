@@ -50,7 +50,7 @@
                 DisplayedCastingCost = CastingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             }
 
-            //ALERT TO BE REVIEW
+            //ALERT TO BE REVIEW IsMultiPart
             /*
             if (IsMultiPart && !otherPart)
             {
@@ -91,10 +91,6 @@
         public string Text
         {
             get { return MainCardFace.Text; }
-        }
-        public IRuling[] Rulings
-        {
-            get { return Card.Rulings; }
         }
         public string ToString(int? languageId)
         {

@@ -3,7 +3,7 @@
     using System;
     using System.Text.Json.Serialization;
 
-    public class Preview : JsonWithExtensionDataBase
+    internal class Preview : JsonWithExtensionDataBase
     {
         [JsonPropertyName("previewed_at")]
         public DateTime PreviewedAt { get; set; }

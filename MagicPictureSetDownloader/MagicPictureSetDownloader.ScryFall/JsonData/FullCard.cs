@@ -1,11 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
 {
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Collections.Generic;
 
     using System.Text.Json.Serialization;
 
-    public class FullCard : FullCardFace
+    internal class FullCard : FullCardFace
     {
         #region Core Field
         [JsonPropertyName("arena_id")]
@@ -202,5 +203,10 @@
         [JsonPropertyName("preview")]
         public Preview Preview { get; set; }
         #endregion
+
+        public Card ToCard()
+        {
+            return new Card(this);
+        }
     }
 }

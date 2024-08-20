@@ -2,23 +2,13 @@
 {
     using System.Collections.Generic;
 
-    using MagicPictureSetDownloader.Interface;
 
     internal class CardWithExtraInfo
     {
-        private readonly IDictionary<string, string> _cardLanguage = new Dictionary<string, string>();
         private readonly HashSet<string> _otherIdScryFall = new HashSet<string>();
-        private string _name;
 
-        public string Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-                _cardLanguage[Constants.English] = _name;
-            }
-        }
+        public string IdScryFall { get; set; }
+        public string Name { get; set; }
         public string Text { get; set; }
         public string Power { get; set; }
         public string Toughness { get; set; }
@@ -32,18 +22,9 @@
         {
             get { return new List<string>(_otherIdScryFall).AsReadOnly(); }
         }
-        public IDictionary<string, string> Languages
-        {
-            get { return new Dictionary<string, string>(_cardLanguage); }
-        }
         public void Add(string otherIdScryFall)
         {
             _otherIdScryFall.Add(otherIdScryFall);
-        }
-
-        public void Add(CardLanguageInfo language)
-        {
-            _cardLanguage[language.Language] = language.Name;
         }
     }
 }

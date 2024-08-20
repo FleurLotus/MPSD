@@ -2,7 +2,7 @@
 {
     using System.Text.Json.Serialization;
 
-    public class Legalities : JsonWithExtensionDataBase
+    internal class Legalities : JsonWithExtensionDataBase
     {
         [JsonPropertyName("alchemy")]
         public Legality Alchemy { get; set; }

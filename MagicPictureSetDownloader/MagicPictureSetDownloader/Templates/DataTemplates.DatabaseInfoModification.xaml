@@ -55,7 +55,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Content="Name"/>
             <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Text="{fl:TwoWayBinding Name}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterExceptNew}}"/>
@@ -70,15 +69,6 @@
             <DatePicker Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" SelectedDate="{fl:TwoWayBinding ReleaseDate}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
             <Label Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Content="Block"/>
             <ComboBox Grid.Column="1" Grid.Row="4" VerticalAlignment="Center" SelectedItem="{fl:TwoWayBinding Block}" ItemsSource="{Binding Blocks}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}"/>
-            <Label Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Content="Block Position"/>
-            <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal">
-                <ComboBox Width="100" VerticalAlignment="Center" SelectedItem="{fl:TwoWayBinding BlockPosition}" IsEnabled="{Binding State, Converter={fl:AggregateConverter {conv:ReadOnlyConverterForNoEdition}, {fl:BoolInvertConverter}}}">
-                    <system:Int32>1</system:Int32>
-                    <system:Int32>2</system:Int32>
-                    <system:Int32>3</system:Int32>
-                </ComboBox>
-                <Button Content="Reset" Width="70" Margin="5,0" Command="{Binding ResetBlockCommand}"/>
-            </StackPanel>
             <Label Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Content="Card Number"/>
             <TextBox Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Text="{fl:TwoWayBinding CardNumber, TargetNullValue={x:Static system:String.Empty}}" IsReadOnly="{Binding State, Converter={conv:ReadOnlyConverterForNoEdition}}"/>
         </Grid>

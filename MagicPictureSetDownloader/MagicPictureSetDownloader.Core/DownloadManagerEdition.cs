@@ -75,7 +75,6 @@
             {
                 foreach (var kv in _editions)
                 {
-                    _downloadManager.EditionCompleted(kv.Key);
                     kv.Value.Finish();
                 }
             }
@@ -124,6 +123,8 @@
         }
         private void Parse()
         {
+            //ALERT Need to be totally reviewed
+            /*
             foreach (var jobData in _inputsWithHtml.GetConsumingEnumerable())
             {
                 try
@@ -136,26 +137,16 @@
                     {
                         string pictureUrl = WebAccess.ToAbsoluteUrl(jobData.Url, cardWithExtraInfo.PictureUrl);
                         int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
-                        //ALERT temp 
-                        string idScryFall = idGatherer.ToString();
-                        string baseUrl = WebAccess.ToAbsoluteUrl(jobData.Url, string.Format("Languages.aspx?multiverseid={0}", idGatherer));
-
+        
                         CardWithExtraInfo info = cardWithExtraInfo;
 
-                        _downloadManager.ManageMultiPage(baseUrl, html =>
-                        {
-                            foreach (CardLanguageInfo language in Parser.ParseCardLanguage(html))
-                            {
-                                info.Add(language);
-                            }
-                        });
-
+        
                         _downloadManager.InsertCardInDb(cardWithExtraInfo);
                         _downloadManager.InsertCardEditionInDb(jobData.EditionId, cardWithExtraInfo);
 
                         foreach (string otherIdScryFall in cardWithExtraInfo.OtherIdScryFall)
                         {
-                            _downloadManager.InsertCardEditionVariationInDb(idScryFall, otherIdScryFall, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdScryFall), true));
+                            _downloadManager.InsertCardEditionVariationInDb(idGatherer, otherIdScryFall, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdScryFall), true));
                         }
                     }
                     _editions[jobData.EditionId].Progress();
@@ -166,6 +157,7 @@
                     SendError(ex, jobData.Url);
                 }
             }
+            */
         }
         public void Stop()
         {

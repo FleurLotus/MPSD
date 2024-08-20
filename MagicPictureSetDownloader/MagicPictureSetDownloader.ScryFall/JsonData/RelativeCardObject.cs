@@ -3,7 +3,7 @@
     using System;
     using System.Text.Json.Serialization;
 
-    public class RelativeCardObject : JsonWithExtensionDataBase
+    internal class RelativeCardObject : JsonWithExtensionDataBase
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }

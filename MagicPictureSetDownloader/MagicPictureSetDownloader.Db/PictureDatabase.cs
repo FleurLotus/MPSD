@@ -101,7 +101,7 @@
             }
         }
 
-        public void InsertNewTreePicture(string name, byte[] data)
+        public void InsertNewTreePicture(string name, byte[] data, bool isSvg)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -114,7 +114,7 @@
             }
 
             string path = GeneratePathFromName(name);
-            string ext = GetExtension(data);
+            string ext = isSvg ? ".svg" : GetExtension(data);
             string filePath = Path.Combine(_treePath, path + ext);
 
             if (Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length> 0)

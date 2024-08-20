@@ -11,7 +11,7 @@ namespace MagicPictureSetDownloader.Converter
 
     using Common.WPF.Converter;
 
-    using MagicPictureSetDownloader.Core.CardInfo;
+    using MagicPictureSetDownloader.Core;
 
     [ValueConversion(typeof(string), typeof(List<Inline>))]
     public class TextToInlinesConverter : NoConvertBackConverter
@@ -34,7 +34,7 @@ namespace MagicPictureSetDownloader.Converter
                 return newList;
             }
 
-            int pos = text.IndexOf(SymbolParser.Prefix, StringComparison.InvariantCulture);
+            int pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
             if (pos < 0)
             {
                 newList.Add(new Run(text));
@@ -62,7 +62,7 @@ namespace MagicPictureSetDownloader.Converter
                 BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
-                    text = text[(pos + SymbolParser.Prefix.Length)..];
+                    text = text[(pos + Shard.Prefix.Length)..];
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace MagicPictureSetDownloader.Converter
                     previousIsPicture = true;
                 }
 
-                pos = text.IndexOf(SymbolParser.Prefix, StringComparison.InvariantCulture);
+                pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(text))

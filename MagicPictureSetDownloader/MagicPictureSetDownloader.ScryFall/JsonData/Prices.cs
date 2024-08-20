@@ -2,7 +2,7 @@
 {
     using System.Text.Json.Serialization;
 
-    public class Prices : JsonWithExtensionDataBase
+    internal class Prices : JsonWithExtensionDataBase
     {
         [JsonPropertyName("usd")]
         public string Usd { get; set; }

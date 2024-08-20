@@ -15,8 +15,6 @@
         private bool _showStatistics;
         private const string ShowOnlyCurrentStatisticsKey = "ShowOnlyCurrentStatistics";
         private bool _showOnlyCurrentStatistics;
-        private const string ShowRulesKey = "ShowRules";
-        private bool _showRules;
         private const string ShowPricesKey = "ShowPrices";
         private bool _showPrices;
         private const string AutoCheckUpgradeKey = "AutoCheckUpgrade";
@@ -90,18 +88,6 @@
                 }
             }
         }
-        public bool ShowRules
-        {
-            get { return _showRules; }
-            set
-            {
-                if (value != _showRules)
-                {
-                    _showRules = value;
-                    OnNotifyPropertyChanged(nameof(ShowRules));
-                }
-            }
-        }
         public bool ShowPrices
         {
             get { return _showPrices; }
@@ -145,7 +131,6 @@
             ShowOtherLanguages = GetOptionValue(TypeOfOption.Display, ShowOtherLanguagesKey);
             ShowStatistics = GetOptionValue(TypeOfOption.Display, ShowStatisticsKey);
             ShowOnlyCurrentStatistics = GetOptionValue(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey);
-            ShowRules = GetOptionValue(TypeOfOption.Display, ShowRulesKey);
             ShowPrices = GetOptionValue(TypeOfOption.Display, ShowPricesKey);
             AutoCheckUpgrade = GetOptionValue(TypeOfOption.Upgrade, AutoCheckUpgradeKey);
         }
@@ -156,7 +141,6 @@
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowStatisticsKey, ShowStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey, ShowOnlyCurrentStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOtherLanguagesKey, ShowOtherLanguages.ToString());
-            _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowRulesKey, ShowRules.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowPricesKey, ShowPrices.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Upgrade, AutoCheckUpgradeKey, AutoCheckUpgrade.ToString());
         }

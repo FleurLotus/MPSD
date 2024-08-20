@@ -100,17 +100,12 @@
 
         private void UpdateDatabaseCommandExecute(object o)
         {
-            OnUpdateDatabaseRequested(new DownloadEditionViewModel());
+            OnUpdateDatabaseRequested(new DownloadViewModel());
             LoadCardsHierarchy();
         }
         private void UpdateImageDatabaseCommandExecute(object o)
         {
             OnAutoUpdateDatabaseRequested(new AutoDownloadImageViewModel());
-        }
-        private void UpdateRulesDatabaseCommandExecute(object o)
-        {
-            OnAutoUpdateDatabaseRequested(new AutoDownloadRuleViewModel());
-            LoadCardsHierarchy();
         }
         private void UpdatePriceDatabaseCommandExecute(object o)
         {
@@ -284,10 +279,6 @@
                 Options.GetDbOptions();
             }
         }
-        private void MigrationPictureDatabaseCommandExecute(object o)
-        {
-            OnAutoUpdateDatabaseRequested(new MigrationPictureDatabaseProgressViewModel());
-        }
         private void CheckNewVersionCommandExecute(object o)
         {
             if (_programUpdater.HasNewVersionAvailable())
@@ -410,8 +401,7 @@
         {
             //File
             MenuViewModel fileMenu = new MenuViewModel("_File");
-            fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
-            fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Editions/Cards Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             //Not Allowed in release version, the update is done by copy of referential
 #if DEBUG
@@ -456,11 +446,6 @@
             toolsMenu.AddChild(new MenuViewModel("_Options", new RelayCommand(OptionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
-            if (_magicDatabase.PictureDatabaseMigration.CouldMigrate)
-            {
-                toolsMenu.AddChild(MenuViewModel.Separator());
-                toolsMenu.AddChild(new MenuViewModel("_Migrate pictures database images", new RelayCommand(MigrationPictureDatabaseCommandExecute)));
-            }
             MenuRoot.AddChild(toolsMenu);
 
             //?

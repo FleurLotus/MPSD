@@ -1,14 +1,16 @@
-﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
+﻿using MagicPictureSetDownloader.ScryFall.JsonData;
+
+namespace MagicPictureSetDownloader.ScryFall.JsonLite
 {
     using System;
     using System.Text.Json.Serialization;
 
-    internal class CardFace
+    public class CardFace
     {
-        public CardFace() 
+        public CardFace()
         { }
 
-        internal CardFace(FullCardFace cf) 
+        internal CardFace(FullCardFace cf)
         {
             Defense = cf.Defense;
             ImageUris = cf.ImageUris == null ? null : new ImageUris { ArtCrop = cf.ImageUris.ArtCrop, BorderCrop = cf.ImageUris.BorderCrop, Large = cf.ImageUris.Large, Normal = cf.ImageUris.Normal, Png = cf.ImageUris.Png, Small = cf.ImageUris.Small };
@@ -43,13 +45,13 @@
 
         [JsonPropertyName("oracle_id")]
         public Guid? OracleId { get; set; }
- 
+
         [JsonPropertyName("oracle_text")]
         public string OracleText { get; set; }
 
         [JsonPropertyName("power")]
         public string Power { get; set; }
-        
+
         [JsonPropertyName("toughness")]
         public string Toughness { get; set; }
 

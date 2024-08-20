@@ -84,7 +84,7 @@
         }
 
 
-        //ALERT: Need to be tatally reviewed
+        //ALERT: Need to be totally reviewed
         /*
 
 

@@ -3,7 +3,7 @@
     using System;
     using System.Text.Json.Serialization;
 
-    public class RelatedUris : JsonWithExtensionDataBase
+    internal class RelatedUris : JsonWithExtensionDataBase
     {
         [JsonPropertyName("gatherer")]
         public Uri Gatherer { get; set; }

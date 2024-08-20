@@ -15,7 +15,6 @@
         private DateTime? _releaseDate;
         private bool _hasFoil;
         private IBlock _block;
-        private int? _blockPosition;
         private int? _cardNumber;
 
         public EditionDatabaseInfoModificationViewModel()
@@ -37,18 +36,6 @@
                 {
                     _cardNumber = value;
                     OnNotifyPropertyChanged(nameof(CardNumber));
-                }
-            }
-        }
-        public int? BlockPosition
-        {
-            get { return _blockPosition; }
-            set
-            {
-                if (value != _blockPosition)
-                {
-                    _blockPosition = value;
-                    OnNotifyPropertyChanged(nameof(BlockPosition));
                 }
             }
         }
@@ -108,7 +95,6 @@
         private void ResetBlockExecute(object o)
         {
             Block = null;
-            BlockPosition = null;
         }
         private bool ResetBlockCanExecute(object o)
         {
@@ -127,7 +113,6 @@
                 ReleaseDate = null;
                 HasFoil = false;
                 Block = null;
-                BlockPosition = null;
                 CardNumber = null;
             }
             else
@@ -137,7 +122,6 @@
                 ReleaseDate = Selected.ReleaseDate;
                 HasFoil = Selected.HasFoil;
                 Block = Selected.IdBlock.HasValue ? Blocks.FirstOrDefault(b => b.Id == Selected.IdBlock.Value) : null;
-                BlockPosition = Selected.BlockPosition;
                 CardNumber = Selected.CardNumber;
             }
         }
@@ -149,7 +133,7 @@
                 return false;
             }
 
-            MagicDatabase.UpdateEdition(Selected, Name, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, BlockPosition, CardNumber, ReleaseDate);
+            MagicDatabase.UpdateEdition(Selected, Name, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, CardNumber, ReleaseDate);
             All.Clear();
             All.AddRange(MagicDatabase.GetAllEditionsOrdered());
             return true;

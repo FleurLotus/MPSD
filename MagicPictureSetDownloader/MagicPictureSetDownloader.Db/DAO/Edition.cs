@@ -25,13 +25,9 @@ namespace MagicPictureSetDownloader.Db.DAO
             get { return Block?.Name; }
         }
         [DbColumn]
-        public int? BlockPosition { get; set; }
-        [DbColumn]
         public DateTime? ReleaseDate { get; set; }
         [DbColumn]
         public int? CardNumber { get; set; }
-        [DbColumn]
-        public bool Completed { get; set; }
         [DbColumn]
         public bool HasFoil { get; set; }
         public bool IsCode(string code)

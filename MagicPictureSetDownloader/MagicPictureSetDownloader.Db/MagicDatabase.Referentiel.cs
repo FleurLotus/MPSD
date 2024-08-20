@@ -37,20 +37,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, IList<ICardEditionVariation>> _cardEditionVariations = new Dictionary<string, IList<ICardEditionVariation>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
-        //Insert one new
-        public void InsertNewEdition(string sourceName)
-        {
-            using (new WriterLock(_lock))
-            {
-                IEdition edition = GetEdition(sourceName);
-                if (edition == null)
-                {
-                    Edition realEdition = new Edition { Name = sourceName, Completed = false, HasFoil = true };
-                    AddToDbAndUpdateReferential(realEdition, InsertInReferential);
-                }
-            }
-        }
-        public void InsertNewEdition(string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate, byte[] icon)
+        public void InsertNewEdition(string sourceName, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate, byte[] icon)
         {
             using (new WriterLock(_lock))
             {
@@ -59,12 +46,10 @@ namespace MagicPictureSetDownloader.Db
                 {
                     Edition realEdition = new Edition
                     {
-                        Name = name,
-                        Completed = false,
+                        Name = sourceName,
                         HasFoil = hasFoil,
                         Code = code,
                         IdBlock = idBlock,
-                        BlockPosition = idBlock.HasValue ? blockPosition : null,
                         CardNumber = cardNumber,
                         ReleaseDate = releaseDate
                     };
@@ -75,16 +60,16 @@ namespace MagicPictureSetDownloader.Db
 
                     AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
-                InsertNewTreePicture(name, icon);
+                InsertNewTreePicture(sourceName, icon, true);
             }
         }
         public void InsertNewPicture(string idScryFall, byte[] data)
         {
             _pictureDatabase.InsertNewPicture(idScryFall, data);
         }
-        public void InsertNewTreePicture(string name, byte[] data)
+        public void InsertNewTreePicture(string name, byte[] data, bool isSvg)
         {
-            _pictureDatabase.InsertNewTreePicture(name, data);
+            _pictureDatabase.InsertNewTreePicture(name, data, isSvg);
         }
         public void InsertNewCard(string name)
         {
@@ -276,23 +261,6 @@ namespace MagicPictureSetDownloader.Db
                 {
                     Translate translate = new Translate { IdCard = card.Id, IdLanguage = idLanguage, Name = name };
                     AddToDbAndUpdateReferential(translate, InsertInReferential);
-                }
-            }
-        }
-        public void InsertNewRuling(string idScryFall, DateTime addDate, string text)
-        {
-            ICard card = GetCardByIdScryFall(idScryFall);
-            if (card == null || string.IsNullOrWhiteSpace(text))
-            {
-                return;
-            }
-
-            using (new WriterLock(_lock))
-            {
-                if (!card.HasRuling(addDate, text))
-                {
-                    Ruling ruling = new Ruling { IdCard = card.Id, AddDate = addDate, Text = text };
-                    AddToDbAndUpdateReferential(ruling, InsertInReferential);
                 }
             }
         }
@@ -506,11 +474,6 @@ namespace MagicPictureSetDownloader.Db
                     InsertInReferential(translate);
                 }
 
-                foreach (Ruling ruling in Mapper<Ruling>.LoadAll(cnx))
-                {
-                    InsertInReferential(ruling);
-                }
-
                 foreach (CardEdition cardEdition in Mapper<CardEdition>.LoadAll(cnx))
                 {
                     InsertInReferential(cardEdition);
@@ -627,17 +590,6 @@ namespace MagicPictureSetDownloader.Db
             }
 
             card.AddTranslate(translate);
-
-            _cacheForAllDbInfos = null;
-        }
-        private void InsertInReferential(Ruling ruling)
-        {
-            if (_cardsbyId.GetOrDefault(ruling.IdCard) is not Card card)
-            {
-                throw new ApplicationDbException($"Can't find card with id {ruling.IdCard}");
-            }
-
-            card.AddRuling(ruling);
 
             _cacheForAllDbInfos = null;
         }

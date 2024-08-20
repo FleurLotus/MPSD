@@ -1,16 +1,18 @@
-﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
+﻿using MagicPictureSetDownloader.ScryFall.JsonData;
+
+namespace MagicPictureSetDownloader.ScryFall.JsonLite
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.Json.Serialization;
 
-    internal class Card : CardFace
+    public class Card : CardFace
     {
         public Card()
         { }
 
-        internal Card(FullCard c): base(c)
+        internal Card(FullCard c) : base(c)
         {
             Id = c.Id;
             MultiverseIds = c.MultiverseIds.ToList();

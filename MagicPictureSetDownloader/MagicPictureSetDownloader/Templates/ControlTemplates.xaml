@@ -180,39 +180,6 @@
         </ListView>
     </ControlTemplate>
 
-    <!-- Rules Grid display -->
-    <ControlTemplate x:Key="RulesControlTemplate">
-        <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ItemsSource="{Binding Hierarchical.Selected, Converter={conv:CardToRulesConverter}}"
-                  Visibility="{Binding Hierarchical.Selected, Converter={conv:CardToRulesVisibleConverter}}"
-                  d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <i:Interaction.Behaviors>
-                <fl:GridViewColumnResizeBehavior />
-            </i:Interaction.Behaviors>
-            
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="BorderBrush" Value="LightGray" />
-                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-            <ListView.View>
-                <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
-                    <GridViewColumn Header="Rule">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <l:PicturedTextBlock TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={conv:TextToInlinesConverter}}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </ControlTemplate>
-
     <!-- Prices Grid display -->
     <ControlTemplate x:Key="PricesControlTemplate">
         <ListView VerticalAlignment="Center" HorizontalAlignment="Left"

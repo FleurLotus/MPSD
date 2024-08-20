@@ -12,7 +12,7 @@ namespace MagicPictureSetDownloader.Db
 
     internal partial class MagicDatabase
     {
-        public void UpdateEdition(IEdition iedition, string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate)
+        public void UpdateEdition(IEdition iedition, string sourceName, string name, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate)
         {
             using (new WriterLock(_lock))
             {
@@ -34,7 +34,6 @@ namespace MagicPictureSetDownloader.Db
                 edition.HasFoil = hasFoil;
                 edition.Code = code;
                 edition.IdBlock = idBlock;
-                edition.BlockPosition =  idBlock.HasValue ? blockPosition : null;
                 edition.CardNumber = cardNumber;
                 edition.ReleaseDate = releaseDate;
 

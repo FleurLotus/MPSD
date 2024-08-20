@@ -1,11 +1,13 @@
-﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
+﻿using MagicPictureSetDownloader.ScryFall.JsonData;
+
+namespace MagicPictureSetDownloader.ScryFall.JsonLite
 {
     using System;
     using System.Text.Json.Serialization;
 
-    public class Set 
+    public class Set
     {
-        public Set() 
+        public Set()
         { }
 
         internal Set(FullSet s)
@@ -17,6 +19,7 @@
             Block = s.Block;
             CardCount = s.CardCount;
             NonFoilOnly = s.NonFoilOnly;
+            IconSvgUri = s.IconSvgUri;
         }
 
         [JsonPropertyName("id")]
@@ -39,9 +42,8 @@
 
         [JsonPropertyName("nonfoil_only")]
         public bool NonFoilOnly { get; set; }
-/*
+
         [JsonPropertyName("icon_svg_uri")]
         public Uri IconSvgUri { get; set; }
-*/
     }
 }

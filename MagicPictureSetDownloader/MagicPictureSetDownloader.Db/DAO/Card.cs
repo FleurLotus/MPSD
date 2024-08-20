@@ -13,7 +13,6 @@
     internal class Card : ICard
     {
         private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
-        private readonly IList<IRuling> _rulings = new List<IRuling>();
         private readonly List<int> _faces = new List<int>();
 
         [DbColumn(Kind = ColumnKind.Identity)]
@@ -21,10 +20,6 @@
         [DbColumn]
         public string Name { get; set; }
 
-        public IRuling[] Rulings
-        {
-            get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }
-        }
         public IReadOnlyList<int> CardFaceIds
         {
             get
@@ -59,20 +54,6 @@
         public bool HasTranslation(int languageId)
         {
             return _translations.ContainsKey(languageId);
-        }
-        internal void AddRuling(Ruling ruling)
-        {
-            if (ruling == null || ruling.IdCard != Id)
-            {
-                return;
-            }
-
-            _rulings.Add(ruling);
-        }
-
-        public bool HasRuling(DateTime addDate, string text)
-        {
-            return _rulings.Any(r => r.AddDate == addDate && r.Text == text);
         }
         internal void AddCardFace(CardCardFace cardCardFace)
         {

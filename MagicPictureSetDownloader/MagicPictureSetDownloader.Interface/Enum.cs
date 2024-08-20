@@ -13,8 +13,7 @@ namespace MagicPictureSetDownloader.Interface
 
     public enum ExportFormat
     {
-        MPSD = -1,
-        MTGM = 0,
+        MPSD,
     }
 
     public enum ImportOption

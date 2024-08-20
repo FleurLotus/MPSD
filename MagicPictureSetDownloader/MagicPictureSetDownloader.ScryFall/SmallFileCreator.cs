@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
 
     using MagicPictureSetDownloader.ScryFall.JsonData;
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
 
     internal class SmallFileCreator
     {
@@ -20,7 +21,7 @@
             string cardFilePath = await CreateCardSmallFile();
             string allCardFilePath = await CreateAllCardSmallFile();
 
-            /* ALERT To be reviewed
+            /* ALERT To be reviewed as sample
             Console.WriteLine("Load Referentials");
             Referential.LoadReferentials();
 

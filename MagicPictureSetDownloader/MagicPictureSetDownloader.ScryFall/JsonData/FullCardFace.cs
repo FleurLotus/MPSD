@@ -5,7 +5,7 @@
 
     using System.Text.Json.Serialization;
 
-    public class FullCardFace : JsonWithExtensionDataBase
+    internal class FullCardFace : JsonWithExtensionDataBase
     {
         [JsonPropertyName("artist")]
         public string Artist { get; set; }

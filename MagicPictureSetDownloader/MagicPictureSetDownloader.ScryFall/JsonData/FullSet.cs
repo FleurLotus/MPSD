@@ -1,9 +1,10 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
 {
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Text.Json.Serialization;
 
-    public class FullSet : JsonWithExtensionDataBase
+    internal class FullSet : JsonWithExtensionDataBase
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }
@@ -67,5 +68,10 @@
 
         [JsonPropertyName("object")]
         public string Object { get; set; }
+
+        public Set ToSet()
+        {
+            return new Set(this);
+        }
     }
 }

@@ -32,10 +32,7 @@ namespace MagicPictureSetDownloader.Db
             _databaseConnection = new DatabaseConnection();
             _pictureDatabase = new PictureDatabase();
             _multiPartCardManager = multiPartCardManager;
-            PictureDatabaseMigration = new PictureDatabaseMigration();
         }
-
-        public IPictureDatabaseMigration PictureDatabaseMigration { get; }
 
         //Unitary Get
         public ICard GetCard(string name)
@@ -269,7 +266,7 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.CardFaces = cardFaces;
                     cardAllDbInfo.MainCardFace = cardFaces[0];
 
-                    /* ALERT to review
+                    /* ALERT to review For Multipart card
                     //For Multipart card
                     if (_multiPartCardManager.HasMultiPart(card))
                     {
@@ -441,50 +438,17 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void EditionCompleted(int editionId)
-        {
-            using (new WriterLock(_lock))
-            {
-                if (_editions.FirstOrDefault(e => e.Id == editionId) is not Edition newEdition || newEdition.Completed)
-                {
-                    return;
-                }
-
-                newEdition.Completed = true;
-
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
-                {
-                    Mapper<Edition>.UpdateOne(cnx, newEdition);
-                }
-            }
-        }
         public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {
             HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());
 
-            /* ALERT: TO REVIEW
+            /* ALERT: TO REVIEW GetMissingPictureUrls
             return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdScryFall))
                                         .Select(ce => new KeyValuePair<string, object>(ce.Url, ce.IdGatherer))
                           .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer))
                                         .Select(cev => new KeyValuePair<string, object>(cev.Url, cev.OtherIdGatherer))).ToList();
             */
             return Array.Empty<KeyValuePair<string, object>>();
-        }
-        public string[] GetRulesId()
-        {
-            using (new ReaderLock(_lock))
-            {
-                IDictionary<int, ICardEdition> temp = new Dictionary<int, ICardEdition>();
-                foreach (ICardEdition ce in AllCardEditions())
-                {
-                    if (!temp.ContainsKey(ce.IdCard))
-                    {
-                        temp.Add(ce.IdCard, ce);
-                    }
-                }
-
-                return temp.Values.Select(ce => ce.IdScryFall).Where(id => !string.IsNullOrEmpty(id)).ToArray();
-            }
         }
     }
 }
