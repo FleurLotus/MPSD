@@ -49,7 +49,6 @@
                 _cards = DownloadManager.GetCards();
 
                 //ALERT read the data from the card to insert or update in ref, DownloadManagerEdition might become a new card transformer to validate 
-                //ALERT mana cost '@'
 
 
 

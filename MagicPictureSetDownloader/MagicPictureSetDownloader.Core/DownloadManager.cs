@@ -34,7 +34,7 @@
         {
             Set[] sets = ScryFallDataRetriever.GetBulkSets(_webAccess);
 
-            foreach (Set set in sets)
+            foreach (Set set in sets.Where(s => !Tranformation.SetToIgnore(s)))
             {
                 IEdition edition = MagicDatabase.GetEdition(set.Name);
                 if (edition == null)
@@ -42,7 +42,7 @@
                     IBlock block = GetOrAddBlock(set.Block);
                     byte[] icon = GetEditionIcon(set.IconSvgUri);
 
-                    MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code, block.Id, set.CardCount, set.ReleasedAt, icon);
+                    MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code.ToUpperInvariant(), block.Id, set.CardCount, set.ReleasedAt, icon);
                 }
             }
         }

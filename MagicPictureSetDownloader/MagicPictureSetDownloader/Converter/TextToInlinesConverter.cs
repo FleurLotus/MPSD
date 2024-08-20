@@ -52,14 +52,15 @@ namespace MagicPictureSetDownloader.Converter
                     previousIsPicture = false;
                 }
 
-                int end = text.IndexOf(' ', pos);
+                int end = text.IndexOf(Shard.Suffix, pos);
                 if (end < 0)
                 {
                     end = text.Length;
                 }
 
                 string symbol = text[pos..end];
-                BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
+                //ALERT: TO BE REVIEW   "@" + symbol.Replace(Shard.Separator,string.Empty)
+                BitmapImage source = (BitmapImage)_conv.Convert("@" + symbol.Replace(Shard.Separator,string.Empty), typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
                     text = text[(pos + Shard.Prefix.Length)..];

@@ -25,7 +25,7 @@
         public string Name { get; set; }
 
         [JsonPropertyName("set_type")]
-        public string SetType { get; set; }
+        public SetType SetType { get; set; }
 
         [JsonPropertyName("released_at")]
         public DateTime? ReleasedAt { get; set; }

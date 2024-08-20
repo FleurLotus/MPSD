@@ -3,12 +3,17 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using MagicPictureSetDownloader.Interface;
 
     public class Shard
     {
-        public const string Prefix = "@";
+        public const string Prefix = "{";
+        public const string Suffix = "}";
+        public const string Separator = "/";
+
+        private static readonly Regex ManaRegex = new Regex("{(?<Mana>[^}]+)}", RegexOptions.Compiled);
 
         private const char White = 'W';
         private const char Blue = 'U';
@@ -20,7 +25,7 @@
         private const string Half = "H";
         private const string Phyrexian = "P";
         private const string TwoHybrid = "2";
-        private const string Snow = "SNOW";
+        private const string Snow = "S";
 
         private static readonly string[] Generics = { "X", "Y", "Z" };
 
@@ -95,9 +100,7 @@
                 return Array.Empty<Shard>();
             }
 
-            return castingCost.Split(new[] { ' ' },StringSplitOptions.RemoveEmptyEntries)
-                              .Select(s => s.StartsWith(Prefix)? s[Prefix.Length..].ToUpperInvariant(): s.ToUpperInvariant())
-                              .Select(GetShard);
+            return ManaRegex.Matches(castingCost.ToUpper()).Select(m => GetShard(m.Groups["Mana"].Value));
         }
 
         private static Shard GetShard(string shardCastingCost)
@@ -171,7 +174,7 @@
 
             isHybrid = workingShardCastingCost.ToCharArray().Length > 1;
 
-            foreach (char c in workingShardCastingCost)
+            foreach (char c in workingShardCastingCost.Replace(Separator,string.Empty))
             {
                 color |= c switch
                 {

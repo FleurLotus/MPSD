@@ -19,7 +19,10 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
             Block = s.Block;
             CardCount = s.CardCount;
             NonFoilOnly = s.NonFoilOnly;
+            SetType = s.SetType;
             IconSvgUri = s.IconSvgUri;
+
+            SetBlock();
         }
 
         [JsonPropertyName("id")]
@@ -43,7 +46,31 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
         [JsonPropertyName("nonfoil_only")]
         public bool NonFoilOnly { get; set; }
 
+        [JsonPropertyName("set_type")]
+        public SetType SetType { get; set; }
+
         [JsonPropertyName("icon_svg_uri")]
         public Uri IconSvgUri { get; set; }
+
+        private void SetBlock()
+        {
+            if (!string.IsNullOrEmpty(Block))
+            {
+                return;
+            }
+            Block = SetType switch
+            {
+                SetType.Alchemy => "Alchemy",
+                SetType.Archenemy => "Archenemy",
+                SetType.Commander => "Commander",
+                SetType.DuelDeck => "Duel Deck",
+                SetType.FromTheVault => "From the Vault",
+                SetType.Funny => "Fun",
+                SetType.Masters => "Masters Edition",
+                SetType.Planechase => "Planechase",
+                SetType.Vanguard => "Vanguard",
+                _ => null,
+            };
+        }
     }
 }
