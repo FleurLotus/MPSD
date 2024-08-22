@@ -19,7 +19,6 @@
     using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.Download.Auto;
-    using MagicPictureSetDownloader.ViewModel.Download.Edition;
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Management;

@@ -5,6 +5,7 @@
 
     internal class CardWithExtraInfo
     {
+
         private readonly HashSet<string> _otherIdScryFall = new HashSet<string>();
 
         public string IdScryFall { get; set; }
@@ -18,6 +19,7 @@
         public string Type { get; set; }
         public string PictureUrl { get; set; }
         public string Rarity { get; set; }
+
         public IList<string> OtherIdScryFall
         {
             get { return new List<string>(_otherIdScryFall).AsReadOnly(); }

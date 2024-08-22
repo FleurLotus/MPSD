@@ -324,7 +324,7 @@
         internal IEnumerable<CardViewModel> SearchResultAsViewModel()
         {
             return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai) && CheckSubType(cai))
-                                               .Select(cai => new CardViewModel(cai));
+                                               .Select(cai => new CardViewModel(cai)); 
         }
 
         private bool CheckPerimeter(ICardAllDbInfo cai)
@@ -409,7 +409,7 @@
             }
 
             
-            ShardColor color = MultiPartCardManager.Instance.GetColor(cai); 
+            ShardColor color = MultiPartCardManager.Instance.GetColor(cai.Card); 
 
             bool wantedColorless = ColorsSelected.Contains(ShardColor.Colorless);
 
@@ -427,7 +427,7 @@
         {
             if (ExcludeSpecialCards)
             {
-                if (MultiPartCardManager.Instance.IsSpecial(cai))
+                if (MultiPartCardManager.Instance.IsSpecial(cai.Card))
                 {
                     return false;
                 }
@@ -438,7 +438,7 @@
                 return true;
             }
 
-            CardType type = MultiPartCardManager.Instance.GetCardType(cai);
+            CardType type = MultiPartCardManager.Instance.GetCardType(cai.Card);
 
             CardType wantedType = TypesSelected.Aggregate(CardType.Token, (current, newtype) => current | newtype);
 
@@ -457,7 +457,7 @@
                 return true;
             }
 
-            CardSubType subType = MultiPartCardManager.Instance.GetCardSubType(cai);
+            CardSubType subType = MultiPartCardManager.Instance.GetCardSubType(cai.Card);
 
             CardSubType wantedSubType = SubTypesSelected.Aggregate(CardSubType.None, (current, newsubtype) => current | newsubtype);
 

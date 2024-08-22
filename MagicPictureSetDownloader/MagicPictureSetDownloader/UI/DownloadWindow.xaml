@@ -8,9 +8,9 @@
         xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
         xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
-        xmlns:edition="clr-namespace:MagicPictureSetDownloader.ViewModel.Download.Edition;assembly=MagicPictureSetDownloader.ViewModel"
+        xmlns:dw="clr-namespace:MagicPictureSetDownloader.ViewModel.Download;assembly=MagicPictureSetDownloader.ViewModel"
         Icon="{Binding Source={x:Static res:ResourceManager.Icon}, Converter={conv:BitmapToImageConverter}}"
-        d:DataContext="{d:DesignInstance Type=edition:DownloadViewModel, IsDesignTimeCreatable=False}"
+        d:DataContext="{d:DesignInstance Type=dw:DownloadViewModel, IsDesignTimeCreatable=False}"
         mc:Ignorable="d"
         Width="850" SizeToContent="Height" Title="Update editions" ResizeMode="NoResize">
 

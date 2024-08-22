@@ -71,7 +71,7 @@ namespace MagicPictureSetDownloader.Db
         {
             _pictureDatabase.InsertNewTreePicture(name, data, isSvg);
         }
-        public void InsertNewCard(string name)
+        public void InsertNewCard(string name, string layout)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -82,7 +82,7 @@ namespace MagicPictureSetDownloader.Db
                 ICard card = GetCard(name);
                 if (null == card)
                 {
-                    Card c = new Card { Name = name };
+                    Card c = new Card { Name = name, Layout = layout };
                     AddToDbAndUpdateReferential(c, InsertInReferential);
                 }
             }
@@ -140,6 +140,40 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
+        public void InsertNewExternalIds(string idScryFall, CardIdSource cardIdSource, string externalId)
+        {
+            if (string.IsNullOrWhiteSpace(idScryFall))
+            {
+                throw new ArgumentNullException(nameof(idScryFall));
+            }
+            if (string.IsNullOrWhiteSpace(externalId))
+            {
+                throw new ArgumentNullException(nameof(externalId));
+            }
+
+            using (new WriterLock(_lock))
+            {
+                ICardEdition cd = GetCardEdition(idScryFall);
+                IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> allExternalIds = cd.ExternalId;
+
+                if (allExternalIds.TryGetValue(cardIdSource, out IReadOnlyList<string> externalIdList))
+                {
+                    if (externalIdList.Contains(externalId))
+                    {
+                        return;
+                    }
+                }
+
+                ExternalIds externalIds = new ExternalIds
+                {
+                    IdScryFall = idScryFall,
+                    ExternalId = externalId,
+                    CardIdSource = cardIdSource.ToString()
+                };
+                AddToDbAndUpdateReferential(externalIds, InsertInReferential);
+            }
+        }
+
         public void InsertNewCardEdition(string idScryFall, int idEdition, string name, string rarity)
         {
             using (new WriterLock(_lock))
@@ -422,7 +456,6 @@ namespace MagicPictureSetDownloader.Db
                 _allCardInCollectionCount.Clear();
                 _preconstructedDecks.Clear();
                 _preconstructedDeckCards.Clear();
-                _multiPartCardManager.ClearBackSideModalDoubleFacedCards();
 
                 foreach (Option option in Mapper<Option>.LoadAll(cnx))
                 {
@@ -479,6 +512,11 @@ namespace MagicPictureSetDownloader.Db
                     InsertInReferential(cardEdition);
                 }
 
+                foreach (ExternalIds externalId in Mapper<ExternalIds>.LoadAll(cnx))
+                {
+                    InsertInReferential(externalId);
+                }
+
                 foreach (CardEditionVariation cardEditionVariation in Mapper<CardEditionVariation>.LoadAll(cnx))
                 {
                     InsertInReferential(cardEditionVariation);
@@ -508,11 +546,6 @@ namespace MagicPictureSetDownloader.Db
                 {
                     InsertInReferential(preconstructedDeckCardEdition);
                 }
-
-                foreach (BackSideModalDoubleFacedCard modalDoubleFacedCardEdition in Mapper<BackSideModalDoubleFacedCard>.LoadAll(cnx))
-                {
-                    InsertInReferential(modalDoubleFacedCardEdition);
-                }
             }
 
             _pictureDatabase.LoadAllTreePicture();
@@ -540,10 +573,14 @@ namespace MagicPictureSetDownloader.Db
             {
                 throw new ApplicationDbException($"Can't find card with id {cardCardFace.IdCard}");
             }
-            card.AddCardFace(cardCardFace);
+            if (_cardFacesbyId.GetOrDefault(cardCardFace.IdCardFace) is not CardFace cardFace)
+            {
+                throw new ApplicationDbException($"Can't find cardFace with id {cardCardFace.IdCardFace}");
+            }
+
+            card.AddCardFace(cardFace);
             _cacheForAllDbInfos = null;
         }
-
         private void InsertInReferential(ICardFace cardFace)
         {
             _cardFaces.Add(cardFace.IdScryFall, cardFace);
@@ -590,6 +627,17 @@ namespace MagicPictureSetDownloader.Db
             }
 
             card.AddTranslate(translate);
+
+            _cacheForAllDbInfos = null;
+        }
+        private void InsertInReferential(ExternalIds externalId)
+        {
+            if (_cardEditions.GetOrDefault(externalId.IdScryFall) is not CardEdition cardEdition)
+            {
+                throw new ApplicationDbException($"Can't find CardEdition with id {externalId.IdScryFall}");
+            }
+
+            cardEdition.AddExternalId(externalId);
 
             _cacheForAllDbInfos = null;
         }
@@ -647,11 +695,6 @@ namespace MagicPictureSetDownloader.Db
 
             list.Add(preconstructedDeckCardEdition);
         }
-        private void InsertInReferential(IBackSideModalDoubleFacedCard modalDoubleFacedCardEdition)
-        {
-            _multiPartCardManager.AddBackSideModalDoubleFacedCard(modalDoubleFacedCardEdition.Name);
-        }
-
         private void RemoveFromReferential(IOption option)
         {
             IList<IOption> options = _allOptions[option.Type];

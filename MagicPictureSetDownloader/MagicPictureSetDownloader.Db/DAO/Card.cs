@@ -1,9 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
-    using System;
-    using System.Linq;
     using System.Collections.Generic;
-
+    using System.Diagnostics;
     using Common.Database;
     using Common.Library.Extension;
 
@@ -13,19 +11,24 @@
     internal class Card : ICard
     {
         private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
-        private readonly List<int> _faces = new List<int>();
+
+        private readonly List<ICardFace> _faces = new List<ICardFace>();
 
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
+        [DbColumn]
+        public string Layout { get; set; }
 
-        public IReadOnlyList<int> CardFaceIds
+        public ICardFace MainCardFace
         {
-            get
-            {
-                return _faces.AsReadOnly();
-            }
+            get { return _faces[0]; }
+        }
+
+        public ICardFace OtherCardFace
+        {
+            get { return _faces.Count == 2 ? _faces[1] : null; }
         }
 
         public string ToString(int? languageId)
@@ -55,13 +58,19 @@
         {
             return _translations.ContainsKey(languageId);
         }
-        internal void AddCardFace(CardCardFace cardCardFace)
+        internal void AddCardFace(CardFace cardFace)
         {
-            if (cardCardFace == null || cardCardFace.IdCard != Id)
+            if (cardFace == null)
             {
                 return;
             }
-            _faces.Add(cardCardFace.IdCardFace);
+            _faces.Add(cardFace);
+
+            if (_faces.Count > 2)
+            {
+                //Not Normal
+                Debugger.Break();
+            }
         }
     }
 }

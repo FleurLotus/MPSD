@@ -11,8 +11,8 @@
     {
         private int CompareArtifact(ICardAllDbInfo x, ICardAllDbInfo y)
         {
-            CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x);
-            CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y);
+            CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x.Card);
+            CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y.Card);
 
             //for artifact
             //Rule 1:
@@ -23,8 +23,8 @@
                 return comp.Value;
             }
             //  a) creature before
-            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
-            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
+            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x.Card);
+            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y.Card);
 
             comp = CompareHasValue(xCardType, yCardType, CardType.Creature, false);
             if (comp.HasValue && comp.Value != 0)
@@ -64,8 +64,8 @@
         }
         public int Compare(ICardAllDbInfo x, ICardAllDbInfo y)
         {
-            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
-            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
+            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x.Card);
+            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y.Card);
 
             int? comp;
             //Rule 1:
@@ -123,8 +123,8 @@
         }
         private int CompareColor(ICardAllDbInfo x, ICardAllDbInfo y, bool colorLessFirst)
         {
-            ShardColor xColor = MultiPartCardManager.Instance.GetColor(x);
-            ShardColor yColor = MultiPartCardManager.Instance.GetColor(y);
+            ShardColor xColor = MultiPartCardManager.Instance.GetColor(x.Card);
+            ShardColor yColor = MultiPartCardManager.Instance.GetColor(y.Card);
             int xColorCount = ColorCount(xColor);
             int yColorCount = ColorCount(yColor);
 
@@ -181,8 +181,8 @@
         }
         private int CompareType(ICardAllDbInfo x, ICardAllDbInfo y)
         {
-            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
-            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
+            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x.Card);
+            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y.Card);
 
             //  a) By Type for all no Artifact: Instant, Sorcery, Enchantment, Creature, Planeswalker, Battle, others
             foreach (CardType cardType in new[] { CardType.Instant, CardType.Sorcery, CardType.Enchantment, CardType.Creature, CardType.Planeswalker, CardType.Battle })
@@ -193,8 +193,8 @@
                     //  b) In Enchantement: Aura then No Aura
                     if (comp.Value == 0 && cardType == CardType.Enchantment)
                     {
-                        CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x);
-                        CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y);
+                        CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x.Card);
+                        CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y.Card);
 
                         comp = CompareHasValue(xCardSubType, yCardSubType, CardSubType.Aura, true);
                         if (comp.HasValue)
@@ -231,9 +231,21 @@
             return xGenerics.CompareTo(yGenerics);
         }
 
+        private IList<ICardFace> GetFaces(ICardAllDbInfo cardAllDbInfo)
+        {
+            IList<ICardFace> faces = new List<ICardFace> { cardAllDbInfo.Card.MainCardFace };
+            if (cardAllDbInfo.Card.OtherCardFace != null)
+            {
+                faces.Add(cardAllDbInfo.Card.OtherCardFace);
+            }
+
+            return faces;
+        }
         private (int, int, int) GetWeightedCCM(ICardAllDbInfo cardAllDbInfo)
         {
-            string castingCost = string.Join(" ", cardAllDbInfo.CardFaces.Select(cf => cf.CastingCost));
+            
+
+            string castingCost = string.Join(" ", GetFaces(cardAllDbInfo).Select(cf => cf.CastingCost));
 
             int noGenerics = 0;
             int generics = 0;
@@ -260,7 +272,7 @@
 
         private int GetToughness(ICardAllDbInfo cardAllDbInfo)
         {
-            string toughness = cardAllDbInfo.CardFaces.Select(cf => cf.Toughness).FirstOrDefault(s => !string.IsNullOrEmpty(s));
+            string toughness = GetFaces(cardAllDbInfo).Select(cf => cf.Toughness).FirstOrDefault(s => !string.IsNullOrEmpty(s));
 
             if (int.TryParse(toughness, out int ret))
             {
@@ -271,7 +283,7 @@
         }
         private int GetPower(ICardAllDbInfo cardAllDbInfo)
         {
-            string power = cardAllDbInfo.CardFaces.Select(cf => cf.Power).FirstOrDefault(s => !string.IsNullOrEmpty(s));
+            string power = GetFaces(cardAllDbInfo).Select(cf => cf.Power).FirstOrDefault(s => !string.IsNullOrEmpty(s));
 
             if (int.TryParse(power, out int ret))
             {
@@ -282,7 +294,7 @@
         }
         private int GetLoyalty(ICardAllDbInfo cardAllDbInfo)
         {
-            string loyalty = cardAllDbInfo.CardFaces.Select(cf => cf.Loyalty).FirstOrDefault(s => !string.IsNullOrEmpty(s));
+            string loyalty = GetFaces(cardAllDbInfo).Select(cf => cf.Loyalty).FirstOrDefault(s => !string.IsNullOrEmpty(s));
 
             if (int.TryParse(loyalty, out int ret))
             {
@@ -293,7 +305,7 @@
         }
         private int GetDefense(ICardAllDbInfo cardAllDbInfo)
         {
-            string defense = cardAllDbInfo.CardFaces.Select(cf => cf.Defense).FirstOrDefault(s => !string.IsNullOrEmpty(s));
+            string defense = GetFaces(cardAllDbInfo).Select(cf => cf.Defense).FirstOrDefault(s => !string.IsNullOrEmpty(s));
 
             if (int.TryParse(defense, out int ret))
             {
@@ -304,10 +316,10 @@
         }
         private int ComparePTLoyaltyDefense(ICardAllDbInfo x, ICardAllDbInfo y)
         {
-            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x);
-            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y);
-            CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x);
-            CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y);
+            CardType xCardType = MultiPartCardManager.Instance.GetCardType(x.Card);
+            CardType yCardType = MultiPartCardManager.Instance.GetCardType(y.Card);
+            CardSubType xCardSubType = MultiPartCardManager.Instance.GetCardSubType(x.Card);
+            CardSubType yCardSubType = MultiPartCardManager.Instance.GetCardSubType(y.Card);
 
             if ((Matcher<CardType>.HasValue(xCardType, CardType.Creature) && Matcher<CardType>.HasValue(yCardType, CardType.Creature)) ||
                 (Matcher<CardSubType>.HasValue(xCardSubType, CardSubType.Vehicle) && Matcher<CardSubType>.HasValue(yCardSubType, CardSubType.Vehicle)))

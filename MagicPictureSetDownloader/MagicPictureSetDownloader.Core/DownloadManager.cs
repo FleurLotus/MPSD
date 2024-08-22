@@ -62,7 +62,7 @@
         }
         public Card[] GetCards()
         {
-            return ScryFallDataRetriever.GetCardsInfo(_webAccess, out _);
+            return ScryFallDataRetriever.GetCardsInfo(_webAccess, out _).Where(c => !Tranformation.CardToIgnore(c)).ToArray();
         }
 
         public string InsertPictureInDb(string pictureUrl, object param)
@@ -155,6 +155,13 @@
         {
             return _webAccess.GetHtml(url);
         }
+        internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
+        {
+            /* ALERT: To be review InsertCardInDb
+            MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
+                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Defense, cardWithExtraInfo.Type,
+                                        cardWithExtraInfo.Languages);
+
         internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo)
         {
             MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
@@ -166,12 +173,8 @@
                 MagicDatabase.InsertNewCardEditionVariation(idScryFall, otherIdScryFall, pictureUrl);
             }
         }
-        internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
-        {
-            /* ALERT: To be review InsertCardInDb
-            MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
-                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Defense, cardWithExtraInfo.Type,
-                                        cardWithExtraInfo.Languages);
+
+
                 */
         }
     }

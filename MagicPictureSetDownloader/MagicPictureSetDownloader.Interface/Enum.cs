@@ -26,6 +26,15 @@ namespace MagicPictureSetDownloader.Interface
         OneByGathererId,
         OneByCardName,
     }
+    public enum CardIdSource
+    {
+        Mtgo,
+        MtgoFoil,
+        MultiverseIds,
+        TcgplayerId,
+        TcgplayerEtchedId,
+        CardmarketId,
+    }
     public enum PriceSource
     {
         Scryfall,

@@ -1,10 +1,11 @@
 ﻿namespace MagicPictureSetDownloader.Interface
 {
-    using System.Collections.Generic;
-
     public interface ICard : IIdName
     {
-        IReadOnlyList<int> CardFaceIds { get; }
+        string Layout { get; }
+
+        ICardFace MainCardFace { get; }
+        ICardFace OtherCardFace { get; }
 
         string ToString(int? languageId);
         bool HasTranslation(int languageId);

@@ -262,36 +262,7 @@ namespace MagicPictureSetDownloader.Db
                     {
                         cardAllDbInfo.VariationIdScryFalls = Array.Empty<string>();
                     }
-                    ICardFace[] cardFaces = card.CardFaceIds.Select(id => _cardFacesbyId.GetOrDefault(id)).ToArray();
-                    cardAllDbInfo.CardFaces = cardFaces;
-                    cardAllDbInfo.MainCardFace = cardFaces[0];
 
-                    /* ALERT to review For Multipart card
-                    //For Multipart card
-                    if (_multiPartCardManager.HasMultiPart(card))
-                    {
-                        //This is the reverse side of a recto-verso card no need to do anything
-                        if (_multiPartCardManager.ShouldIgnore(card))
-                        {
-                            continue;
-                        }
-                        ICard cardPart2 = _multiPartCardManager.GetOtherPartCard(card, GetCard);
-                        cardAllDbInfo.CardPart2 = cardPart2;
-
-                        //Be sure to get the other part (Up/Down, Splitted and Adventure have the same gatherer id so no return)
-                        ICardEdition cardEdition2 = _cardEditions.Values.FirstOrDefault(ce => ce.IdEdition == edition.IdEdition && ce.IdCard == cardPart2.Id && ce.IdGatherer != edition.IdGatherer);
-
-                        //Verso of Reserse Card and Multi-card
-                        if (cardEdition2 != null)
-                        {
-                            cardAllDbInfo.IdGathererPart2 = cardEdition2.IdGatherer;
-                            if (_cardEditionVariations.TryGetValue(cardEdition2.IdGatherer, out IList<ICardEditionVariation> other2))
-                            {
-                                cardAllDbInfo.VariationIdGatherers2 = other2.Select(cev => cev.OtherIdGatherer).ToArray();
-                            }
-                        }
-                    }
-                    */
                     ret.Add(cardAllDbInfo);
                 }
 

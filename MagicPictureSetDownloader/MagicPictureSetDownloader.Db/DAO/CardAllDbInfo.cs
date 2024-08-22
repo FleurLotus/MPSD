@@ -9,8 +9,6 @@
         private ICollection<ICardInCollectionCount> _statistics;
         public string IdScryFall { get; set; }
         public ICard Card { get; set; }
-        public ICollection<ICardFace> CardFaces { get; set; }
-        public ICardFace MainCardFace { get; set; }
         public IRarity Rarity { get; set; }
         public IEdition Edition { get; set; }
         public ICollection<IPrice> Prices { get; set; }
