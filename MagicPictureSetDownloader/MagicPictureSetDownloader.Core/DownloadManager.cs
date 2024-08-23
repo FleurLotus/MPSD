@@ -42,7 +42,7 @@
                     IBlock block = GetOrAddBlock(set.Block);
                     byte[] icon = GetEditionIcon(set.IconSvgUri);
 
-                    MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code.ToUpperInvariant(), block.Id, set.CardCount, set.ReleasedAt, icon);
+                    MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code.ToUpperInvariant(), block?.Id, set.CardCount, set.ReleasedAt, icon);
                 }
             }
         }

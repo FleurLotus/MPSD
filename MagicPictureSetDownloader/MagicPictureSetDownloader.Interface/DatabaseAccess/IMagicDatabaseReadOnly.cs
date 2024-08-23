@@ -17,7 +17,7 @@
         IOption GetOption(TypeOfOption type, string key);
         ICard GetCard(string name);
         ICard GetCardByIdScryFall(string idScryFall);
-        ICardFace GetCardFace(string idScryFall);
+        ICardFace GetCardFace(int idCard, string name);
         IEdition GetEditionFromCode(string code);
         IEdition GetEditionById(int idEdition);
         string GetIdScryFall(ICard card, IEdition edition);

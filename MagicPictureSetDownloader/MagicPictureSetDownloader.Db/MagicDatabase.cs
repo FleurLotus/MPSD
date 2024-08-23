@@ -44,12 +44,24 @@ namespace MagicPictureSetDownloader.Db
             }
         }
         //Unitary Get
-        public ICardFace GetCardFace(string idScryFall)
+        public ICardFace GetCardFace(int idCard, string name)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _cardFaces.GetOrDefault(idScryFall);
+                ICard card = _cardsbyId.GetOrDefault(idCard);
+                if (card != null)
+                {
+                    if (card.MainCardFace?.Name == name)
+                    {
+                        return card.MainCardFace;
+                    }
+                    if (card.OtherCardFace?.Name == name)
+                    {
+                        return card.OtherCardFace;
+                    }
+                }
+                return null;
             }
         }
 

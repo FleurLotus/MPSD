@@ -26,7 +26,7 @@
         public static Set[] GetBulkSets(WebAccess webAccess)
         {
             string json = webAccess.GetHtml(ScryfallSets);
-            return JsonSerializer.Deserialize<FullSet[]>(json).Select(fs => fs.ToSet()).ToArray();
+            return JsonSerializer.Deserialize<AllSet>(json).Data.Select(fs => fs.ToSet()).ToArray();
         }
 
         private static IReadOnlyList<KeyValuePair<string, BulkData>> GetUrls(WebAccess webAccess, string type)

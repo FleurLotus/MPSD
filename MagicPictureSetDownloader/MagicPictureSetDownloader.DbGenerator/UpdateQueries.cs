@@ -5,17 +5,17 @@
     {
         
     public const string SelectPreconstuctedDeckCards =
-@"SELECT pdce.IdGatherer, pd.Name, e.GathererName, pdce.Number
+@"SELECT pdce.IdScryFall, pd.Name, e.Name, pdce.Number
 FROM PreconstructedDeckCardEdition pdce
 INNER JOIN PreconstructedDeck pd ON pd.id = pdce.IdPreconstructedDeck
 INNER JOIN Edition e ON e.id = pd.IdEdition";
 
     public const string InsertPreconstructedDeckCards =
-@"INSERT INTO PreconstructedDeckCardEdition(IdGatherer,IdPreconstructedDeck,Number)
-SELECT ce.IdGatherer, pd.Id, @number
+@"INSERT INTO PreconstructedDeckCardEdition(IdScryFall,IdPreconstructedDeck,Number)
+SELECT ce.IdScryFall, pd.Id, @number
 FROM PreconstructedDeck pd
 INNER JOIN Edition e ON e.id = pd.IdEdition
-INNER JOIN CardEdition ce ON ce.IdGatherer = @idgatherer
+INNER JOIN CardEdition ce ON ce.IdScryFall = @idScryFall
 WHERE e.Name = @editionName
 AND pd.Name = @name
 ";

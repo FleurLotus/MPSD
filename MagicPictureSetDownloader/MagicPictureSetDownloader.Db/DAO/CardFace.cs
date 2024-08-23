@@ -28,6 +28,8 @@
         [DbColumn]
         public string Url { get; set; }
         [DbColumn]
-        public string IdScryFall { get; set; }
+        public int IdCard { get; set; }
+        [DbColumn]
+        public bool IsMainFace { get; set; }
     }
 }

@@ -78,8 +78,8 @@
                             Defense
                             Type
                             Url
-                            IdScryFall
-                    => Id  + CardCardFace
+                            IdCard
+                            IsMainFace
 
                     CardEdition
                                 IdEdition

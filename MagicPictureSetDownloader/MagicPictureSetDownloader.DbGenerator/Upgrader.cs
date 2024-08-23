@@ -172,10 +172,10 @@
         private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)
         {
             Dictionary<string, Tuple<string, string>> referencePreconstructedDecks = GetPreconstructedDecks(connectionString);
-            Dictionary<Tuple<int, string, string>, int> referencePreconstructedDeckCards = GetPreconstructedDeckCards(connectionString);
+            Dictionary<Tuple<string, string, string>, int> referencePreconstructedDeckCards = GetPreconstructedDeckCards(connectionString);
 
             Dictionary<string, Tuple<string, string>> currentPreconstructedDecks = GetPreconstructedDecks(_connectionString);
-            Dictionary<Tuple<int, string, string>, int> currentPreconstructedDeckCards = GetPreconstructedDeckCards(_connectionString);
+            Dictionary<Tuple<string, string, string>, int> currentPreconstructedDeckCards = GetPreconstructedDeckCards(_connectionString);
 
             var parameters = new List<KeyValuePair<string, object>[]>();
 
@@ -200,7 +200,7 @@
                 if (!currentPreconstructedDeckCards.ContainsKey(kv.Key))
                 {
                     parameters.Add(new KeyValuePair<string, object>[] {
-                       new KeyValuePair<string, object>("@idgatherer", kv.Key.Item1),
+                       new KeyValuePair<string, object>("@idScryFall", kv.Key.Item1),
                        new KeyValuePair<string, object>("@name", kv.Key.Item2),
                        new KeyValuePair<string, object>("@editionName", kv.Key.Item3),
                        new KeyValuePair<string, object>("@number", kv.Value) });
@@ -235,9 +235,9 @@
             }
             return ret;
         }
-        private Dictionary<Tuple<int, string, string>, int> GetPreconstructedDeckCards(string connectionString)
+        private Dictionary<Tuple<string, string, string>, int> GetPreconstructedDeckCards(string connectionString)
         {
-            Dictionary<Tuple<int, string, string>, int> ret = new Dictionary<Tuple<int, string, string>, int>();
+            Dictionary<Tuple<string, string, string>, int> ret = new Dictionary<Tuple<string, string, string>, int>();
 
             using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
             {
@@ -251,7 +251,7 @@
                     {
                         while (reader.Read())
                         {
-                            ret.Add(new Tuple<int, string, string>(reader.GetInt32(0), reader.GetString(1), reader.GetString(2)), reader.GetInt32(3));
+                            ret.Add(new Tuple<string, string, string>(reader.GetString(0), reader.GetString(1), reader.GetString(2)), reader.GetInt32(3));
                         }
                     }
                 }

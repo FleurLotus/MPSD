@@ -9,5 +9,6 @@
 
         string ToString(int? languageId);
         bool HasTranslation(int languageId);
+        bool HasCardFace(string name);
     }
 }

@@ -16,7 +16,7 @@
         }
         public static string GetResourceName()
         {
-            return "MagicData.sqlite";
+            return "MagicDataScryFall.sqlite";
         }
     }
 }

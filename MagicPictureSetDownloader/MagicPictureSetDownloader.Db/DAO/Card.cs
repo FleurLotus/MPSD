@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
+    using System.Linq;
     using System.Collections.Generic;
     using System.Diagnostics;
     using Common.Database;
@@ -58,6 +59,11 @@
         {
             return _translations.ContainsKey(languageId);
         }
+        public bool HasCardFace(string name)
+        {
+            return _faces.Any(f=> f.Name == name);
+        }
+
         internal void AddCardFace(CardFace cardFace)
         {
             if (cardFace == null)

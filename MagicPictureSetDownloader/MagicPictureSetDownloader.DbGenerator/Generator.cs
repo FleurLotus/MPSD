@@ -21,7 +21,7 @@
 
             using (Stream stream = executingAssembly.GetManifestResourceStream(name))
             {
-                Zipper.UnZipAll(stream, outDir);
+                Zipper.UnZipAll(stream, outDir, true); 
                 return outDir;
             }
         }

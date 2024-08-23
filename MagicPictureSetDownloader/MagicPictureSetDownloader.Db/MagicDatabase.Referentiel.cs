@@ -23,14 +23,13 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, IRarity> _rarities = new Dictionary<string, IRarity>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<int, IBlock> _blocks = new Dictionary<int, IBlock>();
         private readonly IDictionary<string, ICard> _cards = new Dictionary<string, ICard>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<string, ICardFace> _cardFaces = new Dictionary<string, ICardFace>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<int, ICardFace> _cardFaces = new Dictionary<int, ICardFace>();
         private readonly IDictionary<string, IList<IPrice>> _prices = new Dictionary<string, IList<IPrice>>();
         private readonly IDictionary<int, IPreconstructedDeck> _preconstructedDecks = new Dictionary<int, IPreconstructedDeck>();
         private readonly IDictionary<int, IList<IPreconstructedDeckCardEdition>> _preconstructedDeckCards = new Dictionary<int, IList<IPreconstructedDeckCardEdition>>();
 
         //For quicker access
         private readonly IDictionary<int, ICard> _cardsbyId = new Dictionary<int, ICard>();
-        private readonly IDictionary<int, ICardFace> _cardFacesbyId = new Dictionary<int, ICardFace>();
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
 
         private readonly IDictionary<string, ICardEdition> _cardEditions = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
@@ -88,26 +87,21 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void InsertNewCardFace(int idCard, string idScryFall, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url, IDictionary<string, string> languages)
+        public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url, IDictionary<string, string> languages)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
             }
-            if (string.IsNullOrWhiteSpace(idScryFall))
-            {
-                throw new ArgumentNullException(nameof(idScryFall));
-            }
 
             using (new WriterLock(_lock))
             {
                 ICard refCard = _cardsbyId.GetOrDefault(idCard);
-                if (null == refCard)
+                if (null != refCard)
                 {
-                    ICardFace cardface = GetCardFace(idScryFall);
+                    ICardFace cardface = GetCardFace(idCard, name);
                     if (cardface == null)
                     {
-
                         CardFace cardFace = new CardFace
                         {
                             Name = name,
@@ -119,17 +113,11 @@ namespace MagicPictureSetDownloader.Db
                             Defense = defense,
                             Type = type,
                             Url = url,
-                        };
-
-                        AddToDbAndUpdateReferential(cardFace, InsertInReferential);
-
-                        CardCardFace cardCardFace = new CardCardFace
-                        {
                             IdCard = idCard,
-                            IdCardFace = cardFace.Id
+                            IsMainFace = isMainFace
                         };
 
-                        AddToDbAndUpdateReferential(cardCardFace, InsertInReferential);
+                        InsertNewCardFace(refCard, cardFace);
                     }
 
                     foreach (KeyValuePair<string, string> kv in languages)
@@ -137,6 +125,22 @@ namespace MagicPictureSetDownloader.Db
                         int idlanguage = GetLanguageId(kv.Key);
                         InsertNewTranslate(refCard, idlanguage, kv.Value);
                     }
+                }
+            }
+        }
+
+        private void InsertNewCardFace(ICard card, ICardFace cardFace)
+        {
+            if (card == null)
+            {
+                return;
+            }
+
+            using (new WriterLock(_lock))
+            {
+                if (!card.HasCardFace(cardFace.Name))
+                {
+                    AddToDbAndUpdateReferential((CardFace)cardFace, InsertInReferential);
                 }
             }
         }
@@ -448,7 +452,6 @@ namespace MagicPictureSetDownloader.Db
                 _cards.Clear();
                 _cardsbyId.Clear();
                 _cardFaces.Clear();
-                _cardFacesbyId.Clear();
                 _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
                 _cardEditionVariations.Clear();
@@ -495,11 +498,6 @@ namespace MagicPictureSetDownloader.Db
                 foreach (CardFace cardFace in Mapper<CardFace>.LoadAll(cnx))
                 {
                     InsertInReferential(cardFace);
-                }
-
-                foreach (CardCardFace cardCardFace in Mapper<CardCardFace>.LoadAll(cnx))
-                {
-                    InsertInReferential(cardCardFace);
                 }
 
                 foreach (Translate translate in Mapper<Translate>.LoadAll(cnx))
@@ -567,24 +565,16 @@ namespace MagicPictureSetDownloader.Db
             _cardsbyId.Add(card.Id, card);
             _cacheForAllDbInfos = null;
         }
-        private void InsertInReferential(CardCardFace cardCardFace)
+        private void InsertInReferential(CardFace cardFace)
         {
-            if (_cardsbyId.GetOrDefault(cardCardFace.IdCard) is not Card card)
+            if (_cardsbyId.GetOrDefault(cardFace.IdCard) is not Card card)
             {
-                throw new ApplicationDbException($"Can't find card with id {cardCardFace.IdCard}");
+                throw new ApplicationDbException($"Can't find card with id {cardFace.IdCard}");
             }
-            if (_cardFacesbyId.GetOrDefault(cardCardFace.IdCardFace) is not CardFace cardFace)
-            {
-                throw new ApplicationDbException($"Can't find cardFace with id {cardCardFace.IdCardFace}");
-            }
+            _cardFaces.Add(cardFace.Id, cardFace);
 
             card.AddCardFace(cardFace);
-            _cacheForAllDbInfos = null;
-        }
-        private void InsertInReferential(ICardFace cardFace)
-        {
-            _cardFaces.Add(cardFace.IdScryFall, cardFace);
-            _cardFacesbyId.Add(cardFace.Id, cardFace);
+
             _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(ICardEdition cardEdition)
