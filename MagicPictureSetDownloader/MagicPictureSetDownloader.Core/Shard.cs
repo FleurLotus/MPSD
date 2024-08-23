@@ -14,11 +14,11 @@
         private const char Black = 'B';
         private const char Red = 'R';
         private const char Green = 'G';
+        private const char Colorless = 'C';
 
         private const string Half = "H";
         private const string Phyrexian = "P";
         private const string TwoHybrid = "2";
-        private const string Colorless = "C";
         private const string Snow = "SNOW";
 
         private static readonly string[] Generics = { "X", "Y", "Z" };
@@ -122,7 +122,7 @@
                 return shard;
             }
 
-            if (shardCastingCost == Colorless)
+            if (shardCastingCost == Colorless.ToString())
             {
                 //IsColorless
                 shard = new Shard(shardCastingCost, false, false, true, false);
@@ -168,10 +168,10 @@
                 throw new Exception($"length of workingShardCastingCost is 0 after removing additional info : {shardCastingCost}");
             }
 
+            isHybrid = workingShardCastingCost.ToCharArray().Length > 1;
+
             foreach (char c in workingShardCastingCost)
             {
-                isHybrid = color != ShardColor.Colorless;
-
                 color |= c switch
                 {
                     White => ShardColor.White,
@@ -179,6 +179,7 @@
                     Black => ShardColor.Black,
                     Red => ShardColor.Red,
                     Green => ShardColor.Green,
+                    Colorless => ShardColor.Colorless,
                     _ => throw new Exception($"Unknown element in shard cast cost {shardCastingCost}: {c}"),
                 };
             }
