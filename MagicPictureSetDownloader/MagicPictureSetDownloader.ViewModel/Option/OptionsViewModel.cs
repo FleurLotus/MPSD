@@ -7,8 +7,6 @@
     {
         private const string ShowPictureKey = "ShowPicture";
         private bool _showPicture;
-        private const string ShowVariationPictureKey = "ShowVariationPicture";
-        private bool _showVariationPicture;
         private const string ShowOtherLanguagesKey = "ShowOtherLanguages";
         private bool _showOtherLanguages;
         private const string ShowStatisticsKey = "ShowStatistics";
@@ -37,18 +35,6 @@
                 {
                     _showPicture = value;
                     OnNotifyPropertyChanged(nameof(ShowPicture));
-                }
-            }
-        }
-        public bool ShowVariationPicture
-        {
-            get { return _showVariationPicture; }
-            set
-            {
-                if (value != _showVariationPicture)
-                {
-                    _showVariationPicture = value;
-                    OnNotifyPropertyChanged(nameof(ShowVariationPicture));
                 }
             }
         }
@@ -127,7 +113,6 @@
         public void GetDbOptions()
         {
             ShowPicture = GetOptionValue(TypeOfOption.Display, ShowPictureKey);
-            ShowVariationPicture = GetOptionValue(TypeOfOption.Display, ShowVariationPictureKey);
             ShowOtherLanguages = GetOptionValue(TypeOfOption.Display, ShowOtherLanguagesKey);
             ShowStatistics = GetOptionValue(TypeOfOption.Display, ShowStatisticsKey);
             ShowOnlyCurrentStatistics = GetOptionValue(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey);
@@ -137,7 +122,6 @@
         public void Save()
         {
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowPictureKey, ShowPicture.ToString());
-            _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowVariationPictureKey, ShowVariationPicture.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowStatisticsKey, ShowStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOnlyCurrentStatisticsKey, ShowOnlyCurrentStatistics.ToString());
             _magicDatabase.InsertNewOption(TypeOfOption.Display, ShowOtherLanguagesKey, ShowOtherLanguages.ToString());

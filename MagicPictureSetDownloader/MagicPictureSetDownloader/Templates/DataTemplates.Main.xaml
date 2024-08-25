@@ -137,9 +137,6 @@
                 <TabItem Header="Picture" fl:TabItemExtensions.Visibility="{Binding Options.ShowPicture, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource ImageControlTemplate}" Margin="10" HorizontalAlignment="Center" />
                 </TabItem>
-                <TabItem Header="Others" fl:TabItemExtensions.Visibility="{Binding Options.ShowVariationPicture, Converter={fl:BoolToVisibilityConverter}}">
-                    <Control Template="{StaticResource VariationImageControlTemplate}" Margin="10" />
-                </TabItem>
                 <TabItem Header="Price" fl:TabItemExtensions.Visibility="{Binding Options.ShowPrices, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource PricesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>

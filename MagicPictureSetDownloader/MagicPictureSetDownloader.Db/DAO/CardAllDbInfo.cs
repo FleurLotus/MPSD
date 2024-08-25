@@ -12,7 +12,6 @@
         public IRarity Rarity { get; set; }
         public IEdition Edition { get; set; }
         public ICollection<IPrice> Prices { get; set; }
-        public ICollection<string> VariationIdScryFalls { get; set; }
         public IEnumerable<ICardInCollectionCount> Statistics
         {
             get { return _statistics; }

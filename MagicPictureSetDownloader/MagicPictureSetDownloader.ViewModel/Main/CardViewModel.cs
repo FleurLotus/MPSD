@@ -25,7 +25,6 @@
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
             IdScryFall = cardAllDbInfo.IdScryFall;
-            VariationIdScryFalls = cardAllDbInfo.VariationIdScryFalls.ToArray();
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
             Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card) || MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
             if (!string.IsNullOrWhiteSpace(_currentFace.Power) && !string.IsNullOrWhiteSpace(_currentFace.Toughness))
@@ -102,7 +101,6 @@
         public string PowerToughnessLoyaltyDefense { get; }
         public string PowerToughnessLoyaltyDefenseText { get; }
         public string[] DisplayedCastingCost { get; }
-        public string[] VariationIdScryFalls { get; }
         internal ICard Card { get; }
     }
 }

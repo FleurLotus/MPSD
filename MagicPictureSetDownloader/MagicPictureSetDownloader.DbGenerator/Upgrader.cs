@@ -109,66 +109,8 @@
             using (var temporaryDabase = new TemporaryDatabase())
             {
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
-                AddCardEditionVariationFromReference(repo, temporaryDabase.ConnectionString);
             }
         }
-        private void AddCardEditionVariationFromReference(IRepository repo, string connectionString)
-        {
-            Dictionary<string, List<Tuple<string, string>>> referenceCardEditionVariations = GetCardEditionVariations(connectionString);
-            Dictionary<string, List<Tuple<string, string>>> currentCardEditionVariations = GetCardEditionVariations(_connectionString);
-
-            var parameters = new List<KeyValuePair<string, object>[]>();
-
-            foreach (var kv in referenceCardEditionVariations)
-            {
-                if (!currentCardEditionVariations.ContainsKey(kv.Key))
-                {
-                    foreach (var tuple in kv.Value)
-                    {
-                        parameters.Add(new KeyValuePair<string, object>[] {
-                            new KeyValuePair<string, object>("@idScryFall", kv.Key),
-                            new KeyValuePair<string, object>("@otherIdScryFall", tuple.Item1),
-                            new KeyValuePair<string, object>("@url", tuple.Item2)});
-                    }
-                }
-            }
-            if (parameters.Count > 0)
-            {
-                repo.ExecuteParametrizeCommandMulti(UpdateQueries.InsertNewCardEditionVariation, parameters);
-                parameters.Clear();
-            }
-        }
-        private Dictionary<string, List<Tuple<string, string>>> GetCardEditionVariations(string connectionString)
-        {
-            Dictionary<string, List<Tuple<string, string>>> ret = new Dictionary<string, List<Tuple<string, string>>>();
-
-            using (SQLiteConnection cnx = new SQLiteConnection(connectionString))
-            {
-                cnx.Open();
-                using (DbCommand cmd = cnx.CreateCommand())
-                {
-                    cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = UpdateQueries.SelectCardEditionVariation;
-
-                    using (IDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            string idScryFall = reader.GetString(0);
-                            if (!ret.TryGetValue(idScryFall, out List<Tuple<string, string>> list))
-                            {
-                                list = new List<Tuple<string, string>>();
-                                ret.Add(idScryFall, list);
-                            }
-
-                            list.Add(new Tuple<string, string>(reader.GetString(1), reader.GetString(2)));
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
-
         private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)
         {
             Dictionary<string, Tuple<string, string>> referencePreconstructedDecks = GetPreconstructedDecks(connectionString);

@@ -10,6 +10,5 @@
         string IdScryFall { get; }
         IEnumerable<ICardInCollectionCount> Statistics { get; }
         ICollection<IPrice> Prices { get; }
-        ICollection<string> VariationIdScryFalls { get; }
     }
 }

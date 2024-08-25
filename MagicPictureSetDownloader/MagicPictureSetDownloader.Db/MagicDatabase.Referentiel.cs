@@ -33,7 +33,6 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
 
         private readonly IDictionary<string, ICardEdition> _cardEditions = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<string, IList<ICardEditionVariation>> _cardEditionVariations = new Dictionary<string, IList<ICardEditionVariation>>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
         public void InsertNewEdition(string sourceName, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate, byte[] icon)
@@ -204,35 +203,6 @@ namespace MagicPictureSetDownloader.Db
                 };
 
                 AddToDbAndUpdateReferential(cardEdition, InsertInReferential);
-            }
-        }
-        public void InsertNewCardEditionVariation(string idScryFall, string otherIdScryFall, string url)
-        {
-            using (new WriterLock(_lock))
-            {
-                if (string.IsNullOrEmpty(idScryFall) || string.IsNullOrEmpty(otherIdScryFall))
-                {
-                    throw new ApplicationDbException("Data are not filled correctedly");
-                }
-
-                if (GetCardEdition(idScryFall) == null)
-                {
-                    return;
-                }
-
-                if (GetCardEditionVariation(idScryFall).Any(cev => cev.OtherIdScryFall == otherIdScryFall))
-                {
-                    return;
-                }
-
-                CardEditionVariation cardEditionVariation = new CardEditionVariation
-                {
-                    IdScryFall = idScryFall,
-                    OtherIdScryFall = otherIdScryFall,
-                    Url = url
-                };
-
-                AddToDbAndUpdateReferential(cardEditionVariation, InsertInReferential);
             }
         }
         public void InsertNewOption(TypeOfOption type, string key, string value)
@@ -454,7 +424,6 @@ namespace MagicPictureSetDownloader.Db
                 _cardFaces.Clear();
                 _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
-                _cardEditionVariations.Clear();
                 _collections.Clear();
                 _allCardInCollectionCount.Clear();
                 _preconstructedDecks.Clear();
@@ -513,11 +482,6 @@ namespace MagicPictureSetDownloader.Db
                 foreach (ExternalIds externalId in Mapper<ExternalIds>.LoadAll(cnx))
                 {
                     InsertInReferential(externalId);
-                }
-
-                foreach (CardEditionVariation cardEditionVariation in Mapper<CardEditionVariation>.LoadAll(cnx))
-                {
-                    InsertInReferential(cardEditionVariation);
                 }
 
                 foreach (CardCollection cardCollection in Mapper<CardCollection>.LoadAll(cnx))
@@ -582,23 +546,6 @@ namespace MagicPictureSetDownloader.Db
             _cardEditions.Add(cardEdition.IdScryFall, cardEdition);
             _cacheForAllDbInfos = null;
         }
-        private void InsertInReferential(ICardEditionVariation cardEditionVariation)
-        {
-            if (_cardEditions.GetOrDefault(cardEditionVariation.IdScryFall) == null)
-            {
-                throw new ApplicationDbException($"Can't find CardEdition with id {cardEditionVariation.IdScryFall}");
-            }
-
-            if (!_cardEditionVariations.TryGetValue(cardEditionVariation.IdScryFall, out IList<ICardEditionVariation> variations))
-            {
-                variations = new List<ICardEditionVariation>();
-                _cardEditionVariations.Add(cardEditionVariation.IdScryFall, variations);
-            }
-
-            variations.Add(cardEditionVariation);
-            _cacheForAllDbInfos = null;
-        }
-
         private void InsertInReferential(IOption option)
         {
             if (!_allOptions.TryGetValue(option.Type, out IList<IOption> options))

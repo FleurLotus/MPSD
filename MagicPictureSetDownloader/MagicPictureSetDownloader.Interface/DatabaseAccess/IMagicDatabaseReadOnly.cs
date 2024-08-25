@@ -28,7 +28,6 @@
         IEdition GetEdition(string sourceName);
         IEdition GetEditionByIdScryFall(string idScryFall);
         ILanguage GetLanguage(int idLanguage);
-        IList<ICardEditionVariation> GetCardEditionVariation(string idScryFall);
         ILanguage GetDefaultLanguage();
         ILanguage GetEnglishLanguage();
         IBlock GetBlock(string blockName);

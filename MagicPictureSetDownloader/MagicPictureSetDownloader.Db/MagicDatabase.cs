@@ -266,14 +266,6 @@ namespace MagicPictureSetDownloader.Db
                     IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdScryFall);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
                     cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
-                    if (_cardEditionVariations.TryGetValue(cardEdition.IdScryFall, out IList<ICardEditionVariation> other))
-                    {
-                        cardAllDbInfo.VariationIdScryFalls = other.Select(cev => cev.OtherIdScryFall).ToArray();
-                    }
-                    else
-                    {
-                        cardAllDbInfo.VariationIdScryFalls = Array.Empty<string>();
-                    }
 
                     ret.Add(cardAllDbInfo);
                 }
@@ -311,22 +303,6 @@ namespace MagicPictureSetDownloader.Db
                 return _cardEditions.GetOrDefault(idScryFall);
             }
         }
-        public IList<ICardEditionVariation> GetCardEditionVariation(string idScryFall)
-        {
-            CheckReferentialLoaded();
-
-            using (new ReaderLock(_lock))
-            {
-                IList<ICardEditionVariation> variations = _cardEditionVariations.GetOrDefault(idScryFall);
-                if (variations == null)
-                {
-                    return new List<ICardEditionVariation>().AsReadOnly();
-                }
-
-                return new List<ICardEditionVariation>(variations).AsReadOnly();
-            }
-        }
-
         public IRarity GetRarity(string rarity)
         {
             CheckReferentialLoaded();
@@ -412,15 +388,6 @@ namespace MagicPictureSetDownloader.Db
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();
             }
         }
-        private ICollection<ICardEditionVariation> AllCardEditionVariations()
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return new List<ICardEditionVariation>(_cardEditionVariations.SelectMany(kv => kv.Value)).AsReadOnly();
-            }
-        }
-
         public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {
             HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());

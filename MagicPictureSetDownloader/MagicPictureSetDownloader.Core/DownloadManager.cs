@@ -166,13 +166,6 @@
         {
             MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
         }
-        internal void InsertCardEditionVariationInDb(string idScryFall, string otherIdScryFall, string pictureUrl)
-        {
-            if (idScryFall != otherIdScryFall)
-            {
-                MagicDatabase.InsertNewCardEditionVariation(idScryFall, otherIdScryFall, pictureUrl);
-            }
-        }
 
 
                 */

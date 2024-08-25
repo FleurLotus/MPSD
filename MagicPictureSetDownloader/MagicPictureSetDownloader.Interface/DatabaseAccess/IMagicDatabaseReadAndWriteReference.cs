@@ -12,7 +12,6 @@
         void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url, IDictionary<string, string> languages);
         void InsertNewCardEdition(string idScryFall, int idEdition, string name, string rarity);
         void InsertNewExternalIds(string idScryFall, CardIdSource cardIdSource, string externalId);
-        void InsertNewCardEditionVariation(string idScryFall, string otherIdScryFall, string url);
         void InsertNewBlock(string blockName);
         void InsertNewLanguage(string languageName, string alternativeName);
         void InsertNewPrice(string idScryFall, DateTime addDate, string source, bool foil, int value);

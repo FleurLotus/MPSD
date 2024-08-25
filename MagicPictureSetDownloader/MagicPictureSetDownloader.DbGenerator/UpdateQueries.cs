@@ -30,16 +30,5 @@ SELECT Id, @name, @url
 FROM Edition
 WHERE Name = @editionName";
 
-    public const string SelectCardEditionVariation =
-@"SELECT cev.IdScryFall, cev.OtherIdScryFall, cev.Url
-FROM CardEditionVariation cev
-";
-
-        public const string InsertNewCardEditionVariation =
-@"INSERT INTO CardEditionVariation(IdScryFall, OtherIdScryFall, Url)
-SELECT IdScryFall, @otherIdScryFall, @url
-FROM CardEdition
-WHERE IdScryFall = @idScryFall";
-
     }
 }

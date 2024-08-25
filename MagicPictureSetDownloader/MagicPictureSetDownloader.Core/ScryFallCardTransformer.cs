@@ -215,11 +215,6 @@
                     //_downloadManager.InsertNewExternalIds();
 
 
-                    //foreach (string otherIdScryFall in cardWithExtraInfo.OtherIdScryFall)
-                    //{
-                    //    _downloadManager.InsertCardEditionVariationInDb(idGatherer, otherIdScryFall, WebAccess.ToAbsoluteUrl(jobData.Url, string.Format(Parser.AlternativePictureUrl, otherIdScryFall), true));
-                    //}
-
                     _progressReporter.Progress();
                 }
                 catch (Exception ex)
