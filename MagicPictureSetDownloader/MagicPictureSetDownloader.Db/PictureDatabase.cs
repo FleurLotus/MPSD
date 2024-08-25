@@ -56,6 +56,15 @@
         }
         public ITreePicture GetTreePicture(string key)
         {
+            if (key == "@∞")
+            {
+                key = "@infinity";
+            }
+            if (key == "@½")
+            {
+                key = "@0.5";
+            }
+
             return _treePictures.GetOrDefault(ToWindowsFileName(key));
         }
         public IPicture GetPicture(string idScryFall, bool doNotCache = false)

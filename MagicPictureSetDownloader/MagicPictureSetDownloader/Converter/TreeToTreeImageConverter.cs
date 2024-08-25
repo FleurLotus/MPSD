@@ -29,7 +29,7 @@ namespace MagicPictureSetDownloader.Converter
             byte[] bytes = MagicDatabase.GetTreePicture(data)?.Image;
             if (null != bytes && bytes.Length > 0)
             {
-                return BytesToImage(bytes, data);
+                return BytesToSvgImage(bytes, data);
             }
 
             return null;
