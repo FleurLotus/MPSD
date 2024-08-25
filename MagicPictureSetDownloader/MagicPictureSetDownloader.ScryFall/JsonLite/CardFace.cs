@@ -23,6 +23,7 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
             Power = cf.Power;
             Toughness = cf.Toughness;
             TypeLine = cf.TypeLine;
+            PrintedName = cf.PrintedName;
         }
 
         [JsonPropertyName("defense")]
@@ -57,5 +58,8 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
 
         [JsonPropertyName("type_line")]
         public string TypeLine { get; set; }
+
+        [JsonPropertyName("printed_name")]
+        public string PrintedName { get; set; }
     }
 }

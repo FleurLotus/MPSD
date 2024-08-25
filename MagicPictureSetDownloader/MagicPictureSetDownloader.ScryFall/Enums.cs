@@ -291,4 +291,42 @@
         [EnumMember(Value = "case")]
         Case,
     }
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+    public enum Language
+    {
+        [EnumMember(Value = "en")]
+        English,
+        [EnumMember(Value = "es")]
+        Spanish,
+        [EnumMember(Value = "fr")]
+        French,
+        [EnumMember(Value = "de")]
+        German,
+        [EnumMember(Value = "it")]
+        Italian,
+        [EnumMember(Value = "pt")]
+        Portuguese,
+        [EnumMember(Value = "ja")]
+        Japanese,
+        [EnumMember(Value = "ko")]
+        Korean,
+        [EnumMember(Value = "ru")]
+        Russian,
+        [EnumMember(Value = "zhs")]
+        SimplifiedChinese,
+        [EnumMember(Value = "zht")]
+        TraditionalChinese,
+        [EnumMember(Value = "he")]
+        Hebrew,
+        [EnumMember(Value = "la")]
+        Latin,
+        [EnumMember(Value = "grc")]
+        AncientGreek,
+        [EnumMember(Value = "ar")]
+        Arabic,
+        [EnumMember(Value = "sa")]
+        Sanskrit,
+        [EnumMember(Value = "ph")]
+        Phyrexian,
+    }
 }

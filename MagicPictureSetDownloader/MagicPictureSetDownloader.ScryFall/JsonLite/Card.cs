@@ -27,6 +27,7 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
             Rarity = c.Rarity;
             SetId = c.SetId;
             Set = c.Set;
+            Language = c.Language;
         }
 
         [JsonPropertyName("id")]
@@ -68,6 +69,7 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
         [JsonPropertyName("set")]
         public string Set { get; set; }
 
-
+        [JsonPropertyName("lang")]
+        public Language Language { get; set; }
     }
 }

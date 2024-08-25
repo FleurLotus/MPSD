@@ -7,7 +7,6 @@ namespace MagicPictureSetDownloader.Db
     using System.Linq;
     using System.Threading;
 
-    using Common.Database;
     using Common.Library.Extension;
     using Common.Library.Threading;
 

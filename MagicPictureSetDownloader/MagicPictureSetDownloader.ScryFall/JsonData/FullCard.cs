@@ -16,7 +16,7 @@
         public Guid Id { get; set; }
 
         [JsonPropertyName("lang")]
-        public string Language { get; set; }
+        public Language Language { get; set; }
 
         [JsonPropertyName("mtgo_id")]
         public int? MtgoId { get; set; }

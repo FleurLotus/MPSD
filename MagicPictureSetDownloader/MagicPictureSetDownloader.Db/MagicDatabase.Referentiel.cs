@@ -85,8 +85,7 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-
-        public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url, IDictionary<string, string> languages)
+        public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -118,16 +117,9 @@ namespace MagicPictureSetDownloader.Db
 
                         InsertNewCardFace(refCard, cardFace);
                     }
-
-                    foreach (KeyValuePair<string, string> kv in languages)
-                    {
-                        int idlanguage = GetLanguageId(kv.Key);
-                        InsertNewTranslate(refCard, idlanguage, kv.Value);
-                    }
                 }
             }
         }
-
         private void InsertNewCardFace(ICard card, ICardFace cardFace)
         {
             if (card == null)
@@ -256,18 +248,20 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(language, InsertInReferential);
             }
         }
-        private void InsertNewTranslate(ICard card, int idLanguage, string name)
+        public void InsertNewTranslate(int idCard, int idLanguage, string name)
         {
-            if (card == null)
+            ICard refCard = _cardsbyId.GetOrDefault(idCard);
+
+            if (refCard == null)
             {
                 return;
             }
 
             using (new WriterLock(_lock))
             {
-                if (!card.HasTranslation(idLanguage))
+                if (!refCard.HasTranslation(idLanguage))
                 {
-                    Translate translate = new Translate { IdCard = card.Id, IdLanguage = idLanguage, Name = name };
+                    Translate translate = new Translate { IdCard = idCard, IdLanguage = idLanguage, Name = name };
                     AddToDbAndUpdateReferential(translate, InsertInReferential);
                 }
             }

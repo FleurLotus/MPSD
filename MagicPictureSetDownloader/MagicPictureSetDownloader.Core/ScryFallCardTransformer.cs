@@ -72,6 +72,8 @@
                         Edition = card.Set?.ToUpper(),
                         Layout = card.Layout.ToString(),
                         Rarity = card.Rarity.ToString(),
+                        Language = card.Language.ToString(),
+                        PrinterName = card.PrintedName,
                     };
 
                     if (card.MtgoId.HasValue)
@@ -205,7 +207,7 @@
                     {
                         return;
                     }
-                    //ALERT Insert/Update in db all the parse data 
+                    //ALERT Insert/Update in db all the parse data  + manage lang and variation
                     //string pictureUrl = WebAccess.ToAbsoluteUrl(jobData.Url, cardWithExtraInfo.PictureUrl);
                     //int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
 

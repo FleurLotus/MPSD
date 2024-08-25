@@ -1,7 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
-    using MagicPictureSetDownloader.Interface;
     using System.Collections.Generic;
+
+    using MagicPictureSetDownloader.Interface;
 
     internal class CardWithExtraInfo
     {
@@ -12,5 +13,7 @@
         public string Rarity { get; set; }
         public List<(CardIdSource, string)> ExternalId { get; } = new List<(CardIdSource, string)>();
         public IList<CardFaceWithExtraInfo> CardFaceWithExtraInfos { get;  } = new List<CardFaceWithExtraInfo>();
+        public string Language { get; set; }
+        public string PrinterName { get; set; }
     }
 }
