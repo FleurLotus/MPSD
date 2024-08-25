@@ -38,8 +38,12 @@
 
         public void Start()
         {
-            var parserTasks = Enumerable.Range(0, 4).Select(_ => Task.Run((Action)Parse)).ToArray();
-            var updateTasks = Enumerable.Range(0, 2).Select(_ => Task.Run((Action)Update)).ToArray();
+            //ALERT Temp for debug
+            //var parserTasks = Enumerable.Range(0, 4).Select(_ => Task.Run((Action)Parse)).ToArray();
+            //var updateTasks = Enumerable.Range(0, 2).Select(_ => Task.Run((Action)Update)).ToArray();
+
+            var parserTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Parse)).ToArray();
+            var updateTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Update)).ToArray();
 
             _inputs.CompleteAdding();
             Task.WaitAll(parserTasks);
@@ -60,42 +64,128 @@
                     {
                         return;
                     }
-                    //ALERT TO Create CardWithExtraInfo from scryfall Card so CardFace, Edition, CardCardFace, Card etc...
 
-                    /*
-                    Card
-                        Name
-                        Layout
-                    => Id
+                    CardWithExtraInfo c = new CardWithExtraInfo
+                    {
+                        Name = card.Name,
+                        IdScryFall = card.Id.ToString(),
+                        Edition = card.Set?.ToUpper(),
+                        Layout = card.Layout.ToString(),
+                        Rarity = card.Rarity.ToString(),
+                    };
 
-                    CardFace
-                            Name
-                            Text
-                            Power
-                            Toughness
-                            CastingCost
-                            Loyalty
-                            Defense
-                            Type
-                            Url
-                            IdCard
-                            IsMainFace
+                    if (card.MtgoId.HasValue)
+                    {
+                        c.ExternalId.Add((CardIdSource.Mtgo, card.MtgoId.Value.ToString()));
+                    }
+                    if (card.MtgoFoilId.HasValue)
+                    {
+                        c.ExternalId.Add((CardIdSource.MtgoFoil, card.MtgoFoilId.Value.ToString()));
+                    }
+                    if (card.TcgplayerId.HasValue)
+                    {
+                        c.ExternalId.Add((CardIdSource.Tcgplayer, card.TcgplayerId.Value.ToString()));
+                    }
+                    if (card.TcgplayerEtchedId.HasValue)
+                    {
+                        c.ExternalId.Add((CardIdSource.TcgplayerEtched, card.TcgplayerEtchedId.Value.ToString()));
+                    }
+                    if (card.CardmarketId.HasValue)
+                    {
+                        c.ExternalId.Add((CardIdSource.Cardmarket, card.CardmarketId.Value.ToString()));
+                    }
+                    if (card.MultiverseIds == null || card.MultiverseIds.Count> 0)
+                    {
+                        foreach (int id in card.MultiverseIds)
+                        {
+                            c.ExternalId.Add((CardIdSource.Multiverse, id.ToString()));
+                        }
+                    }
 
-                    CardEdition
-                                IdEdition
-                                IdCard
-                                IdRarity
-                                IdScryFall
+                    //Basic Card
+                    if (card.CardFaces == null || card.CardFaces.Count == 0)
+                    {
+                        CardFaceWithExtraInfo cf = new CardFaceWithExtraInfo
+                        {
+                            Name = card.Name,
+                            Text = card.OracleText,
+                            Power = card.Power,
+                            Toughness = card.Toughness,
+                            CastingCost = card.ManaCost,
+                            Loyalty = card.Loyalty,
+                            Defense = card.Defense,
+                            Type = card.TypeLine,
+                            PictureUrl = card.ImageUris?.Normal.ToString(),
+                            IsMainFace = true,
+                        };
+                        c.CardFaceWithExtraInfos.Add(cf);
+                    }
+                    else if (card.CardFaces.Count == 2)
+                    {
+                        CardFace cardFace = card.CardFaces[0];
 
-                    ExternalIds
-                                CardIdSource
-                                ExternalId
-                    
-                    CardEditionVariation ???
+                        Uri image = cardFace.ImageUris?.Normal ?? card.ImageUris?.Normal;
 
-                    */
-                    CardWithExtraInfo c = new CardWithExtraInfo();
+                        CardFaceWithExtraInfo cf = new CardFaceWithExtraInfo
+                        {
+                            Name = cardFace.Name,
+                            Text = cardFace.OracleText,
+                            Power = cardFace.Power,
+                            Toughness = cardFace.Toughness,
+                            CastingCost = cardFace.ManaCost,
+                            Loyalty = cardFace.Loyalty,
+                            Defense = cardFace.Defense,
+                            Type = cardFace.TypeLine,
+                            PictureUrl = image.ToString(),
+                            IsMainFace = true,
+                        };
+                        c.CardFaceWithExtraInfos.Add(cf);
 
+                        cardFace = card.CardFaces[1];
+                        image = cardFace.ImageUris?.Normal ?? card.ImageUris?.Normal;
+
+                        cf = new CardFaceWithExtraInfo
+                        {
+                            Name = cardFace.Name,
+                            Text = cardFace.OracleText,
+                            Power = cardFace.Power,
+                            Toughness = cardFace.Toughness,
+                            CastingCost = cardFace.ManaCost,
+                            Loyalty = cardFace.Loyalty,
+                            Defense = cardFace.Defense,
+                            Type = cardFace.TypeLine,
+                            PictureUrl = image.ToString(),
+                            IsMainFace = false,
+                        };
+                        c.CardFaceWithExtraInfos.Add(cf);
+                    }
+                    else  //Card of multiple cardface like "Who // What // When // Where // Why"
+                    {
+                        CardFaceWithExtraInfo cf = new CardFaceWithExtraInfo
+                        {
+                            Name = card.Name,
+                            Power = card.Power,
+                            Toughness = card.Toughness,
+                            CastingCost = card.ManaCost,
+                            Loyalty = card.Loyalty,
+                            Defense = card.Defense,
+                            Type = card.TypeLine,
+                            PictureUrl = card.ImageUris?.Normal.ToString(),
+                            IsMainFace = true,
+                        };
+
+                        for (int i = 0; i< card.CardFaces.Count;i++)
+                        {
+                            if (i > 0)
+                            {
+                                cf.Text += "\n-----\n";
+                            }
+
+                            CardFace cardFace = card.CardFaces[i];
+                            cf.Text += $"{cardFace.Name}\n{cardFace.ManaCost}\n{cardFace.TypeLine}\n{cardFace.OracleText}";
+                        }
+                        c.CardFaceWithExtraInfos.Add(cf);
+                    }
 
                     _parsedInput.Add(c);
                 }

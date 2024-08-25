@@ -30,10 +30,10 @@ namespace MagicPictureSetDownloader.Interface
     {
         Mtgo,
         MtgoFoil,
-        MultiverseIds,
-        TcgplayerId,
-        TcgplayerEtchedId,
-        CardmarketId,
+        Multiverse,
+        Tcgplayer,
+        TcgplayerEtched,
+        Cardmarket,
     }
     public enum PriceSource
     {
