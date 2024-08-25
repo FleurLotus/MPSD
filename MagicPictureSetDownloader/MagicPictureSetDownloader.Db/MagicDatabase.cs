@@ -85,6 +85,15 @@ namespace MagicPictureSetDownloader.Db
                 return _editions.FirstOrDefault(ed => string.Equals(ed.Name, sourceName, StringComparison.InvariantCultureIgnoreCase));
             }
         }
+        public IEdition GetEditionByCode(string code)
+        {
+            CheckReferentialLoaded();
+
+            using (new ReaderLock(_lock))
+            {
+                return _editions.FirstOrDefault(ed => string.Equals(ed.Code, code, StringComparison.InvariantCultureIgnoreCase));
+            }
+        }
         public IEdition GetEditionByIdScryFall(string idScryFall)
         {
             using (new ReaderLock(_lock))

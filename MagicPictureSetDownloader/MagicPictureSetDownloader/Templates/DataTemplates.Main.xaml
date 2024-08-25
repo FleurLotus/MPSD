@@ -146,6 +146,7 @@
                 <TabItem Header="Languages" fl:TabItemExtensions.Visibility="{Binding Options.ShowOtherLanguages, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource OtherLanguagesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
+                <!-- ALERT AllCard to display all the other cases -->
             </TabControl>
 
         </Grid>

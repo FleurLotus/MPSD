@@ -157,18 +157,26 @@
         }
         internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
-            /* ALERT: To be review InsertCardInDb
-            MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Text, cardWithExtraInfo.Power, cardWithExtraInfo.Toughness,
-                                        cardWithExtraInfo.CastingCost, cardWithExtraInfo.Loyalty, cardWithExtraInfo.Defense, cardWithExtraInfo.Type,
-                                        cardWithExtraInfo.Languages);
+            MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Layout);
 
-        internal void InsertCardEditionInDb(int idEdition, CardWithExtraInfo cardWithExtraInfo)
-        {
-            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, idEdition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
-        }
+            ICard card = MagicDatabase.GetCard(cardWithExtraInfo.Name);
 
+            foreach (CardFaceWithExtraInfo cardFaceWithExtraInfo in cardWithExtraInfo.CardFaceWithExtraInfos)
+            {
+                MagicDatabase.InsertNewCardFace(card.Id, cardFaceWithExtraInfo.IsMainFace, cardFaceWithExtraInfo.Name, cardFaceWithExtraInfo.Text, cardFaceWithExtraInfo.Power, cardFaceWithExtraInfo.Toughness,
+                                                cardFaceWithExtraInfo.CastingCost, cardFaceWithExtraInfo.Loyalty, cardFaceWithExtraInfo.Defense, cardFaceWithExtraInfo.Type, cardFaceWithExtraInfo.PictureUrl);
+            }
+            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
 
-                */
+            foreach ((CardIdSource source, string id) kv in cardWithExtraInfo.ExternalId)
+            {
+                MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, kv.source, kv.id);
+            }
+
+            if (cardWithExtraInfo.Language != null && cardWithExtraInfo.Language != Language.English.ToString() && !string.IsNullOrEmpty(cardWithExtraInfo.PrinterName))
+            {
+                MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrinterName);
+            }
         }
     }
 }

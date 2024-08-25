@@ -207,15 +207,8 @@
                     {
                         return;
                     }
-                    //ALERT Insert/Update in db all the parse data  + manage lang and variation
-                    //string pictureUrl = WebAccess.ToAbsoluteUrl(jobData.Url, cardWithExtraInfo.PictureUrl);
-                    //int idGatherer = Parser.ExtractIdGatherer(pictureUrl);
 
-                    //_downloadManager.InsertCardInDb(cardWithExtraInfo);
-                    //_downloadManager.InsertCardFaceInDb(cardWithExtraInfo);
-                    //_downloadManager.InsertCardEditionInDb(jobData.EditionId, cardWithExtraInfo);
-                    //_downloadManager.InsertNewExternalIds();
-
+                    _downloadManager.InsertCardInDb(cardWithExtraInfo);
 
                     _progressReporter.Progress();
                 }

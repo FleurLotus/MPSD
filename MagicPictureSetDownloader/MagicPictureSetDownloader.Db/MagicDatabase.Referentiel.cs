@@ -169,14 +169,15 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void InsertNewCardEdition(string idScryFall, int idEdition, string name, string rarity)
+        public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity)
         {
             using (new WriterLock(_lock))
             {
                 int idRarity = GetRarityId(rarity);
                 int idCard = GetCard(name).Id;
+                int idEdition = GetEditionByCode(editionCode).Id;
 
-                if (string.IsNullOrEmpty(idScryFall) || idEdition <= 0)
+                if (string.IsNullOrEmpty(idScryFall))
                 {
                     throw new ApplicationDbException("Data are not filled correctedly");
                 }
@@ -248,7 +249,7 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(language, InsertInReferential);
             }
         }
-        public void InsertNewTranslate(int idCard, int idLanguage, string name)
+        public void InsertNewTranslate(int idCard, string language, string name)
         {
             ICard refCard = _cardsbyId.GetOrDefault(idCard);
 
@@ -256,6 +257,8 @@ namespace MagicPictureSetDownloader.Db
             {
                 return;
             }
+
+            int idLanguage = GetLanguage(language).Id;
 
             using (new WriterLock(_lock))
             {
