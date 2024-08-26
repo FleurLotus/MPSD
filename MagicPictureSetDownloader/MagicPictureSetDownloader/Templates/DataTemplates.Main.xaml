@@ -9,7 +9,6 @@
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
                     xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
                     xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel"
-                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
 
                     mc:Ignorable="d"
                     >
@@ -34,7 +33,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <svgc:SvgViewbox Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={conv:TreeToTreeImageConverter}}" Visibility="{Binding Converter={conv:TreeToVisibleConverter}}"/>
+                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={conv:TreeToTreeImageConverter}}" Visibility="{Binding Converter={conv:TreeToVisibleConverter}}"/>
                         <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
                     </Grid>
                 </HierarchicalDataTemplate>

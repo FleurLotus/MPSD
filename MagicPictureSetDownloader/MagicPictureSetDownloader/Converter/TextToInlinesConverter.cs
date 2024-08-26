@@ -42,6 +42,7 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             bool previousIsPicture = false;
+            bool endOfString = false;
 
             while (pos >= 0)
             {
@@ -55,20 +56,26 @@ namespace MagicPictureSetDownloader.Converter
                 int end = text.IndexOf(Shard.Suffix, pos);
                 if (end < 0)
                 {
+                    endOfString = true;
                     end = text.Length;
                 }
 
-                string symbol = text[pos..end];
+                int endPosition = endOfString ? end : end - 1;
+
+                string symbol = text[(pos + Shard.Prefix.Length)..end];
                 //ALERT: TO BE REVIEW   "@" + symbol.Replace(Shard.Separator,string.Empty)
                 BitmapImage source = (BitmapImage)_conv.Convert("@" + symbol.Replace(Shard.Separator,string.Empty), typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
-                    text = text[(pos + Shard.Prefix.Length)..];
+                    int lastCharPos = endOfString ? end : end + Shard.Suffix.Length;
+
+                    newList.Add(new Run((previousIsPicture ? " " : string.Empty) + text[pos..lastCharPos]));
+                    text = text[lastCharPos..];
                 }
                 else
                 {
-                    
-                    Image image = new Image { Source = source, Width = 12, Height = 12, Visibility = Visibility.Visible };
+
+                    Image image = new Image { Source = source, Width = 15.0 * source.PixelWidth / source.PixelWidth, Height = 15, Visibility = Visibility.Visible };
                     newList.Add(new InlineUIContainer(image));
                     if (text.Length > end)
                     {
