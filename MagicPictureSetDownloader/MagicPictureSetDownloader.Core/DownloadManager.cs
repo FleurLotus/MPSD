@@ -40,7 +40,11 @@
                 if (edition == null)
                 {
                     IBlock block = GetOrAddBlock(set.Block);
-                    byte[] icon = GetEditionIcon(set.IconSvgUri);
+                    byte[] icon = null;
+                    if (MagicDatabase.GetTreePicture(set.Name) == null)
+                    {
+                        icon = GetEditionIcon(set.IconSvgUri);
+                    }
 
                     MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code.ToUpperInvariant(), block?.Id, set.CardCount, set.ReleasedAt, icon);
                 }
@@ -173,9 +177,9 @@
                 MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, kv.source, kv.id);
             }
 
-            if (cardWithExtraInfo.Language != null && cardWithExtraInfo.Language != Language.English.ToString() && !string.IsNullOrEmpty(cardWithExtraInfo.PrinterName))
+            if (cardWithExtraInfo.Language != null && cardWithExtraInfo.Language != Language.English.ToString() && !string.IsNullOrEmpty(cardWithExtraInfo.PrintedName))
             {
-                MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrinterName);
+                MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrintedName);
             }
         }
     }

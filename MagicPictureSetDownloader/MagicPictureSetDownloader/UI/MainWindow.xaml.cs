@@ -33,7 +33,7 @@
         }
         public void UpdateDatabaseRequested(object sender, EventArgs<DownloadViewModelBase> args)
         {
-            new DownloadWindow(args.Data) { Owner = this }.ShowDialog();
+            new AutoDownloadWindow(args.Data) { Owner = this }.ShowDialog();
         }
         public void VersionRequested(object sender, EventArgs args)
         {

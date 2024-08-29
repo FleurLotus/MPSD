@@ -1,13 +1,16 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
-    
+    using System.Windows.Documents;
+    using System.Windows.Markup;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
     using MagicPictureSetDownloader.Interface;
+    using static System.Net.Mime.MediaTypeNames;
 
     public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
@@ -45,7 +48,37 @@
 
             if (!string.IsNullOrWhiteSpace(CastingCost))
             {
-                DisplayedCastingCost = CastingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> castCost = new List<string>();
+                string text = CastingCost;
+
+                bool endOfString = false;
+                int pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
+                while (pos >= 0)
+                {
+                    int end = text.IndexOf(Shard.Suffix, pos);
+                    if (end < 0)
+                    {
+                        end = text.Length;
+                        endOfString = true;
+                    }
+                    int endPosition = endOfString ? end : end - 1;
+                    castCost.Add(Shard.DisplayPrefix + text[(pos + Shard.Prefix.Length)..end]);
+                    if (text.Length > end)
+                    {
+                        text = text[(end + 1)..];
+                    }
+                    else
+                    {
+                        text = string.Empty;
+                    }
+                    pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
+                }
+                if (!string.IsNullOrEmpty(text))
+                {
+                    castCost.Add(Shard.DisplayPrefix + text);
+                }
+
+                DisplayedCastingCost = castCost.ToArray();
             }
 
             

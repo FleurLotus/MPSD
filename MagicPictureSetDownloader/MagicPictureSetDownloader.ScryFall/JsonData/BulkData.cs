@@ -28,7 +28,7 @@
         public string Description { get; set; }
 
         [JsonPropertyName("size")]
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         [JsonPropertyName("download_uri")]
         public string DownloadUri { get; set; }

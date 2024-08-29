@@ -3,15 +3,17 @@ namespace MagicPictureSetDownloader.Converter
     using System;
     using System.Globalization;
     using System.Windows.Data;
-    using System.Windows.Media.Imaging;
 
-    [ValueConversion(typeof(string), typeof(BitmapImage))]
-    public class TreeToTreeImageConverter : ImageConverterBase
+    using Common.WPF;
+    using Common.WPF.Converter;
+
+    using MagicPictureSetDownloader.Db;
+    using MagicPictureSetDownloader.Interface;
+
+    [ValueConversion(typeof(string), typeof(string))]
+    public class TreeToTreeImageConverter : NoConvertBackConverter
     {
-        protected override string GetCachePrefix()
-        {
-            return "TreeImage";
-        }
+        private readonly IMagicDatabaseReadOnly MagicDatabase = Lib.IsInDesignMode() ? null : MagicDatabaseManager.ReadOnly;
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -20,19 +22,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            BitmapImage image = GetImage(data);
-            if (image != null)
-            {
-                return image;
-            }
-
-            byte[] bytes = MagicDatabase.GetTreePicture(data)?.Image;
-            if (null != bytes && bytes.Length > 0)
-            {
-                return BytesToSvgImage(bytes, data);
-            }
-
-            return null;
+            return MagicDatabase.GetTreePicture(data)?.FilePath;
         }
     }
 }

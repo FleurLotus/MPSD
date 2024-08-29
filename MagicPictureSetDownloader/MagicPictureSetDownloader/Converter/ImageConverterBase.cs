@@ -1,7 +1,6 @@
 namespace MagicPictureSetDownloader.Converter
 {
     using System;
-    using System.Text;
     using System.IO;
     using System.Windows.Media.Imaging;
     using System.Runtime.Caching;
@@ -52,7 +51,6 @@ namespace MagicPictureSetDownloader.Converter
 
             return null;
         }
-        //ALERT to be tested
         protected BitmapImage BytesToSvgImage(byte[] bytes, string key)
         {
             MemoryStream svgStream = new MemoryStream(bytes);

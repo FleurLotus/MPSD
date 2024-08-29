@@ -38,10 +38,6 @@
 
         public void Start()
         {
-            //ALERT Temp for debug
-            //var parserTasks = Enumerable.Range(0, 4).Select(_ => Task.Run((Action)Parse)).ToArray();
-            //var updateTasks = Enumerable.Range(0, 2).Select(_ => Task.Run((Action)Update)).ToArray();
-
             var parserTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Parse)).ToArray();
             var updateTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Update)).ToArray();
 
@@ -73,7 +69,7 @@
                         Layout = card.Layout.ToString(),
                         Rarity = card.Rarity.ToString(),
                         Language = card.Language.ToString(),
-                        PrinterName = card.PrintedName,
+                        PrintedName = card.PrintedName,
                     };
 
                     if (card.MtgoId.HasValue)

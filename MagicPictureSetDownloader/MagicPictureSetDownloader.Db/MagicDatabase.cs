@@ -66,7 +66,7 @@ namespace MagicPictureSetDownloader.Db
 
         public IPicture GetDefaultPicture()
         {
-            return GetPicture("");
+            return GetPicture("00000000-0000-0000-0000-000000000000");
         }
         public IPicture GetPicture(string idScryFall, bool doNotCache = false)
         {
@@ -340,8 +340,8 @@ namespace MagicPictureSetDownloader.Db
                 if (_alternativeNameLanguages.TryGetValue(language, out lang) && lang != null)
                 {
                     return lang;
-                }
 
+                }
                 return null;
             }
         }

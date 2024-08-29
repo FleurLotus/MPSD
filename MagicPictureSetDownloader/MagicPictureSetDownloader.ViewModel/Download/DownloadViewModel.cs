@@ -52,6 +52,7 @@
                 _scryFallCardTransformer.Error += ScryFallCardTransformerError;
 
                 CountDown = cards.Length;
+                DownloadReporter.Total = cards.Length;
                 _scryFallCardTransformer.AddRange(cards);
                 _scryFallCardTransformer.Start();
             }

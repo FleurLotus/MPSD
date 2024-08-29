@@ -16,7 +16,6 @@
     {
         private const int Level = 3;
         private const int LevelSize = 2;
-        private static readonly string Format = new string('0', 1 + (int)Math.Truncate(Math.Log10(LevelSize - 1)));
 
         private const string RootFolder = "MagicPicture";
         private const string CardFolder = "Card";
@@ -47,7 +46,7 @@
 
             foreach(string file in Directory.GetFiles(_treePath, "*.*", SearchOption.AllDirectories))
             {
-                TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file) };
+                TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file), FilePath = file };
                 if (!_treePictures.ContainsKey(treePicture.Name))
                 {
                     _treePictures.Add(treePicture.Name, treePicture);
@@ -133,7 +132,7 @@
 
             Save(filePath, data);
 
-            TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(filePath), Image = data };
+            TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(filePath), Image = data, FilePath = filePath };
             _treePictures.Add(treePicture.Name, treePicture);
         }
         public void InsertNewPicture(string idScryFall, byte[] data)
@@ -173,7 +172,7 @@
         {
             string path = string.Empty;
 
-            for (int j=0; j<Level; j++)
+            for (int j = 0; j < Level; j++)
             {
                 path = Path.Combine(path, idScryFall.Substring(LevelSize * j, LevelSize));
             }

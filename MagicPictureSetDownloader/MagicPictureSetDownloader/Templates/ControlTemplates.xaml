@@ -4,6 +4,7 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
 
                     xmlns:l="clr-namespace:MagicPictureSetDownloader"
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
@@ -64,7 +65,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Width="12" Height="12" Source="{Binding Converter={conv:StringToCastingCostImageConverter}}"/>
+                        <Image Width="15" Height="15" Source="{Binding Converter={conv:StringToCastingCostImageConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -166,7 +167,7 @@
                                     <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
                                     <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                                     <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
-                                        <Image Width="30" Source="{Binding Key, Converter={conv:TreeToTreeImageConverter}}" />
+                                        <svgc:SvgViewbox Width="30" Source="{Binding Key, Converter={conv:TreeToTreeImageConverter}}" />
                                     </Border>
                                     <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
                                     <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->

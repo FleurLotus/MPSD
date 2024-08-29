@@ -58,6 +58,7 @@ namespace MagicPictureSetDownloader.Db
 
                     AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
+                
                 InsertNewTreePicture(sourceName, icon, true);
             }
         }
@@ -595,14 +596,17 @@ namespace MagicPictureSetDownloader.Db
         private void InsertInReferential(ILanguage language)
         {
             _languages.Add(language.Name, language);
+
+            string langName = language.Name.Replace(" ", string.Empty);
+            _alternativeNameLanguages[langName] = language;
+
             if (!string.IsNullOrWhiteSpace(language.AlternativeName))
             {
                 foreach (string name in language.AlternativeName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    if (!_languages.ContainsKey(name) && !_alternativeNameLanguages.ContainsKey(name))
-                    {
-                        _alternativeNameLanguages.Add(name, language);
-                    }
+                    langName = name.Replace(" ", string.Empty);
+                    _alternativeNameLanguages[langName] = language;
+                    _alternativeNameLanguages[name] = language;
                 }
             }
         }

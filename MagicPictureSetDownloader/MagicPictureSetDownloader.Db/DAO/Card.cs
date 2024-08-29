@@ -24,7 +24,7 @@
 
         public ICardFace MainCardFace
         {
-            get { return _faces[0]; }
+            get { return _faces.Count > 0 ? _faces[0] : null; }
         }
 
         public ICardFace OtherCardFace

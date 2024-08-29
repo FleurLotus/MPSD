@@ -3,6 +3,7 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
 
                     xmlns:res="clr-namespace:MagicPictureSetDownloader.Resources"
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
@@ -33,7 +34,8 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" MaxHeight="15" Source="{Binding DisplayValue, Converter={conv:TreeToTreeImageConverter}}" Visibility="{Binding Converter={conv:TreeToVisibleConverter}}"/>
+
+                        <svgc:SvgViewbox Grid.Column="0" Height="15" Source="{Binding DisplayValue, Converter={conv:TreeToTreeImageConverter}}" Visibility="{Binding Converter={conv:TreeToVisibleConverter}}" />
                         <TextBlock Grid.Column="1" Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
                     </Grid>
                 </HierarchicalDataTemplate>

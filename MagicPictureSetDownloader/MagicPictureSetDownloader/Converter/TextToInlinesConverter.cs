@@ -63,8 +63,7 @@ namespace MagicPictureSetDownloader.Converter
                 int endPosition = endOfString ? end : end - 1;
 
                 string symbol = text[(pos + Shard.Prefix.Length)..end];
-                //ALERT: TO BE REVIEW   "@" + symbol.Replace(Shard.Separator,string.Empty)
-                BitmapImage source = (BitmapImage)_conv.Convert("@" + symbol.Replace(Shard.Separator,string.Empty), typeof(BitmapImage), null, CultureInfo.InvariantCulture);
+                BitmapImage source = (BitmapImage)_conv.Convert(Shard.DisplayPrefix + symbol.Replace(Shard.Separator,string.Empty), typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
                     int lastCharPos = endOfString ? end : end + Shard.Suffix.Length;

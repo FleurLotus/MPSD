@@ -8,8 +8,6 @@ namespace MagicPictureSetDownloader.ScryFall
         {
             return s.SetType switch
             {
-                SetType.Token => true,
-                SetType.Memorabilia => true,
                 _ => false,
             };
 
