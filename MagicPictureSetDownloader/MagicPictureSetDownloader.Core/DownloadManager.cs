@@ -16,7 +16,7 @@
 
     public class DownloadManager
     {
-        private readonly WebAccess _webAccess = new WebAccess();
+        private readonly WebAccess _webAccess = new WebAccess(TimeSpan.FromMinutes(5));
         private readonly Lazy<IMagicDatabaseReadAndWriteReference> _lazy = new Lazy<IMagicDatabaseReadAndWriteReference>(() => MagicDatabaseManager.ReadAndWriteReference);
 
         private IMagicDatabaseReadAndWriteReference MagicDatabase
@@ -173,6 +173,10 @@
 
             string url = cardWithExtraInfo.CardFaceWithExtraInfos[0].PictureUrl;
             string url2 = cardWithExtraInfo.CardFaceWithExtraInfos.Count > 1 ? cardWithExtraInfo.CardFaceWithExtraInfos[1].PictureUrl : null;
+            if (url2 == url)
+            {
+                url2 = null;
+            }
 
             MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, url, url2);
 

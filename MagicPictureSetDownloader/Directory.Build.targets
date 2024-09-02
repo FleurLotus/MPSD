@@ -5,7 +5,7 @@
     <PackageReference Update="Common.Drawing" Version="7.2.0" />
     <PackageReference Update="Common.SQLite" Version="7.2.0" />
     <PackageReference Update="Common.ViewModel" Version="7.2.0" />
-    <PackageReference Update="Common.Web" Version="7.2.0" />
+    <PackageReference Update="Common.Web" Version="7.2.1" />
     <PackageReference Update="Common.WPF" Version="7.2.1" />
     <PackageReference Update="Common.XML" Version="7.2.0" />
     <PackageReference Update="Common.Zip" Version="7.2.0" />

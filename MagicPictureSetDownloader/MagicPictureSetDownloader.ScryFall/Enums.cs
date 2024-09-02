@@ -118,6 +118,8 @@
         Textless,
         [EnumMember(Value = "spree")]
         Spree,
+        [EnumMember(Value = "borderless")]
+        Borderless,
     }
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Finish

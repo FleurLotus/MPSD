@@ -44,13 +44,17 @@
         {
             try
             {
+                DownloadReporter.Total = 2;
                 DownloadManager.GetAndSaveEditions();
-
+                DownloadReporter.Progress();
                 Card[] cards = DownloadManager.GetCards();
+                DownloadReporter.Progress();
+
                 _scryFallCardTransformer = new ScryFallCardTransformer(DownloadManager, DownloadReporter);
                 _scryFallCardTransformer.Finished += ScryFallCardTransformerFinished;
                 _scryFallCardTransformer.Error += ScryFallCardTransformerError;
 
+                DownloadReporter.Reset();
                 CountDown = cards.Length;
                 DownloadReporter.Total = cards.Length;
                 _scryFallCardTransformer.AddRange(cards);

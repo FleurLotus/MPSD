@@ -18,10 +18,12 @@
         private ICredentials _credentials;
         private readonly IDictionary<string, string> _htmlCache;
         private readonly object _lock = new object();
+        private readonly TimeSpan? _timeout;
 
-        public WebAccess()
+        public WebAccess(TimeSpan? timeOut = null)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            _timeout = timeOut;
             _httpClient = GetHttpClient();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
             _htmlCache = new Dictionary<string, string>();
@@ -147,11 +149,22 @@
 
         private HttpClient NewHttpClient()
         {
+            HttpClient client;
+
             if (_credentials == null)
             {
-                return new HttpClient(new HttpClientHandler { UseDefaultCredentials = true });
+                client = new HttpClient(new HttpClientHandler { UseDefaultCredentials = true });
             }
-            return new HttpClient(new HttpClientHandler { Credentials = _credentials });
+            else
+            {
+                client = new HttpClient(new HttpClientHandler { Credentials = _credentials });
+            }
+            if (_timeout.HasValue)
+            {
+                client.Timeout = _timeout.Value;
+            }
+
+            return client;
         }
 
         public string GetHtml(string url, bool forceRefresh = false)
