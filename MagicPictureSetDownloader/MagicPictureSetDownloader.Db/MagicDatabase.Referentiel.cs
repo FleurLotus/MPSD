@@ -86,7 +86,7 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type, string url)
+        public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -111,7 +111,6 @@ namespace MagicPictureSetDownloader.Db
                             Loyalty = loyalty,
                             Defense = defense,
                             Type = type,
-                            Url = url,
                             IdCard = idCard,
                             IsMainFace = isMainFace
                         };
@@ -170,7 +169,7 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity)
+        public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2)
         {
             using (new WriterLock(_lock))
             {
@@ -194,6 +193,8 @@ namespace MagicPictureSetDownloader.Db
                     IdScryFall = idScryFall,
                     IdEdition = idEdition,
                     IdRarity = idRarity,
+                    Url = url,
+                    Url2 = url2,
                 };
 
                 AddToDbAndUpdateReferential(cardEdition, InsertInReferential);

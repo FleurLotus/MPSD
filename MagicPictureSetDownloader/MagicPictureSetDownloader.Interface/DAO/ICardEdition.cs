@@ -8,6 +8,8 @@
         int IdCard { get; }
         int IdRarity { get; }
         string IdScryFall { get; }
+        string Url { get; }
+        string Url2 { get; }
 
         IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId { get; }
     }

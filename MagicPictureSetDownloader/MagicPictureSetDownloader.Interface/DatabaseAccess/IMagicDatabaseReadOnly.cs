@@ -42,6 +42,7 @@
         IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName);
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
         IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls();
+        string GetVersoExtension();
         IDisposable BatchMode();
     }
 }

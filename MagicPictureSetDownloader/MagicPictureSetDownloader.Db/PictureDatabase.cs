@@ -91,7 +91,7 @@
             return picture;
         }
 
-        public IEnumerable<int> GetAllPictureIds()
+        public IEnumerable<string> GetAllPicturesGuid()
         {
             if (!Directory.Exists(_cardPath))
             {
@@ -100,12 +100,7 @@
 
             foreach (string file in Directory.GetFiles(_cardPath, "*.*", SearchOption.AllDirectories))
             {
-                string name = Path.GetFileNameWithoutExtension(file);
-
-                if (int.TryParse(name, out int id))
-                {
-                    yield return id;
-                }
+                yield return Path.GetFileNameWithoutExtension(file);
             }
         }
 

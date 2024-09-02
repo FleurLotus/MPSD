@@ -22,7 +22,10 @@
         public int IdRarity { get; set; }
         [DbColumn]
         public string IdScryFall { get; set; }
-
+        [DbColumn]
+        public string Url { get; set; }
+        [DbColumn]
+        public string Url2 { get; set; }
 
         public IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId
         {

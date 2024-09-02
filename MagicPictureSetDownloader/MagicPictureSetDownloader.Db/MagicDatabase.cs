@@ -398,15 +398,16 @@ namespace MagicPictureSetDownloader.Db
         }
         public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
         {
-            HashSet<int> idGatherers = new HashSet<int>(_pictureDatabase.GetAllPictureIds());
+            HashSet<string> scryFallIds = new HashSet<string>(_pictureDatabase.GetAllPicturesGuid());
 
-            /* ALERT: TO REVIEW GetMissingPictureUrls
-            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !idGatherers.Contains(ce.IdScryFall))
-                                        .Select(ce => new KeyValuePair<string, object>(ce.Url, ce.IdGatherer))
-                          .Union(AllCardEditionVariations().Where(cev => !string.IsNullOrWhiteSpace(cev.Url) && !idGatherers.Contains(cev.OtherIdGatherer))
-                                        .Select(cev => new KeyValuePair<string, object>(cev.Url, cev.OtherIdGatherer))).ToList();
-            */
-            return Array.Empty<KeyValuePair<string, object>>();
+            return AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url) && !scryFallIds.Contains(ce.IdScryFall))
+                                        .Select(ce => new KeyValuePair<string, object>(ce.Url, ce.IdScryFall))
+                .Union(AllCardEditions().Where(ce => !string.IsNullOrWhiteSpace(ce.Url2) && !scryFallIds.Contains(ce.IdScryFall + GetVersoExtension()))
+                                        .Select(ce => new KeyValuePair<string, object>(ce.Url2, ce.IdScryFall + GetVersoExtension()))).ToList();
+        }
+        public string GetVersoExtension()
+        {
+            return "-2";
         }
     }
 }

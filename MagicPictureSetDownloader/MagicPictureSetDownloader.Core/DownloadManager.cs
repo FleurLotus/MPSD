@@ -168,9 +168,13 @@
             foreach (CardFaceWithExtraInfo cardFaceWithExtraInfo in cardWithExtraInfo.CardFaceWithExtraInfos)
             {
                 MagicDatabase.InsertNewCardFace(card.Id, cardFaceWithExtraInfo.IsMainFace, cardFaceWithExtraInfo.Name, cardFaceWithExtraInfo.Text, cardFaceWithExtraInfo.Power, cardFaceWithExtraInfo.Toughness,
-                                                cardFaceWithExtraInfo.CastingCost, cardFaceWithExtraInfo.Loyalty, cardFaceWithExtraInfo.Defense, cardFaceWithExtraInfo.Type, cardFaceWithExtraInfo.PictureUrl);
+                                                cardFaceWithExtraInfo.CastingCost, cardFaceWithExtraInfo.Loyalty, cardFaceWithExtraInfo.Defense, cardFaceWithExtraInfo.Type);
             }
-            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity);
+
+            string url = cardWithExtraInfo.CardFaceWithExtraInfos[0].PictureUrl;
+            string url2 = cardWithExtraInfo.CardFaceWithExtraInfos.Count > 1 ? cardWithExtraInfo.CardFaceWithExtraInfos[1].PictureUrl : null;
+
+            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, url, url2);
 
             foreach ((CardIdSource source, string id) kv in cardWithExtraInfo.ExternalId)
             {

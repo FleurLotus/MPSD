@@ -24,6 +24,10 @@ namespace MagicPictureSetDownloader.Converter
             {
                 idScryFall = card.IdScryFall;
             }
+            else if (card.OtherCardPart != null) 
+            {
+                idScryFall = card.IdScryFall + MagicDatabase.GetVersoExtension();
+            }
 
             if (string.IsNullOrEmpty(idScryFall))
             {

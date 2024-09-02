@@ -26,8 +26,6 @@
         [DbColumn]
         public string Type { get; set; }
         [DbColumn]
-        public string Url { get; set; }
-        [DbColumn]
         public int IdCard { get; set; }
         [DbColumn]
         public bool IsMainFace { get; set; }

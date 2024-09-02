@@ -9,7 +9,6 @@
         string Loyalty { get; }
         string Defense { get; }
         string Type { get; }
-        string Url { get; }
         int IdCard { get; }
         bool IsMainFace { get; }
     }
