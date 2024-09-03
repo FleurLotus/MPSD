@@ -21,20 +21,19 @@
         {
             return card.OtherCardFace != null;
         }
-
+        // Up/Down
         public bool IsDownSide(ICard card)
         {
             return card.Layout == Layout.Flip.ToString();
         }
 
-        //Multiple part on the same side (it is not the case of Up/Down)
         private bool IsSplitted(ICard card)
         {
             return card.Layout == Layout.Split.ToString(); 
         }
 
         //Aftermath
-        public bool Is90DegreeSide(ICard card)
+        public bool Is90DegreeBackSide(ICard card)
         {
             return IsSplitted(card) && card.OtherCardFace != null && card.OtherCardFace.Text.StartsWith("Aftermath");
         }
@@ -42,7 +41,7 @@
         //Battle
         public bool Is90DegreeFrontSide(ICard card)
         {
-            return HasMultiPart(card) && MagicRules.IsBattle(card.MainCardFace.Type);
+            return (HasMultiPart(card) && MagicRules.IsBattle(card.MainCardFace.Type)) || (IsSplitted(card) && !Is90DegreeBackSide(card));
         }
 
         public bool IsSpecial(ICard card)

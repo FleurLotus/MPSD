@@ -39,6 +39,11 @@ namespace MagicPictureSetDownloader.Converter
                 return BytesToImage(bytes, idScryFall);
             }
 
+            if (int.Parse(parameter.ToString()) != 0)
+            {
+                return null;
+            }
+
             return GetDefaultCardImage();
         }
     }

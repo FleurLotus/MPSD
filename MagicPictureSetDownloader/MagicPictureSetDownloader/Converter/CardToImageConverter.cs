@@ -4,7 +4,6 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
-
     using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
@@ -19,22 +18,29 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            string idScryFall = null;
             if (param == 0)
             {
-                idScryFall = card.IdScryFall;
-            }
-            else if (card.OtherCardPart != null) 
-            {
-                idScryFall = card.IdScryFall + MagicDatabase.GetVersoExtension();
+                return base.Convert(card.IdScryFall, targetType, parameter, culture);
             }
 
-            if (string.IsNullOrEmpty(idScryFall))
+            if (card.OtherCardPart == null)
             {
                 return null;
             }
 
-            return base.Convert(idScryFall, targetType, parameter, culture); 
+            object o = base.Convert(card.IdScryFall + MagicDatabase.GetVersoExtension(), targetType, parameter, culture);
+
+            if (o != null)
+            {
+                return o;
+            }
+
+            if (card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide)
+            {
+                return base.Convert(card.IdScryFall, targetType, parameter, culture);
+            }
+
+            return null;
         }
     }
 }

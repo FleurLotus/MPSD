@@ -3,14 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Windows.Documents;
-    using System.Windows.Markup;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
     using MagicPictureSetDownloader.Interface;
-    using static System.Net.Mime.MediaTypeNames;
 
     public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
@@ -29,7 +26,7 @@
             Rarity = cardAllDbInfo.Rarity;
             IdScryFall = cardAllDbInfo.IdScryFall;
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
-            Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card) || MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
+            Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
             if (!string.IsNullOrWhiteSpace(_currentFace.Power) && !string.IsNullOrWhiteSpace(_currentFace.Toughness))
             {
                 PowerToughnessLoyaltyDefense = string.Format("{0}/{1}", _currentFace.Power, _currentFace.Toughness);
@@ -85,6 +82,7 @@
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
+                OtherCardPart.Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeBackSide(Card);
                 if (MultiPartCardManager.Instance.IsDownSide(cardAllDbInfo.Card))
                 {
                     OtherCardPart.IsDownSide = true;
@@ -126,7 +124,7 @@
             return Card.ToString(languageId);
         }
         public bool IsMultiPart { get; }
-        public bool Is90DegreeSide { get; }
+        public bool Is90DegreeSide { get; private set; }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; }
         public StatisticViewModel[] Statistics { get; }

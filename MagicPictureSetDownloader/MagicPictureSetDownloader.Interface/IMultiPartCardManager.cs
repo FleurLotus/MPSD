@@ -4,7 +4,7 @@
     {
         bool HasMultiPart(ICard card);
         bool IsDownSide(ICard card);
-        bool Is90DegreeSide(ICard card);
+        bool Is90DegreeBackSide(ICard card);
         bool Is90DegreeFrontSide(ICard card);
         bool IsSpecial(ICard card);
         ShardColor GetColor(ICard card);
