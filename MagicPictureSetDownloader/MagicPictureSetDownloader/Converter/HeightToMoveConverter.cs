@@ -11,17 +11,29 @@ namespace MagicPictureSetDownloader.Converter
     {
         public override object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value.Length != 3 || value[0] is not HierarchicalResultNodeViewModel node)
+            if (value == null || value.Length != 3)
             {
                 return 0.0;
             }
+
+            CardViewModel card = value[0] as CardViewModel;
+            if (card == null && value[0] is HierarchicalResultNodeViewModel node)
+            {
+                card = node.Card;
+            }
+
+            if (card == null)
+            {
+                return 0.0;
+            }
+
 
             int param = int.Parse(parameter.ToString());
             int coef = 1;
 
             if (param == 0)
             {
-                if (!node.Card.Is90DegreeSide)
+                if (!card.Is90DegreeSide)
                 {
                     return 0.0;
                 }
@@ -29,7 +41,7 @@ namespace MagicPictureSetDownloader.Converter
             }
             else if (param == 1)
             {
-                if (node.Card.OtherCardPart == null || !node.Card.OtherCardPart.Is90DegreeSide)
+                if (card.OtherCardPart == null || !card.OtherCardPart.Is90DegreeSide)
                 {
                     return 0.0;
                 }

@@ -138,6 +138,9 @@
                 <TabItem Header="Picture" fl:TabItemExtensions.Visibility="{Binding Options.ShowPicture, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource ImageControlTemplate}" Margin="10" HorizontalAlignment="Center" />
                 </TabItem>
+                <TabItem Header="Others" fl:TabItemExtensions.Visibility="{Binding Options.ShowVariationPicture, Converter={fl:BoolToVisibilityConverter}}">
+                    <Control Template="{StaticResource VariationImageControlTemplate}" Margin="10" />
+                </TabItem>
                 <TabItem Header="Price" fl:TabItemExtensions.Visibility="{Binding Options.ShowPrices, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource PricesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
@@ -147,7 +150,6 @@
                 <TabItem Header="Languages" fl:TabItemExtensions.Visibility="{Binding Options.ShowOtherLanguages, Converter={fl:BoolToVisibilityConverter}}">
                     <Control Template="{StaticResource OtherLanguagesControlTemplate}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
                 </TabItem>
-                <!-- ALERT AllCard to display all the other cases -->
             </TabControl>
 
         </Grid>
