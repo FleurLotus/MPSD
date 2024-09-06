@@ -52,13 +52,14 @@
         }
         internal static FullCard[] GetCardsInfoFromBulk(WebAccess webAccess, BulkData bulkData)
         {
-            string filePath = Path.Combine(Path.GetTempPath(), $"{DefaultCard}.json");
+            string fileName = Path.GetFileName(bulkData.DownloadUri);
 
-            if (File.Exists(filePath))
+            string filePath = Path.Combine(Path.GetTempPath(), fileName);
+
+            if (!File.Exists(filePath))
             {
-                File.Delete(filePath);
+                webAccess.DownloadFile(bulkData.DownloadUri, filePath);
             }
-            webAccess.DownloadFile(bulkData.DownloadUri, filePath);
 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {

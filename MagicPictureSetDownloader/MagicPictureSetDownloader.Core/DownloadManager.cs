@@ -185,9 +185,9 @@
                 MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, kv.source, kv.id);
             }
 
-            if (cardWithExtraInfo.Language != null && cardWithExtraInfo.Language != Language.English.ToString() && !string.IsNullOrEmpty(cardWithExtraInfo.PrintedName))
+            if (cardWithExtraInfo.Language != null)
             {
-                MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrintedName);
+                MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrintedName ?? cardWithExtraInfo.Name);
             }
         }
     }

@@ -315,9 +315,9 @@
         [EnumMember(Value = "ru")]
         Russian,
         [EnumMember(Value = "zhs")]
-        SimplifiedChinese,
+        ChineseSimplified,
         [EnumMember(Value = "zht")]
-        TraditionalChinese,
+        ChineseTraditional,
         [EnumMember(Value = "he")]
         Hebrew,
         [EnumMember(Value = "la")]
