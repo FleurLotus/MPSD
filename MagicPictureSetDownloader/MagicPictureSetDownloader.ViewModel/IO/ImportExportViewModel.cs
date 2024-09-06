@@ -34,8 +34,8 @@
         public ImportExportViewModel(IDispatcherInvoker dispatcherInvoker)
         {
             _dispatcherInvoker = dispatcherInvoker;
-            ExportFormats = (ExportFormat[])Enum.GetValues(typeof(ExportFormat));
-            ExportFormatSelected = ExportFormat.MPSD;
+            ExportFormats = new[] { ExportFormat.MPSD2 };
+            ExportFormatSelected = ExportFormat.MPSD2;
             IMagicDatabaseReadOnly magicDatabase = MagicDatabaseManager.ReadOnly;
             ExportCollections = magicDatabase.GetAllCollections().Select(cc => new ExportedCollectionViewModel(cc.Name)).ToList();
             ImportCollections = magicDatabase.GetAllCollections().Select(cc => cc.Name).ToList();

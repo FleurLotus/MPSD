@@ -33,6 +33,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
 
         private readonly IDictionary<string, ICardEdition> _cardEditions = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly IDictionary<string, ICardEdition> _cardEditionsByExternalId = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<TypeOfOption, IList<IOption>> _allOptions = new Dictionary<TypeOfOption, IList<IOption>>();
 
         public void InsertNewEdition(string sourceName, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate, byte[] icon)
@@ -423,6 +424,7 @@ namespace MagicPictureSetDownloader.Db
                 _cardFaces.Clear();
                 _cardsWithoutSpecialCharacters.Clear();
                 _cardEditions.Clear();
+                _cardEditionsByExternalId.Clear();
                 _collections.Clear();
                 _allCardInCollectionCount.Clear();
                 _preconstructedDecks.Clear();
@@ -574,7 +576,7 @@ namespace MagicPictureSetDownloader.Db
             }
 
             cardEdition.AddExternalId(externalId);
-
+            _cardEditionsByExternalId[$"{externalId.CardIdSource}{externalId.ExternalId}"] = cardEdition;
             _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(Price price)

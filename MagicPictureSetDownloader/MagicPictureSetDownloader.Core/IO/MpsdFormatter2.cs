@@ -6,12 +6,12 @@
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Db;
 
-    internal class MpsdFormatter : FormatterBase
+    internal class MpsdFormatter2 : FormatterBase
     {
-        private readonly Regex _regLine = new Regex(@"^(?<IdGatherer>\d+)#(?<Count>\d+)#(?<FoilCount>\d+)(#(?<AltArtCount>\d+)#(?<FoilAltArtCount>\d+))?#(?<Language>\d+)?$", RegexOptions.Compiled);
+        private readonly Regex _regLine = new Regex(@"^(?<IdScryFall>[0-9a-f\-]+)#(?<Count>\d+)#(?<FoilCount>\d+)(#(?<AltArtCount>\d+)#(?<FoilAltArtCount>\d+))?#(?<Language>\d+)?$", RegexOptions.Compiled);
 
-        public MpsdFormatter()
-            : base(ExportFormat.MPSD, ".mpsd")
+        public MpsdFormatter2()
+            : base(ExportFormat.MPSD2, ".mpsd2")
         {
         }
 
@@ -22,14 +22,10 @@
             {
                 return new ErrorImportExportCardInfo(line, "Can't parse line");
             }
-            if (!int.TryParse(m.Groups["IdGatherer"].Value, out int idGatherer))
+            string idScryFall = m.Groups["IdScryFall"].Value;
+            if (MagicDatabase.GetCardByIdScryFall(idScryFall) == null)
             {
-                return new ErrorImportExportCardInfo(line, "Invalid IdGatherer");
-            }
-            ICardEdition cardEdition = MagicDatabase.GetCardEditionByExternalId(CardIdSource.Multiverse, idGatherer.ToString());
-            if (cardEdition == null)
-            {
-                return new ErrorImportExportCardInfo(line, "Unknown gathererid");
+                return new ErrorImportExportCardInfo(line, "Invalid IdScryFall");
             }
             if (!int.TryParse(m.Groups["Count"].Value, out int count) || count < 0)
             {
@@ -57,11 +53,10 @@
                     return new ErrorImportExportCardInfo(line, "Invalid FoilAltArtCount");
                 }
             }
-            if (!int.TryParse(m.Groups["Language"].Value, out int idLanguage) || MagicDatabase.GetLanguages(cardEdition.IdScryFall).All(l => l.Id != idLanguage))
+            if (!int.TryParse(m.Groups["Language"].Value, out int idLanguage) || MagicDatabase.GetLanguages(idScryFall).All(l => l.Id != idLanguage))
             {
                 return new ErrorImportExportCardInfo(line, "Invalid idLanguage");
             }
-
 
             CardCount cardCount = new CardCount
             {
@@ -71,7 +66,7 @@
                 { CardCountKeys.FoilAltArt, foilAltArtCount }
             };
 
-            return new ImportExportCardInfo(cardEdition.IdScryFall, cardCount, idLanguage);
+            return new ImportExportCardInfo(idScryFall, cardCount, idLanguage);
         }
         protected override string ToLine(IImportExportCardCount cardCount)
         {

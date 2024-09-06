@@ -120,6 +120,17 @@ namespace MagicPictureSetDownloader.Db
                 return _cardsbyId.GetOrDefault(cardEdition.IdCard);
             }
         }
+        public ICardEdition GetCardEditionByExternalId(CardIdSource cardSource, string id)
+        {
+            using (new ReaderLock(_lock))
+            {
+                if (_cardEditionsByExternalId.TryGetValue($"{cardSource}{id}", out ICardEdition cardEdition))
+                {
+                    return cardEdition;
+                }
+                return null;
+            }
+        }
         public ILanguage GetLanguage(int idLanguage)
         {
             CheckReferentialLoaded();

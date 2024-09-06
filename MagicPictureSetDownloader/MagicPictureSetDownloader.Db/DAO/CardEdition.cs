@@ -37,7 +37,7 @@
 
         internal void AddExternalId(ExternalIds externalId)
         {
-            if (externalId == null || externalId.IdScryFall != IdScryFall || Enum.TryParse(externalId.CardIdSource, out CardIdSource cardIdSource))
+            if (externalId == null || externalId.IdScryFall != IdScryFall || !Enum.TryParse(externalId.CardIdSource, out CardIdSource cardIdSource))
             {
                 return;
             }
