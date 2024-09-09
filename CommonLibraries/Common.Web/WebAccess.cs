@@ -194,7 +194,7 @@
 
         private async Task DownloadFileInternalAsync(string url, string outfilepath)
         {
-            HttpResponseMessage response = await GetHttpClient().GetAsync(url);
+            HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             using (FileStream fs = new FileStream(outfilepath, FileMode.CreateNew))
             {
                 await response.Content.CopyToAsync(fs);

@@ -78,5 +78,17 @@
             bulkData = info[0].Value;
             return GetCardsInfoFromBulk(webAccess, bulkData).Select(fc => fc.ToCard()).ToArray();
         }
+        public static Card[] GetAllCardsInfo(WebAccess webAccess, out BulkData bulkData)
+        {
+            bulkData = null;
+            IReadOnlyList<KeyValuePair<string, BulkData>> info = GetAllCardUrls(webAccess);
+            if (info == null || info.Count < 1)
+            {
+                return Array.Empty<Card>();
+            }
+
+            bulkData = info[0].Value;
+            return GetCardsInfoFromBulk(webAccess, bulkData).Select(fc => fc.ToCard()).ToArray();
+        }
     }
 }

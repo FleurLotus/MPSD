@@ -68,6 +68,10 @@
         {
             return ScryFallDataRetriever.GetCardsInfo(_webAccess, out _).Where(c => !Tranformation.CardToIgnore(c)).ToArray();
         }
+        public Card[] GetAllCards()
+        {
+            return ScryFallDataRetriever.GetAllCardsInfo(_webAccess, out _).Where(c => !Tranformation.CardToIgnore(c)).ToArray();
+        }
 
         public string InsertPictureInDb(string pictureUrl, object param)
         {
@@ -185,7 +189,13 @@
                 MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, kv.source, kv.id);
             }
 
-            if (cardWithExtraInfo.Language != null)
+            InsertLanguageInDb(cardWithExtraInfo);
+        }
+        internal void InsertLanguageInDb(CardWithExtraInfo cardWithExtraInfo)
+        {
+            ICard card = MagicDatabase.GetCard(cardWithExtraInfo.Name);
+
+            if (cardWithExtraInfo.Language != null && card != null)
             {
                 MagicDatabase.InsertNewTranslate(card.Id, cardWithExtraInfo.Language, cardWithExtraInfo.PrintedName ?? cardWithExtraInfo.Name);
             }

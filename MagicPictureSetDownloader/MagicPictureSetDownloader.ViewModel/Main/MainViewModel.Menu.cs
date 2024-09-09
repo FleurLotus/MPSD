@@ -102,6 +102,11 @@
             OnUpdateDatabaseRequested(new DownloadViewModel());
             LoadCardsHierarchy();
         }
+        private void UpdateLanguageDatabaseCommandExecute(object o)
+        {
+            OnUpdateDatabaseRequested(new DownloadLanguageViewModel());
+            LoadCardsHierarchy();
+        }
         private void UpdateImageDatabaseCommandExecute(object o)
         {
             OnAutoUpdateDatabaseRequested(new AutoDownloadImageViewModel());
@@ -401,6 +406,7 @@
             //File
             MenuViewModel fileMenu = new MenuViewModel("_File");
             fileMenu.AddChild(new MenuViewModel("Update _Editions/Cards Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Cards Language Database...", new RelayCommand(UpdateLanguageDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             //Not Allowed in release version, the update is done by copy of referential
 #if DEBUG

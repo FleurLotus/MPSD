@@ -36,6 +36,43 @@
             }
         }
 
+        public void StartLanguage()
+        {
+            _inputs.CompleteAdding();
+            foreach (Card card in _inputs.GetConsumingEnumerable())
+            {
+                try
+                {
+                    if (_isStopping)
+                    {
+                        return;
+                    }
+
+                    CardWithExtraInfo c = new CardWithExtraInfo
+                    {
+                        Name = card.Name,
+                        IdScryFall = card.Id.ToString(),
+                        Edition = card.Set?.ToUpper(),
+                        Layout = card.Layout.ToString(),
+                        Rarity = card.Rarity.ToString(),
+                        Language = card.Language.ToString(),
+                        PrintedName = card.PrintedName,
+                    };
+
+                    _downloadManager.InsertLanguageInDb(c);
+
+                    _progressReporter.Progress();
+                }
+                catch (Exception ex)
+                {
+                    SendError(ex, $"{card.Name}");
+                }
+            }
+
+            _progressReporter.Finish();
+            OnFinished();
+        }
+
         public void Start()
         {
             var parserTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Parse)).ToArray();
