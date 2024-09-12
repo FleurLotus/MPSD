@@ -16,13 +16,13 @@
             PropertyInfo[] publicInstanceProperties = typeof(ReflectionInfo).GetPublicInstanceProperties();
             PropertyInfo[] publicInstanceProperties2 = (new ReflectionInfo()).GetPublicInstanceProperties();
 
-            Assert.IsNotNull(publicInstanceProperties);
-            Assert.AreSame(publicInstanceProperties, publicInstanceProperties2);
+            Assert.That(publicInstanceProperties, Is.Not.Null);
+            Assert.That(publicInstanceProperties, Is.EqualTo(publicInstanceProperties2));
 
             string[] names = publicInstanceProperties.Select(pi => pi.Name).ToArray();
 
-            Assert.IsTrue(names.Length == 11, "Not the could number of property found");
-            Assert.IsTrue(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), "Must find only member public");
+            Assert.That(names.Length == 11, "Not the could number of property found");
+            Assert.That(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), "Must find only member public");
         }
     
         // ReSharper disable UnusedMember.Local

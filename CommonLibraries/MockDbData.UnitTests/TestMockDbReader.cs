@@ -100,20 +100,20 @@ namespace MockDbData.UnitTests
             DataTable dataTable = new DataTable();
             MockDbResult mockDbResult = new MockDbResult(dataTable);
             dataReader = new MockDbDataReader(mockDbResult);
-            Assert.AreEqual(dataTable.Columns.Count, dataReader.FieldCount);
+            Assert.That(dataReader.FieldCount, Is.EqualTo(dataTable.Columns.Count));
 
             dataTable.Columns.Add("Col1", typeof(string));
             dataReader = new MockDbDataReader(mockDbResult);
-            Assert.AreEqual(dataTable.Columns.Count, dataReader.FieldCount);
+            Assert.That(dataReader.FieldCount, Is.EqualTo(dataTable.Columns.Count));
 
             dataTable.Columns.Add("Col2", typeof(string));
             dataReader = new MockDbDataReader(mockDbResult);
-            Assert.AreEqual(dataTable.Columns.Count, dataReader.FieldCount);
+            Assert.That(dataReader.FieldCount, Is.EqualTo(dataTable.Columns.Count));
 
             dataTable.Columns.Add("Col3", typeof(string));
             dataTable.Columns.Add("Col4", typeof(string));
             dataReader = new MockDbDataReader(mockDbResult);
-            Assert.AreEqual(dataTable.Columns.Count, dataReader.FieldCount);
+            Assert.That(dataReader.FieldCount, Is.EqualTo(dataTable.Columns.Count));
         }
         [Test]
         public void TestGetOrdinal()
@@ -123,9 +123,9 @@ namespace MockDbData.UnitTests
             MockDbDataReader dataReader = new MockDbDataReader(mockDbResult);
             for (int col = 0; col < dataTable.Columns.Count; col++)
             {
-                Assert.AreEqual(col, dataReader.GetOrdinal(dataTable.Columns[col].ColumnName), $"Not the expected value for column {col}");
+                Assert.That(dataReader.GetOrdinal(dataTable.Columns[col].ColumnName), Is.EqualTo(col), $"Not the expected value for column {col}");
             }
-            Assert.AreEqual(-1, dataReader.GetOrdinal("Col5"));
+            Assert.That(dataReader.GetOrdinal("Col5"), Is.EqualTo(-1));
         }
         [Test]
         public void TestGetDataTypeName()
@@ -135,7 +135,7 @@ namespace MockDbData.UnitTests
             MockDbDataReader dataReader = new MockDbDataReader(mockDbResult);
             for (int col = 0; col < dataTable.Columns.Count; col++)
             {
-                Assert.AreEqual(dataTable.Columns[col].DataType.ToString(), dataReader.GetDataTypeName(col), $"Not the expected value for column {col}");
+                Assert.That(dataReader.GetDataTypeName(col), Is.EqualTo(dataTable.Columns[col].DataType.ToString()), $"Not the expected value for column {col}");
             }
         }
         [Test]
@@ -146,7 +146,7 @@ namespace MockDbData.UnitTests
             MockDbDataReader dataReader = new MockDbDataReader(mockDbResult);
             for (int col = 0; col < dataTable.Columns.Count; col++)
             {
-                Assert.AreEqual(dataTable.Columns[col].DataType, dataReader.GetFieldType(col), $"Not the expected value for column {col}");
+                Assert.That(dataReader.GetFieldType(col), Is.EqualTo(dataTable.Columns[col].DataType), $"Not the expected value for column {col}");
             }
         }
         [Test]
@@ -157,7 +157,7 @@ namespace MockDbData.UnitTests
             MockDbDataReader dataReader = new MockDbDataReader(mockDbResult);
             for (int col = 0; col < dataTable.Columns.Count; col++)
             {
-                Assert.AreEqual(dataTable.Columns[col].ColumnName, dataReader.GetName(col), $"Not the expected value for column {col}");
+                Assert.That(dataReader.GetName(col), Is.EqualTo(dataTable.Columns[col].ColumnName), $"Not the expected value for column {col}");
             }
         }
         [Test]
@@ -170,19 +170,19 @@ namespace MockDbData.UnitTests
             {
                 Assert.That(dataReader.Read(), Is.True, $"Should be True for Rows {row}");
                 int col = -1;
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetBoolean(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetByte(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetChar(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetDateTime(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetDecimal(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetDouble(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetFloat(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetGuid(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetInt16(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetInt32(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetInt64(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetString(col), $"Not the expected value for row {row} column {col}");
-                Assert.AreEqual(dataTable.Rows[row][++col], dataReader.GetValue(col), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetBoolean(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetByte(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetChar(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetDateTime(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetDecimal(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetDouble(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetFloat(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetGuid(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetInt16(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetInt32(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetInt64(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetString(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
+                Assert.That(dataReader.GetValue(++col), Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
             }
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward");
         }
@@ -196,8 +196,8 @@ namespace MockDbData.UnitTests
             {
                 Assert.That(dataReader.Read(), Is.True, $"Should be True for Rows {row}");
                 object[] data = new object[dataTable.Columns.Count];
-                Assert.AreEqual(data.Length, dataReader.GetValues(data), $"Not the expected number of value read for row {row}");
-                CollectionAssert.AreEqual(dataTable.Rows[row].ItemArray, data, $"Not the expected value for row {row}");
+                Assert.That(dataReader.GetValues(data), Is.EqualTo(data.Length), $"Not the expected number of value read for row {row}");
+                Assert.That(data, Is.EqualTo(dataTable.Rows[row].ItemArray), $"Not the expected value for row {row}");
             }
 
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward");
@@ -216,21 +216,21 @@ namespace MockDbData.UnitTests
             Assert.That(dataReader.Read(), Is.True, $"Should be True");
             byte[] data = new byte[40];
             int offset = 0;
-            Assert.AreEqual(source.Length, dataReader.GetBytes(1, 0, data, offset, source.Length), "Not the expected number of value read for full");
-            CollectionAssert.AreEqual(source, data.Take(source.Length));
+            Assert.That(dataReader.GetBytes(1, 0, data, offset, source.Length), Is.EqualTo(source.Length), "Not the expected number of value read for full");
+            Assert.That(data.Take(source.Length), Is.EqualTo(source));
 
             offset = 10;
-            Assert.AreEqual(source.Length, dataReader.GetBytes(1, 0, data, offset, source.Length), "Not the expected number of value read for offset");
-            CollectionAssert.AreEqual(source, data.Skip(offset).Take(source.Length));
+            Assert.That(dataReader.GetBytes(1, 0, data, offset, source.Length), Is.EqualTo(source.Length), "Not the expected number of value read for offset");
+            Assert.That(data.Skip(offset).Take(source.Length), Is.EqualTo(source));
             offset = 20;
             int subreadlength = 2;
-            Assert.AreEqual(subreadlength, dataReader.GetBytes(1, 0, data, offset, subreadlength), "Not the expected number of value read for length");
-            CollectionAssert.AreEqual(source.Take(subreadlength).Concat(new byte[source.Length - subreadlength]), data.Skip(offset).Take(source.Length));
+            Assert.That(dataReader.GetBytes(1, 0, data, offset, subreadlength), Is.EqualTo(subreadlength), "Not the expected number of value read for length");
+            Assert.That(data.Skip(offset).Take(source.Length), Is.EqualTo(source.Take(subreadlength).Concat(new byte[source.Length - subreadlength])));
 
             offset = 30;
             int sourceoffset = 1;
-            Assert.AreEqual(source.Length - sourceoffset, dataReader.GetBytes(1, sourceoffset, data, offset, source.Length - sourceoffset), "Not the expected number of value read for dataoffset");
-            CollectionAssert.AreEqual(source.Skip(sourceoffset), data.Skip(offset).Take(source.Length - sourceoffset));
+            Assert.That(dataReader.GetBytes(1, sourceoffset, data, offset, source.Length - sourceoffset), Is.EqualTo(source.Length - sourceoffset), "Not the expected number of value read for dataoffset");
+            Assert.That(data.Skip(offset).Take(source.Length - sourceoffset), Is.EqualTo(source.Skip(sourceoffset)));
         }
 
         [Test]
@@ -250,22 +250,22 @@ namespace MockDbData.UnitTests
             char[] data = new char[40];
 
             int offset = 0;
-            Assert.AreEqual(source.Length, dataReader.GetChars(1, 0, data, offset, source.Length), "Not the expected number of value read for full");
-            CollectionAssert.AreEqual(source, data.Take(source.Length));
+            Assert.That(dataReader.GetChars(1, 0, data, offset, source.Length), Is.EqualTo(source.Length), "Not the expected number of value read for full");
+            Assert.That(data.Take(source.Length), Is.EqualTo(source));
 
             offset = 10;
-            Assert.AreEqual(source.Length, dataReader.GetChars(1, 0, data, offset, source.Length), "Not the expected number of value read for offset");
-            CollectionAssert.AreEqual(source, data.Skip(offset).Take(source.Length));
+            Assert.That(dataReader.GetChars(1, 0, data, offset, source.Length), Is.EqualTo(source.Length), "Not the expected number of value read for offset");
+            Assert.That(data.Skip(offset).Take(source.Length), Is.EqualTo(source));
 
             offset = 20;
             int subreadlength = 2;
-            Assert.AreEqual(subreadlength, dataReader.GetChars(1, 0, data, offset, subreadlength), "Not the expected number of value read for length");
-            CollectionAssert.AreEqual(source.Take(subreadlength).Concat(new char[source.Length - subreadlength]), data.Skip(offset).Take(source.Length));
+            Assert.That(dataReader.GetChars(1, 0, data, offset, subreadlength), Is.EqualTo(subreadlength), "Not the expected number of value read for length");
+            Assert.That(data.Skip(offset).Take(source.Length), Is.EqualTo(source.Take(subreadlength).Concat(new char[source.Length - subreadlength])));
 
             offset = 30;
             int sourceoffset = 1;
-            Assert.AreEqual(source.Length - sourceoffset, dataReader.GetChars(1, sourceoffset, data, offset, source.Length - sourceoffset), "Not the expected number of value read for dataoffset");
-            CollectionAssert.AreEqual(source.Skip(sourceoffset), data.Skip(offset).Take(source.Length - sourceoffset));
+            Assert.That(dataReader.GetChars(1, sourceoffset, data, offset, source.Length - sourceoffset), Is.EqualTo(source.Length - sourceoffset), "Not the expected number of value read for dataoffset");
+            Assert.That(data.Skip(offset).Take(source.Length - sourceoffset), Is.EqualTo(source.Skip(sourceoffset)));
         }
         [Test]
         public void TestIsNull()
@@ -281,7 +281,7 @@ namespace MockDbData.UnitTests
                 Assert.That(dataReader.Read(), Is.True, $"Should be True for Rows {row}");
                 for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
-                    Assert.AreEqual(dataTable.Rows[row].IsNull(col), dataReader.IsDBNull(col), $"Not the expected value for row {row} column {col}");
+                    Assert.That(dataReader.IsDBNull(col), Is.EqualTo(dataTable.Rows[row].IsNull(col)), $"Not the expected value for row {row} column {col}");
                 }
             }
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward");
@@ -298,7 +298,7 @@ namespace MockDbData.UnitTests
                 Assert.That(dataReader.Read(), Is.True, $"Should be True for Rows {row}");
                 for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
-                    Assert.AreEqual(dataTable.Rows[row][col], dataReader[col], $"Not the expected value for row {row} column {col}");
+                    Assert.That(dataReader[col], Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
                 }
             }
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward");
@@ -315,7 +315,7 @@ namespace MockDbData.UnitTests
                 for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
                     string name = dataTable.Columns[col].ColumnName;
-                    Assert.AreEqual(dataTable.Rows[row][name], dataReader[name], $"Not the expected value for row {row} column {col} => {name}");
+                    Assert.That(dataReader[name], Is.EqualTo(dataTable.Rows[row][name]), $"Not the expected value for row {row} column {col} => {name}");
                 }
             }
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward");
@@ -430,7 +430,7 @@ namespace MockDbData.UnitTests
                 {
 
                     Assert.That(enumerator.MoveNext(), Is.True, $"Should be True for Rows {row} column {col}");
-                    Assert.AreEqual(dataTable.Rows[row][col], enumerator.Current, $"Not the expected value for row {row} column {col}");
+                    Assert.That(enumerator.Current, Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for row {row} column {col}");
                 }
                 Assert.That(enumerator.MoveNext(), Is.False, $"Should be False for Rows {row} at the end");
             }
@@ -470,13 +470,13 @@ namespace MockDbData.UnitTests
         private static void CheckStructure(DataTable dataTable, MockDbDataReader dataReader, string name)
         {
             //Columns Count
-            Assert.AreEqual(dataTable.Columns.Count, dataReader.FieldCount, $"Not the expected value for FieldCount for table {name}");
-            Assert.AreEqual(dataTable.Rows.Count > 0, dataReader.HasRows, $"Not the expected value for HasRows for table {name}");
+            Assert.That(dataReader.FieldCount, Is.EqualTo(dataTable.Columns.Count), $"Not the expected value for FieldCount for table {name}");
+            Assert.That(dataReader.HasRows, Is.EqualTo(dataTable.Rows.Count > 0), $"Not the expected value for HasRows for table {name}");
             //Columns type/name
             for (int col = 0; col < dataTable.Columns.Count; col++)
             {
-                Assert.AreEqual(dataTable.Columns[col].DataType, dataReader.GetFieldType(col), $"Not the expected value for column Type {col} for table {name}");
-                Assert.AreEqual(dataTable.Columns[col].ColumnName, dataReader.GetName(col), $"Not the expected value for column Name {col} for table {name}");
+                Assert.That(dataReader.GetFieldType(col), Is.EqualTo(dataTable.Columns[col].DataType), $"Not the expected value for column Type {col} for table {name}");
+                Assert.That(dataReader.GetName(col), Is.EqualTo(dataTable.Columns[col].ColumnName), $"Not the expected value for column Name {col} for table {name}");
             }
             //Rows/Value
             for (int row = 0; row < dataTable.Rows.Count; row++)
@@ -484,8 +484,8 @@ namespace MockDbData.UnitTests
                 Assert.That(dataReader.Read(), Is.True, $"Should be True for Rows {row} for table {name}");
                 for (int col = 0; col < dataTable.Columns.Count; col++)
                 {
-                    Assert.AreEqual(dataTable.Rows[row].IsNull(col), dataReader.IsDBNull(col), $"Not the expected value for IsNull row {row} column {col} for table {name}");
-                    Assert.AreEqual(dataTable.Rows[row][col], dataReader[col], $"Not the expected value for Value row {row} column {col} for table {name}");
+                    Assert.That(dataReader.IsDBNull(col), Is.EqualTo(dataTable.Rows[row].IsNull(col)), $"Not the expected value for IsNull row {row} column {col} for table {name}");
+                    Assert.That(dataReader[col], Is.EqualTo(dataTable.Rows[row][col]), $"Not the expected value for Value row {row} column {col} for table {name}");
                 }
             }
             Assert.That(dataReader.Read(), Is.False, $"Should be False afterward for table {name}");

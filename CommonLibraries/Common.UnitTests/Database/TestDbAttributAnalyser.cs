@@ -35,9 +35,9 @@
         [DbTable]
         private class DbColumnIdentityNotUniqueClass
         {
-            [DbColumn (Kind = ColumnKind.Identity)]
+            [DbColumn(Kind = ColumnKind.Identity)]
             public string Col1 { get; set; }
-            [DbColumn (Kind = ColumnKind.Identity)]
+            [DbColumn(Kind = ColumnKind.Identity)]
             public string Col2 { get; set; }
         }
 
@@ -76,47 +76,47 @@
         public void TestAnalyse1()
         {
             TypeDbInfo typeDbInfo = DbAttributAnalyser.Analyse(typeof(DbClass1));
-            Assert.IsNotNull(typeDbInfo, "typeDbInfo is null");
-            Assert.AreEqual(typeDbInfo.TableName, nameof(DbClass1), "Not the expected TableName");
+            Assert.That(typeDbInfo, Is.Not.Null, "typeDbInfo is null");
+            Assert.That(nameof(DbClass1), Is.EqualTo(typeDbInfo.TableName), "Not the expected TableName");
 
-            Assert.AreEqual(3, typeDbInfo.Columns.Count, "Not the expected Columns Count");
+            Assert.That(typeDbInfo.Columns.Count, Is.EqualTo(3), "Not the expected Columns Count");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col1)), "Col1 should be present");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col2)), "Col2 should be present");
             Assert.That(!typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col3)), "Col3 should not be present");
             Assert.That(typeDbInfo.Columns.ContainsKey("OverrideName"), "OverrideName should be present");
-            
+
             Type t = typeof(DbClass1);
-            Assert.AreEqual(t.GetProperty(nameof(DbClass1.Col1)), typeDbInfo.Columns[nameof(DbClass1.Col1)], "Not the expected value for Col1");
-            Assert.AreEqual(t.GetProperty(nameof(DbClass1.Col2)), typeDbInfo.Columns[nameof(DbClass1.Col2)], "Not the expected value for Col2");
-            Assert.AreEqual(t.GetProperty(nameof(DbClass1.Col3)), typeDbInfo.Columns["OverrideName"], "Not the expected value for Col2");
-            Assert.IsNull(typeDbInfo.Identity, "Identity should be null");
-            Assert.AreEqual(0, typeDbInfo.Keys.Count, "Not the expected Keys Count");
-            Assert.AreEqual(Restriction.None, typeDbInfo.Restriction, "Not the expected Restriction");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass1.Col1)], Is.EqualTo(t.GetProperty(nameof(DbClass1.Col1))), "Not the expected value for Col1");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass1.Col2)], Is.EqualTo(t.GetProperty(nameof(DbClass1.Col2))), "Not the expected value for Col2");
+            Assert.That(typeDbInfo.Columns["OverrideName"], Is.EqualTo(t.GetProperty(nameof(DbClass1.Col3))), "Not the expected value for Col2");
+            Assert.That(typeDbInfo.Identity, Is.Null, "Identity should be null");
+            Assert.That(typeDbInfo.Keys.Count, Is.EqualTo(0), "Not the expected Keys Count");
+            Assert.That(typeDbInfo.Restriction, Is.EqualTo(Restriction.None), "Not the expected Restriction");
         }
 
         [Test]
         public void TestAnalyse2()
         {
             TypeDbInfo typeDbInfo = DbAttributAnalyser.Analyse(typeof(DbClass2));
-            Assert.IsNotNull(typeDbInfo, "typeDbInfo is null");
+            Assert.That(typeDbInfo, Is.Not.Null, "typeDbInfo is null");
 
-            Assert.AreEqual(typeDbInfo.TableName, "Table", "Not the expected TableName");
-            Assert.AreEqual(4, typeDbInfo.Columns.Count, "Not the expected Columns Count");
+            Assert.That(typeDbInfo.TableName, Is.EqualTo("Table"), "Not the expected TableName");
+            Assert.That(typeDbInfo.Columns.Count, Is.EqualTo(4), "Not the expected Columns Count");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col1)), "Col1 should be present");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col2)), "Col2 should be present");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col3)), "Col3 should be present");
             Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col4)), "Col4 should be present");
 
             Type t = typeof(DbClass2);
-            Assert.AreEqual(t.GetProperty(nameof(DbClass2.Col1)), typeDbInfo.Columns[nameof(DbClass2.Col1)], "Not the expected value for Col1");
-            Assert.AreEqual(t.GetProperty(nameof(DbClass2.Col2)), typeDbInfo.Columns[nameof(DbClass2.Col2)], "Not the expected value for Col2");
-            Assert.AreEqual(t.GetProperty(nameof(DbClass2.Col3)), typeDbInfo.Columns[nameof(DbClass2.Col3)], "Not the expected value for Col3");
-            Assert.AreEqual(t.GetProperty(nameof(DbClass2.Col4)), typeDbInfo.Columns[nameof(DbClass2.Col4)], "Not the expected value for Col4");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col1)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col1))), "Not the expected value for Col1");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col2)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col2))), "Not the expected value for Col2");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col3)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col3))), "Not the expected value for Col3");
+            Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col4)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col4))), "Not the expected value for Col4");
 
-            Assert.AreEqual(typeDbInfo.Identity, nameof(DbClass2.Col1), "Not the expected Identity");
-            Assert.AreEqual(3, typeDbInfo.Keys.Count, "Not the expected Keys Count");
-            CollectionAssert.AreEqual(new[] { nameof(DbClass2.Col1), nameof(DbClass2.Col3), nameof(DbClass2.Col4) }, typeDbInfo.Keys, "Not the expected value for Keys");
-            Assert.AreEqual(Restriction.Insert | Restriction.Delete, typeDbInfo.Restriction, "Not the expected Restriction");
+            Assert.That(nameof(DbClass2.Col1), Is.EqualTo(typeDbInfo.Identity), "Not the expected Identity");
+            Assert.That(typeDbInfo.Keys.Count, Is.EqualTo(3), "Not the expected Keys Count");
+            Assert.That(typeDbInfo.Keys, Is.EqualTo(new[] { nameof(DbClass2.Col1), nameof(DbClass2.Col3), nameof(DbClass2.Col4) }), "Not the expected value for Keys");
+            Assert.That(typeDbInfo.Restriction, Is.EqualTo(Restriction.Insert | Restriction.Delete), "Not the expected Restriction");
         }
     }
 }

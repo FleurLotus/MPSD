@@ -52,185 +52,185 @@
         public void TestMatchingLevel()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("sdfghjklm");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText));
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("pppee");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(3);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(5);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(3, "");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(5, 25);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(10);
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("gfhxfhdhfdh");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(3, "");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(5, 25);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("sdfghjklm");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue));
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("pppee");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(3);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(5);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue("cfvvbn", 5m);
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("gfhxfhdhfdh");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
 
             mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(3);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(5);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(3, "");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount));
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(5, 25);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount));
 
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("sdfghjklm");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount));
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("pppee");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterValue | MatchingLevel.CommandParameterCount));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue("cfvvbn", 5m);
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(10);
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("gfhxfhdhfdh");
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText | MatchingLevel.CommandParameterCount | MatchingLevel.CommandParameterValue));
         }
         [Test]
         public void TestSetCommandTextReg()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
-            Assert.AreEqual(CommandType.Text, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.Text));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
 
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("sdfghjklm");
-            Assert.AreEqual(CommandType.Text, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual("sdfghjklm", mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.Text));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo("sdfghjklm"));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
 
             mockDbMatchingRule = mockDbMatchingRule.SetCommandTextReg("pppee");
-            Assert.AreEqual(CommandType.Text, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual("pppee", mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.Text));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo("pppee"));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
         }
 
         [Test]
         public void TestSetParameterCount()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(5);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(5, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(5));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterCount(15);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(15, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(15));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
         }
         [Test]
         public void TestSetParameterValue()
         {
             Dictionary<object, object> expected = new Dictionary<object, object>();
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(5, "fff");
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(1, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(1));
             expected[5] = "fff";
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(5, "tttetetet");
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(1, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(1));
             expected[5] = "tttetetet";
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue(6, "tttetetet");
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(2, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(2));
             expected[6] = "tttetetet";
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue("a", 25);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(3, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(3));
             expected["a"] = 25;
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue("a", null);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(3, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(3));
             expected["a"] = null;
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             mockDbMatchingRule = mockDbMatchingRule.SetParameterValue("b", new DateTime());
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(4, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(4));
             expected["b"] = new DateTime();
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
         }
 
         [Test]
@@ -242,78 +242,78 @@
             Dictionary<object, object> expected2;
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
             Dictionary<object, object> expected = new Dictionary<object, object>();
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
             // SevParameterValue(T)
             mockDbMatchingRule2 = mockDbMatchingRule.SetParameterValue(5, "fff");
             expected2 = new Dictionary<object, object>() { { 5, "fff" } };
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule2.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule2.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule2.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule2.ParameterCount);
-            Assert.AreEqual(1, mockDbMatchingRule2.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected2, mockDbMatchingRule2.ParameterValues);
+            Assert.That(mockDbMatchingRule2.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule2.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule2.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterValues.Count, Is.EqualTo(1));
+            Assert.That(mockDbMatchingRule2.ParameterValues, Is.EqualTo(expected2));
 
             // SetParameterValue(string)
             mockDbMatchingRule2 = mockDbMatchingRule.SetParameterValue("a", 25);
             expected2 = new Dictionary<object, object>() { { "a", 25 } };
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule2.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue, mockDbMatchingRule2.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule2.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule2.ParameterCount);
-            Assert.AreEqual(1, mockDbMatchingRule2.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected2, mockDbMatchingRule2.ParameterValues);
+            Assert.That(mockDbMatchingRule2.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule2.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterValue));
+            Assert.That(mockDbMatchingRule2.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterValues.Count, Is.EqualTo(1));
+            Assert.That(mockDbMatchingRule2.ParameterValues, Is.EqualTo(expected2));
 
             //SetCommandTextReg
             mockDbMatchingRule2 = mockDbMatchingRule.SetCommandTextReg("agzgagzag");
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
 
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule2.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandText, mockDbMatchingRule2.MatchingLevel);
-            Assert.AreEqual("agzgagzag", mockDbMatchingRule2.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule2.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule2.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule2.ParameterValues);
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
+            Assert.That(mockDbMatchingRule2.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule2.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandText));
+            Assert.That(mockDbMatchingRule2.CommandTextReg, Is.EqualTo("agzgagzag"));
+            Assert.That(mockDbMatchingRule2.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule2.ParameterValues, Is.EqualTo(expected));
 
             //SetParameterCount
             mockDbMatchingRule2 = mockDbMatchingRule.SetParameterCount(5);
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType, mockDbMatchingRule.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule.CommandTextReg);
-            Assert.AreEqual(null, mockDbMatchingRule.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule.ParameterValues);
+            Assert.That(mockDbMatchingRule.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType));
+            Assert.That(mockDbMatchingRule.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterCount, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule.ParameterValues, Is.EqualTo(expected));
 
-            Assert.AreEqual(CommandType.StoredProcedure, mockDbMatchingRule2.CommandType);
-            Assert.AreEqual(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount, mockDbMatchingRule2.MatchingLevel);
-            Assert.AreEqual(null, mockDbMatchingRule2.CommandTextReg);
-            Assert.AreEqual(5, mockDbMatchingRule2.ParameterCount);
-            Assert.AreEqual(0, mockDbMatchingRule2.ParameterValues.Count);
-            CollectionAssert.AreEqual(expected, mockDbMatchingRule2.ParameterValues);
+            Assert.That(mockDbMatchingRule2.CommandType, Is.EqualTo(CommandType.StoredProcedure));
+            Assert.That(mockDbMatchingRule2.MatchingLevel, Is.EqualTo(MatchingLevel.CommandType | MatchingLevel.CommandParameterCount));
+            Assert.That(mockDbMatchingRule2.CommandTextReg, Is.EqualTo(null));
+            Assert.That(mockDbMatchingRule2.ParameterCount, Is.EqualTo(5));
+            Assert.That(mockDbMatchingRule2.ParameterValues.Count, Is.EqualTo(0));
+            Assert.That(mockDbMatchingRule2.ParameterValues, Is.EqualTo(expected));
         }
 
         [Test]

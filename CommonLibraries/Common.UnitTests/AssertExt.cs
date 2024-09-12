@@ -19,7 +19,7 @@
                 caughtException = exception;
             }
 
-            Assert.IsInstanceOf<T>(caughtException, message, args);
+            Assert.That(caughtException, Is.InstanceOf<T>(), string.Format(message, args));
             return (T)caughtException;
         }
     }

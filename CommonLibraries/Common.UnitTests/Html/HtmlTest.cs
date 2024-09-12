@@ -14,7 +14,7 @@
         public void TestNotTableTag()
         {
             IHtmlTable ret = HtmlTableParser.Parse("azertyuiop");
-            Assert.IsNull(ret, "ret must be empty");
+            Assert.That(ret, Is.Null, "ret must be empty");
         }
         [Test]
         public void TestMultipleTableTag()
@@ -50,30 +50,30 @@
         public void TestGetColCount()
         {
             IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
-            Assert.IsNotNull(ret, "ret must be not null");
+            Assert.That(ret, Is.Not.Null, "ret must be not null");
 
-            Assert.AreEqual(ret.GetColCount(-1), 0, "Negative index for Row should return 0");
-            Assert.AreEqual(ret.GetColCount(2), 0, "Too large index for Row should return 0");
+            Assert.That(ret.GetColCount(-1), Is.EqualTo(0), "Negative index for Row should return 0");
+            Assert.That(ret.GetColCount(2), Is.EqualTo(0), "Too large index for Row should return 0");
 
-            Assert.AreEqual(ret.GetColCount(0), 2, "Not the expected value for GetColCount");
-            Assert.AreEqual(ret.GetColCount(1), 2, "Not the expected value for GetColCount");
+            Assert.That(ret.GetColCount(0), Is.EqualTo(2), "Not the expected value for GetColCount");
+            Assert.That(ret.GetColCount(1), Is.EqualTo(2), "Not the expected value for GetColCount");
         }
 
         [Test]
         public void TestRangeGet()
         {
             IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
-            Assert.IsNotNull(ret, "ret must be not null");
-            
-            Assert.IsNull(ret[-1, 0], "Negative index for Row should return null");
-            Assert.IsNull(ret[0, -1], "Negative index for Col should return null");
-            Assert.IsNull(ret[2, 0], "Too large index for Row should return null");
-            Assert.IsNull(ret[0, 2], "Too large index for Col should return null");
+            Assert.That(ret, Is.Not.Null, "ret must be not null");
 
-            Assert.IsNotNull(ret[0,0] , "In range index for Row and Col should not return null");
-            Assert.IsNotNull(ret[1,0] , "In range index for Row and Col should not return null");
-            Assert.IsNotNull(ret[0,1] , "In range index for Row and Col should not return null");
-            Assert.IsNotNull(ret[1,1] , "In range index for Row and Col should not return null");
+            Assert.That(ret[-1, 0], Is.Null, "Negative index for Row should return null");
+            Assert.That(ret[0, -1], Is.Null, "Negative index for Col should return null");
+            Assert.That(ret[2, 0], Is.Null, "Too large index for Row should return null");
+            Assert.That(ret[0, 2], Is.Null, "Too large index for Col should return null");
+
+            Assert.That(ret[0, 0], Is.Not.Null, "In range index for Row and Col should not return null");
+            Assert.That(ret[1, 0], Is.Not.Null, "In range index for Row and Col should not return null");
+            Assert.That(ret[0, 1], Is.Not.Null, "In range index for Row and Col should not return null");
+            Assert.That(ret[1, 1], Is.Not.Null, "In range index for Row and Col should not return null");
 
         }
 
@@ -101,22 +101,22 @@
         //AUTO - CLOSE
         [TestCase("azertyuiop <a azertyuiop /> azertyuiop", 0, "</a>", 27)]
         [TestCase("azertyuiop <a azertyuiop /> azertyuiop", 11, "</a>", 27)]
-        [TestCase("azertyuiop <a azertyuiop /> azertyuiop", 26, "</a>", - 1)]
-        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 0, "</a>", - 1)]
-        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 11,"</a>", - 1)]
-        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 20,"</a>", 28)]
-        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 0, "</a>", - 1)]
-        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 11, "</a>", - 1)]
-        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 26, "</a>", - 1)]
+        [TestCase("azertyuiop <a azertyuiop /> azertyuiop", 26, "</a>", -1)]
+        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 0, "</a>", -1)]
+        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 11, "</a>", -1)]
+        [TestCase("azertyuiop <a azer>tyuiop /> azertyuiop", 20, "</a>", 28)]
+        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 0, "</a>", -1)]
+        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 11, "</a>", -1)]
+        [TestCase("azertyuiop <a azertyuiop / < azertyuiop", 26, "</a>", -1)]
         //AUTO - CLOSE vs CLOSE
         [TestCase("azertyuiop <a azertyuiop /> azer</a>tyuiop", 0, "</a>", 27)]
         [TestCase("azertyuiop <a azertyuiop /> azer</a>tyuiop", 11, "</a>", 27)]
         [TestCase("azertyuiop <a azertyuiop /> azer</a>tyuiop", 26, "</a>", 36)]
         [TestCase("azertyuiop <a azertyuiop /> azer</a>tyuiop", 35, "</a>", -1)]
         [TestCase("azertyuiop <a azer>tyuiop /> azer</a>tyuiop", 0, "</a>", 37)]
-        [TestCase("azertyuiop <a azer>tyuiop /> azer</a>tyuiop", 11,"</a>", 37)]
+        [TestCase("azertyuiop <a azer>tyuiop /> azer</a>tyuiop", 11, "</a>", 37)]
         [TestCase("azertyuiop <a azer>tyuiop /> azer</a>tyuiop", 20, "</a>", 28)]
-        [TestCase("azertyuiop <a azertyuiop / < azer</a>tyuiop", 0, "</a>",37)]
+        [TestCase("azertyuiop <a azertyuiop / < azer</a>tyuiop", 0, "</a>", 37)]
         [TestCase("azertyuiop <a azertyuiop / < azer</a>tyuiop", 11, "</a>", 37)]
         [TestCase("azertyuiop <a azertyuiop / < azer</a>tyuiop", 26, "</a>", 37)]
         [TestCase("azertyuiop <a azer</a>tyuiop /> azertyuiop", 0, "</a>", 22)]
@@ -177,7 +177,7 @@
                 throw new Exception(string.Format("The found ColSpan {0} is differente from the excepted one {1} for {2}", cell.ColSpan, expectedColSpan, text));
             }
         }
-        
+
         [Test]
         public void TestCellsInfos()
         {
@@ -209,9 +209,9 @@
 <TR><TD rowspan=3 colspan=3>C91</TD></TR>
 <TR><TD rowspan=3 colspan=3>CA4</TD></TR>
 </Table>");
-            Assert.IsNotNull(ret, "ret must be not null");
+            Assert.That(ret, Is.Not.Null, "ret must be not null");
 
-            Assert.AreEqual(ret.RowCount, 13, "RowCount must be 13");
+            Assert.That(ret.RowCount, Is.EqualTo(13), "RowCount must be 13");
 
             string[,] expectedValue =
                 {
@@ -237,8 +237,8 @@
                 {
                     IHtmlCell cell = ret[i, j];
                     string value = cell?.InnerText;
-                    Assert.AreEqual(expectedValue[i, j], value, "Value different for ({0},{1}) : {2} vs {3}", i, j, value, expectedValue[i, j]);
-                    Assert.AreEqual(cell?.ToString(), value);
+                    Assert.That(value, Is.EqualTo(expectedValue[i, j]), $"Value different for ({i},{j}) : {value} vs {expectedValue[i, j]}");
+                    Assert.That(value, Is.EqualTo(cell?.ToString()));
                 }
             }
         }

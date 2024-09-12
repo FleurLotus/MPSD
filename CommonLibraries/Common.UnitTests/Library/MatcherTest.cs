@@ -14,11 +14,11 @@
         {
             Value0 = 0,
             Value1 = 1,
-            Value2 = 1<<1,
-            Value3 = 1<<2,
-            Value4 = 1<<3,
-            Value5 = 1<<4,
-            Value6 = 1<<5,
+            Value2 = 1 << 1,
+            Value3 = 1 << 2,
+            Value4 = 1 << 3,
+            Value5 = 1 << 4,
+            Value6 = 1 << 5,
         }
         public enum EnumWithNoFlag
         {
@@ -33,7 +33,7 @@
         [Test]
         public void TestWrongType()
         {
-            Assert.Throws<TypeInitializationException>(() => Matcher<int>.HasValue(1,1));
+            Assert.Throws<TypeInitializationException>(() => Matcher<int>.HasValue(1, 1));
         }
 
         #region TestCase List
@@ -61,7 +61,7 @@
         public void TestHasValueWithFlag(EnumWithFlag value, EnumWithFlag check, bool exceptedValue)
         {
             bool hasValue = Matcher<EnumWithFlag>.HasValue(value, check);
-            Assert.AreEqual(exceptedValue, hasValue, "Call HasValue on {0} and {1} return {2} while excepted {3}", value, check, hasValue, exceptedValue);
+            Assert.That(hasValue, Is.EqualTo(exceptedValue), $"Call HasValue on {value} and {check} return {hasValue} while excepted {exceptedValue}");
         }
         #region TestCase List
         [TestCase(EnumWithNoFlag.Value1, EnumWithNoFlag.Value2, false)]
@@ -78,7 +78,7 @@
         public void TestHasValueWithNoFlag(EnumWithNoFlag value, EnumWithNoFlag check, bool exceptedValue)
         {
             bool hasValue = Matcher<EnumWithNoFlag>.HasValue(value, check);
-            Assert.AreEqual(exceptedValue, hasValue, "Call HasValue on {0} and {1} return {2} while excepted {3}", value, check, hasValue, exceptedValue);
+            Assert.That(hasValue, Is.EqualTo(exceptedValue), $"Call HasValue on {value} and {check} return {hasValue} while excepted {exceptedValue}");
         }
 
         #region TestCase List
@@ -94,7 +94,7 @@
         [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value3, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
         [TestCase(EnumWithFlag.Value2 | EnumWithFlag.Value3, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
         [TestCase(EnumWithFlag.Value4 | EnumWithFlag.Value4, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
-        [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value2 | EnumWithFlag.Value3 , EnumWithFlag.Value1 | EnumWithFlag.Value2, true)]
+        [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value2 | EnumWithFlag.Value3, EnumWithFlag.Value1 | EnumWithFlag.Value2, true)]
         [TestCase(EnumWithFlag.Value1 | EnumWithFlag.Value3 | EnumWithFlag.Value4, EnumWithFlag.Value1 | EnumWithFlag.Value2, false)]
 
         //Work with value out of enum
@@ -108,7 +108,7 @@
         public void TestIncludeValueWithFlag(EnumWithFlag value, EnumWithFlag check, bool exceptedValue)
         {
             bool includeValue = Matcher<EnumWithFlag>.IncludeValue(value, check);
-            Assert.AreEqual(exceptedValue, includeValue, "Call IncludeValue on {0} and {1} return {2} while excepted {3}", value, check, includeValue, exceptedValue);
+            Assert.That(includeValue, Is.EqualTo(exceptedValue), $"Call IncludeValue on {value} and {check} return {includeValue} while excepted {exceptedValue}");
         }
         #region TestCase List
         [TestCase(EnumWithNoFlag.Value1, EnumWithNoFlag.Value2, false)]
@@ -125,7 +125,7 @@
         public void TestIncludeValueWithNoFlag(EnumWithNoFlag value, EnumWithNoFlag check, bool exceptedValue)
         {
             bool includeValue = Matcher<EnumWithNoFlag>.IncludeValue(value, check);
-            Assert.AreEqual(exceptedValue, includeValue, "Call IncludeValue on {0} and {1} return {2} while excepted {3}", value, check, includeValue, exceptedValue);
+            Assert.That(includeValue, Is.EqualTo(exceptedValue), $"Call IncludeValue on {value} and {check} return {includeValue} while excepted {exceptedValue}");
         }
     }
 }

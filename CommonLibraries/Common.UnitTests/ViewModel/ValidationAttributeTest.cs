@@ -21,14 +21,14 @@
         {
             Assert.Throws<ArgumentException>(() => new StringMaxLenValidationAttribute(-5), "negative value must not be valid argument");
             Assert.Throws<ArgumentException>(() => new StringMaxLenValidationAttribute(0), "0 must not be valid argument");
-            Assert.IsNotNull(new StringMaxLenValidationAttribute(3), "Strictly positive value is valid argument");
+            Assert.That(new StringMaxLenValidationAttribute(3), Is.Not.Null, "Strictly positive value is valid argument");
         }
         [Test]
         public void TestStringMinLenValidationAttributeArgument()
         {
             Assert.Throws<ArgumentException>(() => new StringMinLenValidationAttribute(-5), "negative value must not be valid argument");
-            Assert.IsNotNull(new StringMinLenValidationAttribute(0), "0 is valid argument");
-            Assert.IsNotNull(new StringMinLenValidationAttribute(3), "Positive value is valid argument");
+            Assert.That(new StringMinLenValidationAttribute(0), Is.Not.Null, "0 is valid argument");
+            Assert.That(new StringMinLenValidationAttribute(3), Is.Not.Null, "Positive value is valid argument");
         }
         [Test]
         public void TestStringRegExValidationAttributeArgument()
@@ -37,7 +37,7 @@
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(string.Empty), "Empty reg string must not be valid argument");
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute("   "), "Blank reg string must not be valid argument");
             AssertEx.ThrowsOfType<ArgumentException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
-            Assert.IsNotNull(new StringRegExValidationAttribute(".*"), "0 is valid argument");
+            Assert.That(new StringRegExValidationAttribute(".*"), Is.Not.Null, "0 is valid argument");
         }
 
         #region TestCase List
@@ -57,7 +57,7 @@
         public void TestMaxLenValidationAttribute(int maxLen, string input, bool isValid)
         {
             StringMaxLenValidationAttribute att = new StringMaxLenValidationAttribute(maxLen);
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for maxLen = {1} and input = {2}", isValid, maxLen, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for maxLen = {maxLen} and input = {input}");
         }
 
         #region TestCase List
@@ -81,7 +81,7 @@
         public void TestMinLenValidationAttribute(int minLen, string input, bool isValid)
         {
             StringMinLenValidationAttribute att = new StringMinLenValidationAttribute(minLen);
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for minLen = {1} and input = {2}", isValid, minLen, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for minLen = {minLen} and input = {input}");
         }
 
         #region TestCase List
@@ -95,7 +95,7 @@
         public void TestNotNullValidationAttribute(object input, bool isValid)
         {
             NotNullValidationAttribute att = new NotNullValidationAttribute();
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for input = {1}", isValid, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for input = {input}");
         }
 
         #region TestCase List
@@ -107,9 +107,9 @@
         public void TestStringRegExValidationAttribute(string regexp, string input, bool isValid)
         {
             StringRegExValidationAttribute att = new StringRegExValidationAttribute(regexp);
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for regexp = {1} and input = {2}", isValid, regexp, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for regexp = {regexp} and input = {input}");
         }
-        
+
         #region TestCase List
         [TestCase(0, false, null, false)]
         [TestCase(0, true, null, false)]
@@ -125,7 +125,7 @@
         public void TestGreaterThanValidationAttribute(double minValue, bool allowEquals, object input, bool isValid)
         {
             GreaterThanValidationAttribute att = new GreaterThanValidationAttribute(minValue, allowEquals);
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for minvalue = {1} and allowEquals={2} and input = {3}", isValid, minValue, allowEquals, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for minvalue = {minValue} and allowEquals={allowEquals} and input = {input}");
         }
         #region TestCase List
         [TestCase(0, false, null, false)]
@@ -142,7 +142,7 @@
         public void TestLessThanValidationAttribute(double maxValue, bool allowEquals, object input, bool isValid)
         {
             LessThanValidationAttribute att = new LessThanValidationAttribute(maxValue, allowEquals);
-            Assert.AreEqual(isValid, string.IsNullOrEmpty(att.Validate(input)), "Expected {0} for maxvalue = {1} and allowEquals={2} and input = {3}", isValid, maxValue, allowEquals, input);
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for maxvalue = {maxValue} and allowEquals={allowEquals} and input = {input}");
         }
 
 

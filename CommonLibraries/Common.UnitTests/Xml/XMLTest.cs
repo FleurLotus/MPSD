@@ -26,19 +26,19 @@
         {
             using (XmlTextReader reader = new XmlTextReader(new StringReader(@"<Element a=""123"" b=""458"" c=""azerty"" />")))
             {
-                Assert.IsTrue(reader.Read(), "Can't read");
-                Assert.IsTrue(reader.Name == "Element", "Not the good tag");
+                Assert.That(reader.Read(), "Can't read");
+                Assert.That(reader.Name == "Element", "Not the good tag");
                 IDictionary<string, string> attributes = reader.GetAttributes();
 
-                Assert.IsNotNull(attributes, "attributes is null");
-                Assert.IsTrue(attributes.Count == 3, "Not the good number of attributes");
-                Assert.IsTrue(attributes.ContainsKey("a"), "Has not key a");
-                Assert.IsTrue(attributes["a"]=="123","Value is wrong for key a");
-                Assert.IsTrue(attributes.ContainsKey("b"), "Has not key b");
-                Assert.IsTrue(attributes["b"] == "458", "Value is wrong for key b");
-                Assert.IsTrue(attributes.ContainsKey("c"), "Has not key c");
-                Assert.IsTrue(attributes["c"] == "azerty", "Value is wrong for key c");
-                Assert.IsTrue(reader.Name == "Element", "Not back to the element");
+                Assert.That(attributes, Is.Not.Null, "attributes is null");
+                Assert.That(attributes.Count == 3, "Not the good number of attributes");
+                Assert.That(attributes.ContainsKey("a"), "Has not key a");
+                Assert.That(attributes["a"] == "123", "Value is wrong for key a");
+                Assert.That(attributes.ContainsKey("b"), "Has not key b");
+                Assert.That(attributes["b"] == "458", "Value is wrong for key b");
+                Assert.That(attributes.ContainsKey("c"), "Has not key c");
+                Assert.That(attributes["c"] == "azerty", "Value is wrong for key c");
+                Assert.That(reader.Name == "Element", "Not back to the element");
             }
         }
         [Test]
@@ -46,15 +46,14 @@
         {
             using (XmlTextReader reader = new XmlTextReader(new StringReader(@"<Element />")))
             {
-                Assert.IsTrue(reader.Read(), "Can't read");
-                Assert.IsTrue(reader.Name == "Element", "Not the good tag");
+                Assert.That(reader.Read(), "Can't read");
+                Assert.That(reader.Name == "Element", "Not the good tag");
                 IDictionary<string, string> attributes = reader.GetAttributes();
 
-                Assert.IsNotNull(attributes, "attributes is null");
-                Assert.IsTrue(attributes.Count == 0, "Not the good number of attributes");
-                Assert.IsTrue(reader.Name == "Element", "Not back to the element");
+                Assert.That(attributes, Is.Not.Null, "attributes is null");
+                Assert.That(attributes.Count == 0, "Not the good number of attributes");
+                Assert.That(reader.Name == "Element", "Not back to the element");
             }
         }
-
     }
 }
