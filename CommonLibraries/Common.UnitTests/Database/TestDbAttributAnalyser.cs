@@ -77,13 +77,13 @@
         {
             TypeDbInfo typeDbInfo = DbAttributAnalyser.Analyse(typeof(DbClass1));
             Assert.That(typeDbInfo, Is.Not.Null, "typeDbInfo is null");
-            Assert.That(nameof(DbClass1), Is.EqualTo(typeDbInfo.TableName), "Not the expected TableName");
+            Assert.That(typeDbInfo.TableName, Is.EqualTo(nameof(DbClass1)), "Not the expected TableName");
 
             Assert.That(typeDbInfo.Columns.Count, Is.EqualTo(3), "Not the expected Columns Count");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col1)), "Col1 should be present");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col2)), "Col2 should be present");
-            Assert.That(!typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col3)), "Col3 should not be present");
-            Assert.That(typeDbInfo.Columns.ContainsKey("OverrideName"), "OverrideName should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col1)), Is.True, "Col1 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col2)), Is.True, "Col2 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass1.Col3)), Is.False, "Col3 should not be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey("OverrideName"), Is.True, "OverrideName should be present");
 
             Type t = typeof(DbClass1);
             Assert.That(typeDbInfo.Columns[nameof(DbClass1.Col1)], Is.EqualTo(t.GetProperty(nameof(DbClass1.Col1))), "Not the expected value for Col1");
@@ -102,10 +102,10 @@
 
             Assert.That(typeDbInfo.TableName, Is.EqualTo("Table"), "Not the expected TableName");
             Assert.That(typeDbInfo.Columns.Count, Is.EqualTo(4), "Not the expected Columns Count");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col1)), "Col1 should be present");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col2)), "Col2 should be present");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col3)), "Col3 should be present");
-            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col4)), "Col4 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col1)), Is.True, "Col1 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col2)), Is.True, "Col2 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col3)), Is.True, "Col3 should be present");
+            Assert.That(typeDbInfo.Columns.ContainsKey(nameof(DbClass2.Col4)), Is.True, "Col4 should be present");
 
             Type t = typeof(DbClass2);
             Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col1)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col1))), "Not the expected value for Col1");
@@ -113,7 +113,7 @@
             Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col3)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col3))), "Not the expected value for Col3");
             Assert.That(typeDbInfo.Columns[nameof(DbClass2.Col4)], Is.EqualTo(t.GetProperty(nameof(DbClass2.Col4))), "Not the expected value for Col4");
 
-            Assert.That(nameof(DbClass2.Col1), Is.EqualTo(typeDbInfo.Identity), "Not the expected Identity");
+            Assert.That(typeDbInfo.Identity, Is.EqualTo(nameof(DbClass2.Col1)), "Not the expected Identity");
             Assert.That(typeDbInfo.Keys.Count, Is.EqualTo(3), "Not the expected Keys Count");
             Assert.That(typeDbInfo.Keys, Is.EqualTo(new[] { nameof(DbClass2.Col1), nameof(DbClass2.Col3), nameof(DbClass2.Col4) }), "Not the expected value for Keys");
             Assert.That(typeDbInfo.Restriction, Is.EqualTo(Restriction.Insert | Restriction.Delete), "Not the expected Restriction");

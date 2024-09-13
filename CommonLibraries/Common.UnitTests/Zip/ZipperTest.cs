@@ -4,7 +4,7 @@
     using System.IO;
     using Common.Zip;
     using NUnit.Framework;
-    
+
     [TestFixture]
     public class ZipperTest
     {
@@ -21,9 +21,9 @@
         [Test]
         public void TestUnzipAll([Values(true, false)] bool fromStream)
         {
-            Assert.That(File.Exists(ZipFileName), "Can't find the test file");
+            Assert.That(File.Exists(ZipFileName), Is.True, "Can't find the test file");
             string temporyDirectory = Path.Combine(Path.GetTempPath(), "TestUnzip");
-            string[] fileNames = {"File1.txt", "File2.txt"};
+            string[] fileNames = { "File1.txt", "File2.txt" };
             const string subDirName = "Subdir";
 
             try
@@ -48,7 +48,7 @@
 
                 string[] files = Directory.GetFiles(temporyDirectory);
 
-                Assert.That(files.Length == 2, "The unzipped direcory must have 2 files in the root");
+                Assert.That(files.Length, Is.EqualTo(2), "The unzipped direcory must have 2 files in the root");
 
                 List<string> expectedfiles = new List<string>(fileNames);
 
@@ -57,23 +57,23 @@
                     using (StreamReader sr = new StreamReader(file))
                     {
                         string fileName = Path.GetFileName(file);
-                        Assert.That(expectedfiles.Contains(fileName), "The file name is not in the expected list");
+                        Assert.That(expectedfiles.Contains(fileName), Is.True, "The file name is not in the expected list");
                         expectedfiles.Remove(fileName);
 
                         string content = sr.ReadToEnd();
-                        Assert.That(content == fileName, "The file {0} doesn't content the expected text", file);
+                        Assert.That(content, Is.EqualTo(fileName), $"The file {file} doesn't content the expected text");
                     }
                 }
 
                 string[] directories = Directory.GetDirectories(temporyDirectory);
-                Assert.That(directories.Length == 1, "The unzipped direcory must have 1 sub directory in the root");
+                Assert.That(directories.Length, Is.EqualTo(1), "The unzipped direcory must have 1 sub directory in the root");
 
                 string subDirectory = directories[0];
-                Assert.That(subDirectory == Path.Combine(temporyDirectory, subDirName), "The sub direcory has not the expected name");
+                Assert.That(subDirectory, Is.EqualTo(Path.Combine(temporyDirectory, subDirName)), "The sub direcory has not the expected name");
 
                 files = Directory.GetFiles(subDirectory);
 
-                Assert.That(files.Length == 2, "The unzipped direcory must have 2 files in the sub directory");
+                Assert.That(files.Length, Is.EqualTo(2), "The unzipped direcory must have 2 files in the sub directory");
 
                 expectedfiles = new List<string>(fileNames);
 
@@ -82,15 +82,15 @@
                     using (StreamReader sr = new StreamReader(file))
                     {
                         string fileName = Path.GetFileName(file);
-                        Assert.That(expectedfiles.Contains(fileName), "The file name is not in the expected list");
+                        Assert.That(expectedfiles.Contains(fileName), Is.True, "The file name is not in the expected list");
                         expectedfiles.Remove(fileName);
 
                         string content = sr.ReadToEnd();
-                        Assert.That(content == string.Format("{0}\\{1}", subDirName, fileName), "The file {0} doesn't content the expected text", file);
+                        Assert.That(content, Is.EqualTo($"{subDirName}\\{fileName}"), $"The file {file} doesn't content the expected text");
                     }
                 }
 
-                Assert.That(Directory.GetDirectories(subDirectory).Length == 0, "The unzipped direcory must not have any sub-sub directory in the root");
+                Assert.That(Directory.GetDirectories(subDirectory).Length, Is.EqualTo(0), "The unzipped direcory must not have any sub-sub directory in the root");
             }
             finally
             {

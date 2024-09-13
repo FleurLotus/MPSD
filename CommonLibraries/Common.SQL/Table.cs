@@ -114,7 +114,7 @@
         }
         public static string TableKey(string schemaName, string name, CaseSensitivity caseSensitivity)
         {
-            return caseSensitivity.ToKeyString(string.IsNullOrEmpty(schemaName) ? name : string.Format("{0}.{1}", schemaName, name));
+            return caseSensitivity.ToKeyString(string.IsNullOrEmpty(schemaName) ? name : $"{schemaName}.{name}");
         }
     }
 }

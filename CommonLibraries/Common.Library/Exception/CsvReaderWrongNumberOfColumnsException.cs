@@ -7,7 +7,7 @@
     {
         #region Constructors and Destructors
         public CsvReaderWrongNumberOfColumnsException(int line, int found, int expectedColumn)
-            : base(string.Format("At line {0}, found {1} column(s) while expected {2}", line, found, expectedColumn))
+            : base($"At line {line}, found {found} column(s) while expected {expectedColumn}")
         {
         }
         #endregion

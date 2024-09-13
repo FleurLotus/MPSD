@@ -25,10 +25,10 @@
         {
             ValidatorViewModel vm = new ValidatorViewModel();
             string message = vm.Validate();
-            Assert.That(string.IsNullOrEmpty(message), "No rules so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.True, "No rules so no error excepted");
             vm.Name = "Value";
             message = vm.Validate();
-            Assert.That(string.IsNullOrEmpty(message), "No rules so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.True, "No rules so no error excepted");
         }
         [Test]
         public void TestWithOkRule()
@@ -36,10 +36,10 @@
             ValidatorViewModel vm = new ValidatorViewModel();
             vm.AddValidatorAlwaysOk();
             string message = vm.Validate();
-            Assert.That(string.IsNullOrEmpty(message), "Rules always OK so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.True, "Rules always OK so no error excepted");
             vm.Name = "Value";
             message = vm.Validate();
-            Assert.That(string.IsNullOrEmpty(message), "Rules always OK so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.True, "Rules always OK so no error excepted");
         }
         [Test]
         public void TestWithKoRule()
@@ -47,11 +47,11 @@
             ValidatorViewModel vm = new ValidatorViewModel();
             vm.AddValidatorAlwaysKo();
             string message = vm.Validate();
-            Assert.That(!string.IsNullOrEmpty(message), "Rules always Ko so error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.False, "Rules always Ko so error excepted");
             Assert.That(message, Is.EqualTo(string.Format(MessageFormat, "Error")), "Not the excepted message");
             vm.Name = "Value";
             message = vm.Validate();
-            Assert.That(!string.IsNullOrEmpty(message), "Rules always Ko so error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.False, "Rules always Ko so error excepted");
             Assert.That(message, Is.EqualTo(string.Format(MessageFormat, "Error")), "Not the excepted message");
         }
         [Test]
@@ -60,11 +60,11 @@
             ValidatorViewModel vm = new ValidatorViewModel();
             vm.AddValidator();
             string message = vm.Validate();
-            Assert.That(!string.IsNullOrEmpty(message), "Rules is not valide so error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.False, "Rules is not valide so error excepted");
             Assert.That(message, Is.EqualTo(string.Format(MessageFormat, "Name must not be null or white space")), "Not the excepted message");
             vm.Name = "Value";
             message = vm.Validate();
-            Assert.That(string.IsNullOrEmpty(message), "Rules is valide so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.True, "Rules is valide so no error excepted");
         }
         [Test]
         public void TestWithRealRuleAndKo()
@@ -72,11 +72,11 @@
             ValidatorViewModel vm = new ValidatorViewModel();
             vm.AddValidatorWithChildKo();
             string message = vm.Validate();
-            Assert.That(!string.IsNullOrEmpty(message), "Rules is not valide and child always Ko so error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.False, "Rules is not valide and child always Ko so error excepted");
             Assert.That(message, Is.EqualTo(string.Format(MessageFormat, "Name must not be null or white space\r\nError")), "Not the excepted message");
             vm.Name = "Value";
             message = vm.Validate();
-            Assert.That(!string.IsNullOrEmpty(message), "Rules is valide but and child always Ko so no error excepted");
+            Assert.That(string.IsNullOrEmpty(message), Is.False, "Rules is valide but and child always Ko so no error excepted");
             Assert.That(message, Is.EqualTo(string.Format(MessageFormat, "Error")), "Not the excepted message");
         }
 

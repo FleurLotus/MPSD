@@ -37,9 +37,9 @@
         {
             if (IsAsc.HasValue)
             {
-                return string.Format("{0} {1} {2}", Position, Column, IsAsc.Value ? "Asc" : "Desc");
+                return $"{Position} {Column} {(IsAsc.Value ? "Asc" : "Desc")}";
             }
-            return string.Format("{0} {1}", Position, Column);
+            return $"{Position} {Column}";
         }
     }
 }

@@ -93,7 +93,7 @@
             int index = HtmlTableParser.GetAutoCloseIndex(text, startindex);
             if (index != expectedreturn)
             {
-                throw new Exception(string.Format("The found index {0} is differente from the excepted one {1} for {2}", index, expectedreturn, text));
+                throw new Exception($"The found index {index} is differente from the excepted one {expectedreturn} for {text}");
             }
         }
 
@@ -137,7 +137,7 @@
             int index = HtmlTableParser.GetPostClosingIndex(text, startindex, wantedtag);
             if (index != expectedreturn)
             {
-                throw new Exception(string.Format("The found index {0} is differente from the excepted one {1} for {2}", index, expectedreturn, text));
+                throw new Exception($"The found index {index} is differente from the excepted one {expectedreturn} for {text}");
             }
 
             index = HtmlTableParser.GetPostClosingIndex(text.ToLower(), startindex, wantedtag.ToUpper());
@@ -159,22 +159,22 @@
             IHtmlCell cell = HtmlTableParser.ExtractCell(text);
             if (cell.InnerText != expectedText)
             {
-                throw new Exception(string.Format("The found InnerText {0} is differente from the excepted one {1} for {2}", cell.InnerText, expectedText, text));
+                throw new Exception($"The found InnerText {cell.InnerText} is differente from the excepted one {expectedText} for {text}");
             }
 
             if (cell.IsHeader != expectedIsHeader)
             {
-                throw new Exception(string.Format("The found IsHeader {0} is differente from the excepted one {1} for {2}", cell.IsHeader, expectedIsHeader, text));
+                throw new Exception($"The found IsHeader {cell.IsHeader} is differente from the excepted one {expectedIsHeader} for {text}");
             }
 
             if (cell.RowSpan != expectedRowSpan)
             {
-                throw new Exception(string.Format("The found RowSpan {0} is differente from the excepted one {1} for {2}", cell.RowSpan, expectedRowSpan, text));
+                throw new Exception($"The found RowSpan {cell.RowSpan} is differente from the excepted one {expectedRowSpan} for {text}");
             }
 
             if (cell.ColSpan != expectedColSpan)
             {
-                throw new Exception(string.Format("The found ColSpan {0} is differente from the excepted one {1} for {2}", cell.ColSpan, expectedColSpan, text));
+                throw new Exception($"The found ColSpan {cell.ColSpan} is differente from the excepted one {expectedColSpan} for {text}");
             }
         }
 

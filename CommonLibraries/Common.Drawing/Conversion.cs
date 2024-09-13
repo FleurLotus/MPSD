@@ -20,7 +20,7 @@
                                                                                   .ToLower())
                                                 .FirstOrDefault();
 
-            return extension ?? string.Format(".{0}", image.RawFormat.ToString().ToLower());
+            return extension ?? $".{image.RawFormat.ToString().ToLower()}";
         }
 
         public static Image ToImage(this byte[] bytes)

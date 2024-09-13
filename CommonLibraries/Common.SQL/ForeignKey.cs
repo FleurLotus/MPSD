@@ -63,7 +63,7 @@
         }
         public override string ToString()
         {
-            return string.Format("{0}.{1}", Table.TableKey(SourceSchemaName, SourceTableName, CaseSensitivity), Name);
+            return $"{Table.TableKey(SourceSchemaName, SourceTableName, CaseSensitivity)}.{Name}";
         }
 
     }

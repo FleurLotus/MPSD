@@ -115,7 +115,7 @@
             {
                 if (!withHeader)
                 {
-                    Assert.That(reader.Read(), "Can't read first line");
+                    Assert.That(reader.Read(), Is.True, "Can't read first line");
                 }
 
                 Assert.Throws<CsvReaderWrongNumberOfColumnsException>(() => reader.Read(), "Read should throw CsvReaderWrongNumberOfColumnsException when line has not the expected number of colums");
@@ -135,17 +135,17 @@
             using (ICsvReader reader = CreateCsvReader(sb.ToString(), withHeader))
             {
                 int expectedLine = -1;
-                Assert.That(reader.GetCurrentLine() == expectedLine, "No the expected current line");
+                Assert.That(reader.GetCurrentLine(), Is.EqualTo(expectedLine), "No the expected current line");
                 //
                 for (int i = 0; i < (count - (withHeader ? 1 : 0)); i++)
                 {
-                    Assert.That(reader.Read(), "Can't read!");
+                    Assert.That(reader.Read(), Is.True, "Can't read!");
                     expectedLine++;
-                    Assert.That(reader.GetCurrentLine() == expectedLine, "No the expected current line");
+                    Assert.That(reader.GetCurrentLine(), Is.EqualTo(expectedLine), "No the expected current line");
                 }
 
                 Assert.That(reader.Read(), Is.False, "Should be end of file");
-                Assert.That(reader.GetCurrentLine() == expectedLine, "Current must not change after and of file");
+                Assert.That(reader.GetCurrentLine(), Is.EqualTo(expectedLine), "Current must not change after and of file");
             }
         }
         [Test]
@@ -163,7 +163,7 @@
                 {
                     Assert.That(header[i], Is.EqualTo(exceptedResult[i]), $"Not the excepted value at i={i}");
                 }
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 header = reader.GetHeaders();
                 Assert.That(header.Length, Is.EqualTo(exceptedResult.Length), "Not the excepted length after read");
                 for (int i = 0; i < exceptedResult.Length; i++)
@@ -187,7 +187,7 @@
                 {
                     Assert.Throws<CsvReaderNoReadCallException>(() => reader.GetColumnsCount(), "Access to GetColumnsCount should throw CsvReaderNoReadCallException before call to Read");
                 }
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetColumnsCount(), Is.EqualTo(2), "Not the excepted ColumnsCount after call to Read");
             }
         }
@@ -198,7 +198,7 @@
 
             using (ICsvReader reader = CreateCsvReader(input, false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.Throws<IndexOutOfRangeException>(() => reader.GetValue(-1), "GetValue(-1) should thrown IndexOutOfRangeException");
                 Assert.DoesNotThrow(() => reader.GetValue(0), "GetValue(0) should not thrown IndexOutOfRangeException");
                 Assert.DoesNotThrow(() => reader.GetValue(1), "GetValue(1) should not thrown IndexOutOfRangeException");
@@ -211,17 +211,17 @@
         [Test]
         public void TestAllKindOfEndLineAndFile([Values("\n", "\r", "\r\n")] string eol1, [Values("\n", "\r", "\r\n")] string eol2, [Values("\n", "\r", "\r\n", null, "")] string eof)
         {
-            string input = string.Format("azerty,azerty2{0}tttt,tttt2{1}aaaaa,aaaaa2{2}", eol1, eol2, eof);
+            string input = $"azerty,azerty2{eol1}tttt,tttt2{eol2}aaaaa,aaaaa2{eof}";
 
             using (ICsvReader reader = CreateCsvReader(input, false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("azerty"), "Not the excepted value for line 0 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("azerty2"), "Not the excepted value for line 0 column 1");
-                Assert.That(reader.Read(), "Can't read second line");
+                Assert.That(reader.Read(), Is.True, "Can't read second line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("tttt"), "Not the excepted value for line 1 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("tttt2"), "Not the excepted value for line 1 column 1");
-                Assert.That(reader.Read(), "Can't read third line");
+                Assert.That(reader.Read(), Is.True, "Can't read third line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("aaaaa"), "Not the excepted value for line 2 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("aaaaa2"), "Not the excepted value for line 2 column 1");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
@@ -230,17 +230,17 @@
         [Test]
         public void TestChangeSeparator([Values('\t', ';', ',', ':', '.', 's')] char separator)
         {
-            byte[] data = Encoding.Default.GetBytes(string.Format("azerty{0}azerty2\ntttt{0}tttt2\naaaaa{0}aaaaa2", separator));
+            byte[] data = Encoding.Default.GetBytes($"azerty{separator}azerty2\ntttt{separator}tttt2\naaaaa{separator}aaaaa2");
 
             using (ICsvReader reader = new CsvReader(new MemoryStream(data), false, separator))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("azerty"), "Not the excepted value for line 0 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("azerty2"), "Not the excepted value for line 0 column 1");
-                Assert.That(reader.Read(), "Can't read second line");
+                Assert.That(reader.Read(), Is.True, "Can't read second line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("tttt"), "Not the excepted value for line 1 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("tttt2"), "Not the excepted value for line 1 column 1");
-                Assert.That(reader.Read(), "Can't read third line");
+                Assert.That(reader.Read(), Is.True, "Can't read third line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("aaaaa"), "Not the excepted value for line 2 column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("aaaaa2"), "Not the excepted value for line 2 column 1");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
@@ -283,7 +283,7 @@
                     Assert.That(reader.Read(), $"Can't read line {l}");
                     for (int f = 0; f < 3; f++)
                     {
-                        Assert.That(reader.GetValue(f), Is.EqualTo(string.Format("azerty{0}{1}", l, f)), $"Not the excepted value for line {l} column {f}");
+                        Assert.That(reader.GetValue(f), Is.EqualTo($"azerty{l}{f}"), $"Not the excepted value for line {l} column {f}");
                     }
                 }
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
@@ -306,10 +306,10 @@
 
             using (ICsvReader reader = CreateCsvReader(sb.ToString(), false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 for (int index = 0; index < specialChars.Length; index++)
                 {
-                    Assert.That(reader.GetValue(index), Is.EqualTo(string.Format("azerty{0}azerty", specialChars[index])), $"Not the excepted value for column {index}");
+                    Assert.That(reader.GetValue(index), Is.EqualTo($"azerty{specialChars[index]}azerty"), $"Not the excepted value for column {index}");
                 }
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
             }
@@ -325,7 +325,7 @@
             // '""'
             using (ICsvReader reader = CreateCsvReader("\"\"", false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo(string.Empty), "Not the excepted value");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
             }
@@ -337,7 +337,7 @@
             // '""""'
             using (ICsvReader reader = CreateCsvReader("\"\"\"\"", false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("\""), "Not the excepted value");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
             }
@@ -349,7 +349,7 @@
             // '""""""'
             using (ICsvReader reader = CreateCsvReader("\"\"\"\"\"\"", false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo("\"\""), "Not the excepted value");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
             }
@@ -362,7 +362,7 @@
 
             using (ICsvReader reader = CreateCsvReader(input, false))
             {
-                Assert.That(reader.Read(), "Can't read first line");
+                Assert.That(reader.Read(), Is.True, "Can't read first line");
                 Assert.That(reader.GetValue(0), Is.EqualTo(" \"azerty\""), "Not the excepted value for column 0");
                 Assert.That(reader.GetValue(1), Is.EqualTo("t\"\""), "Not the excepted value for column 1");
                 Assert.That(reader.GetValue(2), Is.EqualTo("\t\""), "Not the excepted value for column 2");

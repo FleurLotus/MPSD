@@ -244,7 +244,7 @@
         {
             IDbDataParameter parameter = cmd.CreateParameter();
             PropertyInfo pi = _typeDbInfo.Columns[col];
-            parameter.ParameterName = string.Format("@{0}", col);
+            parameter.ParameterName = $"@{col}";
             object value = pi.GetValue(input, null);
             parameter.Value = value ?? DBNull.Value;
             DbType? dbtype = pi.PropertyType.ToDbType();

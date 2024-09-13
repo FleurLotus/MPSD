@@ -25,19 +25,19 @@
             ViewModelWithValidation vm = new ViewModelWithValidation();
 
             //PropertyPublic and PropertyWithProtectedGet are null
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error");
             vm.PropertyPublic = "ahahah";
             //PropertyWithProtectedGet is null
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must still have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must still have error");
             vm.PropertyWithProtectedGet = "bbbb";
             //Ok
-            Assert.That(string.IsNullOrEmpty(vm.Error), "Must have not error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must have not error");
             vm.PropertyWithNoRule = "bbbb";
             //No change for rules
-            Assert.That(string.IsNullOrEmpty(vm.Error), "Must still have not error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must still have not error");
             vm.PropertyPublic = "";
             //PropertyPublic is empty
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error again");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error again");
 
         }
         [Test]
@@ -46,19 +46,19 @@
             ViewModelWithValidation2 vm = new ViewModelWithValidation2();
 
             //PropertyPublic is empty and child not set
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error");
             vm.PropertyPublic = "ahahah";
             //OK
-            Assert.That(string.IsNullOrEmpty(vm.Error), "Must have not error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must have not error");
             vm.CreateChild();
             //Set child  and Child.PropertyPublic and Child.PropertyWithProtectedGet are null
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error");
             vm.Child.PropertyPublic = "ahahah";
             //Child.PropertyWithProtectedGet is null
-            Assert.That(!string.IsNullOrEmpty(vm.Error), "Must still have error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must still have error");
             vm.Child.PropertyWithProtectedGet = "bbbb";
             //Ok
-            Assert.That(string.IsNullOrEmpty(vm.Error), "Must have not error");
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must have not error");
         }
 
         //Used by reflection

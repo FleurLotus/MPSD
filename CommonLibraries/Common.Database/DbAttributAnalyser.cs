@@ -56,7 +56,7 @@
                             identity = name;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(string.Format("{0} is not managed", columnAttribute.Kind));
+                            throw new ArgumentOutOfRangeException($"{columnAttribute.Kind} is not managed");
                     }
                 }
             }

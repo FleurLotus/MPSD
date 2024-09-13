@@ -125,7 +125,7 @@
         public void TestGreaterThanValidationAttribute(double minValue, bool allowEquals, object input, bool isValid)
         {
             GreaterThanValidationAttribute att = new GreaterThanValidationAttribute(minValue, allowEquals);
-            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for minvalue = {minValue} and allowEquals={allowEquals} and input = {input}");
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for minvalue = {minValue} and allowEquals = {allowEquals} and input = {input}");
         }
         #region TestCase List
         [TestCase(0, false, null, false)]
@@ -142,7 +142,7 @@
         public void TestLessThanValidationAttribute(double maxValue, bool allowEquals, object input, bool isValid)
         {
             LessThanValidationAttribute att = new LessThanValidationAttribute(maxValue, allowEquals);
-            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for maxvalue = {maxValue} and allowEquals={allowEquals} and input = {input}");
+            Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for maxvalue = {maxValue} and allowEquals = {allowEquals} and input = {input}");
         }
 
 

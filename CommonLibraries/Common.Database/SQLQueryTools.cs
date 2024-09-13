@@ -68,7 +68,7 @@
                 return dt.ToString("yyyyMMdd HH:mm:ss");
             }
 
-            return string.Format("'{0}'", o.ToString().ToSqlStringEscaped());
+            return $"'{o.ToString().ToSqlStringEscaped()}'";
         }
         public static string EqualityOperator(string value)
         {

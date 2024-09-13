@@ -21,8 +21,8 @@
 
             string[] names = publicInstanceProperties.Select(pi => pi.Name).ToArray();
 
-            Assert.That(names.Length == 11, "Not the could number of property found");
-            Assert.That(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), "Must find only member public");
+            Assert.That(names.Length, Is.EqualTo(11), "Not the could number of property found");
+            Assert.That(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), Is.True, "Must find only member public");
         }
     
         // ReSharper disable UnusedMember.Local
