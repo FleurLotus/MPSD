@@ -39,29 +39,29 @@
 
             InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = -1});
         }
-        private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, ICardCount cardCount)
+        private void AuditAddCard(int idCollection, string idScryFall, int idLanguage, ICardCount cardCount)
         {
             foreach (KeyValuePair<ICardCountKey, int> kv in cardCount)
             {
-                AuditAddCard(idCollection, idGatherer, idLanguage, kv.Key, kv.Value);
+                AuditAddCard(idCollection, idScryFall, idLanguage, kv.Key, kv.Value);
             }
         }
-        private void AuditAddCard(int idCollection, int idGatherer, int idLanguage, ICardCountKey cardCountKey, int countToAdd)
+        private void AuditAddCard(int idCollection, string idScryFall, int idLanguage, ICardCountKey cardCountKey, int countToAdd)
         {
-            if (idCollection <= 0 || countToAdd == 0 || idGatherer == 0 || idLanguage < 0 || cardCountKey == null)
+            if (idCollection <= 0 || countToAdd == 0 || string.IsNullOrEmpty(idScryFall) || idLanguage < 0 || cardCountKey == null)
             {
                 return;
             }
 
             InsertNewAudit(new Audit
-                               {
-                                   IdCollection = idCollection,
-                                   Quantity = countToAdd,
-                                   IdGatherer = idGatherer,
-                                   IsFoil = cardCountKey.IsFoil,
-                                   IsAltArt = cardCountKey.IsAltArt,
-                                   IdLanguage = idLanguage
-                               });
+            {
+                IdCollection = idCollection,
+                Quantity = countToAdd,
+                IdScryFall = idScryFall,
+                IsFoil = cardCountKey.IsFoil,
+                IsAltArt = cardCountKey.IsAltArt,
+                IdLanguage = idLanguage
+            });
         }
 
         private void InsertNewAudit(Audit audit)

@@ -4,13 +4,13 @@ namespace MagicPictureSetDownloader.Db.DAO
     using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{IdGatherer}")]
+    [DebuggerDisplay("{IdScryFall}")]
     [DbTable(Name = "Picture")]
     [DbRestictedDml(Restriction.Insert | Restriction.Delete | Restriction.Update)]
     internal class PictureKey : IPictureKey
     {
         //Use for light load
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
     }
 }

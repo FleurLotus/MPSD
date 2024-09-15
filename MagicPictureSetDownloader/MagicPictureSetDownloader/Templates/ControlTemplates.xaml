@@ -4,6 +4,7 @@
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+                    xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
 
                     xmlns:l="clr-namespace:MagicPictureSetDownloader"
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
@@ -12,6 +13,79 @@
 
                     mc:Ignorable="d"
                     >
+    <!-- override the template of the TabControl to replace the header to have one line with scroll bar -->
+    <SolidColorBrush x:Key="TabItem.Selected.Background" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
+    <Style x:Key="TabControlStyle1" TargetType="{x:Type TabControl}">
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="ColumnDefinition0"/>
+                            <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                            <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Start of change -->
+                        <!--  <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/> -->
+                        <ScrollViewer x:Name="headerPanel" Background="Transparent" Grid.Column="0" Margin="2,2,2,0" Grid.Row="0" Panel.ZIndex="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto" >
+                            <VirtualizingStackPanel Orientation="Horizontal" IsItemsHost="true" KeyboardNavigation.TabIndex="1" />
+                        </ScrollViewer>
+                        <!-- End of change  -->
+                        <Border x:Name="contentPanel" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="TabStripPlacement" Value="Bottom">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="1"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="Auto"/>
+                            <Setter Property="Margin" TargetName="headerPanel" Value="2,0,2,2"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Left">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="1"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="Margin" TargetName="headerPanel" Value="2,2,0,2"/>
+                        </Trigger>
+                        <Trigger Property="TabStripPlacement" Value="Right">
+                            <Setter Property="Grid.Row" TargetName="headerPanel" Value="0"/>
+                            <Setter Property="Grid.Row" TargetName="contentPanel" Value="0"/>
+                            <Setter Property="Grid.Column" TargetName="headerPanel" Value="1"/>
+                            <Setter Property="Grid.Column" TargetName="contentPanel" Value="0"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition0" Value="*"/>
+                            <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto"/>
+                            <Setter Property="Height" TargetName="RowDefinition0" Value="*"/>
+                            <Setter Property="Height" TargetName="RowDefinition1" Value="0"/>
+                            <Setter Property="Margin" TargetName="headerPanel" Value="0,2,2,2"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 
     <!-- Control Template -->
     <!-- Card part display -->
@@ -64,7 +138,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Image Width="12" Height="12" Source="{Binding Converter={conv:StringToCastingCostImageConverter}}"/>
+                        <Image Width="15" Height="15" Source="{Binding Converter={conv:StringToCastingCostImageConverter}}"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -166,7 +240,7 @@
                                     <!-- Here the datacontext is a Dictionary<string, string>.KeyValuePair but generics is not supported for DesignInstance -->
                                     <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                                     <Border Grid.Column="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1">
-                                        <Image Width="30" Source="{Binding Key, Converter={conv:TreeToTreeImageConverter}}" />
+                                        <svgc:SvgViewbox Width="30" Source="{Binding Key, Converter={conv:TreeToTreeImageConverter}}" />
                                     </Border>
                                     <TextBlock Grid.Column="1" Margin="5,0" Text="{Binding Key}"/>
                                     <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
@@ -175,39 +249,6 @@
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Value}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </ControlTemplate>
-
-    <!-- Rules Grid display -->
-    <ControlTemplate x:Key="RulesControlTemplate">
-        <ListView VerticalAlignment="Center" HorizontalAlignment="Left"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ItemsSource="{Binding Hierarchical.Selected, Converter={conv:CardToRulesConverter}}"
-                  Visibility="{Binding Hierarchical.Selected, Converter={conv:CardToRulesVisibleConverter}}"
-                  d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}">
-            <i:Interaction.Behaviors>
-                <fl:GridViewColumnResizeBehavior />
-            </i:Interaction.Behaviors>
-            
-            <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
-                    <Setter Property="BorderBrush" Value="LightGray" />
-                    <Setter Property="BorderThickness" Value="0,0,0,1" />
-                </Style>
-            </ListView.ItemContainerStyle>
-            
-            <ListView.View>
-                <GridView AllowsColumnReorder="False">
-                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding AddDate, StringFormat='dd/MM/yyyy'}" />
-                    <GridViewColumn Header="Rule">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <l:PicturedTextBlock TextWrapping="Wrap" InlineCollection="{Binding Text, Converter={conv:TextToInlinesConverter}}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -289,18 +330,52 @@
 
     <!-- Card picture display variations -->
     <ControlTemplate x:Key="VariationImageControlTemplate">
-        <TabControl TabStripPlacement="Bottom" Background="Transparent" fl:TabControlExtensions.SelectOnlyVisibleTabs="True" 
-                    ItemsSource="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter},{conv:CardToVariationsConverter}}}"
-                    Visibility="{Binding Hierarchical.Selected, Converter={fl:AggregateConverter {conv:HierarchicalResultNodeToCardConverter},{conv:CardToVariationsVisibleConverter}}}"
+        <TabControl Style="{DynamicResource TabControlStyle1}"
+                    TabStripPlacement="Bottom" Background="Transparent" fl:TabControlExtensions.SelectOnlyVisibleTabs="True" 
+                    ItemsSource="{Binding Hierarchical.Selected, Converter={conv:HierarchicalResultNodeToVariationsConverter}}"
+                    Visibility="{Binding Hierarchical.Selected, Converter={conv:HierarchicalResultNodeToVariationsVisibleConverter}}"
                     d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="Alt"/>
+                    <TextBlock Text="{Binding IdScryFall}"/>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <Image StretchDirection="DownOnly" Source="{Binding Converter={conv:GathererIdToImageConverter}}" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Image Source="{Binding Converter={conv:CardToImageConverter}, ConverterParameter=0}" RenderTransformOrigin="0.5,0.5">
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="{Binding Converter={conv:CardToRotationAngleConverter}, ConverterParameter=0}" />
+                                    <TranslateTransform>
+                                        <TranslateTransform.X>
+                                            <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="0">
+                                                <Binding />
+                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                            </MultiBinding>
+                                        </TranslateTransform.X>
+                                    </TranslateTransform>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                        <Image Source="{Binding Converter={conv:CardToImageConverter}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
+                            <Image.RenderTransform>
+                                <TransformGroup>
+                                    <RotateTransform Angle="{Binding Converter={conv:CardToRotationAngleConverter}, ConverterParameter=1}" />
+                                    <TranslateTransform>
+                                        <TranslateTransform.X>
+                                            <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="1">
+                                                <Binding />
+                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
+                                            </MultiBinding>
+                                        </TranslateTransform.X>
+                                    </TranslateTransform>
+                                </TransformGroup>
+                            </Image.RenderTransform>
+                        </Image>
+                    </StackPanel>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>

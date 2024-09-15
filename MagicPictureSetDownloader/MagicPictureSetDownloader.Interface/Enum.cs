@@ -13,8 +13,8 @@ namespace MagicPictureSetDownloader.Interface
 
     public enum ExportFormat
     {
-        MPSD = -1,
-        MTGM = 0,
+        MPSD2,
+        MPSD
     }
 
     public enum ImportOption
@@ -26,6 +26,15 @@ namespace MagicPictureSetDownloader.Interface
     {
         OneByGathererId,
         OneByCardName,
+    }
+    public enum CardIdSource
+    {
+        Mtgo,
+        MtgoFoil,
+        Multiverse,
+        Tcgplayer,
+        TcgplayerEtched,
+        Cardmarket,
     }
     public enum PriceSource
     {

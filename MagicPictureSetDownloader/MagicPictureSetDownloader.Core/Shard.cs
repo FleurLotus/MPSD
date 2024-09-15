@@ -3,23 +3,33 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using MagicPictureSetDownloader.Interface;
-    using MagicPictureSetDownloader.Core.CardInfo;
 
     public class Shard
     {
+        public const string Prefix = "{";
+        public const string Suffix = "}";
+        public const string Separator = "/";
+
+        private static readonly Regex ManaRegex = new Regex("{(?<Mana>[^}]+)}", RegexOptions.Compiled);
+
         private const char White = 'W';
         private const char Blue = 'U';
         private const char Black = 'B';
         private const char Red = 'R';
         private const char Green = 'G';
         private const char Colorless = 'C';
+        private const char Legendary = 'L';
+        private const char Drop = 'D';
+
+        public const string DisplayPrefix = "@";
 
         private const string Half = "H";
         private const string Phyrexian = "P";
         private const string TwoHybrid = "2";
-        private const string Snow = "SNOW";
+        private const string Snow = "S";
 
         private static readonly string[] Generics = { "X", "Y", "Z" };
 
@@ -27,7 +37,7 @@
 
         private readonly string _toString;
 
-        private Shard(string shardCastingCost, bool isGeneric, bool isSnow, bool isColorless, bool isXYZ)
+        private Shard(string shardCastingCost, bool isGeneric, bool isSnow, bool isColorless, bool isXYZ, bool isLegendary, bool isDrop)
         {
             ShardCastingCost = shardCastingCost;
             Color = ShardColor.Colorless;
@@ -35,6 +45,8 @@
             IsSnow = isSnow;            // -> CCM = 1
             IsColorless = isColorless;  // -> CCM = 1
             IsXYZ = isXYZ;              // -> CCM = 0
+            IsLegendary = isLegendary;
+            IsDrop = isDrop;
 
             if (IsXYZ)
             {
@@ -49,8 +61,9 @@
                 ConvertedCastingCost = 1;
             }
 
-            _toString = string.Format("{0} => {1} CCM={2} {3}{4}{5}{6}", ShardCastingCost, Color, ConvertedCastingCost, IsGeneric ? "(IsGeneric)" : string.Empty,
-                 IsSnow ? "(IsSnow)" : string.Empty, IsColorless ? "(IsColorless)" : string.Empty, IsXYZ ? "(IsXYZ)" : string.Empty);
+            _toString = string.Format("{0} => {1} CCM={2} {3}{4}{5}{6}{7}{8}", ShardCastingCost, Color, ConvertedCastingCost, IsGeneric ? "(IsGeneric)" : string.Empty,
+                 IsSnow ? "(IsSnow)" : string.Empty, IsColorless ? "(IsColorless)" : string.Empty, IsXYZ ? "(IsXYZ)" : string.Empty, 
+                 IsLegendary ? "(IsLegendary)" : string.Empty, IsDrop ? "(IsDrop)" : string.Empty);
         }
         private Shard(string shardCastingCost, ShardColor color, bool isPhyrexian, bool isHybrid, bool is2Hybrid, bool isHalf)
         {
@@ -74,7 +87,9 @@
         public bool IsSnow { get; }
         public bool IsColorless { get; }
         public bool IsXYZ { get; }
-
+        public bool IsLegendary { get; }
+        public bool IsDrop { get; }
+        
         public bool IsPhyrexian { get; }
         public bool IsHybrid { get; }
         public bool Is2Hybrid { get; }
@@ -94,9 +109,7 @@
                 return Array.Empty<Shard>();
             }
 
-            return castingCost.Split(new[] { ' ' },StringSplitOptions.RemoveEmptyEntries)
-                              .Select(s => s.StartsWith(SymbolParser.Prefix)? s[SymbolParser.Prefix.Length..].ToUpperInvariant(): s.ToUpperInvariant())
-                              .Select(GetShard);
+            return ManaRegex.Matches(castingCost.ToUpper()).Select(m => GetShard(m.Groups["Mana"].Value));
         }
 
         private static Shard GetShard(string shardCastingCost)
@@ -109,7 +122,7 @@
             if (int.TryParse(shardCastingCost, out int _))
             {
                 //IsGeneric
-                shard = new Shard(shardCastingCost, true, false, false, false);
+                shard = new Shard(shardCastingCost, true, false, false, false, false, false);
                 _shards.Add(shardCastingCost, shard);
                 return shard;
             }
@@ -117,7 +130,7 @@
             if (shardCastingCost == Snow)
             {
                 //IsSnow
-                shard = new Shard(shardCastingCost, false, true, false, false);
+                shard = new Shard(shardCastingCost, false, true, false, false, false, false);
                 _shards.Add(shardCastingCost, shard);
                 return shard;
             }
@@ -125,7 +138,23 @@
             if (shardCastingCost == Colorless.ToString())
             {
                 //IsColorless
-                shard = new Shard(shardCastingCost, false, false, true, false);
+                shard = new Shard(shardCastingCost, false, false, true, false, false, false);
+                _shards.Add(shardCastingCost, shard);
+                return shard;
+            }
+
+            if (shardCastingCost == Legendary.ToString())
+            {
+                //IsLegendary
+                shard = new Shard(shardCastingCost, false, false, false, false, true, false);
+                _shards.Add(shardCastingCost, shard);
+                return shard;
+            }
+            
+            if (shardCastingCost == Drop.ToString())
+            {
+                //IsDrop
+                shard = new Shard(shardCastingCost, false, false, false, false, false, true);
                 _shards.Add(shardCastingCost, shard);
                 return shard;
             }
@@ -133,7 +162,7 @@
             if (Generics.Contains(shardCastingCost))
             {
                 //IsXYZ => IsGeneric
-                shard = new Shard(shardCastingCost, true, false, false, true);
+                shard = new Shard(shardCastingCost, true, false, false, true, false, false);
                 _shards.Add(shardCastingCost, shard);
                 return shard;
             }
@@ -170,7 +199,7 @@
 
             isHybrid = workingShardCastingCost.ToCharArray().Length > 1;
 
-            foreach (char c in workingShardCastingCost)
+            foreach (char c in workingShardCastingCost.Replace(Separator,string.Empty))
             {
                 color |= c switch
                 {

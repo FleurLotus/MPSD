@@ -1,8 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
-
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
@@ -11,50 +11,79 @@
 
     public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
     {
-        public CardViewModel(ICardAllDbInfo cardAllDbInfo)
-            : this(cardAllDbInfo, false)
-        {
-        }
+        private readonly ICardFace _currentFace;
 
-        private CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart)
+        public CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart =  false)
         {
             CardAllDbInfo = cardAllDbInfo;
-            Card = otherPart ? cardAllDbInfo.CardPart2 : cardAllDbInfo.Card;
+            Card = cardAllDbInfo.Card;
+            _currentFace = otherPart ? Card.OtherCardFace : Card.MainCardFace;
             IEdition edition = cardAllDbInfo.Edition;
             Statistics = cardAllDbInfo.Statistics.Select(s => new StatisticViewModel(s)).ToArray();
             Prices = cardAllDbInfo.Prices.Select(p => new PriceViewModel(p,edition)).ToArray();
             IsDownSide = false;
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
-            IdGatherer = otherPart ? cardAllDbInfo.IdGathererPart2 : cardAllDbInfo.IdGatherer;
-            VariationIdGatherers = otherPart ? cardAllDbInfo.VariationIdGatherers2.ToArray() : cardAllDbInfo.VariationIdGatherers.ToArray();
+            IdScryFall = cardAllDbInfo.IdScryFall;
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
-            Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeSide(Card) || MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
-            if (!string.IsNullOrWhiteSpace(Card.Power) && !string.IsNullOrWhiteSpace(Card.Toughness))
+            Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
+            if (!string.IsNullOrWhiteSpace(_currentFace.Power) && !string.IsNullOrWhiteSpace(_currentFace.Toughness))
             {
-                PowerToughnessLoyaltyDefense = string.Format("{0}/{1}", Card.Power, Card.Toughness);
+                PowerToughnessLoyaltyDefense = string.Format("{0}/{1}", _currentFace.Power, _currentFace.Toughness);
                 PowerToughnessLoyaltyDefenseText = "Power/Toughness";
             }
-            else if (!string.IsNullOrWhiteSpace(Card.Loyalty))
+            else if (!string.IsNullOrWhiteSpace(_currentFace.Loyalty))
             {
-                PowerToughnessLoyaltyDefense = Card.Loyalty;
+                PowerToughnessLoyaltyDefense = _currentFace.Loyalty;
                 PowerToughnessLoyaltyDefenseText = "Loyalty";
             }
-            else if (!string.IsNullOrWhiteSpace(Card.Defense))
+            else if (!string.IsNullOrWhiteSpace(_currentFace.Defense))
             {
-                PowerToughnessLoyaltyDefense = Card.Defense;
+                PowerToughnessLoyaltyDefense = _currentFace.Defense;
                 PowerToughnessLoyaltyDefenseText = "Defense";
             }
 
             if (!string.IsNullOrWhiteSpace(CastingCost))
             {
-                DisplayedCastingCost = CastingCost.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                List<string> castCost = new List<string>();
+                string text = CastingCost;
+
+                bool endOfString = false;
+                int pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
+                while (pos >= 0)
+                {
+                    int end = text.IndexOf(Shard.Suffix, pos);
+                    if (end < 0)
+                    {
+                        end = text.Length;
+                        endOfString = true;
+                    }
+                    int endPosition = endOfString ? end : end - 1;
+                    castCost.Add(Shard.DisplayPrefix + text[(pos + Shard.Prefix.Length)..end]);
+                    if (text.Length > end)
+                    {
+                        text = text[(end + 1)..];
+                    }
+                    else
+                    {
+                        text = string.Empty;
+                    }
+                    pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
+                }
+                if (!string.IsNullOrEmpty(text))
+                {
+                    castCost.Add(Shard.DisplayPrefix + text);
+                }
+
+                DisplayedCastingCost = castCost.ToArray();
             }
 
+            
             if (IsMultiPart && !otherPart)
             {
                 OtherCardPart = new CardViewModel(cardAllDbInfo, true);
-                if (MultiPartCardManager.Instance.IsDownSide(cardAllDbInfo.CardPart2))
+                OtherCardPart.Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeBackSide(Card);
+                if (MultiPartCardManager.Instance.IsDownSide(cardAllDbInfo.Card))
                 {
                     OtherCardPart.IsDownSide = true;
                 }
@@ -64,7 +93,7 @@
         public ICardAllDbInfo CardAllDbInfo { get; }
         public IEdition Edition { get; }
         public IRarity Rarity { get; }
-        public int IdGatherer { get; }
+        public string IdScryFall { get; }
         
         public string Name
         {
@@ -76,34 +105,26 @@
         }
         public string Type
         {
-            get { return Card.Type; }
+            get { return _currentFace.Type; }
         }
         public string CastingCost
         {
-            get { return Card.CastingCost; }
+            get { return _currentFace.CastingCost; }
         }
         public string AllPartCastingCost
         {
-            get { return IsMultiPart ? CastingCost + " " + OtherCardPart.CastingCost : CastingCost; }
-        }
-        public string PartName
-        {
-            get { return Card.PartName; }
+            get { return IsMultiPart ? $"{CastingCost} {OtherCardPart.CastingCost}" : CastingCost; }
         }
         public string Text
         {
-            get { return Card.Text; }
-        }
-        public IRuling[] Rulings
-        {
-            get { return Card.Rulings; }
+            get { return _currentFace.Text; }
         }
         public string ToString(int? languageId)
         {
             return Card.ToString(languageId);
         }
         public bool IsMultiPart { get; }
-        public bool Is90DegreeSide { get; }
+        public bool Is90DegreeSide { get; private set; }
         public bool IsDownSide { get; private set; }
         public CardViewModel OtherCardPart { get; }
         public StatisticViewModel[] Statistics { get; }
@@ -111,7 +132,6 @@
         public string PowerToughnessLoyaltyDefense { get; }
         public string PowerToughnessLoyaltyDefenseText { get; }
         public string[] DisplayedCastingCost { get; }
-        public int[] VariationIdGatherers { get; }
         internal ICard Card { get; }
     }
 }

@@ -1,9 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
-    using System;
     using System.Linq;
     using System.Collections.Generic;
-
+    using System.Diagnostics;
     using Common.Database;
     using Common.Library.Extension;
 
@@ -13,34 +12,24 @@
     internal class Card : ICard
     {
         private readonly IDictionary<int, string> _translations = new Dictionary<int, string>();
-        private readonly IList<IRuling> _rulings = new List<IRuling>();
+
+        private readonly List<ICardFace> _faces = new List<ICardFace>();
 
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
         public string Name { get; set; }
         [DbColumn]
-        public string Text { get; set; }
-        [DbColumn]
-        public string Power { get; set; }
-        [DbColumn]
-        public string Toughness { get; set; }
-        [DbColumn]
-        public string CastingCost { get; set; }
-        [DbColumn]
-        public string Loyalty { get; set; }
-        [DbColumn]
-        public string Defense { get; set; }
-        [DbColumn]
-        public string Type { get; set; }
-        [DbColumn]
-        public string PartName { get; set; }
-        [DbColumn]
-        public string OtherPartName { get; set; }
+        public string Layout { get; set; }
 
-        public IRuling[] Rulings
+        public ICardFace MainCardFace
         {
-            get { return _rulings.OrderByDescending(r => r.AddDate).ThenBy(r => r.Text).ToArray(); }
+            get { return _faces.Count > 0 ? _faces[0] : null; }
+        }
+
+        public ICardFace OtherCardFace
+        {
+            get { return _faces.Count == 2 ? _faces[1] : null; }
         }
 
         public string ToString(int? languageId)
@@ -70,19 +59,24 @@
         {
             return _translations.ContainsKey(languageId);
         }
-        internal void AddRuling(Ruling ruling)
+        public bool HasCardFace(string name)
         {
-            if (ruling == null || ruling.IdCard != Id)
+            return _faces.Any(f=> f.Name == name);
+        }
+
+        internal void AddCardFace(CardFace cardFace)
+        {
+            if (cardFace == null)
             {
                 return;
             }
+            _faces.Add(cardFace);
 
-            _rulings.Add(ruling);
-        }
-
-        public bool HasRuling(DateTime addDate, string text)
-        {
-            return _rulings.Any(r => r.AddDate == addDate && r.Text == text);
+            if (_faces.Count > 2)
+            {
+                //Not Normal
+                Debugger.Break();
+            }
         }
     }
 }

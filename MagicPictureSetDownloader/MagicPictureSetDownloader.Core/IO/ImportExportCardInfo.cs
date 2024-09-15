@@ -7,14 +7,14 @@
     {
         private readonly CardCount _cardCount;
 
-        internal ImportExportCardInfo(int idGatherer, ICardCount cardCount, int idLanguage)
+        internal ImportExportCardInfo(string idScryFall, ICardCount cardCount, int idLanguage)
         {
-            IdGatherer = idGatherer;
+            IdScryFall = idScryFall;
             IdLanguage = idLanguage;
             _cardCount = new CardCount(cardCount);
         }
 
-        public int IdGatherer { get; }
+        public string IdScryFall { get; }
         public int IdLanguage { get; }
 
         public int Number { get { return GetCount(CardCountKeys.Standard); } }

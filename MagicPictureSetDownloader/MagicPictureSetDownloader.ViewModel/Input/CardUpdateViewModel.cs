@@ -104,8 +104,8 @@
         
         private void ChangeDestinationLanguage()
         {
-            int idGatherer = MagicDatabase.GetIdGatherer(Source.Card, EditionSelected);
-            Languages = MagicDatabase.GetLanguages(idGatherer).ToArray();
+            string idScryFall = MagicDatabase.GetIdScryFall(Source.Card, EditionSelected);
+            Languages = MagicDatabase.GetLanguages(idScryFall).ToArray();
         }
         protected override bool OkCommandCanExecute(object o)
         {

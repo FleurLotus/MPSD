@@ -11,6 +11,6 @@
         string Type { get; }
         string CastingCost { get; }
         string AllPartCastingCost { get; }
-        int IdGatherer { get; }
+        string IdScryFall { get; }
     }
 }

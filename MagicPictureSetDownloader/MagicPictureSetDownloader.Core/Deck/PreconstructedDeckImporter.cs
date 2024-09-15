@@ -75,7 +75,7 @@
             IEdition deckEdition = GetEdition(deckName, m);
             if (deckEdition == null)
             {
-                throw new ParserException("Could not find edition with name " + deckName);
+                throw new ParserException($"Could not find edition with name {deckName}");
             }
             if (MagicDatabase.GetPreconstructedDeck(deckEdition.Id, deckName) != null)
             {
@@ -106,30 +106,17 @@
 
                         if (edition == null)
                         {
-                            throw new ParserException("Could not find edition for card in " + deckName);
+                            throw new ParserException($"Could not find edition for card in {deckName}");
                         }
 
-                        int idGatherer = MagicDatabase.GetIdGatherer(card, edition);
-                        if (idGatherer == 0 && deckEdition.IsNoneGatherer())
+                        string idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                        if (string.IsNullOrEmpty(idScryFall))
                         {
-                            edition = deckEdition;
-                            idGatherer = MagicDatabase.GetIdGatherer(card, edition);
-                        }
-                        if (idGatherer == 0)
-                        {
-                            //It is not a gatherer edition, we will add the card to it
-                            if (edition.IsNoneGatherer() && _getExtraInfo != null)
-                            {
-                                Tuple<string, IRarity> t = ExtractExtraInfo(m.Groups["url"].Value);
-                                cards.Add(new DeckCardInfo(edition.Id, card.Id, number, t.Item2.Id, t.Item1));
-                                break;
-                            }
-
                             throw new ParserException(string.Format("Could not find card with idCard {0} and idEdition {1}", card.Id, edition.Id));
                         }
                         else
                         {
-                            cards.Add(new DeckCardInfo(idGatherer, number));
+                            cards.Add(new DeckCardInfo(idScryFall, number));
                             break;
                         }
                     }
@@ -172,7 +159,7 @@
         {
             string cardName = m.Groups["name"].Value.TrimEnd();
             string cardName2 = null;
-  
+
             if (cardName.Contains("/"))
             {
                 string[] c = cardName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -184,15 +171,12 @@
                 }
             }
 
-            ICard card = MagicDatabase.GetCard(cardName, cardName2);
+            ICard card = MagicDatabase.GetCard(cardName);
             if (card == null)
             {
-                card = MagicDatabase.GetCard(cardName, null);
-                if (card == null)
-                {
-                    throw new ParserException("Could not find Card with name " + cardName);
-                }
+                throw new ParserException($"Could not find Card with name {cardName}");
             }
+        
 
             return card;
         }
@@ -204,7 +188,7 @@
             if (edition == null)
             {
                 //Special case for guild pack
-                string cardEdition2 = cardEdition + "_" + deckName;
+                string cardEdition2 = $"{cardEdition}_{deckName}";
                 if (cardEdition2.Length > 10)
                 {
                     cardEdition2 = cardEdition2[..10];
@@ -221,14 +205,14 @@
             Match m = _cardImageRegex.Match(extraHtml);
             if (!m.Success)
             {
-                throw new ParserException("Could not find Card image in with " + url);
+                throw new ParserException($"Could not find Card image in with {url}");
             }
             string pictureUrl = BaseUrl + m.Groups["url"].Value;
 
             m = _cardRarityRegex.Match(extraHtml);
             if (!m.Success)
             {
-                throw new ParserException("Could not find Card rarity in with " + url);
+                throw new ParserException($"Could not find Card rarity in with {url}");
             }
             string rarityString = m.Groups["rarity"].Value.Trim();
             if (rarityString.ToLower() == "mythic")
@@ -242,7 +226,7 @@
             IRarity rarity = MagicDatabase.GetRarity(rarityString);
             if (rarity == null)
             {
-                throw new ParserException("Unknown rarity " + rarityString);
+                throw new ParserException($"Unknown rarity {rarityString}");
 
             }
             return new Tuple<string, IRarity>(pictureUrl, rarity);

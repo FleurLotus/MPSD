@@ -9,7 +9,7 @@
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdPreconstructedDeck { get; set; }
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
-        public int IdGatherer { get; set; }
+        public string IdScryFall { get; set; }
         [DbColumn]
         public int Number { get; set; }
     }

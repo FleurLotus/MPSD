@@ -15,8 +15,7 @@
     internal class PictureDatabase
     {
         private const int Level = 3;
-        private const int LevelSize = 100;
-        private static readonly string Format = new string('0', 1 + (int)Math.Truncate(Math.Log10(LevelSize - 1)));
+        private const int LevelSize = 2;
 
         private const string RootFolder = "MagicPicture";
         private const string CardFolder = "Card";
@@ -26,7 +25,7 @@
         private readonly string _treePath;
 
         private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<int, IPicture> _pictures = new Dictionary<int, IPicture>();
+        private readonly IDictionary<string, IPicture> _pictures = new Dictionary<string, IPicture>();
 
         public PictureDatabase()
         {
@@ -47,7 +46,7 @@
 
             foreach(string file in Directory.GetFiles(_treePath, "*.*", SearchOption.AllDirectories))
             {
-                TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file) };
+                TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file), FilePath = file };
                 if (!_treePictures.ContainsKey(treePicture.Name))
                 {
                     _treePictures.Add(treePicture.Name, treePicture);
@@ -56,23 +55,32 @@
         }
         public ITreePicture GetTreePicture(string key)
         {
+            if (key == "@∞")
+            {
+                key = "@infinity";
+            }
+            if (key == "@½")
+            {
+                key = "@0.5";
+            }
+
             return _treePictures.GetOrDefault(ToWindowsFileName(key));
         }
-        public IPicture GetPicture(int idGatherer, bool doNotCache = false)
+        public IPicture GetPicture(string idScryFall, bool doNotCache = false)
         {
-            if (!_pictures.TryGetValue(idGatherer, out IPicture picture))
+            if (!_pictures.TryGetValue(idScryFall, out IPicture picture))
             {
-                string path = GeneratePath(idGatherer);
+                string path = GeneratePath(idScryFall);
                 path = Path.GetDirectoryName(Path.Combine(_cardPath, path));
 
                 if (Directory.Exists(path))
                 {
-                    foreach (string file in Directory.GetFiles(path, idGatherer.ToString() + ".*", SearchOption.AllDirectories))
+                    foreach (string file in Directory.GetFiles(path, $"{idScryFall}.*", SearchOption.AllDirectories))
                     {
-                        picture = new Picture { IdGatherer = idGatherer, Image = File.ReadAllBytes(file) };
+                        picture = new Picture { IdScryFall = idScryFall, Image = File.ReadAllBytes(file) };
                         if (!doNotCache)
                         {
-                            _pictures.Add(picture.IdGatherer, picture);
+                            _pictures.Add(picture.IdScryFall, picture);
                         }
 
                         break;
@@ -83,7 +91,7 @@
             return picture;
         }
 
-        public IEnumerable<int> GetAllPictureIds()
+        public IEnumerable<string> GetAllPicturesGuid()
         {
             if (!Directory.Exists(_cardPath))
             {
@@ -92,16 +100,11 @@
 
             foreach (string file in Directory.GetFiles(_cardPath, "*.*", SearchOption.AllDirectories))
             {
-                string name = Path.GetFileNameWithoutExtension(file);
-
-                if (int.TryParse(name, out int id))
-                {
-                    yield return id;
-                }
+                yield return Path.GetFileNameWithoutExtension(file);
             }
         }
 
-        public void InsertNewTreePicture(string name, byte[] data)
+        public void InsertNewTreePicture(string name, byte[] data, bool isSvg)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -113,8 +116,8 @@
                 return;
             }
 
-            string path = GeneratePath(name);
-            string ext = GetExtension(data);
+            string path = GeneratePathFromName(name);
+            string ext = isSvg ? ".svg" : GetExtension(data);
             string filePath = Path.Combine(_treePath, path + ext);
 
             if (Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length> 0)
@@ -124,17 +127,17 @@
 
             Save(filePath, data);
 
-            TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(filePath), Image = data };
+            TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(filePath), Image = data, FilePath = filePath };
             _treePictures.Add(treePicture.Name, treePicture);
         }
-        public void InsertNewPicture(int idGatherer, byte[] data)
+        public void InsertNewPicture(string idScryFall, byte[] data)
         {
             if (data == null || data.Length == 0)
             {
                 return;
             }
 
-            string path = GeneratePath(idGatherer);
+            string path = GeneratePath(idScryFall);
             string ext = GetExtension(data);
             string filePath = Path.Combine(_cardPath, path + ext);
 
@@ -145,46 +148,33 @@
 
             Save(filePath, data);
         }
-        public IPicture GetPicture(int idGatherer)
+        public IPicture GetPicture(string idScryFall)
         {
-            string path = GeneratePath(idGatherer);
+            string path = GeneratePath(idScryFall);
 
             if (!File.Exists(path))
             {
                 return null;
             }
 
-            return new Picture { IdGatherer = idGatherer, Image = File.ReadAllBytes(path) };
+            return new Picture { IdScryFall = idScryFall, Image = File.ReadAllBytes(path) };
         }
         private string GetExtension(byte[] bytes)
         {
             return bytes.ToImage().GetFileExtension();
         }
-        private string GeneratePath(int idGatherer)
+        private string GeneratePath(string idScryFall)
         {
             string path = string.Empty;
 
-            int id = Math.Abs(idGatherer);
-
-            int[] levels = new int[Level];
-
-            int coef = LevelSize;
-
-            for (int i = 0; i < Level; i++)
+            for (int j = 0; j < Level; j++)
             {
-                int l = (id / coef) % LevelSize;
-                levels[i] = l;
-                coef *= LevelSize;
+                path = Path.Combine(path, idScryFall.Substring(LevelSize * j, LevelSize));
             }
 
-            for (int j= Level -1; j>=0; j--)
-            {
-                path = Path.Combine(path, levels[j].ToString(Format));
-            }
-
-            return Path.Combine(path, idGatherer.ToString());
+            return Path.Combine(path, idScryFall.ToString());
         }
-        private string GeneratePath(string name)
+        private string GeneratePathFromName(string name)
         {
             return ToWindowsFileName(name.ToLowerInvariant());
         }

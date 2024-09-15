@@ -86,26 +86,26 @@
                 };
                 
                 ICardCollection cardCollection = _magicDatabase.GetCollection(audit.IdCollection);
-                info.CollectionName = cardCollection == null ? "(Deleted) " + audit.IdCollection : cardCollection.Name;
+                info.CollectionName = cardCollection == null ? $"(Deleted) {audit.IdCollection}" : cardCollection.Name;
 
-                if (audit.IdGatherer.HasValue)
+                if (!string.IsNullOrEmpty(audit.IdScryFall))
                 {
-                    ICard card = _magicDatabase.GetCard(audit.IdGatherer.Value);
+                    ICard card = _magicDatabase.GetCardByIdScryFall(audit.IdScryFall);
                     if (card == null)
                     {
-                        info.CardName = "(Not found) " + audit.IdGatherer.Value;
-                        info.EditionName = "(Not found) " + audit.IdGatherer.Value;
+                        info.CardName = $"(Not found) {audit.IdScryFall}";
+                        info.EditionName = $"(Not found) {audit.IdScryFall}";
                     }
                     else
                     {
                         info.CardName = card.Name;
-                        IEdition edition = _magicDatabase.GetEdition(audit.IdGatherer.Value);
-                        info.EditionName = edition == null ? "(Not found) " + audit.IdGatherer.Value : edition.Name;
+                        IEdition edition = _magicDatabase.GetEditionByIdScryFall(audit.IdScryFall);
+                        info.EditionName = edition != null ? edition.Name : $"(Not found) {audit.IdScryFall}";
                     }
                     if (audit.IdLanguage.HasValue)
                     {
                         ILanguage language = _magicDatabase.GetLanguage(audit.IdLanguage.Value);
-                        info.Language = language == null ? "(Not found) " + audit.IdLanguage.Value : language.Name;
+                        info.Language = language == null ? $"(Not found) {audit.IdLanguage.Value}" : language.Name;
                     }
                     else
                     {

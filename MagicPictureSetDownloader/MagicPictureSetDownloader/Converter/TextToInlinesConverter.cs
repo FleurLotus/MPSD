@@ -11,7 +11,7 @@ namespace MagicPictureSetDownloader.Converter
 
     using Common.WPF.Converter;
 
-    using MagicPictureSetDownloader.Core.CardInfo;
+    using MagicPictureSetDownloader.Core;
 
     [ValueConversion(typeof(string), typeof(List<Inline>))]
     public class TextToInlinesConverter : NoConvertBackConverter
@@ -34,7 +34,7 @@ namespace MagicPictureSetDownloader.Converter
                 return newList;
             }
 
-            int pos = text.IndexOf(SymbolParser.Prefix, StringComparison.InvariantCulture);
+            int pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
             if (pos < 0)
             {
                 newList.Add(new Run(text));
@@ -42,6 +42,7 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             bool previousIsPicture = false;
+            bool endOfString = false;
 
             while (pos >= 0)
             {
@@ -52,22 +53,28 @@ namespace MagicPictureSetDownloader.Converter
                     previousIsPicture = false;
                 }
 
-                int end = text.IndexOf(' ', pos);
+                int end = text.IndexOf(Shard.Suffix, pos);
                 if (end < 0)
                 {
+                    endOfString = true;
                     end = text.Length;
                 }
 
-                string symbol = text[pos..end];
-                BitmapImage source = (BitmapImage)_conv.Convert(symbol, typeof(BitmapImage), null, CultureInfo.InvariantCulture);
+                int endPosition = endOfString ? end : end - 1;
+
+                string symbol = text[(pos + Shard.Prefix.Length)..end];
+                BitmapImage source = (BitmapImage)_conv.Convert(Shard.DisplayPrefix + symbol.Replace(Shard.Separator,string.Empty), typeof(BitmapImage), null, CultureInfo.InvariantCulture);
                 if (source == null)
                 {
-                    text = text[(pos + SymbolParser.Prefix.Length)..];
+                    int lastCharPos = endOfString ? end : end + Shard.Suffix.Length;
+
+                    newList.Add(new Run((previousIsPicture ? " " : string.Empty) + text[pos..lastCharPos]));
+                    text = text[lastCharPos..];
                 }
                 else
                 {
-                    
-                    Image image = new Image { Source = source, Width = 12, Height = 12, Visibility = Visibility.Visible };
+
+                    Image image = new Image { Source = source, Width = 15.0 * source.PixelWidth / source.PixelWidth, Height = 15, Visibility = Visibility.Visible };
                     newList.Add(new InlineUIContainer(image));
                     if (text.Length > end)
                     {
@@ -81,7 +88,7 @@ namespace MagicPictureSetDownloader.Converter
                     previousIsPicture = true;
                 }
 
-                pos = text.IndexOf(SymbolParser.Prefix, StringComparison.InvariantCulture);
+                pos = text.IndexOf(Shard.Prefix, StringComparison.InvariantCulture);
             }
 
             if (!string.IsNullOrEmpty(text))

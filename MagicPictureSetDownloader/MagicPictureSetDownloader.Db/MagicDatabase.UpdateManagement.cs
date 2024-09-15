@@ -12,7 +12,7 @@ namespace MagicPictureSetDownloader.Db
 
     internal partial class MagicDatabase
     {
-        public void UpdateEdition(IEdition iedition, string sourceName, string name, bool hasFoil, string code, int? idBlock, int? blockPosition, int? cardNumber, DateTime? releaseDate)
+        public void UpdateEdition(IEdition iedition, string sourceName, string name, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate)
         {
             using (new WriterLock(_lock))
             {
@@ -24,18 +24,16 @@ namespace MagicPictureSetDownloader.Db
                 name = name.Trim();
                 sourceName = sourceName.Trim();
 
-                if (_editions.FirstOrDefault(e => edition.Id != e.Id && string.Compare(e.GathererName, sourceName, StringComparison.InvariantCultureIgnoreCase) == 0) != null)
+                if (_editions.FirstOrDefault(e => edition.Id != e.Id && string.Compare(e.Name, sourceName, StringComparison.InvariantCultureIgnoreCase) == 0) != null)
                 {
                     return;
                 }
 
                 //No need to update referencial because instance is still the same
                 edition.Name = name;
-                edition.GathererName = sourceName;
                 edition.HasFoil = hasFoil;
                 edition.Code = code;
                 edition.IdBlock = idBlock;
-                edition.BlockPosition =  idBlock.HasValue ? blockPosition : null;
                 edition.CardNumber = cardNumber;
                 edition.ReleaseDate = releaseDate;
 
@@ -69,11 +67,11 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public void UpdateLanguage(ILanguage ilanguage, string languageName, string alternativeName)
+        public void UpdateLanguage(ILanguage idlanguage, string languageName, string alternativeName)
         {
             using (new WriterLock(_lock))
             {
-                if (ilanguage is not Language language || string.IsNullOrWhiteSpace(languageName))
+                if (idlanguage is not Language language || string.IsNullOrWhiteSpace(languageName))
                 {
                     return;
                 }

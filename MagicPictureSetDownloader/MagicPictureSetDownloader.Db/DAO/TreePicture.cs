@@ -1,17 +1,12 @@
 namespace MagicPictureSetDownloader.Db.DAO
 {
-    using System.Diagnostics;
-    using Common.Database;
     using MagicPictureSetDownloader.Interface;
 
-    [DebuggerDisplay("{Name}")]
-    [DbTable]
     internal class TreePicture: ITreePicture
     {
         private byte[] _image;
-        [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public string Name { get; set; }
-        [DbColumn]
+        public string FilePath { get; set; }
         public byte[] Image
         {
             get { return _image == null ? null : (byte[]) _image.Clone(); }

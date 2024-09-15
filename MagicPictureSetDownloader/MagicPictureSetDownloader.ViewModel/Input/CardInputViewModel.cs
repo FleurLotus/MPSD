@@ -362,7 +362,7 @@
             };
 
             ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
-            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdGatherer, LanguageSelected.Id, cardCount);
+            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdScryFall, LanguageSelected.Id, cardCount);
         }
         private void SelectCardCollection(string name)
         {
@@ -417,7 +417,7 @@
                     return;
                 }
 
-                foreach (ILanguage language in _magicDatabase.GetLanguages(cardAllDbInfo.IdGatherer))
+                foreach (ILanguage language in _magicDatabase.GetLanguages(cardAllDbInfo.IdScryFall))
                 {
                     Languages.Add(language);
                 }
@@ -514,7 +514,7 @@
             {
                 int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber + cardInCollectionCount.AltArtNumber + cardInCollectionCount.FoilAltArtNumber;
                 totalInCollection += inCollection;
-                if (_magicDatabase.GetEdition(cardInCollectionCount.IdGatherer) == EditionSelected)
+                if (_magicDatabase.GetEdition(cardInCollectionCount.IdScryFall) == EditionSelected)
                 {
                     totalInEditionInCollection += inCollection;
                     if (cardInCollectionCount.IdLanguage == LanguageSelected.Id)

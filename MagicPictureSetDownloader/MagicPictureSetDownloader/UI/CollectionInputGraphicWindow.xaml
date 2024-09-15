@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
         xmlns:vm="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
         xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
         xmlns:controls="clr-namespace:WpfToolkit.Controls;assembly=VirtualizingWrapPanel"
@@ -63,14 +64,15 @@
                         Command="{Binding ChangeInputLanguageCommand}"/>
                     <Border Grid.Column="3" Grid.Row="0" BorderBrush="Black" HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="1" 
                         Visibility="{Binding InputLanguage, Converter={fl:AggregateConverter {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
-                        <Image Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
+
+                        <svgc:SvgViewbox Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
                     </Border>
 
                     <Label Grid.Column="0" Grid.Row="2" Content="Edition" />
                     <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
                             SelectedValue="{fl:TwoWayBinding Path=EditionSelected}" ItemsSource="{Binding Editions}" 
                             IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <Image Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <svgc:SvgViewbox Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
                     <Button Grid.Column="0" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" Command="{Binding ResetCommand}" />
                     <CheckBox Grid.Column="1" Grid.Row="4" Content="Foil" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />

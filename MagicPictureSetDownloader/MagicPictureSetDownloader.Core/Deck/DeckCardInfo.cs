@@ -2,9 +2,9 @@
 {
     internal class DeckCardInfo
     {
-        public DeckCardInfo(int idGatherer, int number)
+        public DeckCardInfo(string idScryFall, int number)
         {
-            IdGatherer = idGatherer;
+            IdScryFall = idScryFall;
             Number = number;
             NeedToCreate = false;
         }
@@ -19,7 +19,7 @@
         }
 
         public bool NeedToCreate { get; }
-        public int IdGatherer { get; }
+        public string IdScryFall { get; }
         public int Number { get; }
         public int IdEdition { get; }
         public int IdCard { get; }

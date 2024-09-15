@@ -90,7 +90,7 @@
   
         public string Title
         {
-            get { return Hierarchical == null ? "MagicPictureSetDownloader" : "MagicPictureSetDownloader - " + Hierarchical.Name; }
+            get { return Hierarchical == null ? "MagicPictureSetDownloader" : $"MagicPictureSetDownloader - {Hierarchical.Name}"; }
         }
         public UpgradeStatus UpgradeStatus
         {

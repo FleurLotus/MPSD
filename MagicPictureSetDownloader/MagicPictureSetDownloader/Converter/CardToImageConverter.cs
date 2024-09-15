@@ -4,11 +4,10 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
-
     using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
-    public class CardToImageConverter : GathererIdToImageConverter
+    public class CardToImageConverter : ScryFallIdToImageConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,22 +18,29 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            int idGatherer = 0;
             if (param == 0)
             {
-                idGatherer = card.IdGatherer;
-            }
-            else if (card.OtherCardPart != null)
-            {
-                idGatherer = card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide ? card.IdGatherer : card.OtherCardPart.IdGatherer;
+                return base.Convert(card.IdScryFall, targetType, parameter, culture);
             }
 
-            if (idGatherer == 0)
+            if (card.OtherCardPart == null)
             {
                 return null;
             }
 
-            return base.Convert(idGatherer, targetType, parameter, culture); 
+            object o = base.Convert(card.IdScryFall + MagicDatabase.GetVersoExtension(), targetType, parameter, culture);
+
+            if (o != null)
+            {
+                return o;
+            }
+
+            if (card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide)
+            {
+                return base.Convert(card.IdScryFall, targetType, parameter, culture);
+            }
+
+            return null;
         }
     }
 }

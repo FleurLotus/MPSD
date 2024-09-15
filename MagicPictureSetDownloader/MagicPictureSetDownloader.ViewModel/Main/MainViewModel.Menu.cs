@@ -19,7 +19,6 @@
     using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
     using MagicPictureSetDownloader.ViewModel.Download.Auto;
-    using MagicPictureSetDownloader.ViewModel.Download.Edition;
     using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Management;
@@ -100,17 +99,17 @@
 
         private void UpdateDatabaseCommandExecute(object o)
         {
-            OnUpdateDatabaseRequested(new DownloadEditionViewModel());
+            OnUpdateDatabaseRequested(new DownloadViewModel());
+            LoadCardsHierarchy();
+        }
+        private void UpdateLanguageDatabaseCommandExecute(object o)
+        {
+            OnUpdateDatabaseRequested(new DownloadLanguageViewModel());
             LoadCardsHierarchy();
         }
         private void UpdateImageDatabaseCommandExecute(object o)
         {
             OnAutoUpdateDatabaseRequested(new AutoDownloadImageViewModel());
-        }
-        private void UpdateRulesDatabaseCommandExecute(object o)
-        {
-            OnAutoUpdateDatabaseRequested(new AutoDownloadRuleViewModel());
-            LoadCardsHierarchy();
         }
         private void UpdatePriceDatabaseCommandExecute(object o)
         {
@@ -284,10 +283,6 @@
                 Options.GetDbOptions();
             }
         }
-        private void MigrationPictureDatabaseCommandExecute(object o)
-        {
-            OnAutoUpdateDatabaseRequested(new MigrationPictureDatabaseProgressViewModel());
-        }
         private void CheckNewVersionCommandExecute(object o)
         {
             if (_programUpdater.HasNewVersionAvailable())
@@ -341,7 +336,7 @@
                     { new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), -vm.Source.Count }
                 };
 
-                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
+                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdScryFall(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
                 LoadCardsHierarchy();
             }
         }
@@ -388,7 +383,7 @@
                             cardCount.Add(kv.Key, -kv.Value);
                         }
 
-                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cardCount);
+                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cardCount);
                     }
                 }
 
@@ -410,8 +405,8 @@
         {
             //File
             MenuViewModel fileMenu = new MenuViewModel("_File");
-            fileMenu.AddChild(new MenuViewModel("Update _Editions Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
-            fileMenu.AddChild(new MenuViewModel("Update _Rules Database..", new RelayCommand(UpdateRulesDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Editions/Cards Database...", new RelayCommand(UpdateDatabaseCommandExecute)));
+            fileMenu.AddChild(new MenuViewModel("Update _Cards Language Database...", new RelayCommand(UpdateLanguageDatabaseCommandExecute)));
             fileMenu.AddChild(new MenuViewModel("Update _Images Database..", new RelayCommand(UpdateImageDatabaseCommandExecute)));
             //Not Allowed in release version, the update is done by copy of referential
 #if DEBUG
@@ -456,11 +451,6 @@
             toolsMenu.AddChild(new MenuViewModel("_Options", new RelayCommand(OptionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
             toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
-            if (_magicDatabase.PictureDatabaseMigration.CouldMigrate)
-            {
-                toolsMenu.AddChild(MenuViewModel.Separator());
-                toolsMenu.AddChild(new MenuViewModel("_Migrate pictures database images", new RelayCommand(MigrationPictureDatabaseCommandExecute)));
-            }
             MenuRoot.AddChild(toolsMenu);
 
             //?
@@ -567,7 +557,7 @@
 
                 if (vm.Copy)
                 {
-                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdGatherer(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
+                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdScryFall(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
                 }
                 else
                 {
@@ -598,11 +588,11 @@
                     {
                         if (copy)
                         {
-                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdGatherer, cicc.IdLanguage, cicc.GetCardCount());
+                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount());
                         }
                         else
                         {
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdGatherer, cicc.IdLanguage, cicc.GetCardCount(), destCollection);
+                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount(), destCollection);
                         }
                     }
                 }
@@ -629,7 +619,7 @@
                 {
                     foreach (ICardInCollectionCount cicc in _magicDatabase.GetCollectionStatisticsForCard(collection, cardViewModel.Card))
                     {
-                        if (cicc.IdGatherer == cardViewModel.IdGatherer)
+                        if (cicc.IdScryFall == cardViewModel.IdScryFall)
                         {
                             yield return cicc;
                         }

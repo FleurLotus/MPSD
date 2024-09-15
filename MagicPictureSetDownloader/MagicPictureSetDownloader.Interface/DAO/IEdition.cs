@@ -7,14 +7,10 @@ namespace MagicPictureSetDownloader.Interface
         string Code { get; }
         int? IdBlock { get; }
         string BlockName { get; }
-        int? BlockPosition { get; }
-        string GathererName { get; }
         DateTime? ReleaseDate { get; }
         int? CardNumber { get; }
-        bool Completed { get; }
         bool IsCode(string code);
         string AlternativeCode(ExportFormat format);
         bool HasFoil { get; }
-        bool IsNoneGatherer();
     }
 }

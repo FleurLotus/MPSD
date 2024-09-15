@@ -32,7 +32,7 @@
             _cardInCollectionCounts = _magicDatabase.GetCollectionStatisticsForCard(sourceCardCollection, Card)
                 .ToArray();
 
-            _editions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEdition(cicc.IdGatherer))
+            _editions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall))
                 .Distinct()
                 .Ordered()
                 .ToArray();
@@ -148,14 +148,14 @@
 
         private void UpdateMaxCount()
         {
-            int idGatherer = _magicDatabase.GetIdGatherer(Card, EditionSelected);
+            string idScryFall = _magicDatabase.GetIdScryFall(Card, EditionSelected);
             if (LanguageSelected == null)
             {
                 MaxCount = 0;
                 return;
             }
 
-            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdGatherer == idGatherer && cicc.IdLanguage == LanguageSelected.Id);
+            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdScryFall == idScryFall && cicc.IdLanguage == LanguageSelected.Id);
           
             if (cardInCollectionCount == null)
             {
@@ -166,8 +166,8 @@
         }
         private void ChangeLanguage()
         {
-            int idGatherer = _magicDatabase.GetIdGatherer(Card, EditionSelected);
-            Languages = _cardInCollectionCounts.Where(cicc => cicc.IdGatherer == idGatherer)
+            string idScryFall = _magicDatabase.GetIdScryFall(Card, EditionSelected);
+            Languages = _cardInCollectionCounts.Where(cicc => cicc.IdScryFall == idScryFall)
                                                      .Select(cicc => _magicDatabase.GetLanguage(cicc.IdLanguage))
                                                      .Distinct()
                                                      .OrderBy(l => l.Id)

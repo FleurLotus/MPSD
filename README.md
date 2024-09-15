@@ -6,4 +6,4 @@ This repo contains:
   
 ## MagicPictureSetDownloader
   The program is for the management of Magic the Gathering collection. 
-  It is relying on the web site https://gatherer.wizards.com/ to download the info and pictures.
+  It is relying on the web site https://scryfall.com/ to download the info and pictures.

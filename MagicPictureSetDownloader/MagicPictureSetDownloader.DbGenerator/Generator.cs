@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     using System.IO;
+    using System.IO.Pipes;
     using System.Linq;
     using System.Reflection;
 
@@ -21,7 +22,7 @@
 
             using (Stream stream = executingAssembly.GetManifestResourceStream(name))
             {
-                Zipper.UnZipAll(stream, outDir);
+                Zipper.UnZipAll(stream, outDir, true); 
                 return outDir;
             }
         }

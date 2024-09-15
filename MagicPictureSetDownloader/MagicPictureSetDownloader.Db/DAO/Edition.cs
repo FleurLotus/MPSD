@@ -9,11 +9,6 @@ namespace MagicPictureSetDownloader.Db.DAO
     [DbTable]
     internal class Edition : IEdition
     {
-        private static readonly string[] SpecialEditionPrefix =
-        {
-            "MTG.WTF-",
-        };
-
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
@@ -30,20 +25,14 @@ namespace MagicPictureSetDownloader.Db.DAO
             get { return Block?.Name; }
         }
         [DbColumn]
-        public int? BlockPosition { get; set; }
-        [DbColumn]
-        public string GathererName { get; set; }
-        [DbColumn]
         public DateTime? ReleaseDate { get; set; }
         [DbColumn]
         public int? CardNumber { get; set; }
         [DbColumn]
-        public bool Completed { get; set; }
-        [DbColumn]
         public bool HasFoil { get; set; }
         public bool IsCode(string code)
         {
-            string tmp = Code + ";" + AlternativeCode;
+            string tmp = $"{Code};{AlternativeCode}";
             return tmp.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Any(c => string.Equals(c, code, StringComparison.InvariantCultureIgnoreCase));
         }
 
@@ -83,11 +72,6 @@ namespace MagicPictureSetDownloader.Db.DAO
             }
 
             return Name.CompareTo(e.Name);
-        }
-        public bool IsNoneGatherer()
-        {
-            string name = GathererName.ToUpper();
-            return SpecialEditionPrefix.Any(p => name.StartsWith(p));
         }
     }
 }

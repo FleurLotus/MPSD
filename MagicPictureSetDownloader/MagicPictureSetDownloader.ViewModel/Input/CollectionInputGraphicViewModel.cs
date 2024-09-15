@@ -266,7 +266,7 @@
                     { new CardCountKey(Foil, AltArt), card.ChangedCount }
                 };
 
-                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdGatherer, InputLanguage.Id, cardCount);
+                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdScryFall, InputLanguage.Id, cardCount);
             }
 
             RefreshDisplayedData(true);
@@ -367,7 +367,7 @@
                 int count = 0;
 
                 foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, card.Card)
-                                .Where(cicc =>  cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEdition(cicc.IdGatherer).Id == editionSelected.Id))
+                                .Where(cicc =>  cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall).Id == editionSelected.Id))
                 {
                     if (AltArt)
                     {

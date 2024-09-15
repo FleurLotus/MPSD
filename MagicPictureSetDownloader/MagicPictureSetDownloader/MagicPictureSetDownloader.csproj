@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <AssemblyTitle>MagicPictureSetDownloader</AssemblyTitle>
     <Product>MagicPictureSetDownloader</Product>
-    <Description>Cards pictures coming from http://gatherer.wizards.com site</Description>
+    <Description>Cards pictures coming from https://scryfall.com/ site</Description>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <PropertyGroup>
@@ -32,7 +32,8 @@
     <PackageReference Include="Common.WPF" />
     <PackageReference Include="Extended.Wpf.Toolkit" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    <PackageReference Include="SharpVectors.Wpf" />
     <PackageReference Include="System.Runtime.Caching" />
-    <PackageReference Include="VirtualizingWrapPanel"  />
+    <PackageReference Include="VirtualizingWrapPanel" />
   </ItemGroup>
 </Project>

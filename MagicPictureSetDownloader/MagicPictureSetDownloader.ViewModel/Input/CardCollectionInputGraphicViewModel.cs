@@ -83,11 +83,11 @@
 
         internal CardType GetCardType()
         {
-            return MultiPartCardManager.Instance.GetCardType(Card.CardAllDbInfo);
+            return MultiPartCardManager.Instance.GetCardType(Card.CardAllDbInfo.Card);
         }
         internal ShardColor GetColor()
         {
-            return MultiPartCardManager.Instance.GetColor(Card.CardAllDbInfo);
+            return MultiPartCardManager.Instance.GetColor(Card.CardAllDbInfo.Card);
         }
     }
 }

@@ -7,7 +7,7 @@
         int Id { get; }
         DateTime AddDate { get; }
         string Source { get; set; }
-        int IdGatherer { get; }
+        string IdScryFall { get; }
         bool Foil { get; set; }
         int Value { get; }
     }
