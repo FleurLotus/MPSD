@@ -280,7 +280,7 @@
             {
                 for (int l = 0; l < 4; l++)
                 {
-                    Assert.That(reader.Read(), $"Can't read line {l}");
+                    Assert.That(reader.Read(), Is.True, $"Can't read line {l}");
                     for (int f = 0; f < 3; f++)
                     {
                         Assert.That(reader.GetValue(f), Is.EqualTo($"azerty{l}{f}"), $"Not the excepted value for line {l} column {f}");
@@ -326,7 +326,7 @@
             using (ICsvReader reader = CreateCsvReader("\"\"", false))
             {
                 Assert.That(reader.Read(), Is.True, "Can't read first line");
-                Assert.That(reader.GetValue(0), Is.EqualTo(string.Empty), "Not the excepted value");
+                Assert.That(reader.GetValue(0), Is.Empty, "Not the excepted value");
                 Assert.That(reader.Read(), Is.False, "Must be end of file");
             }
             // '"""'

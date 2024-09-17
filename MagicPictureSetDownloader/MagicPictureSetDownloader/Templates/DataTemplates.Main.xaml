@@ -19,7 +19,7 @@
 
     <!-- TreeView -->
     <DataTemplate DataType="{x:Type main:HierarchicalViewModel}">
-        <TreeView ItemsSource="{Binding Root}">
+        <TreeView ItemsSource="{Binding Root}" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <i:Interaction.Behaviors>
                 <fl:BindableSelectedItemBehavior SelectedItem="{fl:TwoWayBinding Selected}" />
             </i:Interaction.Behaviors>
