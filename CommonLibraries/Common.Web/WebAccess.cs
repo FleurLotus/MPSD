@@ -138,10 +138,7 @@
         {
             lock(_lock)
             {
-                if (_httpClient == null)
-                {
-                    _httpClient = NewHttpClient();
-                }
+                _httpClient ??= NewHttpClient();
 
                 return _httpClient;
             }

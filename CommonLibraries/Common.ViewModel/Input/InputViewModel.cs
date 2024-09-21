@@ -89,23 +89,14 @@
 
         protected override bool OkCommandCanExecute(object o)
         {
-            switch (InputMode)
+            return InputMode switch
             {
-                case InputMode.ChooseInList:
-                    return Selected != null;
-
-                case InputMode.MoveFromListToOther:
-                    return Selected != null && Selected2 != null && Selected != Selected2;
-
-                case InputMode.TextNeed:
-                    return !string.IsNullOrWhiteSpace(Text);
-
-                case InputMode.ChooseInListAndTextNeed:
-                    return Selected != null && !string.IsNullOrWhiteSpace(Text) && Selected != Text;
-
-                default:
-                    return true;
-            }
+                InputMode.ChooseInList => Selected != null,
+                InputMode.MoveFromListToOther => Selected != null && Selected2 != null && Selected != Selected2,
+                InputMode.TextNeed => !string.IsNullOrWhiteSpace(Text),
+                InputMode.ChooseInListAndTextNeed => Selected != null && !string.IsNullOrWhiteSpace(Text) && Selected != Text,
+                _ => true,
+            };
         }
     }
 }

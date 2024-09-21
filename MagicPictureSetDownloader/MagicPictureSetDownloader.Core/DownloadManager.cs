@@ -184,9 +184,9 @@
 
             MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, url, url2);
 
-            foreach ((CardIdSource source, string id) kv in cardWithExtraInfo.ExternalId)
+            foreach ((CardIdSource source, string id) in cardWithExtraInfo.ExternalId)
             {
-                MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, kv.source, kv.id);
+                MagicDatabase.InsertNewExternalIds(cardWithExtraInfo.IdScryFall, source, id);
             }
 
             InsertLanguageInDb(cardWithExtraInfo);

@@ -22,15 +22,13 @@ namespace MagicPictureSetDownloader.Db
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly DatabaseConnection _databaseConnection;
         private readonly PictureDatabase _pictureDatabase;
-        private readonly IMultiPartCardManager _multiPartCardManager;
         //To optimize display
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
         
-        internal MagicDatabase(IMultiPartCardManager multiPartCardManager)
+        internal MagicDatabase()
         {
             _databaseConnection = new DatabaseConnection();
             _pictureDatabase = new PictureDatabase();
-            _multiPartCardManager = multiPartCardManager;
         }
 
         //Unitary Get
@@ -333,10 +331,6 @@ namespace MagicPictureSetDownloader.Db
         private int GetRarityId(string rarity)
         {
             return GetRarity(rarity).Id;
-        }
-        private int GetLanguageId(string language)
-        {
-            return GetLanguage(language).Id;
         }
         private ILanguage GetLanguage(string language)
         {

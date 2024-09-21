@@ -6,9 +6,9 @@
     {
         private static MagicDatabase _magicDatabase;
 
-        public static void Initialise(IMultiPartCardManager multiPartCardManager)
+        public static void Initialise()
         {
-            _magicDatabase = new MagicDatabase(multiPartCardManager);
+            _magicDatabase = new MagicDatabase();
         }
 
         public static IMagicDatabaseReadOnly ReadOnly 

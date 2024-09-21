@@ -2,7 +2,6 @@ namespace Common.WPF.UI
 {
     using System;
     using System.ComponentModel;
-    using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using System.Timers;
     using System.Windows;

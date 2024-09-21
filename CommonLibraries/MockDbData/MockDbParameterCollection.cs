@@ -21,12 +21,12 @@
         public override bool IsSynchronized { get { return false; } }
         public override object SyncRoot { get { return null; } }
 
-        public MockDbParameter this[string parameterName]
+        public new MockDbParameter this[string parameterName]
         {
             get { return (MockDbParameter)GetParameter(parameterName); }
             set { SetParameter(parameterName, value); }
         }
-        public MockDbParameter this[int index]
+        public new MockDbParameter this[int index]
         {
             get { return (MockDbParameter)GetParameter(index); }
             set { SetParameter(index, value); }

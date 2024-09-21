@@ -1,7 +1,6 @@
 ﻿namespace Common.UnitTests.ViewModel
 {
     using System;
-    using System.Diagnostics.CodeAnalysis;
     using Common.ViewModel.Validation.Attributes;
 
     using NUnit.Framework;

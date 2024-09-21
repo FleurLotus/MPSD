@@ -62,11 +62,11 @@
             }
             if (columnNames == null || columnNames.Length == 0)
             {
-                throw new ArgumentException("columnNames");
+                throw new ArgumentNullException(nameof(columnNames));
             }
             if (values == null || values.Length == 0)
             {
-                throw new ArgumentException("values");
+                throw new ArgumentNullException(nameof(values));
             }
             if (values.Length != columnNames.Length)
             {

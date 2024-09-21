@@ -95,10 +95,7 @@
 
             _notLoaded.Add(assemblyName.Name);
 
-            if (_logTextWriter != null)
-            {
-                _logTextWriter.WriteLine("AssemblyResolver: Could not find assembly '{0}'", assemblyName.Name);
-            }
+            _logTextWriter?.WriteLine("AssemblyResolver: Could not find assembly '{0}'", assemblyName.Name);
 
             return null;
         }

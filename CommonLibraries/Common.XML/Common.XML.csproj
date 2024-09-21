@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-    <AssemblyTitle>Common.XML</AssemblyTitle>
-    <Product>Common.XML</Product>
-  </PropertyGroup>
-</Project>

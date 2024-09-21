@@ -7,7 +7,6 @@
   <ItemGroup>
     <PackageReference Include="Common.Drawing" />
     <PackageReference Include="Common.Web" />
-    <PackageReference Include="Common.XML" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MagicPictureSetDownloader.Db\MagicPictureSetDownloader.Db.csproj" />

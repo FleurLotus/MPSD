@@ -3,7 +3,6 @@
     using System;
     using System.Configuration;
 #if DEBUG
-    using System.Diagnostics;
 #endif
     using System.Windows;
     using System.Windows.Threading;
@@ -13,8 +12,6 @@
     using Common.WPF.UI;
 #endif
     using Common.WPF;
-
-    using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.UI;
 
@@ -49,7 +46,7 @@
             {
                 splashScreenWindow.Show();
 #endif
-                MagicDatabaseManager.Initialise(MultiPartCardManager.Instance);
+                MagicDatabaseManager.Initialise();
                 mainWindow = new MainWindow();
 #if !DEBUG
             }

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Concurrent;
-    using System.Diagnostics.CodeAnalysis;
 
     public static class FlagExtension
     {

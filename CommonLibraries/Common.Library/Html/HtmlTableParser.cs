@@ -8,7 +8,7 @@ namespace Common.Library.Html
 
     using Common.Library.Exception;
 
-    public static class HtmlTableParser
+    public static partial class HtmlTableParser
     {
         //TODO: less strict on closing tag use next tag to know if it close the previous one
         private const string TableStart = "<table";
@@ -21,9 +21,18 @@ namespace Common.Library.Html
         private const string RowCellHeaderEnd = "</th>";
         private const string Close = ">";
         private const string AutoEnd = "/>";
+
+#if NET7_0_OR_GREATER
+        private static readonly Regex _colSpanRegex = ColSpanRegexFunction();
+        [GeneratedRegex("colspan=\"?(?<size>\\d+)\"?", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled, "en-GB")]
+        private static partial Regex ColSpanRegexFunction();
+        private static readonly Regex _rowSpanRegex = RowSpanRegexFunction();
+        [GeneratedRegex("rowspan=\"?(?<size>\\d+)\"?", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled, "en-GB")]
+        private static partial Regex RowSpanRegexFunction();
+#else
         private static readonly Regex _colSpanRegex = new Regex(@"colspan=""?(?<size>\d+)""?", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private static readonly Regex _rowSpanRegex = new Regex(@"rowspan=""?(?<size>\d+)""?", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
-
+#endif
         public static IHtmlTable Parse(string htmlText)
         {
             string workingText = ExtractTable(htmlText);

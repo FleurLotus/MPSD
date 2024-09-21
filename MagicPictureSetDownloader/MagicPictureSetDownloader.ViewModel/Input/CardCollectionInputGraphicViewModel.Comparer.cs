@@ -1,9 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
-    using System;
     using System.Collections.Generic;
-
-    using Common.Library.Enums;
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Core;
