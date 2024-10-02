@@ -12,15 +12,15 @@
     public class PreconstructedDeckImporter
     {
         private const string BaseUrl = @"http://mtg.wtf";
-        private readonly Regex _decksRegex = new Regex(@"<a href=""(?<url>/deck/\w+/[^>]+)"">", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private readonly Regex _decksRegex = new Regex(@"<a href=""(?<url>/deck/\w+/[^>]+)"">.*\n</a>\((?<type>[^,]+),\s+\d+\s+cards\)", RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.Multiline);
         private readonly Regex _deckNameRegex = new Regex(@"<h4>(?<name>[^<]+)</h4>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _deckEditionRegex = new Regex(@"<a download=""true"" href=""/deck/(?<edition>\w+)/[^>]*"">", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _cardInfoRegex = new Regex(@"<a href=""(?<url>/card/(?<edition>\w+)/[^>]*)"">(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _cardImageRegex = new Regex(@"<img alt=.* src='(?<url>/cards[^>]*)'>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _cardRarityRegex = new Regex(@"Rarity: (?<rarity>\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private const string CardSplitter = @"<div class='card_entry'>";
-        // Magic Online + Coldsnap + doublon
-        private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0|me2|wth|vis|mir|csp|rqs|wc\d{2})/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        // Magic Online Commander
+        private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0)/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Func<string, string> _getExtraInfo;
 
         private readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
@@ -35,6 +35,13 @@
             return string.Format("{0}/deck", BaseUrl);
         }
 
+        private bool IgnoreDeckTypeEdition(string name)
+        {
+            string checkName = name?.ToLower();
+
+            return checkName.Contains("alchemy") || checkName.Contains("online") || checkName.Contains("arena") || checkName.Contains("historic brawl") || checkName.Contains("mtgo");
+        }
+
         internal string[] GetDeckUrls(string html)
         {
             if (string.IsNullOrWhiteSpace(html))
@@ -46,7 +53,8 @@
             MatchCollection matches = _decksRegex.Matches(htmltext);
             ICollection<IPreconstructedDeck> decks = MagicDatabase.GetAllPreconstructedDecks();
             return  matches.OfType<Match>()
-                           .Select(m => BaseUrl + m.Groups["url"].Value)
+                           .Where(m =>  !IgnoreDeckTypeEdition(m.Groups["type"].Value))
+                           .Select(m =>  BaseUrl + m.Groups["url"].Value)
                            .Where(u => decks.All(d => d.Url != u) && !_excludedRegex.IsMatch(u))
                            .ToArray();
         }
@@ -73,11 +81,7 @@
             }
 
             IEdition deckEdition = GetEdition(deckName, m);
-            if (deckEdition == null)
-            {
-                throw new ParserException($"Could not find edition with name {deckName}");
-            }
-            if (MagicDatabase.GetPreconstructedDeck(deckEdition.Id, deckName) != null)
+            if (MagicDatabase.GetPreconstructedDeck(deckEdition?.Id, deckName) != null)
             {
                 return null;
             }
@@ -110,6 +114,20 @@
                         }
 
                         string idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+
+                        // Fallback for card special with double identical face
+                        if (string.IsNullOrEmpty(idScryFall))
+                        {
+                            string cardName = m.Groups["name"].Value.TrimEnd();
+                            cardName = $"{cardName} // {cardName}";
+                            card = MagicDatabase.GetCard(cardName);
+                            if (card != null)
+                            {
+                                idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                            }
+                        }
+
+
                         if (string.IsNullOrEmpty(idScryFall))
                         {
                             throw new ParserException(string.Format("Could not find card with idCard {0} and idEdition {1}", card.Id, edition.Id));
@@ -127,56 +145,17 @@
             {
                 return null;
             }
-            DeckInfo deckInfo =  new DeckInfo(deckEdition.Id, deckName, cards);
-            int cardCount = deckInfo.Count;
-            //  60 Usual
-            //  75 Usual with side board
-            //  62 Deckmasters
-            //  61 Beatdown
-            // 100 Commander
-            //  15 or 22 or 26 or 30 or 35 or 40 or 41 Welcome Pack / Portal
-            //  80 Archenemy
-            //  70 Planechase
-            //  20 Jumpstart
-            //  19 Jumpstart (+1 semi-random)
-            if (cardCount != 60 && cardCount != 75 && 
-                cardCount != 62 &&
-                cardCount != 61 &&
-                cardCount != 100 &&
-                cardCount != 15 && cardCount != 22 && cardCount != 26 && cardCount != 30 && cardCount != 35 && cardCount != 40 && cardCount != 41 && 
-                cardCount != 80 &&
-                cardCount != 70 &&
-                cardCount != 20 && cardCount != 19
-                )
-            {
-                throw new ParserException(string.Format("Deck {0} contains {1} cards", deckName, cardCount));
-            }
-
-            return deckInfo;
+            return new DeckInfo(deckEdition?.Id, deckName, cards);
         }
 
         private ICard GetCard(Match m)
         {
             string cardName = m.Groups["name"].Value.TrimEnd();
-            string cardName2 = null;
-
-            if (cardName.Contains("/"))
-            {
-                string[] c = cardName.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                // Special case for Who / What / When / Where / Why that is considered as 1 card with no second card 
-                if (c.Length == 2)
-                {
-                    cardName = c[0].Trim();
-                    cardName2 = c[1].Trim();
-                }
-            }
-
             ICard card = MagicDatabase.GetCard(cardName);
             if (card == null)
             {
                 throw new ParserException($"Could not find Card with name {cardName}");
             }
-        
 
             return card;
         }
@@ -197,39 +176,6 @@
              }
 
             return edition;
-        }
-        private Tuple<string, IRarity> ExtractExtraInfo(string url)
-        {
-            string extraHtml = WebUtility.HtmlDecode(_getExtraInfo(BaseUrl + url));
-
-            Match m = _cardImageRegex.Match(extraHtml);
-            if (!m.Success)
-            {
-                throw new ParserException($"Could not find Card image in with {url}");
-            }
-            string pictureUrl = BaseUrl + m.Groups["url"].Value;
-
-            m = _cardRarityRegex.Match(extraHtml);
-            if (!m.Success)
-            {
-                throw new ParserException($"Could not find Card rarity in with {url}");
-            }
-            string rarityString = m.Groups["rarity"].Value.Trim();
-            if (rarityString.ToLower() == "mythic")
-            {
-                rarityString = "mythic rare";
-            }
-            else if (rarityString.ToLower() == "basic")
-            {
-                rarityString = "basic land";
-            }
-            IRarity rarity = MagicDatabase.GetRarity(rarityString);
-            if (rarity == null)
-            {
-                throw new ParserException($"Unknown rarity {rarityString}");
-
-            }
-            return new Tuple<string, IRarity>(pictureUrl, rarity);
         }
     }
 }

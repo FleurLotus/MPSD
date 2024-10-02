@@ -30,7 +30,7 @@ namespace MagicPictureSetDownloader.Db
 
         //For quicker access
         private readonly IDictionary<int, ICard> _cardsbyId = new Dictionary<int, ICard>();
-        private readonly IDictionary<string, ICard> _cardsWithoutSpecialCharacters = new Dictionary<string, ICard>();
+        private readonly IDictionary<string, ICard> _cardNameSimple = new Dictionary<string, ICard>();
 
         private readonly IDictionary<string, ICardEdition> _cardEditions = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<string, ICardEdition> _cardEditionsByExternalId = new Dictionary<string, ICardEdition>(StringComparer.InvariantCultureIgnoreCase);
@@ -285,7 +285,7 @@ namespace MagicPictureSetDownloader.Db
                 AddToDbAndUpdateReferential(price, InsertInReferential);
             }
         }
-        public void InsertNewPreconstructedDeck(int idEdition, string preconstructedDeckName, string url)
+        public void InsertNewPreconstructedDeck(int? idEdition, string preconstructedDeckName, string url)
         {
             using (new WriterLock(_lock))
             {
@@ -422,7 +422,7 @@ namespace MagicPictureSetDownloader.Db
                 _cards.Clear();
                 _cardsbyId.Clear();
                 _cardFaces.Clear();
-                _cardsWithoutSpecialCharacters.Clear();
+                _cardNameSimple.Clear();
                 _cardEditions.Clear();
                 _cardEditionsByExternalId.Clear();
                 _collections.Clear();
@@ -528,6 +528,11 @@ namespace MagicPictureSetDownloader.Db
         {
             _cards.Add(card.Name, card);
             _cardsbyId.Add(card.Id, card);
+            string name = SplitName(card.Name);
+            if (!string.IsNullOrEmpty(name))
+            {
+                _cardNameSimple[name] = card;
+            }
             _cacheForAllDbInfos = null;
         }
         private void InsertInReferential(CardFace cardFace)
@@ -677,110 +682,25 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        private string LowerCaseWithoutSpecialCharacters(string source)
+        private string SplitName(string source)
         {
             if (string.IsNullOrEmpty(source))
             {
+                return null;
+            }
+
+            string[] names = source.Split("//");
+
+            if (names.Length > 1)
+            {
+                if (names[0].Trim() != names[1].Trim())
+                {
+                    return names[0].Trim();
+                }
+
                 return source;
             }
-
-            StringBuilder sb = new StringBuilder(source.Length);
-
-            bool isPreviousSpace = false;
-            foreach (char c in source)
-            {
-                if ((c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'))
-                {
-                    sb.Append(c);
-                    isPreviousSpace = false;
-                }
-                else if (c >= 'A' && c <= 'Z')
-                {
-                    // => a - z
-                    sb.Append((char)(c + 0x20));
-                    isPreviousSpace = false;
-                }
-                else if (c == 'æ' || c == 'Æ')
-                {
-                    sb.Append("ae");
-                    isPreviousSpace = false;
-                }
-                else if (c == 'Œ' || c == 'œ')
-                {
-                    sb.Append("oe");
-                    isPreviousSpace = false;
-                }
-                else if (c == 'Ñ' || c == 'ñ')
-                {
-                    sb.Append('n');
-                    isPreviousSpace = false;
-                }
-                else if ((c >= 'À' && c <= 'Å') || (c >= 'à' && c <= 'å'))
-                {
-                    // À Á Â Ã Ä Å à á â ã ä å => a
-                    sb.Append('a');
-                    isPreviousSpace = false;
-                }
-                else if ((c >= 'È' && c <= 'Ë') || (c >= 'è' && c <= 'ë'))
-                {
-                    // È É Ê Ë è é ê ë => e
-                    sb.Append('e');
-                    isPreviousSpace = false;
-                }
-                else if ((c >= 'Ì' && c <= 'Ï') || (c >= 'ì' && c <= 'ï'))
-                {
-                    // Ì Í Î Ï ì í î ï => i
-                    sb.Append('i');
-                    isPreviousSpace = false;
-                }
-                else if ((c >= 'Ò' && c <= 'Ö') || (c >= 'ò' && c <= 'ö'))
-                {
-                    // Ò Ó Ô Õ Ö ò ó ô õ ö => o
-                    sb.Append('o');
-                    isPreviousSpace = false;
-                }
-                else if ((c >= 'Ù' && c <= 'Ü') || (c >= 'ù' && c <= 'ü'))
-                {
-                    // Ù Ú Û Ü ù ú û ü => u
-                    sb.Append('u');
-                    isPreviousSpace = false;
-                }
-                else if (c == '/')
-                {
-                    //Keep because manage in block
-                    sb.Append(c);
-                    isPreviousSpace = false;
-                }
-                else if (c == '\'' || c == ',' || c == '.')
-                {
-                    //Remove 
-                }
-                else if (sb.Length == 0 || isPreviousSpace)
-                {
-                    //Never starts with space and not two spaces
-                }
-                else
-                {
-                    sb.Append(' ');
-                    isPreviousSpace = true;
-                }
-            }
-
-            string ret = sb.ToString().TrimEnd();
-            //Case for token
-            if (ret.EndsWith(" card"))
-            {
-                ret = ret[0..^5];
-            }
-            foreach (string s in new []{" // ","//", " / ", "/"})
-            {
-                if (ret.Contains(s))
-                {
-                    ret = ret.Replace(s, string.Empty);
-                }
-            }
-
-            return ret;
+            return null;
         }
     }
 }

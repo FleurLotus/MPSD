@@ -30,6 +30,7 @@
         IEdition GetEditionByCode(string code);
         IEdition GetEditionByIdScryFall(string idScryFall);
         ILanguage GetLanguage(int idLanguage);
+        ILanguage GetLanguage(string language);
         ILanguage GetDefaultLanguage();
         ILanguage GetEnglishLanguage();
         IBlock GetBlock(string blockName);
@@ -40,7 +41,7 @@
         ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, string idScryFall);
         ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, string idScryFall, int idLanguage);
         ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card);
-        IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName);
+        IPreconstructedDeck GetPreconstructedDeck(int? idEdition, string preconstructedDeckName);
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
         IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls();
         string GetVersoExtension();

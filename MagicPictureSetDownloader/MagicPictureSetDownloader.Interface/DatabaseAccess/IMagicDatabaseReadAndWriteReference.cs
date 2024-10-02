@@ -15,7 +15,7 @@
         void InsertNewBlock(string blockName);
         void InsertNewLanguage(string languageName, string alternativeName);
         void InsertNewPrice(string idScryFall, DateTime addDate, string source, bool foil, int value);
-        void InsertNewPreconstructedDeck(int idEdition, string preconstructedDeckName, string url);
+        void InsertNewPreconstructedDeck(int? idEdition, string preconstructedDeckName, string url);
         void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, string idScryFall, int count);
     }
 }

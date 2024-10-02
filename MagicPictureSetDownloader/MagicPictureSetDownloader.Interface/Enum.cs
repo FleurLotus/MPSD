@@ -64,6 +64,7 @@ namespace MagicPictureSetDownloader.Interface
         Adventure = 1 << 10,
         Equipment = 1 << 11,
         Siege = 1 << 12,
+        Room = 1 << 13,
         //Must be constistante with MagicRules.GetCardSubType
     }
 

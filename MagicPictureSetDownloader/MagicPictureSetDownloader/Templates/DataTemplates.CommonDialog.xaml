@@ -196,7 +196,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
@@ -219,11 +218,10 @@
             <RadioButton Grid.Column="1" Grid.Row="3" Margin="5,0" GroupName="Perimeter" Content="Based on collection" IsChecked="{fl:TwoWayBinding PerimeterScope, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=CollectionBased}"/>
 
             <CheckBox Grid.Column="2" Grid.Row="2" Content="Exclude fun editions" IsChecked="{fl:TwoWayBinding ExcludeFunEditions}"/>
-            <CheckBox Grid.Column="2" Grid.Row="3" Content="Exclude online only editions" IsChecked="{fl:TwoWayBinding ExcludeOnlineOnlyEditions}"/>
-            <CheckBox Grid.Column="2" Grid.Row="4" Content="Exclude special card" IsChecked="{fl:TwoWayBinding ExcludeSpecialCards}"/>
+            <CheckBox Grid.Column="2" Grid.Row="3" Content="Exclude special card" IsChecked="{fl:TwoWayBinding ExcludeSpecialCards}"/>
 
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,10,5,0" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}"/>
-            <Grid Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Margin="5,0" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}">
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="5,10,5,0" ItemsSource="{Binding Collections}" SelectedItemsOverride="{Binding CollectionsSelected}" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}"/>
+            <Grid Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Margin="5,0" Visibility="{Binding PerimeterScope, Converter={fl:AggregateConverter {fl:EnumMatchToBooleanConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=CollectionBased}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -242,29 +240,29 @@
                 <CheckBox Grid.Row="1" Grid.Column="2" Margin="20,0" Content="Include alt art" VerticalAlignment="Center" IsChecked="{fl:TwoWayBinding CountIncludeAltArt}"/>
             </Grid>
             
-            <Label Grid.Column="0" Grid.Row="8" Content="Editions"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="8" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
+            <Label Grid.Column="0" Grid.Row="7" Content="Editions"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Editions}" SelectedItemsOverride="{Binding EditionsSelected}"/>
 
-            <StackPanel Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton GroupName="Color" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding ColorAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
                 <RadioButton GroupName="Color" Width="50" Content="And" IsChecked="{fl:TwoWayBinding ColorAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
             </StackPanel>
-            <Label Grid.Column="0" Grid.Row="11" Content="Colors" />
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}"/>
+            <Label Grid.Column="0" Grid.Row="10" Content="Colors" />
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Colors}" SelectedItemsOverride="{Binding ColorsSelected}"/>
 
-            <StackPanel Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" Grid.Row="12" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton GroupName="Type" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding TypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
                 <RadioButton GroupName="Type" Width="50" Content="And" IsChecked="{fl:TwoWayBinding TypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
             </StackPanel>
-            <Label Grid.Column="0" Grid.Row="14" Content="Types" VerticalAlignment="Center"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="14" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
+            <Label Grid.Column="0" Grid.Row="13" Content="Types" VerticalAlignment="Center"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="13" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}"/>
  
-            <StackPanel Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="1" Grid.Row="15" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                 <RadioButton GroupName="SubType" Width="50" Content="Or" IsChecked="{fl:TwoWayBinding SubTypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=Or}"/>
                 <RadioButton GroupName="SubType" Width="50" Content="And" IsChecked="{fl:TwoWayBinding SubTypeAggregation, Converter={fl:EnumMatchToBooleanConverter}, ConverterParameter=And}"/>
             </StackPanel>
-            <Label Grid.Column="0" Grid.Row="17" Content="SubTypes" VerticalAlignment="Center"/>
-            <xctk:CheckComboBox Grid.Column="1" Grid.Row="17" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding SubTypes}" SelectedItemsOverride="{Binding SubTypesSelected}"/>
+            <Label Grid.Column="0" Grid.Row="16" Content="SubTypes" VerticalAlignment="Center"/>
+            <xctk:CheckComboBox Grid.Column="1" Grid.Row="16" Grid.ColumnSpan="2" Margin="5,0" ItemsSource="{Binding SubTypes}" SelectedItemsOverride="{Binding SubTypesSelected}"/>
         </Grid>
     </DataTemplate>
 

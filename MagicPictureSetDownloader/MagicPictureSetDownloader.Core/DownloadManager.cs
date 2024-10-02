@@ -34,7 +34,7 @@
         {
             Set[] sets = ScryFallDataRetriever.GetBulkSets(_webAccess);
 
-            foreach (Set set in sets.Where(s => !Tranformation.SetToIgnore(s)))
+            foreach (Set set in sets)
             {
                 IEdition edition = MagicDatabase.GetEdition(set.Name);
                 if (edition == null)
@@ -130,7 +130,7 @@
         public IReadOnlyList<KeyValuePair<string, object>> GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter)
         {
             string html = _webAccess.GetHtml(preconstructedDeckImporter.GetRootUrl());
-            return preconstructedDeckImporter.GetDeckUrls(html).Select( s => new KeyValuePair<string, object>(s, null)).ToList();
+            return preconstructedDeckImporter.GetDeckUrls(html).Select(s => new KeyValuePair<string, object>(s, null)).ToList();
         }
         public string InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
         {
@@ -165,6 +165,14 @@
         }
         internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {
+            IEdition edition = MagicDatabase.GetEditionByCode(cardWithExtraInfo.Edition);
+            string checkName = edition?.Name.ToLower();
+
+            if (checkName.Contains("alchemy") || checkName.Contains("online") || checkName.Contains("arena"))
+            {
+                return;
+            }
+
             MagicDatabase.InsertNewCard(cardWithExtraInfo.Name, cardWithExtraInfo.Layout);
 
             ICard card = MagicDatabase.GetCard(cardWithExtraInfo.Name);

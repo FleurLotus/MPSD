@@ -37,7 +37,7 @@ namespace MagicPictureSetDownloader.Db
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _cards.GetOrDefault(name);
+                return _cards.GetOrDefault(name) ?? _cardNameSimple.GetOrDefault(name);
             }
         }
         //Unitary Get
@@ -176,7 +176,7 @@ namespace MagicPictureSetDownloader.Db
                 return languages;
             }
         }
-        public IPreconstructedDeck GetPreconstructedDeck(int idEdition, string preconstructedDeckName)
+        public IPreconstructedDeck GetPreconstructedDeck(int? idEdition, string preconstructedDeckName)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))
@@ -332,7 +332,7 @@ namespace MagicPictureSetDownloader.Db
         {
             return GetRarity(rarity).Id;
         }
-        private ILanguage GetLanguage(string language)
+        public ILanguage GetLanguage(string language)
         {
             CheckReferentialLoaded();
             using (new ReaderLock(_lock))

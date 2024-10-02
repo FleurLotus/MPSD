@@ -11,7 +11,7 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn(Kind = ColumnKind.Identity)]
         public int Id { get; set; }
         [DbColumn]
-        public int IdEdition { get; set; }
+        public int? IdEdition { get; set; }
         [DbColumn]
         public string Name { get; set; }
         [DbColumn]

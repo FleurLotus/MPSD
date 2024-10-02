@@ -4,14 +4,6 @@ namespace MagicPictureSetDownloader.ScryFall
 {
     public static class Tranformation
     {
-        public static bool SetToIgnore(Set s)
-        {
-            return s.SetType switch
-            {
-                _ => false,
-            };
-
-        }
         public static bool CardToIgnore(Card s)
         {
             return s.Layout switch

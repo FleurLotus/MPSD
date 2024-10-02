@@ -317,6 +317,11 @@
                 cardSubType |= CardSubType.Siege;
             }
 
+            if (IsRoom(type))
+            {
+                cardSubType |= CardSubType.Room;
+            }
+
             return cardSubType;
         }
         public static ShardColor GetColor(string castingCost)
@@ -428,6 +433,10 @@
         public static bool IsSiege(string type)
         {
             return type.ToLowerInvariant().Contains("siege");
+        }
+        public static bool IsRoom(string type)
+        {
+            return type.ToLowerInvariant().Contains("room");
         }
         public static bool IsVanguard(string type)
         {

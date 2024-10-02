@@ -38,7 +38,6 @@
         private MultiSelectedAggregation _subTypeAggregation;
         private PerimeterScope _perimeterScope;
         private bool _excludeFunEditions;
-        private bool _excludeOnlineOnlyEditions;
         private bool _excludeSpecialCards;
         private bool _countIncludeFoil;
         private bool _countIncludeAltArt;
@@ -48,7 +47,6 @@
         private int _countSelected;
         private string _name;
         private int _idBlockFun;
-        private int _idBlockOnlineOnly;
         
         public SearchViewModel()
         {
@@ -108,18 +106,6 @@
                 {
                     _excludeFunEditions = value;
                     OnNotifyPropertyChanged(nameof(ExcludeFunEditions));
-                }
-            }
-        }
-        public bool ExcludeOnlineOnlyEditions
-        {
-            get { return _excludeOnlineOnlyEditions; }
-            set
-            {
-                if (value != _excludeOnlineOnlyEditions)
-                {
-                    _excludeOnlineOnlyEditions = value;
-                    OnNotifyPropertyChanged(nameof(ExcludeOnlineOnlyEditions));
                 }
             }
         }
@@ -279,8 +265,8 @@
         {
             //Can be updated by application so refill the lists
             Result = null;
-            _idBlockFun = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("Fun", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).First();
-            _idBlockOnlineOnly = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("OnlineOnly", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).First();
+            int[] ids = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("Fun", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).ToArray();
+            _idBlockFun = ids.Length > 0 ? ids[0] : -1;
             Editions = _magicDatabase.GetAllEditionsOrdered();
             Collections = _magicDatabase.GetAllCollections();
 
@@ -303,7 +289,6 @@
             //Default values
             Name = null;
             ExcludeFunEditions = true;
-            ExcludeOnlineOnlyEditions = true;
             ExcludeSpecialCards = true;
             CountIncludeFoil = false;
             CountIsNameBased = false;
@@ -380,13 +365,6 @@
             if (ExcludeFunEditions)
             {
                 if (_magicDatabase.GetEditionByIdScryFall(cai.IdScryFall).IdBlock == _idBlockFun)
-                {
-                    return false;
-                }
-            }
-            if (ExcludeOnlineOnlyEditions)
-            {
-                if (_magicDatabase.GetEditionByIdScryFall(cai.IdScryFall).IdBlock == _idBlockOnlineOnly)
                 {
                     return false;
                 }

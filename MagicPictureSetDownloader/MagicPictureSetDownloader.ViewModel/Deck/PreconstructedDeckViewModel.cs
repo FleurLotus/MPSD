@@ -27,8 +27,8 @@
         }
 
         public string Name { get; }
-        public string Edition { get { return _edition.Name; } }
-        public DateTime? EditionDate { get { return _edition.ReleaseDate; } }
+        public string Edition { get { return _edition?.Name; } }
+        public DateTime? EditionDate { get { return _edition?.ReleaseDate; } }
         public IPreconstructedDeck PreconstructedDeck { get; }
         public IDictionary<CardViewModel, int> Composition { get; }
 

@@ -80,9 +80,9 @@
             foreach (IPreconstructedDeck preconstructedDeck in _magicDatabase.GetAllPreconstructedDecks())
             {
                 ICollection<IPreconstructedDeckCardEdition> deckComposition = _magicDatabase.GetPreconstructedDeckCards(preconstructedDeck);
-                IEdition edition = _magicDatabase.GetEditionById(preconstructedDeck.IdEdition);
+                IEdition edition = preconstructedDeck.IdEdition.HasValue ? _magicDatabase.GetEditionById(preconstructedDeck.IdEdition.Value) : null;
 
-                ret.Add(new PreconstructedDeckViewModel(preconstructedDeck, edition, 
+                ret.Add(new PreconstructedDeckViewModel(preconstructedDeck, edition,
                             deckComposition.Select(pdce => new KeyValuePair<CardViewModel, int>(allCardsViewModel[pdce.IdScryFall], pdce.Number))));
             }
 

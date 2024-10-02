@@ -5,7 +5,7 @@
 
     internal class DeckInfo
     {
-        public DeckInfo(int idEdition, string name, IEnumerable<DeckCardInfo> deckCards)
+        public DeckInfo(int? idEdition, string name, IEnumerable<DeckCardInfo> deckCards)
         {
             IdEdition = idEdition;
             Name = name;
@@ -13,7 +13,7 @@
         }
 
         public string Name { get; }
-        public int IdEdition { get; }
+        public int? IdEdition { get; }
         public IList<DeckCardInfo> Cards { get; }
         public int Count
         {
