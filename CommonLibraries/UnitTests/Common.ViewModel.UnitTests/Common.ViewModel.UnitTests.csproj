@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0-windows;net7.0-windows</TargetFrameworks>
+    <AssemblyTitle>Common.ViewModel.UnitTests</AssemblyTitle>
+    <Product>CCommon.ViewModel.UnitTests</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.ViewModel\Common.ViewModel.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+</Project>

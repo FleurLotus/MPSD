@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <AssemblyTitle>Common.Database.UnitTests</AssemblyTitle>
+    <Product>Common.Database.UnitTests</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.Database\Common.Database.csproj" />
+    <ProjectReference Include="..\MockDbData\MockDbData.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+  </ItemGroup>
+</Project>

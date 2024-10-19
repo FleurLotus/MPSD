@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Common.UnitTests")]
+[assembly: InternalsVisibleTo("Common.Database.UnitTests")]

@@ -1,6 +1,7 @@
-﻿namespace Common.UnitTests.ViewModel
+﻿namespace Common.ViewModel.UnitTests
 {
     using System;
+    using System.Text.RegularExpressions;
     using Common.ViewModel.Validation.Attributes;
 
     using NUnit.Framework;
@@ -35,7 +36,7 @@
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(null), "Null reg string must not be valid argument");
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(string.Empty), "Empty reg string must not be valid argument");
             Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute("   "), "Blank reg string must not be valid argument");
-            AssertEx.ThrowsOfType<ArgumentException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
+            Assert.Throws<RegexParseException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
             Assert.That(new StringRegExValidationAttribute(".*"), Is.Not.Null, "0 is valid argument");
         }
 

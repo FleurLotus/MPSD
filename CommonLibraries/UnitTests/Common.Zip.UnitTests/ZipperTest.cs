@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.Zip
+﻿namespace Common.Zip.UnitTests
 {
     using System.Collections.Generic;
     using System.IO;

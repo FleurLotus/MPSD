@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.Library
+﻿namespace Common.Library.UnitTests
 {
     using System.Collections.Generic;
 

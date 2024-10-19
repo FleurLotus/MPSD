@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.ViewModel
+﻿namespace Common.ViewModel.UnitTests
 {
     using Common.ViewModel.Validation;
     using Common.ViewModel.Validation.Attributes;

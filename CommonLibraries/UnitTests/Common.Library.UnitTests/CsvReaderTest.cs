@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.CSV
+﻿namespace Common.Library.UnitTests
 {
     using System;
     using System.IO;

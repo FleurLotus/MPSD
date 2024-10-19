@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.ViewModel
+﻿namespace Common.ViewModel.UnitTests
 {
     using System;
 

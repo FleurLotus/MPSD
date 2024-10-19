@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.Html
+﻿namespace Common.Library.UnitTests
 {
     using System;
 

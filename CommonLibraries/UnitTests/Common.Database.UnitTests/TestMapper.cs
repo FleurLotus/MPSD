@@ -1,4 +1,4 @@
-﻿namespace Common.UnitTests.Database
+﻿namespace Common.Database.UnitTests
 {
     using System.Data;
 
