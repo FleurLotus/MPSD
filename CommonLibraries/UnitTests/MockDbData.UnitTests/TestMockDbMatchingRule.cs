@@ -5,7 +5,6 @@
     using System.Data;
     using NUnit.Framework;
 
-
     [TestFixture]
     public class TestMockDbMatchingRule
     {
@@ -234,9 +233,7 @@
         }
 
         [Test]
-
         public void TestImmutable()
-
         {
             MockDbMatchingRule mockDbMatchingRule2;
             Dictionary<object, object> expected2;
@@ -428,7 +425,29 @@
             Assert.That(mockDbMatchingRule.Match(cmd), Is.True, "Not the expected value for SetParameterValue (5) with a=\"25\" and b=25");
             cmd.Parameters["b"].Value = "25";
             Assert.That(mockDbMatchingRule.Match(cmd), Is.False, "Not the expected value for SetParameterValue (5) with a=\"25\" and b=\"25\"");
+        }
+        [Test]
+        public void TestToString()
+        {
+            MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
+            Assert.That(mockDbMatchingRule, Is.Not.Null);
+            Assert.That(mockDbMatchingRule.ToString(), Is.EqualTo($"CommandType={mockDbMatchingRule.CommandType}"));
 
+            mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text).SetCommandTextReg(".aaa+");
+            Assert.That(mockDbMatchingRule, Is.Not.Null);
+            Assert.That(mockDbMatchingRule.ToString(), Is.EqualTo($"CommandType={mockDbMatchingRule.CommandType} && CommandTextReg={mockDbMatchingRule.CommandTextReg}"));
+
+            mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.TableDirect).SetCommandTextReg("b").SetParameterCount(3);
+            Assert.That(mockDbMatchingRule, Is.Not.Null);
+            Assert.That(mockDbMatchingRule.ToString(), Is.EqualTo($"CommandType={mockDbMatchingRule.CommandType} && CommandTextReg={mockDbMatchingRule.CommandTextReg} && ParameterCount={mockDbMatchingRule.ParameterCount.Value}"));
+
+            mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.TableDirect).SetParameterCount(4);
+            Assert.That(mockDbMatchingRule, Is.Not.Null);
+            Assert.That(mockDbMatchingRule.ToString(), Is.EqualTo($"CommandType={mockDbMatchingRule.CommandType} && ParameterCount={mockDbMatchingRule.ParameterCount}"));
+
+            mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure).SetParameterValue("a", 42).SetParameterValue(2, "sdfghjuklo");
+            Assert.That(mockDbMatchingRule, Is.Not.Null);
+            Assert.That(mockDbMatchingRule.ToString(), Is.EqualTo($"CommandType={mockDbMatchingRule.CommandType} && \"a\"=42 && pos 2=sdfghjuklo"));
         }
     }
 }

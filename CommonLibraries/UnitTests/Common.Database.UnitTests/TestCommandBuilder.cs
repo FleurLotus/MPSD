@@ -119,8 +119,8 @@
             IDbCommand cnx = new MockDbCommand();
             DbClassNoDelete o = new DbClassNoDelete { Col1 = "1", Col2 = "2" };
 
-            Assert.Throws<RestrictedDmlException>(() => commandBuilder.BuildDeleteAllCommand(cnx), "BuildDeleteAllCommand should throw for DbClassNoDelete");
-            Assert.Throws<RestrictedDmlException>(() => commandBuilder.BuildDeleteOneCommand(cnx, o), "BuildDeleteOneCommand should throw for DbClassNoDelete");
+            Assert.Throws(Is.TypeOf<RestrictedDmlException>().With.Property("Restriction").EqualTo(Restriction.Delete).And.Property("TableName").EqualTo(nameof(DbClassNoDelete)), () => commandBuilder.BuildDeleteAllCommand(cnx), "BuildDeleteAllCommand should throw for DbClassNoDelete");
+            Assert.Throws(Is.TypeOf<RestrictedDmlException>().With.Property("Restriction").EqualTo(Restriction.Delete).And.Property("TableName").EqualTo(nameof(DbClassNoDelete)), () => commandBuilder.BuildDeleteOneCommand(cnx, o), "BuildDeleteOneCommand should throw for DbClassNoDelete");
             Assert.DoesNotThrow(() => commandBuilder.BuildUpdateOneCommand(cnx, o), "BuildUpdateOneCommand should not throw for DbClassNoDelete");
             Assert.DoesNotThrow(() => commandBuilder.BuildInsertOneCommand(cnx, o), "BuildInsertOneCommand should not throw for DbClassNoDelete");
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectOneCommand(cnx, o), "BuildSelectOneCommand should not throw for DbClassNoDelete");
@@ -137,7 +137,7 @@
             Assert.DoesNotThrow(() => commandBuilder.BuildDeleteAllCommand(cnx), "BuildDeleteAllCommand should not throw for DbClassNoInsert");
             Assert.DoesNotThrow(() => commandBuilder.BuildDeleteOneCommand(cnx, o), "BuildDeleteOneCommand should not throw for DbClassNoInsert");
             Assert.DoesNotThrow(() => commandBuilder.BuildUpdateOneCommand(cnx, o), "BuildUpdateOneCommand should not throw for DbClassNoInsert");
-            Assert.Throws<RestrictedDmlException>(() => commandBuilder.BuildInsertOneCommand(cnx, o), "BuildInsertOneCommand should throw for DbClassNoInsert");
+            Assert.Throws(Is.TypeOf<RestrictedDmlException>().With.Property("Restriction").EqualTo(Restriction.Insert).And.Property("TableName").EqualTo(nameof(DbClassNoInsert)), () => commandBuilder.BuildInsertOneCommand(cnx, o), "BuildInsertOneCommand should throw for DbClassNoInsert");
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectOneCommand(cnx, o), "BuildSelectOneCommand should not throw for DbClassNoInsert");
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectAllCommand(cnx), "BuildSelectAllCommand should not throw for DbClassNoInsert");
         }
@@ -151,7 +151,7 @@
 
             Assert.DoesNotThrow(() => commandBuilder.BuildDeleteAllCommand(cnx), "BuildDeleteAllCommand should not throw for DbClassNoUpdate");
             Assert.DoesNotThrow(() => commandBuilder.BuildDeleteOneCommand(cnx, o), "BuildDeleteOneCommand should not throw for DbClassNoUpdate");
-            Assert.Throws<RestrictedDmlException>(() => commandBuilder.BuildUpdateOneCommand(cnx, o), "BuildUpdateOneCommand should throw for DbClassNoUpdate");
+            Assert.Throws(Is.TypeOf<RestrictedDmlException>().With.Property("Restriction").EqualTo(Restriction.Update).And.Property("TableName").EqualTo(nameof(DbClassNoUpdate)), () => commandBuilder.BuildUpdateOneCommand(cnx, o), "BuildUpdateOneCommand should throw for DbClassNoUpdate");
             Assert.DoesNotThrow(() => commandBuilder.BuildInsertOneCommand(cnx, o), "BuildInsertOneCommand should not throw for DbClassNoUpdate");
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectOneCommand(cnx, o), "BuildSelectOneCommand should not throw for DbClassNoUpdate");
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectAllCommand(cnx), "BuildSelectAllCommand should not throw for DbClassNoUpdate");

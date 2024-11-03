@@ -19,7 +19,7 @@
     public class MockDbMatchingRule
     {
         private readonly Dictionary<object, object> _parametersValues;
-        internal MockDbMatchingRule(CommandType commandType)
+        private MockDbMatchingRule(CommandType commandType)
         {
             _parametersValues = new Dictionary<object, object>();
             CommandType = commandType;

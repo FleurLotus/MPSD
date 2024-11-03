@@ -77,6 +77,11 @@
 
         public static DbType? ToDbType(this Type type)
         {
+            if (type == null)
+            {
+                return null;
+            }
+
             if (!_typeToDbTypes.TryGetValue(type, out DbType dbType))
             {
                 return null;

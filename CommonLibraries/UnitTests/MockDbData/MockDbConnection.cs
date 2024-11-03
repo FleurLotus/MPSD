@@ -6,21 +6,26 @@
     public class MockDbConnection : DbConnection, IAcceptResultInjection
     {
         private MockDbResultInjector _injector;
+        private string _database;
+        private ConnectionState _state = ConnectionState.Closed;
 
         public override string ConnectionString { get; set; }
-        public override string Database { get; }
+        public override string Database { get { return _database; } }
         public override string DataSource { get; }
         public override string ServerVersion { get; }
-        public override ConnectionState State { get; }
+        public override ConnectionState State { get { return _state; } }
 
         public override void ChangeDatabase(string databaseName)
         {
+            _database = databaseName;
         }
         public override void Close()
         {
+            _state = ConnectionState.Closed;
         }
         public override void Open()
         {
+            _state = ConnectionState.Open;
         }
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {

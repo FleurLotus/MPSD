@@ -26,22 +26,29 @@
 
         public override void Cancel()
         {
-            throw new NotImplementedException();
         }
 
         public override int ExecuteNonQuery()
         {
-            throw new NotImplementedException();
+            return _injector?.GetExecuteNonQueryResult(this) ?? 0;
         }
-
         public override object ExecuteScalar()
         {
-            throw new NotImplementedException();
+            MockDbResult result = _injector?.GetMockDbResult(this);
+            if (result != null)
+            {
+                MockDbDataReader reader = new MockDbDataReader(result);
+                if (reader.Read())
+                {
+                    return reader.GetValue(0);
+                }
+            }
+
+            return null;
         }
 
         public override void Prepare()
         {
-            throw new NotImplementedException();
         }
 
         protected override DbParameter CreateDbParameter()

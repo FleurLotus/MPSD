@@ -6,9 +6,14 @@
     public class MockDbResultInjector
     {
         private MockDbResult _globalResult;
+        private int? _nonQueryResult;
         private readonly Dictionary<MockDbMatchingRule, MockDbResult> _rules = new Dictionary<MockDbMatchingRule, MockDbResult>();
         public MockDbResultInjector()
         {
+        }
+        public void AddGlobalExecuteNonQueryResult(int nonQueryResult)
+        {
+            _nonQueryResult = nonQueryResult;
         }
         public void AddGlobalResult(MockDbResult mockDbResult)
         {
@@ -30,7 +35,7 @@
             }
             _rules[matchingRule] = mockDbResult;
         }
-        public MockDbResult GetMockDbResult(DbCommand command)
+        internal MockDbResult GetMockDbResult(DbCommand command)
         {
             if (command == null)
             {
@@ -74,6 +79,14 @@
             }
 
             return _globalResult;
+        }
+        internal int? GetExecuteNonQueryResult(DbCommand command)
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+            return _nonQueryResult;
         }
     }
 }

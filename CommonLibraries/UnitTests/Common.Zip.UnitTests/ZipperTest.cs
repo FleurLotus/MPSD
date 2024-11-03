@@ -22,7 +22,7 @@
         public void TestUnzipAll([Values(true, false)] bool fromStream)
         {
             Assert.That(File.Exists(ZipFileName), Is.True, "Can't find the test file");
-            string temporyDirectory = Path.Combine(Path.GetTempPath(), "TestUnzip");
+            string temporyDirectory = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Path.GetRandomFileName()));
             string[] fileNames = { "File1.txt", "File2.txt" };
             const string subDirName = "Subdir";
 

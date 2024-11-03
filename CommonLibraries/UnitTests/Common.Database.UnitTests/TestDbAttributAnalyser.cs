@@ -15,8 +15,7 @@
         [Test]
         public void TestDbTableIsPresent()
         {
-            AttributedTypeException ex = Assert.Throws<AttributedTypeException>(() => DbAttributAnalyser.Analyse(typeof(DbTableNotPresentClass)));
-            Assert.That(ex.Message, Is.EqualTo("DbTableAttribute must be declared one and one time for the type"));
+            Assert.Throws(Is.TypeOf<AttributedTypeException>().With.Message.EqualTo("DbTableAttribute must be declared one and one time for the type").And.Property("Type").EqualTo(typeof(DbTableNotPresentClass)), () => DbAttributAnalyser.Analyse(typeof(DbTableNotPresentClass)));
         }
 
         [DbTable]
@@ -28,8 +27,7 @@
         [Test]
         public void TestDbColumnIsPresent()
         {
-            AttributedTypeException ex = Assert.Throws<AttributedTypeException>(() => DbAttributAnalyser.Analyse(typeof(DbColumnNotPresentClass)));
-            Assert.That(ex.Message, Is.EqualTo("DbColumnAttribute must be declared at least one time for the type"));
+            Assert.Throws(Is.TypeOf<AttributedTypeException>().With.Message.EqualTo("DbColumnAttribute must be declared at least one time for the type").And.Property("Type").EqualTo(typeof(DbColumnNotPresentClass)), () => DbAttributAnalyser.Analyse(typeof(DbColumnNotPresentClass)));
         }
 
         [DbTable]
@@ -44,8 +42,7 @@
         [Test]
         public void TestDbColumnIdentityUnique()
         {
-            AttributedTypeException ex = Assert.Throws<AttributedTypeException>(() => DbAttributAnalyser.Analyse(typeof(DbColumnIdentityNotUniqueClass)));
-            Assert.That(ex.Message, Is.EqualTo("DbColumnAttribute identity could only be declared one time for the type"));
+            Assert.Throws(Is.TypeOf<AttributedTypeException>().With.Message.EqualTo("DbColumnAttribute identity could only be declared one time for the type").And.Property("Type").EqualTo(typeof(DbColumnIdentityNotUniqueClass)), () => DbAttributAnalyser.Analyse(typeof(DbColumnIdentityNotUniqueClass)));
         }
 
         [DbTable]

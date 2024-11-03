@@ -28,6 +28,30 @@
             Assert.DoesNotThrow(() => mockDbResultInjector.AddGlobalResult(mockDbResult), "Should not throw when mockDbResult is not null");
         }
         [Test]
+        public void TestGetExecuteNonQueryResultArgument()
+        {
+            MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
+            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.GetExecuteNonQueryResult(null), "Should throw ArgumentNullException when command is null");
+        }
+        [Test]
+        public void TestGetExecuteNonQueryResult()
+        {
+            MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
+            mockDbResultInjector.AddGlobalExecuteNonQueryResult(10);
+
+            MockDbCommand cmd = new MockDbCommand();
+            int? result = mockDbResultInjector.GetExecuteNonQueryResult(cmd);
+            Assert.That(result, Is.EqualTo(10));
+        }
+        [Test]
+        public void TestGetExecuteNonQueryResultNoSet()
+        {
+            MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
+            MockDbCommand cmd = new MockDbCommand();
+            int? result = mockDbResultInjector.GetExecuteNonQueryResult(cmd);
+            Assert.That(result, Is.Null);
+        }
+        [Test]
         public void TestGetMockDbResultArgument()
         {
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
