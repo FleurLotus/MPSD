@@ -493,14 +493,12 @@ namespace MockDbData.UnitTests
 
         private static void CheckThrowCloseException(TestDelegate testDelegate, string method)
         {
-            InvalidOperationException ex = Assert.Throws<InvalidOperationException>(testDelegate, $"Expecting InvalidOperationException while calling {method}");
-            Assert.That(ex.Message, Is.EqualTo("Could not access while reader is closed"), $"Not the expected exception while calling {method}");
+            Assert.Throws(Is.TypeOf<InvalidOperationException>().With.Message.EqualTo("Could not access while reader is closed"), testDelegate, $"Expecting InvalidOperationException while calling {method}");
         }
 
         private static void CheckThrowNoDateException(TestDelegate testDelegate, string method)
         {
-            InvalidOperationException ex = Assert.Throws<InvalidOperationException>(testDelegate, "Expecting InvalidOperationException while calling " + method);
-            Assert.That(ex.Message, Is.EqualTo("no data"), "Not the expected exception while calling " + method);
+            Assert.Throws(Is.TypeOf<InvalidOperationException>().With.Message.EqualTo("no data"), testDelegate, $"Expecting InvalidOperationException while calling {method}");
         }
     }
 }

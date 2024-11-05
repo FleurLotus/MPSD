@@ -8,6 +8,9 @@
     using Common.Database;
 
     using NUnit.Framework;
+    using System.Data.Common;
+    using System.Collections.Generic;
+    using Newtonsoft.Json.Linq;
 
     [TestFixture]
     public class TestMapper
@@ -22,7 +25,7 @@
         }
 
         [DbTable()]
-        private class DbWithMultiColumn
+        public class DbWithMultiColumn
         {
             [DbColumn(Kind = ColumnKind.PrimaryKey)]
             public string Col1 { get; set; }
@@ -110,6 +113,77 @@
             DbWithMultiColumn source = new DbWithMultiColumn { Col1 = "aaaa" };
             DbWithMultiColumn ret = Mapper<DbWithMultiColumn>.Load(_connection, source);
             Assert.That(ret, Is.Null);
+        }
+
+        [DbTable()]
+        public class DbWithIdentity
+        {
+            [DbColumn(Kind = ColumnKind.Identity)]
+            public int Col1 { get; set; }
+            [DbColumn()]
+            public string Col2 { get; set; }
+        }
+        [Test]
+        public void TestInsertOneWithAddIdentifier()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("id", typeof(int));
+            dt.Rows.Add(100);
+
+            MockDbResultInjector injector = new MockDbResultInjector();
+            injector.AddGlobalExecuteNonQueryResult(1);
+            MockDbMatchingRule matchingRule =  MockDbMatchingRule.CreateRule(CommandType.Text).SetParameterCount(0);
+            injector.AddResult(matchingRule, new MockDbResult(dt));
+            ((IAcceptResultInjection)_connection).Accept(injector);
+
+            DbWithIdentity newClass = new DbWithIdentity { Col2 = "aaaa" };
+            Mapper<DbWithIdentity>.InsertOne(_connection, newClass);
+
+            Assert.That(newClass, Is.Not.Null);
+            Assert.That(newClass.Col2, Is.EqualTo("aaaa"));
+            Assert.That(newClass.Col1, Is.EqualTo(100));
+        }
+        [DbTable()]
+        public class DbWithPrimary
+        {
+            [DbColumn(Kind = ColumnKind.PrimaryKey)]
+            public int Col1 { get; set; }
+            [DbColumn()]
+            public string Col2 { get; set; }
+        }
+        [TestCaseSource("TestInsertUpdateDeleteOneCases", new object[] { nameof(TestInsertUpdateDeleteOne) })]
+        public void TestInsertUpdateDeleteOne(Action<IDbConnection, DbWithPrimary> func, int resultCount)
+        {
+            MockDbResultInjector injector = new MockDbResultInjector();
+            injector.AddGlobalExecuteNonQueryResult(resultCount);
+            ((IAcceptResultInjection)_connection).Accept(injector);
+
+            DbWithPrimary newClass = new DbWithPrimary { Col1 = 10, Col2 = "aaaa" };
+
+            if (resultCount == 1)
+            {
+                func(_connection, newClass);
+                Assert.That(newClass, Is.Not.Null);
+                Assert.That(newClass.Col2, Is.EqualTo("aaaa"));
+                Assert.That(newClass.Col1, Is.EqualTo(10));
+            }
+            else
+            {
+                Assert.Throws(Is.TypeOf<ApplicationDbException>().With.Message.EqualTo("Wrong number of row affected. Rollback"), () => func(_connection, newClass));
+            }
+        }
+
+        public static IEnumerable<TestCaseData> TestInsertUpdateDeleteOneCases(string methodCaller)
+        {
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 1).SetName($"{methodCaller} (InsertOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 0).SetName($"{methodCaller} (InsertOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 2).SetName($"{methodCaller} (InsertOneFailIfMultipleLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 1).SetName($"{methodCaller} (DeleteOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 0).SetName($"{methodCaller} (DeleteOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 2).SetName($"{methodCaller} (DeleteOneFailIfMultipleLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 1).SetName($"{methodCaller} (UpdateOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 0).SetName($"{methodCaller} (UpdateOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 2).SetName($"{methodCaller} (UpdateOneFailIfMultipleLineUpdated)");
         }
     }
 }
