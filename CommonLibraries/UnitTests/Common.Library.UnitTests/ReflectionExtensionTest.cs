@@ -8,8 +8,19 @@
 
     using NUnit.Framework;
 
-    public partial class LibExtensionTest
+    [TestFixture]
+    public class ReflectionExtensionTest
     {
+        [Test]
+        public void ReflectionExtensionGetPublicInstancePropertiesNull()
+        {
+            Type t = null;
+            Assert.Throws<ArgumentNullException>(() => t.GetPublicInstanceProperties());
+
+            object o = null;
+            Assert.Throws<ArgumentNullException>(() => o.GetPublicInstanceProperties());
+
+        }
         [Test]
         public void ReflectionExtensionGetPublicInstancePropertiesTest()
         {
@@ -24,11 +35,54 @@
             Assert.That(names.Length, Is.EqualTo(11), "Not the could number of property found");
             Assert.That(names.All(s => s.StartsWith("Member") && (s.Contains("PublicGet") || s.Contains("PublicSet"))), Is.True, "Must find only member public");
         }
-    
+        [Test]
+        public void ReflectionExtensionGetCustomAttributesForProperties()
+        {
+            ICustomAttributeProvider custom = typeof(ChildClass).GetProperty("Property3");
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1)); 
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1)); 
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(0)); 
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(0));
+
+            custom = typeof(ChildClass).GetProperty("Property");
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(0));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(0));
+
+            custom = typeof(ChildClass).GetProperty("Property2");
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(1));
+
+            custom = typeof(ChildClass).GetProperty("Property4");
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(1));
+        }
+        [Test]
+        public void ReflectionExtensionGetCustomAttributesForClass()
+        {
+            ICustomAttributeProvider custom = typeof(ChildClass);
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(2));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(1));
+
+            custom = typeof(MotherClass);
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(0));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(0));
+
+        }
+
         // ReSharper disable UnusedMember.Local
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         // ReSharper disable ValueParameterNotUsed
-        [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+        [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, AllowMultiple = true)]
         private class MotherAttribute : Attribute
         {
 
@@ -38,6 +92,7 @@
         {
         }
 
+        [Mother]
         private class MotherClass
         {
             [Mother]
@@ -48,7 +103,7 @@
 
         }
 
-
+        [Child]
         private class ChildClass : MotherClass
         {
             [Mother]

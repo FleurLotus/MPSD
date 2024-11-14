@@ -7,7 +7,7 @@
     using NUnit.Framework;
 
     [TestFixture]
-    public partial class LibExtensionTest
+    public class DictionaryExtensionTest
     {
         [Test]
         public void DictionaryExtensionGetOrDefaultTest()

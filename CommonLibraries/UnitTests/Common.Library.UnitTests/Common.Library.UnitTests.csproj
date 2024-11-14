@@ -4,11 +4,6 @@
     <AssemblyTitle>Common.Library.UnitTests</AssemblyTitle>
     <Product>Common.Library.UnitTests</Product>
   </PropertyGroup>
-   <ItemGroup>
-    <Compile Update="LibExtensionTest.Reflection.cs">
-      <DependentUpon>LibExtensionTest.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common.Library\Common.Library.csproj" />
   </ItemGroup>
