@@ -10,7 +10,7 @@
     [TestFixture]
     public class LockTest
     {
-        private const int timeout = 100;
+        private const int timeout = 30;
 
         [Test]
         public void TestReaderLockNullArgument()

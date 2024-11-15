@@ -23,8 +23,6 @@
         {
             _exit = true;
             _autoResetEvent.Set();
-            
-            _thread.Abort();
             _autoResetEvent.Close();
         }
 
@@ -45,44 +43,38 @@
         
         private void ActionExecutorThreadLoop()
         {
-            try
+            while (!_exit)
             {
-                while (!_exit)
+                // Wait for work
+                _autoResetEvent.WaitOne();
+
+                // Dequeue actions
+                var todo = new List<Action>();
+                lock (_queue)
                 {
-                    // Wait for work
-                    _autoResetEvent.WaitOne();
-
-                    // Dequeue actions
-                    var todo = new List<Action>();
-                    lock (_queue)
+                    while (_queue.Count > 0)
                     {
-                        while (_queue.Count > 0)
-                        {
-                            todo.Add(_queue.Dequeue());
-                        }
-                    }
-
-                    // Execute them
-                    foreach (var action in todo)
-                    {
-                        if (_exit)
-                        {
-                            return;
-                        }
-
-                        try
-                        {
-                            action();
-                        }
-                        catch (Exception e)
-                        {
-                            Console.Error.WriteLine("ActionExecutorThreadLoop got exception: " + e);
-                        }
+                        todo.Add(_queue.Dequeue());
                     }
                 }
-            }
-            catch (ThreadAbortException)
-            {
+
+                // Execute them
+                foreach (var action in todo)
+                {
+                    if (_exit)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        action();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.Error.WriteLine("ActionExecutorThreadLoop got exception: " + e);
+                    }
+                }
             }
         }
     }
