@@ -13,7 +13,7 @@
         [Test]
         public void TestStartStop()
         {
-            EventDispatcher eventDispatcher = new EventDispatcher("test");
+            EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
             Assert.That(eventDispatcher.Name, Does.StartWith("test:"));
             eventDispatcher.Dispose();
             eventDispatcher.Enqueue(() => { });
@@ -22,7 +22,7 @@
         [Test]
         public void TestEnqueue()
         {
-            EventDispatcher eventDispatcher = new EventDispatcher("test");
+            EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
             eventDispatcher.Enqueue(Increase);
             Thread.Sleep(50);
             Assert.That(_count, Is.EqualTo(1));
@@ -38,7 +38,7 @@
         [Test]
         public void TestStopWithRunningTask()
         {
-            EventDispatcher eventDispatcher = new EventDispatcher("test");
+            EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
             eventDispatcher.Enqueue(IncreaseWait);
             Thread.Sleep(20);
             eventDispatcher.Enqueue(IncreaseWait);
@@ -60,7 +60,7 @@
         {
             Assert.DoesNotThrow(() =>
             {
-                EventDispatcher eventDispatcher = new EventDispatcher("test");
+                EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
                 eventDispatcher.Enqueue(() => throw new Exception());
                 Thread.Sleep(50);
                 eventDispatcher.Dispose();

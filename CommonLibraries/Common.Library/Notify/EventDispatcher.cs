@@ -3,19 +3,22 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using Microsoft.Extensions.Logging;
 
     public sealed class EventDispatcher : IEventDispatcher, IDisposable
     {
         private readonly AutoResetEvent _autoResetEvent = new AutoResetEvent(false);
         private readonly Queue<Action> _queue = new Queue<Action>();
         private readonly Thread _thread;
+        private readonly ILogger _logger;
         private volatile bool _exit;
 
-        public EventDispatcher(string name)
+        public EventDispatcher(ILogger logger, string name)
         {
             _thread = new Thread(ActionExecutorThreadLoop) { Name = name, IsBackground = true };
             _thread.Start();
-            Name = name + ":" + _thread.ManagedThreadId;
+            _logger = logger;
+            Name = $"{name}:{_thread.ManagedThreadId}";
         }
         public string Name { get; }
         
@@ -72,7 +75,7 @@
                     }
                     catch (Exception e)
                     {
-                        Console.Error.WriteLine("ActionExecutorThreadLoop got exception: " + e);
+                        _logger?.LogError("ActionExecutorThreadLoop got exception: {Exception}", e);
                     }
                 }
             }

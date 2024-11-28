@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+    using Microsoft.Extensions.Logging;
 
     public sealed class AssemblyResolver : IDisposable
     {
@@ -13,12 +14,14 @@
         private volatile bool _disposed;
         private readonly HashSet<string> _loaded;
         private readonly HashSet<string> _notLoaded;
+        private readonly ILogger _logger;
 
-        public AssemblyResolver(IEnumerable<string> resolveDirectories, TextWriter logTextWriter = null)
+        public AssemblyResolver(ILogger logger, IEnumerable<string> resolveDirectories, TextWriter logTextWriter = null)
         {
             _notLoaded = new HashSet<string>();
             _loaded = new HashSet<string>();
             _logTextWriter = logTextWriter;
+            _logger = logger;
 
             Assembly assembly  = Assembly.GetEntryAssembly();
             //Could be null in unit test
@@ -57,7 +60,7 @@
         {
             if (_logTextWriter != null)
             {
-                Console.Error.WriteLine("AssemblyResolver: Loaded assembly '{0}' ({1})", new AssemblyName(args.LoadedAssembly.FullName).Name, args.LoadedAssembly.Location);
+                _logger?.LogError("AssemblyResolver: Loaded assembly '{AssemblyName}' ({Location})", new AssemblyName(args.LoadedAssembly.FullName).Name, args.LoadedAssembly.Location);
             }
         }
         private Assembly OnCurrentDomainAssemblyResolve(object sender, ResolveEventArgs args)

@@ -16,13 +16,12 @@
 
         private HttpClient _httpClient;
         private ICredentials _credentials;
-        private readonly IDictionary<string, string> _htmlCache;
+        private readonly Dictionary<string, string> _htmlCache;
         private readonly object _lock = new object();
         private readonly TimeSpan? _timeout;
 
         public WebAccess(TimeSpan? timeOut = null)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             _timeout = timeOut;
             _httpClient = GetHttpClient();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
