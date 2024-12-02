@@ -36,7 +36,7 @@
                 foreach (NotifyCollectionChangedEventHandler handler in delegates.Cast<NotifyCollectionChangedEventHandler>())
                 {
                     NotifyCollectionChangedEventHandler handler1 = handler;
-                    _dispatcherInvoker.Invoke(() => handler1(this, e));
+                    _dispatcherInvoker?.Invoke(() => handler1(this, e));
                 }
             }
         }
