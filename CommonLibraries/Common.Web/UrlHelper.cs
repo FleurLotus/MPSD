@@ -28,7 +28,14 @@
 
             if (!baseurl.EndsWith("/"))
             {
-                baseurl = baseurl[..(baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1)];
+                if (baseurl.Contains('/'))
+                {
+                    baseurl = baseurl[..(baseurl.LastIndexOf("/", StringComparison.InvariantCulture) + 1)];
+                }
+                else
+                {
+                    baseurl += "/";
+                }
             }
 
             if (relativeurl.StartsWith("/"))
@@ -41,34 +48,36 @@
 
         private static string RemovePathBack(string url)
         {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return url;
-            }
-
             const string pathBack = "/../";
             int index;
+            int start;
             while ((index = url.IndexOf(pathBack, StringComparison.InvariantCultureIgnoreCase)) >= 0)
             {
-                int start = url.LastIndexOf('/', index - 1);
-                if (start < 0)
+                if (index == 0)
                 {
-                    continue;
+                    start = -1;
+                }
+                else
+                {
+                    start = url.LastIndexOf('/', index - 1);
+                }
+                if (start > 0 && url[start - 1] == ':')
+                {
+                    start++;
                 }
 
                 url = url[..(start + 1)] + url[(index + pathBack.Length)..];
+
+                if (start < 0 && url.StartsWith("../"))
+                {
+                    url = "/" + url;
+                }
             }
             return url;
-
         }
         private static string ExtractBaseUrl(string url)
         {
             const string postfixProtocol = @"://";
-
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return url;
-            }
 
             int startIndex = url.IndexOf(postfixProtocol, StringComparison.InvariantCulture);
             if (startIndex < 0)
@@ -83,6 +92,6 @@
             }
 
             return url[..(index + 1)];
-        }       
+        }
     }
 }
