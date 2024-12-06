@@ -19,9 +19,14 @@
         private readonly Dictionary<string, string> _htmlCache;
         private readonly object _lock = new object();
         private readonly TimeSpan? _timeout;
+        private readonly IHttpMessageHandlerFactory _httpMessageHandlerFactory;
 
-        public WebAccess(TimeSpan? timeOut = null)
+        public WebAccess(TimeSpan? timeOut = null): this(new HttpMessageHandlerFactory(), timeOut)
         {
+        }
+        internal WebAccess(IHttpMessageHandlerFactory httpMessageHandlerFactory, TimeSpan? timeOut = null)
+        {
+            _httpMessageHandlerFactory = httpMessageHandlerFactory;
             _timeout = timeOut;
             _httpClient = GetHttpClient();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
@@ -64,16 +69,8 @@
 
         private HttpClient NewHttpClient()
         {
-            HttpClient client;
+            HttpClient client = new HttpClient(_httpMessageHandlerFactory.Create(_credentials));
 
-            if (_credentials == null)
-            {
-                client = new HttpClient(new HttpClientHandler { UseDefaultCredentials = true });
-            }
-            else
-            {
-                client = new HttpClient(new HttpClientHandler { Credentials = _credentials });
-            }
             if (_timeout.HasValue)
             {
                 client.Timeout = _timeout.Value;

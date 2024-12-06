@@ -6,13 +6,12 @@
 
     internal class ForeignKey : IForeignKey, IComparable<IForeignKey>
     {
-        private readonly List<ColumnForForeignKey> _columns = new List<ColumnForForeignKey>();
+        private readonly SortedDictionary<int, IColumnForForeignKey> _columns = new SortedDictionary<int, IColumnForForeignKey>();
 
         public string Name { get; set; }
         public string SourceTableName { get; set; }
         public string SourceSchemaName { get; set; }
 
-        public string ReferenceName { get; set; }
         public string ReferenceTableName { get; set; }
         public string ReferenceSchemaName { get; set; }
 
@@ -21,19 +20,39 @@
 
         public CaseSensitivity CaseSensitivity { get; internal set; }
         
-        public IColumnForForeignKey[] SourceColumns()
+        public IColumnForForeignKey[] Columns()
         {
-            return _columns.Cast<IColumnForForeignKey>().ToArray();
+            return _columns.Values.ToArray();
         }
 
-        internal void AddColumn(ColumnForForeignKey column)
+        internal void AddColumn(int position, IColumn source, IColumn reference)
         {
-            if (column == null)
+            if (source == null)
             {
-                throw new ArgumentNullException(nameof(column));
+                throw new ArgumentNullException(nameof(source));
             }
-            _columns.Add(column);
-            _columns.Sort();
+            if (reference == null)
+            {
+                throw new ArgumentNullException(nameof(reference));
+            }
+            if (CaseSensitivity.Compare(SourceSchemaName, source.SchemaName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong source schema", nameof(source));
+            }
+            if (CaseSensitivity.Compare(SourceTableName, source.TableName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong source table", nameof(source));
+            }
+            if (CaseSensitivity.Compare(ReferenceSchemaName, reference.SchemaName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong reference schema", nameof(reference));
+            }
+            if (CaseSensitivity.Compare(ReferenceTableName, reference.TableName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong reference table", nameof(reference));
+            }
+
+            _columns[position] = new ColumnForForeignKey { SourceColumn = source, ReferenceColumn = reference, Position = position };
         }
 
         public int CompareTo(IForeignKey other)
@@ -48,23 +67,22 @@
             }
             else
             {
-                comp = string.Compare(SourceSchemaName, other.SourceSchemaName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(SourceSchemaName, other.SourceSchemaName, CaseSensitivity);
             }
 
             if (comp == 0)
             {
-                comp = string.Compare(SourceTableName, other.SourceTableName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(SourceTableName, other.SourceTableName, CaseSensitivity);
             }
             if (comp == 0)
             {
-                comp = string.Compare(CaseSensitivity.ToKeyString(Name), CaseSensitivity.ToKeyString(other.Name), StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(Name, other.Name, CaseSensitivity);
             }
             return comp;
         }
         public override string ToString()
         {
-            return $"{Table.TableKey(SourceSchemaName, SourceTableName, CaseSensitivity)}.{Name}";
+            return CaseSensitivity.ToKeyString($"{Table.TableKey(SourceSchemaName, SourceTableName, CaseSensitivity)}.{Name}", CaseSensitivity);
         }
-
     }
 }

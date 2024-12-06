@@ -7,7 +7,7 @@
     [TestFixture]
     public class UrlHelperTest
     {
-        [TestCaseSource("TestToAbsoluteUrlCases", new object[] { nameof(TestToAbsoluteUrl) })]
+        [TestCaseSource(nameof(TestToAbsoluteUrlCases), new object[] { nameof(TestToAbsoluteUrl) })]
         public string TestToAbsoluteUrl(string baseurl, string relativeurl, bool useOnlyDomain)
         {
             return UrlHelper.ToAbsoluteUrl(baseurl, relativeurl, useOnlyDomain);

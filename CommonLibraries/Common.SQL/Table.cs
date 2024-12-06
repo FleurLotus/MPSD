@@ -34,7 +34,7 @@
         }
         public IColumn GetColumn(string name)
         {
-            return _columns.FirstOrDefault(c => c.CaseSensitivity.ToKeyString(c.Name) == c.CaseSensitivity.ToKeyString(name));
+            return _columns.FirstOrDefault(c => CaseSensitivity.Compare(c.Name, name, CaseSensitivity) == 0);
         }
         public bool HasColumn(string name)
         {
@@ -59,7 +59,7 @@
         }
         public IIndex GetIndex(string name)
         {
-            return _indexes.FirstOrDefault(c => c.CaseSensitivity.ToKeyString(c.Name) == c.CaseSensitivity.ToKeyString(name));
+            return _indexes.FirstOrDefault(c => CaseSensitivity.Compare(c.Name, name, CaseSensitivity) == 0);
         }
         public bool HasIndex(string name)
         {
@@ -84,7 +84,7 @@
         }
         public IForeignKey GetForeignKey(string name)
         {
-            return _foreignKeys.FirstOrDefault(c => c.CaseSensitivity.ToKeyString(c.Name) == c.CaseSensitivity.ToKeyString(name));
+            return _foreignKeys.FirstOrDefault(c => CaseSensitivity.Compare(c.Name, name, CaseSensitivity) == 0);
         }
         public bool HasForeignKey(string name)
         {
@@ -114,7 +114,7 @@
         }
         public static string TableKey(string schemaName, string name, CaseSensitivity caseSensitivity)
         {
-            return caseSensitivity.ToKeyString(string.IsNullOrEmpty(schemaName) ? name : $"{schemaName}.{name}");
+            return CaseSensitivity.ToKeyString(string.IsNullOrEmpty(schemaName) ? name : $"{schemaName}.{name}", caseSensitivity);
         }
     }
 }

@@ -55,7 +55,7 @@
         {
             return SQLQueryTools.EqualityOperator(value);
         }
-        [TestCaseSource("TestToSqlStringCases", new object[] { nameof(TestToSqlStringCase) })]
+        [TestCaseSource(nameof(TestToSqlStringCases), new object[] { nameof(TestToSqlStringCase) })]
         public string TestToSqlStringCase(object o)
         {
             return o.ToSqlString();

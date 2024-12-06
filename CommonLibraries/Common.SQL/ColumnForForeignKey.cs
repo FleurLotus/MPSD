@@ -1,15 +1,21 @@
 ﻿namespace Common.SQL
 {
-    internal class ColumnForForeignKey : IColumnForForeignKey
+    using System;
+
+    internal class ColumnForForeignKey : IColumnForForeignKey, IComparable<IColumnForForeignKey>
     {
         public IColumn SourceColumn { get; set; }
-        public int SourcePosition { get; set; }
         public IColumn ReferenceColumn { get; set; }
-        public int ReferencePosition { get; set; }
+        public int Position { get; set; }
+
+        public int CompareTo(IColumnForForeignKey other)
+        {
+            return Position.CompareTo(other.Position);
+        }
 
         public override string ToString()
         {
-            return $"{SourcePosition} {SourceColumn} -> {ReferencePosition} {ReferenceColumn}";
+            return $"{Position} {SourceColumn} -> {ReferenceColumn}";
         }
     }
 }

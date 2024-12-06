@@ -3,14 +3,13 @@
     using System;
     using System.Data;
     using System.Linq;
+    using System.Data.Common;
+    using System.Collections.Generic;
+
+    using NUnit.Framework;
 
     using MockDbData;
     using Common.Database;
-
-    using NUnit.Framework;
-    using System.Data.Common;
-    using System.Collections.Generic;
-    using Newtonsoft.Json.Linq;
 
     [TestFixture]
     public class TestMapper
@@ -151,7 +150,7 @@
             [DbColumn()]
             public string Col2 { get; set; }
         }
-        [TestCaseSource("TestInsertUpdateDeleteOneCases", new object[] { nameof(TestInsertUpdateDeleteOne) })]
+        [TestCaseSource(nameof(TestInsertUpdateDeleteOneCases), new object[] { nameof(TestInsertUpdateDeleteOne) })]
         public void TestInsertUpdateDeleteOne(Action<IDbConnection, DbWithPrimary> func, int resultCount)
         {
             MockDbResultInjector injector = new MockDbResultInjector();

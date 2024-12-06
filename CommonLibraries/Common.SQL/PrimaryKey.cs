@@ -24,6 +24,15 @@
                 throw new ArgumentNullException(nameof(column));
             }
 
+            if (CaseSensitivity.Compare(SchemaName, column.SchemaName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong schema", nameof(column));
+            }
+            if (CaseSensitivity.Compare(TableName, column.TableName, CaseSensitivity) != 0)
+            {
+                throw new ArgumentException("Wrong table", nameof(column));
+            }
+
             _columns[index] = column;
         }
 
@@ -39,22 +48,22 @@
             }
             else
             {
-                comp = string.Compare(SchemaName, other.SchemaName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(SchemaName, other.SchemaName, CaseSensitivity);
             }
 
             if (comp == 0)
             {
-                comp = string.Compare(TableName, other.TableName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(TableName, other.TableName, CaseSensitivity);
             }
             if (comp == 0)
             {
-                comp = string.Compare(CaseSensitivity.ToKeyString(Name), CaseSensitivity.ToKeyString(other.Name), StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(Name, other.Name, CaseSensitivity);
             }
             return comp;
         }
         public override string ToString()
         {
-            return string.Format("{0}.{1}", Table.TableKey(SchemaName, TableName, CaseSensitivity), Name??"*AUTO*");
+            return CaseSensitivity.ToKeyString($"{Table.TableKey(SchemaName, TableName, CaseSensitivity)}.{(Name ?? "*AUTO*")}", CaseSensitivity);
         }
     }
 }

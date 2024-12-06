@@ -110,7 +110,7 @@
                                 while (reader.Read())
                                 {
                                     IColumn column = table.GetColumn(reader.GetStringOrDefault(2));
-                                    index.AddColumn(new ColumnForIndex { Column = column, Position = (int)reader.GetInt64OrDefault(0) });
+                                    index.AddColumn((int)reader.GetInt64OrDefault(0), column);
                                 }
                             }
                         }

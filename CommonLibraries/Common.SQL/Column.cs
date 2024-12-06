@@ -52,12 +52,12 @@
             }
             else
             {
-                comp = string.Compare(SchemaName, other.SchemaName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(SchemaName, other.SchemaName, CaseSensitivity);
             }
 
             if (comp == 0)
             {
-                comp = string.Compare(TableName, other.TableName, StringComparison.Ordinal);
+                comp = CaseSensitivity.Compare(TableName, other.TableName, CaseSensitivity);
             }
             if (comp == 0)
             {
@@ -67,7 +67,7 @@
         }
         public override string ToString()
         {
-            return $"{Table.TableKey(SchemaName, TableName, CaseSensitivity)}.{Name}";
+            return CaseSensitivity.ToKeyString($"{Table.TableKey(SchemaName, TableName, CaseSensitivity)}.{Name}", CaseSensitivity);
         }
     }
 }
