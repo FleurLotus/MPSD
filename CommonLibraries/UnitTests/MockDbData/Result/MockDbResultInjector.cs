@@ -3,14 +3,20 @@
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
+
     public class MockDbResultInjector
     {
         private MockDbResult _globalResult;
         private int? _nonQueryResult;
         private readonly Dictionary<MockDbMatchingRule, MockDbResult> _rules = new Dictionary<MockDbMatchingRule, MockDbResult>();
+        private readonly List<MockDbExecution> _executions = new List<MockDbExecution>();
+
         public MockDbResultInjector()
         {
         }
+
+        public IReadOnlyList<MockDbExecution> Executions { get { return _executions.AsReadOnly(); } }
+
         public void AddGlobalExecuteNonQueryResult(int nonQueryResult)
         {
             _nonQueryResult = nonQueryResult;
@@ -86,8 +92,9 @@
             {
                 throw new ArgumentNullException(nameof(command));
             }
+            _executions.Add(new MockDbExecution(command));
+
             return _nonQueryResult;
         }
     }
 }
-    

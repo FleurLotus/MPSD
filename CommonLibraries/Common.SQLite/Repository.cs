@@ -1,5 +1,6 @@
 ﻿namespace Common.SQLite
 {
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.SQLite;
     using System.Linq;
@@ -13,6 +14,7 @@
         private const string ColumnQuery = @"PRAGMA table_info({0})";
         private const string IndexListQuery = @"PRAGMA index_list({0})";
         private const string IndexInfoQuery = @"PRAGMA index_info({0})";
+        private const string ForeignKeyQuery = @"PRAGMA foreign_key_list({0})";
         private const string TableQuery = @"SELECT name FROM sqlite_master WHERE type = 'table'";
         #endregion
 
@@ -65,6 +67,9 @@
                     foreach (Table table in Tables.Values.Cast<Table>())
                     {
                         cmd.CommandText = string.Format(ColumnQuery, table.Name);
+
+                        PrimaryKey primaryKey = null;
+
                         using (IDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -75,16 +80,14 @@
                                 int pkpos = (int)reader.GetInt64OrDefault(5);
                                 if (pkpos > 0)
                                 {
-                                    if (table.PrimaryKey == null)
-                                    {
-                                        table.SetPrimaryKey(CreatePrimaryKey(table));
-                                    }
-
-                                    PrimaryKey primaryKey = table.PrimaryKey as PrimaryKey;
-                                    // ReSharper disable PossibleNullReferenceException
+                                    primaryKey ??= CreatePrimaryKey(table);
                                     primaryKey.AddColumn(pkpos, column);
-                                    // ReSharper restore PossibleNullReferenceException
                                 }
+                            }
+
+                            if (primaryKey != null)
+                            {
+                                table.SetPrimaryKey(primaryKey);
                             }
                         }
                     }
@@ -93,16 +96,17 @@
                     foreach (Table table in Tables.Values.Cast<Table>())
                     {
                         cmd.CommandText = string.Format(IndexListQuery, table.Name);
+                        List<Index> indexes = new List<Index>();
+
                         using (IDataReader reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                Index index = CreateIndex(reader, table);
-                                table.AddIndex(index);
+                                indexes.Add(CreateIndex(reader, table));
                             }
                         }
 
-                        foreach (Index index in table.Indexes().Cast<Index>())
+                        foreach (Index index in indexes)
                         {
                             cmd.CommandText = string.Format(IndexInfoQuery, index.Name);
                             using (IDataReader reader = cmd.ExecuteReader())
@@ -113,9 +117,41 @@
                                     index.AddColumn((int)reader.GetInt64OrDefault(0), column);
                                 }
                             }
+                            table.AddIndex(index);
                         }
                     }
-                    //ALERT: Foreign Key List TO BE CODED
+
+                    //Foreign Key
+                    foreach (Table table in Tables.Values.Cast<Table>())
+                    {
+                        cmd.CommandText = string.Format(ForeignKeyQuery, table.Name);
+                        IDictionary<int, ForeignKey> foreignKeys = new Dictionary<int, ForeignKey>();
+
+                        using (IDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int id = (int)reader.GetInt64OrDefault(0);
+
+                                if (!foreignKeys.TryGetValue(id, out ForeignKey foreignKey))
+                                {
+                                    foreignKey = CreateForeignKey(reader, table);
+                                    foreignKeys.Add(id, foreignKey);
+                                }
+
+                                int seq = (int)reader.GetInt64OrDefault(1);
+                                string from = reader.GetStringOrDefault(3);
+                                string to = reader.GetStringOrDefault(4);
+
+                                foreignKey.AddColumn(seq, table.GetColumn(from), GetTable(foreignKey.ReferenceSchemaName, foreignKey.ReferenceTableName).GetColumn(to));
+                            }
+                        }
+
+                        foreach (ForeignKey foreignKey in foreignKeys.Values)
+                        {
+                            table.AddForeignKey(foreignKey);
+                        }
+                    }
                 }
             }
         }
@@ -157,6 +193,18 @@
                 Name = dr.GetStringOrDefault(1),
                 IsUnique = dr.GetInt64OrDefault(2) == 1,
                 TableName = table.Name,
+                CaseSensitivity = IsCaseSensitive,
+            };
+        }
+        private ForeignKey CreateForeignKey(IDataRecord dr, ITable table)
+        {
+            return new ForeignKey
+            {
+                SourceTableName = table.Name,
+                ReferenceTableName = dr.GetStringOrDefault(2),
+                UpdateRule = dr.GetStringOrDefault(5),
+                DeleteRule = dr.GetStringOrDefault(6),
+                Name = $"sqlite_autoforeignkey_{table.Name}_{(((int)dr.GetInt64OrDefault(0)) + 1)}",
                 CaseSensitivity = IsCaseSensitive,
             };
         }

@@ -29,6 +29,17 @@
             {
                 throw new ArgumentException("Column doesn't belong to table", nameof(column));
             }
+
+            if (HasColumn(column.Name))
+            {
+                throw new ArgumentException("Column name already present", nameof(column));
+            }
+
+            if (_columns.Any(c => c.Position == column.Position))
+            {
+                throw new ArgumentException("Column position already present", nameof(column));
+            }
+
             _columns.Add(column);
             _columns.Sort();
         }
@@ -40,7 +51,7 @@
         {
             return GetColumn(name) != null;
         }
-        
+
         public IIndex[] Indexes()
         {
             return _indexes.Cast<IIndex>().ToArray();
@@ -55,6 +66,21 @@
             {
                 throw new ArgumentException("Index doesn't belong to table", nameof(index));
             }
+
+            IColumnForIndex[] columns = index.Columns();
+            if (columns.Length == 0)
+            {
+                throw new ArgumentException("Empty index", nameof(index));
+            }
+            if (columns.Any(c => !HasColumn(c.Column.Name)))
+            {
+                throw new ArgumentException("Invalid column in index", nameof(index));
+            }
+            if (_indexes.Any(i => CaseSensitivity.Compare(i.Name, index.Name, CaseSensitivity) == 0))
+            {
+                throw new ArgumentException("Index already present", nameof(index));
+            }
+
             _indexes.Add(index);
         }
         public IIndex GetIndex(string name)
@@ -80,6 +106,20 @@
             {
                 throw new ArgumentException("ForeignKey doesn't belong to table", nameof(foreignKey));
             }
+            IColumnForForeignKey[] columns = foreignKey.Columns();
+            if (columns.Length == 0)
+            {
+                throw new ArgumentException("Empty foreignKey", nameof(foreignKey));
+            }
+            if (columns.Any(c => !HasColumn(c.SourceColumn.Name)))
+            {
+                throw new ArgumentException("Invalid column in foreignKey", nameof(foreignKey));
+            }
+            if (_foreignKeys.Any(i => CaseSensitivity.Compare(i.Name, foreignKey.Name, CaseSensitivity) == 0))
+            {
+                throw new ArgumentException("ForeignKey already present", nameof(foreignKey));
+            }
+
             _foreignKeys.Add(foreignKey);
         }
         public IForeignKey GetForeignKey(string name)
@@ -90,7 +130,7 @@
         {
             return GetForeignKey(name) != null;
         }
-        
+
         internal void SetPrimaryKey(IPrimaryKey primaryKey)
         {
             if (primaryKey == null)
@@ -101,10 +141,20 @@
             {
                 throw new ArgumentException("Primary Key doesn't belong to table", nameof(primaryKey));
             }
+            IColumn[] columns = primaryKey.Columns();
+            if (columns.Length == 0)
+            {
+                throw new ArgumentException("Empty primary key", nameof(primaryKey));
+            }
+            if (columns.Any(c => !HasColumn(c.Name)))
+            {
+                throw new ArgumentException("Invalid column in primary key", nameof(primaryKey));
+            }
             if (PrimaryKey != null)
             {
                 throw new Exception("PrimaryKey is already set");
             }
+
             PrimaryKey = primaryKey;
         }
 

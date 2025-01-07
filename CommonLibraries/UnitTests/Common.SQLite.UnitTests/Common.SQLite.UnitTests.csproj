@@ -10,8 +10,6 @@
     <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Sample.sqlite">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\..\Common.SQLite\Common.SQLite.csproj" />
   </ItemGroup>
 </Project>

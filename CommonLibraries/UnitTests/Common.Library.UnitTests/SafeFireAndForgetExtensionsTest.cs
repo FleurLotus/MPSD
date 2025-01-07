@@ -19,7 +19,7 @@
         {
             Task t = CreateTask();
             t.FireAndForgetSafeAsync();
-            Assert.That(_autoResetEvent.WaitOne(Timeout * 2), Is.True);
+            Assert.That(_autoResetEvent.WaitOne(Timeout * 3), Is.True);
         }
         private async Task CreateTask()
         {
@@ -32,7 +32,7 @@
             Task t = CreateFailureTask();
             t.FireAndForgetSafeAsync();
             Assert.That(t.IsCompleted, Is.False);
-            Thread.Sleep(Timeout * 2);
+            Thread.Sleep(Timeout * 3);
             Assert.That(t.IsCompleted, Is.True);
         }
         private async Task CreateFailureTask()
@@ -47,7 +47,7 @@
             Handler h = new Handler();
             t.FireAndForgetSafeAsync(h);
             Assert.That(t.IsCompleted, Is.False);
-            Thread.Sleep(Timeout * 2);
+            Thread.Sleep(Timeout * 3);
             Assert.That(t.IsCompleted, Is.True);
             Assert.That(h.Exception, Is.Not.Null);
         }

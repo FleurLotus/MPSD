@@ -12,5 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common.SQL\Common.SQL.csproj" />
+    <ProjectReference Include="..\MockDbData\MockDbData.csproj" />
   </ItemGroup>
 </Project>

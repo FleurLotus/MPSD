@@ -38,18 +38,39 @@
         {
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
             mockDbResultInjector.AddGlobalExecuteNonQueryResult(10);
+            Assert.That(mockDbResultInjector.Executions.Count, Is.EqualTo(0));
 
-            MockDbCommand cmd = new MockDbCommand();
+            MockDbCommand cmd = new MockDbCommand
+            {
+                CommandText = "Test",
+                CommandType = CommandType.Text,
+            };
             int? result = mockDbResultInjector.GetExecuteNonQueryResult(cmd);
             Assert.That(result, Is.EqualTo(10));
+            Assert.That(mockDbResultInjector.Executions.Count, Is.EqualTo(1));
+            MockDbExecution execution = mockDbResultInjector.Executions[0];
+            Assert.That(execution, Is.Not.Null);
+            Assert.That(execution.CommandText, Is.EqualTo("Test"));
+            Assert.That(execution.CommandType, Is.EqualTo(CommandType.Text));
         }
         [Test]
         public void TestGetExecuteNonQueryResultNoSet()
         {
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
-            MockDbCommand cmd = new MockDbCommand();
+            MockDbCommand cmd = new MockDbCommand
+            {
+                CommandText = "Test",
+                CommandType = CommandType.Text,
+            };
+
+            Assert.That(mockDbResultInjector.Executions.Count, Is.EqualTo(0));
             int? result = mockDbResultInjector.GetExecuteNonQueryResult(cmd);
             Assert.That(result, Is.Null);
+            Assert.That(mockDbResultInjector.Executions.Count, Is.EqualTo(1));
+            MockDbExecution execution = mockDbResultInjector.Executions[0];
+            Assert.That(execution, Is.Not.Null);
+            Assert.That(execution.CommandText, Is.EqualTo("Test"));
+            Assert.That(execution.CommandType, Is.EqualTo(CommandType.Text));
         }
         [Test]
         public void TestGetMockDbResultArgument()

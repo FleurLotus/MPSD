@@ -119,9 +119,10 @@
 
             MockDbCommand command = new MockDbCommand();
             ((IAcceptResultInjection)command).Accept(injector);
-
+            Assert.That(injector.Executions.Count, Is.EqualTo(0));
             int result = command.ExecuteNonQuery();
             Assert.That(result, Is.EqualTo(0));
+            Assert.That(injector.Executions.Count, Is.EqualTo(1));
         }
         [Test]
         public void TestExecuteNonQueryWithInjectionAndValue()
@@ -131,9 +132,11 @@
 
             MockDbCommand command = new MockDbCommand();
             ((IAcceptResultInjection)command).Accept(injector);
+            Assert.That(injector.Executions.Count, Is.EqualTo(0));
 
             int result = command.ExecuteNonQuery();
             Assert.That(result, Is.EqualTo(123));
+            Assert.That(injector.Executions.Count, Is.EqualTo(1));
         }
         [Test]
         public void TestPrepare()
