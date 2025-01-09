@@ -1,10 +1,11 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
     using System;
-
-    using Common.ViewModel.Validation;
+    using System.Collections.Generic;
 
     using NUnit.Framework;
+
+    using Common.ViewModel.Validation;
 
     [TestFixture]
     public class ValidationUsingRulesTest
@@ -12,12 +13,22 @@
         [Test]
         public void TestUnknownProperty()
         {
-            Assert.Throws<ArgumentException>(() => (new ViewModelWithValidation()).AddRuleWithUnknownSource(), "Unknown source must throw ArgumentException");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Message.StartsWith("property is unknown"), () => (new ViewModelWithValidation()).AddRuleWithUnknownSource(), "Unknown source must throw ArgumentException");
+        }
+        [Test]
+        public void TestNullRuleList()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("rules"), () => (new ViewModelWithValidation()).AddRuleWithIEnumerableFuncNullRule(), "Null rules must throw ArgumentNullException");
+        }
+        [Test]
+        public void TestNullNameList()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("propertyNames"), () => (new ViewModelWithValidation()).AddRuleWithIEnumerableNameNullRule(), "Null propertyNames must throw ArgumentNullException");
         }
         [Test]
         public void TestNullRule()
         {
-            Assert.Throws<ArgumentNullException>(() => (new ViewModelWithValidation()).AddRuleWithNullRule(), "Null rule must throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("rule"), () => (new ViewModelWithValidation()).AddRuleWithNullRule(), "Null rule must throw ArgumentNullException");
         }
         [Test]
         public void TestRule()
@@ -53,6 +64,12 @@
             vm.CreateChild();
             //Set child  and Child.PropertyPublic and Child.PropertyWithProtectedGet are null
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error");
+
+            Assert.That(string.IsNullOrEmpty(vm["PropertyPublic"]), Is.True, "Must have not error on PropertyPublic");
+            Assert.That(string.IsNullOrEmpty(vm["Child"]), Is.True, "Must have not error on Child");
+            Assert.That(string.IsNullOrEmpty(vm.Child["PropertyPublic"]), Is.False, "Must have error on Child.PropertyPublic");
+            Assert.That(string.IsNullOrEmpty(vm.Child["PropertyWithProtectedGet"]), Is.False, "Must have error on Child.PropertyWithProtectedGet");
+
             vm.Child.PropertyPublic = "ahahah";
             //Child.PropertyWithProtectedGet is null
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must still have error");
@@ -69,14 +86,22 @@
         {
             public ViewModelWithValidation()
             {
-                AddValidationRule(nameof(PropertyPublic), () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
-                AddValidationRule(nameof(PropertyWithProtectedGet), () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null);
+                AddValidationRule(new[] { nameof(PropertyPublic) }, () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
+                AddValidationRule(nameof(PropertyWithProtectedGet),new[] { () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null });
             }
 
             public void AddRuleWithUnknownSource()
             {
                 //Unknown because only instance | public property are allowed
                 AddValidationRule(nameof(Inner), () => PropertyWithProtectedGet);
+            }
+            public void AddRuleWithIEnumerableFuncNullRule()
+            {
+                AddValidationRule(nameof(PropertyPublic), (IEnumerable<Func<string>>)null);
+            }
+            public void AddRuleWithIEnumerableNameNullRule()
+            {
+                AddValidationRule((IEnumerable<string>)null, () => PropertyWithProtectedGet);
             }
             public void AddRuleWithNullRule()
             {
@@ -86,7 +111,6 @@
             public static string Inner { get; set; }
 
             private string _propertyWithProtectedGet;
-            private string _propertyWithProtectedSet;
             private string _propertyPublic;
             private string _propertyWithNoRule;
 
@@ -114,18 +138,6 @@
                     }
                 }
             }
-            public string PropertyWithProtectedSet
-            {
-                get { return _propertyWithProtectedSet; }
-                protected set
-                {
-                    if (value != _propertyWithProtectedSet)
-                    {
-                        _propertyWithProtectedSet = value;
-                        OnNotifyPropertyChanged(nameof(PropertyWithProtectedSet));
-                    }
-                }
-            }
             public string PropertyWithProtectedGet
             {
                 protected get { return _propertyWithProtectedGet; }
@@ -144,7 +156,7 @@
             public ViewModelWithValidation2()
             {
                 AddValidationRule(nameof(PropertyPublic), () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
-              
+            
             }
             
             public ViewModelWithValidation Child { get; set; }

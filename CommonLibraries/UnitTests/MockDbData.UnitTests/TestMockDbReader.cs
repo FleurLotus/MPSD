@@ -5,7 +5,9 @@ namespace MockDbData.UnitTests
     using System.Collections;
     using System.Data;
     using System.Linq;
+
     using NUnit.Framework;
+
     [TestFixture]
     public class TestMockDbReader
     {

@@ -4,9 +4,9 @@
     using System.Linq;
     using System.Reflection;
 
-    using Common.Library.Extension;
-
     using NUnit.Framework;
+
+    using Common.Library.Extension;
 
     [TestFixture]
     public class ReflectionExtensionTest

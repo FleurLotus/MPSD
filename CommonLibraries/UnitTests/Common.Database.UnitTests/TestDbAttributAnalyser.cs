@@ -1,9 +1,10 @@
 ﻿namespace Common.Database.UnitTests
 {
     using System;
-    using Common.Database;
 
     using NUnit.Framework;
+
+    using Common.Database;
 
     [TestFixture]
     public class TestDbAttributAnalyser

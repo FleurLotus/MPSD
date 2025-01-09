@@ -1,9 +1,10 @@
 ﻿namespace Common.Library.UnitTests
 {
     using System;
-    using Common.Library.Threading;
 
     using NUnit.Framework;
+
+    using Common.Library.Threading;
 
     [TestFixture]
     public class FlagExtensionTest

@@ -1,12 +1,12 @@
 ﻿namespace Common.Library.UnitTests
 {
     using System;
-    using System.Threading;
-    using Common.Library.Notify;
-    using Common.Library.Exception;
 
     using NUnit.Framework;
     using Moq;
+
+    using Common.Library.Notify;
+    using Common.Library.Exception;
 
 
     [TestFixture]

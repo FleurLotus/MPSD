@@ -2,10 +2,10 @@
 {
     using System;
     using System.Threading;
-    using Common.Library.Notify;
 
     using NUnit.Framework;
-    
+
+    using Common.Library.Notify;
 
     [TestFixture]
     public class EventDispatcherTest

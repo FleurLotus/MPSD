@@ -4,10 +4,10 @@
     using System.Data;
     using System.Data.Common;
 
+    using NUnit.Framework;
+
     using Common.Database;
     using MockDbData;
-
-    using NUnit.Framework;
 
     [TestFixture]
     public class TestCommandBuilder

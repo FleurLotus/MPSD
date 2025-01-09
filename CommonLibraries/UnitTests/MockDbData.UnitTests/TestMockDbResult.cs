@@ -2,7 +2,9 @@
 {
     using System;
     using System.Data;
+
     using NUnit.Framework;
+
     [TestFixture]
     public class TestMockDbResult
     {

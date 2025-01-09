@@ -4,10 +4,10 @@
     using System.IO;
     using System.Text;
 
+    using NUnit.Framework;
+
     using Common.Library.CSV;
     using Common.Library.Exception;
-
-    using NUnit.Framework;
 
     [TestFixture]
     public class CsvReaderTest

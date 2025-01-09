@@ -1,6 +1,7 @@
 ﻿namespace MockDbData.UnitTests
 {
     using System.Data;
+
     using NUnit.Framework;
 
     [TestFixture]

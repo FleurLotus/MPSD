@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Common.Library.Extension;
-
     using NUnit.Framework;
+
+    using Common.Library.Extension;
 
     [TestFixture]
     public class DictionaryExtensionTest

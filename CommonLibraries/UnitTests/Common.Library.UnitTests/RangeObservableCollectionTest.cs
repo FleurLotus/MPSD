@@ -3,9 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using Common.Library.Collection;
 
     using NUnit.Framework;
+
+    using Common.Library.Collection;
 
     [TestFixture]
     public class RangeObservableCollectionTest

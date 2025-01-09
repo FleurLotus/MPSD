@@ -2,9 +2,10 @@
 {
     using System;
     using System.Text.RegularExpressions;
-    using Common.ViewModel.Validation.Attributes;
 
     using NUnit.Framework;
+
+    using Common.ViewModel.Validation.Attributes;
 
     [TestFixture]
     public class ValidationAttributeTest
@@ -127,6 +128,13 @@
             GreaterThanValidationAttribute att = new GreaterThanValidationAttribute(minValue, allowEquals);
             Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for minvalue = {minValue} and allowEquals = {allowEquals} and input = {input}");
         }
+        [Test]
+        public void TestGreaterThanValidationAttributeError()
+        {
+            GreaterThanValidationAttribute att = new GreaterThanValidationAttribute(10, true);
+            Assert.That(string.IsNullOrEmpty(att.Validate(new DateTime())), Is.False, $"Expected error for invalid input");
+        }
+
         #region TestCase List
         [TestCase(0, false, null, false)]
         [TestCase(0, true, null, false)]
@@ -143,6 +151,12 @@
         {
             LessThanValidationAttribute att = new LessThanValidationAttribute(maxValue, allowEquals);
             Assert.That(string.IsNullOrEmpty(att.Validate(input)), Is.EqualTo(isValid), $"Expected {isValid} for maxvalue = {maxValue} and allowEquals = {allowEquals} and input = {input}");
+        }
+        [Test]
+        public void TestLessThanValidationAttributeError()
+        {
+            LessThanValidationAttribute att = new LessThanValidationAttribute(10, true);
+            Assert.That(string.IsNullOrEmpty(att.Validate(new DateTime())), Is.False, $"Expected error for invalid input");
         }
 
 

@@ -4,9 +4,9 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
-    using Common.ViewModel;
-
     using NUnit.Framework;
+
+    using Common.ViewModel;
 
     [TestFixture]
     public class NotifyPropertyChangedTest

@@ -1,8 +1,8 @@
 ﻿namespace Common.Library.UnitTests
 {
-    using Common.Library.Threading;
-
     using NUnit.Framework;
+
+    using Common.Library.Threading;
 
     [TestFixture]
     public class ThreadPoolArgsTest

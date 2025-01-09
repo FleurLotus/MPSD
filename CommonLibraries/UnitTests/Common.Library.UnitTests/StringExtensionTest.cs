@@ -1,8 +1,8 @@
 ﻿namespace Common.Library.UnitTests
 {
-    using Common.Library.Extension;
-
     using NUnit.Framework;
+
+    using Common.Library.Extension;
 
     [TestFixture]
     public class StringExtensionTest

@@ -2,9 +2,9 @@
 {
     using System;
 
-    using Common.Library.Enums;
-
     using NUnit.Framework;
+
+    using Common.Library.Enums;
 
     [TestFixture]
     public class MatcherTest

@@ -1,9 +1,9 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
+    using NUnit.Framework;
+
     using Common.ViewModel.Validation;
     using Common.ViewModel.Validation.Attributes;
-
-    using NUnit.Framework;
 
     [TestFixture]
     public class ValidationUsingAttributTest
@@ -37,6 +37,15 @@
             vm.StringValue = "azertazertazert";
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error a max len  error");
             vm.StringValue = "azertazert";
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must not have error");
+        }
+        [Test]
+        public void TestRuleIgnorePropertyWithoutGetter()
+        {
+            ViewModelWithValidation2 vm = new ViewModelWithValidation2();
+
+            Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error");
+            vm.StringValue = "123456";
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must not have error");
         }
 
@@ -89,7 +98,37 @@
                     }
                 }
             }
+        }
+        private class ViewModelWithValidation2 : NotifyPropertyChangedWithValidationBase
+        {
+            private object _objectValue;
+            private string _stringValue;
 
+            [StringMaxLenValidation(10), StringMinLenValidation(5)]
+            public string StringValue
+            {
+                get { return _stringValue; }
+                set
+                {
+                    if (value != _stringValue)
+                    {
+                        _stringValue = value;
+                        OnNotifyPropertyChanged(nameof(StringValue));
+                    }
+                }
+            }
+            [NotNullValidation]
+            public object ObjectValue
+            {
+                set
+                {
+                    if (value != _objectValue)
+                    {
+                        _objectValue = value;
+                        OnNotifyPropertyChanged(nameof(ObjectValue));
+                    }
+                }
+            }
         }
         // ReSharper restore MemberCanBePrivate.Local
         // ReSharper restore UnusedAutoPropertyAccessor.Local

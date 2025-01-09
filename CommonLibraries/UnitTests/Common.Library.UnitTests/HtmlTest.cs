@@ -2,10 +2,10 @@
 {
     using System;
 
+    using NUnit.Framework;
+
     using Common.Library.Exception;
     using Common.Library.Html;
-
-    using NUnit.Framework;
 
     [TestFixture]
     public class HtmlTest

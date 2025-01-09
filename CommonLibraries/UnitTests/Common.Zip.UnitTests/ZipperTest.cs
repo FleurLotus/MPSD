@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using Common.Zip;
+
     using NUnit.Framework;
+
+    using Common.Zip;
 
     [TestFixture]
     public class ZipperTest

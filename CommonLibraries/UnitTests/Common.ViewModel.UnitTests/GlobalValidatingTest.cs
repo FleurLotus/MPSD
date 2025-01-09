@@ -1,9 +1,10 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
     using System;
-    using Common.ViewModel.Validation;
 
     using NUnit.Framework;
+
+    using Common.ViewModel.Validation;
 
     [TestFixture]
     public class GlobalValidatingTest

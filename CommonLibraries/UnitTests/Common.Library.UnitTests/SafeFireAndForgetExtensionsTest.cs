@@ -4,9 +4,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    using Common.Library.Threading;
-
     using NUnit.Framework;
+
+    using Common.Library.Threading;
 
     [TestFixture]
     public class SafeFireAndForgetExtensionsTest
