@@ -7,6 +7,8 @@
     using NUnit.Framework;
 
     using Common.ViewModel;
+    using Common.Library.Notify;
+    using NUnit.Framework.Internal.Execution;
 
     [TestFixture]
     public class NotifyPropertyChangedTest
@@ -29,6 +31,12 @@
             {
                 _vm.PropertyChanged -= PropertyChanged;
             }
+        }
+
+        [Test]
+        public void TestLinkPropertiesConstructor()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("parent"), () => new LinkedProperties(null), "Unknown source must throw ArgumentException");
         }
 
         [Test]
@@ -60,6 +68,12 @@
             _vm.Property7 = "a";
             Assert.That(_notified.Count, Is.EqualTo(3), "not the expected number of notification after Property7 set");
             Assert.That(_notified[^1], Is.EqualTo("Property7"), "not the expected notification after Property7 set");
+            _vm.Property9 = "a";
+            Assert.That(_notified.Count, Is.EqualTo(4), "not the expected number of notification after Property9 set");
+            Assert.That(_notified[^1], Is.EqualTo("Property9"), "not the expected notification after Property9 set");
+            _vm.Property10 = "a";
+            Assert.That(_notified.Count, Is.EqualTo(5), "not the expected number of notification after Property10 set");
+            Assert.That(_notified[^1], Is.EqualTo("Property10"), "not the expected notification after Property10 set");
         }
         [Test]
         public void TestWithLink()
@@ -80,6 +94,54 @@
             Assert.That(_notified.Count, Is.EqualTo(8), "not the expected number of notification after Property7 set");
             Assert.That(_notified[^2], Is.EqualTo("Property7"), "not the expected notification after Property7 set");
             Assert.That(_notified[^1], Is.EqualTo("Property8"), "not the expected notification after Property7 set");
+            _vm.Property9 = "a";
+            Assert.That(_notified.Count, Is.EqualTo(10), "not the expected number of notification after Property9 set");
+            Assert.That(_notified[^2], Is.EqualTo("Property9"), "not the expected notification after Property9 set");
+            Assert.That(_notified[^1], Is.EqualTo("Property11"), "not the expected notification after Property9 set");
+            _vm.Property10 = "a";
+            Assert.That(_notified.Count, Is.EqualTo(12), "not the expected number of notification after Property10 set");
+            Assert.That(_notified[^2], Is.EqualTo("Property10"), "not the expected notification after Property10 set");
+            Assert.That(_notified[^1], Is.EqualTo("Property11"), "not the expected notification after Property10 set");
+        }
+
+        [Test]
+        public void TestOnEventRaise()
+        {
+            ViewModel vm = new ViewModel();
+
+            object sender = null;
+            EventArgs eventArg = null;
+
+            vm.BasicEvent += (s, e) =>
+            {
+                sender = s;
+                eventArg = e;
+            };
+
+            vm.OnRaise();
+
+            Assert.That(sender, Is.EqualTo(vm));
+            Assert.That(eventArg, Is.Not.Null);
+        }
+        [Test]
+        public void TestOnEventRaiseOfT()
+        {
+            ViewModel vm = new ViewModel();
+
+            object sender = null;
+            EventArgs<object> eventArg = null;
+
+            vm.Event += (s, e) =>
+            {
+                sender = s;
+                eventArg = e;
+            };
+            object p = new object();
+            vm.OnRaise(p);
+
+            Assert.That(sender, Is.EqualTo(vm));
+            Assert.That(eventArg, Is.Not.Null);
+            Assert.That(eventArg.Data, Is.EqualTo(p));
         }
 
         private void PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -93,6 +155,18 @@
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         private class ViewModel : NotifyPropertyChangedBase
         {
+            public event EventHandler BasicEvent;
+            public event EventHandler<EventArgs<object>> Event;
+
+            public void OnRaise()
+            {
+                OnEventRaise(BasicEvent);
+            }
+            public void OnRaise(object o)
+            {
+                OnEventRaise(Event, o);
+            }
+
             public void InitLink()
             {
                 //Test Chaining
@@ -105,6 +179,10 @@
                 //Test no cycle
                 AddLinkedProperty(nameof(Property7), nameof(Property8));
                 AddLinkedProperty(nameof(Property8), nameof(Property7));
+
+                //Test multiple parent
+                AddLinkedProperty(new string[] { nameof(Property9), nameof(Property10) }, nameof(Property11));
+
             }
             public void InitLinkDuplicate()
             {
@@ -131,7 +209,49 @@
             private string _property6;
             private string _property7;
             private string _property8;
+            private string _property9;
+            private string _property10;
+            private string _property11;
 
+            public string Property11
+            {
+                get { return _property11; }
+
+                set
+                {
+                    if (value != _property11)
+                    {
+                        _property11 = value;
+                        OnNotifyPropertyChanged(nameof(Property11));
+                    }
+                }
+            }
+            public string Property10
+            {
+                get { return _property10; }
+
+                set
+                {
+                    if (value != _property10)
+                    {
+                        _property10 = value;
+                        OnNotifyPropertyChanged(nameof(Property10));
+                    }
+                }
+            }
+            public string Property9
+            {
+                get { return _property9; }
+
+                set
+                {
+                    if (value != _property9)
+                    {
+                        _property9 = value;
+                        OnNotifyPropertyChanged(nameof(Property9));
+                    }
+                }
+            }
             public string Property8
             {
                 get { return _property8; }

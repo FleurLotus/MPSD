@@ -13,30 +13,30 @@
         [Test]
         public void TestValidationAttributeArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new FakeAttribute(null), "Null message must thrown ArgumentNullException");
-            Assert.Throws<ArgumentNullException>(() => new FakeAttribute(string.Empty), "Empty message must thrown ArgumentNullException");
-            Assert.Throws<ArgumentNullException>(() => new FakeAttribute("        "), "Blank message must thrown ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("errorMessage"), () => new FakeAttribute(null), "Null message must thrown ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("errorMessage"), () => new FakeAttribute(string.Empty), "Empty message must thrown ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("errorMessage"), () => new FakeAttribute("        "), "Blank message must thrown ArgumentNullException");
         }
         [Test]
         public void TestStringMaxLenValidationAttributeArgument()
         {
-            Assert.Throws<ArgumentException>(() => new StringMaxLenValidationAttribute(-5), "negative value must not be valid argument");
-            Assert.Throws<ArgumentException>(() => new StringMaxLenValidationAttribute(0), "0 must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("maxLen"), () => new StringMaxLenValidationAttribute(-5), "negative value must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("maxLen"), () => new StringMaxLenValidationAttribute(0), "0 must not be valid argument");
             Assert.That(new StringMaxLenValidationAttribute(3), Is.Not.Null, "Strictly positive value is valid argument");
         }
         [Test]
         public void TestStringMinLenValidationAttributeArgument()
         {
-            Assert.Throws<ArgumentException>(() => new StringMinLenValidationAttribute(-5), "negative value must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("minLen"), () => new StringMinLenValidationAttribute(-5), "negative value must not be valid argument");
             Assert.That(new StringMinLenValidationAttribute(0), Is.Not.Null, "0 is valid argument");
             Assert.That(new StringMinLenValidationAttribute(3), Is.Not.Null, "Positive value is valid argument");
         }
         [Test]
         public void TestStringRegExValidationAttributeArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(null), "Null reg string must not be valid argument");
-            Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute(string.Empty), "Empty reg string must not be valid argument");
-            Assert.Throws<ArgumentNullException>(() => new StringRegExValidationAttribute("   "), "Blank reg string must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("regExRule"), () => new StringRegExValidationAttribute(null), "Null reg string must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("regExRule"), () => new StringRegExValidationAttribute(string.Empty), "Empty reg string must not be valid argument");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("regExRule"), () => new StringRegExValidationAttribute("   "), "Blank reg string must not be valid argument");
             Assert.Throws<RegexParseException>(() => new StringRegExValidationAttribute("azertyuiop^["), "Invalid reg string must not be valid argument");
             Assert.That(new StringRegExValidationAttribute(".*"), Is.Not.Null, "0 is valid argument");
         }

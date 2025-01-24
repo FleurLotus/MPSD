@@ -16,12 +16,12 @@
         [Test]
         public void TestNullStringArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new CsvReader((string)null, false), "Null string arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("path"), () => new CsvReader((string)null, false), "Null string arg should throw ArgumentNullException");
         }
         [Test]
         public void TestNullStreamArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new CsvReader((Stream)null, false), "Null stream arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("stream"), () => new CsvReader((Stream)null, false), "Null stream arg should throw ArgumentNullException");
         }
         [Test]
         public void TestUnexistingPathArgument()
@@ -31,7 +31,7 @@
         [Test]
         public void TestInvalidSeparatorArgument()
         {
-            Assert.Throws<ArgumentException>(() => new CsvReader(new MemoryStream(), true, '"'), " \" separator should throw ArgumentException");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("separator"), () => new CsvReader(new MemoryStream(), true, '"'), " \" separator should throw ArgumentException");
         }
         #endregion
 

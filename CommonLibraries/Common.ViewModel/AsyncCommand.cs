@@ -16,6 +16,11 @@
 
         public AsyncCommand(Func<Task> execute, Func<bool> canExecute = null, IErrorHandler errorHandler = null)
         {
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+
             _execute = execute;
             _canExecute = canExecute;
             _errorHandler = errorHandler;
@@ -70,6 +75,11 @@
 
         public AsyncCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, IErrorHandler errorHandler = null)
         {
+            if (execute == null)
+            {
+                throw new ArgumentNullException(nameof(execute));
+            }
+
             _execute = execute;
             _canExecute = canExecute;
             _errorHandler = errorHandler;

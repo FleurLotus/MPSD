@@ -13,21 +13,21 @@
         public void TestSetParameterValueArgument()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
-            Assert.Throws<ArgumentException>(() => mockDbMatchingRule.SetParameterValue(-5, "aaaa"), "Should throw ArgumentException when parameterPosition<0 for string param");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("parameterPosition"), () => mockDbMatchingRule.SetParameterValue(-5, "aaaa"), "Should throw ArgumentException when parameterPosition<0 for string param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue(0, "aaaa"), "Should not throw when parameterPosition=0 for string param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue(2, "aaaa"), "Should not throw when parameterPosition>0 for string param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue(2, null), "Should not throw when string is null");
 
-            Assert.Throws<ArgumentException>(() => mockDbMatchingRule.SetParameterValue(-5, 25), "Should throw ArgumentException when parameterPosition<0 for struct param");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("parameterPosition"), () => mockDbMatchingRule.SetParameterValue(-5, 25), "Should throw ArgumentException when parameterPosition<0 for struct param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue(0, "aaaa"), "Should not throw when parameterPosition=0 for struct param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue(2, "aaaa"), "Should not throw when parameterPosition>0 for struct param");
 
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetParameterValue(null, "aaaa"), "Should throw ArgumentNullException when parameter name is null for string param");
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetParameterValue(string.Empty, "aaaa"), "Should throw ArgumentNullException when parameter name is null for string param");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("parameterName"), () => mockDbMatchingRule.SetParameterValue(null, "aaaa"), "Should throw ArgumentNullException when parameter name is null for string param");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("parameterName"), () => mockDbMatchingRule.SetParameterValue(string.Empty, "aaaa"), "Should throw ArgumentNullException when parameter name is null for string param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue("bbbb", "aaaa"), "Should not throw when parameter name is set for string param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue("bbbb", null), "Should not throw when string is null");
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetParameterValue(null, 25), "Should throw ArgumentNullException when parameter name is null for struct param");
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetParameterValue(string.Empty, 25), "Should throw ArgumentNullException when parameter name is null for struct param");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("parameterName"), () => mockDbMatchingRule.SetParameterValue(null, 25), "Should throw ArgumentNullException when parameter name is null for struct param");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("parameterName"), () => mockDbMatchingRule.SetParameterValue(string.Empty, 25), "Should throw ArgumentNullException when parameter name is null for struct param");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterValue("bbbb", 25), "Should not throw when parameter name is set for struct param");
         }
 
@@ -35,15 +35,15 @@
         public void TestSetCommandTextRegArgument()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetCommandTextReg(null), "Should throw ArgumentNullException when text is null");
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.SetCommandTextReg(string.Empty), "Should throw ArgumentNullException when text is empty");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("text"), () => mockDbMatchingRule.SetCommandTextReg(null), "Should throw ArgumentNullException when text is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("text"), () => mockDbMatchingRule.SetCommandTextReg(string.Empty), "Should throw ArgumentNullException when text is empty");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetCommandTextReg("aaaa"), "Should not throw when text is set");
         }
         [Test]
         public void TestSetParameterCountArgument()
         {
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
-            Assert.Throws<ArgumentException>(() => mockDbMatchingRule.SetParameterCount(-5), "Should throw ArgumentException when parameterCount<0");
+            Assert.Throws(Is.TypeOf<ArgumentException>().With.Property("ParamName").EqualTo("parameterCount"), () => mockDbMatchingRule.SetParameterCount(-5), "Should throw ArgumentException when parameterCount<0");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterCount(0), "Should not throw when parameterCount=0");
             Assert.DoesNotThrow(() => mockDbMatchingRule.SetParameterCount(2), "Should not throw when parameterCount>0");
         }
@@ -322,7 +322,7 @@
             MockDbCommand cmd = null;
 
             mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure);
-            Assert.Throws<ArgumentNullException>(() => mockDbMatchingRule.Match(cmd), "Should throw ArgumentNullException when Command is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("command"), () => mockDbMatchingRule.Match(cmd), "Should throw ArgumentNullException when Command is null");
 
             cmd = new MockDbCommand { CommandType = CommandType.StoredProcedure };
             Assert.That(mockDbMatchingRule.Match(cmd), Is.True, "Not the expected value for CommandType.StoredProcedure");

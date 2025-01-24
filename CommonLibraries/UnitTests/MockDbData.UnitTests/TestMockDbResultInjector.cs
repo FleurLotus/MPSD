@@ -16,8 +16,8 @@
             MockDbMatchingRule mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);
             MockDbResult mockDbResult = new MockDbResult(new DataTable());
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
-            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.AddResult(null, mockDbResult), "Should throw ArgumentNullException when matchingRule is null");
-            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.AddResult(mockDbMatchingRule, null), "Should throw ArgumentNullException when mockDbResult is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("matchingRule"), () => mockDbResultInjector.AddResult(null, mockDbResult), "Should throw ArgumentNullException when matchingRule is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("mockDbResult"), () => mockDbResultInjector.AddResult(mockDbMatchingRule, null), "Should throw ArgumentNullException when mockDbResult is null");
             Assert.DoesNotThrow(() => mockDbResultInjector.AddResult(mockDbMatchingRule, mockDbResult), "Should not throw when both args are not null");
         }
         [Test]
@@ -25,14 +25,14 @@
         {
             MockDbResult mockDbResult = new MockDbResult(new DataTable());
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
-            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.AddGlobalResult(null), "Should throw ArgumentNullException when mockDResult is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("mockDbResult"), () => mockDbResultInjector.AddGlobalResult(null), "Should throw ArgumentNullException when mockDResult is null");
             Assert.DoesNotThrow(() => mockDbResultInjector.AddGlobalResult(mockDbResult), "Should not throw when mockDbResult is not null");
         }
         [Test]
         public void TestGetExecuteNonQueryResultArgument()
         {
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
-            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.GetExecuteNonQueryResult(null), "Should throw ArgumentNullException when command is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("command"), () => mockDbResultInjector.GetExecuteNonQueryResult(null), "Should throw ArgumentNullException when command is null");
         }
         [Test]
         public void TestGetExecuteNonQueryResult()
@@ -77,7 +77,7 @@
         public void TestGetMockDbResultArgument()
         {
             MockDbResultInjector mockDbResultInjector = new MockDbResultInjector();
-            Assert.Throws<ArgumentNullException>(() => mockDbResultInjector.GetMockDbResult(null), "Should throw ArgumentNullException when command is null");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("command"), () => mockDbResultInjector.GetMockDbResult(null), "Should throw ArgumentNullException when command is null");
         }
 
         [TestCaseSource(nameof(TestGetMockDbResultSource), new object[] { nameof(TestGetMockDbResult) })]

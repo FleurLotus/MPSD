@@ -25,21 +25,21 @@
             CommandBuilder commandBuilder = new CommandBuilder(DbAttributAnalyser.Analyse(typeof(DbClass1)));
             IDbCommand cnx = new MockDbCommand();
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildSelectAllCommand(null), "Null Command should have thrown ArgumentNullException for BuildSelectAllCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildSelectAllCommand(null), "Null Command should have thrown ArgumentNullException for BuildSelectAllCommand");
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildSelectOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildSelectOneCommand");
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildSelectOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildSelectOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildSelectOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildSelectOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("input"), () => commandBuilder.BuildSelectOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildSelectOneCommand");
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildDeleteAllCommand(null), "Null Command should have thrown ArgumentNullException for BuildDeleteAllCommand");
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildDeleteOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildDeleteOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildDeleteAllCommand(null), "Null Command should have thrown ArgumentNullException for BuildDeleteAllCommand");
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildDeleteOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildDeleteOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildDeleteOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildDeleteOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("input"), () => commandBuilder.BuildDeleteOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildDeleteOneCommand");
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildInsertOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildInsertOneCommand");
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildInsertOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildInsertOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildInsertOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildInsertOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("input"), () => commandBuilder.BuildInsertOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildInsertOneCommand");
 
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildUpdateOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildUpdateOneCommand");
-            Assert.Throws<ArgumentNullException>(() => commandBuilder.BuildUpdateOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildUpdateOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("cmd"), () => commandBuilder.BuildUpdateOneCommand(null, new object()), "Null Command should have thrown ArgumentNullException for BuildUpdateOneCommand");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("input"), () => commandBuilder.BuildUpdateOneCommand(cnx, null), "Null input should have thrown ArgumentNullException for BuildUpdateOneCommand");
         }
 
         [Test]

@@ -23,7 +23,6 @@
             Assert.That(_args, Is.Not.Null);
             Assert.That(_args.PropertyName, Is.EqualTo(propertyName));
         }
-
         private void NotifyPropertyChangedPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             _eventSender = sender;

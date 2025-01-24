@@ -15,17 +15,17 @@
         [Test]
         public void TestReaderLockNullArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new ReaderLock(null), "Null string arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("readerWriter"), () => new ReaderLock(null), "Null string arg should throw ArgumentNullException");
         }
         [Test]
         public void TestWriterLockNullArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new WriterLock(null), "Null string arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("readerWriter"), () => new WriterLock(null), "Null string arg should throw ArgumentNullException");
         }
         [Test]
         public void TestUpgradeableReadLockNullArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new UpgradeableReadLock(null), "Null string arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("readerWriter"), () => new UpgradeableReadLock(null), "Null string arg should throw ArgumentNullException");
         }
         [Test]
         public void TestReaderLockMultiDispose()

@@ -15,10 +15,10 @@
         public void ReflectionExtensionGetPublicInstancePropertiesNull()
         {
             Type t = null;
-            Assert.Throws<ArgumentNullException>(() => t.GetPublicInstanceProperties());
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("t"), () => t.GetPublicInstanceProperties());
 
             object o = null;
-            Assert.Throws<ArgumentNullException>(() => o.GetPublicInstanceProperties());
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("o"), () => o.GetPublicInstanceProperties());
 
         }
         [Test]

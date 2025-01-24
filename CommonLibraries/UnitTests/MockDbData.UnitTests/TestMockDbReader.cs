@@ -15,7 +15,7 @@ namespace MockDbData.UnitTests
         public void TestConstuctor()
         {
             Assert.DoesNotThrow(() => new MockDbDataReader(), "No arg should not throw");
-            Assert.Throws<ArgumentNullException>(() => new MockDbDataReader(null), "null arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("mockDbResult"), () => new MockDbDataReader(null), "null arg should throw ArgumentNullException");
             Assert.DoesNotThrow(() => new MockDbDataReader(new MockDbResult(new DataTable())), "None null MockDbResult should not throw");
         }
         [Test]
@@ -90,9 +90,9 @@ namespace MockDbData.UnitTests
         public void TestMethodParam()
         {
             MockDbDataReader dataReader = new MockDbDataReader();
-            Assert.Throws<ArgumentNullException>(() => dataReader.GetValues(null), "Should throw ArgumentNullException when values is null for GetValues");
-            Assert.Throws<ArgumentNullException>(() => dataReader.GetBytes(0, 0, null, 0, 1), "Should throw ArgumentNullException when buffer is null for GetBytes");
-            Assert.Throws<ArgumentNullException>(() => dataReader.GetChars(0, 0, null, 0, 1), "Should throw ArgumentNullException when buffer is null for GetChars");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("values"), () => dataReader.GetValues(null), "Should throw ArgumentNullException when values is null for GetValues");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("buffer"), () => dataReader.GetBytes(0, 0, null, 0, 1), "Should throw ArgumentNullException when buffer is null for GetBytes");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("buffer"), () => dataReader.GetChars(0, 0, null, 0, 1), "Should throw ArgumentNullException when buffer is null for GetChars");
         }
 
         [Test]
