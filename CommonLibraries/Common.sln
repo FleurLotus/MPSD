@@ -48,6 +48,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.SQL.UnitTests", "Uni
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.SQLite.UnitTests", "UnitTests\Common.SQLite.UnitTests\Common.SQLite.UnitTests.csproj", "{36948B19-C3F4-46B1-BAE6-F71DF6274D97}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.WPF.UnitTests", "UnitTests\Common.WPF.UnitTests\Common.WPF.UnitTests.csproj", "{9798DA68-6A84-4500-BF8A-7DB81FCF41B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +128,10 @@ Global
 		{36948B19-C3F4-46B1-BAE6-F71DF6274D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36948B19-C3F4-46B1-BAE6-F71DF6274D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36948B19-C3F4-46B1-BAE6-F71DF6274D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9798DA68-6A84-4500-BF8A-7DB81FCF41B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9798DA68-6A84-4500-BF8A-7DB81FCF41B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9798DA68-6A84-4500-BF8A-7DB81FCF41B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9798DA68-6A84-4500-BF8A-7DB81FCF41B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,6 +146,7 @@ Global
 		{834FF293-DEB4-4642-93AB-AE0724054D1A} = {D6C1D0BF-CF90-408C-A80A-8B9E92DDDFE3}
 		{B20EA82D-5D11-4B51-BBAF-00AF28627B4B} = {D6C1D0BF-CF90-408C-A80A-8B9E92DDDFE3}
 		{36948B19-C3F4-46B1-BAE6-F71DF6274D97} = {D6C1D0BF-CF90-408C-A80A-8B9E92DDDFE3}
+		{9798DA68-6A84-4500-BF8A-7DB81FCF41B5} = {D6C1D0BF-CF90-408C-A80A-8B9E92DDDFE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {86770675-18BE-468D-8338-48E5D6094AEE}
