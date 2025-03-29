@@ -120,6 +120,8 @@
         Spree,
         [EnumMember(Value = "borderless")]
         Borderless,
+        [EnumMember(Value = "enchantment")]
+        Enchantment,
     }
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Finish
@@ -145,6 +147,8 @@
         Silver,
         [EnumMember(Value = "gold")]
         Gold,
+        [EnumMember(Value = "yellow")]
+        Yellow,
     }
 
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
@@ -330,5 +334,7 @@
         Sanskrit,
         [EnumMember(Value = "ph")]
         Phyrexian,
+        [EnumMember(Value = "qya")]
+        Elvish,
     }
 }

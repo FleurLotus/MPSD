@@ -59,12 +59,13 @@ namespace MagicPictureSetDownloader.Interface
         Curse = 1 << 5,
         Trap = 1 << 6,
         Arcane = 1 << 7,
-        Tribal = 1 << 8,
+        Kindred = 1 << 8,
         Saga = 1 << 9,
         Adventure = 1 << 10,
         Equipment = 1 << 11,
         Siege = 1 << 12,
         Room = 1 << 13,
+        Omen = 1 << 14,
         //Must be constistante with MagicRules.GetCardSubType
     }
 
@@ -87,6 +88,7 @@ namespace MagicPictureSetDownloader.Interface
         Vanguard = 1 << 12,
         Stickers = 1 << 13,
         Battle = 1 << 14,
+        Dungeon = 1 << 15,
         //Must be constistante with MagicRules.GetCardType
     }
 

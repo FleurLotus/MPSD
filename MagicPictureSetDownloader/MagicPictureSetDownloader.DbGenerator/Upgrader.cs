@@ -110,6 +110,14 @@
             {
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
             }
+
+
+            if (dbVersion <= 20)
+            {
+                repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewLanguage, new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("@name", "Elvish") });
+            }
+
+
         }
         private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)
         {

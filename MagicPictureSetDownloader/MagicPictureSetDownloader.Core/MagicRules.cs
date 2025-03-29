@@ -24,6 +24,7 @@
         Token,
         Stickers,
         Battle,
+        Dungeon,
     }
 
     public enum DisplayColor
@@ -159,6 +160,11 @@
                 return DisplayCardType.Stickers;
             }
 
+            if (Matcher<CardType>.HasValue(card, CardType.Dungeon))
+            {
+                return DisplayCardType.Dungeon;
+            }
+
             return DisplayCardType.Token;
         }
         //For search 
@@ -247,6 +253,11 @@
                 cardType |= CardType.Battle;
             }
 
+            if (IsDungeon(type))
+            {
+                cardType |= CardType.Dungeon;
+            }
+
             return cardType;
         }
         public static CardSubType GetCardSubType(string type)
@@ -292,9 +303,9 @@
                 cardSubType |= CardSubType.Arcane;
             }
 
-            if (IsTribal(type))
+            if (IsKindred(type))
             {
-                cardSubType |= CardSubType.Tribal;
+                cardSubType |= CardSubType.Kindred;
             }
 
             if (IsSaga(type))
@@ -321,6 +332,12 @@
             {
                 cardSubType |= CardSubType.Room;
             }
+            
+            if (IsOmen(type))
+            {
+                cardSubType |= CardSubType.Omen;
+            }
+
 
             return cardSubType;
         }
@@ -358,9 +375,9 @@
             return type.ToLowerInvariant().Contains("summon") || type.ToLowerInvariant().Contains("eaturecray") || 
                   (type.ToLowerInvariant().Contains("creature") && !type.ToLowerInvariant().Contains("enchant creature"));
         }
-        public static bool IsTribal(string type)
+        public static bool IsKindred(string type)
         {
-            return type.ToLowerInvariant().Contains("tribal");
+            return type.ToLowerInvariant().Contains("kindred ");
         }
         public static bool IsArcane(string type)
         {
@@ -401,6 +418,10 @@
         public static bool IsAdventure(string type)
         {
             return type.ToLowerInvariant().Contains("adventure");
+        }
+        public static bool IsOmen(string type)
+        {
+            return type.ToLowerInvariant().Contains("omen");
         }
         public static bool IsVehicle(string type)
         {
@@ -453,6 +474,10 @@
         public static bool IsBattle(string type)
         {
             return type.ToLowerInvariant().Contains("battle");
+        }
+        public static bool IsDungeon(string type)
+        {
+            return type.ToLowerInvariant().Contains("dungeon");
         }
     }
 }
