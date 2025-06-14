@@ -122,6 +122,8 @@
         Borderless,
         [EnumMember(Value = "enchantment")]
         Enchantment,
+        [EnumMember(Value = "placeholderimage")]
+        PlaceHolderImage,
     }
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Finish

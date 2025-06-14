@@ -168,7 +168,7 @@
             IEdition edition = MagicDatabase.GetEditionByCode(cardWithExtraInfo.Edition);
             string checkName = edition?.Name.ToLower();
 
-            if (checkName.Contains("alchemy") || checkName.Contains("online") || checkName.Contains("arena"))
+            if (string.IsNullOrWhiteSpace(checkName) || checkName.Contains("alchemy") || checkName.Contains("online") || checkName.Contains("arena"))
             {
                 return;
             }

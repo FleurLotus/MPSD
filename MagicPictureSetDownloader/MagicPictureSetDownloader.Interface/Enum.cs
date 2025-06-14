@@ -66,6 +66,15 @@ namespace MagicPictureSetDownloader.Interface
         Siege = 1 << 12,
         Room = 1 << 13,
         Omen = 1 << 14,
+        Food = 1 << 15,
+        Clue = 1 << 16,
+        Lesson = 1 << 17,
+        Quest = 1 << 18,
+        Class = 1 << 19,
+        Case = 1 << 20,
+        Locus = 1 << 21,
+        Lair = 1 << 22,
+        Town = 1 << 23,
         //Must be constistante with MagicRules.GetCardSubType
     }
 

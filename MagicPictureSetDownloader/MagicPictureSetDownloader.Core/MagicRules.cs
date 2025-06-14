@@ -338,6 +338,45 @@
                 cardSubType |= CardSubType.Omen;
             }
 
+            if (IsFood(type))
+            {
+                cardSubType |= CardSubType.Food;
+            }
+
+            if (IsClue(type))
+            {
+                cardSubType |= CardSubType.Clue;
+            }
+
+            if (IsLesson(type))
+            {
+                cardSubType |= CardSubType.Lesson;
+            }
+
+            if (IsQuest(type))
+            {
+                cardSubType |= CardSubType.Quest;
+            }
+
+            if (IsClass(type))
+            {
+                cardSubType |= CardSubType.Class;
+            }
+
+            if (IsCase(type))
+            {
+                cardSubType |= CardSubType.Case;
+            }
+
+            if (IsLair(type))
+            {
+                cardSubType |= CardSubType.Lair;
+            }
+
+            if (IsTown(type))
+            {
+                cardSubType |= CardSubType.Town;
+            }
 
             return cardSubType;
         }
@@ -422,6 +461,38 @@
         public static bool IsOmen(string type)
         {
             return type.ToLowerInvariant().Contains("omen");
+        }
+        public static bool IsFood(string type)
+        {
+            return type.ToLowerInvariant().Contains("food");
+        }
+        public static bool IsClue(string type)
+        {
+            return type.ToLowerInvariant().Contains("clue");
+        }
+        public static bool IsLesson(string type)
+        {
+            return type.ToLowerInvariant().Contains("lesson");
+        }
+        public static bool IsQuest(string type)
+        {
+            return type.ToLowerInvariant().Contains("quest");
+        }
+        public static bool IsClass(string type)
+        {
+            return type.ToLowerInvariant().Contains("class");
+        }
+        public static bool IsCase(string type)
+        {
+            return type.ToLowerInvariant().Contains("case");
+        }
+        public static bool IsLair(string type)
+        {
+            return type.ToLowerInvariant().Contains("lair");
+        }
+        public static bool IsTown(string type)
+        {
+            return type.ToLowerInvariant().Contains("town");
         }
         public static bool IsVehicle(string type)
         {
