@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)-windows</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.ViewModel</AssemblyTitle>
     <Product>MagicPictureSetDownloader.ViewModel</Product>
     <UseWPF>true</UseWPF>

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>$(AppTargetFramework)</TargetFramework>
     <AssemblyTitle>MagicPictureSetDownloader.Interface</AssemblyTitle>
     <Product>MagicPictureSetDownloader.Interface</Product>
   </PropertyGroup>
