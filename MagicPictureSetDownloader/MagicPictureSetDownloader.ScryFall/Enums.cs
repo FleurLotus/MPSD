@@ -2,7 +2,7 @@
 {
     using System.Runtime.Serialization;
     using System.Text.Json.Serialization;
-    
+
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Color
     {
@@ -16,11 +16,13 @@
         Red,
         [EnumMember(Value = "G")]
         Green,
-    }    
+    }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: ImageStatus.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum ImageStatus
     {
+        Error,
         [EnumMember(Value = "missing")]
         Missing,
         [EnumMember(Value = "placeholder")]
@@ -29,11 +31,13 @@
         LowRes,
         [EnumMember(Value = "highres_scan")]
         HighRes,
-    }    
+    }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Game.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Game
     {
+        Error,
         [EnumMember(Value = "paper")]
         Paper,
         [EnumMember(Value = "arena")]
@@ -46,9 +50,11 @@
         Astral,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Frame.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Frame
     {
+        Error,
         [EnumMember(Value = "1993")]
         Year1993,
         [EnumMember(Value = "1997")]
@@ -60,10 +66,12 @@
         [EnumMember(Value = "future")]
         Future,
     }
-    
+
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: FrameEffect.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum FrameEffect
     {
+        Error,
         [EnumMember(Value = "legendary")]
         Legendary,
         [EnumMember(Value = "miracle")]
@@ -125,9 +133,11 @@
         [EnumMember(Value = "placeholderimage")]
         PlaceHolderImage,
     }
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Finish.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Finish
     {
+        Error,
         [EnumMember(Value = "foil")]
         Foil,
         [EnumMember(Value = "nonfoil")]
@@ -135,10 +145,12 @@
         [EnumMember(Value = "etched")]
         Etched,
     }
-    
+
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: BorderColor.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum BorderColor
     {
+        Error,
         [EnumMember(Value = "black")]
         Black,
         [EnumMember(Value = "white")]
@@ -153,9 +165,11 @@
         Yellow,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Component.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Component
     {
+        Error,
         [EnumMember(Value = "token")]
         Token,
         [EnumMember(Value = "meld_part")]
@@ -166,9 +180,11 @@
         ComboPiece,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Rarity.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Rarity
     {
+        Error,
         [EnumMember(Value = "common")]
         Common,
         [EnumMember(Value = "uncommon")]
@@ -183,9 +199,11 @@
         Bonus,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Legality.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Legality
     {
+        Error,
         [EnumMember(Value = "legal")]
         Legal,
         [EnumMember(Value = "not_legal")]
@@ -196,9 +214,11 @@
         Banned,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: SetType.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum SetType
     {
+        Error,
         [EnumMember(Value = "core")]
         Core,
         [EnumMember(Value = "expansion")]
@@ -247,9 +267,11 @@
         Minigame,
     }
 
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Layout.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Layout
     {
+        Error,
         [EnumMember(Value = "normal")]
         Normal,
         [EnumMember(Value = "split")]
@@ -299,9 +321,12 @@
         [EnumMember(Value = "case")]
         Case,
     }
+
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Language.Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Language
     {
+        Error,
         [EnumMember(Value = "en")]
         English,
         [EnumMember(Value = "es")]

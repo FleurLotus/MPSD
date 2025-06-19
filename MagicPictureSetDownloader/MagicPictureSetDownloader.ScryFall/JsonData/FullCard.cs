@@ -86,6 +86,9 @@
         [JsonPropertyName("reserved")]
         public bool Reserved { get; set; }
 
+        [JsonPropertyName("game_changer")]
+        public bool GameChanger { get; set; }
+
         #endregion
 
         #region Print Field

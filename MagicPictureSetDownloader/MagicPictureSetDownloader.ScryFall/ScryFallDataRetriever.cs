@@ -1,15 +1,14 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall
 {
+    using Common.Web;
+    using MagicPictureSetDownloader.ScryFall.JsonData;
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Text.Json;
-
-    using Common.Web;
-
-    using MagicPictureSetDownloader.ScryFall.JsonData;
-    using MagicPictureSetDownloader.ScryFall.JsonLite;
 
     public static class ScryFallDataRetriever 
     {
@@ -61,9 +60,23 @@
                 webAccess.DownloadFile(bulkData.DownloadUri, filePath);
             }
 
+            IList<FullCard> cards = new List<FullCard>();
+
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {
-                return JsonSerializer.Deserialize<FullCard[]>(fileStream);
+                foreach (FullCard card in JsonSerializer.DeserializeAsyncEnumerable<FullCard>(fileStream).ToEnumerable())
+                {
+                    cards.Add(card);
+
+#if DEBUG
+                    var errors = JsonMissingMapping.Check(card);
+                    if (errors.Count > 0)
+                    {
+                        Debugger.Break();
+                    }
+#endif
+                }
+                return cards.ToArray();
             }
         }
         public static Card[] GetCardsInfo(WebAccess webAccess, out BulkData bulkData)
