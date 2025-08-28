@@ -4,12 +4,6 @@
     <AssemblyTitle>MagicPictureSetDownloader.DbGenerator</AssemblyTitle>
     <Product>MagicPictureSetDownloader.DbGenerator</Product>
   </PropertyGroup>
-  <PropertyGroup>
-    <PreBuildEvent>
-		call $(SolutionDir)SetBuildEnvironment.bat
-		%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicDataScryFall.zip" "$(SolutionDir)MagicDataScryFall.sqlite"
-		%ZIP% a -tzip "$(SolutionDir)MagicPictureSetDownloader.DbGenerator\MagicPicture.zip" "$(SolutionDir)MagicPicture"</PreBuildEvent>
-  </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
     <EmbeddedResource Include="MagicDataScryFall.zip" />
@@ -19,7 +13,4 @@
     <PackageReference Include="Common.SQLite" />
     <PackageReference Include="Common.Zip" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="del &quot;$(ProjectDir)MagicDataScryFall.zip&quot;&#xD;&#xA;del &quot;$(ProjectDir)MagicPicture.zip&quot;" />
-  </Target>
 </Project>
