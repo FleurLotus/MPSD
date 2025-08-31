@@ -1,0 +1,182 @@
+name: Global Build
+
+on:
+  push:
+    branches: [ "Work" ]
+  pull_request:
+    branches: [ "Work" ]
+
+jobs:
+  build_deloy_common:
+    runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    env:
+        CommonSolution: '.\CommonLibraries\Common.sln'
+        TestResult: '.\TestResults'
+
+    # CheckOut of the code with just the head 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: |
+          6.0.x
+          7.0.x
+          8.0.x
+          9.0.x
+
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    # Install coverage tools if not already present
+    - name: Install coverage tools if not already present
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    #Restore dependencies
+    - name: Restore
+      run: dotnet restore $env:CommonSolution -v m
+    
+    #Build
+    - name: Build
+      run: dotnet build $env:CommonSolution -c Release --no-restore -v m
+
+    #Run UnitTest and Coverage
+    - name: Run UnitTests with coverage
+      run: |
+        $frameworks = "net6.0", "net7.0", "net8.0", "net9.0"
+        foreach ($framework in $frameworks)
+        {
+          dotnet test .\CommonLibraries\netcore.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
+        }
+        $frameworks = "net6.0-windows", "net7.0-windows", "net8.0-windows", "net9.0-windows"
+        foreach ($framework in $frameworks)
+        {
+          dotnet test .\CommonLibraries\netwindows.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
+        }
+      continue-on-error: true
+      
+    #Generate Coverage Report
+    - name: Generate coverage report
+      run: |
+        # Find coverage files
+        $coverageFiles = Get-ChildItem -Path "." -Filter "coverage.cobertura.xml" -Recurse
+      
+        if ($coverageFiles.Count -eq 0) 
+        {
+            Write-Warning "No coverage files found!"
+            exit 1
+        }
+      
+        # Generate HTML report
+        reportgenerator -reports:"**/coverage.cobertura.xml" -targetdir:"./CoverageReport" -reporttypes:"Html;Cobertura;JsonSummary"
+
+    #Parse result
+    - name: Parse and display coverage results
+      run: |
+        # Read the JSON summary for coverage percentage
+        $summaryPath = "./CoverageReport/Summary.json"
+        if (Test-Path $summaryPath) {
+            $summary = Get-Content $summaryPath | ConvertFrom-Json
+            $lineCoverage = [math]::Round($summary.summary.linecoverage, 2)
+            $branchCoverage = [math]::Round($summary.summary.branchcoverage, 2)
+          
+            Write-Host "📊 Coverage Results:" -ForegroundColor Cyan
+            Write-Host "  Line Coverage: $lineCoverage%" -ForegroundColor Yellow
+            Write-Host "  Branch Coverage: $branchCoverage%" -ForegroundColor Yellow
+          
+            # Set output for other steps
+            echo "LINE_COVERAGE=$lineCoverage" >> $env:GITHUB_ENV
+            echo "BRANCH_COVERAGE=$branchCoverage" >> $env:GITHUB_ENV
+          
+            # Fail if coverage is below threshold
+            $threshold = 80
+            if ($lineCoverage -lt $threshold) 
+            {
+                Write-Host "❌ Line coverage ($lineCoverage%) is below threshold ($threshold%)" -ForegroundColor Red
+            } else 
+            {
+                Write-Host "✅ Coverage meets threshold requirements!" -ForegroundColor Green
+            }
+        }
+
+    # Upload Result
+    - name: Upload artifact UnitTest Coverage
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: |
+          ./**/*.trx
+          ./CoverageReport/**/*
+
+    # Publish Result
+    - name: Publish test results to GitHub
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Unit Test Results
+        path: './**/*.trx'
+        reporter: dotnet-trx
+        fail-on-error: false
+
+    # Publish code coverage to Codecov
+    - name: Publish coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    # Package Common
+    - name: Package Common Release
+      run: dotnet pack $env:CommonSolution -c Release -o .\LocalPackages -v m
+
+    # Upload Result
+    - name: Upload artifact LocalPackages
+      uses: actions/upload-artifact@v4
+      with:
+        name: Packages
+        path: './LocalPackages/*.nupkg'
+
+
+  build_mpsd:
+    runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    needs: build_deloy_common
+    env:
+        MainSolution: '.\MagicPictureSetDownloader\MagicPictureSetDownloader.sln'
+
+    # CheckOut of the code with just the head 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    # Get back the Package
+    - name: Download artifact LocalPackages
+      uses: actions/download-artifact@v4
+      with:
+        name: Packages
+        path: ./LocalPackages/
+
+    # Restore Main
+    - name: Restore
+      run: dotnet restore $env:MainSolution --configfile .\nuget-local.config -v m
+
+    # Build Main
+    - name: Build Main Release
+      run: dotnet build $env:MainSolution -c Release -v m --no-restore

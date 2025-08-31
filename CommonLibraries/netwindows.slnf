@@ -1,0 +1,19 @@
+{
+  "solution": {
+    "path": "Common.sln",
+    "projects": [
+      "Common.Database\\Common.Database.csproj",
+      "Common.Drawing\\Common.Drawing.csproj",
+      "Common.Library\\Common.Library.csproj",
+      "Common.SQL\\Common.SQL.csproj",
+      "Common.SQLite\\Common.SQLite.csproj",
+      "Common.ViewModel\\Common.ViewModel.csproj",
+      "Common.WPF\\Common.WPF.csproj",
+      "Common.Web\\Common.Web.csproj",
+      "Common.Zip\\Common.Zip.csproj",
+      "UnitTests\\Common.ViewModel.UnitTests\\Common.ViewModel.UnitTests.csproj",
+      "UnitTests\\Common.WPF.UnitTests\\Common.WPF.UnitTests.csproj",
+      "UnitTests\\MockDbData\\MockDbData.csproj"
+    ]
+  }
+}

@@ -12,5 +12,13 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <IsTestProject>$(MSBuildProjectName.Contains('UnitTests'))</IsTestProject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+    <UseSourceLink>true</UseSourceLink>
+    <CoverletOutputFormat>cobertura</CoverletOutputFormat>
+    <CoverletOutput>$(MSBuildThisFileDirectory)coverlet/$(AssemblyName)/$(TargetFramework)/</CoverletOutput>
+  </PropertyGroup> 
 
 </Project>

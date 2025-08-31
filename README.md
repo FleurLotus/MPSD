@@ -1,3 +1,5 @@
+[![Global Build](https://github.com/FleurLotus/MPSD/actions/workflows/dotnet-desktop.yml/badge.svg?branch=Work)](https://github.com/FleurLotus/MPSD/actions/workflows/dotnet-desktop.yml)
+
 # MPSD - MagicPictureSetDownloader
 
 This repo contains:
