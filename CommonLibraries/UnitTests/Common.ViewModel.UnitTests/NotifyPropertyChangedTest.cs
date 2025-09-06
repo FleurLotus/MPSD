@@ -7,7 +7,7 @@
     using NUnit.Framework;
 
     using Common.ViewModel;
-    using Common.Library.Notify;
+    using Common.Notify;
     using NUnit.Framework.Internal.Execution;
 
     [TestFixture]

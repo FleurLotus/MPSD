@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Common.Database;
-    using Common.Library.Extension;
+    using Common.Collection;
 
     using MagicPictureSetDownloader.Interface;
 

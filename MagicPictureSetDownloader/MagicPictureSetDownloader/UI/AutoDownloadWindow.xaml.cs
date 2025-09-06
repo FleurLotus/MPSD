@@ -3,7 +3,7 @@
     using System;
     using System.Windows;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using Common.Web;
     using Common.ViewModel.Web;
     using Common.WPF;

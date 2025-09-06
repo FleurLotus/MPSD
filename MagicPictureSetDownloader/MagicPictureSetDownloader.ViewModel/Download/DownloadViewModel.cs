@@ -3,7 +3,7 @@
     using System;
     using System.Threading;
 
-    using Common.Library.Notify;
+    using Common.Notify;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.ScryFall.JsonLite;

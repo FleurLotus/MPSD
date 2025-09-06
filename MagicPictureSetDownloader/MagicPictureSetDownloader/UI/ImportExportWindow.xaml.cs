@@ -2,7 +2,7 @@
 {
     using System.Windows;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using Common.ViewModel.Input;
 
     using MagicPictureSetDownloader.ViewModel.IO;

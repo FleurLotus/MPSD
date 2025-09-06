@@ -3,7 +3,7 @@
     using System;
     using System.Windows.Input;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using Common.ViewModel.Input;
 
     public class DialogViewModelBase : NotifyPropertyChangedBase

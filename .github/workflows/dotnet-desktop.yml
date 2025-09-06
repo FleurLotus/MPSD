@@ -2,9 +2,7 @@ name: Global Build
 
 on:
   push:
-    branches: [ "Work" ]
   pull_request:
-    branches: [ "Work" ]
 
 jobs:
   build_deploy_common:

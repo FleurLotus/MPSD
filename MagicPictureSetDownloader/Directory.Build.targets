@@ -1,13 +1,15 @@
 <Project>
   <ItemGroup>
 
-    <PackageReference Update="Common.Database" Version="7.2.0" />
-    <PackageReference Update="Common.Drawing" Version="7.2.0" />
-    <PackageReference Update="Common.SQLite" Version="7.2.0" />
-    <PackageReference Update="Common.ViewModel" Version="7.2.0" />
-    <PackageReference Update="Common.Web" Version="7.2.2" />
-    <PackageReference Update="Common.WPF" Version="7.2.1" />
-    <PackageReference Update="Common.Zip" Version="7.2.0" />
+    <PackageReference Update="Common.Collection" Version="1.0.0" />
+    <PackageReference Update="Common.Database" Version="1.0.0" />
+    <PackageReference Update="Common.Drawing" Version="1.0.0" />
+    <PackageReference Update="Common.SQLite" Version="1.0.0" />
+    <PackageReference Update="Common.Threading" Version="1.0.0" />
+    <PackageReference Update="Common.ViewModel" Version="1.0.0" />
+    <PackageReference Update="Common.Web" Version="1.0.0" />
+    <PackageReference Update="Common.WPF" Version="1.0.0" />
+    <PackageReference Update="Common.Zip" Version="1.0.0" />
 
     <PackageReference Update="Extended.Wpf.Toolkit" Version="4.6.1" />
 	<PackageReference Update="Macross.Json.Extensions" Version="3.0.0" />

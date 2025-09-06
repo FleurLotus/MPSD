@@ -7,8 +7,8 @@
     using System.Net.Http;
     using System.IO;
 
-    using Common.Library.Notify;
-    using Common.Library.Threading;
+    using Common.Notify;
+    using Common.Threading;
 
     public class WebAccess
     {

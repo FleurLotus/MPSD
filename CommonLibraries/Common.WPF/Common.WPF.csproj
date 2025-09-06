@@ -4,12 +4,10 @@
     <AssemblyTitle>Common.WPF</AssemblyTitle>
     <Product>Common.WPF</Product>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>7.2.1</AssemblyVersion>
-    <FileVersion>7.2.1</FileVersion>
-    <Version>7.2.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
+    <ProjectReference Include="..\Common.Notify\Common.Notify.csproj" />
     <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
   </ItemGroup>
   <ItemGroup>

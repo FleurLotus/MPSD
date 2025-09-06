@@ -2,7 +2,7 @@
  {
      using System;
 
-     using Common.Library.Threading;
+     using Common.Threading;
 
      internal partial class MagicDatabase
      {

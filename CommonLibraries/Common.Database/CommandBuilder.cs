@@ -6,7 +6,7 @@
     using System.Reflection;
     using System.Collections.Generic;
     using System.Text;
-    using Library.Enums;
+    using Common.Enums;
 
     internal class CommandBuilder
     {

@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Net;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using Common.Web;
 
     using MagicPictureSetDownloader.Core.Deck;

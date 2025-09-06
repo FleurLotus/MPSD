@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
     using System.Windows.Input;
 
-    using Common.Library.Threading;
+    using Common.Threading;
 
     //From https://johnthiriet.com/mvvm-going-async-with-async-command/# and https://github.com/johnthiriet/AsyncVoid/blob/master/AsyncVoid
     public class AsyncCommand : IAsyncCommand

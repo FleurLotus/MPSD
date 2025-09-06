@@ -3,14 +3,12 @@
     <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
     <AssemblyTitle>Common.Web</AssemblyTitle>
     <Product>Common.Web</Product>
-    <AssemblyVersion>7.2.2</AssemblyVersion>
-    <FileVersion>7.2.2</FileVersion>
-    <Version>7.2.2</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
+    <ProjectReference Include="..\Common.Notify\Common.Notify.csproj" />
+    <ProjectReference Include="..\Common.Threading\Common.Threading.csproj" />
   </ItemGroup>
 </Project>

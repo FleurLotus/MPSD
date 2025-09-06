@@ -1,5 +1,4 @@
-﻿
-namespace MockDbData.UnitTests
+﻿namespace MockDbData.UnitTests
 {
     using System;
     using System.Collections;

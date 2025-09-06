@@ -4,7 +4,7 @@
 
     using NUnit.Framework;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using Common.ViewModel.Input;
     using Common.ViewModel.Dialog;
 

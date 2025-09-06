@@ -5,6 +5,7 @@
     <Product>Common.Database</Product>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common.Enums\Common.Enums.csproj" />
     <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
   </ItemGroup>
 </Project>

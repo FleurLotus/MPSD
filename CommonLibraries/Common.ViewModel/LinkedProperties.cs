@@ -5,7 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
 
-    using Common.Library.Extension;
+    using Common.Library;
 
     internal class LinkedProperties
     {

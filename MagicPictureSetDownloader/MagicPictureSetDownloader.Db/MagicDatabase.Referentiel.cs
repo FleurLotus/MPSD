@@ -3,12 +3,11 @@ namespace MagicPictureSetDownloader.Db
     using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Text;
     using System.Linq;
     
     using Common.Database;
-    using Common.Library.Extension;
-    using Common.Library.Threading;
+    using Common.Collection;
+    using Common.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;

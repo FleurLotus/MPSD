@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
-    using Common.Library.Extension;
+    using Common.Collection;
 
     public static class ResourceManager
     {

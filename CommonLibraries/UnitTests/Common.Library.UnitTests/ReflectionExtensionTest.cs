@@ -6,7 +6,7 @@
 
     using NUnit.Framework;
 
-    using Common.Library.Extension;
+    using Common.Library;
 
     [TestFixture]
     public class ReflectionExtensionTest

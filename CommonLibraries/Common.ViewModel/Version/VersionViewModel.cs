@@ -2,7 +2,7 @@
 {
     using System.Reflection;
 
-    using Common.Library.Extension;
+    using Common.Library;
 
     public class VersionViewModel : NotifyPropertyChangedBase
     {

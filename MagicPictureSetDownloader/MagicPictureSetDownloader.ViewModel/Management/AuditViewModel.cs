@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Common.Library.Collection;
+    using Common.Collection;
     using Common.ViewModel.Dialog;
 
     using MagicPictureSetDownloader.Db;

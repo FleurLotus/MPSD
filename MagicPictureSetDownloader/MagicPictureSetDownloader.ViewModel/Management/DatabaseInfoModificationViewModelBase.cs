@@ -3,7 +3,7 @@
     using System;
     using System.Windows.Input;
 
-    using Common.Library.Collection;
+    using Common.Collection;
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Db;

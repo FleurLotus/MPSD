@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
-    using Common.Library.Extension;
+    using Common.Library;
     using Common.ViewModel.Validation.Attributes;
 
     internal static class ReflectionCacheRepository

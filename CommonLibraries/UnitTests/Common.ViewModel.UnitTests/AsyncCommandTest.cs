@@ -7,7 +7,7 @@
 
     using NUnit.Framework;
 
-    using Common.Library.Threading;
+    using Common.Threading;
 
     [TestFixture]
     public class AsyncCommandTest

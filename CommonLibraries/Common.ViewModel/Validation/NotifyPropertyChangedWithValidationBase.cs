@@ -7,8 +7,8 @@
     using System.Text;
     using System.Threading;
 
-    using Common.Library.Extension;
-    using Common.Library.Threading;
+    using Common.Collection;
+    using Common.Threading;
 
     public class NotifyPropertyChangedWithValidationBase : NotifyPropertyChangedBase, IValidable
     {

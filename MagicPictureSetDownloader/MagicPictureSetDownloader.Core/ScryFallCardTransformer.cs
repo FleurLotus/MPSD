@@ -3,11 +3,10 @@
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
 
-    using Common.Library.Notify;
+    using Common.Notify;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall.JsonLite;
 

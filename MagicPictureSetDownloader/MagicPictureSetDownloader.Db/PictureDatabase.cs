@@ -6,7 +6,7 @@
     using System.Reflection;
 
     using Common.Drawing;
-    using Common.Library.Extension;
+    using Common.Collection;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.DbGenerator;

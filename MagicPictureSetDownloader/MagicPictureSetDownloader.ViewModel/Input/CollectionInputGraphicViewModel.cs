@@ -10,8 +10,8 @@
     using System.Windows.Data;
     using System.Windows.Input;
 
-    using Common.Library.Collection;
-    using Common.Library.Enums;
+    using Common.Collection;
+    using Common.Enums;
     using Common.ViewModel;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;

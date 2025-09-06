@@ -2,7 +2,7 @@
 {
     using System.Linq;
 
-    using Common.Library.Enums;
+    using Common.Enums;
 
     using MagicPictureSetDownloader.Interface;
     

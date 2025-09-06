@@ -6,8 +6,8 @@
     using System.Linq;
     using System.Threading;
 
-    using Common.Library.Notify;
-    using Common.Library.Threading;
+    using Common.Notify;
+    using Common.Threading;
     using Common.ViewModel;
     using Common.ViewModel.Menu;
     using Common.ViewModel.Input;

@@ -30,6 +30,8 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Common.Database" />
+    <PackageReference Include="Common.Collection" />
+    <PackageReference Include="Common.Threading" />
     <PackageReference Include="Common.Drawing" />
   </ItemGroup>
 </Project>

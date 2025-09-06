@@ -6,8 +6,7 @@
     using System.Linq;
     using System.Windows.Input;
 
-    using Common.Library.Extension;
-    using Common.Library.Collection;
+    using Common.Collection;
     using Common.ViewModel;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
