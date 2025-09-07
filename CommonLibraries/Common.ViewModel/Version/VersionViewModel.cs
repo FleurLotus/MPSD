@@ -6,9 +6,9 @@
 
     public class VersionViewModel : NotifyPropertyChangedBase
     {
-        public VersionViewModel()
+        public VersionViewModel(Assembly assembly = null)
         {
-            Assembly entryAssembly = Assembly.GetEntryAssembly();
+            Assembly entryAssembly = assembly ?? Assembly.GetEntryAssembly();
             AssemblyCopyrightAttribute[] copyrightAttrib = entryAssembly.GetCustomAttributes<AssemblyCopyrightAttribute>(false);
             if (copyrightAttrib != null && copyrightAttrib.Length >= 1)
             {

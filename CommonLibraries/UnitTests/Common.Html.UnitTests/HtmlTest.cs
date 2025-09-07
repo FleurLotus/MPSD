@@ -46,6 +46,18 @@
             Assert.Throws<HtmlTableParserNoTagEndException>(() => HtmlTableParser.ExtractCell("<td"), "Should throw HtmlTableParserNoTagEndException");
         }
         [Test]
+        public void TestMultiCellType()
+        {
+            IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH><TD>C1</TD><TD>C2</TD></TR></TABLE>");
+            Assert.That(ret, Is.Not.Null, "ret must be not null");
+
+            Assert.That(ret[0, 0]?.InnerText, Is.EqualTo("H1"), "Should return the first TH value");
+            Assert.That(ret[0, 1]?.InnerText, Is.EqualTo("H2"), "Should return the second TH value");
+            Assert.That(ret[0, 2]?.InnerText, Is.EqualTo("C1"), "Should return the first TD value");
+            Assert.That(ret[0, 3]?.InnerText, Is.EqualTo("C2"), "Should return the second TD value");
+            Assert.That(ret[0, 4]?.InnerText, Is.Null, "Too large index for Col should return null");
+        }
+        [Test]
         public void TestGetColCount()
         {
             IHtmlTable ret = HtmlTableParser.Parse(@"<TABLE><TR><TH>H1</TH><TH>H2</TH></TR><TR><TD>C11</TD><TD>C12</TD></TR></TABLE>");
@@ -73,7 +85,6 @@
             Assert.That(ret[1, 0], Is.Not.Null, "In range index for Row and Col should not return null");
             Assert.That(ret[0, 1], Is.Not.Null, "In range index for Row and Col should not return null");
             Assert.That(ret[1, 1], Is.Not.Null, "In range index for Row and Col should not return null");
-
         }
 
         #region TestCase List

@@ -214,15 +214,6 @@
         }
         private void AppendWhereCriteriaCommand(IDbCommand cmd, object input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
-
             StringBuilder sb = new StringBuilder(cmd.CommandText);
 
             sb.Append(" WHERE ");

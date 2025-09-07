@@ -198,6 +198,30 @@
             Assert.That(param2.Value, Is.EqualTo("bbb"));
         }
         [Test]
+        public void TestExecuteParametrizeCommandWithNullValue()
+        {
+            string sql = "UPDATE SchemaName.TableName SET ColumnName = @Param1 WHERE ColumnName = @Param2";
+            MockDbResultInjector injector = new MockDbResultInjector();
+            ((IAcceptResultInjection)_connection).Accept(injector);
+            Assert.That(injector.Executions.Count, Is.EqualTo(0));
+            _repositoryBaseTesting.ExecuteParametrizeCommand(sql, new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", null));
+
+            Assert.That(injector.Executions.Count, Is.EqualTo(1));
+            MockDbExecution execution = injector.Executions[0];
+            Assert.That(execution, Is.Not.Null);
+            Assert.That(execution.CommandType, Is.EqualTo(CommandType.Text));
+            Assert.That(execution.CommandText, Is.EqualTo(sql));
+            Assert.That(execution.Parameters.Count, Is.EqualTo(2));
+            MockDbExecutionParameter param1 = execution.Parameters[0];
+            Assert.That(param1, Is.Not.Null);
+            Assert.That(param1.ParameterName, Is.EqualTo("@Param1"));
+            Assert.That(param1.Value, Is.EqualTo("aaa"));
+            MockDbExecutionParameter param2 = execution.Parameters[1];
+            Assert.That(param2, Is.Not.Null);
+            Assert.That(param2.ParameterName, Is.EqualTo("@Param2"));
+            Assert.That(param2.Value, Is.EqualTo(DBNull.Value));
+        }
+        [Test]
         public void TestExecuteParametrizeCommandMulti()
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = @Param1 WHERE ColumnName = @Param2";
@@ -208,7 +232,7 @@
             var param = new List<KeyValuePair<string, object>[]>
             {
                     new[] { new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb") },
-                    new[] { new KeyValuePair<string, object>("@Param1", "111"), new KeyValuePair<string, object>("@Param2", "222") },
+                    new[] { new KeyValuePair<string, object>("@Param1", "111"), new KeyValuePair<string, object>("@Param2", null) },
             };
 
             _repositoryBaseTesting.ExecuteParametrizeCommandMulti(sql, param);
@@ -243,7 +267,25 @@
             param2 = execution.Parameters[1];
             Assert.That(param2, Is.Not.Null);
             Assert.That(param2.ParameterName, Is.EqualTo("@Param2"));
-            Assert.That(param2.Value, Is.EqualTo("222"));
+            Assert.That(param2.Value, Is.EqualTo(DBNull.Value));
+        }
+        [Test]
+        public void TestExecuteParametrizeCommandMultiWithEmptyCommand()
+        {
+            string sql = "\r\n";
+            MockDbResultInjector injector = new MockDbResultInjector();
+            ((IAcceptResultInjection)_connection).Accept(injector);
+            Assert.That(injector.Executions.Count, Is.EqualTo(0));
+
+            var param = new List<KeyValuePair<string, object>[]>
+            {
+                    new[] { new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb") },
+                    new[] { new KeyValuePair<string, object>("@Param1", "111"), new KeyValuePair<string, object>("@Param2", null) },
+            };
+
+            _repositoryBaseTesting.ExecuteParametrizeCommandMulti(sql, param);
+
+            Assert.That(injector.Executions.Count, Is.EqualTo(0));
         }
     }
 }

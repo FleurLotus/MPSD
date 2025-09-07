@@ -157,6 +157,22 @@
             Assert.DoesNotThrow(() => commandBuilder.BuildSelectAllCommand(cnx), "BuildSelectAllCommand should not throw for DbClassNoUpdate");
 
         }
+
+        [DbTable(Name = "MyTable")]
+        private class DbWithWrongKind
+        {
+            [DbColumn(Kind = (ColumnKind)999)]
+            public string Col1 { get; set; }
+            [DbColumn()]
+            public string Col2 { get; set; }
+        }
+
+        [Test]
+        public void TestWithWrongKind()
+        {
+            Assert.Throws(Is.TypeOf<ArgumentOutOfRangeException>().With.Message.Contains("999 is not managed"), () => new CommandBuilder(DbAttributAnalyser.Analyse(typeof(DbWithWrongKind))), "Kind out of range should throw ArgumentOutOfRangeException");
+        }
+
         [DbTable(Name = "MyTable")]
         private class DbWithAlias
         {
@@ -213,6 +229,32 @@
             Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
             Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
             Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo("2"), "Not the expected value for @MyValue");
+        }
+
+        [Test]
+        public void TestWithNullValue()
+        {
+            IDbCommand cnx;
+            CommandBuilder commandBuilder = new CommandBuilder(DbAttributAnalyser.Analyse(typeof(DbWithAlias)));
+            DbWithAlias o = new DbWithAlias { Col1 = "1", Col2 = null };
+
+            cnx = new MockDbCommand();
+            commandBuilder.BuildUpdateOneCommand(cnx, o);
+            Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [MyTable] SET [MyValue] = @MyValue WHERE ([MyKey] = @MyKey)"), "Not the expected UpdateOne CommandText");
+            Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
+            Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
+            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
+            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
+
+            cnx = new MockDbCommand();
+            commandBuilder.BuildInsertOneCommand(cnx, o);
+            Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [MyTable] ([MyKey], [MyValue]) VALUES (@MyKey, @MyValue)"), "Not the expected InsertOne CommandText");
+            Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
+            Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
+            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
+            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
         }
 
         [DbTable()]

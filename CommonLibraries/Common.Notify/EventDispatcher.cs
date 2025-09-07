@@ -12,6 +12,7 @@
         private readonly Thread _thread;
         private readonly ILogger _logger;
         private volatile bool _exit;
+        private Exception _unmanagedException = null;
 
         public EventDispatcher(ILogger logger, string name)
         {
@@ -27,6 +28,10 @@
             _exit = true;
             _autoResetEvent.Set();
             _autoResetEvent.Close();
+            if (_unmanagedException != null)
+            {
+                throw _unmanagedException;
+            }
         }
 
         public void Enqueue(Action action)
@@ -43,41 +48,48 @@
 
             _autoResetEvent.Set();
         }
-        
+
         private void ActionExecutorThreadLoop()
         {
-            while (!_exit)
+            try
             {
-                // Wait for work
-                _autoResetEvent.WaitOne();
-
-                // Dequeue actions
-                var todo = new List<Action>();
-                lock (_queue)
+                while (!_exit)
                 {
-                    while (_queue.Count > 0)
+                    // Wait for work
+                    _autoResetEvent.WaitOne();
+
+                    // Dequeue actions
+                    var todo = new List<Action>();
+                    lock (_queue)
                     {
-                        todo.Add(_queue.Dequeue());
+                        while (_queue.Count > 0)
+                        {
+                            todo.Add(_queue.Dequeue());
+                        }
+                    }
+
+                    // Execute them
+                    foreach (var action in todo)
+                    {
+                        if (_exit)
+                        {
+                            return;
+                        }
+
+                        try
+                        {
+                            action();
+                        }
+                        catch (Exception e)
+                        {
+                            _logger?.LogError("ActionExecutorThreadLoop got exception: {Exception}", e);
+                        }
                     }
                 }
-
-                // Execute them
-                foreach (var action in todo)
-                {
-                    if (_exit)
-                    {
-                        return;
-                    }
-
-                    try
-                    {
-                        action();
-                    }
-                    catch (Exception e)
-                    {
-                        _logger?.LogError("ActionExecutorThreadLoop got exception: {Exception}", e);
-                    }
-                }
+            }
+            catch (Exception e)
+            {
+                _unmanagedException = e;
             }
         }
     }

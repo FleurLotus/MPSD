@@ -91,14 +91,15 @@
             while (true)
             {
                 string endTag = null;
-                int tdIndex = htmlRow.IndexOf(RowCellStart, lastindex, StringComparison.InvariantCultureIgnoreCase);
+                int templastindex = lastindex;
+                int tdIndex = htmlRow.IndexOf(RowCellStart, templastindex, StringComparison.InvariantCultureIgnoreCase);
                 if (tdIndex >= 0)
                 {
                     endTag = RowCellEnd;
                     lastindex = tdIndex;
                 }
 
-                int thIndex = htmlRow.IndexOf(RowCellHeaderStart, lastindex, StringComparison.InvariantCultureIgnoreCase);
+                int thIndex = htmlRow.IndexOf(RowCellHeaderStart, templastindex, StringComparison.InvariantCultureIgnoreCase);
                 if (thIndex >= 0)
                 {
                     if (tdIndex < 0 || thIndex < tdIndex)

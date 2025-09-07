@@ -2,8 +2,10 @@
 {
     using System;
     using System.Threading;
+    using Microsoft.Extensions.Logging;
 
     using NUnit.Framework;
+    using Moq;
 
     using Common.Notify;
 
@@ -61,6 +63,33 @@
             Assert.DoesNotThrow(() =>
             {
                 EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
+                eventDispatcher.Enqueue(() => throw new Exception());
+                Thread.Sleep(50);
+                eventDispatcher.Dispose();
+            });
+        }
+        [Test]
+        public void TestNotErrorIfActionExceptionWithLogger()
+        {
+            Mock<ILogger> log = new Mock<ILogger>(MockBehavior.Strict);
+            log.Setup(l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true), It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true))).Verifiable(); 
+            Assert.DoesNotThrow(() =>
+            {
+                EventDispatcher eventDispatcher = new EventDispatcher(log.Object, "test");
+                eventDispatcher.Enqueue(() => throw new Exception());
+                Thread.Sleep(50);
+                eventDispatcher.Dispose();
+            });
+            log.Verify();
+        }
+        [Test]
+        public void TestErrorRaiseIfGlobalExceptionStopThread()
+        {
+            Mock<ILogger> log = new Mock<ILogger>(MockBehavior.Strict);
+            log.Setup(l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true), It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true))).Throws(new Exception());
+            Assert.Throws<Exception>(() =>
+            {
+                EventDispatcher eventDispatcher = new EventDispatcher(log.Object, "test");
                 eventDispatcher.Enqueue(() => throw new Exception());
                 Thread.Sleep(50);
                 eventDispatcher.Dispose();
