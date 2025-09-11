@@ -23,7 +23,7 @@
         {
             if (_withFlag)
             {
-                return ((int)(object)source & ((int)(object)matching)) > 0;
+                return ((int) (object) source & ((int) (object) matching)) > 0;
             }
 
             return source.Equals(matching);
@@ -32,15 +32,14 @@
         {
             if (_withFlag)
             {
-                if ((int)(object)matching == 0)
+                if ((int) (object) matching == 0)
                 {
                     return false;
                 }
-                return ((int)(object)source & ((int)(object)matching)) == (int)(object)matching;
+                return ((int) (object) source & ((int) (object) matching)) == (int) (object) matching;
             }
 
             return source.Equals(matching);
         }
-
     }
 }

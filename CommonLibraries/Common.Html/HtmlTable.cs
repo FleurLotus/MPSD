@@ -7,13 +7,10 @@
     internal class HtmlTable : IHtmlTable
     {
         private readonly IList<IHtmlCell[]> _rows = new List<IHtmlCell[]>();
-        
+
         public HtmlTable(IEnumerable<IHtmlCell[]> rows)
         {
-            if (rows == null)
-            {
-                throw new ArgumentNullException(nameof(rows));
-            }
+            ArgumentNullException.ThrowIfNull(rows);
 
             Build(rows);
         }
@@ -54,7 +51,7 @@
         {
             Queue<IList<IHtmlCell>> waitingRows = new Queue<IList<IHtmlCell>>();
 
-            foreach (var cells in rows)
+            foreach (IHtmlCell[] cells in rows)
             {
                 IList<IHtmlCell> currentRow = waitingRows.Count > 0 ? waitingRows.Dequeue() : new List<IHtmlCell>();
 

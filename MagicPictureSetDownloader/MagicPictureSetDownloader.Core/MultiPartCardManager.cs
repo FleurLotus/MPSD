@@ -1,10 +1,11 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
     using System;
+
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall;
 
-    public class MultiPartCardManager: IMultiPartCardManager
+    public class MultiPartCardManager : IMultiPartCardManager
     {
         private static readonly Lazy<IMultiPartCardManager> _lazy = new Lazy<IMultiPartCardManager>(() => new MultiPartCardManager());
 
@@ -29,7 +30,7 @@
 
         private bool IsSplitted(ICard card)
         {
-            return card.Layout == Layout.Split.ToString(); 
+            return card.Layout == Layout.Split.ToString();
         }
 
         //Aftermath

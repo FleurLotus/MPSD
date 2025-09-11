@@ -9,7 +9,7 @@
 
     using Common.Library;
     using Common.Notify;
-    using Common.ViewModel;
+    using Common.ViewModel.Command;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
 
@@ -155,6 +155,8 @@
                         return File.Exists(ImportFilePath) && !string.IsNullOrWhiteSpace(NewCollectionName) && !ImportCollections.Contains(NewCollectionName);
                     case ImportOption.AddToCollection:
                         return File.Exists(ImportFilePath) && SelectedCollection != null;
+                    default:
+                        break;
                 }
             }
 
@@ -171,15 +173,11 @@
         }
         private void OnOpenFileDialog(InputViewModel vm)
         {
-            var e = OpenFileDialog;
-            if (e != null)
-            {
-                e(this, new EventArgs<InputViewModel>(vm));
-            }
+            OpenFileDialog?.Invoke(this, new EventArgs<InputViewModel>(vm));
         }
         private void OnDisplayResult(string message)
         {
-            var e = DisplayResult;
+            EventHandler<EventArgs<string>> e = DisplayResult;
             if (e != null)
             {
                 _dispatcherInvoker.Invoke(() => e(this, new EventArgs<string>(message)));
@@ -205,6 +203,8 @@
                             break;
                         case ImportOption.AddToCollection:
                             status = importExportWorker.ImportToExistingCollection(ImportFilePath, SelectedCollection);
+                            break;
+                        default:
                             break;
                     }
 

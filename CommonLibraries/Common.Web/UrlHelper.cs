@@ -26,7 +26,7 @@
                 baseurl = ExtractBaseUrl(baseurl);
             }
 
-            if (!baseurl.EndsWith("/"))
+            if (!baseurl.EndsWith('/'))
             {
                 if (baseurl.Contains('/'))
                 {
@@ -38,7 +38,7 @@
                 }
             }
 
-            if (relativeurl.StartsWith("/"))
+            if (relativeurl.StartsWith('/'))
             {
                 relativeurl = relativeurl[1..];
             }
@@ -53,14 +53,8 @@
             int start;
             while ((index = url.IndexOf(pathBack, StringComparison.InvariantCultureIgnoreCase)) >= 0)
             {
-                if (index == 0)
-                {
-                    start = -1;
-                }
-                else
-                {
-                    start = url.LastIndexOf('/', index - 1);
-                }
+                start = index == 0 ? -1 : url.LastIndexOf('/', index - 1);
+
                 if (start > 0 && url[start - 1] == ':')
                 {
                     start++;

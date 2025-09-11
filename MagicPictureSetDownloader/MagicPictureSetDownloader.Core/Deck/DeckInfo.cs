@@ -1,7 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Core.Deck
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Collections.Generic; 
 
     internal class DeckInfo
     {
@@ -22,5 +22,5 @@
                 return Cards.Sum(c => c.Number);
             }
         }
-     }
+    }
 }

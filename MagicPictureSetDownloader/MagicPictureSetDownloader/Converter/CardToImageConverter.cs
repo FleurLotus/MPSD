@@ -4,6 +4,7 @@ namespace MagicPictureSetDownloader.Converter
     using System.Globalization;
     using System.Windows.Data;
     using System.Windows.Media.Imaging;
+
     using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(CardViewModel), typeof(BitmapImage))]
@@ -17,7 +18,6 @@ namespace MagicPictureSetDownloader.Converter
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int param = int.Parse(parameter.ToString());
-
 
             CardViewModel card = value as CardViewModel;
             if (card == null && value is HierarchicalResultNodeViewModel node)

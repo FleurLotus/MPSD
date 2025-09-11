@@ -6,7 +6,8 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
 
     using Common.WPF.Converter;
-     using MagicPictureSetDownloader.ViewModel.Main;
+
+    using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(PriceViewModel[]))]
     public class CardToPricesConverter : NoConvertBackConverter
@@ -18,7 +19,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            return node.AllCard.SelectMany(c  => c.Prices)
+            return node.AllCard.SelectMany(c => c.Prices)
                                .OrderByDescending(p => p.AddDate)
                                .ThenBy(p => p.Foil)
                                .ThenBy(p => p.EditionName)

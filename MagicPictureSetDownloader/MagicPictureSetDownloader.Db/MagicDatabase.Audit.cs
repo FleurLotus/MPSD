@@ -1,4 +1,4 @@
-﻿ namespace MagicPictureSetDownloader.Db
+﻿namespace MagicPictureSetDownloader.Db
 {
     using System.Collections.Generic;
     using System.Data;
@@ -28,7 +28,7 @@
                 return;
             }
 
-            InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = 1});
+            InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = 1 });
         }
         private void AuditRemoveCollection(int idCollection)
         {
@@ -37,7 +37,7 @@
                 return;
             }
 
-            InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = -1});
+            InsertNewAudit(new Audit { IdCollection = idCollection, Quantity = -1 });
         }
         private void AuditAddCard(int idCollection, string idScryFall, int idLanguage, ICardCount cardCount)
         {

@@ -7,7 +7,7 @@
 
     using MagicPictureSetDownloader.Interface;
 
-    public class CardCount: ICardCount
+    public class CardCount : ICardCount
     {
         private readonly IDictionary<ICardCountKey, int> _counts = new Dictionary<ICardCountKey, int>();
 

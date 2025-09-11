@@ -4,8 +4,6 @@
     using System.Linq;
     using System.Windows.Input;
 
-    using Common.ViewModel;
-
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
 
@@ -133,11 +131,10 @@
                 return false;
             }
 
-            MagicDatabase.UpdateEdition(Selected, Name, Name, HasFoil, Code, Block == null ? (int?)null : Block.Id, CardNumber, ReleaseDate);
+            MagicDatabase.UpdateEdition(Selected, Name, Name, HasFoil, Code, Block == null ? (int?) null : Block.Id, CardNumber, ReleaseDate);
             All.Clear();
             All.AddRange(MagicDatabase.GetAllEditionsOrdered());
             return true;
         }
-
     }
 }

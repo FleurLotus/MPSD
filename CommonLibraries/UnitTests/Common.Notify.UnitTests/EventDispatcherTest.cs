@@ -2,12 +2,14 @@
 {
     using System;
     using System.Threading;
-    using Microsoft.Extensions.Logging;
-
-    using NUnit.Framework;
-    using Moq;
 
     using Common.Notify;
+
+    using Microsoft.Extensions.Logging;
+
+    using Moq;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class EventDispatcherTest
@@ -72,7 +74,7 @@
         public void TestNotErrorIfActionExceptionWithLogger()
         {
             Mock<ILogger> log = new Mock<ILogger>(MockBehavior.Strict);
-            log.Setup(l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true), It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true))).Verifiable(); 
+            log.Setup(l => l.Log(LogLevel.Error, It.IsAny<EventId>(), It.Is<It.IsAnyType>((v, t) => true), It.IsAny<Exception>(), It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true))).Verifiable();
             Assert.DoesNotThrow(() =>
             {
                 EventDispatcher eventDispatcher = new EventDispatcher(log.Object, "test");

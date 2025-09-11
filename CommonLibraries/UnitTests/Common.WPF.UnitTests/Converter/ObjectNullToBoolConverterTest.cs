@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.WPF.Converter;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ObjectNullToBoolConverterTest
@@ -27,7 +27,7 @@
         public void TestNoConvertBack()
         {
             ObjectNullToBoolConverter converter = new ObjectNullToBoolConverter();
-            Assert.Throws<NotImplementedException>(()=> converter.ConvertBack(null, null, null, null));
+            Assert.Throws<NotImplementedException>(() => converter.ConvertBack(null, null, null, null));
         }
         [Test]
         public void TestMarkup()

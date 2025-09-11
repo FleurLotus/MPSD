@@ -11,13 +11,13 @@ namespace MagicPictureSetDownloader.Converter
     using MagicPictureSetDownloader.Resources;
 
     [ValueConversion(typeof(bool), typeof(BitmapSource))]
-    public class BoolToOrderImageConverter : NoConvertBackConverter 
+    public class BoolToOrderImageConverter : NoConvertBackConverter
     {
         private static readonly BitmapToImageConverter _bitmapToImageConverter = new BitmapToImageConverter();
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Bitmap bitmap = (bool)value ? ResourceManager.Asc : ResourceManager.Desc;
+            Bitmap bitmap = (bool) value ? ResourceManager.Asc : ResourceManager.Desc;
 
             return _bitmapToImageConverter.Convert(bitmap, targetType, parameter, culture);
         }

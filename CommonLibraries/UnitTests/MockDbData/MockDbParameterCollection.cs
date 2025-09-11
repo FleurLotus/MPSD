@@ -23,12 +23,12 @@
 
         public new MockDbParameter this[string parameterName]
         {
-            get { return (MockDbParameter)GetParameter(parameterName); }
+            get { return (MockDbParameter) GetParameter(parameterName); }
             set { SetParameter(parameterName, value); }
         }
         public new MockDbParameter this[int index]
         {
-            get { return (MockDbParameter)GetParameter(index); }
+            get { return (MockDbParameter) GetParameter(index); }
             set { SetParameter(index, value); }
         }
 
@@ -55,7 +55,7 @@
         }
         public override int Add(object value)
         {
-            return Add((MockDbParameter)value);
+            return Add((MockDbParameter) value);
         }
         public void AddRange(MockDbParameter[] values)
         {
@@ -70,7 +70,7 @@
             int length = values.Length;
             for (int i = 0; i < length; i++)
             {
-                Add((MockDbParameter)values.GetValue(i));
+                Add((MockDbParameter) values.GetValue(i));
             }
         }
         public MockDbParameter AddWithValue(string parameterName, object value)
@@ -89,7 +89,7 @@
         }
         public override bool Contains(object value)
         {
-            return _parameterList.Contains((MockDbParameter)value);
+            return _parameterList.Contains((MockDbParameter) value);
         }
         public override void CopyTo(Array array, int index)
         {
@@ -121,15 +121,15 @@
         }
         public override int IndexOf(object value)
         {
-            return _parameterList.IndexOf((MockDbParameter)value);
+            return _parameterList.IndexOf((MockDbParameter) value);
         }
         public override void Insert(int index, object value)
         {
-            _parameterList.Insert(index, (MockDbParameter)value);
+            _parameterList.Insert(index, (MockDbParameter) value);
         }
         public override void Remove(object value)
         {
-            _parameterList.Remove((MockDbParameter)value);
+            _parameterList.Remove((MockDbParameter) value);
         }
         public override void RemoveAt(string parameterName)
         {

@@ -13,9 +13,10 @@
         [Test]
         public void TestProperties()
         {
-            Table table = new Table();
-
-            table.Name = "Name";
+            Table table = new Table
+            {
+                Name = "Name"
+            };
             Assert.That(table.Name, Is.EqualTo("Name"));
 
             table.SchemaName = "SchemaName";

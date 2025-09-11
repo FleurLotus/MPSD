@@ -3,9 +3,9 @@
     using System;
     using System.Threading;
 
-    using NUnit.Framework;
-
     using Common.Threading;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class LockTest

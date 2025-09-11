@@ -6,17 +6,17 @@
 
     using Common.Notify;
 
-    public class NotifyPropertyChangedBase: INotifyPropertyChanged
+    public class NotifyPropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly Lazy<LinkedProperties> _lazyLinkedProperties;
-        
+
         protected NotifyPropertyChangedBase()
         {
             _lazyLinkedProperties = new Lazy<LinkedProperties>(() => new LinkedProperties(this), LazyThreadSafetyMode.PublicationOnly);
         }
-        
+
         protected void OnNotifyPropertyChanged(string propertyName)
         {
             if (_lazyLinkedProperties.IsValueCreated)
@@ -40,19 +40,12 @@
         }
         protected void OnEventRaise(EventHandler ev)
         {
-            if (ev != null)
-            {
-                ev(this, EventArgs.Empty);
-            }
+            ev?.Invoke(this, EventArgs.Empty);
         }
 
         private void RaiseNotifyPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler e = PropertyChanged;
-            if (e != null)
-            {
-                e(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected void AddLinkedProperty(string source, string destination)

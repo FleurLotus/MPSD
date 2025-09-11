@@ -3,9 +3,9 @@ namespace Common.Collection.UnitTests
     using System.Collections.Specialized;
     using System.Threading;
 
-    using NUnit.Framework;
-
     using Common.Collection;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class AsyncObservableCollectionTest

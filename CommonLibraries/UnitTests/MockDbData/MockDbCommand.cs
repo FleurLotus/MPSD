@@ -1,13 +1,11 @@
 ﻿namespace MockDbData
 {
-    using System;
     using System.Data;
     using System.Data.Common;
 
     public class MockDbCommand : DbCommand, IAcceptResultInjection
     {
         private MockDbResultInjector _injector;
-        private readonly MockDbParameterCollection _parameters = new MockDbParameterCollection();
 
         public override string CommandText { get; set; }
         public override int CommandTimeout { get; set; }
@@ -15,11 +13,11 @@
         public override bool DesignTimeVisible { get; set; }
         public override UpdateRowSource UpdatedRowSource { get; set; }
         protected override DbConnection DbConnection { get; set; }
-        public new MockDbParameterCollection Parameters { get { return _parameters; } }
+        public new MockDbParameterCollection Parameters { get; } = new MockDbParameterCollection();
 
         protected override DbParameterCollection DbParameterCollection
         {
-            get { return _parameters; }
+            get { return Parameters; }
         }
 
         protected override DbTransaction DbTransaction { get; set; }

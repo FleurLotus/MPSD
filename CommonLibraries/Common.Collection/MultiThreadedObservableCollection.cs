@@ -25,7 +25,7 @@
             // Be nice - use BlockReentrancy like MSDN said
             using (BlockReentrancy())
             {
-               NotifyCollectionChangedEventHandler eventHandler = CollectionChanged;
+                NotifyCollectionChangedEventHandler eventHandler = CollectionChanged;
                 if (eventHandler == null)
                 {
                     return;

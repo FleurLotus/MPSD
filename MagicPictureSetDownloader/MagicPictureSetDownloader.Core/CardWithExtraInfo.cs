@@ -12,7 +12,7 @@
         public string Layout { get; set; }
         public string Rarity { get; set; }
         public List<(CardIdSource, string)> ExternalId { get; } = new List<(CardIdSource, string)>();
-        public IList<CardFaceWithExtraInfo> CardFaceWithExtraInfos { get;  } = new List<CardFaceWithExtraInfo>();
+        public IList<CardFaceWithExtraInfo> CardFaceWithExtraInfos { get; } = new List<CardFaceWithExtraInfo>();
         public string Language { get; set; }
         public string PrintedName { get; set; }
     }

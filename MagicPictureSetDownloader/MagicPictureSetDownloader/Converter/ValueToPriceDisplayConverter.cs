@@ -5,6 +5,7 @@ namespace MagicPictureSetDownloader.Converter
     using System.Windows.Data;
 
     using Common.WPF.Converter;
+
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 

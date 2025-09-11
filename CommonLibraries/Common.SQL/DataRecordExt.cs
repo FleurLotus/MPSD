@@ -51,35 +51,35 @@
         }
         public static bool? GetBoolOrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (bool?)null : dr.GetBoolean(index);
+            return dr.IsDBNull(index) ? (bool?) null : dr.GetBoolean(index);
         }
         public static short? GetInt16OrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (short?)null : dr.GetInt16(index);
+            return dr.IsDBNull(index) ? (short?) null : dr.GetInt16(index);
         }
         public static int? GetInt32OrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (int?)null : dr.GetInt32(index);
+            return dr.IsDBNull(index) ? (int?) null : dr.GetInt32(index);
         }
         public static long? GetInt64OrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (long?)null : dr.GetInt64(index);
+            return dr.IsDBNull(index) ? (long?) null : dr.GetInt64(index);
         }
         public static double? GetDoubleOrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (double?)null : dr.GetDouble(index);
+            return dr.IsDBNull(index) ? (double?) null : dr.GetDouble(index);
         }
         public static DateTime? GetDateTimeOrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (DateTime?)null : dr.GetDateTime(index);
+            return dr.IsDBNull(index) ? (DateTime?) null : dr.GetDateTime(index);
         }
         public static byte? GetByteOrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (byte?)null : dr.GetByte(index);
+            return dr.IsDBNull(index) ? (byte?) null : dr.GetByte(index);
         }
         public static char? GetCharOrNull(this IDataRecord dr, int index)
         {
-            return dr.IsDBNull(index) ? (char?)null : dr.GetChar(index);
+            return dr.IsDBNull(index) ? (char?) null : dr.GetChar(index);
         }
         #endregion
     }

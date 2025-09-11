@@ -1,4 +1,4 @@
-﻿ namespace MagicPictureSetDownloader.Core.IO
+﻿namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
     using System.Collections.Generic;
@@ -60,7 +60,7 @@
             }
 
             //them the merged values
-            foreach (var value in ret.Values)
+            foreach (ImportExportCardInfo value in ret.Values)
             {
                 yield return value;
             }

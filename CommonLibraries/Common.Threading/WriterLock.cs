@@ -10,10 +10,7 @@
 
         public WriterLock(ReaderWriterLockSlim readerWriter)
         {
-            if (readerWriter == null)
-            {
-                throw new ArgumentNullException(nameof(readerWriter));
-            }
+            ArgumentNullException.ThrowIfNull(readerWriter);
 
             _readerWriter = readerWriter;
             _readerWriter.EnterWriteLock();

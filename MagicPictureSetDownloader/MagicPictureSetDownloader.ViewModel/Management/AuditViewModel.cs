@@ -16,7 +16,7 @@
         private DateTime _maxDate;
         private readonly IAudit[] _allAudit;
         private readonly IMagicDatabaseReadOnly _magicDatabase;
-        
+
         public AuditViewModel()
         {
             _magicDatabase = MagicDatabaseManager.ReadOnly;
@@ -84,7 +84,7 @@
                     IsFoil = audit.IsFoil.HasValue && audit.IsFoil.Value,
                     IsAltArt = audit.IsAltArt.HasValue && audit.IsAltArt.Value,
                 };
-                
+
                 ICardCollection cardCollection = _magicDatabase.GetCollection(audit.IdCollection);
                 info.CollectionName = cardCollection == null ? $"(Deleted) {audit.IdCollection}" : cardCollection.Name;
 

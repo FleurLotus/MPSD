@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    using NUnit.Framework;
-
     using Common.ViewModel.Validation;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ValidationUsingRulesTest
@@ -87,7 +87,7 @@
             public ViewModelWithValidation()
             {
                 AddValidationRule(new[] { nameof(PropertyPublic) }, () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
-                AddValidationRule(nameof(PropertyWithProtectedGet),new[] { () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null });
+                AddValidationRule(nameof(PropertyWithProtectedGet), new[] { () => string.IsNullOrWhiteSpace(PropertyWithProtectedGet) ? "Null or Empty" : null });
             }
 
             public void AddRuleWithUnknownSource()
@@ -97,15 +97,15 @@
             }
             public void AddRuleWithIEnumerableFuncNullRule()
             {
-                AddValidationRule(nameof(PropertyPublic), (IEnumerable<Func<string>>)null);
+                AddValidationRule(nameof(PropertyPublic), (IEnumerable<Func<string>>) null);
             }
             public void AddRuleWithIEnumerableNameNullRule()
             {
-                AddValidationRule((IEnumerable<string>)null, () => PropertyWithProtectedGet);
+                AddValidationRule((IEnumerable<string>) null, () => PropertyWithProtectedGet);
             }
             public void AddRuleWithNullRule()
             {
-                AddValidationRule(nameof(PropertyPublic), (Func<string>)null);
+                AddValidationRule(nameof(PropertyPublic), (Func<string>) null);
             }
 
             public static string Inner { get; set; }
@@ -156,9 +156,9 @@
             public ViewModelWithValidation2()
             {
                 AddValidationRule(nameof(PropertyPublic), () => string.IsNullOrWhiteSpace(PropertyPublic) ? "Null or Empty" : null);
-            
+
             }
-            
+
             public ViewModelWithValidation Child { get; set; }
 
             public void CreateChild()

@@ -1,8 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall
 {
+    using System;
     using System.Globalization;
     using System.IO;
-    using System;
 
     internal static class FileManager
     {

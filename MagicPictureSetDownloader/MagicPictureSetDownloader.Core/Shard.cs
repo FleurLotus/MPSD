@@ -62,7 +62,7 @@
             }
 
             _toString = string.Format("{0} => {1} CCM={2} {3}{4}{5}{6}{7}{8}", ShardCastingCost, Color, ConvertedCastingCost, IsGeneric ? "(IsGeneric)" : string.Empty,
-                 IsSnow ? "(IsSnow)" : string.Empty, IsColorless ? "(IsColorless)" : string.Empty, IsXYZ ? "(IsXYZ)" : string.Empty, 
+                 IsSnow ? "(IsSnow)" : string.Empty, IsColorless ? "(IsColorless)" : string.Empty, IsXYZ ? "(IsXYZ)" : string.Empty,
                  IsLegendary ? "(IsLegendary)" : string.Empty, IsDrop ? "(IsDrop)" : string.Empty);
         }
         private Shard(string shardCastingCost, ShardColor color, bool isPhyrexian, bool isHybrid, bool is2Hybrid, bool isHalf)
@@ -82,14 +82,14 @@
 
         public string ShardCastingCost { get; }
         public ShardColor Color { get; }
-        
+
         public bool IsGeneric { get; }
         public bool IsSnow { get; }
         public bool IsColorless { get; }
         public bool IsXYZ { get; }
         public bool IsLegendary { get; }
         public bool IsDrop { get; }
-        
+
         public bool IsPhyrexian { get; }
         public bool IsHybrid { get; }
         public bool Is2Hybrid { get; }
@@ -150,7 +150,7 @@
                 _shards.Add(shardCastingCost, shard);
                 return shard;
             }
-            
+
             if (shardCastingCost == Drop.ToString())
             {
                 //IsDrop
@@ -199,7 +199,7 @@
 
             isHybrid = workingShardCastingCost.ToCharArray().Length > 1;
 
-            foreach (char c in workingShardCastingCost.Replace(Separator,string.Empty))
+            foreach (char c in workingShardCastingCost.Replace(Separator, string.Empty))
             {
                 color |= c switch
                 {

@@ -1,7 +1,7 @@
-﻿using MagicPictureSetDownloader.ScryFall.JsonLite;
-
-namespace MagicPictureSetDownloader.ScryFall
+﻿namespace MagicPictureSetDownloader.ScryFall
 {
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
+
     public static class Tranformation
     {
         public static bool CardToIgnore(Card s)
@@ -16,6 +16,5 @@ namespace MagicPictureSetDownloader.ScryFall
             };
 
         }
-
     }
 }

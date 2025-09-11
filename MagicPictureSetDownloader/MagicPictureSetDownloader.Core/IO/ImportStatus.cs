@@ -28,7 +28,6 @@
             StringBuilder sbFile = new StringBuilder();
             StringBuilder sbErrorMessage = new StringBuilder();
 
-
             foreach (IImportExportCardCount importExportCardCount in cardsImport)
             {
                 if (importExportCardCount is ImportExportCardInfo okCard)
@@ -51,13 +50,13 @@
             }
 
             return new ImportStatus
-                       {
-                           TotalCard = totalCard,
-                           ReadyToBeInserted = list.ToArray(),
-                           TotalKoLine = totalKoLine,
-                           RebuiltErrorFile = sbFile.ToString(),
-                           ErrorMessage = sbErrorMessage.ToString()
-                       };
+            {
+                TotalCard = totalCard,
+                ReadyToBeInserted = list.ToArray(),
+                TotalKoLine = totalKoLine,
+                RebuiltErrorFile = sbFile.ToString(),
+                ErrorMessage = sbErrorMessage.ToString()
+            };
         }
     }
 }

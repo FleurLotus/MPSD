@@ -11,23 +11,18 @@
         public static T[] GetCustomAttributes<T>(this ICustomAttributeProvider member, bool inherit)
             where T : Attribute
         {
-            return (T[])member.GetCustomAttributes(typeof(T), inherit);
+            return (T[]) member.GetCustomAttributes(typeof(T), inherit);
         }
 
         public static PropertyInfo[] GetPublicInstanceProperties(this object o)
         {
-            if (o == null)
-            {
-                throw new ArgumentNullException(nameof(o));
-            }
+            ArgumentNullException.ThrowIfNull(o);
+
             return o.GetType().GetPublicInstanceProperties();
         }
         public static PropertyInfo[] GetPublicInstanceProperties(this Type t)
         {
-            if (t == null)
-            {
-                throw new ArgumentNullException(nameof(t));
-            }
+            ArgumentNullException.ThrowIfNull(t);
 
             // ReSharper disable once InconsistentlySynchronizedField
             if (!_propertiesCache.TryGetValue(t, out PropertyInfo[] ret))

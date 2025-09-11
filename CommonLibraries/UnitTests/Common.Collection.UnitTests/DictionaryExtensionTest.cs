@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using NUnit.Framework;
-
     using Common.Collection;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class DictionaryExtensionTest
@@ -28,11 +28,11 @@
             IDictionary<string, string> dic2 = new Dictionary<string, string> { { "CCC", "ccc" }, { "DDD", "ddd" } };
             dic.AddRange(dic2);
 
-            Assert.That(dic.Count , Is.EqualTo(4), "Not the good count");
+            Assert.That(dic.Count, Is.EqualTo(4), "Not the good count");
             foreach (KeyValuePair<string, string> kv in dic2)
             {
                 Assert.That(dic.ContainsKey(kv.Key), Is.True, "Missing key {kv.Key}");
-                Assert.That(dic[kv.Key] , Is.EqualTo(kv.Value), $"Not the good value for key {kv.Key} expecting {kv.Value}");
+                Assert.That(dic[kv.Key], Is.EqualTo(kv.Value), $"Not the good value for key {kv.Key} expecting {kv.Value}");
             }
         }
     }

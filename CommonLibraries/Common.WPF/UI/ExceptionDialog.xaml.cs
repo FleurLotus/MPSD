@@ -5,7 +5,7 @@
     /// <summary>
     /// Interaction logic for ExceptionDialog.xaml
     /// </summary>
-    public partial class ExceptionDialog 
+    public partial class ExceptionDialog
     {
         public ExceptionDialog(ExceptionViewModel vm)
         {

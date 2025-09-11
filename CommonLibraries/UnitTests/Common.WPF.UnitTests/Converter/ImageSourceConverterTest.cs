@@ -8,7 +8,7 @@
 
     using NUnit.Framework;
 
-    using ImageSourceConverter = Common.WPF.Converter.ImageSourceConverter;
+    using ImageSourceConverter = ImageSourceConverter;
 
     [TestFixture]
     public class ImageSourceConverterTest
@@ -26,7 +26,7 @@
             ImageSourceConverter converter = new ImageSourceConverter();
             object ret = converter.Convert("ImageSample.bmp", typeof(ImageSource), null, null);
             Assert.That(ret, Is.Not.Null);
-            Assert.That(ret, Is.InstanceOf(typeof(BitmapImage)));
+            Assert.That(ret, Is.InstanceOf<BitmapImage>());
         }
         [Test]
         public void TestConvertUriToImageSource()
@@ -34,7 +34,7 @@
             ImageSourceConverter converter = new ImageSourceConverter();
             object ret = converter.Convert(new Uri($"file://{(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))}/ImageSample.bmp"), typeof(ImageSource), null, null);
             Assert.That(ret, Is.Not.Null);
-            Assert.That(ret, Is.InstanceOf(typeof(BitmapImage)));
+            Assert.That(ret, Is.InstanceOf<BitmapImage>());
         }
         [Test]
         public void TestConvertObjectToImageSource()
@@ -42,13 +42,13 @@
             ImageSourceConverter converter = new ImageSourceConverter();
             object ret = converter.Convert(new object(), typeof(ImageSource), null, null);
             Assert.That(ret, Is.Not.Null);
-            Assert.That(ret, Is.Not.InstanceOf(typeof(BitmapImage)));
+            Assert.That(ret, Is.Not.InstanceOf<BitmapImage>());
         }
         [Test]
         public void TestNoConvertBack()
         {
             ImageSourceConverter converter = new ImageSourceConverter();
-            Assert.Throws<NotImplementedException>(()=> converter.ConvertBack(null, null, null, null));
+            Assert.Throws<NotImplementedException>(() => converter.ConvertBack(null, null, null, null));
         }
         [Test]
         public void TestMarkup()

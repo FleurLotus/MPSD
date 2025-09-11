@@ -77,7 +77,7 @@
                                 Column column = CreateColumn(reader, table);
                                 table.AddColumn(column);
 
-                                int pkpos = (int)reader.GetInt64OrDefault(5);
+                                int pkpos = (int) reader.GetInt64OrDefault(5);
                                 if (pkpos > 0)
                                 {
                                     primaryKey ??= CreatePrimaryKey(table);
@@ -114,7 +114,7 @@
                                 while (reader.Read())
                                 {
                                     IColumn column = table.GetColumn(reader.GetStringOrDefault(2));
-                                    index.AddColumn((int)reader.GetInt64OrDefault(0), column);
+                                    index.AddColumn((int) reader.GetInt64OrDefault(0), column);
                                 }
                             }
                             table.AddIndex(index);
@@ -131,7 +131,7 @@
                         {
                             while (reader.Read())
                             {
-                                int id = (int)reader.GetInt64OrDefault(0);
+                                int id = (int) reader.GetInt64OrDefault(0);
 
                                 if (!foreignKeys.TryGetValue(id, out ForeignKey foreignKey))
                                 {
@@ -139,7 +139,7 @@
                                     foreignKeys.Add(id, foreignKey);
                                 }
 
-                                int seq = (int)reader.GetInt64OrDefault(1);
+                                int seq = (int) reader.GetInt64OrDefault(1);
                                 string from = reader.GetStringOrDefault(3);
                                 string to = reader.GetStringOrDefault(4);
 
@@ -159,16 +159,16 @@
         private Column CreateColumn(IDataRecord dr, ITable table)
         {
             return new Column
-                       {
-                           Position = (int)dr.GetInt64OrDefault(0),
-                           Name = dr.GetStringOrDefault(1),
-                           DataType = dr.GetStringOrDefault(2),
-                           IsNullable = dr.GetInt64OrDefault(3) == 0,
-                           HasDefault = dr.GetStringOrDefault(4) != null,
-                           Default = dr.GetStringOrDefault(4),
-                           TableName = table.Name,
-                           CaseSensitivity = IsCaseSensitive,
-                       };
+            {
+                Position = (int) dr.GetInt64OrDefault(0),
+                Name = dr.GetStringOrDefault(1),
+                DataType = dr.GetStringOrDefault(2),
+                IsNullable = dr.GetInt64OrDefault(3) == 0,
+                HasDefault = dr.GetStringOrDefault(4) != null,
+                Default = dr.GetStringOrDefault(4),
+                TableName = table.Name,
+                CaseSensitivity = IsCaseSensitive,
+            };
         }
         private Table CreateTable(IDataRecord dr)
         {
@@ -204,7 +204,7 @@
                 ReferenceTableName = dr.GetStringOrDefault(2),
                 UpdateRule = dr.GetStringOrDefault(5),
                 DeleteRule = dr.GetStringOrDefault(6),
-                Name = $"sqlite_autoforeignkey_{table.Name}_{(((int)dr.GetInt64OrDefault(0)) + 1)}",
+                Name = $"sqlite_autoforeignkey_{table.Name}_{(((int) dr.GetInt64OrDefault(0)) + 1)}",
                 CaseSensitivity = IsCaseSensitive,
             };
         }

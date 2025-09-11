@@ -64,7 +64,7 @@
             yield return new TestCaseData(null) { ExpectedResult = "NULL" }.SetName($"{methodCaller} (null)");
             yield return new TestCaseData(5) { ExpectedResult = "5" }.SetName($"{methodCaller} (5)");
             yield return new TestCaseData(5.25) { ExpectedResult = "5.25" }.SetName($"{methodCaller} (5.25)");
-            yield return new TestCaseData(new DateTime(2024,10,5,13,53,17)) { ExpectedResult = "20241005 13:53:17" }.SetName($"{methodCaller} (05/10/2024 13:53:17)");
+            yield return new TestCaseData(new DateTime(2024, 10, 5, 13, 53, 17)) { ExpectedResult = "20241005 13:53:17" }.SetName($"{methodCaller} (05/10/2024 13:53:17)");
             yield return new TestCaseData("") { ExpectedResult = "''" }.SetName($"{methodCaller} (\"\")");
             yield return new TestCaseData("azerty") { ExpectedResult = "'azerty'" }.SetName($"{methodCaller} (\"azerty\")");
             yield return new TestCaseData("abc'cde''aa") { ExpectedResult = "'abc''cde''''aa'" }.SetName($"{methodCaller} (\"abc'cde''aa\")");

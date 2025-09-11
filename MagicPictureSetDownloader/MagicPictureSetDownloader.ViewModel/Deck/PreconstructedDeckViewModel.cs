@@ -5,10 +5,11 @@
     using System.Collections.ObjectModel;
 
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    public class PreconstructedDeckViewModel: NotifyPropertyChangedBase
+    public class PreconstructedDeckViewModel : NotifyPropertyChangedBase
     {
         private KeyValuePair<CardViewModel, int> _selectedItem;
         private readonly IEdition _edition;

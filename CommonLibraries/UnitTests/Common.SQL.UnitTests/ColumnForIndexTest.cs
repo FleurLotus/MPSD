@@ -11,8 +11,10 @@
         [Test]
         public void TestProperties()
         {
-            ColumnForIndex columnForIndex = new ColumnForIndex();
-            columnForIndex.Position = 10;
+            ColumnForIndex columnForIndex = new ColumnForIndex
+            {
+                Position = 10
+            };
             Assert.That(columnForIndex.Position, Is.EqualTo(10));
 
             Column source = new Column();
@@ -42,7 +44,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object columnForIndex, object columnForIndex2, IConstraint constraint)
         {
-            Assert.That(((ColumnForIndex)columnForIndex).CompareTo(((ColumnForIndex)columnForIndex2)), constraint);
+            Assert.That(((ColumnForIndex) columnForIndex).CompareTo(((ColumnForIndex) columnForIndex2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {

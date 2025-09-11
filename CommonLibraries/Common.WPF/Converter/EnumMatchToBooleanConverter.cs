@@ -27,7 +27,7 @@
                 return null;
             }
 
-            bool useValue = (bool)value;
+            bool useValue = (bool) value;
             string targetValue = parameter.ToString();
             return useValue && !targetValue.Contains("@") ? Enum.Parse(targetType, targetValue) : null;
         }

@@ -3,9 +3,9 @@
     using System;
     using System.Windows;
 
-    using NUnit.Framework;
-
     using Common.WPF.Converter;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class BoolToVisibilityConverterTest
@@ -28,7 +28,7 @@
         public void TestNoConvertBack()
         {
             BoolToVisibilityConverter converter = new BoolToVisibilityConverter();
-            Assert.Throws<NotImplementedException>(()=> converter.ConvertBack(null, null, null, null));
+            Assert.Throws<NotImplementedException>(() => converter.ConvertBack(null, null, null, null));
         }
         [Test]
         public void TestMarkup()

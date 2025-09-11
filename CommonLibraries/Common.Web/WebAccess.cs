@@ -2,10 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.IO;
     using System.Net;
     using System.Net.Http;
-    using System.IO;
+    using System.Threading.Tasks;
 
     using Common.Notify;
     using Common.Threading;
@@ -17,11 +17,15 @@
         private HttpClient _httpClient;
         private ICredentials _credentials;
         private readonly Dictionary<string, string> _htmlCache;
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _lock = new System.Threading.Lock();
+#else
         private readonly object _lock = new object();
+#endif
         private readonly TimeSpan? _timeout;
         private readonly IHttpMessageHandlerFactory _httpMessageHandlerFactory;
 
-        public WebAccess(TimeSpan? timeOut = null): this(new HttpMessageHandlerFactory(), timeOut)
+        public WebAccess(TimeSpan? timeOut = null) : this(new HttpMessageHandlerFactory(), timeOut)
         {
         }
         internal WebAccess(IHttpMessageHandlerFactory httpMessageHandlerFactory, TimeSpan? timeOut = null)
@@ -35,7 +39,7 @@
 
         private bool OnCredentialRequiered()
         {
-            var e = CredentialRequiered;
+            EventHandler<EventArgs<CredentialRequieredArgs>> e = CredentialRequiered;
             if (e != null)
             {
                 CredentialRequieredArgs args = new CredentialRequieredArgs();
@@ -59,7 +63,7 @@
 
         private HttpClient GetHttpClient()
         {
-            lock(_lock)
+            lock (_lock)
             {
                 _httpClient ??= NewHttpClient();
 
@@ -139,7 +143,6 @@
                         throw;
                     }
                 }
-
             } while (true);
         }
 
@@ -158,7 +161,6 @@
                         throw;
                     }
                 }
-
             } while (true);
         }
     }

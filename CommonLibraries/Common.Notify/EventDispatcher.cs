@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+
     using Microsoft.Extensions.Logging;
 
     public sealed class EventDispatcher : IEventDispatcher, IDisposable
@@ -22,7 +23,7 @@
             Name = $"{name}:{_thread.ManagedThreadId}";
         }
         public string Name { get; }
-        
+
         public void Dispose()
         {
             _exit = true;
@@ -59,7 +60,7 @@
                     _autoResetEvent.WaitOne();
 
                     // Dequeue actions
-                    var todo = new List<Action>();
+                    List<Action> todo = new List<Action>();
                     lock (_queue)
                     {
                         while (_queue.Count > 0)
@@ -69,7 +70,7 @@
                     }
 
                     // Execute them
-                    foreach (var action in todo)
+                    foreach (Action action in todo)
                     {
                         if (_exit)
                         {

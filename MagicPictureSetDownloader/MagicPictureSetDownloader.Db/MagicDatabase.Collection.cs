@@ -5,8 +5,8 @@ namespace MagicPictureSetDownloader.Db
     using System.Data;
     using System.Linq;
 
-    using Common.Database;
     using Common.Collection;
+    using Common.Database;
     using Common.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
@@ -194,7 +194,6 @@ namespace MagicPictureSetDownloader.Db
                             IdLanguage = idLanguage
                         };
 
-
                         AddToDbAndUpdateReferential(newCardInCollectionCount, InsertInReferential);
 
                         AuditAddCard(idCollection, idScryFall, idLanguage, cardCount);
@@ -356,7 +355,6 @@ namespace MagicPictureSetDownloader.Db
                 {
                     return collection;
                 }
-
 
                 if (collection is not CardCollection newCollection)
                 {

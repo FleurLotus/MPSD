@@ -19,7 +19,7 @@
             {
                 Description = descriptionAttrib[0].Description;
             }
-            
+
             AssemblyName assemblyName = entryAssembly.GetName();
             Name = assemblyName.Name;
             Version = assemblyName.Version.ToString();

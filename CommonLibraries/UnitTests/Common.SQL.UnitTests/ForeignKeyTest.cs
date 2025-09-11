@@ -12,9 +12,10 @@
         [Test]
         public void TestProperties()
         {
-            ForeignKey foreignKey = new ForeignKey();
-
-            foreignKey.Name = "Name";
+            ForeignKey foreignKey = new ForeignKey
+            {
+                Name = "Name"
+            };
             Assert.That(foreignKey.Name, Is.EqualTo("Name"));
             foreignKey.SourceTableName = "SourceTableName";
             Assert.That(foreignKey.SourceTableName, Is.EqualTo("SourceTableName"));
@@ -110,7 +111,6 @@
             Assert.That(foreignKey.Columns(), Is.Not.Null);
             Assert.That(foreignKey.Columns().Length, Is.EqualTo(2));
 
-
             foreignKey.AddColumn(0,
                 new Column { SchemaName = "SourceSchemaName", TableName = "SourceTableName", Name = "SourceName3", CaseSensitivity = foreignKey.CaseSensitivity },
                 new Column { SchemaName = "ReferenceSchemaName", TableName = "ReferenceTableName", Name = "ReferenceName3", CaseSensitivity = foreignKey.CaseSensitivity });
@@ -145,7 +145,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object foreignKey, object foreignKey2, IConstraint constraint)
         {
-            Assert.That(((ForeignKey)foreignKey).CompareTo(((ForeignKey)foreignKey2)), constraint);
+            Assert.That(((ForeignKey) foreignKey).CompareTo(((ForeignKey) foreignKey2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {

@@ -83,7 +83,7 @@
         [TestCaseSource(nameof(TestGetMockDbResultSource), new object[] { nameof(TestGetMockDbResult) })]
         public MockDbResult TestGetMockDbResult(MockDbResultInjector mockDbResultInjector, DbCommand cmd)
         {
-            return mockDbResultInjector.GetMockDbResult(cmd); ;
+            return mockDbResultInjector.GetMockDbResult(cmd);
         }
         public static IEnumerable<TestCaseData> TestGetMockDbResultSource(string methodCaller)
         {
@@ -110,7 +110,6 @@
             mockDbResultInjector.AddGlobalResult(mockDbResult);
             mockDbCommand = new MockDbCommand { CommandType = CommandType.Text, CommandText = "TEST1" };
             yield return new TestCaseData(mockDbResultInjector, mockDbCommand).Returns(mockDbResult).SetName($"{methodCaller} (Only global)");
-
 
             mockDbResultInjector = new MockDbResultInjector();
             mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.Text);

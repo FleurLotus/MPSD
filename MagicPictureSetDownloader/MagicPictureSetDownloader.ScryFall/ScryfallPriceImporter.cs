@@ -5,7 +5,7 @@
     using System.Linq;
 
     using Common.Web;
-   
+
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall.JsonData;
 
@@ -13,7 +13,7 @@
     {
         public IEnumerable<PriceInfo> Parse(WebAccess webAccess, string url, object param)
         {
-            BulkData bulkData = (BulkData)param;
+            BulkData bulkData = (BulkData) param;
 
             FullCard[] cards = ScryFallDataRetriever.GetCardsInfoFromBulk(webAccess, bulkData);
 
@@ -33,22 +33,22 @@
             int p;
             if (double.TryParse(scryfallCard.Prices.Usd, out double price))
             {
-                p = (int)(price * 100);
+                p = (int) (price * 100);
                 yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.TCGplayer, Foil = false, Value = p };
             }
             if (double.TryParse(scryfallCard.Prices.UsdFoil, out price))
             {
-                p = (int)(price * 100);
+                p = (int) (price * 100);
                 yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.TCGplayer, Foil = true, Value = p };
             }
             if (double.TryParse(scryfallCard.Prices.Eur, out price))
             {
-                p = (int)(price * 100);
+                p = (int) (price * 100);
                 yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.Cardmarket, Foil = false, Value = p };
             }
             if (double.TryParse(scryfallCard.Prices.EurFoil, out price))
             {
-                p = (int)(price * 100);
+                p = (int) (price * 100);
                 yield return new PriceInfo { UpdateDate = updatedAt, IdScryFall = scryfallCard.Id.ToString(), PriceSource = PriceValueSource.Cardmarket, Foil = true, Value = p };
             }
         }

@@ -4,8 +4,9 @@
     using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
-    using Microsoft.Xaml.Behaviors;
     using System.Windows.Media;
+
+    using Microsoft.Xaml.Behaviors;
 
     //From http://stackoverflow.com/questions/11065995/binding-selecteditem-in-a-hierarchicaldatatemplate-applied-wpf-treeview/18700099#18700099
     public class BindableSelectedItemBehavior : Behavior<TreeView>
@@ -74,7 +75,7 @@
                 // expanded we still need to do this step in order to 
                 // regenerate the visuals because they may have been virtualized away.
                 container.ApplyTemplate();
-                ItemsPresenter itemsPresenter = (ItemsPresenter)container.Template.FindName("ItemsHost", container);
+                ItemsPresenter itemsPresenter = (ItemsPresenter) container.Template.FindName("ItemsHost", container);
                 if (itemsPresenter != null)
                 {
                     itemsPresenter.ApplyTemplate();
@@ -91,7 +92,7 @@
                     }
                 }
 
-                Panel itemsHostPanel = (Panel)VisualTreeHelper.GetChild(itemsPresenter, 0);
+                Panel itemsHostPanel = (Panel) VisualTreeHelper.GetChild(itemsPresenter, 0);
 
                 // Ensure that the generator for this panel has been created.
                 // ReSharper disable UnusedVariable
@@ -107,11 +108,11 @@
                         // Bring the item into view so 
                         // that the container will be generated.
                         bringIndexIntoView(i);
-                        subContainer = (TreeViewItem)container.ItemContainerGenerator.ContainerFromIndex(i);
+                        subContainer = (TreeViewItem) container.ItemContainerGenerator.ContainerFromIndex(i);
                     }
                     else
                     {
-                        subContainer = (TreeViewItem)container.ItemContainerGenerator.ContainerFromIndex(i);
+                        subContainer = (TreeViewItem) container.ItemContainerGenerator.ContainerFromIndex(i);
 
                         // Bring the item into view to maintain the 
                         // same behavior as with a virtualizing panel.
@@ -147,7 +148,7 @@
                 return;
             }
 
-            BindableSelectedItemBehavior behavior = (BindableSelectedItemBehavior)sender;
+            BindableSelectedItemBehavior behavior = (BindableSelectedItemBehavior) sender;
             TreeView treeView = behavior.AssociatedObject;
             if (treeView == null)
             {

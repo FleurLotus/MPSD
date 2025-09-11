@@ -23,7 +23,7 @@
         }
 
         public DateTime AddDate { get; }
-        public PriceValueSource Source { get;  }
+        public PriceValueSource Source { get; }
         public bool Foil { get; }
         public int Value { get; }
         public string EditionName { get; }

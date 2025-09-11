@@ -13,7 +13,7 @@
 
         public static bool GetEnabled(DependencyObject obj)
         {
-            return (bool)obj.GetValue(EnabledProperty);
+            return (bool) obj.GetValue(EnabledProperty);
         }
         public static void SetEnabled(DependencyObject obj, bool value)
         {
@@ -21,7 +21,7 @@
         }
         public static bool GetCaseInsensitive(DependencyObject obj)
         {
-            return (bool)obj.GetValue(CaseInsensitiveProperty);
+            return (bool) obj.GetValue(CaseInsensitiveProperty);
         }
         public static void SetCaseInsensitive(DependencyObject obj, bool value)
         {
@@ -98,7 +98,7 @@
             }
             string text = combo.IsTextSearchEnabled ? textBox.Text[..textBox.SelectionStart] : textBox.Text;
             bool caseInsensitive = GetCaseInsensitive(combo);
-            
+
             combo.Items.Filter = value => value.ToString().StartsWith(text, caseInsensitive, CultureInfo.InvariantCulture);
         }
     }

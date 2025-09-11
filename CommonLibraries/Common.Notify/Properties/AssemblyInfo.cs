@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Common.Notify.UnitTests")]
+[assembly: InternalsVisibleTo("Common.Notify.UnitTests")]

@@ -12,7 +12,7 @@
 
         string UpdateRule { get; }
         string DeleteRule { get; }
-        
+
         IColumnForForeignKey[] Columns();
     }
 }

@@ -18,7 +18,7 @@
         Green,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: ImageStatus.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum ImageStatus
     {
@@ -33,7 +33,7 @@
         HighRes,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Game.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Game
     {
@@ -50,7 +50,7 @@
         Astral,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Frame.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Frame
     {
@@ -67,7 +67,7 @@
         Future,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: FrameEffect.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum FrameEffect
     {
@@ -133,7 +133,7 @@
         [EnumMember(Value = "placeholderimage")]
         PlaceHolderImage,
     }
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Finish.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Finish
     {
@@ -146,7 +146,7 @@
         Etched,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: BorderColor.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum BorderColor
     {
@@ -165,7 +165,7 @@
         Yellow,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Component.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Component
     {
@@ -180,7 +180,7 @@
         ComboPiece,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Rarity.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Rarity
     {
@@ -199,7 +199,7 @@
         Bonus,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Legality.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Legality
     {
@@ -214,7 +214,7 @@
         Banned,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: SetType.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum SetType
     {
@@ -267,7 +267,7 @@
         Minigame,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Layout.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Layout
     {
@@ -322,7 +322,7 @@
         Case,
     }
 
-    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Language.Error)]
+    [JsonStringEnumMemberConverterOptions(deserializationFailureFallbackValue: Error)]
     [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     public enum Language
     {

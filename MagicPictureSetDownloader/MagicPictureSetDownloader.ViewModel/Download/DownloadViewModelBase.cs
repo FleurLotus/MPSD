@@ -27,7 +27,7 @@
         private readonly object _sync = new object();
         private bool _isBusy;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
-        
+
         protected DownloadViewModelBase(string title)
         {
             Title = title;
@@ -68,12 +68,7 @@
         }
         public void Start(IDispatcherInvoker dispatcherInvoker)
         {
-            if (null == dispatcherInvoker)
-            {
-                throw new ArgumentNullException(nameof(dispatcherInvoker));
-            }
-
-            DispatcherInvoker = dispatcherInvoker;
+            DispatcherInvoker = dispatcherInvoker ?? throw new ArgumentNullException(nameof(dispatcherInvoker));
 
             JobStarting();
             if (!StartImpl())
@@ -128,7 +123,7 @@
 
             if (disposing)
             {
-                if (DownloadManager!= null)
+                if (DownloadManager != null)
                 {
                     DownloadManager.CredentialRequiered += OnCredentialRequiered;
                 }
@@ -177,7 +172,7 @@
 
         private void OnCredentialRequiered(object sender, EventArgs<CredentialRequieredArgs> args)
         {
-            var e = CredentialRequiered;
+            EventHandler<EventArgs<CredentialRequieredArgs>> e = CredentialRequiered;
             if (e != null)
             {
                 DispatcherInvoker.Invoke(() => e(sender, args));

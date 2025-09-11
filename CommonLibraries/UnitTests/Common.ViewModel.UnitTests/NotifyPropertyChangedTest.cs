@@ -4,11 +4,10 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
 
-    using NUnit.Framework;
-
-    using Common.ViewModel;
     using Common.Notify;
-    using NUnit.Framework.Internal.Execution;
+    using Common.ViewModel;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class NotifyPropertyChangedTest

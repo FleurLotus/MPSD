@@ -1,8 +1,8 @@
 ﻿namespace Common.Html.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.Html;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class StringExtensionTest

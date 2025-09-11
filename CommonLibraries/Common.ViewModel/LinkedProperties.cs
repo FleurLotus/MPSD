@@ -11,14 +11,15 @@
     {
         private readonly HashSet<string> _propertyNameSet;
         private readonly Dictionary<string, HashSet<string>> _linkedProperties = new Dictionary<string, HashSet<string>>();
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _sync = new System.Threading.Lock();
+#else
         private readonly object _sync = new object();
-        
+#endif
+
         internal LinkedProperties(INotifyPropertyChanged parent)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
 
             _propertyNameSet = new HashSet<string>(parent.GetPublicInstanceProperties().Select(pi => pi.Name));
         }
@@ -50,7 +51,7 @@
                 linked.Add(destinationName);
             }
         }
-        
+
         internal IEnumerable<string> GetNotifyList(string propertyName)
         {
             HashSet<string> ret = new HashSet<string>();
@@ -62,16 +63,18 @@
         }
         private void GetNotifyList(string propertyName, ISet<string> notifylist)
         {
-            if (!notifylist.Contains(propertyName))
+            if (notifylist.Contains(propertyName))
             {
-                notifylist.Add(propertyName);
+                return;
+            }
 
-                if (_linkedProperties.TryGetValue(propertyName, out HashSet<string> linked))
+            notifylist.Add(propertyName);
+
+            if (_linkedProperties.TryGetValue(propertyName, out HashSet<string> linked))
+            {
+                foreach (string linkedPropertyName in linked)
                 {
-                    foreach (string linkedPropertyName in linked)
-                    {
-                        GetNotifyList(linkedPropertyName, notifylist);
-                    }
+                    GetNotifyList(linkedPropertyName, notifylist);
                 }
             }
         }

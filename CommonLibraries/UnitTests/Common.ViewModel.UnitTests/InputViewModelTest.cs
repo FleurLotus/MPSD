@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
+    using Common.ViewModel.Input;
+
     using NUnit.Framework;
 
-    using Common.ViewModel.Input;
-    
     [TestFixture]
     public class InputViewModelTest
     {

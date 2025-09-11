@@ -14,7 +14,7 @@
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _toBeValidatedPropertyCache;
         private static readonly ConcurrentDictionary<Type, PropertyInfo[]> _toBeValidatedRecursivePropertyCache;
         private static readonly ConcurrentDictionary<PropertyInfo, Func<object, string>[]> _propertyValidatorRulesCache;
-        
+
         static ReflectionCacheRepository()
         {
             _toBeValidatedPropertyCache = new ConcurrentDictionary<Type, PropertyInfo[]>();
@@ -41,7 +41,7 @@
         public static Func<object, string>[] GetTypeValidatorRules(PropertyInfo propetyInfo)
         {
             return _propertyValidatorRulesCache.GetOrAdd(propetyInfo, pi => pi.GetCustomAttributes<ValidationAttribute>(true)
-                                                                              .Select(att => (Func<object, string>)att.Validate)
+                                                                              .Select(att => (Func<object, string>) att.Validate)
                                                                               .ToArray());
         }
     }

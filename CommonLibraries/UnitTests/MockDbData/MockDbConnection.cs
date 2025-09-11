@@ -36,13 +36,13 @@
         {
 
             MockDbCommand cmd = new MockDbCommand { Connection = this };
-            ((IAcceptResultInjection)cmd).Accept(_injector);
+            ((IAcceptResultInjection) cmd).Accept(_injector);
             return cmd;
         }
 
         void IAcceptResultInjection.Accept(MockDbResultInjector injector)
-        { 
-            _injector = injector; 
+        {
+            _injector = injector;
         }
 
         protected override DbProviderFactory DbProviderFactory

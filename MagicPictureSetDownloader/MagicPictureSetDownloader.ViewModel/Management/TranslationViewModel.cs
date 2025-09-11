@@ -4,7 +4,7 @@
 
     using MagicPictureSetDownloader.Interface;
 
-    public class TranslationViewModel: NotifyPropertyChangedBase
+    public class TranslationViewModel : NotifyPropertyChangedBase
     {
         private string _translation;
         private readonly string _originalTranslation;

@@ -5,11 +5,12 @@
 
     using Common.Library;
     using Common.ViewModel;
+    using Common.ViewModel.Command;
     using Common.ViewModel.Menu;
 
+    using MagicPictureSetDownloader.Core.Upgrade;
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
-    using MagicPictureSetDownloader.Core.Upgrade;
     using MagicPictureSetDownloader.ViewModel.Option;
 
     public partial class MainViewModel : NotifyPropertyChangedBase
@@ -44,15 +45,15 @@
             Options = new OptionsViewModel(_magicDatabaseForOption);
             _programUpdater = new ProgramUpgrader();
             UpgradeStatus = _programUpdater.Status;
-           
+
             if (Options.AutoCheckUpgrade)
             {
                 ThreadPool.QueueUserWorkItem(DoCheckNewVersion);
             }
 
             Analysers = new HierarchicalInfoAnalysersViewModel();
-            _menuRoot = new MenuViewModel();
-            _contextMenuRoot = new MenuViewModel();
+            MenuRoot = new MenuViewModel();
+            ContextMenuRoot = new MenuViewModel();
 
             CreateMenu();
 
@@ -87,7 +88,7 @@
                 }
             }
         }
-  
+
         public string Title
         {
             get { return Hierarchical == null ? "MagicPictureSetDownloader" : $"MagicPictureSetDownloader - {Hierarchical.Name}"; }

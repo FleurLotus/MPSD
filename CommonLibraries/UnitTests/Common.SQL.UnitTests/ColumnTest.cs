@@ -11,9 +11,10 @@
         [Test]
         public void TestProperties()
         {
-            Column column = new Column();
-
-            column.Name = "Name";
+            Column column = new Column
+            {
+                Name = "Name"
+            };
             Assert.That(column.Name, Is.EqualTo("Name"));
 
             column.IsNullable = true;
@@ -92,7 +93,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object column, object column2, IConstraint constraint)
         {
-            Assert.That(((Column)column).CompareTo(((Column)column2)), constraint);
+            Assert.That(((Column) column).CompareTo(((Column) column2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {
@@ -140,7 +141,7 @@
         [TestCaseSource(nameof(TestShortTypeSource), new object[] { nameof(TestShortType) })]
         public string TestShortType(object column)
         {
-            return ((Column)column).ShortType;
+            return ((Column) column).ShortType;
         }
         public static IEnumerable<TestCaseData> TestShortTypeSource(string methodCaller)
         {

@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
 
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Interface;
 
     public enum DisplayOrder
     {

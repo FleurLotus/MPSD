@@ -3,6 +3,7 @@
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Input;
 
     //based on https://thomaslevesque.com/2009/03/27/wpf-automatically-sort-a-gridview-when-a-column-header-is-clicked/
@@ -17,7 +18,7 @@
 
         public static ICommand GetCommand(DependencyObject obj)
         {
-            return (ICommand)obj.GetValue(CommandProperty);
+            return (ICommand) obj.GetValue(CommandProperty);
         }
         public static void SetCommand(DependencyObject obj, ICommand value)
         {
@@ -26,7 +27,7 @@
 
         public static bool GetAutoSort(DependencyObject obj)
         {
-            return (bool)obj.GetValue(AutoSortProperty);
+            return (bool) obj.GetValue(AutoSortProperty);
         }
         public static void SetAutoSort(DependencyObject obj, bool value)
         {
@@ -35,7 +36,7 @@
 
         public static string GetPropertyName(DependencyObject obj)
         {
-            return (string)obj.GetValue(PropertyNameProperty);
+            return (string) obj.GetValue(PropertyNameProperty);
         }
         public static void SetPropertyName(DependencyObject obj, string value)
         {
@@ -50,11 +51,11 @@
                 {
                     if (e.OldValue != null && e.NewValue == null)
                     {
-                        listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        listView.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                     }
                     if (e.OldValue == null && e.NewValue != null)
                     {
-                        listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                     }
                 }
             }
@@ -65,20 +66,19 @@
             {
                 if (GetCommand(listView) == null) // Don't change click handler if a command is set
                 {
-                    bool oldValue = (bool)e.OldValue;
-                    bool newValue = (bool)e.NewValue;
+                    bool oldValue = (bool) e.OldValue;
+                    bool newValue = (bool) e.NewValue;
                     if (oldValue && !newValue)
                     {
-                        listView.RemoveHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        listView.RemoveHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                     }
                     if (!oldValue && newValue)
                     {
-                        listView.AddHandler(GridViewColumnHeader.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
+                        listView.AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(ColumnHeader_Click));
                     }
                 }
             }
         }
-
 
         private static void ColumnHeader_Click(object sender, RoutedEventArgs e)
         {
@@ -115,10 +115,7 @@
                 SortDescription currentSort = view.SortDescriptions[0];
                 if (currentSort.PropertyName == propertyName)
                 {
-                    if (currentSort.Direction == ListSortDirection.Ascending)
-                        direction = ListSortDirection.Descending;
-                    else
-                        direction = ListSortDirection.Ascending;
+                    direction = currentSort.Direction == ListSortDirection.Ascending ? ListSortDirection.Descending : ListSortDirection.Ascending;
                 }
                 view.SortDescriptions.Clear();
             }

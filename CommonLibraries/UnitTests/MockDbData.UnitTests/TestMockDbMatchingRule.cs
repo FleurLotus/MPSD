@@ -411,7 +411,6 @@
             cmd.Parameters["b"].Value = "25";
             Assert.That(mockDbMatchingRule.Match(cmd), Is.False, "Not the expected value for SetParameterValue (4) with a=\"25\" and b=\"25\"");
 
-
             mockDbMatchingRule = MockDbMatchingRule.CreateRule(CommandType.StoredProcedure).SetParameterValue("b", 25).SetParameterValue(0, "25");
             cmd = new MockDbCommand { CommandType = CommandType.StoredProcedure };
             Assert.That(mockDbMatchingRule.Match(cmd), Is.False, "Not the expected value for CommandType.StoredProcedure only");

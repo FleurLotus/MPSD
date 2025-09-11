@@ -8,18 +8,12 @@
     {
         public MockDbResult(DataTable table)
         {
-            if (table == null)
-            {
-                throw new ArgumentNullException(nameof(table));
-            }
+            ArgumentNullException.ThrowIfNull(table);
             Tables = new List<DataTable> { table }.AsReadOnly();
         }
         public MockDbResult(DataTable[] tables)
         {
-            if (tables == null)
-            {
-                throw new ArgumentNullException(nameof(tables));
-            }
+            ArgumentNullException.ThrowIfNull(tables);
             if (tables.Any(t => t == null))
             {
                 throw new ArgumentNullException(nameof(tables));

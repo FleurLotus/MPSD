@@ -4,14 +4,14 @@ namespace MagicPictureSetDownloader.Db
     using System.Collections.Generic;
     using System.Data;
     using System.Linq;
-    
-    using Common.Database;
+
     using Common.Collection;
+    using Common.Database;
     using Common.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;
-    
+
     internal partial class MagicDatabase
     {
         private bool _referentialLoaded;
@@ -58,7 +58,7 @@ namespace MagicPictureSetDownloader.Db
 
                     AddToDbAndUpdateReferential(realEdition, InsertInReferential);
                 }
-                
+
                 InsertNewTreePicture(sourceName, icon, true);
             }
         }
@@ -131,7 +131,7 @@ namespace MagicPictureSetDownloader.Db
             {
                 if (!card.HasCardFace(cardFace.Name))
                 {
-                    AddToDbAndUpdateReferential((CardFace)cardFace, InsertInReferential);
+                    AddToDbAndUpdateReferential((CardFace) cardFace, InsertInReferential);
                 }
             }
         }
@@ -321,7 +321,6 @@ namespace MagicPictureSetDownloader.Db
                         IdScryFall = idScryFall,
                         Number = count
                     };
-
 
                     AddToDbAndUpdateReferential(newPreconstructedDeckCardEdition, InsertInReferential);
 

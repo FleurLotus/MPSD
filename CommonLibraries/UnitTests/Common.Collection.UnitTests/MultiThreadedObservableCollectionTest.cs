@@ -2,10 +2,11 @@
 {
     using System;
 
-    using NUnit.Framework;
+    using Common.Library;
+
     using Moq;
 
-    using Common.Library;
+    using NUnit.Framework;
 
     [TestFixture]
     public class MultiThreadedObservableCollectionTest
@@ -65,7 +66,7 @@
             int countcall2 = 0;
 
             MultiThreadedObservableCollection<int> collection = new MultiThreadedObservableCollection<int>(mockDispatcher.Object);
-            collection.CollectionChanged += (s, e) => 
+            collection.CollectionChanged += (s, e) =>
             {
                 Assert.That(s, Is.EqualTo(collection), "Sender is not the expected one");
                 countcall++;

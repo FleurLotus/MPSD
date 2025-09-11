@@ -1,7 +1,9 @@
 namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
+
     using Common.Database;
+
     using MagicPictureSetDownloader.Interface;
 
     [DbTable]

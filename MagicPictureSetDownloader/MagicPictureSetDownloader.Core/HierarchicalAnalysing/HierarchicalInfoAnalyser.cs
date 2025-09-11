@@ -1,7 +1,7 @@
 namespace MagicPictureSetDownloader.Core.HierarchicalAnalysing
 {
     using System;
-    public class HierarchicalInfoAnalyser: IHierarchicalInfoAnalyser
+    public class HierarchicalInfoAnalyser : IHierarchicalInfoAnalyser
     {
         private readonly Func<ICardInfo, IComparable> _method;
 

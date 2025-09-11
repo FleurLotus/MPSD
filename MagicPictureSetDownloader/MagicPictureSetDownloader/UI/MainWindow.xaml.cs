@@ -12,9 +12,9 @@
 
     using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
+    using MagicPictureSetDownloader.ViewModel.Input;
     using MagicPictureSetDownloader.ViewModel.IO;
     using MagicPictureSetDownloader.ViewModel.Main;
-    using MagicPictureSetDownloader.ViewModel.Input;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml

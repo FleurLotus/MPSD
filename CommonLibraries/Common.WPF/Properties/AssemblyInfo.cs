@@ -1,6 +1,5 @@
-﻿using System.Windows.Markup;
-
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using System.Windows.Markup;
 
 [assembly: XmlnsDefinition("http://schemas.fleurlotus.com/xaml/", "Common.WPF")]
 [assembly: XmlnsDefinition("http://schemas.fleurlotus.com/xaml/", "Common.WPF.Behavior")]

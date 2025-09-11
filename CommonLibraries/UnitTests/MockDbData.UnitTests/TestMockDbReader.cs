@@ -24,11 +24,11 @@
             Assert.That(dataReader.IsClosed, Is.False, "IsClosed should be false");
             dataReader.Close();
             Assert.That(dataReader.IsClosed, Is.True, "IsClosed should be true");
-            CheckThrowCloseException(() => { var o = dataReader[0]; }, "this[int]");
-            CheckThrowCloseException(() => { var o = dataReader["aaa"]; }, "this[name]");
-            CheckThrowCloseException(() => { var o = dataReader.Depth; }, nameof(MockDbDataReader.Depth));
-            CheckThrowCloseException(() => { var o = dataReader.FieldCount; }, nameof(MockDbDataReader.FieldCount));
-            CheckThrowCloseException(() => { var o = dataReader.HasRows; }, nameof(MockDbDataReader.HasRows));
+            CheckThrowCloseException(() => { object o = dataReader[0]; }, "this[int]");
+            CheckThrowCloseException(() => { object o = dataReader["aaa"]; }, "this[name]");
+            CheckThrowCloseException(() => { int o = dataReader.Depth; }, nameof(MockDbDataReader.Depth));
+            CheckThrowCloseException(() => { int o = dataReader.FieldCount; }, nameof(MockDbDataReader.FieldCount));
+            CheckThrowCloseException(() => { bool o = dataReader.HasRows; }, nameof(MockDbDataReader.HasRows));
             CheckThrowCloseException(() => dataReader.GetBoolean(0), nameof(MockDbDataReader.GetBoolean));
             CheckThrowCloseException(() => dataReader.GetByte(0), nameof(MockDbDataReader.GetByte));
             CheckThrowCloseException(() => dataReader.GetBytes(0, 0, new byte[10], 0, 10), nameof(MockDbDataReader.GetBytes));
@@ -57,11 +57,11 @@
         public void TestHasData()
         {
             MockDbDataReader dataReader = new MockDbDataReader();
-            CheckThrowNoDateException(() => { var o = dataReader[0]; }, "this[int]");
-            CheckThrowNoDateException(() => { var o = dataReader["aaa"]; }, "this[name]");
-            Assert.DoesNotThrow(() => { var o = dataReader.Depth; }, nameof(MockDbDataReader.Depth));
-            Assert.DoesNotThrow(() => { var o = dataReader.FieldCount; }, nameof(MockDbDataReader.FieldCount));
-            Assert.DoesNotThrow(() => { var o = dataReader.HasRows; }, nameof(MockDbDataReader.HasRows));
+            CheckThrowNoDateException(() => { object o = dataReader[0]; }, "this[int]");
+            CheckThrowNoDateException(() => { object o = dataReader["aaa"]; }, "this[name]");
+            Assert.DoesNotThrow(() => { int o = dataReader.Depth; }, nameof(MockDbDataReader.Depth));
+            Assert.DoesNotThrow(() => { int o = dataReader.FieldCount; }, nameof(MockDbDataReader.FieldCount));
+            Assert.DoesNotThrow(() => { bool o = dataReader.HasRows; }, nameof(MockDbDataReader.HasRows));
             CheckThrowNoDateException(() => dataReader.GetBoolean(0), nameof(MockDbDataReader.GetBoolean));
             CheckThrowNoDateException(() => dataReader.GetByte(0), nameof(MockDbDataReader.GetByte));
             CheckThrowNoDateException(() => dataReader.GetBytes(0, 0, new byte[10], 0, 10), nameof(MockDbDataReader.GetBytes));
@@ -344,7 +344,8 @@
 
             //One table all data read
             dataReader = new MockDbDataReader(mockDbResult);
-            while (dataReader.Read()) { }
+            while (dataReader.Read())
+            { }
             Assert.That(dataReader.NextResult, Is.False, $"Should be False with one table all data read");
 
             //Multi tables no data read
@@ -366,7 +367,8 @@
             //Multi table all data read
             dataTable = BuildSampleWithMostDataType();
             dataReader = new MockDbDataReader(mockDbResult);
-            while (dataReader.Read()) { }
+            while (dataReader.Read())
+            { }
             Assert.That(dataReader.NextResult, Is.True, $"Should be True with three table on first call");
             Assert.That(dataReader.NextResult, Is.True, $"Should be True with three table on second call");
             Assert.That(dataReader.NextResult, Is.False, $"Should be False with three table on third call");
@@ -414,7 +416,8 @@
             Assert.That(dataReader.HasRows, Is.True, $"Should be True with one table with data before read");
             Assert.That(dataReader.Read(), Is.True, $"Should be True");
             Assert.That(dataReader.HasRows, Is.True, $"Should be True with one table with data after read");
-            while (dataReader.Read()) { }
+            while (dataReader.Read())
+            { }
             Assert.That(dataReader.HasRows, Is.True, $"Should be True with one table with data at the end");
         }
         [Test]
@@ -453,9 +456,9 @@
             dataTable.Columns.Add("Col11", typeof(long));
             dataTable.Columns.Add("Col12", typeof(string));
             dataTable.Columns.Add("Col13", typeof(object));
-            dataTable.Rows.Add(false, (byte)2, 'a', new DateTime(2022, 10, 8), 3.5m, 7.2d, 5.32f, Guid.NewGuid(), (short)42, 256, 10254232L, "sdfghjk", "ffghhj");
-            dataTable.Rows.Add(true, (byte)5, 'z', new DateTime(2022, 11, 8), 4.5m, 8.2d, 95.32f, Guid.NewGuid(), (short)3, 12, 1234567890L, "xcvbn,", null);
-            dataTable.Rows.Add(false, (byte)10, '5', new DateTime(2022, 12, 8), 5.5m, 9.2d, 52.32f, Guid.NewGuid(), (short)21, 69, 11111L, "hh hhaa", 12.5);
+            dataTable.Rows.Add(false, (byte) 2, 'a', new DateTime(2022, 10, 8), 3.5m, 7.2d, 5.32f, Guid.NewGuid(), (short) 42, 256, 10254232L, "sdfghjk", "ffghhj");
+            dataTable.Rows.Add(true, (byte) 5, 'z', new DateTime(2022, 11, 8), 4.5m, 8.2d, 95.32f, Guid.NewGuid(), (short) 3, 12, 1234567890L, "xcvbn,", null);
+            dataTable.Rows.Add(false, (byte) 10, '5', new DateTime(2022, 12, 8), 5.5m, 9.2d, 52.32f, Guid.NewGuid(), (short) 21, 69, 11111L, "hh hhaa", 12.5);
             return dataTable;
         }
 

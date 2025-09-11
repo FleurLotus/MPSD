@@ -4,10 +4,11 @@
     using System.Linq;
     using System.Reflection;
 
-    using NUnit.Framework;
-
     using Common.Library;
 
+    using NUnit.Framework;
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0051:Remove unused private members", Justification = "Used by reflection for testing")]
     [TestFixture]
     public class ReflectionExtensionTest
     {
@@ -39,9 +40,9 @@
         public void ReflectionExtensionGetCustomAttributesForProperties()
         {
             ICustomAttributeProvider custom = typeof(ChildClass).GetProperty("Property3");
-            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1)); 
-            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1)); 
-            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(0)); 
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(false).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<MotherAttribute>(true).Length, Is.EqualTo(1));
+            Assert.That(custom.GetCustomAttributes<ChildAttribute>(false).Length, Is.EqualTo(0));
             Assert.That(custom.GetCustomAttributes<ChildAttribute>(true).Length, Is.EqualTo(0));
 
             custom = typeof(ChildClass).GetProperty("Property");
@@ -86,7 +87,6 @@
         private class MotherAttribute : Attribute
         {
 
-
         }
         private class ChildAttribute : MotherAttribute
         {
@@ -100,7 +100,6 @@
 
             [Child]
             public object Property2 { get; set; }
-
         }
 
         [Child]
@@ -117,7 +116,6 @@
         {
             public static string StaticPublicGetSet { get; set; }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateGetSet { get; set; }
             internal static string StaticInternalGetSet { get; set; }
             protected static string StaticProtectedGetSet { get; set; }
@@ -128,7 +126,6 @@
                 get { return null; }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateGet
             {
                 get { return null; }
@@ -151,7 +148,6 @@
                 set { }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private static string StaticPrivateSet
             {
                 set { }
@@ -168,7 +164,6 @@
             {
                 set { }
             }
-
 
             public static string StaticPublicGetPrivateSet { get; }
 
@@ -193,10 +188,8 @@
             protected static string StaticProtectedGetPrivateSet { get; }
             protected static string StaticPrivateGetProtectedGet { private get; set; }
 
-
             public string MemberPublicGetSet { get; set; }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateGetSet { get; set; }
             internal string MemberInternalGetSet { get; set; }
             protected string MemberProtectedGetSet { get; set; }
@@ -207,7 +200,6 @@
                 get { return null; }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateGet
             {
                 get { return null; }
@@ -230,7 +222,6 @@
                 set { }
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
             private string MemberPrivateSet
             {
                 set { }
@@ -270,8 +261,5 @@
             protected string MemberProtectedGetPrivateSet { get; }
             protected string MemberPrivateGetProtectedGet { private get; set; }
         }
-        // ReSharper restore UnusedMember.Local
-        // ReSharper restore UnusedAutoPropertyAccessor.Local
-        // ReSharper restore ValueParameterNotUsed
     }
 }

@@ -7,7 +7,7 @@
     using System.Windows.Input;
 
     using Common.Collection;
-    using Common.ViewModel;
+    using Common.ViewModel.Command;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
 
@@ -343,6 +343,8 @@
                     EditionSelected = null;
                     CardSelectedName = null;
                     break;
+                default:
+                    break;
             }
 
             Languages.Clear();
@@ -380,7 +382,7 @@
             {
                 _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Language", _inputLanguage.Id.ToString(CultureInfo.InvariantCulture));
             }
-            
+
             OnNotifyPropertyChanged(nameof(InputLanguageName));
             RebuildOrder();
             InitWindow();
@@ -488,6 +490,10 @@
                         }
 
                         break;
+                    case InputMode.None:
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -526,7 +532,7 @@
                 }
             }
 
-            CurrentCollectionDetail = string.Format("{2}{3}{4}{5} {0} {1}\n{6} {0}\n{7} All Edition", EditionSelected.Code, LanguageSelected.Name, 
+            CurrentCollectionDetail = string.Format("{2}{3}{4}{5} {0} {1}\n{6} {0}\n{7} All Edition", EditionSelected.Code, LanguageSelected.Name,
                                                                                                        totalInEditionAndLanguageInCollectionNotFoilNotAltArt,
                                                                                                        totalInEditionAndLanguageInCollectionFoilNotAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionFoilNotAltArt + "(Foil)" : string.Empty,
                                                                                                        totalInEditionAndLanguageInCollectionNotFoilAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionNotFoilAltArt + "(AltArt)" : string.Empty,

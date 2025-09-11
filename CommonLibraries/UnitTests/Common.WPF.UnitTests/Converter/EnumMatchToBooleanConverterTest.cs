@@ -1,8 +1,8 @@
 ﻿namespace Common.WPF.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.WPF.Converter;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class EnumMatchToBooleanConverterTest

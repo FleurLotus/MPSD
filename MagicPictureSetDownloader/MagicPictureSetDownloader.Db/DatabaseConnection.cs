@@ -8,13 +8,13 @@
     using Common.Database;
 
     using MagicPictureSetDownloader.DbGenerator;
-    
+
     internal partial class DatabaseConnection
     {
         private string _connectionString;
         private IDbConnection _batchConnection;
         private IDbTransaction _batchTransaction;
-        
+
         public DatabaseConnection()
         {
             IdentityRetriever.IdentityQuery = "SELECT last_insert_rowid()";
@@ -23,7 +23,7 @@
         private void GetConnectionString()
         {
             string fileName = DatabaseGenerator.GetResourceName();
-                
+
             // ReSharper disable AssignNullToNotNullAttribute
             string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
             // ReSharper restore AssignNullToNotNullAttribute

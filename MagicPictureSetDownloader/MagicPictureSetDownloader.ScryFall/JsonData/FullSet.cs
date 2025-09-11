@@ -1,8 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
 {
-    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Text.Json.Serialization;
+
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
 
     internal class FullSet : JsonWithExtensionDataBase
     {
@@ -64,7 +65,7 @@
         public Uri IconSvgUri { get; set; }
 
         [JsonPropertyName("search_uri")]
-        public Uri SearchUri{ get; set; }
+        public Uri SearchUri { get; set; }
 
         [JsonPropertyName("object")]
         public string Object { get; set; }

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
+
     using Microsoft.Extensions.Logging;
 
     public sealed class AssemblyResolver : IDisposable
@@ -23,7 +24,7 @@
             _logTextWriter = logTextWriter;
             _logger = logger;
 
-            Assembly assembly  = Assembly.GetEntryAssembly();
+            Assembly assembly = Assembly.GetEntryAssembly();
             //Could be null in unit test
             _rootDir = assembly != null ? Path.GetDirectoryName(assembly.Location) : Environment.CurrentDirectory;
             _resolveDirectories = resolveDirectories ?? new List<string>();

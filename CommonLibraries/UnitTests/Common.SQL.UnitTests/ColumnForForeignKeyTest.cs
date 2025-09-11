@@ -11,8 +11,10 @@
         [Test]
         public void TestProperties()
         {
-            ColumnForForeignKey columnForForeignKey = new ColumnForForeignKey();
-            columnForForeignKey.Position = 10;
+            ColumnForForeignKey columnForForeignKey = new ColumnForForeignKey
+            {
+                Position = 10
+            };
             Assert.That(columnForForeignKey.Position, Is.EqualTo(10));
 
             Column source = new Column();
@@ -37,7 +39,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object columnForForeignKey, object columnForForeignKey2, IConstraint constraint)
         {
-            Assert.That(((ColumnForForeignKey)columnForForeignKey).CompareTo(((ColumnForForeignKey)columnForForeignKey2)), constraint);
+            Assert.That(((ColumnForForeignKey) columnForForeignKey).CompareTo(((ColumnForForeignKey) columnForForeignKey2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {

@@ -16,24 +16,13 @@
                 throw new ArgumentException("output path doesn't exist", nameof(outpath));
             }
 
-            IImportExportFormatter formatter = ImportExportFormatterFactory.Create(exportFormatSelected);
-            if (formatter == null)
-            {
-                throw new ArgumentException("Can't find appropriate formatter for " + exportFormatSelected, nameof(exportFormatSelected));
-            }
-
+            IImportExportFormatter formatter = ImportExportFormatterFactory.Create(exportFormatSelected) ?? throw new ArgumentException("Can't find appropriate formatter for " + exportFormatSelected, nameof(exportFormatSelected));
             IMagicDatabaseReadOnly magicDatabase = MagicDatabaseManager.ReadOnly;
 
             foreach (string collectionName in collectionNames)
             {
                 ICardCollection cardcollection = magicDatabase.GetCollection(collectionName);
-                IEnumerable<ICardInCollectionCount> cardsInCollection = magicDatabase.GetCardCollection(cardcollection);
-
-                if (cardsInCollection == null)
-                {
-                    throw new ImportExportException("Can't find collection named {0}", collectionName);
-                }
-
+                IEnumerable<ICardInCollectionCount> cardsInCollection = magicDatabase.GetCardCollection(cardcollection) ?? throw new ImportExportException("Can't find collection named {0}", collectionName);
                 string filePath = Path.Combine(outpath, collectionName + formatter.Extension);
 
                 try
@@ -57,24 +46,14 @@
         public ImportStatus ImportToNewCollection(string importFilePath, string newCollectionName)
         {
             IMagicDatabaseReadAndWriteCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCollection;
-            ICardCollection collection = magicDatabaseCollection.InsertNewCollection(newCollectionName);
-            if (collection == null)
-            {
-                throw new ArgumentException("Collection name already exists", nameof(newCollectionName));
-            }
-
+            ICardCollection collection = magicDatabaseCollection.InsertNewCollection(newCollectionName) ?? throw new ArgumentException("Collection name already exists", nameof(newCollectionName));
             return ImportToCollection(importFilePath, collection);
         }
 
         public ImportStatus ImportToExistingCollection(string importFilePath, string collectionToCompletName)
         {
             IMagicDatabaseReadAndWriteCardInCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
-            ICardCollection collection = magicDatabaseCollection.GetCollection(collectionToCompletName);
-            if (collection == null)
-            {
-                throw new ArgumentException("Collection name doesn't exist", nameof(collectionToCompletName));
-            }
-
+            ICardCollection collection = magicDatabaseCollection.GetCollection(collectionToCompletName) ?? throw new ArgumentException("Collection name doesn't exist", nameof(collectionToCompletName));
             return ImportToCollection(importFilePath, collection);
         }
         private ImportStatus ImportToCollection(string importFilePath, ICardCollection collection)
@@ -101,12 +80,7 @@
                 throw new ArgumentException("import file doesn't exist", nameof(importFilePath));
             }
 
-            IImportExportFormatter formatter = ImportExportFormatterFactory.CreateForFile(importFilePath);
-            if (formatter == null)
-            {
-                throw new ArgumentException("Can't find appropriate formatter for " + importFilePath, nameof(importFilePath));
-            }
-
+            IImportExportFormatter formatter = ImportExportFormatterFactory.CreateForFile(importFilePath) ?? throw new ArgumentException("Can't find appropriate formatter for " + importFilePath, nameof(importFilePath));
             using (StreamReader sr = new StreamReader(importFilePath))
             {
                 return formatter.Parse(sr.ReadToEnd());

@@ -1,6 +1,6 @@
 ﻿namespace Common.SQL.UnitTests
 {
-     using System.Collections.Generic;
+    using System.Collections.Generic;
 
     internal class CaseSensitivityTestCaseSource
     {
@@ -54,7 +54,7 @@
             foreignKey.DeleteRule = foreignKey.DeleteRule?.ToLower();
             foreignKey.Name = foreignKey.Name?.ToLower();
         }
-        internal void Apply(SQL.Index index)
+        internal void Apply(Index index)
         {
             if (index == null || !Value.HasValue || Value.Value)
             {

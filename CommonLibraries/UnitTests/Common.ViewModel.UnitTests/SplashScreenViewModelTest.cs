@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.ViewModel.SplashScreen;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class SplashScreenViewModelTest

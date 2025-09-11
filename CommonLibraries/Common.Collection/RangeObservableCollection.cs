@@ -9,7 +9,7 @@
 
     public class RangeObservableCollection<T> : ObservableCollection<T>
     {
-       private const string SuppressNotification = "SuppressNotification";
+        private const string SuppressNotification = "SuppressNotification";
 
         public RangeObservableCollection()
         {
@@ -22,10 +22,7 @@
 
         public void AddRange(IEnumerable<T> list)
         {
-            if (list == null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
+            ArgumentNullException.ThrowIfNull(list);
 
             using (this.SetFlag(SuppressNotification))
             {

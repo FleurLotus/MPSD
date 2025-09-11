@@ -97,17 +97,16 @@
             {
                 throw new ArgumentException($"{nameof(parameterCount)} must be greater of equals to 0.", nameof(parameterCount));
             }
-            MockDbMatchingRule copy = new MockDbMatchingRule(this);
-            copy.ParameterCount = parameterCount;
+            MockDbMatchingRule copy = new MockDbMatchingRule(this)
+            {
+                ParameterCount = parameterCount
+            };
             copy.MatchingLevel |= MatchingLevel.CommandParameterCount;
             return copy;
         }
         internal bool Match(DbCommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            ArgumentNullException.ThrowIfNull(command);
 
             if (command.CommandType != CommandType)
             {
@@ -139,7 +138,7 @@
 
             if (ParameterValues.Count > 0)
             {
-                foreach (var kv in ParameterValues)
+                foreach (KeyValuePair<object, object> kv in ParameterValues)
                 {
                     if (kv.Key is string key)
                     {
@@ -179,7 +178,7 @@
             }
             if (ParameterValues.Count > 0)
             {
-                foreach (var kv in ParameterValues)
+                foreach (KeyValuePair<object, object> kv in ParameterValues)
                 {
                     if (kv.Key is string key)
                     {

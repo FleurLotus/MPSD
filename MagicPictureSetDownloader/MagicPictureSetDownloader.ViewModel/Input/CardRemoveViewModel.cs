@@ -12,7 +12,7 @@
             Display.Title = "Remove card";
         }
         public CardSourceViewModel Source { get; }
-        
+
         protected override bool OkCommandCanExecute(object o)
         {
             return Source.Count > 0 && Source.Count <= Source.MaxCount && Source.EditionSelected != null;

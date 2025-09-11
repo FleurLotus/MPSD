@@ -6,7 +6,7 @@
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
-    
+
     public class UpdateViewModelCommun : DialogViewModelBase
     {
         protected readonly IMagicDatabaseReadOnly MagicDatabase;

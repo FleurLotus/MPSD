@@ -4,6 +4,7 @@
     using System.Threading;
 
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Interface;
 
     public class DownloadReporterViewModel : NotifyPropertyChangedBase, IDisposable, IProgressReporter

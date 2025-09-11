@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
     using System.Windows.Input;
 
-    using NUnit.Framework;
-
     using Common.Threading;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class AsyncCommandTest
@@ -21,7 +21,7 @@
         [Test]
         public void TestCanExecuteNull()
         {
-            ICommand command = new AsyncCommand( () => Task.Delay(10), null);
+            ICommand command = new AsyncCommand(() => Task.Delay(10), null);
             Assert.That(command.CanExecute(null), Is.True);
         }
         [Test]
@@ -128,7 +128,7 @@
         {
             object obj = null;
 
-            ICommand command = new AsyncCommand<object>( o =>
+            ICommand command = new AsyncCommand<object>(o =>
             {
                 obj = o;
                 return Task.Delay(1);

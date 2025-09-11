@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly:InternalsVisibleTo("Common.Enums.UnitTests")]
+[assembly: InternalsVisibleTo("Common.Enums.UnitTests")]

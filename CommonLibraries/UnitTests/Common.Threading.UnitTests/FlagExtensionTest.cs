@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.Threading;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class FlagExtensionTest
@@ -51,7 +51,7 @@
         public void TestFlagDispose()
         {
             object obj = new object();
-            var flag = obj.SetFlag(key);
+            IDisposable flag = obj.SetFlag(key);
             flag.Dispose();
             Assert.Throws<ObjectDisposedException>(() => flag.Dispose());
         }
@@ -60,7 +60,7 @@
         {
             object obj = new object();
             Assert.That(obj.IsFlagSet(key), Is.False);
-            using (var flag = obj.SetFlag(key))
+            using (IDisposable flag = obj.SetFlag(key))
             {
                 Assert.That(obj.IsFlagSet(key), Is.True);
             }
@@ -71,10 +71,10 @@
         {
             object obj = new object();
             Assert.That(obj.IsFlagSet(key), Is.False);
-            using (var flag = obj.SetFlag(key))
+            using (IDisposable flag = obj.SetFlag(key))
             {
                 Assert.That(obj.IsFlagSet(key), Is.True);
-                using (var flag2 = obj.SetFlag(key))
+                using (IDisposable flag2 = obj.SetFlag(key))
                 {
                     Assert.That(obj.IsFlagSet(key), Is.True);
                 }
@@ -90,11 +90,11 @@
 
             Assert.That(obj.IsFlagSet(key), Is.False);
             Assert.That(obj.IsFlagSet(key2), Is.False);
-            using (var flag = obj.SetFlag(key))
+            using (IDisposable flag = obj.SetFlag(key))
             {
                 Assert.That(obj.IsFlagSet(key), Is.True);
                 Assert.That(obj.IsFlagSet(key2), Is.False);
-                using (var flag2 = obj.SetFlag(key2))
+                using (IDisposable flag2 = obj.SetFlag(key2))
                 {
                     Assert.That(obj.IsFlagSet(key), Is.True);
                     Assert.That(obj.IsFlagSet(key2), Is.True);
@@ -113,11 +113,11 @@
 
             Assert.That(obj.IsFlagSet(key), Is.False);
             Assert.That(obj2.IsFlagSet(key), Is.False);
-            using (var flag = obj.SetFlag(key))
+            using (IDisposable flag = obj.SetFlag(key))
             {
                 Assert.That(obj.IsFlagSet(key), Is.True);
                 Assert.That(obj2.IsFlagSet(key), Is.False);
-                using (var flag2 = obj2.SetFlag(key))
+                using (IDisposable flag2 = obj2.SetFlag(key))
                 {
                     Assert.That(obj.IsFlagSet(key), Is.True);
                     Assert.That(obj2.IsFlagSet(key), Is.True);

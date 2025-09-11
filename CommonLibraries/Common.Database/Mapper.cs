@@ -116,10 +116,7 @@
                         throw new ApplicationDbException("Wrong number of row affected. Rollback");
                     }
 
-                    if (doPostExecuteAction != null)
-                    {
-                        doPostExecuteAction(cmd, value);
-                    }
+                    doPostExecuteAction?.Invoke(cmd, value);
                 }
             }
         }
@@ -136,7 +133,7 @@
             {
                 safeValue = Enum.Parse(wantedType, value.ToString());
             }
-            else 
+            else
             {
                 safeValue = Convert.ChangeType(value, wantedType);
             }

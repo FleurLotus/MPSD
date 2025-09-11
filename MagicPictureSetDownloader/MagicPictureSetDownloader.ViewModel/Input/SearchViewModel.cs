@@ -47,16 +47,16 @@
         private int _countSelected;
         private string _name;
         private int _idBlockFun;
-        
+
         public SearchViewModel()
         {
             _magicDatabase = MagicDatabaseManager.ReadOnly;
             //Never change
             CountComparator = new[] { "≥", "<" };
-            Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
-            Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token)
+            Colors = (ShardColor[]) Enum.GetValues(typeof(ShardColor));
+            Types = ((CardType[]) Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token)
                                                                   .ToArray();
-            SubTypes = ((CardSubType[])Enum.GetValues(typeof(CardSubType))).Where(t => t != CardSubType.None)
+            SubTypes = ((CardSubType[]) Enum.GetValues(typeof(CardSubType))).Where(t => t != CardSubType.None)
                                                                            .ToArray();
 
             Display.Title = "Search";
@@ -72,7 +72,7 @@
             ReInit();
             Reuse();
         }
-        
+
         public ICollection<IEdition> Editions { get; private set; }
         public ICollection<IEdition> EditionsSelected { get; }
         public ICollection<ICardCollection> Collections { get; private set; }
@@ -123,19 +123,19 @@
         }
         public string CountComparatorSelected
         {
-            get { return CountComparator[(int)_countComparatorWanted]; }
+            get { return CountComparator[(int) _countComparatorWanted]; }
             set
             {
                 for (int i = 0; i < CountComparator.Length; i++)
                 {
                     if (value == CountComparator[i])
                     {
-                        if (_countComparatorWanted == (ComparisonType)i)
+                        if (_countComparatorWanted == (ComparisonType) i)
                         {
                             return;
                         }
 
-                        _countComparatorWanted = (ComparisonType)i;
+                        _countComparatorWanted = (ComparisonType) i;
                         OnNotifyPropertyChanged(nameof(CountComparatorSelected));
                         break;
                     }
@@ -254,7 +254,7 @@
 
         protected override bool OkCommandCanExecute(object o)
         {
-            return ((!string.IsNullOrWhiteSpace(Name) || EditionsSelected.Count > 0 || ColorsSelected.Count > 0 || TypesSelected.Count > 0 || SubTypesSelected.Count > 0) && PerimeterScope == PerimeterScope.All) || 
+            return ((!string.IsNullOrWhiteSpace(Name) || EditionsSelected.Count > 0 || ColorsSelected.Count > 0 || TypesSelected.Count > 0 || SubTypesSelected.Count > 0) && PerimeterScope == PerimeterScope.All) ||
                 CollectionsSelected.Count > 0;
         }
         protected override void OtherCommandExecute(object o)
@@ -292,7 +292,7 @@
             ExcludeSpecialCards = true;
             CountIncludeFoil = false;
             CountIsNameBased = false;
-            CountComparatorSelected = CountComparator[(int)ComparisonType.GreaterOrEquals];
+            CountComparatorSelected = CountComparator[(int) ComparisonType.GreaterOrEquals];
             CountSelected = 1;
             AllLanguages = false;
             PerimeterScope = PerimeterScope.All;
@@ -305,11 +305,11 @@
             TypesSelected.Clear();
             SubTypesSelected.Clear();
         }
-       
+
         internal IEnumerable<CardViewModel> SearchResultAsViewModel()
         {
             return _magicDatabase.GetAllInfos().Where(cai => CheckPerimeter(cai) && CheckName(cai) && CheckEdition(cai) && CheckColor(cai) && CheckType(cai) && CheckSubType(cai))
-                                               .Select(cai => new CardViewModel(cai)); 
+                                               .Select(cai => new CardViewModel(cai));
         }
 
         private bool CheckPerimeter(ICardAllDbInfo cai)
@@ -386,8 +386,7 @@
                 return true;
             }
 
-            
-            ShardColor color = MultiPartCardManager.Instance.GetColor(cai.Card); 
+            ShardColor color = MultiPartCardManager.Instance.GetColor(cai.Card);
 
             bool wantedColorless = ColorsSelected.Contains(ShardColor.Colorless);
 

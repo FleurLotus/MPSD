@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.ViewModel.Menu;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class MenuViewModelTest

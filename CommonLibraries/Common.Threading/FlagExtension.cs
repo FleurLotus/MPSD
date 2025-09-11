@@ -32,10 +32,7 @@
             {
                 throw new ArgumentException("Can't be null or empty", nameof(name));
             }
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
         }
     }
 }

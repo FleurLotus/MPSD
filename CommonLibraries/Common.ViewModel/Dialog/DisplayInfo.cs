@@ -15,7 +15,7 @@
             OtherCommandLabel = null;
             Other2CommandLabel = null;
         }
-        
+
         public string CancelCommandLabel
         {
             get { return _cancelCommandLabel; }

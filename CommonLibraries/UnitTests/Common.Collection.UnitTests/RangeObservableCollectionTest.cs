@@ -2,11 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.Specialized;
-
-    using NUnit.Framework;
 
     using Common.Collection;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class RangeObservableCollectionTest
@@ -24,8 +23,7 @@
             RangeObservableCollection<object> obs = new RangeObservableCollection<object>(new[] { new object() });
             int counter = 0;
 
-            NotifyCollectionChangedEventHandler h = (o,h) => counter++;
-            obs.CollectionChanged += h;
+            obs.CollectionChanged += (o, h) => counter++;
 
             for (int i = 0; i < 10; i++)
             {
@@ -41,8 +39,7 @@
             RangeObservableCollection<object> obs = new RangeObservableCollection<object>(new[] { new object() });
             int counter = 0;
 
-            NotifyCollectionChangedEventHandler h = (o, h) => counter++;
-            obs.CollectionChanged += h;
+            obs.CollectionChanged += (o, h) => counter++;
 
             List<object> l = new List<object>();
             for (int i = 0; i < 10; i++)

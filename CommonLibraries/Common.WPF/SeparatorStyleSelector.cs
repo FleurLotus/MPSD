@@ -15,7 +15,7 @@
                 ResourceDictionary resourceDictionary = Application.Current.Resources;
                 if (resourceDictionary.Contains("separatorStyle"))
                 {
-                    return (Style)resourceDictionary["separatorStyle"];
+                    return (Style) resourceDictionary["separatorStyle"];
                 }
             }
             return null;

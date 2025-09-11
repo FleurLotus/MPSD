@@ -5,9 +5,11 @@
 
 namespace Common.ViewModel.UnitTests
 {
-    using Common.ViewModel.Version;
-    using NUnit.Framework;
     using System.Reflection;
+
+    using Common.ViewModel.Version;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class VersionViewModelTest
@@ -35,6 +37,5 @@ namespace Common.ViewModel.UnitTests
             Assert.That(vm.Name, Is.EqualTo(assembly.GetName().Name));
             Assert.That(vm.Version, Is.EqualTo(assembly.GetName().Version.ToString()));
         }
-
     }
 }

@@ -2,11 +2,11 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.Notify;
-    using Common.ViewModel.Input;
     using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class DialogViewModelBaseTest
@@ -35,13 +35,13 @@
             DialogViewModelBaseTesting vm = new DialogViewModelBaseTesting();
 
             object sender = null;
-            EventArgs ea = null; 
+            EventArgs ea = null;
 
             vm.Closing += (s, e) =>
             {
                 sender = s;
                 ea = e;
-            }; 
+            };
             Assert.That(vm.Result, Is.Null);
             vm.CancelCommand.Execute(null);
             Assert.That(vm.Result, Is.False);

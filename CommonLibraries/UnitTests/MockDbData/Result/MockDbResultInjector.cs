@@ -23,30 +23,20 @@
         }
         public void AddGlobalResult(MockDbResult mockDbResult)
         {
-            if (mockDbResult == null)
-            {
-                throw new ArgumentNullException(nameof(mockDbResult));
-            }
+            ArgumentNullException.ThrowIfNull(mockDbResult);
+
             _globalResult = mockDbResult;
         }
         public void AddResult(MockDbMatchingRule matchingRule, MockDbResult mockDbResult)
         {
-            if (matchingRule == null)
-            {
-                throw new ArgumentNullException(nameof(matchingRule));
-            }
-            if (mockDbResult == null)
-            {
-                throw new ArgumentNullException(nameof(mockDbResult));
-            }
+            ArgumentNullException.ThrowIfNull(matchingRule);
+            ArgumentNullException.ThrowIfNull(mockDbResult);
+
             _rules[matchingRule] = mockDbResult;
         }
         internal MockDbResult GetMockDbResult(DbCommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            ArgumentNullException.ThrowIfNull(command);
 
             int matchingLevel = -1;
             IList<KeyValuePair<MockDbMatchingRule, MockDbResult>> matching = new List<KeyValuePair<MockDbMatchingRule, MockDbResult>>();
@@ -57,14 +47,14 @@
 
                 if (rule.Match(command))
                 {
-                    if ((int)rule.MatchingLevel > matchingLevel)
+                    if ((int) rule.MatchingLevel > matchingLevel)
                     {
                         matching.Clear();
-                        matchingLevel = (int)rule.MatchingLevel;
+                        matchingLevel = (int) rule.MatchingLevel;
                         matching.Add(kv);
 
                     }
-                    else if ((int)rule.MatchingLevel == matchingLevel)
+                    else if ((int) rule.MatchingLevel == matchingLevel)
                     {
                         if (rule.ParameterValues.Count > matching[0].Key.ParameterValues.Count)
                         {
@@ -88,10 +78,7 @@
         }
         internal int? GetExecuteNonQueryResult(DbCommand command)
         {
-            if (command == null)
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
+            ArgumentNullException.ThrowIfNull(command);
             _executions.Add(new MockDbExecution(command));
 
             return _nonQueryResult;

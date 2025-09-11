@@ -5,8 +5,8 @@
     using System.IO;
     using System.Reflection;
 
-    using Common.Drawing;
     using Common.Collection;
+    using Common.Drawing;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.DbGenerator;
@@ -44,7 +44,7 @@
                 return;
             }
 
-            foreach(string file in Directory.GetFiles(_treePath, "*.*", SearchOption.AllDirectories))
+            foreach (string file in Directory.GetFiles(_treePath, "*.*", SearchOption.AllDirectories))
             {
                 TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file), FilePath = file };
                 if (!_treePictures.ContainsKey(treePicture.Name))
@@ -120,7 +120,7 @@
             string ext = isSvg ? ".svg" : GetExtension(data);
             string filePath = Path.Combine(_treePath, path + ext);
 
-            if (Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length> 0)
+            if (Directory.GetFiles(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath) + ".*").Length > 0)
             {
                 return;
             }

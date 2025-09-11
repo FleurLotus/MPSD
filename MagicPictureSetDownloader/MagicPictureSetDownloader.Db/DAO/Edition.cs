@@ -4,6 +4,7 @@ namespace MagicPictureSetDownloader.Db.DAO
     using System.Linq;
 
     using Common.Database;
+
     using MagicPictureSetDownloader.Interface;
 
     [DbTable]
@@ -45,7 +46,7 @@ namespace MagicPictureSetDownloader.Db.DAO
             }
 
             string[] codes = AlternativeCode.Split(';');
-            int pos = (int)format;
+            int pos = (int) format;
             if (pos < 0 || pos >= codes.Length)
             {
                 return code;

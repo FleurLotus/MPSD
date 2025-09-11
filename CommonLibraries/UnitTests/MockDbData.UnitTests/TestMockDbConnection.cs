@@ -11,9 +11,10 @@
         [Test]
         public void TestProperties()
         {
-            MockDbConnection connection = new MockDbConnection();
-
-            connection.ConnectionString = "azerty";
+            MockDbConnection connection = new MockDbConnection
+            {
+                ConnectionString = "azerty"
+            };
             Assert.That(connection.ConnectionString, Is.EqualTo("azerty"));
         }
         [Test]
@@ -22,7 +23,7 @@
             MockDbConnection connection = new MockDbConnection();
             DbCommand command = connection.CreateCommand();
             Assert.That(command, Is.Not.Null);
-            Assert.That(command, Is.InstanceOf(typeof(MockDbCommand)));
+            Assert.That(command, Is.InstanceOf<MockDbCommand>());
         }
         [Test]
         public void TestBeginTransaction()
@@ -30,7 +31,7 @@
             MockDbConnection connection = new MockDbConnection();
             DbTransaction transaction = connection.BeginTransaction(IsolationLevel.Chaos);
             Assert.That(transaction, Is.Not.Null);
-            Assert.That(transaction, Is.InstanceOf(typeof(MockDbTransaction)));
+            Assert.That(transaction, Is.InstanceOf<MockDbTransaction>());
             Assert.That(transaction.IsolationLevel, Is.EqualTo(IsolationLevel.Chaos));
             Assert.That(transaction.Connection, Is.EqualTo(connection));
         }
@@ -40,7 +41,7 @@
             MockDbConnection connection = new MockDbConnection();
             DbProviderFactory factory = DbProviderFactories.GetFactory(connection);
             Assert.That(factory, Is.Not.Null);
-            Assert.That(factory, Is.InstanceOf(typeof(MockDbProviderFactory)));
+            Assert.That(factory, Is.InstanceOf<MockDbProviderFactory>());
         }
         [Test]
         public void TestChangeDatabase()

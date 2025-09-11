@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
+    using Common.ViewModel.Input;
+
     using NUnit.Framework;
 
-    using Common.ViewModel.Input;
-    
     [TestFixture]
     public class InputViewModelFactoryTest
     {
@@ -63,7 +63,7 @@
         public void TestCreateChooseInList()
         {
             List<string> list = new List<string> { "a", "b", "c" };
-            InputViewModel input = _factory.CreateChooseInListViewModel("title", "label", list); 
+            InputViewModel input = _factory.CreateChooseInListViewModel("title", "label", list);
 
             Assert.That(input, Is.Not.Null);
             Assert.That(input.InputMode, Is.EqualTo(InputMode.ChooseInList));

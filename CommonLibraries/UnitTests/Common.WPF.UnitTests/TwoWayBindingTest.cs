@@ -2,9 +2,9 @@
 {
     using System.Windows.Data;
 
-    using NUnit.Framework;
-
     using Common.WPF.Binding;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class TwoWayBindingTest

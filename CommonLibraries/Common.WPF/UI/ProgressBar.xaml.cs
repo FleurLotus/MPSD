@@ -18,7 +18,11 @@ namespace Common.WPF.UI
         public static readonly DependencyProperty DisplayTextProperty = _displayTextPropertyKey.DependencyProperty;
 
         private readonly Timer _timer;
-        private readonly object _synch = new object();
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _sync = new System.Threading.Lock();
+#else
+        private readonly object _sync = new object();
+#endif
         private DateTime? _startAt;
         #endregion
 
@@ -59,19 +63,19 @@ namespace Common.WPF.UI
         [Bindable(true), Category("Behavior")]
         public bool ShowPerCent
         {
-            get { return (bool)GetValue(ShowPerCentProperty); }
+            get { return (bool) GetValue(ShowPerCentProperty); }
             set { SetValue(ShowPerCentProperty, value); }
         }
         [Bindable(true), Category("Behavior")]
         public bool ShowETA
         {
-            get { return (bool)GetValue(ShowETAProperty); }
+            get { return (bool) GetValue(ShowETAProperty); }
             set { SetValue(ShowETAProperty, value); }
         }
         [Bindable(true), Category("Behavior")]
         public string DisplayText
         {
-            get { return (string)GetValue(DisplayTextProperty); }
+            get { return (string) GetValue(DisplayTextProperty); }
             private set { SetValue(_displayTextPropertyKey, value); }
         }
         #endregion
@@ -132,7 +136,7 @@ namespace Common.WPF.UI
 
         private void SetDisplayText()
         {
-            lock (_synch)
+            lock (_sync)
             {
                 if (!Lib.IsInDesignMode() && !_timer.Enabled && ShowETA && Maximum != Value && Value > 0)
                 {
@@ -150,14 +154,7 @@ namespace Common.WPF.UI
                 double percent;
                 string estimatedTime = null;
 
-                if (max == value)
-                {
-                    percent = 100;
-                }
-                else
-                {
-                    percent = value / max * 100;
-                }
+                percent = max == value ? 100 : value / max * 100;
 
                 if (_startAt.HasValue && percent > 0)
                 {
@@ -181,7 +178,7 @@ namespace Common.WPF.UI
         }
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            Dispatcher.Invoke((Action)SetDisplayText);
+            Dispatcher.Invoke((Action) SetDisplayText);
         }
 
         #endregion

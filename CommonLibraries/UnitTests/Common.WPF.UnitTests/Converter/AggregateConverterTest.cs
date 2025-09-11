@@ -3,9 +3,9 @@
     using System;
     using System.Windows.Data;
 
-    using NUnit.Framework;
-
     using Common.WPF.Converter;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class AggregateConverterTest

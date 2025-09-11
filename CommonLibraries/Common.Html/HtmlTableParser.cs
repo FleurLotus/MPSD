@@ -55,7 +55,7 @@
                 throw new HtmlTableParserMultiTableException();
             }
 
-            int end = GetPostClosingIndex(workingText,0 ,TableEnd);
+            int end = GetPostClosingIndex(workingText, 0, TableEnd);
             if (end < 0)
             {
                 throw new HtmlTableParserNoTableClosingTagException();
@@ -129,7 +129,7 @@
         internal static IHtmlCell ExtractCell(string htmlCell)
         {
             bool isHeader = htmlCell.StartsWith(RowCellHeaderStart, StringComparison.InvariantCultureIgnoreCase);
-            int tagIndex = htmlCell.IndexOf(Close,StringComparison.InvariantCultureIgnoreCase);
+            int tagIndex = htmlCell.IndexOf(Close, StringComparison.InvariantCultureIgnoreCase);
             //Should never happen
             if (tagIndex < 0)
             {

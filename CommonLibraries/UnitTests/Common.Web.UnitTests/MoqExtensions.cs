@@ -2,14 +2,15 @@
 {
     using System.Net;
     using System.Net.Http;
-    using System.Threading.Tasks;
     using System.Threading;
+    using System.Threading.Tasks;
 
-    using Newtonsoft.Json;
     using Moq;
-    using Moq.Protected;
     using Moq.Language;
     using Moq.Language.Flow;
+    using Moq.Protected;
+
+    using Newtonsoft.Json;
 
     public static class MoqExtensions
     {
@@ -38,10 +39,10 @@
         }
         public static IReturnsResult<HttpMessageHandler> ReturnsHttpResponseAsync(this ISetup<HttpMessageHandler, Task<HttpResponseMessage>> moqSetup, object responseBody, HttpStatusCode responseCode)
         {
-            var serializedResponse = JsonConvert.SerializeObject(responseBody);
-            var stringContent = new StringContent(serializedResponse ?? string.Empty);
+            string serializedResponse = JsonConvert.SerializeObject(responseBody);
+            StringContent stringContent = new StringContent(serializedResponse ?? string.Empty);
 
-            var responseMessage = new HttpResponseMessage
+            HttpResponseMessage responseMessage = new HttpResponseMessage
             {
                 StatusCode = responseCode,
                 Content = stringContent
@@ -51,10 +52,10 @@
         }
         public static ISetupSequentialResult<Task<HttpResponseMessage>> ReturnsHttpResponseAsync(this ISetupSequentialResult<Task<HttpResponseMessage>> moqSetup, object responseBody, HttpStatusCode responseCode)
         {
-            var serializedResponse = JsonConvert.SerializeObject(responseBody);
-            var stringContent = new StringContent(serializedResponse ?? string.Empty);
+            string serializedResponse = JsonConvert.SerializeObject(responseBody);
+            StringContent stringContent = new StringContent(serializedResponse ?? string.Empty);
 
-            var responseMessage = new HttpResponseMessage
+            HttpResponseMessage responseMessage = new HttpResponseMessage
             {
                 StatusCode = responseCode,
                 Content = stringContent

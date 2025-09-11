@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-///From https://github.com/dotnet/reactive/blob/main/Ix.NET/Source/System.Linq.Async/System/Linq/Operators/ToEnumerable.cs
+﻿///From https://github.com/dotnet/reactive/blob/main/Ix.NET/Source/System.Linq.Async/System/Linq/Operators/ToEnumerable.cs
 namespace System.Linq
 {
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public static partial class AsyncEnumerable
     {
         // REVIEW: This type of blocking is an anti-pattern. We may want to move it to System.Interactive.Async
@@ -27,7 +27,7 @@ namespace System.Linq
 
             static IEnumerable<TSource> Core(IAsyncEnumerable<TSource> source)
             {
-                var e = source.GetAsyncEnumerator(default);
+                IAsyncEnumerator<TSource> e = source.GetAsyncEnumerator(default);
 
                 try
                 {
@@ -54,7 +54,7 @@ namespace System.Linq
 
         private static void Wait(ValueTask task)
         {
-            var awaiter = task.GetAwaiter();
+            Runtime.CompilerServices.ValueTaskAwaiter awaiter = task.GetAwaiter();
 
             if (!awaiter.IsCompleted)
             {
@@ -67,7 +67,7 @@ namespace System.Linq
 
         private static T Wait<T>(ValueTask<T> task)
         {
-            var awaiter = task.GetAwaiter();
+            Runtime.CompilerServices.ValueTaskAwaiter<T> awaiter = task.GetAwaiter();
 
             if (!awaiter.IsCompleted)
             {
@@ -78,4 +78,3 @@ namespace System.Linq
         }
     }
 }
-

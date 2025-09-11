@@ -1,7 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
+
     using Common.Database;
+
     using MagicPictureSetDownloader.Interface;
 
     [DbTable(Name = "CardEditionsInCollection")]
@@ -21,7 +23,7 @@
         public int FoilAltArtNumber { get; set; }
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdLanguage { get; set; }
-        
+
         public override bool Equals(object obj)
         {
             if (obj is not CardInCollectionCount cicc)
@@ -35,7 +37,7 @@
         //There are not readonly because of reflection feeding by they never change after instance creation
         public override int GetHashCode()
         {
-            return IdCollection * 23 + IdScryFall.GetHashCode();
+            return (IdCollection * 23) + IdScryFall.GetHashCode();
         }
 
         public int GetCount(ICardCountKey key)
@@ -76,6 +78,5 @@
 
             return cardCount;
         }
-
     }
 }

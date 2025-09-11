@@ -4,10 +4,11 @@
     using System.Data;
     using System.Data.Common;
 
-    using NUnit.Framework;
-
     using Common.Database;
+
     using MockDbData;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestCommandBuilder
@@ -161,7 +162,7 @@
         [DbTable(Name = "MyTable")]
         private class DbWithWrongKind
         {
-            [DbColumn(Kind = (ColumnKind)999)]
+            [DbColumn(Kind = (ColumnKind) 999)]
             public string Col1 { get; set; }
             [DbColumn()]
             public string Col2 { get; set; }
@@ -193,7 +194,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("DELETE FROM [MyTable] WHERE ([MyKey] = @MyKey)"), "Not the expected DeleteOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildDeleteAllCommand(cnx);
@@ -205,7 +206,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("SELECT [MyKey], [MyValue] FROM [MyTable] WHERE ([MyKey] = @MyKey)"), "Not the expected SelectOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildSelectAllCommand(cnx);
@@ -217,18 +218,18 @@
             Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [MyTable] SET [MyValue] = @MyValue WHERE ([MyKey] = @MyKey)"), "Not the expected UpdateOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
             Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo("2"), "Not the expected value for @MyValue");
+            Assert.That(((DbParameter) cnx.Parameters["@MyValue"]).Value, Is.EqualTo("2"), "Not the expected value for @MyValue");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildInsertOneCommand(cnx, o);
             Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [MyTable] ([MyKey], [MyValue]) VALUES (@MyKey, @MyValue)"), "Not the expected InsertOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
             Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo("2"), "Not the expected value for @MyValue");
+            Assert.That(((DbParameter) cnx.Parameters["@MyValue"]).Value, Is.EqualTo("2"), "Not the expected value for @MyValue");
         }
 
         [Test]
@@ -243,18 +244,18 @@
             Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [MyTable] SET [MyValue] = @MyValue WHERE ([MyKey] = @MyKey)"), "Not the expected UpdateOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
             Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
+            Assert.That(((DbParameter) cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildInsertOneCommand(cnx, o);
             Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [MyTable] ([MyKey], [MyValue]) VALUES (@MyKey, @MyValue)"), "Not the expected InsertOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@MyKey"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
+            Assert.That(((DbParameter) cnx.Parameters["@MyKey"]).Value, Is.EqualTo("1"), "Not the expected value for @MyKey");
             Assert.That(cnx.Parameters.Contains("@MyValue"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
+            Assert.That(((DbParameter) cnx.Parameters["@MyValue"]).Value, Is.EqualTo(DBNull.Value), "Not the expected value for @MyValue");
         }
 
         [DbTable()]
@@ -278,7 +279,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("DELETE FROM [DbWithIdentity] WHERE ([Col1] = @Col1)"), "Not the expected DeleteOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildDeleteAllCommand(cnx);
@@ -290,7 +291,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("SELECT [Col1], [Col2] FROM [DbWithIdentity] WHERE ([Col1] = @Col1)"), "Not the expected SelectOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildSelectAllCommand(cnx);
@@ -302,16 +303,16 @@
             Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [DbWithIdentity] SET [Col2] = @Col2 WHERE ([Col1] = @Col1)"), "Not the expected UpdateOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildInsertOneCommand(cnx, o);
             Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [DbWithIdentity] ([Col2]) VALUES (@Col2)"), "Not the expected InsertOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
         }
 
         [DbTable()]
@@ -336,9 +337,9 @@
             Assert.That(cnx.CommandText, Is.EqualTo("DELETE FROM [DbWithPrimaryMultiColumn] WHERE ([Col1] = @Col1) AND ([Col3] = @Col3)"), "Not the expected DeleteOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildDeleteAllCommand(cnx);
@@ -350,9 +351,9 @@
             Assert.That(cnx.CommandText, Is.EqualTo("SELECT [Col1], [Col2], [Col3] FROM [DbWithPrimaryMultiColumn] WHERE ([Col1] = @Col1) AND ([Col3] = @Col3)"), "Not the expected SelectOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(2), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildSelectAllCommand(cnx);
@@ -364,22 +365,22 @@
             Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [DbWithPrimaryMultiColumn] SET [Col2] = @Col2 WHERE ([Col1] = @Col1) AND ([Col3] = @Col3)"), "Not the expected UpdateOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(3), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildInsertOneCommand(cnx, o);
             Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [DbWithPrimaryMultiColumn] ([Col1], [Col2], [Col3]) VALUES (@Col1, @Col2, @Col3)"), "Not the expected InsertOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(3), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo("3"), "Not the expected value for @Col3");
         }
 
         [DbTable()]
@@ -407,7 +408,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("DELETE FROM [DbWithMultiColumn] WHERE ([Col1] = @Col1)"), "Not the expected DeleteOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildDeleteAllCommand(cnx);
@@ -419,7 +420,7 @@
             Assert.That(cnx.CommandText, Is.EqualTo("SELECT [Col1], [Col2], [Col3], [Col4], [Col5] FROM [DbWithMultiColumn] WHERE ([Col1] = @Col1)"), "Not the expected SelectOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(1), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildSelectAllCommand(cnx);
@@ -431,30 +432,30 @@
             Assert.That(cnx.CommandText, Is.EqualTo("UPDATE [DbWithMultiColumn] SET [Col2] = @Col2, [Col3] = @Col3, [Col4] = @Col4, [Col5] = @Col5 WHERE ([Col1] = @Col1)"), "Not the expected UpdateOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(5), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo(3), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo(3), "Not the expected value for @Col3");
             Assert.That(cnx.Parameters.Contains("@Col4"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col4"]).Value, Is.EqualTo(4.0), "Not the expected value for @Col4");
+            Assert.That(((DbParameter) cnx.Parameters["@Col4"]).Value, Is.EqualTo(4.0), "Not the expected value for @Col4");
             Assert.That(cnx.Parameters.Contains("@Col5"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col5"]).Value, Is.True, "Not the expected value for @Col5");
+            Assert.That(((DbParameter) cnx.Parameters["@Col5"]).Value, Is.True, "Not the expected value for @Col5");
 
             cnx = new MockDbCommand();
             commandBuilder.BuildInsertOneCommand(cnx, o);
             Assert.That(cnx.CommandText, Is.EqualTo("INSERT INTO [DbWithMultiColumn] ([Col1], [Col2], [Col3], [Col4], [Col5]) VALUES (@Col1, @Col2, @Col3, @Col4, @Col5)"), "Not the expected InsertOne CommandText");
             Assert.That(cnx.Parameters.Count, Is.EqualTo(5), "Not the expected number of parameters");
             Assert.That(cnx.Parameters.Contains("@Col1"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
+            Assert.That(((DbParameter) cnx.Parameters["@Col1"]).Value, Is.EqualTo("1"), "Not the expected value for @Col1");
             Assert.That(cnx.Parameters.Contains("@Col2"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
+            Assert.That(((DbParameter) cnx.Parameters["@Col2"]).Value, Is.EqualTo("2"), "Not the expected value for @Col2");
             Assert.That(cnx.Parameters.Contains("@Col3"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col3"]).Value, Is.EqualTo(3), "Not the expected value for @Col3");
+            Assert.That(((DbParameter) cnx.Parameters["@Col3"]).Value, Is.EqualTo(3), "Not the expected value for @Col3");
             Assert.That(cnx.Parameters.Contains("@Col4"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col4"]).Value, Is.EqualTo(4.0), "Not the expected value for @Col4");
+            Assert.That(((DbParameter) cnx.Parameters["@Col4"]).Value, Is.EqualTo(4.0), "Not the expected value for @Col4");
             Assert.That(cnx.Parameters.Contains("@Col5"), Is.True, "Not expected parameter");
-            Assert.That(((DbParameter)cnx.Parameters["@Col5"]).Value, Is.True, "Not the expected value for @Col5");
+            Assert.That(((DbParameter) cnx.Parameters["@Col5"]).Value, Is.True, "Not the expected value for @Col5");
         }
 
         [Test]

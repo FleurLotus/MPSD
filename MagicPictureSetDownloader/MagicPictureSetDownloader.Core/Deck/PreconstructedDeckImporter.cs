@@ -1,13 +1,13 @@
 ﻿namespace MagicPictureSetDownloader.Core.Deck
 {
     using System;
-    using System.Net;
-    using System.Linq;
-    using System.Text.RegularExpressions;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Text.RegularExpressions;
 
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Db;
+    using MagicPictureSetDownloader.Interface;
 
     public class PreconstructedDeckImporter
     {
@@ -48,13 +48,13 @@
             {
                 return Array.Empty<string>();
             }
-            
+
             string htmltext = WebUtility.HtmlDecode(html);
             MatchCollection matches = _decksRegex.Matches(htmltext);
             ICollection<IPreconstructedDeck> decks = MagicDatabase.GetAllPreconstructedDecks();
-            return  matches.OfType<Match>()
-                           .Where(m =>  !IgnoreDeckTypeEdition(m.Groups["type"].Value))
-                           .Select(m =>  BaseUrl + m.Groups["url"].Value)
+            return matches.OfType<Match>()
+                           .Where(m => !IgnoreDeckTypeEdition(m.Groups["type"].Value))
+                           .Select(m => BaseUrl + m.Groups["url"].Value)
                            .Where(u => decks.All(d => d.Url != u) && !_excludedRegex.IsMatch(u))
                            .ToArray();
         }
@@ -70,7 +70,7 @@
 
             string deckName = m.Groups["name"].Value;
             m = _deckEditionRegex.Match(htmltext);
-            if(!m.Success)
+            if (!m.Success)
             {
                 throw new ParserException("Could not find edition");
             }
@@ -106,13 +106,7 @@
                     if (m.Success)
                     {
                         ICard card = GetCard(m);
-                        IEdition edition = GetEdition(deckName, m);
-
-                        if (edition == null)
-                        {
-                            throw new ParserException($"Could not find edition for card in {deckName}");
-                        }
-
+                        IEdition edition = GetEdition(deckName, m) ?? throw new ParserException($"Could not find edition for card in {deckName}");
                         string idScryFall = MagicDatabase.GetIdScryFall(card, edition);
 
                         // Fallback for card special with double identical face
@@ -126,7 +120,6 @@
                                 idScryFall = MagicDatabase.GetIdScryFall(card, edition);
                             }
                         }
-
 
                         if (string.IsNullOrEmpty(idScryFall))
                         {
@@ -151,12 +144,7 @@
         private ICard GetCard(Match m)
         {
             string cardName = m.Groups["name"].Value.TrimEnd();
-            ICard card = MagicDatabase.GetCard(cardName);
-            if (card == null)
-            {
-                throw new ParserException($"Could not find Card with name {cardName}");
-            }
-
+            ICard card = MagicDatabase.GetCard(cardName) ?? throw new ParserException($"Could not find Card with name {cardName}");
             return card;
         }
         private IEdition GetEdition(string deckName, Match m)
@@ -173,7 +161,7 @@
                     cardEdition2 = cardEdition2[..10];
                 }
                 edition = MagicDatabase.GetEditionFromCode(cardEdition2);
-             }
+            }
 
             return edition;
         }

@@ -16,7 +16,7 @@
         [Test]
         public void TestCanExecuteNull()
         {
-            RelayCommand command = new RelayCommand( o => { }, null);
+            RelayCommand command = new RelayCommand(o => { }, null);
             Assert.That(command.CanExecute(null), Is.True);
         }
         [Test]
@@ -31,7 +31,7 @@
         {
             object obj = null;
 
-            RelayCommand command = new RelayCommand(o => { obj = o; } );
+            RelayCommand command = new RelayCommand(o => obj = o);
             Assert.That(obj, Is.Null);
             object o = new object();
             command.Execute(o);

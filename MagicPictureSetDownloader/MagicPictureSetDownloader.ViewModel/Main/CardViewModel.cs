@@ -3,24 +3,25 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
     using MagicPictureSetDownloader.Interface;
 
-    public class CardViewModel: NotifyPropertyChangedBase, ICardInfo
+    public class CardViewModel : NotifyPropertyChangedBase, ICardInfo
     {
         private readonly ICardFace _currentFace;
 
-        public CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart =  false)
+        public CardViewModel(ICardAllDbInfo cardAllDbInfo, bool otherPart = false)
         {
             CardAllDbInfo = cardAllDbInfo;
             Card = cardAllDbInfo.Card;
             _currentFace = otherPart ? Card.OtherCardFace : Card.MainCardFace;
             IEdition edition = cardAllDbInfo.Edition;
             Statistics = cardAllDbInfo.Statistics.Select(s => new StatisticViewModel(s)).ToArray();
-            Prices = cardAllDbInfo.Prices.Select(p => new PriceViewModel(p,edition)).ToArray();
+            Prices = cardAllDbInfo.Prices.Select(p => new PriceViewModel(p, edition)).ToArray();
             IsDownSide = false;
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
@@ -78,11 +79,12 @@
                 DisplayedCastingCost = castCost.ToArray();
             }
 
-            
             if (IsMultiPart && !otherPart)
             {
-                OtherCardPart = new CardViewModel(cardAllDbInfo, true);
-                OtherCardPart.Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeBackSide(Card);
+                OtherCardPart = new CardViewModel(cardAllDbInfo, true)
+                {
+                    Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeBackSide(Card)
+                };
                 if (MultiPartCardManager.Instance.IsDownSide(cardAllDbInfo.Card))
                 {
                     OtherCardPart.IsDownSide = true;
@@ -94,7 +96,7 @@
         public IEdition Edition { get; }
         public IRarity Rarity { get; }
         public string IdScryFall { get; }
-        
+
         public string Name
         {
             get { return Card.Name; }

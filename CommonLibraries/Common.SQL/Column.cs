@@ -27,7 +27,7 @@
         {
             get
             {
-                if (DataType == "nchar" || DataType == "nvarchar" || DataType == "binary" || DataType == "varbinary")
+                if (DataType is "nchar" or "nvarchar" or "binary" or "varbinary")
                 {
                     return string.Format(CultureInfo.InvariantCulture, "{0}({1})", DataType, CharacterMaxLength);
                 }

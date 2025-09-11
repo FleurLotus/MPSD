@@ -15,8 +15,8 @@
 
         public static TResult RunSync<TResult>(Func<Task<TResult>> func)
         {
-            var cultureUi = CultureInfo.CurrentUICulture;
-            var culture = CultureInfo.CurrentCulture;
+            CultureInfo cultureUi = CultureInfo.CurrentUICulture;
+            CultureInfo culture = CultureInfo.CurrentCulture;
             return myTaskFactory.StartNew(() =>
             {
                 Thread.CurrentThread.CurrentCulture = culture;
@@ -27,8 +27,8 @@
 
         public static void RunSync(Func<Task> func)
         {
-            var cultureUi = CultureInfo.CurrentUICulture;
-            var culture = CultureInfo.CurrentCulture;
+            CultureInfo cultureUi = CultureInfo.CurrentUICulture;
+            CultureInfo culture = CultureInfo.CurrentCulture;
             myTaskFactory.StartNew(() =>
             {
                 Thread.CurrentThread.CurrentCulture = culture;

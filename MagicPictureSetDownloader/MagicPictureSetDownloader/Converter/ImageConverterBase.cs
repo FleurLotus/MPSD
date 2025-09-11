@@ -1,13 +1,10 @@
 namespace MagicPictureSetDownloader.Converter
 {
     using System;
-    using System.IO;
-    using System.Windows.Media.Imaging;
-    using System.Runtime.Caching;
     using System.Collections.Specialized;
-
-    using SharpVectors.Converters;
-    using SharpVectors.Renderers.Wpf;
+    using System.IO;
+    using System.Runtime.Caching;
+    using System.Windows.Media.Imaging;
 
     using Common.WPF;
     using Common.WPF.Converter;
@@ -15,9 +12,12 @@ namespace MagicPictureSetDownloader.Converter
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
 
+    using SharpVectors.Converters;
+    using SharpVectors.Renderers.Wpf;
+
     public abstract class ImageConverterBase : NoConvertBackConverter
     {
-        private static StreamSvgConverter StreamSvgConverter = new StreamSvgConverter(new WpfDrawingSettings { IncludeRuntime = false, TextAsGeometry = false });
+        private static readonly StreamSvgConverter StreamSvgConverter = new StreamSvgConverter(new WpfDrawingSettings { IncludeRuntime = false, TextAsGeometry = false });
         private const string DefaultCardImage = "Default";
 
         private static readonly MemoryCache cache = new MemoryCache("Cache", new NameValueCollection() { { "CacheMemoryLimitMegabytes", "100" } });
@@ -56,7 +56,7 @@ namespace MagicPictureSetDownloader.Converter
             MemoryStream svgStream = new MemoryStream(bytes);
             MemoryStream stream = new MemoryStream();
             StreamSvgConverter.Convert(svgStream, stream);
-            
+
             return StreamToImage(stream, key);
         }
         protected BitmapImage BytesToImage(byte[] bytes, string key)

@@ -18,10 +18,7 @@
 
         public MockDbDataReader(MockDbResult mockDbResult)
         {
-            if (mockDbResult == null)
-            {
-                throw new ArgumentNullException(nameof(mockDbResult));
-            }
+            ArgumentNullException.ThrowIfNull(mockDbResult);
             _tables = mockDbResult.Tables;
             SetTable(0);
         }
@@ -97,10 +94,7 @@
         }
         public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException(nameof(buffer));
-            }
+            ArgumentNullException.ThrowIfNull(buffer);
 
             byte[] b = GetFieldValue<byte[]>(ordinal);
             long read = 0;
@@ -118,10 +112,7 @@
         }
         public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
         {
-            if (buffer == null)
-            {
-                throw new ArgumentNullException(nameof(buffer));
-            }
+            ArgumentNullException.ThrowIfNull(buffer);
 
             char[] c = GetFieldValue<char[]>(ordinal);
             long read = 0;
@@ -210,10 +201,7 @@
         }
         public override int GetValues(object[] values)
         {
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(values);
             CheckIsClosed();
             CheckData();
 
@@ -270,7 +258,7 @@
             CheckIsClosed();
             CheckData();
 
-            return (T)(_currentRow[ordinal]);
+            return (T) (_currentRow[ordinal]);
         }
         private void CheckIsClosed()
         {

@@ -9,7 +9,7 @@
             IsHeader = isHeader;
             InnerText = innerText;
         }
-        
+
         public bool IsHeader { get; }
         public string InnerText { get; }
         public int ColSpan { get; }

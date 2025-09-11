@@ -12,7 +12,7 @@
 
         public List<Inline> InlineCollection
         {
-            get { return (List<Inline>)GetValue(InlineCollectionProperty); }
+            get { return (List<Inline>) GetValue(InlineCollectionProperty); }
             set { SetValue(InlineCollectionProperty, value); }
         }
 
@@ -21,7 +21,6 @@
             if (sender is PicturedTextBlock textBlock)
             {
                 textBlock.Inlines.Clear();
-
 
                 if (args.NewValue is List<Inline> inlines)
                 {

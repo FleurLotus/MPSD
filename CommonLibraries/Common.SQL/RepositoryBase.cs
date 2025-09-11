@@ -41,7 +41,7 @@
             ITable table = GetTable(schemaName, tableName);
             return table != null && table.HasColumn(name);
         }
-        
+
         public ITable GetTable(string name)
         {
             return GetTable(null, name);
@@ -55,11 +55,8 @@
         }
         public bool RowExists(string schemaName, string tableName, string[] columnNames, object[] values)
         {
-            ITable table = GetTable(schemaName, tableName);
-            if (table == null)
-            {
-                throw new Exception("Unknown table");
-            }
+            ITable table = GetTable(schemaName, tableName) ?? throw new Exception("Unknown table");
+
             if (columnNames == null || columnNames.Length == 0)
             {
                 throw new ArgumentNullException(nameof(columnNames));
@@ -86,7 +83,7 @@
                 using (IDbCommand cmd = cnx.CreateCommand())
                 {
                     cmd.CommandType = CommandType.Text;
-                    
+
                     for (int i = 0; i < columnNames.Length; i++)
                     {
                         if (i != 0)
@@ -103,7 +100,7 @@
                             sb.AppendFormat("([{0}] = @{0})", columnNames[i]);
                             IDbDataParameter param = cmd.CreateParameter();
                             param.ParameterName = "@" + columnNames[i];
-                            param.Value =  values[i];
+                            param.Value = values[i];
                             cmd.Parameters.Add(param);
                         }
                     }
@@ -111,14 +108,15 @@
                     cmd.CommandText = sb.ToString();
 
                     object o = cmd.ExecuteScalar();
-                    
+
                     return o != null && o != DBNull.Value;
                 }
             }
         }
         public void ExecuteBatch(string sqlcommand)
         {
-            string[] commands = sqlcommand.Split(new[] { "GO" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] separator = new[] { "GO" };
+            string[] commands = sqlcommand.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
             using (IDbConnection cnx = GetConnection())
             {
@@ -161,7 +159,7 @@
                     if (!string.IsNullOrWhiteSpace(trimcommand))
                     {
                         cmd.CommandText = trimcommand;
-                        foreach (var kv in parameters)
+                        foreach (KeyValuePair<string, object> kv in parameters)
                         {
                             IDbDataParameter parameter = cmd.CreateParameter();
                             parameter.ParameterName = kv.Key;
@@ -190,10 +188,10 @@
                         if (!string.IsNullOrWhiteSpace(trimcommand))
                         {
                             cmd.CommandText = trimcommand;
-                            foreach (var parameters in executionParameters)
+                            foreach (KeyValuePair<string, object>[] parameters in executionParameters)
                             {
                                 cmd.Parameters.Clear();
-                                foreach (var kv in parameters)
+                                foreach (KeyValuePair<string, object> kv in parameters)
                                 {
                                     IDbDataParameter parameter = cmd.CreateParameter();
                                     parameter.ParameterName = kv.Key;

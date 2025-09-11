@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.Html;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class HtmlTest
@@ -239,7 +239,6 @@
                     { "C91", "C91", "C91", "CA4", "CA4", "CA4", null },
                     { null, null, null, "CA4", "CA4", "CA4", null }
                 };
-
 
             for (int i = 0; i < expectedValue.GetLength(0); i++)
             {

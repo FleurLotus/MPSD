@@ -1,4 +1,4 @@
-﻿ namespace MagicPictureSetDownloader.Resources
+﻿namespace MagicPictureSetDownloader.Resources
 {
     using System.Collections.Generic;
     using System.Drawing;

@@ -22,10 +22,8 @@
 
         internal void AddColumn(int position, IColumn column, bool? isAsc = null)
         {
-            if (column == null)
-            {
-                throw new ArgumentNullException(nameof(column));
-            }
+            ArgumentNullException.ThrowIfNull(column);
+
             if (CaseSensitivity.Compare(SchemaName, column.SchemaName, CaseSensitivity) != 0)
             {
                 throw new ArgumentException("Wrong schema", nameof(column));

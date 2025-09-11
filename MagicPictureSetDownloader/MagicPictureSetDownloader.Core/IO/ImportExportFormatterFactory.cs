@@ -1,4 +1,4 @@
-﻿ namespace MagicPictureSetDownloader.Core.IO
+﻿namespace MagicPictureSetDownloader.Core.IO
 {
     using System;
     using System.IO;
@@ -13,11 +13,11 @@
 
         static ImportExportFormatterFactory()
         {
-           _formatters = Assembly.GetExecutingAssembly().GetTypes()
-                                                        .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Contains(typeof(IImportExportFormatter)))
-                                                        .Select(Activator.CreateInstance)
-                                                        .Cast<IImportExportFormatter>()
-                                                        .ToArray();
+            _formatters = Assembly.GetExecutingAssembly().GetTypes()
+                                                         .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces().Contains(typeof(IImportExportFormatter)))
+                                                         .Select(Activator.CreateInstance)
+                                                         .Cast<IImportExportFormatter>()
+                                                         .ToArray();
         }
 
         public static IImportExportFormatter Create(ExportFormat format)

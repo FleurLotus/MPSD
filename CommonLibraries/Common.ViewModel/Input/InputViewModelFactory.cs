@@ -6,7 +6,7 @@
     public class InputViewModelFactory
     {
         private static readonly Lazy<InputViewModelFactory> _lazy = new Lazy<InputViewModelFactory>(() => new InputViewModelFactory());
-        
+
         private InputViewModelFactory()
         {
         }

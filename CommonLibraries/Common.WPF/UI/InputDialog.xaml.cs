@@ -5,7 +5,7 @@
     /// <summary>
     /// Interaction logic for InputDialog.xaml
     /// </summary>
-    public partial class InputDialog 
+    public partial class InputDialog
     {
         public InputDialog(InputViewModel vm)
         {

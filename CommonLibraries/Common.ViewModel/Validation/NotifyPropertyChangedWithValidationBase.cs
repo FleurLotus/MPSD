@@ -19,7 +19,7 @@
         private readonly IDictionary<string, IList<Func<string>>> _rules;
 
         private readonly Lazy<ReaderWriterLockSlim> _lazyLock = new Lazy<ReaderWriterLockSlim>(() => new ReaderWriterLockSlim());
-        
+
         protected NotifyPropertyChangedWithValidationBase()
         {
             _rules = new Dictionary<string, IList<Func<string>>>();
@@ -29,7 +29,7 @@
             _propertyValidatorRules = _toBeValidatedProperty.ToDictionary(pi => pi, ReflectionCacheRepository.GetTypeValidatorRules);
 
             _toBeValidatedRecursiveProperty = ReflectionCacheRepository.GetToBeValidatedRecursiveProperty(GetType());
-            
+
         }
         protected IValidator Validator { get; set; }
         public string this[string columnName]
@@ -43,33 +43,24 @@
 
         protected void AddValidationRule(IEnumerable<string> propertyNames, Func<string> rule)
         {
-            if (propertyNames == null)
-            {
-                throw new ArgumentNullException(nameof(propertyNames));
-            }
-            foreach (var propertyName in propertyNames)
+            ArgumentNullException.ThrowIfNull(propertyNames);
+            foreach (string propertyName in propertyNames)
             {
                 AddValidationRule(propertyName, rule);
             }
         }
         protected void AddValidationRule(string propertyName, IEnumerable<Func<string>> rules)
         {
-            if (rules == null)
-            {
-                throw new ArgumentNullException(nameof(rules));
-            }
+            ArgumentNullException.ThrowIfNull(rules);
 
-            foreach (var rule in rules)
+            foreach (Func<string> rule in rules)
             {
                 AddValidationRule(propertyName, rule);
             }
         }
         protected void AddValidationRule(string propertyName, Func<string> rule)
         {
-            if (rule == null)
-            {
-                throw new ArgumentNullException(nameof(rule));
-            }
+            ArgumentNullException.ThrowIfNull(rule);
 
             if (_toBeValidatedProperty.All(pi => pi.Name != propertyName))
             {
@@ -93,7 +84,7 @@
             StringBuilder errorMessage = new StringBuilder();
 
             //Property rule checks
-            foreach (var pi in _toBeValidatedProperty)
+            foreach (PropertyInfo pi in _toBeValidatedProperty)
             {
                 string propName = pi.Name;
                 string res = ValidateProperty(propName);
@@ -137,7 +128,7 @@
         private string ValidatePropertyUsingAttributes(string propertyName)
         {
             //Rules Attribute check
-            var keyValue = _propertyValidatorRules.First(kv => kv.Key.Name == propertyName);
+            KeyValuePair<PropertyInfo, Func<object, string>[]> keyValue = _propertyValidatorRules.First(kv => kv.Key.Name == propertyName);
             if (keyValue.Value == null || keyValue.Value.Length == 0)
             {
                 return null;
@@ -152,7 +143,7 @@
 
             StringBuilder sb = new StringBuilder();
             object value = getter.Invoke(this, null);
-            foreach (var rule in keyValue.Value)
+            foreach (Func<object, string> rule in keyValue.Value)
             {
                 string res = rule(value);
                 if (!string.IsNullOrWhiteSpace(res))
@@ -170,17 +161,10 @@
             using (new ReaderLock(_lazyLock.Value))
             {
                 IList<Func<string>> lst = _rules.GetOrDefault(propertyName);
-                if (lst == null || lst.Count == 0)
-                {
-                    propertyRules = new List<Func<string>>();
-                }
-                else
-                {
-                    propertyRules = new List<Func<string>>(lst);
-                }
+                propertyRules = lst == null || lst.Count == 0 ? new List<Func<string>>() : new List<Func<string>>(lst);
             }
-            
-            foreach (var rule in propertyRules)
+
+            foreach (Func<string> rule in propertyRules)
             {
                 string res = rule();
                 if (!string.IsNullOrWhiteSpace(res))

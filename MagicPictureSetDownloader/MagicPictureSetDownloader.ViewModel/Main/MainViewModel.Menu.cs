@@ -8,13 +8,13 @@
 
     using Common.Notify;
     using Common.Threading;
-    using Common.ViewModel;
-    using Common.ViewModel.Menu;
-    using Common.ViewModel.Input;
+    using Common.ViewModel.Command;
     using Common.ViewModel.Dialog;
+    using Common.ViewModel.Input;
+    using Common.ViewModel.Menu;
 
-    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Core;
+    using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Deck;
     using MagicPictureSetDownloader.ViewModel.Download;
@@ -26,7 +26,7 @@
 
     public partial class MainViewModel
     {
-        const string None = "--- None ---";
+        private const string None = "--- None ---";
 
         #region EventHandler
 
@@ -43,21 +43,13 @@
         public event EventHandler<EventArgs<Exception>> ExceptionOccured;
 
         #endregion
-        private readonly MenuViewModel _menuRoot;
-        private readonly MenuViewModel _contextMenuRoot;
         private SearchViewModel _searchViewModel;
-        
+
         private MenuViewModel _collectionViewModel;
 
-        public MenuViewModel MenuRoot
-        {
-            get { return _menuRoot; }
-        }
-        public MenuViewModel ContextMenuRoot
-        {
-            get { return _contextMenuRoot; }
-        }
-     
+        public MenuViewModel MenuRoot { get; }
+        public MenuViewModel ContextMenuRoot { get; }
+
         #region Events
 
         private void OnUpdateDatabaseRequested(DownloadViewModelBase vm)
@@ -113,7 +105,7 @@
         }
         private void UpdatePriceDatabaseCommandExecute(object o)
         {
-            OnAutoUpdateDatabaseRequested(new AutoDownloadPriceViewModel((PriceSource)o));
+            OnAutoUpdateDatabaseRequested(new AutoDownloadPriceViewModel((PriceSource) o));
             LoadCardsHierarchy();
         }
         private void UpdatePreconstructedDeckCommandExecute(object o)
@@ -180,7 +172,7 @@
                 string toBeDeleted = vm.Selected;
                 string toAdd = vm.Selected2;
 
-                if (!string.IsNullOrWhiteSpace(toBeDeleted)&& !string.IsNullOrWhiteSpace(toAdd))
+                if (!string.IsNullOrWhiteSpace(toBeDeleted) && !string.IsNullOrWhiteSpace(toAdd))
                 {
                     Loading = true;
                     ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(DeleteCollectionAsync, vm));
@@ -221,7 +213,7 @@
         }
         private void CardInputCommandExecute(object o)
         {
-            OnDialogWanted(new CardInputViewModel(Hierarchical.Name, (int)o));
+            OnDialogWanted(new CardInputViewModel(Hierarchical.Name, (int) o));
             LoadCardsHierarchy();
         }
         private void CollectionInputGraphicCommandExecute(object o)
@@ -326,7 +318,7 @@
                 return;
             }
 
-            var vm = new CardRemoveViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
+            CardRemoveViewModel vm = new CardRemoveViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
             OnDialogWanted(vm);
 
             if (vm.Result == true)
@@ -389,7 +381,6 @@
 
                 LoadCardsHierarchy();
             }
-
         }
         private void CopyCommandExecute(object o)
         {
@@ -400,7 +391,7 @@
             MoveOrCopy(o as ICardCollection, Hierarchical.Selected, false);
         }
         #endregion
-       
+
         private void CreateMenu()
         {
             //File
@@ -415,7 +406,7 @@
             fileMenu.AddChild(MenuViewModel.Separator());
             //Price
             MenuViewModel priceMenu = new MenuViewModel("Update _Prices Database");
-            foreach (PriceSource pricesource in (PriceSource[])Enum.GetValues(typeof(PriceSource)))
+            foreach (PriceSource pricesource in (PriceSource[]) Enum.GetValues(typeof(PriceSource)))
             {
                 priceMenu.AddChild(new MenuViewModel(pricesource.ToString("g"), new RelayCommand(UpdatePriceDatabaseCommandExecute), pricesource));
             }
@@ -534,9 +525,9 @@
                 foreach (ICardCollection cardCollection in cardCollections)
                 {
                     MenuViewModel menuViewModel = new MenuViewModel(cardCollection.Name, new RelayCommand(ShowCollectionCommandExecute), cardCollection.Name)
-                                                      {
-                                                          IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name
-                                                      };
+                    {
+                        IsChecked = Hierarchical != null && Hierarchical.Name == cardCollection.Name
+                    };
 
                     _collectionViewModel.AddChild(menuViewModel);
                 }
@@ -575,7 +566,7 @@
             }
 
             ICardCollection sourceCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == Hierarchical.Name);
-            
+
             string title = copy ? "Copy" : "Move";
             InputViewModel questionViewModel = InputViewModelFactory.Instance.CreateQuestionViewModel(title, string.Format("{0} selected from {1} to {2}?", title, sourceCollection.Name, destCollection.Name));
             OnInputRequested(questionViewModel);
@@ -627,7 +618,7 @@
                 }
             }
         }
-        
+
         #region Async
 
         private void AsyncCalling(object state)

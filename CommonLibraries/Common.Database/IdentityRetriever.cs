@@ -9,7 +9,7 @@
 
         //ALERT: Warning, sql injection!
         public static string IdentityQuery { get; set; }
-        
+
         public static int GetId(IDbCommand cmd)
         {
             //must be done in the transaction because of the way, SQLCE works

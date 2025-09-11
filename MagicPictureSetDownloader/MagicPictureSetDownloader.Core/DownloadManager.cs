@@ -75,7 +75,7 @@
 
         public string InsertPictureInDb(string pictureUrl, object param)
         {
-            string idScryFall = (string)param;
+            string idScryFall = (string) param;
 
             IPicture picture = MagicDatabase.GetPicture(idScryFall);
             if (picture == null)

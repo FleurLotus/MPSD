@@ -1,11 +1,12 @@
 ﻿namespace Common.Database
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Linq;
     using System.Reflection;
-    using System.Collections.Generic;
     using System.Text;
+
     using Common.Enums;
 
     internal class CommandBuilder
@@ -17,7 +18,7 @@
         private string _insertQuery;
         private string[] _notKeycolumns;
         private string[] _canInsertColumns;
-        
+
         public CommandBuilder(TypeDbInfo typeDbInfo)
         {
             _typeDbInfo = typeDbInfo;
@@ -26,14 +27,8 @@
 
         public void BuildSelectOneCommand(IDbCommand cmd, object input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(input);
+            ArgumentNullException.ThrowIfNull(cmd);
 
             CheckHasKey();
 
@@ -44,20 +39,14 @@
         }
         public void BuildSelectAllCommand(IDbCommand cmd)
         {
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(cmd);
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _selectQuery;
         }
         public void BuildDeleteAllCommand(IDbCommand cmd)
         {
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(cmd);
 
             CheckRestriction(Restriction.Delete);
 
@@ -66,21 +55,15 @@
         }
         public void BuildUpdateOneCommand(IDbCommand cmd, object input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(input);
+            ArgumentNullException.ThrowIfNull(cmd);
 
             CheckRestriction(Restriction.Update);
             CheckHasKey();
 
             cmd.CommandType = CommandType.Text;
             cmd.CommandText = _updateQuery;
-            
+
             foreach (string col in _notKeycolumns)
             {
                 AddParameter(cmd, input, col);
@@ -90,14 +73,8 @@
         }
         public void BuildDeleteOneCommand(IDbCommand cmd, object input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(input);
+            ArgumentNullException.ThrowIfNull(cmd);
 
             CheckRestriction(Restriction.Delete);
             CheckHasKey();
@@ -109,14 +86,8 @@
         }
         public void BuildInsertOneCommand(IDbCommand cmd, object input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException(nameof(input));
-            }
-            if (cmd == null)
-            {
-                throw new ArgumentNullException(nameof(cmd));
-            }
+            ArgumentNullException.ThrowIfNull(input);
+            ArgumentNullException.ThrowIfNull(cmd);
 
             CheckRestriction(Restriction.Insert);
 

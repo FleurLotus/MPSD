@@ -21,7 +21,7 @@
 
         public string Validate(object instance)
         {
-            return IsValide(instance) ? null: _errorMessage;
+            return IsValide(instance) ? null : _errorMessage;
         }
     }
 }

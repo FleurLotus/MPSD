@@ -12,21 +12,21 @@
         {
             DbCommand command = MockDbProviderFactory.Instance.CreateCommand();
             Assert.That(command, Is.Not.Null);
-            Assert.That(command, Is.InstanceOf(typeof(MockDbCommand)));
+            Assert.That(command, Is.InstanceOf<MockDbCommand>());
         }
         [Test]
         public void TestCreateConnection()
         {
             DbConnection connection = MockDbProviderFactory.Instance.CreateConnection();
             Assert.That(connection, Is.Not.Null);
-            Assert.That(connection, Is.InstanceOf(typeof(MockDbConnection)));
+            Assert.That(connection, Is.InstanceOf<MockDbConnection>());
         }
         [Test]
         public void TestCreateParameter()
         {
             DbParameter parameter = MockDbProviderFactory.Instance.CreateParameter();
             Assert.That(parameter, Is.Not.Null);
-            Assert.That(parameter, Is.InstanceOf(typeof(MockDbParameter)));
+            Assert.That(parameter, Is.InstanceOf<MockDbParameter>());
         }
         [Test]
         public void TestOtherProperties()

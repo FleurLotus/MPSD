@@ -5,7 +5,7 @@
     using Common.Enums;
 
     using MagicPictureSetDownloader.Interface;
-    
+
     public enum DisplayCardType
     {
         Instant,
@@ -171,8 +171,8 @@
         public static CardType GetCardType(string type, string castingCost)
         {
             CardType cardType = CardType.Token;
-            
-            if (IsToken(type) || string.IsNullOrEmpty(castingCost) && IsCreature(type))
+
+            if (IsToken(type) || (string.IsNullOrEmpty(castingCost) && IsCreature(type)))
             {
                 return CardType.Token;
             }
@@ -211,7 +211,6 @@
             {
                 cardType |= CardType.Planeswalker;
             }
-
 
             if (IsPhenomenon(type))
             {
@@ -332,7 +331,7 @@
             {
                 cardSubType |= CardSubType.Room;
             }
-            
+
             if (IsOmen(type))
             {
                 cardSubType |= CardSubType.Omen;
@@ -411,7 +410,7 @@
         }
         public static bool IsCreature(string type)
         {
-            return type.ToLowerInvariant().Contains("summon") || type.ToLowerInvariant().Contains("eaturecray") || 
+            return type.ToLowerInvariant().Contains("summon") || type.ToLowerInvariant().Contains("eaturecray") ||
                   (type.ToLowerInvariant().Contains("creature") && !type.ToLowerInvariant().Contains("enchant creature"));
         }
         public static bool IsKindred(string type)
@@ -428,7 +427,7 @@
         }
         public static bool IsSpecial(string type)
         {
-            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type) || IsVanguard(type) || IsStickers(type) ;
+            return IsPhenomenon(type) || IsConspiracy(type) || IsScheme(type) || IsPlane(type) || IsContraption(type) || IsVanguard(type) || IsStickers(type);
         }
         public static bool IsContraption(string type)
         {
@@ -497,7 +496,7 @@
         public static bool IsVehicle(string type)
         {
             return type.ToLowerInvariant().Contains("vehicle");
-        } 
+        }
         public static bool IsHost(string type)
         {
             return type.ToLowerInvariant().Contains("host");

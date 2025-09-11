@@ -1,9 +1,9 @@
 ﻿namespace Common.Database
 {
-    using System.Linq;
-    using System.Reflection;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
     using Common.Library;
 
@@ -69,7 +69,7 @@
             DbRestictedDmlAttribute[] restrictionAttributes = type.GetCustomAttributes<DbRestictedDmlAttribute>().ToArray();
 
             Restriction restriction = restrictionAttributes.Length == 1 ? restrictionAttributes[0].Restriction : Restriction.None;
-            
+
             typeDbInfo = new TypeDbInfo(tableName, keys, identity, columns, restriction);
             _analysied[type] = typeDbInfo;
 

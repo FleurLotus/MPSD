@@ -111,7 +111,7 @@
             {
                 if (_disposed)
                 {
-                    throw new ObjectDisposedException(typeof(ConnectionWrapper).Name);
+                    throw new ObjectDisposedException(nameof(ConnectionWrapper));
                 }
             }
 

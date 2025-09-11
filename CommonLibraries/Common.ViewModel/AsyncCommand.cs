@@ -16,10 +16,7 @@
 
         public AsyncCommand(Func<Task> execute, Func<bool> canExecute = null, IErrorHandler errorHandler = null)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException(nameof(execute));
-            }
+            ArgumentNullException.ThrowIfNull(execute);
 
             _execute = execute;
             _canExecute = canExecute;
@@ -75,10 +72,7 @@
 
         public AsyncCommand(Func<T, Task> execute, Func<T, bool> canExecute = null, IErrorHandler errorHandler = null)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException(nameof(execute));
-            }
+            ArgumentNullException.ThrowIfNull(execute);
 
             _execute = execute;
             _canExecute = canExecute;
@@ -115,12 +109,12 @@
         #region Explicit implementations
         bool ICommand.CanExecute(object parameter)
         {
-            return CanExecute((T)parameter);
+            return CanExecute((T) parameter);
         }
 
         void ICommand.Execute(object parameter)
         {
-            ExecuteAsync((T)parameter).FireAndForgetSafeAsync(_errorHandler);
+            ExecuteAsync((T) parameter).FireAndForgetSafeAsync(_errorHandler);
         }
         #endregion
     }

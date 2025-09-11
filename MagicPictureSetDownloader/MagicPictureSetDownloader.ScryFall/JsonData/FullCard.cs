@@ -1,10 +1,10 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall.JsonData
 {
-    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Collections.Generic;
-
     using System.Text.Json.Serialization;
+
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
 
     internal class FullCard : FullCardFace
     {

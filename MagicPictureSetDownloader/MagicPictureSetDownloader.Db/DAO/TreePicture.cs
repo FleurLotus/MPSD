@@ -2,7 +2,7 @@ namespace MagicPictureSetDownloader.Db.DAO
 {
     using MagicPictureSetDownloader.Interface;
 
-    internal class TreePicture: ITreePicture
+    internal class TreePicture : ITreePicture
     {
         private byte[] _image;
         public string Name { get; set; }

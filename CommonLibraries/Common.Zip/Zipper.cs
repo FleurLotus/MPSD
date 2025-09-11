@@ -1,6 +1,7 @@
 ﻿namespace Common.Zip
 {
     using System.IO;
+
     using ICSharpCode.SharpZipLib.Zip;
 
     public static class Zipper

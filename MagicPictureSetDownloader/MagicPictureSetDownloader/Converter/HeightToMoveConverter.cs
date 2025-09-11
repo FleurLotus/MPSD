@@ -27,7 +27,6 @@ namespace MagicPictureSetDownloader.Converter
                 return 0.0;
             }
 
-
             int param = int.Parse(parameter.ToString());
             int coef = 1;
 
@@ -48,8 +47,8 @@ namespace MagicPictureSetDownloader.Converter
                 coef = 1;
             }
 
-            double actualHeight = (double)value[1];
-            double actualWidth = (double)value[2];
+            double actualHeight = (double) value[1];
+            double actualWidth = (double) value[2];
             return coef * (actualHeight - actualWidth) / 2;
         }
     }

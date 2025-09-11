@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Common.Enums;
 
     using MagicPictureSetDownloader.Interface;
@@ -140,9 +141,7 @@
                 }
             }
 
-
-            
-            foreach (ShardColor color in new [] {ShardColor.White, ShardColor.Blue, ShardColor.Black, ShardColor.Red, ShardColor.Green})
+            foreach (ShardColor color in new[] { ShardColor.White, ShardColor.Blue, ShardColor.Black, ShardColor.Red, ShardColor.Green })
             {
                 comp = CompareEquals(xColor, yColor, color, true);
                 if (comp.HasValue)
@@ -215,7 +214,7 @@
         {
             (int xNoGenerics, int xXYZ, int xGenerics) = GetWeightedCCM(x);
             (int yNoGenerics, int yXYZ, int yGenerics) = GetWeightedCCM(y);
-            
+
             //  a) by Number of colored mana increasing
             int comp = xNoGenerics.CompareTo(yNoGenerics);
             if (comp != 0)
@@ -243,7 +242,6 @@
         }
         private (int, int, int) GetWeightedCCM(ICardAllDbInfo cardAllDbInfo)
         {
-            
 
             string castingCost = string.Join(" ", GetFaces(cardAllDbInfo).Select(cf => cf.CastingCost));
 
@@ -366,7 +364,6 @@
                 }
             }
 
-
             return 0;
         }
 
@@ -425,6 +422,5 @@
             }
             return count;
         }
-
     }
 }

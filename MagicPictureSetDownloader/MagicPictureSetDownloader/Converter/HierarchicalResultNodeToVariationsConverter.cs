@@ -1,15 +1,14 @@
 namespace MagicPictureSetDownloader.Converter
 {
     using System;
-    using System.Globalization;
-    using System.Windows.Data;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-
-    using MagicPictureSetDownloader.ViewModel.Main;
+    using System.Windows.Data;
 
     using Common.WPF.Converter;
 
+    using MagicPictureSetDownloader.ViewModel.Main;
 
     [ValueConversion(typeof(HierarchicalResultNodeViewModel), typeof(IList<CardViewModel>))]
     public class HierarchicalResultNodeToVariationsConverter : NoConvertBackConverter
@@ -22,7 +21,6 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             HashSet<CardViewModel> ret = new HashSet<CardViewModel>();
-            
 
             foreach (CardViewModel card in node.AllCard)
             {

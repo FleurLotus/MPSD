@@ -4,9 +4,9 @@
     using System.IO;
     using System.Text;
 
-    using NUnit.Framework;
-
     using Common.CSV;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class CsvReaderTest
@@ -15,12 +15,12 @@
         [Test]
         public void TestNullStringArgument()
         {
-            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("path"), () => new CsvReader((string)null, false), "Null string arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("path"), () => new CsvReader((string) null, false), "Null string arg should throw ArgumentNullException");
         }
         [Test]
         public void TestNullStreamArgument()
         {
-            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("stream"), () => new CsvReader((Stream)null, false), "Null stream arg should throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("stream"), () => new CsvReader((Stream) null, false), "Null stream arg should throw ArgumentNullException");
         }
         [Test]
         public void TestUnexistingPathArgument()
@@ -381,6 +381,5 @@
             Assert.Throws<CsvReaderErrorStateException>(() => reader.Read(), "Read should throw CsvReaderErrorStateException when call Read after {0}", exceptionName);
             Assert.Throws<CsvReaderErrorStateException>(() => reader.GetValue(0), "GetValue() should throw CsvReaderErrorStateException when call Read after {0}", exceptionName);
         }
-
     }
 }

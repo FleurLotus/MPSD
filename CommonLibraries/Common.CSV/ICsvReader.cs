@@ -2,7 +2,7 @@
 {
     using System;
 
-    public interface ICsvReader: IDisposable
+    public interface ICsvReader : IDisposable
     {
         bool WithHeader { get; }
         char Separator { get; }

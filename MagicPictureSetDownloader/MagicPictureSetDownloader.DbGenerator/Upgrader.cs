@@ -1,12 +1,12 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
     using System.Data.SQLite;
-    using System.Reflection;
-    using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
 
     using Common.SQL;
     using Common.SQLite;
@@ -23,7 +23,7 @@
         private class TemporaryDatabase : IDisposable
         {
             private readonly string _temporaryDatabasePath;
-                        
+
             public TemporaryDatabase()
             {
                 _temporaryDatabasePath = new Generator().Generate(true);
@@ -60,7 +60,7 @@
                     cmd.CommandType = CommandType.Text;
                     cmd.CommandText = VersionQuery;
 
-                    version = (int)(long)(cmd.ExecuteScalar());
+                    version = (int) (long) (cmd.ExecuteScalar());
                 }
             }
             try
@@ -92,7 +92,7 @@
             }
 
             Repository repo = new Repository(_connectionString);
-        
+
             UpgradeData(dbVersion, repo);
 
 #if !DEBUG
@@ -103,21 +103,18 @@
             }
 #endif
         }
-        
+
         private void UpgradeData(int dbVersion, IRepository repo)
         {
-            using (var temporaryDabase = new TemporaryDatabase())
+            using (TemporaryDatabase temporaryDabase = new TemporaryDatabase())
             {
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
             }
-
 
             if (dbVersion <= 20)
             {
                 repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewLanguage, new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("@name", "Elvish") });
             }
-
-
         }
         private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)
         {
@@ -127,9 +124,9 @@
             Dictionary<string, Tuple<string, string>> currentPreconstructedDecks = GetPreconstructedDecks(_connectionString);
             Dictionary<Tuple<string, string, string>, int> currentPreconstructedDeckCards = GetPreconstructedDeckCards(_connectionString);
 
-            var parameters = new List<KeyValuePair<string, object>[]>();
+            List<KeyValuePair<string, object>[]> parameters = new List<KeyValuePair<string, object>[]>();
 
-            foreach (var kv in referencePreconstructedDecks)
+            foreach (KeyValuePair<string, Tuple<string, string>> kv in referencePreconstructedDecks)
             {
                 if (!currentPreconstructedDecks.ContainsKey(kv.Key))
                 {
@@ -145,7 +142,7 @@
                 parameters.Clear();
             }
 
-            foreach (var kv in referencePreconstructedDeckCards)
+            foreach (KeyValuePair<Tuple<string, string, string>, int> kv in referencePreconstructedDeckCards)
             {
                 if (!currentPreconstructedDeckCards.ContainsKey(kv.Key))
                 {

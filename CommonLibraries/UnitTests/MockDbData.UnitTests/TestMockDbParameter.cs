@@ -24,9 +24,10 @@
         [Test]
         public void TestProperties()
         {
-            MockDbParameter parameter = new MockDbParameter();
-
-            parameter.DbType = DbType.String;
+            MockDbParameter parameter = new MockDbParameter
+            {
+                DbType = DbType.String
+            };
             Assert.That(parameter.DbType, Is.EqualTo(DbType.String));
 
             parameter.Value = 63.5;

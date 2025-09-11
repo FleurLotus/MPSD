@@ -1,9 +1,9 @@
-﻿using MagicPictureSetDownloader.ScryFall.JsonData;
-
-namespace MagicPictureSetDownloader.ScryFall.JsonLite
+﻿namespace MagicPictureSetDownloader.ScryFall.JsonLite
 {
     using System;
     using System.Text.Json.Serialization;
+
+    using MagicPictureSetDownloader.ScryFall.JsonData;
 
     public class CardFace
     {

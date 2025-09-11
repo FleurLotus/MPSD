@@ -14,9 +14,10 @@
         [Test]
         public void TestProperties()
         {
-            Index index = new Index();
-
-            index.Name = "Name";
+            Index index = new Index
+            {
+                Name = "Name"
+            };
             Assert.That(index.Name, Is.EqualTo("Name"));
             index.TableName = "TableName";
             Assert.That(index.TableName, Is.EqualTo("TableName"));
@@ -90,7 +91,6 @@
                 index = new Index { TableName = "TableName", Name = "Name", CaseSensitivity = caseSensitivity };
                 yield return new TestCaseData(index).Returns(caseSensivityTestCaseSource.Expected("TableName.Name")).SetName($"{methodCaller} (No schema {label})");
 
-
                 index = new Index { SchemaName = "SchemaName", Name = "Name", CaseSensitivity = caseSensitivity };
                 yield return new TestCaseData(index).Returns(caseSensivityTestCaseSource.Expected("SchemaName..Name")).SetName($"{methodCaller} (No table {label})");
             }
@@ -99,7 +99,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object index, object index2, IConstraint constraint)
         {
-            Assert.That(((Index)index).CompareTo(((Index)index2)), constraint);
+            Assert.That(((Index) index).CompareTo(((Index) index2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {

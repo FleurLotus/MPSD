@@ -19,7 +19,7 @@
         public string DeleteRule { get; set; }
 
         public CaseSensitivity CaseSensitivity { get; internal set; }
-        
+
         public IColumnForForeignKey[] Columns()
         {
             return _columns.Values.ToArray();
@@ -27,14 +27,9 @@
 
         internal void AddColumn(int position, IColumn source, IColumn reference)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (reference == null)
-            {
-                throw new ArgumentNullException(nameof(reference));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(reference);
+
             if (CaseSensitivity.Compare(SourceSchemaName, source.SchemaName, CaseSensitivity) != 0)
             {
                 throw new ArgumentException("Wrong source schema", nameof(source));

@@ -1,8 +1,5 @@
 ﻿namespace MagicPictureSetDownloader.ScryFall
 {
-    using Common.Web;
-    using MagicPictureSetDownloader.ScryFall.JsonData;
-    using MagicPictureSetDownloader.ScryFall.JsonLite;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -10,7 +7,12 @@
     using System.Linq;
     using System.Text.Json;
 
-    public static class ScryFallDataRetriever 
+    using Common.Web;
+
+    using MagicPictureSetDownloader.ScryFall.JsonData;
+    using MagicPictureSetDownloader.ScryFall.JsonLite;
+
+    public static class ScryFallDataRetriever
     {
         private const string ScryfallBulk = @"https://api.scryfall.com/bulk-data";
         private const string ScryfallSets = @"https://api.scryfall.com/sets";
@@ -69,7 +71,7 @@
                     cards.Add(card);
 
 #if DEBUG
-                    var errors = JsonMissingMapping.Check(card);
+                    IList<string> errors = JsonMissingMapping.Check(card);
                     if (errors.Count > 0)
                     {
                         Debugger.Break();

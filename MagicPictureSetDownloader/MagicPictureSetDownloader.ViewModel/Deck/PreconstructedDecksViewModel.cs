@@ -4,11 +4,12 @@
     using System.Linq;
 
     using Common.ViewModel.Dialog;
+
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Main;
 
-    public class PreconstructedDecksViewModel: DialogViewModelBase
+    public class PreconstructedDecksViewModel : DialogViewModelBase
     {
         private PreconstructedDeckViewModel _preconstructedDeckSelected;
         private ICardCollection _cardCollectionSelected;
@@ -103,7 +104,6 @@
                     //Alphabet order
                     comp = x.Name.CompareTo(y.Name);
                 }
-
 
                 return comp;
             });

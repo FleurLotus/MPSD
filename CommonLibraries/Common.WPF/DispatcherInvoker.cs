@@ -2,6 +2,7 @@
 {
     using System;
     using System.Windows.Threading;
+
     using Common.Library;
 
     public class DispatcherInvoker : IDispatcherInvoker

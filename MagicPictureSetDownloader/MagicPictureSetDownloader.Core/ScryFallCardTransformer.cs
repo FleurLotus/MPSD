@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
 
     using Common.Notify;
+
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall.JsonLite;
 
@@ -58,7 +59,7 @@
                         Language = card.Language.ToString(),
                         PrintedName = card.PrintedName,
                     };
-    
+
                     _downloadManager.InsertLanguageInDb(c);
 
                     _progressReporter.Progress();
@@ -75,8 +76,8 @@
 
         public void Start()
         {
-            var parserTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Parse)).ToArray();
-            var updateTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action)Update)).ToArray();
+            Task[] parserTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action) Parse)).ToArray();
+            Task[] updateTasks = Enumerable.Range(0, 1).Select(_ => Task.Run((Action) Update)).ToArray();
 
             _inputs.CompleteAdding();
             Task.WaitAll(parserTasks);
@@ -129,7 +130,7 @@
                     {
                         c.ExternalId.Add((CardIdSource.Cardmarket, card.CardmarketId.Value.ToString()));
                     }
-                    if (card.MultiverseIds == null || card.MultiverseIds.Count> 0)
+                    if (card.MultiverseIds == null || card.MultiverseIds.Count > 0)
                     {
                         foreach (int id in card.MultiverseIds)
                         {
@@ -209,7 +210,7 @@
                             IsMainFace = true,
                         };
 
-                        for (int i = 0; i< card.CardFaces.Count;i++)
+                        for (int i = 0; i < card.CardFaces.Count; i++)
                         {
                             if (i > 0)
                             {
@@ -260,19 +261,11 @@
         }
         private void OnError(string message)
         {
-            var e = Error;
-            if (e != null)
-            {
-                e(this, new EventArgs<string>(message));
-            }
+            Error?.Invoke(this, new EventArgs<string>(message));
         }
         private void OnFinished()
         {
-            var e = Finished;
-            if (e != null)
-            {
-                e(this, EventArgs.Empty);
-            }
+            Finished?.Invoke(this, EventArgs.Empty);
         }
     }
 }

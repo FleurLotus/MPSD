@@ -12,9 +12,10 @@
         [Test]
         public void TestProperties()
         {
-            PrimaryKey primaryKey = new PrimaryKey();
-
-            primaryKey.Name = "Name";
+            PrimaryKey primaryKey = new PrimaryKey
+            {
+                Name = "Name"
+            };
             Assert.That(primaryKey.Name, Is.EqualTo("Name"));
 
             primaryKey.TableName = "TableName";
@@ -101,7 +102,7 @@
         [TestCaseSource(nameof(TestCompareSource), new object[] { nameof(TestCompare) })]
         public void TestCompare(object primaryKey, object primaryKey2, IConstraint constraint)
         {
-            Assert.That(((PrimaryKey)primaryKey).CompareTo(((PrimaryKey)primaryKey2)), constraint);
+            Assert.That(((PrimaryKey) primaryKey).CompareTo(((PrimaryKey) primaryKey2)), constraint);
         }
         public static IEnumerable<TestCaseData> TestCompareSource(string methodCaller)
         {

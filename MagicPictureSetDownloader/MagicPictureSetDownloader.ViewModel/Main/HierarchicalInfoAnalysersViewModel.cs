@@ -24,7 +24,7 @@
             DownCommand = new RelayCommand(DownCommandExecute, DownCommandCanExecute);
 
             CreateHierarchy(_magicDatabase.GetOptions(TypeOfOption.Hierarchy));
-            
+
             _allCount = _all.Count;
             SelectedIndex = -1;
         }
@@ -80,7 +80,7 @@
 
             _all.AddRange(dic.Values);
         }
-        
+
         #region Command
 
         private void UpCommandExecute(object o)
@@ -92,7 +92,7 @@
             index--;
             _all.Insert(index, current);
             OnNotifyPropertyChanged(nameof(All));
-            SelectedIndex= index;
+            SelectedIndex = index;
         }
         private bool UpCommandCanExecute(object o)
         {

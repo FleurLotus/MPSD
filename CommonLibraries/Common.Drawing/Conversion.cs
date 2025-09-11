@@ -1,20 +1,22 @@
 ﻿namespace Common.Drawing
 {
-    using System.IO;
-    using System.Linq;
+    using System;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
-    using System;
+    using System.IO;
+    using System.Linq;
 
     public static class Conversion
     {
+        private static readonly char[] separator = new[] { ';' };
+
         public static string GetFileExtension(this Image image)
         {
             Guid guid = image.RawFormat.Guid;
             string extension = ImageCodecInfo.GetImageEncoders()
                                                 .Where(ie => ie.FormatID == guid)
-                                                .Select(ie => ie.FilenameExtension.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                                .Select(ie => ie.FilenameExtension.Split(separator, StringSplitOptions.RemoveEmptyEntries)
                                                                                   .First()
                                                                                   .Trim('*')
                                                                                   .ToLower())
@@ -40,8 +42,8 @@
             int sourceWidth = source.Width;
             int sourceHeight = source.Height;
 
-            int newWidth = (int)(sourceWidth * percent);
-            int newHeight = (int)(sourceHeight * percent);
+            int newWidth = (int) (sourceWidth * percent);
+            int newHeight = (int) (sourceHeight * percent);
 
             return CreateResizedImage(source, newWidth, newHeight, new Rectangle(0, 0, newWidth, newHeight));
         }
@@ -53,17 +55,14 @@
             //Consider vertical pics
             if (sourceWidth < sourceHeight)
             {
-                int buff = newWidth;
-
-                newWidth = newHeight;
-                newHeight = buff;
+                (newHeight, newWidth) = (newWidth, newHeight);
             }
 
             int destX = 0, destY = 0;
             float nPercent;
 
-            float nPercentW = ((float)newWidth / sourceWidth);
-            float nPercentH = ((float)newHeight / sourceHeight);
+            float nPercentW = ((float) newWidth / sourceWidth);
+            float nPercentH = ((float) newHeight / sourceHeight);
             if (nPercentH < nPercentW)
             {
                 nPercent = nPercentH;
@@ -75,8 +74,8 @@
                 destY = Convert.ToInt16((newHeight - (sourceHeight * nPercent)) / 2);
             }
 
-            int destWidth = (int)(sourceWidth * nPercent);
-            int destHeight = (int)(sourceHeight * nPercent);
+            int destWidth = (int) (sourceWidth * nPercent);
+            int destHeight = (int) (sourceHeight * nPercent);
 
             return CreateResizedImage(source, newWidth, newHeight, new Rectangle(destX, destY, destWidth, destHeight));
         }

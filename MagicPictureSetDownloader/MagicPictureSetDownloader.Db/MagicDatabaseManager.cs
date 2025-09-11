@@ -11,7 +11,7 @@
             _magicDatabase = new MagicDatabase();
         }
 
-        public static IMagicDatabaseReadOnly ReadOnly 
+        public static IMagicDatabaseReadOnly ReadOnly
         {
             get { return _magicDatabase; }
         }

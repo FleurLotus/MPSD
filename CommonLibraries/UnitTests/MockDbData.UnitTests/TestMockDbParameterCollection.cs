@@ -74,7 +74,7 @@
             MockDbParameterCollection parameters = new MockDbParameterCollection();
             MockDbParameter parameter = new MockDbParameter("aaaaa", "zzzz");
 
-            parameters.Add((object)parameter);
+            parameters.Add((object) parameter);
             Assert.That(parameters.Count, Is.EqualTo(1));
             Assert.That(parameters[0], Is.EqualTo(parameter));
             Assert.That(parameters[parameter.ParameterName], Is.EqualTo(parameter));
@@ -89,10 +89,10 @@
         public void TestAddRange()
         {
             MockDbParameterCollection parameters = new MockDbParameterCollection();
-            MockDbParameter parameter = new MockDbParameter{ Direction = ParameterDirection.Output};
+            MockDbParameter parameter = new MockDbParameter { Direction = ParameterDirection.Output };
             MockDbParameter parameter2 = new MockDbParameter("aaaaa", "zzzz");
 
-            parameters.AddRange(new[] { parameter, parameter2});
+            parameters.AddRange(new[] { parameter, parameter2 });
             Assert.That(parameters.Count, Is.EqualTo(2));
             Assert.That(parameters[0], Is.EqualTo(parameter));
             Assert.That(parameters[1], Is.EqualTo(parameter2));
@@ -322,7 +322,7 @@
             parameters.Add(parameter);
             parameters.Add(parameter2);
 
-            Assert.That(parameters, Is.EquivalentTo(new [] { parameter, parameter2 }));
+            Assert.That(parameters, Is.EquivalentTo(new[] { parameter, parameter2 }));
         }
     }
 }

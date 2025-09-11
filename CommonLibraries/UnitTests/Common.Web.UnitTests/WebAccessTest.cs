@@ -7,7 +7,9 @@
     using System.Text;
 
     using Moq;
+
     using Newtonsoft.Json;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -27,7 +29,7 @@
 
             _httpMessageHandlerFactory = new Mock<IHttpMessageHandlerFactory>();
             _httpMessageHandlerFactory.Setup(h => h.Create(null)).Returns(_httpMessageHandler.Object);
-            _httpMessageHandlerFactory.Setup(h => h.Create(It.Is<ICredentials>(c => c is NetworkCredential && ((NetworkCredential)c).UserName == Login))).Returns(_httpMessageHandlerWithLogin.Object);
+            _httpMessageHandlerFactory.Setup(h => h.Create(It.Is<ICredentials>(c => c is NetworkCredential && ((NetworkCredential) c).UserName == Login))).Returns(_httpMessageHandlerWithLogin.Object);
         }
         [Test]
         public void TestConstructor()
@@ -94,10 +96,7 @@
 
             bool called = false;
 
-            access.CredentialRequiered += (o, e) =>
-            {
-                called = true;
-            };
+            access.CredentialRequiered += (o, e) => called = true;
 
             Assert.Throws<WebException>(() => access.GetHtml(FakeAddress));
             Assert.That(called, Is.True);
@@ -174,10 +173,7 @@
 
             bool called = false;
 
-            access.CredentialRequiered += (o, e) =>
-            {
-                called = true;
-            };
+            access.CredentialRequiered += (o, e) => called = true;
 
             string tempfile = Path.GetRandomFileName();
 

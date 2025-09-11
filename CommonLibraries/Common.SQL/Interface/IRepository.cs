@@ -10,12 +10,12 @@ namespace Common.SQL
         ITable GetTable(string schemaName, string name);
         bool TableExists(string name);
         bool TableExists(string schemaName, string name);
-        
+
         bool ColumnExists(string tableName, string name);
         bool ColumnExists(string schemaName, string tableName, string name);
-        
+
         bool RowExists(string schemaName, string tableName, string[] columnNames, object[] values);
-        
+
         void Refresh();
 
         void ExecuteBatch(string sqlcommand);

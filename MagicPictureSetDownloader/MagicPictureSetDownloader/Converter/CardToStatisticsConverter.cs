@@ -1,8 +1,8 @@
 namespace MagicPictureSetDownloader.Converter
 {
     using System;
-    using System.Linq;
     using System.Globalization;
+    using System.Linq;
 
     using Common.WPF.Converter;
 
@@ -24,7 +24,7 @@ namespace MagicPictureSetDownloader.Converter
             }
 
             StatisticViewModel[] statistics = node.Card.Statistics;
-            if (!((bool)value[1]))
+            if (!((bool) value[1]))
             {
                 return statistics;
             }

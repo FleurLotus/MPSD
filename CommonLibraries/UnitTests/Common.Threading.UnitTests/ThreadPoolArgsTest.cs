@@ -1,8 +1,8 @@
 ﻿namespace Common.Threading.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.Threading;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ThreadPoolArgsTest
@@ -24,4 +24,3 @@
         }
     }
 }
-

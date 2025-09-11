@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.ViewModel.Validation;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class GlobalValidatingTest
@@ -14,12 +14,12 @@
         [Test]
         public void TestNullInstance()
         {
-            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("instance"), () => new Validator((ValidatorViewModel)null), "Null instance view model must throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("instance"), () => new Validator((ValidatorViewModel) null), "Null instance view model must throw ArgumentNullException");
         }
         [Test]
         public void TestNullChild()
         {
-            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("child"), () => new Validator((ValidatorBase<ValidatorViewModel>)null), "Null child validator must throw ArgumentNullException");
+            Assert.Throws(Is.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("child"), () => new Validator((ValidatorBase<ValidatorViewModel>) null), "Null child validator must throw ArgumentNullException");
         }
         [Test]
         public void TestWithNoRule()

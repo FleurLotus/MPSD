@@ -37,7 +37,7 @@
         private void RaiseCollectionChanged(object param)
         {
             // We are in the creator thread, call the base implementation directly
-            base.OnCollectionChanged((NotifyCollectionChangedEventArgs)param);
+            base.OnCollectionChanged((NotifyCollectionChangedEventArgs) param);
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -57,7 +57,7 @@
         private void RaisePropertyChanged(object param)
         {
             // We are in the creator thread, call the base implementation directly
-            base.OnPropertyChanged((PropertyChangedEventArgs)param);
+            base.OnPropertyChanged((PropertyChangedEventArgs) param);
         }
     }
 }

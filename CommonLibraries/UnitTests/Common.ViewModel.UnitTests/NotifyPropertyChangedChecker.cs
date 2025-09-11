@@ -5,14 +5,15 @@
 
     using NUnit.Framework;
 
-    public class NotifyPropertyChangedChecker : IDisposable
+    public sealed class NotifyPropertyChangedChecker : IDisposable
     {
         private PropertyChangedEventArgs _args = null;
         private object _eventSender = null;
-        private INotifyPropertyChanged _notifyPropertyChanged = null;
+        private readonly INotifyPropertyChanged _notifyPropertyChanged;
 
         public NotifyPropertyChangedChecker(INotifyPropertyChanged notifyPropertyChanged)
         {
+            ArgumentNullException.ThrowIfNull(notifyPropertyChanged);
             _notifyPropertyChanged = notifyPropertyChanged;
             _notifyPropertyChanged.PropertyChanged += NotifyPropertyChangedPropertyChanged;
         }

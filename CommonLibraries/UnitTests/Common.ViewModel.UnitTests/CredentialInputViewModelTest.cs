@@ -1,8 +1,8 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.ViewModel.Web;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class CredentialInputViewModelTest

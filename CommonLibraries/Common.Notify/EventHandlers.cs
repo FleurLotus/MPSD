@@ -7,7 +7,11 @@
         where T : EventArgs
     {
         private readonly List<EventHandler<T>> _handlers = new List<EventHandler<T>>();
+#if NET9_0_OR_GREATER
+        private readonly System.Threading.Lock _synclock = new System.Threading.Lock();
+#else
         private readonly object _synclock = new object();
+#endif
 
         public EventHandlers()
         {
@@ -49,17 +53,11 @@
                     throw new HandlerAlreadyKnownException();
                 }
 
-                if (ExecuteOnAdding != null)
-                {
-                    ExecuteOnAdding(handler, _handlers.Count);
-                }
+                ExecuteOnAdding?.Invoke(handler, _handlers.Count);
 
                 _handlers.Add(handler);
 
-                if (ExecuteOnAdded != null)
-                {
-                    ExecuteOnAdded(handler, _handlers.Count);
-                }
+                ExecuteOnAdded?.Invoke(handler, _handlers.Count);
             }
         }
         public void Clear()
@@ -74,10 +72,11 @@
         {
             lock (_synclock)
             {
-                foreach (var handler in _handlers)
+                foreach (EventHandler<T> handler in _handlers)
                 {
                     EventHandler<T> handler1 = handler;
-                    Action a = () =>
+
+                    eventDispatcher.Enqueue(() =>
                         {
                             try
                             {
@@ -85,14 +84,9 @@
                             }
                             catch (Exception e)
                             {
-                                if (executeOnException != null)
-                                {
-                                    executeOnException(handler1, e);
-                                }
+                                executeOnException?.Invoke(handler1, e);
                             }
-                        };
-
-                    eventDispatcher.Enqueue(a);
+                        });
                 }
             }
         }
@@ -109,17 +103,11 @@
                     throw new HandlerNotKnownException();
                 }
 
-                if (ExecuteOnRemoving != null)
-                {
-                    ExecuteOnRemoving(handler, _handlers.Count);
-                }
+                ExecuteOnRemoving?.Invoke(handler, _handlers.Count);
 
                 _handlers.Remove(handler);
 
-                if (ExecuteOnRemoved != null)
-                {
-                    ExecuteOnRemoved(handler, _handlers.Count);
-                }
+                ExecuteOnRemoved?.Invoke(handler, _handlers.Count);
             }
         }
     }

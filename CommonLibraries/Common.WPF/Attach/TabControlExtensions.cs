@@ -8,7 +8,7 @@ namespace Common.WPF
     public static class TabControlExtensions
     {
         public static readonly DependencyProperty SelectOnlyVisibleTabsProperty = DependencyProperty.RegisterAttached("SelectOnlyVisibleTabs", typeof(bool), typeof(TabControlExtensions), new PropertyMetadata(false, SelectOnlyVisibleTabsChanged));
-        
+
         /// <summary>
         /// Use this property on a TabControl to correct the behavior
         /// of selecting Collapsed TabItems.
@@ -17,7 +17,7 @@ namespace Common.WPF
         /// <returns></returns>
         public static bool GetSelectOnlyVisibleTabs(DependencyObject obj)
         {
-            return (bool)obj.GetValue(SelectOnlyVisibleTabsProperty);
+            return (bool) obj.GetValue(SelectOnlyVisibleTabsProperty);
         }
         public static void SetSelectOnlyVisibleTabs(DependencyObject obj, bool value)
         {
@@ -31,7 +31,7 @@ namespace Common.WPF
                 return;
             }
 
-            if ((bool)args.NewValue)
+            if ((bool) args.NewValue)
             {
                 tabControl.SelectionChanged += TabControlSelectionChanged;
                 CorrectSelection(tabControl);

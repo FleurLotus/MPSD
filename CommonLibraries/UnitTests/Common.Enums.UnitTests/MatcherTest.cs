@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.Enums;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class MatcherTest
@@ -33,7 +33,7 @@
         [Test]
         public void TestWrongType()
         {
-            var ex = Assert.Throws<TypeInitializationException>(() => Matcher<int>.HasValue(1, 1));
+            TypeInitializationException ex = Assert.Throws<TypeInitializationException>(() => Matcher<int>.HasValue(1, 1));
             Assert.That(ex.InnerException, Is.TypeOf<ArgumentException>());
             Assert.That(ex.InnerException.Message, Does.Contain("T could only be a Enum"));
         }

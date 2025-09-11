@@ -1,9 +1,9 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.ViewModel.Validation;
     using Common.ViewModel.Validation.Attributes;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ValidationUsingAttributTest
@@ -12,7 +12,7 @@
         public void TestRule()
         {
             ViewModelWithValidation vm = new ViewModelWithValidation { StringValue = "123456", IntValue = 0, ObjectValue = new object() };
-            
+
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.True, "Must not have error");
             vm.ObjectValue = null;
             Assert.That(string.IsNullOrEmpty(vm.Error), Is.False, "Must have error an other null error");

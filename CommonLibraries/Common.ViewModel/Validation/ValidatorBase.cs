@@ -12,18 +12,12 @@
 
         protected ValidatorBase(T instance)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
+            ArgumentNullException.ThrowIfNull(instance);
             _instance = instance;
         }
         protected ValidatorBase(ValidatorBase<T> child)
         {
-            if (child == null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
+            ArgumentNullException.ThrowIfNull(child);
 
             _child = child;
             _instance = child._instance;

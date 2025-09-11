@@ -3,9 +3,9 @@
     using System.Collections.Generic;
     using System.IO;
 
-    using NUnit.Framework;
-
     using Common.Zip;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ZipperTest
@@ -15,7 +15,7 @@
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            var dir = Path.GetDirectoryName(typeof(ZipperTest).Assembly.Location);
+            string dir = Path.GetDirectoryName(typeof(ZipperTest).Assembly.Location);
 
             Directory.SetCurrentDirectory(dir);
         }

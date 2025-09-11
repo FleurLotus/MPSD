@@ -17,7 +17,7 @@
         NeedToBeUpdated,
         CantCheck,
     }
-    
+
     public class ProgramUpgrader
     {
         private const string LastVersionUrl = @"https://www.dropbox.com/s/0p3e0rb8dpjml6a/LastVersion.xml?dl=1";

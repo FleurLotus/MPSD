@@ -11,7 +11,7 @@
         public static readonly DependencyProperty FocusFirstProperty = DependencyProperty.RegisterAttached("FocusFirst", typeof(bool), typeof(FocusBehavior), new PropertyMetadata(false, OnFocusFirstChanged));
         public static bool GetFocusFirst(Control control)
         {
-            return (bool)control.GetValue(FocusFirstProperty);
+            return (bool) control.GetValue(FocusFirstProperty);
         }
         public static void SetFocusFirst(Control control, bool value)
         {
@@ -25,7 +25,7 @@
                 return;
             }
 
-            if ((bool)args.NewValue)
+            if ((bool) args.NewValue)
             {
                 control.Loaded += (sender, e) => control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }
@@ -38,7 +38,7 @@
 
         public static bool GetIsFocused(DependencyObject dependencyObject)
         {
-            return (bool)dependencyObject.GetValue(IsFocusedProperty);
+            return (bool) dependencyObject.GetValue(IsFocusedProperty);
         }
 
         public static void SetIsFocused(DependencyObject dependencyObject, bool value)
@@ -53,8 +53,8 @@
                 return;
             }
 
-            bool newValue = (bool)args.NewValue;
-            bool oldValue = (bool)args.OldValue;
+            bool newValue = (bool) args.NewValue;
+            bool oldValue = (bool) args.OldValue;
             if (newValue && !oldValue && !control.IsFocused)
             {
                 control.Focus();

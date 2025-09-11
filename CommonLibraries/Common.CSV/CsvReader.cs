@@ -28,10 +28,7 @@
         }
         public CsvReader(Stream stream, bool withHeader, char separator)
         {
-            if (stream == null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             Init(stream, withHeader, separator);
         }
@@ -42,10 +39,7 @@
         }
         public CsvReader(string path, bool withHeader, char separator)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             if (!File.Exists(path))
             {
@@ -114,15 +108,19 @@
         }
         private void CheckDisposed()
         {
+#if NET7_0_OR_GREATER
+            ObjectDisposedException.ThrowIf(_disposed, this);
+#else
             if (_disposed)
             {
                 throw new ObjectDisposedException("CsvReader");
             }
+#endif
         }
         private string[] GetLine()
         {
             _currentLine++;
-            
+
             List<string> ret = new List<string>();
             bool inEscape = false;
 
@@ -143,7 +141,7 @@
                     break;
                 }
 
-                char c = (char)readChar;
+                char c = (char) readChar;
 
                 if (inEscape)
                 {
@@ -157,7 +155,7 @@
                         }
                         else
                         {
-                            char cNext = (char)next;
+                            char cNext = (char) next;
                             if (cNext == EscapingChar)
                             {
                                 //Double Escape char so add one to field
@@ -201,7 +199,7 @@
                         //Dixit StreamReader.ReadLine()
                         // \n - UNIX   \r\n - DOS   \r - Mac
                         int next = _streamReader.Peek();
-                        if (next >= 0 && ((char)next) == '\n')
+                        if (next >= 0 && ((char) next) == '\n')
                         {
                             _streamReader.Read();
                         }
@@ -221,7 +219,7 @@
                     }
                 }
             }
-            
+
             return ret.ToArray();
         }
 
@@ -246,7 +244,7 @@
 
             if (WithHeader)
             {
-                return (string[])_headers.Clone();
+                return (string[]) _headers.Clone();
             }
 
             return Array.Empty<string>();

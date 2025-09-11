@@ -1,15 +1,16 @@
 ﻿namespace Common.Database.UnitTests
 {
     using System;
-    using System.Data;
-    using System.Linq;
-    using System.Data.Common;
     using System.Collections.Generic;
+    using System.Data;
+    using System.Data.Common;
+    using System.Linq;
 
-    using NUnit.Framework;
+    using Common.Database;
 
     using MockDbData;
-    using Common.Database;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestMapper
@@ -63,13 +64,13 @@
             Assert.That(line.Col4, Is.EqualTo(row["Col4"]));
             Assert.That(line.Col5, Is.EqualTo(row["Col5"]));
             Assert.That(line.Col6, Is.EqualTo(row["Col6"] == DBNull.Value ? null : row["Col6"]));
-            Assert.That(line.Col7, Is.EqualTo((ColumnKind)row["Col7"]));
+            Assert.That(line.Col7, Is.EqualTo((ColumnKind) row["Col7"]));
         }
         private void InjectGlobalResult(DataTable dataTable)
         {
             MockDbResultInjector injector = new MockDbResultInjector();
             injector.AddGlobalResult(new MockDbResult(dataTable));
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
         }
 
         [Test]
@@ -131,9 +132,9 @@
 
             MockDbResultInjector injector = new MockDbResultInjector();
             injector.AddGlobalExecuteNonQueryResult(1);
-            MockDbMatchingRule matchingRule =  MockDbMatchingRule.CreateRule(CommandType.Text).SetParameterCount(0);
+            MockDbMatchingRule matchingRule = MockDbMatchingRule.CreateRule(CommandType.Text).SetParameterCount(0);
             injector.AddResult(matchingRule, new MockDbResult(dt));
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
 
             DbWithIdentity newClass = new DbWithIdentity { Col2 = "aaaa" };
             Mapper<DbWithIdentity>.InsertOne(_connection, newClass);
@@ -155,7 +156,7 @@
         {
             MockDbResultInjector injector = new MockDbResultInjector();
             injector.AddGlobalExecuteNonQueryResult(resultCount);
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
 
             DbWithPrimary newClass = new DbWithPrimary { Col1 = 10, Col2 = "aaaa" };
 
@@ -174,15 +175,15 @@
 
         public static IEnumerable<TestCaseData> TestInsertUpdateDeleteOneCases(string methodCaller)
         {
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 1).SetName($"{methodCaller} (InsertOne)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 0).SetName($"{methodCaller} (InsertOneFailIfNoLineUpdated)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.InsertOne, 2).SetName($"{methodCaller} (InsertOneFailIfMultipleLineUpdated)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 1).SetName($"{methodCaller} (DeleteOne)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 0).SetName($"{methodCaller} (DeleteOneFailIfNoLineUpdated)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.DeleteOne, 2).SetName($"{methodCaller} (DeleteOneFailIfMultipleLineUpdated)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 1).SetName($"{methodCaller} (UpdateOne)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 0).SetName($"{methodCaller} (UpdateOneFailIfNoLineUpdated)");
-            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>)Mapper<DbWithPrimary>.UpdateOne, 2).SetName($"{methodCaller} (UpdateOneFailIfMultipleLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.InsertOne, 1).SetName($"{methodCaller} (InsertOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.InsertOne, 0).SetName($"{methodCaller} (InsertOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.InsertOne, 2).SetName($"{methodCaller} (InsertOneFailIfMultipleLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.DeleteOne, 1).SetName($"{methodCaller} (DeleteOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.DeleteOne, 0).SetName($"{methodCaller} (DeleteOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.DeleteOne, 2).SetName($"{methodCaller} (DeleteOneFailIfMultipleLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.UpdateOne, 1).SetName($"{methodCaller} (UpdateOne)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.UpdateOne, 0).SetName($"{methodCaller} (UpdateOneFailIfNoLineUpdated)");
+            yield return new TestCaseData((Action<IDbConnection, DbWithPrimary>) Mapper<DbWithPrimary>.UpdateOne, 2).SetName($"{methodCaller} (UpdateOneFailIfMultipleLineUpdated)");
         }
     }
 }

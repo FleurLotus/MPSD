@@ -13,12 +13,11 @@
 
         private bool _isFoil;
         private bool _isAltArt;
-        private readonly IEdition[] _editions;
 
         public CardUpdateViewModel(string collectionName, ICard card)
             : base(collectionName)
         {
-            _editions = MagicDatabase.GetAllEditionIncludingCardOrdered(card)
+            Editions = MagicDatabase.GetAllEditionIncludingCardOrdered(card)
                 .ToArray();
 
             Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
@@ -28,10 +27,7 @@
             Display.Title = "Update infos";
         }
         public CardSourceViewModel Source { get; }
-        public IEdition[] Editions
-        {
-            get { return _editions; }
-        }
+        public IEdition[] Editions { get; }
         public ILanguage[] Languages
         {
             get { return _languages; }
@@ -101,7 +97,7 @@
                 }
             }
         }
-        
+
         private void ChangeDestinationLanguage()
         {
             string idScryFall = MagicDatabase.GetIdScryFall(Source.Card, EditionSelected);
@@ -114,8 +110,8 @@
                 return false;
             }
 
-            return EditionSelected != null && LanguageSelected!= null &&
-                   (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil || IsAltArt != Source.IsAltArt) && 
+            return EditionSelected != null && LanguageSelected != null &&
+                   (LanguageSelected != Source.LanguageSelected || EditionSelected != Source.EditionSelected || IsFoil != Source.IsFoil || IsAltArt != Source.IsAltArt) &&
                    (EditionSelected.HasFoil || !IsFoil);
         }
     }

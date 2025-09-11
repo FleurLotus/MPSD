@@ -1,12 +1,12 @@
 ﻿namespace Common.SQLite.UnitTests
 {
     using System;
-    using System.IO;
     using System.Data.SQLite;
-
-    using NUnit.Framework;
+    using System.IO;
 
     using Common.SQL;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class RepositoryTest
@@ -39,8 +39,8 @@ CREATE TABLE ""Table2"" (
         {
             string fileName = $"Sample_{DateTime.Now:yyyyMMddHHmmssfff}_{Guid.NewGuid()}.sqlite";
             SQLiteConnection.CreateFile(fileName);
-            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = fileName }).ToString(); 
-            
+            string connectionString = (new SQLiteConnectionStringBuilder { DataSource = fileName }).ToString();
+
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
@@ -145,7 +145,6 @@ CREATE TABLE ""Table2"" (
                 Assert.That(column.IsNullable, Is.True);
                 Assert.That(column.HasDefault, Is.False);
                 Assert.That(column.Default, Is.Null);
-
 
                 // Table 1 Column Field5
                 Assert.That(table.HasColumn("Field5"), Is.True);
@@ -287,7 +286,6 @@ CREATE TABLE ""Table2"" (
                 Assert.That(column.IsNullable, Is.False);
                 Assert.That(column.HasDefault, Is.False);
                 Assert.That(column.Default, Is.Null);
-
 
                 // Table 2 Primary Key
                 primaryKey = table.PrimaryKey;

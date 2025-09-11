@@ -1,10 +1,10 @@
-﻿ namespace MagicPictureSetDownloader.Core.IO
+﻿namespace MagicPictureSetDownloader.Core.IO
 {
     using System.Linq;
     using System.Text.RegularExpressions;
 
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Db;
+    using MagicPictureSetDownloader.Interface;
 
     internal class MpsdFormatter2 : FormatterBase
     {

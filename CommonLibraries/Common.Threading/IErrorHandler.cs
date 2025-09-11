@@ -7,5 +7,4 @@
     {
         void HandleError(Exception ex);
     }
-
 }

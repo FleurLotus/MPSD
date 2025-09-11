@@ -2,9 +2,9 @@
 {
     using System;
 
-    using NUnit.Framework;
-
     using Common.Database;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class TestDbAttributAnalyser

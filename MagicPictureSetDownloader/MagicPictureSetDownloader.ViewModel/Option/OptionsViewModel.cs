@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Option
 {
     using Common.ViewModel;
+
     using MagicPictureSetDownloader.Interface;
 
     public class OptionsViewModel : NotifyPropertyChangedBase
@@ -83,7 +84,7 @@
             {
                 if (value != _showOtherLanguages)
                 {
-                    _showOtherLanguages = value;                  
+                    _showOtherLanguages = value;
                     OnNotifyPropertyChanged(nameof(ShowOtherLanguages));
                 }
             }
@@ -112,7 +113,7 @@
                 }
             }
         }
-       
+
         private bool GetOptionValue(TypeOfOption typeOfOption, string optionName)
         {
             bool ret = true;

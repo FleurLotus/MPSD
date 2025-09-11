@@ -1,9 +1,9 @@
 ﻿namespace Common.WPF.Behavior
 {
-    using System;
     using System.Collections.Specialized;
     using System.Linq;
     using System.Windows.Controls;
+
     using Microsoft.Xaml.Behaviors;
 
     //From http://stackoverflow.com/questions/845269/force-resize-of-gridview-columns-inside-listview
@@ -13,7 +13,7 @@
         {
             base.OnAttached();
 
-            var listView = AssociatedObject;
+            ListView listView = AssociatedObject;
             if (listView == null)
             {
                 return;
@@ -33,7 +33,7 @@
 
         private void OnListViewItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
         {
-            var listView = AssociatedObject;
+            ListView listView = AssociatedObject;
             if (listView == null)
             {
                 return;
@@ -45,16 +45,16 @@
             }
 
             // If the column is automatically sized, change the column width to re-apply automatic width
-            foreach (var column in gridView.Columns.Where(column => Double.IsNaN(column.Width)))
+            foreach (GridViewColumn column in gridView.Columns.Where(column => double.IsNaN(column.Width)))
             {
                 column.Width = column.ActualWidth;
-                column.Width = Double.NaN;
+                column.Width = double.NaN;
             }
         }
 
         protected override void OnDetaching()
         {
-            var listView = AssociatedObject;
+            ListView listView = AssociatedObject;
             if (listView != null)
             {
                 RemoveHandler(listView.Items);

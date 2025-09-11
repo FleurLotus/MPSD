@@ -12,6 +12,7 @@
     using Common.WPF.UI;
 #endif
     using Common.WPF;
+
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.UI;
 
@@ -46,8 +47,8 @@
             {
                 splashScreenWindow.Show();
 #endif
-                MagicDatabaseManager.Initialise();
-                mainWindow = new MainWindow();
+            MagicDatabaseManager.Initialise();
+            mainWindow = new MainWindow();
 #if !DEBUG
             }
             finally
@@ -62,7 +63,7 @@
         private void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Exception ex = e.ExceptionObject as Exception;
-            Dispatcher.Invoke((Action)(ex.UserDisplay));
+            Dispatcher.Invoke((Action) (ex.UserDisplay));
         }
 
         private void ApplicationDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

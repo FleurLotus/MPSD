@@ -1,9 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.Db.DAO
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
 
     using Common.Database;
 
@@ -31,7 +31,7 @@
         {
             get
             {
-                return new ReadOnlyDictionary<CardIdSource, IReadOnlyList<string>>(_externalIds.ToDictionary(kv => kv.Key, kv => (IReadOnlyList<string>)kv.Value.ToList().AsReadOnly()));
+                return new ReadOnlyDictionary<CardIdSource, IReadOnlyList<string>>(_externalIds.ToDictionary(kv => kv.Key, kv => (IReadOnlyList<string>) kv.Value.ToList().AsReadOnly()));
             }
         }
 

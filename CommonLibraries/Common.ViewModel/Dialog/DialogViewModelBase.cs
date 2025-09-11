@@ -11,7 +11,7 @@
         public event EventHandler Closing;
         public event EventHandler<EventArgs<DialogViewModelBase>> DialogWanted;
         public event EventHandler<EventArgs<InputViewModel>> InputRequested;
-        
+
         protected DialogViewModelBase()
         {
             OkCommand = new RelayCommand(OkCommandExecute, OkCommandCanExecute);
@@ -66,7 +66,7 @@
 
         protected void OnDialogWanted(DialogViewModelBase arg)
         {
-            var ev = DialogWanted;
+            EventHandler<EventArgs<DialogViewModelBase>> ev = DialogWanted;
             if (ev != null && arg != null)
             {
                 ev(this, new EventArgs<DialogViewModelBase>(arg));
@@ -74,7 +74,7 @@
         }
         protected void OnInputRequestedRequested(InputViewModel vm)
         {
-            var e = InputRequested;
+            EventHandler<EventArgs<InputViewModel>> e = InputRequested;
             if (e != null && vm != null)
             {
                 e(this, new EventArgs<InputViewModel>(vm));
@@ -82,11 +82,7 @@
         }
         protected void OnClosing()
         {
-            var e = Closing;
-            if (e != null)
-            {
-                e(this, EventArgs.Empty);
-            }
+            Closing?.Invoke(this, EventArgs.Empty);
         }
     }
 }

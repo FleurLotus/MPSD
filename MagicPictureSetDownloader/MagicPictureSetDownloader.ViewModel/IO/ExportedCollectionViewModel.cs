@@ -2,7 +2,7 @@
 {
     using Common.ViewModel;
 
-    public class ExportedCollectionViewModel: NotifyPropertyChangedBase
+    public class ExportedCollectionViewModel : NotifyPropertyChangedBase
     {
         private bool _isSelected;
 

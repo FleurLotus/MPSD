@@ -16,9 +16,9 @@
         public TranslateDatabaseInfoModificationViewModel()
         {
             AllTranslations = new ObservableCollection<TranslationViewModel>();
-            All.AddRange(MagicDatabase.GetAllInfos().GetAllCardsOrderByTranslation(null).Select(kv=> kv.Value));
+            All.AddRange(MagicDatabase.GetAllInfos().GetAllCardsOrderByTranslation(null).Select(kv => kv.Value));
             _notUpdatableLanguages = new[] { MagicDatabase.GetDefaultLanguage(), MagicDatabase.GetEnglishLanguage() };
-            _allLanguages = MagicDatabase.GetAllLanguages().Where(l=> !_notUpdatableLanguages.Contains(l)).ToArray();
+            _allLanguages = MagicDatabase.GetAllLanguages().Where(l => !_notUpdatableLanguages.Contains(l)).ToArray();
             Title = "Manage Translate";
         }
         public ICollection<TranslationViewModel> AllTranslations { get; }
@@ -54,7 +54,7 @@
         }
         protected override bool ApplyEditionToDatabase()
         {
-            foreach (TranslationViewModel translation in AllTranslations.Where(t=>t.Modified))
+            foreach (TranslationViewModel translation in AllTranslations.Where(t => t.Modified))
             {
                 MagicDatabase.UpdateTranslate(Selected, translation.Language, translation.Translation);
             }

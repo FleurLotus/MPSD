@@ -1,10 +1,10 @@
 namespace MagicPictureSetDownloader.Converter
 {
     using System;
-    using System.Globalization;
-    using System.Windows.Data;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Windows;
+    using System.Windows.Data;
 
     using MagicPictureSetDownloader.ViewModel.Main;
 

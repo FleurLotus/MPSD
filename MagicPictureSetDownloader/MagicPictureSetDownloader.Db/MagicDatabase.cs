@@ -24,7 +24,7 @@ namespace MagicPictureSetDownloader.Db
         private readonly PictureDatabase _pictureDatabase;
         //To optimize display
         private List<ICardAllDbInfo> _cacheForAllDbInfos;
-        
+
         internal MagicDatabase()
         {
             _databaseConnection = new DatabaseConnection();

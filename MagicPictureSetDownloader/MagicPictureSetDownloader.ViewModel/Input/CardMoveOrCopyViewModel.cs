@@ -7,34 +7,30 @@
     public class CardMoveOrCopyViewModel : UpdateViewModelCommun
     {
         private ICardCollection _cardCollectionSelected;
-        private readonly ICardCollection[] _collections;
         private bool _copy;
 
-        public CardMoveOrCopyViewModel(string collectionName, ICard card, bool copy) : 
+        public CardMoveOrCopyViewModel(string collectionName, ICard card, bool copy) :
             base(collectionName)
         {
             Source = new CardSourceViewModel(MagicDatabase, SourceCollection, card);
 
             Copy = copy;
-            _collections = MagicDatabase.GetAllCollections().ToArray();
+            Collections = MagicDatabase.GetAllCollections().ToArray();
 
-            if (_collections.Length > 0)
+            if (Collections.Length > 0)
             {
-                if (SourceCollection != _collections[0] ||_collections.Length ==1)
+                if (SourceCollection != Collections[0] || Collections.Length == 1)
                 {
-                    CardCollectionSelected = _collections[0];
+                    CardCollectionSelected = Collections[0];
                 }
                 else
                 {
-                    CardCollectionSelected = _collections[1];
+                    CardCollectionSelected = Collections[1];
                 }
             }
         }
         public CardSourceViewModel Source { get; }
-        public ICardCollection[] Collections
-        {
-            get { return _collections; }
-        }
+        public ICardCollection[] Collections { get; }
         public ICardCollection CardCollectionSelected
         {
             get { return _cardCollectionSelected; }

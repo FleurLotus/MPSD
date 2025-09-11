@@ -5,9 +5,9 @@
     using System.Data;
     using System.Linq;
 
-    using NUnit.Framework;
-
     using MockDbData;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class RepositoryBaseTest
@@ -128,13 +128,13 @@
         [Test]
         public void TestRowExists()
         {
-            DataTable dt = new DataTable(); 
-            dt.Columns.Add("Col1", typeof(string)); 
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Col1", typeof(string));
             dt.Rows.Add("aaaa");
             MockDbMatchingRule matchingRule = MockDbMatchingRule.CreateRule(CommandType.Text).SetCommandTextReg($"SELECT 1 FROM SchemaName.TableName WHERE \\(\\[ColumnName\\] = @ColumnName\\) AND \\(\\[ColumnName2\\] IS NULL\\)").SetParameterCount(1).SetParameterValue(0, "0");
             MockDbResultInjector injector = new MockDbResultInjector();
             injector.AddResult(matchingRule, new MockDbResult(dt));
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(_repositoryBaseTesting.RowExists("SchemaName", "TableName", new[] { "ColumnName", "ColumnName2" }, new object[] { "0", null }), Is.True);
         }
         [Test]
@@ -148,7 +148,7 @@
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = 'a'";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
             _repositoryBaseTesting.ExecuteBatch(sql);
             Assert.That(injector.Executions.Count, Is.EqualTo(1));
@@ -163,7 +163,7 @@
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = '{0}' WHERE ColumnName = '{1}'";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
             _repositoryBaseTesting.ExecuteBatch(sql, "aa'aa", "aaaa");
             Assert.That(injector.Executions.Count, Is.EqualTo(1));
@@ -178,10 +178,10 @@
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = @Param1 WHERE ColumnName = @Param2";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
-            _repositoryBaseTesting.ExecuteParametrizeCommand(sql, new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb")); 
-            
+            _repositoryBaseTesting.ExecuteParametrizeCommand(sql, new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb"));
+
             Assert.That(injector.Executions.Count, Is.EqualTo(1));
             MockDbExecution execution = injector.Executions[0];
             Assert.That(execution, Is.Not.Null);
@@ -202,7 +202,7 @@
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = @Param1 WHERE ColumnName = @Param2";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
             _repositoryBaseTesting.ExecuteParametrizeCommand(sql, new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", null));
 
@@ -226,10 +226,10 @@
         {
             string sql = "UPDATE SchemaName.TableName SET ColumnName = @Param1 WHERE ColumnName = @Param2";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
 
-            var param = new List<KeyValuePair<string, object>[]>
+            List<KeyValuePair<string, object>[]> param = new List<KeyValuePair<string, object>[]>
             {
                     new[] { new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb") },
                     new[] { new KeyValuePair<string, object>("@Param1", "111"), new KeyValuePair<string, object>("@Param2", null) },
@@ -242,13 +242,13 @@
             Assert.That(execution, Is.Not.Null);
             Assert.That(execution.CommandType, Is.EqualTo(CommandType.Text));
             Assert.That(execution.CommandText, Is.EqualTo(sql));
-            
+
             Assert.That(execution.Parameters.Count, Is.EqualTo(2));
             MockDbExecutionParameter param1 = execution.Parameters[0];
             Assert.That(param1, Is.Not.Null);
             Assert.That(param1.ParameterName, Is.EqualTo("@Param1"));
             Assert.That(param1.Value, Is.EqualTo("aaa"));
-            
+
             MockDbExecutionParameter param2 = execution.Parameters[1];
             Assert.That(param2, Is.Not.Null);
             Assert.That(param2.ParameterName, Is.EqualTo("@Param2"));
@@ -274,10 +274,10 @@
         {
             string sql = "\r\n";
             MockDbResultInjector injector = new MockDbResultInjector();
-            ((IAcceptResultInjection)_connection).Accept(injector);
+            ((IAcceptResultInjection) _connection).Accept(injector);
             Assert.That(injector.Executions.Count, Is.EqualTo(0));
 
-            var param = new List<KeyValuePair<string, object>[]>
+            List<KeyValuePair<string, object>[]> param = new List<KeyValuePair<string, object>[]>
             {
                     new[] { new KeyValuePair<string, object>("@Param1", "aaa"), new KeyValuePair<string, object>("@Param2", "bbb") },
                     new[] { new KeyValuePair<string, object>("@Param1", "111"), new KeyValuePair<string, object>("@Param2", null) },

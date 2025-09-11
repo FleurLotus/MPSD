@@ -2,11 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core.HierarchicalAnalysing;
 
-    public class HierarchicalViewModel: NotifyPropertyChangedBase
+    public class HierarchicalViewModel : NotifyPropertyChangedBase
     {
         private enum Matching
         {
@@ -73,7 +74,7 @@
                 MakeHierarchy(analysers, orders, card);
                 _globalStatictics.Add(card);
             }
-            
+
             Root = (new List<HierarchicalResultViewModel> { _buildingRoot });
 
             if (saveSelected != null)

@@ -2,11 +2,11 @@
 {
     using System;
 
-    using NUnit.Framework;
-    using Moq;
-
     using Common.Notify;
 
+    using Moq;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class EventHandlersTest
@@ -90,7 +90,7 @@
         {
             private readonly EventHandler<EventArgs<object>> _expectedHandler;
             private readonly int _expectedCount;
-            
+
             public HandlerCheck(EventHandler<EventArgs<object>> expectedHandler, int expectedCount)
             {
                 _expectedHandler = expectedHandler;
@@ -127,7 +127,7 @@
             HandlerCheck handlerCheckRemoving = new HandlerCheck(handler, 0);
             HandlerCheck handlerCheckRemoved = new HandlerCheck(handler, 0);
 
-            EventHandlers<EventArgs<object>> eventHandlers = new EventHandlers<EventArgs<object>>(null, null, handlerCheckRemoving.Callback, handlerCheckRemoved.Callback); 
+            EventHandlers<EventArgs<object>> eventHandlers = new EventHandlers<EventArgs<object>>(null, null, handlerCheckRemoving.Callback, handlerCheckRemoved.Callback);
             eventHandlers.Add(handler);
             Assert.That(handlerCheckRemoving.CallCount, Is.EqualTo(0));
             Assert.That(handlerCheckRemoved.CallCount, Is.EqualTo(0));
@@ -140,18 +140,17 @@
         public void TestNotify()
         {
             object sender = new object();
-            EventArgs<object> args = new EventArgs<object>( new object());
+            EventArgs<object> args = new EventArgs<object>(new object());
 
             object calledSender = null;
             EventArgs<object> calledArgs = null;
 
             EventHandlers<EventArgs<object>> eventHandlers = new EventHandlers<EventArgs<object>>();
-            EventHandler<EventArgs<object>> handler = (s, a) =>
+            eventHandlers.Add((s, a) =>
             {
                 calledSender = s;
                 calledArgs = a;
-            };
-            eventHandlers.Add(handler);
+            });
 
             Mock<IEventDispatcher> eventDispatcher = new Mock<IEventDispatcher>(MockBehavior.Strict);
             eventDispatcher.Setup(ed => ed.Enqueue(It.IsAny<Action>())).Callback((Action a) => a()).Verifiable();
@@ -169,11 +168,7 @@
             EventArgs<object> args = new EventArgs<object>(new object());
 
             EventHandlers<EventArgs<object>> eventHandlers = new EventHandlers<EventArgs<object>>();
-            EventHandler<EventArgs<object>> handler = (s, a) =>
-            {
-                throw new Exception("handler exception");
-            };
-            eventHandlers.Add(handler);
+            eventHandlers.Add((s, a) => throw new Exception("handler exception"));
 
             Mock<IEventDispatcher> eventDispatcher = new Mock<IEventDispatcher>(MockBehavior.Strict);
             eventDispatcher.Setup(ed => ed.Enqueue(It.IsAny<Action>())).Callback((Action a) => a()).Verifiable();
@@ -212,6 +207,5 @@
 
             eventDispatcher.VerifyAll();
         }
-
     }
 }

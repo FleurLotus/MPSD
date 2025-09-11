@@ -4,25 +4,22 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class PrimaryKey: IPrimaryKey, IComparable<IPrimaryKey>
+    internal class PrimaryKey : IPrimaryKey, IComparable<IPrimaryKey>
     {
-        private readonly SortedDictionary<int, IColumn> _columns = new SortedDictionary<int, IColumn>(); 
+        private readonly SortedDictionary<int, IColumn> _columns = new SortedDictionary<int, IColumn>();
 
         public string Name { get; set; }
         public string TableName { get; set; }
         public string SchemaName { get; set; }
         public CaseSensitivity CaseSensitivity { get; internal set; }
-        
+
         public IColumn[] Columns()
         {
             return _columns.Values.ToArray();
         }
         internal void AddColumn(int index, IColumn column)
         {
-            if (column == null)
-            {
-                throw new ArgumentNullException(nameof(column));
-            }
+            ArgumentNullException.ThrowIfNull(column);
 
             if (CaseSensitivity.Compare(SchemaName, column.SchemaName, CaseSensitivity) != 0)
             {

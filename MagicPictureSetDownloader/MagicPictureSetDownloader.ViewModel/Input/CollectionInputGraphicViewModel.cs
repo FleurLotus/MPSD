@@ -12,7 +12,7 @@
 
     using Common.Collection;
     using Common.Enums;
-    using Common.ViewModel;
+    using Common.ViewModel.Command;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
 
@@ -81,9 +81,9 @@
             Cards = CollectionViewSource.GetDefaultView(_cards);
             Cards.Filter = ToDisplay;
 
-            Colors = (ShardColor[])Enum.GetValues(typeof(ShardColor));
-            DisplayOrders = (DisplayOrder[])Enum.GetValues(typeof(DisplayOrder));
-            Types = ((CardType[])Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token).ToArray();
+            Colors = (ShardColor[]) Enum.GetValues(typeof(ShardColor));
+            DisplayOrders = (DisplayOrder[]) Enum.GetValues(typeof(DisplayOrder));
+            Types = ((CardType[]) Enum.GetValues(typeof(CardType))).Where(t => t != CardType.Token).ToArray();
 
             ObservableCollection<ShardColor> colorsSelected = new ObservableCollection<ShardColor>();
             colorsSelected.CollectionChanged += CollectionChanged;
@@ -367,7 +367,7 @@
                 int count = 0;
 
                 foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, card.Card)
-                                .Where(cicc =>  cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall).Id == editionSelected.Id))
+                                .Where(cicc => cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall).Id == editionSelected.Id))
                 {
                     if (AltArt)
                     {
@@ -377,7 +377,6 @@
                     {
                         count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
                     }
-
                 }
                 ccigvm.SetInfo(name, count);
 

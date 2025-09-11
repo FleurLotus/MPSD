@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace MagicPictureSetDownloader.Interface
+﻿namespace MagicPictureSetDownloader.Interface
 {
+    using System;
+
     public enum TypeOfOption
     {
         Hierarchy,
@@ -111,5 +111,4 @@ namespace MagicPictureSetDownloader.Interface
         Red = 1 << 3,
         Green = 1 << 4
     }
-
 }

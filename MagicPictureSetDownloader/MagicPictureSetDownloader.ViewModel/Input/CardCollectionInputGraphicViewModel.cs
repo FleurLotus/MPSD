@@ -18,9 +18,9 @@
             Card = card;
             AddCommand = new RelayCommand(AddCommandExecute);
             RemoveCommand = new RelayCommand(RemoveCommandExecute);
-            AddLinkedProperty(nameof(ChangedCount), new [] { nameof(Count), nameof(CountLabel) });
+            AddLinkedProperty(nameof(ChangedCount), new[] { nameof(Count), nameof(CountLabel) });
         }
-        
+
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public CardViewModel Card { get; }
@@ -50,7 +50,7 @@
             }
             private set
             {
-                if (_changedCount!= value)
+                if (_changedCount != value)
                 {
                     _changedCount = value;
                     OnNotifyPropertyChanged(nameof(ChangedCount));

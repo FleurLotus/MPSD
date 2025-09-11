@@ -74,22 +74,24 @@
                 }
             }
         }
-        
+
         public void AddChild(MenuViewModel child)
-        {
-            if (!_children.Contains(child))
-            {
-                _children.Add(child);
-                OnNotifyPropertyChanged(nameof(Children));
-            }
-        }
-        public void RemoveChild(MenuViewModel child)
         {
             if (_children.Contains(child))
             {
-                _children.Remove(child);
-                OnNotifyPropertyChanged(nameof(Children));
+                return;
             }
+            _children.Add(child);
+            OnNotifyPropertyChanged(nameof(Children));
+        }
+        public void RemoveChild(MenuViewModel child)
+        {
+            if (!_children.Contains(child))
+            {
+                return;
+            }
+            _children.Remove(child);
+            OnNotifyPropertyChanged(nameof(Children));
         }
         public void RemoveAllChildren()
         {

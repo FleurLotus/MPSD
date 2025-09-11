@@ -3,8 +3,9 @@
     using System;
     using System.Data;
 
-    using NUnit.Framework;
     using Moq;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class DataRecordExtDataRecordExtTest

@@ -8,7 +8,7 @@
             Number = number;
             NeedToCreate = false;
         }
-        public DeckCardInfo(int idEdition, int idCard, int number, int idRarity, string pictureUrl) 
+        public DeckCardInfo(int idEdition, int idCard, int number, int idRarity, string pictureUrl)
         {
             NeedToCreate = true;
             IdEdition = idEdition;

@@ -3,9 +3,9 @@
     using System;
     using System.Text.RegularExpressions;
 
-    using NUnit.Framework;
-
     using Common.ViewModel.Validation.Attributes;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class ValidationAttributeTest
@@ -158,7 +158,6 @@
             LessThanValidationAttribute att = new LessThanValidationAttribute(10, true);
             Assert.That(string.IsNullOrEmpty(att.Validate(new DateTime())), Is.False, $"Expected error for invalid input");
         }
-
 
         // ReSharper disable MemberCanBePrivate.Local
         // ReSharper disable UnusedAutoPropertyAccessor.Local

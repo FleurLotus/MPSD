@@ -5,8 +5,8 @@
     using Common.ViewModel;
 
     using MagicPictureSetDownloader.Core;
-    using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.Db;
+    using MagicPictureSetDownloader.Interface;
 
     public class CardSourceViewModel : NotifyPropertyChangedBase
     {
@@ -18,7 +18,6 @@
         private bool _isAltArt;
         private int _maxCount;
         private int _count;
-        private readonly IEdition[] _editions;
         private readonly ICardInCollectionCount[] _cardInCollectionCounts;
 
         private readonly IMagicDatabaseReadOnly _magicDatabase;
@@ -32,21 +31,18 @@
             _cardInCollectionCounts = _magicDatabase.GetCollectionStatisticsForCard(sourceCardCollection, Card)
                 .ToArray();
 
-            _editions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall))
+            Editions = _cardInCollectionCounts.Select(cicc => _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall))
                 .Distinct()
                 .Ordered()
                 .ToArray();
 
-            if (_editions.Length > 0)
+            if (Editions.Length > 0)
             {
-                EditionSelected = _editions[0];
+                EditionSelected = Editions[0];
             }
         }
         public ICard Card { get; }
-        public IEdition[] Editions
-        {
-            get { return _editions; }
-        }
+        public IEdition[] Editions { get; }
         public ILanguage[] Languages
         {
             get { return _languages; }
@@ -156,7 +152,7 @@
             }
 
             ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdScryFall == idScryFall && cicc.IdLanguage == LanguageSelected.Id);
-          
+
             if (cardInCollectionCount == null)
             {
                 MaxCount = 0;

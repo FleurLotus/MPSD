@@ -16,7 +16,7 @@
         Updating,
     }
 
-    public abstract class DatabaseInfoModificationViewModelBase<T> : NotifyPropertyChangedBase where T: class
+    public abstract class DatabaseInfoModificationViewModelBase<T> : NotifyPropertyChangedBase where T : class
     {
         public event EventHandler Closing;
 
@@ -160,11 +160,7 @@
         }
         private void OnClosing()
         {
-            var e = Closing;
-            if (e != null)
-            {
-                e(this, EventArgs.Empty);
-            }
+            Closing?.Invoke(this, EventArgs.Empty);
         }
     }
 }

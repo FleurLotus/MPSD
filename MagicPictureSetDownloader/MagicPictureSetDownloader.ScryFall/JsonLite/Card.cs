@@ -1,11 +1,11 @@
-﻿using MagicPictureSetDownloader.ScryFall.JsonData;
-
-namespace MagicPictureSetDownloader.ScryFall.JsonLite
+﻿namespace MagicPictureSetDownloader.ScryFall.JsonLite
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.Json.Serialization;
+
+    using MagicPictureSetDownloader.ScryFall.JsonData;
 
     public class Card : CardFace
     {
@@ -15,10 +15,10 @@ namespace MagicPictureSetDownloader.ScryFall.JsonLite
         internal Card(FullCard c) : base(c)
         {
             Id = c.Id;
-            MtgoId= c.MtgoId;
-            MtgoFoilId= c.MtgoFoilId;
+            MtgoId = c.MtgoId;
+            MtgoFoilId = c.MtgoFoilId;
             MultiverseIds = c.MultiverseIds.ToList();
-            TcgplayerId= c.TcgplayerId;
+            TcgplayerId = c.TcgplayerId;
             TcgplayerEtchedId = c.TcgplayerEtchedId;
             CardmarketId = c.CardmarketId;
             CardFaces = c.CardFaces.Select(cf => new CardFace(cf)).ToList();

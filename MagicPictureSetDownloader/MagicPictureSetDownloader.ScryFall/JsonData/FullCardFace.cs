@@ -54,7 +54,7 @@
 
         [JsonPropertyName("oracle_id")]
         public Guid? OracleId { get; set; }
- 
+
         [JsonPropertyName("oracle_text")]
         public string OracleText { get; set; }
 

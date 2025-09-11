@@ -1,8 +1,8 @@
 ﻿namespace Common.ViewModel.UnitTests
 {
-    using NUnit.Framework;
-
     using Common.ViewModel.Dialog;
+
+    using NUnit.Framework;
 
     [TestFixture]
     public class DisplayInfoTest

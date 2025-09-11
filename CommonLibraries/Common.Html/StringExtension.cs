@@ -5,7 +5,7 @@
 
     public static class StringExtension
     {
-        private static readonly string[] _formatTags = { 
+        private static readonly string[] _formatTags = {
                                                            "<p>", "</p>",
                                                            "<i>", "</i>",
                                                            "<b>", "</b>",

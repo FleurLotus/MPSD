@@ -21,10 +21,8 @@
         }
         internal void AddColumn(Column column)
         {
-            if (column == null)
-            {
-                throw new ArgumentNullException(nameof(column));
-            }
+            ArgumentNullException.ThrowIfNull(column);
+
             if (TableKey(column.SchemaName, column.TableName, column.CaseSensitivity) != ToString())
             {
                 throw new ArgumentException("Column doesn't belong to table", nameof(column));
@@ -58,10 +56,8 @@
         }
         internal void AddIndex(Index index)
         {
-            if (index == null)
-            {
-                throw new ArgumentNullException(nameof(index));
-            }
+            ArgumentNullException.ThrowIfNull(index);
+
             if (TableKey(index.SchemaName, index.TableName, index.CaseSensitivity) != ToString())
             {
                 throw new ArgumentException("Index doesn't belong to table", nameof(index));
@@ -98,10 +94,8 @@
         }
         internal void AddForeignKey(ForeignKey foreignKey)
         {
-            if (foreignKey == null)
-            {
-                throw new ArgumentNullException(nameof(foreignKey));
-            }
+            ArgumentNullException.ThrowIfNull(foreignKey);
+
             if (TableKey(foreignKey.SourceSchemaName, foreignKey.SourceTableName, foreignKey.CaseSensitivity) != ToString())
             {
                 throw new ArgumentException("ForeignKey doesn't belong to table", nameof(foreignKey));
@@ -133,10 +127,8 @@
 
         internal void SetPrimaryKey(IPrimaryKey primaryKey)
         {
-            if (primaryKey == null)
-            {
-                throw new ArgumentNullException(nameof(primaryKey));
-            }
+            ArgumentNullException.ThrowIfNull(primaryKey);
+
             if (TableKey(primaryKey.SchemaName, primaryKey.TableName, CaseSensitivity) != ToString())
             {
                 throw new ArgumentException("Primary Key doesn't belong to table", nameof(primaryKey));

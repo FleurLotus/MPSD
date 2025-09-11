@@ -3,10 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text.Json;
     using System.Text.Json.Serialization;
 
     public static class JsonMissingMapping
@@ -75,7 +73,6 @@
             {
                 return Array.Empty<string>();
             }
-
 
             foreach (PropertyInfo prop in GetProperties(t))
             {
