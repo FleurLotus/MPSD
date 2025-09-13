@@ -5,6 +5,7 @@
 
     using Common.Collection;
     using Common.ViewModel;
+    using Common.ViewModel.Command;
 
     using MagicPictureSetDownloader.Db;
     using MagicPictureSetDownloader.Interface;

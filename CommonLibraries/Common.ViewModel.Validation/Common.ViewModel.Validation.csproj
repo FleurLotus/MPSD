@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <AssemblyTitle>Common.ViewModel.Validation</AssemblyTitle>
+    <Product>Common.ViewModel.Validation</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Collection\Common.Collection.csproj" />
+    <ProjectReference Include="..\Common.Threading\Common.Threading.csproj" />
+    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
+  </ItemGroup>
+</Project>

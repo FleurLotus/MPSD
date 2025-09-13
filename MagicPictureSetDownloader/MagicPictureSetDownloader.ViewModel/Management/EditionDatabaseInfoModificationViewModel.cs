@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Windows.Input;
 
+    using Common.ViewModel.Command;
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
 

@@ -14,10 +14,5 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="coverlet.collector" />
   </ItemGroup>
-  <ItemGroup>
-    <None Update="ImageSample.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 
 </Project>

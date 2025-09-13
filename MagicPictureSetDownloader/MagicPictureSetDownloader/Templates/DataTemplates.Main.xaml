@@ -9,7 +9,7 @@
                     xmlns:main="clr-namespace:MagicPictureSetDownloader.ViewModel.Main;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:fl="http://schemas.fleurlotus.com/xaml/"
                     xmlns:conv="clr-namespace:MagicPictureSetDownloader.Converter"
-                    xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel"
+                    xmlns:menu="clr-namespace:Common.ViewModel.Menu;assembly=Common.ViewModel.Extended"
 
                     mc:Ignorable="d"
                     >

@@ -7,9 +7,6 @@ _ReSharper*/
 *.suo
 packages/
 *.DotSettings.user
-*/Sample/
-*.orig
-Matrix*/
 save/*
 /LocalPackages/*
 FolderProfile.pubxml.user

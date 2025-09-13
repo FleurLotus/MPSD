@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <AssemblyTitle>Common.ViewModel.Validation.UnitTests</AssemblyTitle>
+    <Product>Common.ViewModel.Validation.UnitTests</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.ViewModel.Validation\Common.ViewModel.Validation.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="coverlet.collector" />
+  </ItemGroup>
+</Project>

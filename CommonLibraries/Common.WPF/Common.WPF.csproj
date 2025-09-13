@@ -6,12 +6,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Library\Common.Library.csproj" />
-    <ProjectReference Include="..\Common.Notify\Common.Notify.csproj" />
-    <ProjectReference Include="..\Common.ViewModel\Common.ViewModel.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Converter\TreeViewLineConverter.cs" />
+    <ProjectReference Include="..\Common.ViewModel.Extended\Common.ViewModel.Extended.csproj" />
+    <ProjectReference Include="..\Common.WPF.Attach\Common.WPF.Attach.csproj" />
+    <ProjectReference Include="..\Common.WPF.Behavior\Common.WPF.Behavior.csproj" />
+    <ProjectReference Include="..\Common.WPF.Converter\Common.WPF.Converter.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />

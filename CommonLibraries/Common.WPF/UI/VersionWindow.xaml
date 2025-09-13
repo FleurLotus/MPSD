@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:version="clr-namespace:Common.ViewModel.Version;assembly=Common.ViewModel"
+        xmlns:version="clr-namespace:Common.ViewModel.Version;assembly=Common.ViewModel.Extended"
 
         d:DataContext="{d:DesignInstance Type=version:VersionViewModel, IsDesignTimeCreatable=False}"
         d:DesignWidth="200" d:DesignHeight="150"

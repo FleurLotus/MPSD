@@ -7,8 +7,10 @@
     <PackageReference Update="Common.SQLite" Version="1.0.0" />
     <PackageReference Update="Common.Threading" Version="1.0.0" />
     <PackageReference Update="Common.ViewModel" Version="1.0.0" />
+    <PackageReference Update="Common.ViewModel.Extended" Version="1.0.0" />
     <PackageReference Update="Common.Web" Version="1.0.0" />
     <PackageReference Update="Common.WPF" Version="1.0.0" />
+    <PackageReference Update="Common.WPF.Converter" Version="1.0.0" />
     <PackageReference Update="Common.Zip" Version="1.0.0" />
 
     <PackageReference Update="Extended.Wpf.Toolkit" Version="4.6.1" />
