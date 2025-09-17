@@ -32,7 +32,9 @@ jobs:
 
     # Install coverage tools if not already present
     - name: Install coverage tools if not already present
-      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+      run: |
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        dotnet tool install --global dotnet-coverage
 
     #Restore dependencies
     - name: Restore
@@ -45,18 +47,57 @@ jobs:
     #Run UnitTest and Coverage
     - name: Run UnitTests with coverage
       run: |
+        $hasFailedTests = $false
         $frameworks = "net8.0", "net9.0"
+        
         foreach ($framework in $frameworks)
         {
+          Write-Host "Running Test for $framework ..."
           dotnet test .\CommonLibraries\netcore.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
+          if ($LASTEXITCODE -ne 0)
+          {
+            $hasFailedTests = $true
+          }
         }
         $frameworks = "net8.0-windows", "net9.0-windows"
         foreach ($framework in $frameworks)
         {
+          Write-Host "Running Test for $framework ..."
           dotnet test .\CommonLibraries\netwindows.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
+          if ($LASTEXITCODE -ne 0)
+          {
+            $hasFailedTests = $true
+          }
         }
-      continue-on-error: true
-      
+        
+        
+        $frameworks = "net8.0-windows"
+        foreach ($framework in $frameworks)
+        {
+          dotnet test .\CommonLibraries\netwindowsUI.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
+          
+          $session = (New-Guid).Guid
+          $coverageFile = "$frameworks\coverage.cobertura.xml"
+          
+          Write-Host "Starting dotnet-coverage server for session $session..."
+          $serverJob = Start-Job -ScriptBlock { param($session_id, $output_file)
+               & dotnet-coverage collect --server-mode --session-id $session_id --output-format cobertura --output $output_file
+                                              } -ArgumentList $session, $coverageFile
+          
+          Start-Sleep -Seconds 5
+          
+          Write-Host "Running UI tests for $frameworks connected to coverage server..."
+          & dotnet-coverage connect $session "dotnet" "test" ".\CommonLibraries\netwindowsUI.slnf" "--framework" "$framework" "--no-build" "-c" "Release" "-v" "m"
+          
+          Write-Host "Shutting down dotnet-coverage server..."
+          & dotnet-coverage shutdown $session
+          Remove-Job -Job $serverJob -Force
+        }
+        if ($hasFailedTests) 
+        {
+            exit 1
+        }
+
     #Generate Coverage Report
     - name: Generate coverage report
       run: |

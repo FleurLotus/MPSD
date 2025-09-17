@@ -1,20 +1,20 @@
 ﻿namespace Common.WPF.Attach.UI.UnitTests
 {
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Runtime.CompilerServices;
 
-    public class AutoCompleteWindowViewModel : INotifyPropertyChanged
+    using Common.ViewModel;
+
+    public class AutoCompleteWindowViewModel : NotifyPropertyChangedBase
     {
         private string _selected;
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        private string _selected2;
 
         public AutoCompleteWindowViewModel()
         {
             Possibles = new ObservableCollection<string>
             {
                 "Apple",
+                "aPPle",
                 "Apricot",
                 "Banana",
             };
@@ -28,14 +28,21 @@
                 if (_selected != value)
                 {
                     _selected = value;
-                    RaiseNotifyPropertyChanged();
+                    OnNotifyPropertyChanged();
                 }
             }
         }
-
-        private void RaiseNotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        public string Selected2
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            get { return _selected2; }
+            set
+            {
+                if (_selected2 != value)
+                {
+                    _selected2 = value;
+                    OnNotifyPropertyChanged();
+                }
+            }
         }
     }
 }

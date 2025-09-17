@@ -1,7 +1,6 @@
 ﻿namespace Common.WPF.Converter.UnitTests
 {
     using System;
-    using System.Windows.Data;
     using System.Globalization;
 
     using Common.WPF.Converter;

@@ -1,0 +1,25 @@
+﻿<Window x:Class="Common.WPF.Behavior.UI.UnitTests.BindableSelectedItemBehaviorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:Common.WPF.Behavior.UI.UnitTests"
+        Title="BindableSelectedItemBehaviorWindow"
+        mc:Ignorable="d"
+        Width="500" Height="500"
+        d:DataContext="{d:DesignInstance Type=local:BindableSelectedItemBehaviorWindowViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <TreeView ItemsSource="{Binding Root}">
+            <i:Interaction.Behaviors>
+                <fl:BindableSelectedItemBehavior SelectedItem="{Binding Selected, Mode=TwoWay}" />
+            </i:Interaction.Behaviors>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding DisplayValue}" VerticalAlignment="Center" Padding="5,0" />
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </Grid>
+</Window>

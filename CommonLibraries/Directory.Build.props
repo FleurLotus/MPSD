@@ -5,6 +5,7 @@
     <FileVersion>1.0.0</FileVersion>
     <Copyright>Blue Force Inc.</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -20,5 +21,4 @@
     <CoverletOutputFormat>cobertura</CoverletOutputFormat>
     <CoverletOutput>$(MSBuildThisFileDirectory)coverlet/$(AssemblyName)/$(TargetFramework)/</CoverletOutput>
   </PropertyGroup> 
-
 </Project>

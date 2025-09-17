@@ -2,6 +2,7 @@
 {
     using System;
     using System.ComponentModel;
+    using System.Runtime.CompilerServices;
     using System.Threading;
 
     using Common.Notify;
@@ -17,7 +18,7 @@
             _lazyLinkedProperties = new Lazy<LinkedProperties>(() => new LinkedProperties(this), LazyThreadSafetyMode.PublicationOnly);
         }
 
-        protected void OnNotifyPropertyChanged(string propertyName)
+        protected void OnNotifyPropertyChanged([CallerMemberName] string propertyName = null)
         {
             if (_lazyLinkedProperties.IsValueCreated)
             {

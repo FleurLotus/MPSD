@@ -1,0 +1,34 @@
+{
+  "solution": {
+    "path": "Common.sln",
+    "projects": [
+      "Common.CSV\\Common.CSV.csproj",
+      "Common.Collection\\Common.Collection.csproj",
+      "Common.Database\\Common.Database.csproj",
+      "Common.Drawing\\Common.Drawing.csproj",
+      "Common.Enums\\Common.Enums.csproj",
+      "Common.Html\\Common.Html.csproj",
+      "Common.Library\\Common.Library.csproj",
+      "Common.Notify\\Common.Notify.csproj",
+      "Common.SQL\\Common.SQL.csproj",
+      "Common.SQLite\\Common.SQLite.csproj",
+      "Common.Threading\\Common.Threading.csproj",
+      "Common.ViewModel.Command\\Common.ViewModel.Command.csproj",
+      "Common.ViewModel.Extended\\Common.ViewModel.Extended.csproj",
+      "Common.ViewModel.Validation\\Common.ViewModel.Validation.csproj",
+      "Common.ViewModel\\Common.ViewModel.csproj",
+      "Common.WPF.Attach\\Common.WPF.Attach.csproj",
+      "Common.WPF.Behavior\\Common.WPF.Behavior.csproj",
+      "Common.WPF.Converter\\Common.WPF.Converter.csproj",
+      "Common.WPF.Extension\\Common.WPF.Extension.csproj",
+      "Common.WPF\\Common.WPF.csproj",
+      "Common.Web\\Common.Web.csproj",
+      "Common.Zip\\Common.Zip.csproj",
+      "UnitTests\\MockDbData\\MockDbData.csproj",
+      "UnitTests\\UI.UnitTests\\Common.UIBaseTests\\Common.UIBaseTests.csproj",
+      "UnitTests\\UI.UnitTests\\Common.WPF.Attach.UI.UnitTests\\Common.WPF.Attach.UI.UnitTests.csproj",
+      "UnitTests\\UI.UnitTests\\Common.WPF.Behavior.UI.UnitTests\\Common.WPF.Behavior.UI.UnitTests.csproj",
+      "UnitTests\\UI.UnitTests\\Common.WPF.UI.UnitTests\\Common.WPF.UI.UnitTests.csproj"
+    ]
+  }
+}

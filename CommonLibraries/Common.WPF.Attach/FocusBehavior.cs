@@ -1,4 +1,4 @@
-﻿namespace Common.WPF.Behavior
+﻿namespace Common.WPF.Attach
 {
     using System.Windows;
     using System.Windows.Controls;

@@ -1,0 +1,16 @@
+﻿<Window x:Class="Common.UIBaseTests.SampleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:Common.UIBaseTests"
+        Title="SampleWindow"
+        mc:Ignorable="d"
+        Height="70" Width="200"
+        d:DataContext="{d:DesignInstance Type=local:SampleWindowViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <Label Content="{Binding SampleText}" />
+    </Grid>
+</Window>

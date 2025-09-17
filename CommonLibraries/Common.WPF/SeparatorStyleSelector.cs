@@ -12,8 +12,12 @@
         {
             if (item is MenuViewModel menu && menu.IsSeparator)
             {
-                ResourceDictionary resourceDictionary = Application.Current.Resources;
-                if (resourceDictionary.Contains("separatorStyle"))
+                ResourceDictionary resourceDictionary = Application.Current?.Resources;
+                if (resourceDictionary == null || !resourceDictionary.Contains("separatorStyle"))
+                {
+                    resourceDictionary = container.GetVisualAncestor<Window>()?.Resources;
+                }
+                if (resourceDictionary?.Contains("separatorStyle") == true)
                 {
                     return (Style) resourceDictionary["separatorStyle"];
                 }

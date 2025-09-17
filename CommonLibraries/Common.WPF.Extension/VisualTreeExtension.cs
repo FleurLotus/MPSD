@@ -11,7 +11,7 @@
         //From: https://gong-wpf-dragdrop.googlecode.com/svn-history/r29/branches/jon/GongSolutions.Wpf.DragDrop/Utilities/VisualTreeExtensions.cs
         public static T GetVisualAncestor<T>(this DependencyObject d) where T : class
         {
-            DependencyObject item = VisualTreeHelper.GetParent(d);
+            DependencyObject item = VisualTreeHelper.GetParent(d) ?? LogicalTreeHelper.GetParent(d);
 
             while (item != null)
             {
@@ -19,14 +19,14 @@
                 {
                     return itemAsT;
                 }
-                item = VisualTreeHelper.GetParent(item);
+                item = VisualTreeHelper.GetParent(item) ?? LogicalTreeHelper.GetParent(item);
             }
 
             return null;
         }
         public static DependencyObject GetVisualAncestor(this DependencyObject d, Type type)
         {
-            DependencyObject item = VisualTreeHelper.GetParent(d);
+            DependencyObject item = VisualTreeHelper.GetParent(d) ?? LogicalTreeHelper.GetParent(d);
 
             while (item != null)
             {
@@ -35,7 +35,7 @@
                     return item;
                 }
 
-                item = VisualTreeHelper.GetParent(item);
+                item = VisualTreeHelper.GetParent(item) ?? LogicalTreeHelper.GetParent(item);
             }
 
             return null;

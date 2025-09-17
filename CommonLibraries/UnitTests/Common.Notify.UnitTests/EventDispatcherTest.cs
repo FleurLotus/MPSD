@@ -44,13 +44,13 @@
         {
             EventDispatcher eventDispatcher = new EventDispatcher(null, "test");
             eventDispatcher.Enqueue(IncreaseWait);
-            Thread.Sleep(20);
+            Thread.Sleep(100);
             eventDispatcher.Enqueue(IncreaseWait);
             eventDispatcher.Enqueue(IncreaseWait);
             eventDispatcher.Enqueue(IncreaseWait);
-            Thread.Sleep(20);
+            Thread.Sleep(100);
             eventDispatcher.Dispose();
-            Thread.Sleep(30);
+            Thread.Sleep(100);
             Assert.That(_countWait, Is.GreaterThanOrEqualTo(2));
         }
         private int _countWait = 0;

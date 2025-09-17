@@ -7,10 +7,10 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:conv="clr-namespace:Common.WPF.Converter;assembly=Common.WPF.Converter"
         xmlns:input="clr-namespace:Common.ViewModel.Input;assembly=Common.ViewModel.Extended"
-        xmlns:behavior="clr-namespace:Common.WPF.Behavior;assembly=Common.WPF.Behavior"
+        xmlns:attach="clr-namespace:Common.WPF.Attach;assembly=Common.WPF.Attach"
         mc:Ignorable="d" 
         d:DataContext="{d:DesignInstance Type=input:InputViewModel}"
-        behavior:FocusBehavior.FocusFirst="True"
+        attach:FocusBehavior.FocusFirst="True"
         Title="{Binding Title}" 
         ResizeMode="NoResize" SizeToContent="WidthAndHeight" Width="277" WindowStartupLocation="CenterOwner">
     <Window.Resources>

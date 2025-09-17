@@ -1,0 +1,42 @@
+﻿<Window x:Class="Common.WPF.Behavior.UI.UnitTests.GridViewColumnResizeBehaviorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fl="http://schemas.fleurlotus.com/xaml/"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:Common.WPF.Behavior.UI.UnitTests"
+        Title="GridViewColumnResizeBehaviorWindow"
+        mc:Ignorable="d"
+        Width="500"
+        d:DataContext="{d:DesignInstance Type=local:GridViewColumnResizeBehaviorWindowViewModel, IsDesignTimeCreatable=False}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0"  Content="Go" Width="50" Command="{Binding AddCommand}"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Elements}">
+            <i:Interaction.Behaviors>
+                <fl:GridViewColumnResizeBehavior />
+            </i:Interaction.Behaviors>
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <ListView Grid.Row="3" ItemsSource="{Binding Elements}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>

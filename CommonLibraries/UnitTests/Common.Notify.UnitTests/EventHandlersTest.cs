@@ -7,7 +7,8 @@
     using Moq;
 
     using NUnit.Framework;
-
+#pragma warning disable IDE0039 // Use local function
+#pragma warning disable IDE0053 // Use expression body for lambda expression
     [TestFixture]
     public class EventHandlersTest
     {
@@ -183,6 +184,7 @@
 
             EventHandler<EventArgs<object>> calledHandler = null;
             Exception calledException = null;
+
             Action<EventHandler<EventArgs<object>>, Exception> exceptionCallback = (h, e) =>
             {
                 calledHandler = h;
@@ -208,4 +210,6 @@
             eventDispatcher.VerifyAll();
         }
     }
+#pragma warning restore IDE0053 // Use expression body for lambda expression
+#pragma warning restore IDE0039 // Use local function
 }
