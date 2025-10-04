@@ -7,7 +7,7 @@ on:
     branches: [ "Work" ]
 
 jobs:
-  build_deloy_common:
+  build_deploy_common:
     runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     env:
         CommonSolution: '.\CommonLibraries\Common.sln'
@@ -145,7 +145,7 @@ jobs:
 
   build_mpsd:
     runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    needs: build_deloy_common
+    needs: build_deploy_common
     env:
         MainSolution: '.\MagicPictureSetDownloader\MagicPictureSetDownloader.sln'
 
