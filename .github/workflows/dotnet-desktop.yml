@@ -7,7 +7,7 @@ on:
     branches: [ "Work" ]
 
 jobs:
-  build_deloy_common:
+  build_deploy_common:
     runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     env:
         CommonSolution: '.\CommonLibraries\Common.sln'
@@ -16,13 +16,13 @@ jobs:
     # CheckOut of the code with just the head 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
     # Install the .NET Core workload
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
           6.0.x
@@ -117,7 +117,7 @@ jobs:
 
     # Publish Result
     - name: Publish test results to GitHub
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always()
       with:
         name: Unit Test Results
@@ -145,7 +145,7 @@ jobs:
 
   build_mpsd:
     runs-on: windows-latest  # For a list of available runner types, refer to https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    needs: build_deloy_common
+    needs: build_deploy_common
     env:
         MainSolution: '.\MagicPictureSetDownloader\MagicPictureSetDownloader.sln'
 
@@ -158,7 +158,7 @@ jobs:
 
     # Install the .NET Core workload
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 9.0.x
 
@@ -168,7 +168,7 @@ jobs:
 
     # Get back the Package
     - name: Download artifact LocalPackages
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: Packages
         path: ./LocalPackages/
