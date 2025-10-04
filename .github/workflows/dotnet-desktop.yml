@@ -16,7 +16,7 @@ jobs:
     # CheckOut of the code with just the head 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
@@ -152,7 +152,7 @@ jobs:
     # CheckOut of the code with just the head 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
 
