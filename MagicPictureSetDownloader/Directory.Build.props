@@ -4,7 +4,7 @@
     <Version>20.1.0</Version>
     <FileVersion>20.1.0</FileVersion>
     <Copyright>Blue Force Inc.</Copyright>
-    <AppTargetFramework>net6.0</AppTargetFramework>
+    <AppTargetFramework>net8.0</AppTargetFramework>
     <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

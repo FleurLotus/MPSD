@@ -22,9 +22,5 @@
             : base(message, innerException)
         {
         }
-        public PriceImporterException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
 }

@@ -23,8 +23,6 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: |
-          6.0.x
-          7.0.x
           8.0.x
           9.0.x
 
@@ -47,12 +45,12 @@ jobs:
     #Run UnitTest and Coverage
     - name: Run UnitTests with coverage
       run: |
-        $frameworks = "net6.0", "net7.0", "net8.0", "net9.0"
+        $frameworks = "net8.0", "net9.0"
         foreach ($framework in $frameworks)
         {
           dotnet test .\CommonLibraries\netcore.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"
         }
-        $frameworks = "net6.0-windows", "net7.0-windows", "net8.0-windows", "net9.0-windows"
+        $frameworks = "net8.0-windows", "net9.0-windows"
         foreach ($framework in $frameworks)
         {
           dotnet test .\CommonLibraries\netwindows.slnf  --framework $framework --no-build -c Release -l "trx;LogFileName=$framework\test-results.trx" -v m --collect:"XPlat Code Coverage"

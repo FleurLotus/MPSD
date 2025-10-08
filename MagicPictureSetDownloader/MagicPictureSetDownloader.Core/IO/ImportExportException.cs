@@ -22,9 +22,5 @@
             : base(message, innerException)
         {
         }
-        public ImportExportException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
     }
 }
