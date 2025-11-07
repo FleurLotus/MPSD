@@ -14,7 +14,7 @@ jobs:
     # CheckOut of the code with just the head 
     steps:
     - name: Checkout
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
@@ -144,7 +144,7 @@ jobs:
 
     # Upload Result
     - name: Upload artifact UnitTest Coverage
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: test-results
@@ -174,7 +174,7 @@ jobs:
 
     # Upload Result
     - name: Upload artifact LocalPackages
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
         name: Packages
         path: './LocalPackages/*.nupkg'
@@ -189,7 +189,7 @@ jobs:
     # CheckOut of the code with just the head 
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         fetch-depth: 0
 
@@ -205,7 +205,7 @@ jobs:
 
     # Get back the Package
     - name: Download artifact LocalPackages
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v7
       with:
         name: Packages
         path: ./LocalPackages/
