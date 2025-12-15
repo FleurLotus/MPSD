@@ -205,7 +205,7 @@ jobs:
 
     # Get back the Package
     - name: Download artifact LocalPackages
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         name: Packages
         path: ./LocalPackages/
