@@ -294,23 +294,6 @@
                 OnInputRequested(vm);
             }
         }
-        private void ChangeCardCommandExecute(object o)
-        {
-            if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
-            {
-                return;
-            }
-
-            CardUpdateViewModel vm = new CardUpdateViewModel(Hierarchical.Name, nodeViewModel.Card.Card);
-            OnDialogWanted(vm);
-
-            if (vm.Result == true)
-            {
-                _magicDatabaseForCardInCollection.ChangeCardEditionFoilAltArtLanguage(vm.SourceCollection, vm.Source.Card, vm.Source.Count, vm.Source.EditionSelected, new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.LanguageSelected, vm.EditionSelected, new CardCountKey(vm.IsFoil, vm.IsAltArt), vm.LanguageSelected);
-                LoadCardsHierarchy();
-            }
-        }
-
         private void RemoveCardCommandExecute(object o)
         {
             if (Hierarchical.Selected is not HierarchicalResultNodeViewModel nodeViewModel)
@@ -325,7 +308,7 @@
             {
                 CardCount cardCount = new CardCount
                 {
-                    { new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), -vm.Source.Count }
+                    { new CardCountKey(vm.Source.IsFoil), -vm.Source.Count }
                 };
 
                 _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdScryFall(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
@@ -493,8 +476,6 @@
                 ContextMenuRoot.AddChild(new MenuViewModel("Copy card to other collection", new RelayCommand(CopyCardCommandExecute)));
                 ContextMenuRoot.AddChild(new MenuViewModel("Remove card from collection", new RelayCommand(RemoveCardCommandExecute)));
                 ContextMenuRoot.AddChild(new MenuViewModel("Move card to other collection", new RelayCommand(MoveCardCommandExecute)));
-                ContextMenuRoot.AddChild(MenuViewModel.Separator());
-                ContextMenuRoot.AddChild(new MenuViewModel("Change edition/language/foil/alt art", new RelayCommand(ChangeCardCommandExecute)));
             }
         }
         private void GenerateCollectionMenu()
@@ -543,7 +524,7 @@
             {
                 CardCount cardCount = new CardCount
                 {
-                    { new CardCountKey(vm.Source.IsFoil, vm.Source.IsAltArt), vm.Source.Count }
+                    { new CardCountKey(vm.Source.IsFoil), vm.Source.Count }
                 };
 
                 if (vm.Copy)

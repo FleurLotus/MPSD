@@ -91,14 +91,30 @@
         {
             HierarchicalResultViewModel current = _buildingRoot;
 
-            for (int index = 0; index <= analysers.Length; index++)
+            // Until analysers.Length + 1 as we need name + card image
+            for (int index = 0; index <= analysers.Length + 1; index++)
             {
                 IList<HierarchicalResultViewModel> children = current.Children;
                 HierarchicalResultViewModel next = null;
 
-                IComparable value = index < analysers.Length ? analysers[index].Analyse(card) : card.Name;
+                IComparable value;
+                bool isAscendentOrder;
 
-                bool isAscendentOrder = index >= orders.Length || orders[index];
+                if (index == analysers.Length)
+                {
+                    value = card.Name;
+                    isAscendentOrder = true;
+                }
+                else if (index == analysers.Length + 1)
+                {
+                    value = $"{card.IdScryFall[..8]}..";
+                    isAscendentOrder = true;
+                }
+                else
+                {
+                    value = analysers[index].Analyse(card);
+                    isAscendentOrder = orders[index];
+                }
                 int i;
 
                 for (i = 0; i < children.Count; i++)
@@ -116,13 +132,13 @@
                     }
                 }
 
-                if (next == null)
+                if (next == null || index == analysers.Length + 1)
                 {
-                    next = index < analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value);
+                    next = index <= analysers.Length ? new HierarchicalResultViewModel(value) : new HierarchicalResultNodeViewModel(value);
                     current.Children.Insert(i, next);
                 }
 
-                if (index == analysers.Length)
+                if (index == analysers.Length + 1)
                 {
                     // ReSharper disable PossibleNullReferenceException
                     (next as HierarchicalResultNodeViewModel).AddCard(card);

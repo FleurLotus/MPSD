@@ -76,7 +76,6 @@
 
                     <Button Grid.Column="0" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" Command="{Binding ResetCommand}" />
                     <CheckBox Grid.Column="1" Grid.Row="4" Content="Foil" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <CheckBox Grid.Column="2" Grid.Row="4" Content="AltArt" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding AltArt}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Column="3" Header="Display">

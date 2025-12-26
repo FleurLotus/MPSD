@@ -22,6 +22,7 @@
         IEdition GetEditionFromCode(string code);
         IEdition GetEditionById(int idEdition);
         string GetIdScryFall(ICard card, IEdition edition);
+        string GetIdScryFallByFlavorName(string flavorName, IEdition edition);
         IPicture GetPicture(string idScryFall, bool doNotCache = false);
         IPicture GetDefaultPicture();
         ITreePicture GetTreePicture(string key);

@@ -82,7 +82,6 @@
                     Quantity = audit.Quantity,
                     OperationDate = audit.OperationDate.ToLocalTime().ToString("G"),
                     IsFoil = audit.IsFoil.HasValue && audit.IsFoil.Value,
-                    IsAltArt = audit.IsAltArt.HasValue && audit.IsAltArt.Value,
                 };
 
                 ICardCollection cardCollection = _magicDatabase.GetCollection(audit.IdCollection);

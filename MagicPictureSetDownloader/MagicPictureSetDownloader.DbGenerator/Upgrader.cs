@@ -86,9 +86,9 @@
                             return;
             */
 
-            if (dbVersion < 6)
+            if (dbVersion < 21)
             {
-                throw new Exception("You have udpated the version!!! There is no released version with this db version");
+                throw new Exception("Your current database version is incompatible with the new release, you will lose data.");
             }
 
             Repository repo = new Repository(_connectionString);
@@ -111,9 +111,8 @@
                 AddPreconstructedDeckFromReference(repo, temporaryDabase.ConnectionString);
             }
 
-            if (dbVersion <= 20)
+            if (dbVersion <= 21)
             {
-                repo.ExecuteParametrizeCommand(UpdateQueries.InsertNewLanguage, new KeyValuePair<string, object>[] { new KeyValuePair<string, object>("@name", "Elvish") });
             }
         }
         private void AddPreconstructedDeckFromReference(IRepository repo, string connectionString)

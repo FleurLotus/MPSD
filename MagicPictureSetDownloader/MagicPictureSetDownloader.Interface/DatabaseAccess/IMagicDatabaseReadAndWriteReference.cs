@@ -10,7 +10,7 @@
         void InsertNewCard(string name, string layout);
         void InsertNewTranslate(int idCard, string language, string name);
         void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type);
-        void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2);
+        void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2, string flavorName);
         void InsertNewExternalIds(string idScryFall, CardIdSource cardIdSource, string externalId);
         void InsertNewBlock(string blockName);
         void InsertNewLanguage(string languageName, string alternativeName);

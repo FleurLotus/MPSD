@@ -16,18 +16,14 @@
         private readonly Regex _deckNameRegex = new Regex(@"<h4>(?<name>[^<]+)</h4>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _deckEditionRegex = new Regex(@"<a download=""true"" href=""/deck/(?<edition>\w+)/[^>]*"">", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly Regex _cardInfoRegex = new Regex(@"<a href=""(?<url>/card/(?<edition>\w+)/[^>]*)"">(?<name>.+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Regex _cardImageRegex = new Regex(@"<img alt=.* src='(?<url>/cards[^>]*)'>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Regex _cardRarityRegex = new Regex(@"Rarity: (?<rarity>\w+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private const string CardSplitter = @"<div class='card_entry'>";
         // Magic Online Commander
         private readonly Regex _excludedRegex = new Regex(@"/deck/(?:td0)/", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private readonly Func<string, string> _getExtraInfo;
 
         private readonly IMagicDatabaseReadOnly MagicDatabase = MagicDatabaseManager.ReadOnly;
 
-        public PreconstructedDeckImporter(Func<string, string> getExtraInfo)
+        public PreconstructedDeckImporter()
         {
-            _getExtraInfo = getExtraInfo;
         }
 
         public string GetRootUrl()
@@ -105,25 +101,54 @@
                     m = _cardInfoRegex.Match(line);
                     if (m.Success)
                     {
-                        ICard card = GetCard(m);
-                        IEdition edition = GetEdition(deckName, m) ?? throw new ParserException($"Could not find edition for card in {deckName}");
-                        string idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                        string idScryFall = null;
+                        string cardName = m.Groups["name"].Value.TrimEnd();
 
-                        // Fallback for card special with double identical face
-                        if (string.IsNullOrEmpty(idScryFall))
+                        IEdition edition = GetEdition(deckName, m) ?? throw new ParserException($"Could not find edition for card in {deckName}");
+                        ICard card = MagicDatabase.GetCard(cardName);
+                        if (card != null)
                         {
-                            string cardName = m.Groups["name"].Value.TrimEnd();
-                            cardName = $"{cardName} // {cardName}";
-                            card = MagicDatabase.GetCard(cardName);
-                            if (card != null)
+                            idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                            // Fallback for card special with double identical face
+                            if (string.IsNullOrEmpty(idScryFall))
                             {
-                                idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                                card = MagicDatabase.GetCard($"{cardName} // {cardName}");
+                                if (card != null)
+                                {
+                                    idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            //Flavor name search 1st
+                            idScryFall = MagicDatabase.GetIdScryFallByFlavorName(cardName, edition);
+                            if (string.IsNullOrEmpty(idScryFall))
+                            {
+                                if (cardName.Contains("("))
+                                {
+                                    //Flavor name search 2nd
+                                    idScryFall = MagicDatabase.GetIdScryFallByFlavorName(cardName[..cardName.LastIndexOf("(")].TrimEnd(), edition);
+                                    if (string.IsNullOrEmpty(idScryFall))
+                                    {
+                                        // Try to get the real name between parenthesis
+                                        string name = cardName[(cardName.LastIndexOf("(") + 1)..cardName.LastIndexOf(")")];
+                                        card = MagicDatabase.GetCard(name);
+                                        idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+
+                                        if (string.IsNullOrEmpty(idScryFall))
+                                        {
+                                            card = MagicDatabase.GetCard($"{name} // {name}");
+                                            idScryFall = MagicDatabase.GetIdScryFall(card, edition);
+                                        }
+                                    }
+                                }
                             }
                         }
 
                         if (string.IsNullOrEmpty(idScryFall))
                         {
-                            throw new ParserException(string.Format("Could not find card with idCard {0} and idEdition {1}", card.Id, edition.Id));
+                            throw new ParserException(string.Format("Could not find card with Card {0} and idEdition {1}", card?.Id.ToString() ?? cardName, edition.Id));
                         }
                         else
                         {
@@ -141,12 +166,6 @@
             return new DeckInfo(deckEdition?.Id, deckName, cards);
         }
 
-        private ICard GetCard(Match m)
-        {
-            string cardName = m.Groups["name"].Value.TrimEnd();
-            ICard card = MagicDatabase.GetCard(cardName) ?? throw new ParserException($"Could not find Card with name {cardName}");
-            return card;
-        }
         private IEdition GetEdition(string deckName, Match m)
         {
             string cardEdition = m.Groups["edition"].Value.TrimEnd();

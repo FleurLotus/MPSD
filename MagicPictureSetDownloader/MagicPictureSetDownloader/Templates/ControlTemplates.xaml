@@ -198,20 +198,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Alt Art" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding AltArtNumber}" HorizontalAlignment="Right"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Foil Alt" Width="50">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding FoilAltArtNumber}" HorizontalAlignment="Right"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
+                    <GridViewColumn Header="Version" DisplayMemberBinding="{Binding Version}"/>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -326,59 +313,6 @@
                 </Image.RenderTransform>
             </Image>
         </StackPanel>
-    </ControlTemplate>
-
-    <!-- Card picture display variations -->
-    <ControlTemplate x:Key="VariationImageControlTemplate">
-        <TabControl Style="{DynamicResource TabControlStyle1}"
-                    TabStripPlacement="Bottom" Background="Transparent" fl:TabControlExtensions.SelectOnlyVisibleTabs="True" 
-                    ItemsSource="{Binding Hierarchical.Selected, Converter={conv:HierarchicalResultNodeToVariationsConverter}}"
-                    Visibility="{Binding Hierarchical.Selected, Converter={conv:HierarchicalResultNodeToVariationsVisibleConverter}}"
-                    d:DataContext="{d:DesignInstance Type=main:MainViewModel, IsDesignTimeCreatable=False}" >
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding IdScryFall}"/>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image Source="{Binding Converter={conv:CardToImageConverter}, ConverterParameter=0}" RenderTransformOrigin="0.5,0.5">
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="{Binding Converter={conv:CardToRotationAngleConverter}, ConverterParameter=0}" />
-                                    <TranslateTransform>
-                                        <TranslateTransform.X>
-                                            <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="0">
-                                                <Binding />
-                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
-                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
-                                            </MultiBinding>
-                                        </TranslateTransform.X>
-                                    </TranslateTransform>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                        <Image Source="{Binding Converter={conv:CardToImageConverter}, ConverterParameter=1}" RenderTransformOrigin="0.5,0.5" >
-                            <Image.RenderTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="{Binding Converter={conv:CardToRotationAngleConverter}, ConverterParameter=1}" />
-                                    <TranslateTransform>
-                                        <TranslateTransform.X>
-                                            <MultiBinding Converter="{conv:HeightToMoveConverter}" ConverterParameter="1">
-                                                <Binding />
-                                                <Binding Path="ActualHeight" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
-                                                <Binding Path="ActualWidth" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Image}}" />
-                                            </MultiBinding>
-                                        </TranslateTransform.X>
-                                    </TranslateTransform>
-                                </TransformGroup>
-                            </Image.RenderTransform>
-                        </Image>
-                    </StackPanel>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
     </ControlTemplate>
 
     <!-- Quantity for card change -->

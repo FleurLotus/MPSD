@@ -33,7 +33,7 @@
                 if (importExportCardCount is ImportExportCardInfo okCard)
                 {
                     list.Add(okCard);
-                    totalCard += okCard.FoilNumber + okCard.Number + okCard.AltArtNumber + okCard.FoilAltArtNumber;
+                    totalCard += okCard.FoilNumber + okCard.Number;
                     continue;
                 }
 

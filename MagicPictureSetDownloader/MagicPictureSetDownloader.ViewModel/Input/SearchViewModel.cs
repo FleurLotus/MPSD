@@ -40,7 +40,6 @@
         private bool _excludeFunEditions;
         private bool _excludeSpecialCards;
         private bool _countIncludeFoil;
-        private bool _countIncludeAltArt;
         private bool _countIsNameBased;
         private bool _allLanguages;
         private ComparisonType _countComparatorWanted;
@@ -178,18 +177,6 @@
                 }
             }
         }
-        public bool CountIncludeAltArt
-        {
-            get { return _countIncludeAltArt; }
-            set
-            {
-                if (value != _countIncludeAltArt)
-                {
-                    _countIncludeAltArt = value;
-                    OnNotifyPropertyChanged();
-                }
-            }
-        }
         public bool AllLanguages
         {
             get { return _allLanguages; }
@@ -267,7 +254,7 @@
             Result = null;
             int[] ids = _magicDatabase.GetAllBlocks().Where(b => b.Name.IndexOf("Fun", StringComparison.InvariantCultureIgnoreCase) >= 0).Select(b => b.Id).ToArray();
             _idBlockFun = ids.Length > 0 ? ids[0] : -1;
-            Editions = _magicDatabase.GetAllEditionsOrdered();
+            Editions = _magicDatabase.GetNoneEmptyEditionsOrdered();
             Collections = _magicDatabase.GetAllCollections();
 
             IEdition[] editions = EditionsSelected.ToArray();
@@ -330,14 +317,6 @@
             if (CountIncludeFoil)
             {
                 count += statistics.Sum(stat => stat.FoilNumber);
-            }
-            if (CountIncludeAltArt)
-            {
-                count += statistics.Sum(stat => stat.AltArtNumber);
-            }
-            if (CountIncludeAltArt && CountIncludeFoil)
-            {
-                count += statistics.Sum(stat => stat.FoilAltArtNumber);
             }
 
             return _countComparatorWanted == ComparisonType.GreaterOrEquals ? count >= CountSelected : count < CountSelected;

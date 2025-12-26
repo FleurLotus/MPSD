@@ -26,7 +26,6 @@
     {
         private InputMode _inputMode = InputMode.ByEdition;
         private bool _isFoil;
-        private bool _isAltArt;
         private bool _isFocused;
         private int _count;
         private ICard _cardSelected;
@@ -46,8 +45,9 @@
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
         private readonly int _defaultQuantity;
-        private const int MaxCount = 99;
-        private const int MinCount = -99;
+        private string _versionSelected;
+        public const int MaxCount = 99;
+        public const int MinCount = -99;
 
         public CardInputViewModel(string name, int defaultQuantity)
         {
@@ -89,10 +89,11 @@
 
             Cards = new RangeObservableCollection<string>();
 
-            _allEditions = _magicDatabase.GetAllEditionsOrdered();
+            _allEditions = _magicDatabase.GetNoneEmptyEditionsOrdered();
             Editions = new RangeObservableCollection<IEdition>();
 
             Languages = new RangeObservableCollection<ILanguage>();
+            Versions = new RangeObservableCollection<string>();
 
             RebuildOrder();
             InitWindow();
@@ -103,6 +104,7 @@
         public RangeObservableCollection<IEdition> Editions { get; }
         public RangeObservableCollection<ILanguage> Languages { get; }
         public RangeObservableCollection<string> Cards { get; }
+        public RangeObservableCollection<string> Versions { get; }
 
         public ILanguage LanguageSelected
         {
@@ -166,19 +168,6 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged();
-                    RefreshDisplayedData(InputMode.None);
-                }
-            }
-        }
-        public bool IsAltArt
-        {
-            get { return _isAltArt; }
-            set
-            {
-                if (value != _isAltArt)
-                {
-                    _isAltArt = value;
                     OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.None);
                 }
@@ -265,6 +254,19 @@
                 }
             }
         }
+        public string VersionSelected
+        {
+            get { return _versionSelected; }
+            set
+            {
+                if (value != _versionSelected)
+                {
+                    _versionSelected = value;
+                    OnNotifyPropertyChanged();
+                    RefreshDisplayedData(InputMode.None);
+                }
+            }
+        }
 
         protected override void OkCommandExecute(object o)
         {
@@ -273,7 +275,7 @@
         }
         protected override bool OkCommandCanExecute(object o)
         {
-            return Count != 0 && EditionSelected != null && _cardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil);
+            return Count != 0 && EditionSelected != null && _cardSelected != null && _languageSelected != null && (EditionSelected.HasFoil || !IsFoil) && (VersionSelected != null);
         }
         private void ChangeCollectionCommandExecute(object obj)
         {
@@ -347,23 +349,23 @@
                     break;
             }
 
+            Versions.Clear();
             Languages.Clear();
             CurrentCollectionDetail = null;
             LanguageSelected = null;
+            VersionSelected = null;
             Count = _defaultQuantity;
             IsFoil = false;
-            IsAltArt = false;
             ResetFocus();
         }
         private void AddNewCard()
         {
             CardCount cardCount = new CardCount
             {
-                { new CardCountKey(IsFoil, IsAltArt), Count }
+                { new CardCountKey(IsFoil), Count }
             };
 
-            ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == EditionSelected && cadi.Card == _cardSelected);
-            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, cardAllDbInfo.IdScryFall, LanguageSelected.Id, cardCount);
+            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, VersionSelected, LanguageSelected.Id, cardCount);
         }
         private void SelectCardCollection(string name)
         {
@@ -405,20 +407,29 @@
             if (InputMode != modifyData)
             {
                 Languages.Clear();
+                Versions.Clear();
+
                 IEdition editionSelected = EditionSelected;
                 ICard cardNameSelected = _cardSelected;
+
                 if (editionSelected == null || cardNameSelected == null)
                 {
                     return;
                 }
 
-                ICardAllDbInfo cardAllDbInfo = _allCardInfos.First(cadi => cadi.Edition == editionSelected && cadi.Card == cardNameSelected);
-                if (cardAllDbInfo == null)
+                ICardAllDbInfo[] cardAllDbInfos = _allCardInfos.Where(cadi => cadi.Edition == editionSelected && cadi.Card == cardNameSelected).ToArray();
+                if (cardAllDbInfos.Length == 0)
                 {
                     return;
                 }
 
-                foreach (ILanguage language in _magicDatabase.GetLanguages(cardAllDbInfo.IdScryFall))
+                Versions.AddRange(cardAllDbInfos.Select(cadi => cadi.IdScryFall).OrderBy(id => id));
+                if (Versions.Count > 0)
+                {
+                    VersionSelected = Versions[0];
+                }
+
+                foreach (ILanguage language in cardAllDbInfos.SelectMany(c => _magicDatabase.GetLanguages(c.IdScryFall)).Distinct())
                 {
                     Languages.Add(language);
                 }
@@ -445,6 +456,7 @@
                         IEdition editionSelected = EditionSelected;
                         Cards.Clear();
                         Languages.Clear();
+                        Versions.Clear();
                         if (editionSelected == null)
                         {
                             return;
@@ -474,6 +486,7 @@
                         ICard cardNameSelected = _cardSelected;
                         Editions.Clear();
                         Languages.Clear();
+                        Versions.Clear();
                         if (cardNameSelected == null)
                         {
                             return;
@@ -499,7 +512,7 @@
         }
         private void UpdateCurrentCollectionDetailAndTranslate()
         {
-            if (EditionSelected == null || _cardSelected == null || LanguageSelected == null)
+            if (EditionSelected == null || _cardSelected == null || LanguageSelected == null || VersionSelected == null)
             {
                 CurrentCollectionDetail = null;
                 Translate = null;
@@ -510,34 +523,39 @@
 
             int totalInCollection = 0;
             int totalInEditionInCollection = 0;
-            int totalInEditionAndLanguageInCollectionNotFoilNotAltArt = 0;
-            int totalInEditionAndLanguageInCollectionFoilNotAltArt = 0;
-            int totalInEditionAndLanguageInCollectionNotFoilAltArt = 0;
-            int totalInEditionAndLanguageInCollectionFoilAltArt = 0;
+            int totalInEditionAndLanguageInCollectionNotFoil = 0;
+            int totalInEditionAndLanguageInCollectionFoil = 0;
+            int totalInVersionAndLanguageInCollectionFoil = 0;
+            int totalInVersionAndLanguageInCollectionNotFoil = 0;
 
             foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, _cardSelected))
             {
-                int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber + cardInCollectionCount.AltArtNumber + cardInCollectionCount.FoilAltArtNumber;
+                int inCollection = cardInCollectionCount.Number + cardInCollectionCount.FoilNumber;
                 totalInCollection += inCollection;
-                if (_magicDatabase.GetEdition(cardInCollectionCount.IdScryFall) == EditionSelected)
+                if (_magicDatabase.GetEditionByIdScryFall(cardInCollectionCount.IdScryFall) == EditionSelected)
                 {
                     totalInEditionInCollection += inCollection;
                     if (cardInCollectionCount.IdLanguage == LanguageSelected.Id)
                     {
-                        totalInEditionAndLanguageInCollectionNotFoilNotAltArt += cardInCollectionCount.Number;
-                        totalInEditionAndLanguageInCollectionFoilNotAltArt += cardInCollectionCount.FoilNumber;
-                        totalInEditionAndLanguageInCollectionNotFoilAltArt += cardInCollectionCount.AltArtNumber;
-                        totalInEditionAndLanguageInCollectionFoilAltArt += cardInCollectionCount.FoilAltArtNumber;
+                        totalInEditionAndLanguageInCollectionNotFoil += cardInCollectionCount.Number;
+                        totalInEditionAndLanguageInCollectionFoil += cardInCollectionCount.FoilNumber;
+
+                        if (cardInCollectionCount.IdScryFall == VersionSelected)
+                        {
+                            totalInVersionAndLanguageInCollectionNotFoil += cardInCollectionCount.Number;
+                            totalInVersionAndLanguageInCollectionFoil += cardInCollectionCount.FoilNumber;
+                        }
                     }
                 }
             }
 
-            CurrentCollectionDetail = string.Format("{2}{3}{4}{5} {0} {1}\n{6} {0}\n{7} All Edition", EditionSelected.Code, LanguageSelected.Name,
-                                                                                                       totalInEditionAndLanguageInCollectionNotFoilNotAltArt,
-                                                                                                       totalInEditionAndLanguageInCollectionFoilNotAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionFoilNotAltArt + "(Foil)" : string.Empty,
-                                                                                                       totalInEditionAndLanguageInCollectionNotFoilAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionNotFoilAltArt + "(AltArt)" : string.Empty,
-                                                                                                       totalInEditionAndLanguageInCollectionFoilAltArt > 0 ? "+" + totalInEditionAndLanguageInCollectionFoilAltArt + "(FoilAltArt)" : string.Empty,
-                                                                                                       totalInEditionInCollection, totalInCollection);
+            CurrentCollectionDetail = string.Format("{2}{3} {0} {1} Version\n{4}{5} {0} {1}\n{6} {0}\n{7} All Edition", EditionSelected.Code, LanguageSelected.Name,
+                                                                                                totalInVersionAndLanguageInCollectionNotFoil,
+                                                                                                totalInVersionAndLanguageInCollectionFoil > 0 ? "+" + totalInVersionAndLanguageInCollectionFoil + "(Foil)" : string.Empty,
+                                                                                                totalInEditionAndLanguageInCollectionNotFoil,
+                                                                                                totalInEditionAndLanguageInCollectionFoil > 0 ? "+" + totalInEditionAndLanguageInCollectionFoil + "(Foil)" : string.Empty,
+                                                                                                totalInEditionInCollection,
+                                                                                                totalInCollection);
         }
         private void ResetFocus()
         {

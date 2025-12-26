@@ -28,6 +28,7 @@
             SetId = c.SetId;
             Set = c.Set;
             Language = c.Language;
+            FlavorName = c.FlavorName;
         }
 
         [JsonPropertyName("id")]
@@ -71,5 +72,8 @@
 
         [JsonPropertyName("lang")]
         public Language Language { get; set; }
+
+        [JsonPropertyName("flavor_name")]
+        public string FlavorName { get; set; }
     }
 }

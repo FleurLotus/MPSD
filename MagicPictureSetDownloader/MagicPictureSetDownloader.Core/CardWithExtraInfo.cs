@@ -8,6 +8,7 @@
     {
         public string IdScryFall { get; set; }
         public string Name { get; set; }
+        public string FlavorName { get; set; }
         public string Edition { get; set; }
         public string Layout { get; set; }
         public string Rarity { get; set; }

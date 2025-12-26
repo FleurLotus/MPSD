@@ -25,8 +25,6 @@ namespace MagicPictureSetDownloader.Db.DAO
         [DbColumn]
         public bool? IsFoil { get; set; }
         [DbColumn]
-        public bool? IsAltArt { get; set; }
-        [DbColumn]
         public int? IdLanguage { get; set; }
         [DbColumn]
         public int Quantity { get; set; }
@@ -34,13 +32,12 @@ namespace MagicPictureSetDownloader.Db.DAO
         //IdScryFall, IsFoil, IdLanguage null or not are linked
         public override string ToString()
         {
-            return string.Format(" {0} card(s) {1}{2}{3}{4} to collection {5} at {6:yyyy-MM-dd HH:mm:ss.ff}", Quantity,
-                                                                                                            IdScryFall + " ",
-                                                                                                            IsFoil.Value ? "(Foil)" : string.Empty,
-                                                                                                            IsAltArt.Value ? "(AltArt)" : string.Empty,
-                                                                                                            IdLanguage.Value,
-                                                                                                            IdCollection,
-                                                                                                            OperationDate);
+            return string.Format(" {0} card(s) {1}{2}{3} to collection {4} at {5:yyyy-MM-dd HH:mm:ss.ff}", Quantity,
+                                                                                                           IdScryFall + " ",
+                                                                                                           IsFoil.Value ? "(Foil)" : string.Empty,
+                                                                                                           IdLanguage.Value,
+                                                                                                           IdCollection,
+                                                                                                           OperationDate);
         }
     }
 }

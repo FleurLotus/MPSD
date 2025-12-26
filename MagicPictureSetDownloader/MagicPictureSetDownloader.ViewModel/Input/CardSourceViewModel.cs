@@ -15,7 +15,6 @@
         private ILanguage[] _languages;
 
         private bool _isFoil;
-        private bool _isAltArt;
         private int _maxCount;
         private int _count;
         private readonly ICardInCollectionCount[] _cardInCollectionCounts;
@@ -67,19 +66,6 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged();
-                    UpdateMaxCount();
-                }
-            }
-        }
-        public bool IsAltArt
-        {
-            get { return _isAltArt; }
-            set
-            {
-                if (value != _isAltArt)
-                {
-                    _isAltArt = value;
                     OnNotifyPropertyChanged();
                     UpdateMaxCount();
                 }
@@ -158,7 +144,7 @@
                 MaxCount = 0;
                 return;
             }
-            MaxCount = cardInCollectionCount.GetCount(new CardCountKey(IsFoil, IsAltArt));
+            MaxCount = cardInCollectionCount.GetCount(new CardCountKey(IsFoil));
         }
         private void ChangeLanguage()
         {

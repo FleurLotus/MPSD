@@ -108,6 +108,7 @@
                         Rarity = card.Rarity.ToString(),
                         Language = card.Language.ToString(),
                         PrintedName = card.PrintedName,
+                        FlavorName = card.FlavorName,
                     };
 
                     if (card.MtgoId.HasValue)

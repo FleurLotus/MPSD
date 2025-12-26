@@ -17,10 +17,6 @@
         public int Number { get; set; }
         [DbColumn]
         public int FoilNumber { get; set; }
-        [DbColumn]
-        public int AltArtNumber { get; set; }
-        [DbColumn]
-        public int FoilAltArtNumber { get; set; }
         [DbColumn(Kind = ColumnKind.PrimaryKey)]
         public int IdLanguage { get; set; }
 
@@ -55,14 +51,6 @@
             {
                 return FoilNumber;
             }
-            if (CardCountKeys.AltArt.Equals(key))
-            {
-                return AltArtNumber;
-            }
-            if (CardCountKeys.FoilAltArt.Equals(key))
-            {
-                return FoilAltArtNumber;
-            }
 
             throw new ArgumentException("Unmanaged type of key", nameof(key));
         }
@@ -72,8 +60,6 @@
             {
                 { CardCountKeys.Standard, Number },
                 { CardCountKeys.Foil, FoilNumber },
-                { CardCountKeys.AltArt, AltArtNumber },
-                { CardCountKeys.FoilAltArt, FoilAltArtNumber }
             };
 
             return cardCount;

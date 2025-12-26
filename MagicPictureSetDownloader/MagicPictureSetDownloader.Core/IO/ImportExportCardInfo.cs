@@ -19,8 +19,6 @@
 
         public int Number { get { return GetCount(CardCountKeys.Standard); } }
         public int FoilNumber { get { return GetCount(CardCountKeys.Foil); } }
-        public int AltArtNumber { get { return GetCount(CardCountKeys.AltArt); } }
-        public int FoilAltArtNumber { get { return GetCount(CardCountKeys.FoilAltArt); } }
 
         internal void Add(ICardCountKey key, int number)
         {

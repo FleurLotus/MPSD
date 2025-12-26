@@ -5,14 +5,12 @@
 
     public class CardCountKey : ICardCountKey
     {
-        public CardCountKey(bool isFoil, bool isAltArt)
+        public CardCountKey(bool isFoil)
         {
             IsFoil = isFoil;
-            IsAltArt = isAltArt;
         }
 
         public bool IsFoil { get; }
-        public bool IsAltArt { get; }
 
         public override bool Equals(object o)
         {
@@ -24,24 +22,11 @@
         }
         public override int GetHashCode()
         {
-            int ret = 0;
-            if (IsFoil)
-            {
-                ret += 1;
-            }
-            if (IsAltArt)
-            {
-                ret += 2;
-            }
-            return ret;
+            return IsFoil ? 1 : 0;
         }
         public override string ToString()
         {
-            if (IsFoil)
-            {
-                return IsAltArt ? "FoilAltArt" : "Foil";
-            }
-            return IsAltArt ? "AltArt" : "Standard";
+            return IsFoil ? "Foil" : "Standard";
         }
         public bool Equals(ICardCountKey other)
         {
@@ -50,7 +35,7 @@
                 return false;
             }
 
-            return IsFoil == other.IsFoil && IsAltArt == other.IsAltArt;
+            return IsFoil == other.IsFoil;
         }
     }
 }

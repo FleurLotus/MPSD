@@ -47,6 +47,9 @@
 
         [JsonPropertyName("uri")]
         public Uri Uri { get; set; }
+
+        [JsonPropertyName("resource_id")]
+        public string ResourceId { get; set; }
         #endregion 
 
         #region Gameplay

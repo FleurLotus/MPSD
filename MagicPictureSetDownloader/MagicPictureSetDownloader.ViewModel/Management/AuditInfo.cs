@@ -8,7 +8,6 @@
         public string CardName { get; set; }
         public string EditionName { get; set; }
         public bool IsFoil { get; set; }
-        public bool IsAltArt { get; set; }
         public string Language { get; set; }
     }
 }

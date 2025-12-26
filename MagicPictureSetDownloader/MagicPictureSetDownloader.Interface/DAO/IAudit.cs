@@ -9,7 +9,6 @@
         int IdCollection { get; }
         string IdScryFall { get; }
         bool? IsFoil { get; }
-        bool? IsAltArt { get; }
         int? IdLanguage { get; }
         int Quantity { get; }
     }

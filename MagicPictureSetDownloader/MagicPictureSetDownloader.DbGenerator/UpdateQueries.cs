@@ -30,9 +30,5 @@ SELECT Id, @name, @url
 FROM Edition
 WHERE Name = @editionName";
 
-        public const string InsertNewLanguage =
-@"INSERT INTO Language(Name)
-SELECT @name
-WHERE NOT EXISTS(SELECT 1 FROM Language WHERE Name = @name)";
     }
 }

@@ -59,7 +59,6 @@
                 Quantity = countToAdd,
                 IdScryFall = idScryFall,
                 IsFoil = cardCountKey.IsFoil,
-                IsAltArt = cardCountKey.IsAltArt,
                 IdLanguage = idLanguage
             });
         }

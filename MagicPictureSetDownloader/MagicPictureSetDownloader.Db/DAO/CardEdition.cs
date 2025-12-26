@@ -26,6 +26,8 @@
         public string Url { get; set; }
         [DbColumn]
         public string Url2 { get; set; }
+        [DbColumn]
+        public string FlavorName { get; set; }
 
         public IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId
         {

@@ -190,7 +190,7 @@
                 url2 = null;
             }
 
-            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, url, url2);
+            MagicDatabase.InsertNewCardEdition(cardWithExtraInfo.IdScryFall, cardWithExtraInfo.Edition, cardWithExtraInfo.Name, cardWithExtraInfo.Rarity, url, url2, cardWithExtraInfo.FlavorName);
 
             foreach ((CardIdSource source, string id) in cardWithExtraInfo.ExternalId)
             {

@@ -12,6 +12,15 @@
             return magicDatabase.GetAllEditions().Ordered()
                                                  .ToArray();
         }
+        public static IEdition[] GetNoneEmptyEditionsOrdered(this IMagicDatabaseReadOnly magicDatabase)
+        {
+            ICollection<ICardAllDbInfo> cards = magicDatabase.GetAllInfos();
+
+            return magicDatabase.GetAllEditions().Where(e => cards.Any(c => c.Edition == e))
+                                                 .Ordered()
+                                                 .ToArray();
+        }
+
         public static IDictionary<string, ICard> GetAllCardsOrderByTranslation(this IEnumerable<ICardAllDbInfo> allCardInfos, ILanguage language)
         {
             IDictionary<string, ICard> allCardSorted = new SortedList<string, ICard>();
@@ -72,6 +81,7 @@
         {
             return allCardInfos.Where(cadi => cadi.Card == card)
                                .Select(cadi => cadi.Edition)
+                               .Distinct()
                                .Ordered();
         }
         public static IEnumerable<ICardInCollectionCount> GetCollectionStatisticsForCard(this IMagicDatabaseReadOnly magicDatabase, ICardCollection collection, ICard card)

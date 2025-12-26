@@ -25,14 +25,21 @@ namespace MagicPictureSetDownloader.Converter
                 card = node.Card;
             }
 
-            if (card == null)
+            string idScryFall = card?.IdScryFall ?? (value as string);
+
+            if (idScryFall == null)
             {
                 return null;
             }
 
             if (param == 0)
             {
-                return Convert(card.IdScryFall, param);
+                return Convert(idScryFall, param);
+            }
+
+            if (card == null)
+            {
+                return null;
             }
 
             if (card.OtherCardPart == null)
@@ -40,7 +47,7 @@ namespace MagicPictureSetDownloader.Converter
                 return null;
             }
 
-            object o = Convert(card.IdScryFall + MagicDatabase.GetVersoExtension(), param);
+            object o = Convert(idScryFall + MagicDatabase.GetVersoExtension(), param);
 
             if (o != null)
             {
@@ -49,7 +56,7 @@ namespace MagicPictureSetDownloader.Converter
 
             if (card.OtherCardPart.IsDownSide || card.OtherCardPart.Is90DegreeSide)
             {
-                return Convert(card.IdScryFall, param);
+                return Convert(idScryFall, param);
             }
 
             return null;

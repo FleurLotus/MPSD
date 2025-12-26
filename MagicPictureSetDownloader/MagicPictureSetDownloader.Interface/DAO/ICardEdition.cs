@@ -10,6 +10,7 @@
         string IdScryFall { get; }
         string Url { get; }
         string Url2 { get; }
+        string FlavorName { get; }
 
         IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId { get; }
     }

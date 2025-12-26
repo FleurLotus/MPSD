@@ -27,7 +27,6 @@
         private ILanguage _inputLanguage;
         private string _filter;
         private bool _foil;
-        private bool _altArt;
         private bool _hasChange;
         private int _size = 126;
         private DisplayOrder _displayOrder;
@@ -76,7 +75,7 @@
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
             _allLanguages = _magicDatabase.GetAllLanguages().ToArray();
 
-            Editions = _magicDatabase.GetAllEditionsOrdered();
+            Editions = _magicDatabase.GetNoneEmptyEditionsOrdered();
             _cards = new RangeObservableCollection<CardCollectionInputGraphicViewModel>();
             Cards = CollectionViewSource.GetDefaultView(_cards);
             Cards.Filter = ToDisplay;
@@ -122,19 +121,6 @@
                 if (value != _foil)
                 {
                     _foil = value;
-                    OnNotifyPropertyChanged();
-                    RefreshDisplayedData(false);
-                }
-            }
-        }
-        public bool AltArt
-        {
-            get { return _altArt; }
-            set
-            {
-                if (value != _altArt)
-                {
-                    _altArt = value;
                     OnNotifyPropertyChanged();
                     RefreshDisplayedData(false);
                 }
@@ -263,7 +249,7 @@
             {
                 CardCount cardCount = new CardCount
                 {
-                    { new CardCountKey(Foil, AltArt), card.ChangedCount }
+                    { new CardCountKey(Foil), card.ChangedCount }
                 };
 
                 _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdScryFall, InputLanguage.Id, cardCount);
@@ -369,14 +355,7 @@
                 foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, card.Card)
                                 .Where(cicc => cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall).Id == editionSelected.Id))
                 {
-                    if (AltArt)
-                    {
-                        count += Foil ? cardInCollectionCount.FoilAltArtNumber : cardInCollectionCount.AltArtNumber;
-                    }
-                    else
-                    {
-                        count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
-                    }
+                    count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
                 }
                 ccigvm.SetInfo(name, count);
 

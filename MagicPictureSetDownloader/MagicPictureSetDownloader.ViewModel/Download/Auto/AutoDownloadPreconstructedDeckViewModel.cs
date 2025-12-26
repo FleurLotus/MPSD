@@ -11,7 +11,7 @@
         public AutoDownloadPreconstructedDeckViewModel()
             : base("Download new preconstructed decks")
         {
-            _preconstructedDeckImporter = new PreconstructedDeckImporter(GetExtraInfo);
+            _preconstructedDeckImporter = new PreconstructedDeckImporter();
         }
         protected override IReadOnlyList<KeyValuePair<string, object>> GetUrls()
         {
@@ -20,10 +20,6 @@
         protected override string Download(string url, object param)
         {
             return DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter);
-        }
-        private string GetExtraInfo(string url)
-        {
-            return DownloadManager.GetExtraInfo(url);
         }
     }
 }
