@@ -46,7 +46,7 @@
                 if (value != _isBusy)
                 {
                     _isBusy = value;
-                    OnNotifyPropertyChanged(nameof(IsBusy));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

@@ -30,7 +30,7 @@
                 if (_translation != value)
                 {
                     _translation = value;
-                    OnNotifyPropertyChanged(nameof(Translation));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

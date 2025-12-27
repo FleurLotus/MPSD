@@ -122,7 +122,7 @@
                 if (value != _foil)
                 {
                     _foil = value;
-                    OnNotifyPropertyChanged(nameof(Foil));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(false);
                 }
             }
@@ -135,7 +135,7 @@
                 if (value != _altArt)
                 {
                     _altArt = value;
-                    OnNotifyPropertyChanged(nameof(AltArt));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(false);
                 }
             }
@@ -148,7 +148,7 @@
                 if (value != _hasChange)
                 {
                     _hasChange = value;
-                    OnNotifyPropertyChanged(nameof(HasChange));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -161,7 +161,7 @@
                 {
                     _size = value;
                     _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "ImageSize", _size.ToString());
-                    OnNotifyPropertyChanged(nameof(Size));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -173,7 +173,7 @@
                 if (value != _inputLanguage)
                 {
                     _inputLanguage = value;
-                    OnNotifyPropertyChanged(nameof(InputLanguage));
+                    OnNotifyPropertyChanged();
                     RebuildOrder();
                     RefreshDisplayedData(false);
                 }
@@ -187,7 +187,7 @@
                 if (value != _filter)
                 {
                     _filter = value;
-                    OnNotifyPropertyChanged(nameof(Filter));
+                    OnNotifyPropertyChanged();
                     Cards.Refresh();
                 }
             }
@@ -200,7 +200,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(nameof(EditionSelected));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(true);
                 }
             }
@@ -214,7 +214,7 @@
                 {
                     _displayOrder = value;
                     _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Order", _displayOrder.ToString("g"));
-                    OnNotifyPropertyChanged(nameof(DisplayOrder));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(false);
                 }
             }

@@ -60,7 +60,7 @@
                 if (value != _path)
                 {
                     _path = value;
-                    OnNotifyPropertyChanged(nameof(Path));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -72,7 +72,7 @@
                 if (value != _importFilePath)
                 {
                     _importFilePath = value;
-                    OnNotifyPropertyChanged(nameof(ImportFilePath));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -84,7 +84,7 @@
                 if (value != _newCollectionName)
                 {
                     _newCollectionName = value;
-                    OnNotifyPropertyChanged(nameof(NewCollectionName));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -96,7 +96,7 @@
                 if (value != _selectedIndex)
                 {
                     _selectedIndex = value;
-                    OnNotifyPropertyChanged(nameof(SelectedIndex));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -108,7 +108,7 @@
                 if (value != _selectedCollection)
                 {
                     _selectedCollection = value;
-                    OnNotifyPropertyChanged(nameof(SelectedCollection));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -120,7 +120,7 @@
                 if (value != _exportFormatSelected)
                 {
                     _exportFormatSelected = value;
-                    OnNotifyPropertyChanged(nameof(ExportFormatSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -132,7 +132,7 @@
                 if (value != _importType)
                 {
                     _importType = value;
-                    OnNotifyPropertyChanged(nameof(ImportType));
+                    OnNotifyPropertyChanged();
                     if (_importType == ImportOption.AddToCollection && HasCollection && SelectedCollection == null)
                     {
                         SelectedCollection = ImportCollections[0];

@@ -44,7 +44,7 @@
                 if (value.Key != _selectedItem.Key)
                 {
                     _selectedItem = value;
-                    OnNotifyPropertyChanged(nameof(SelectedItem));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

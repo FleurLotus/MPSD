@@ -36,7 +36,7 @@
                 if (value != _languages)
                 {
                     _languages = value;
-                    OnNotifyPropertyChanged(nameof(Languages));
+                    OnNotifyPropertyChanged();
                     if (_languages != null && _languages.Length > 0)
                     {
                         LanguageSelected = _languages[0];
@@ -52,7 +52,7 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged(nameof(IsFoil));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -64,7 +64,7 @@
                 if (value != _isAltArt)
                 {
                     _isAltArt = value;
-                    OnNotifyPropertyChanged(nameof(IsAltArt));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -76,7 +76,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(nameof(EditionSelected));
+                    OnNotifyPropertyChanged();
                     ChangeDestinationLanguage();
                     if (_editionSelected != null && !_editionSelected.HasFoil)
                     {
@@ -93,7 +93,7 @@
                 if (value != _languageSelected)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(nameof(LanguageSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

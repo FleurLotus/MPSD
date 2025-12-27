@@ -51,7 +51,7 @@
                 if (value != _languages)
                 {
                     _languages = value;
-                    OnNotifyPropertyChanged(nameof(Languages));
+                    OnNotifyPropertyChanged();
                     if (_languages != null && _languages.Length > 0)
                     {
                         LanguageSelected = _languages[0];
@@ -67,7 +67,7 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged(nameof(IsFoil));
+                    OnNotifyPropertyChanged();
                     UpdateMaxCount();
                 }
             }
@@ -80,7 +80,7 @@
                 if (value != _isAltArt)
                 {
                     _isAltArt = value;
-                    OnNotifyPropertyChanged(nameof(IsAltArt));
+                    OnNotifyPropertyChanged();
                     UpdateMaxCount();
                 }
             }
@@ -93,7 +93,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(nameof(EditionSelected));
+                    OnNotifyPropertyChanged();
                     ChangeLanguage();
                     UpdateMaxCount();
                 }
@@ -107,7 +107,7 @@
                 if (value != _languageSelected)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(nameof(LanguageSelected));
+                    OnNotifyPropertyChanged();
                     UpdateMaxCount();
                 }
             }
@@ -120,7 +120,7 @@
                 if (value != _maxCount)
                 {
                     _maxCount = value;
-                    OnNotifyPropertyChanged(nameof(MaxCount));
+                    OnNotifyPropertyChanged();
 
                     if (value < Count)
                     {
@@ -137,7 +137,7 @@
                 if (value != _count)
                 {
                     _count = value;
-                    OnNotifyPropertyChanged(nameof(Count));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

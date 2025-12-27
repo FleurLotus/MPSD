@@ -20,7 +20,7 @@
                 if (value != _alternativeName)
                 {
                     _alternativeName = value;
-                    OnNotifyPropertyChanged(nameof(AlternativeName));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

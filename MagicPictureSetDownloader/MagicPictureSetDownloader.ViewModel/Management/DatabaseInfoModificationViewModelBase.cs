@@ -55,7 +55,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    OnNotifyPropertyChanged(nameof(Name));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -67,7 +67,7 @@
                 if (value != _state)
                 {
                     _state = value;
-                    OnNotifyPropertyChanged(nameof(State));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -79,7 +79,7 @@
                 if (value != _selected)
                 {
                     _selected = value;
-                    OnNotifyPropertyChanged(nameof(Selected));
+                    OnNotifyPropertyChanged();
                     DisplayCurrent();
                 }
             }

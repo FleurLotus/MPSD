@@ -39,7 +39,7 @@
                 if (value != _cardCollectionSelected)
                 {
                     _cardCollectionSelected = value;
-                    OnNotifyPropertyChanged(nameof(CardCollectionSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -51,7 +51,7 @@
                 if (value != _copy)
                 {
                     _copy = value;
-                    OnNotifyPropertyChanged(nameof(Copy));
+                    OnNotifyPropertyChanged();
                 }
                 Display.Title = Copy ? "Copy card" : "Move card";
             }

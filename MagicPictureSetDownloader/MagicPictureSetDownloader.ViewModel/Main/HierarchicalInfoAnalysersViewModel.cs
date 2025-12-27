@@ -46,7 +46,7 @@
                 if (value != _selectedIndex)
                 {
                     _selectedIndex = value;
-                    OnNotifyPropertyChanged(nameof(SelectedIndex));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

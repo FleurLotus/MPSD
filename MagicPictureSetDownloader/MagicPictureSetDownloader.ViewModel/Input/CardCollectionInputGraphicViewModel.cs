@@ -54,7 +54,7 @@
                 if (_changedCount != value)
                 {
                     _changedCount = value;
-                    OnNotifyPropertyChanged(nameof(ChangedCount));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

@@ -38,7 +38,7 @@
                 if (_preconstructedDeckSelected != value)
                 {
                     _preconstructedDeckSelected = value;
-                    OnNotifyPropertyChanged(nameof(PreconstructedDeckSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -53,7 +53,7 @@
                 if (_cardCollectionSelected != value)
                 {
                     _cardCollectionSelected = value;
-                    OnNotifyPropertyChanged(nameof(CardCollectionSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -68,7 +68,7 @@
                 if (_languageSelected != value)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(nameof(LanguageSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

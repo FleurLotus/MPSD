@@ -27,7 +27,7 @@
                 if (value != _total)
                 {
                     _total = value;
-                    OnNotifyPropertyChanged(nameof(Total));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

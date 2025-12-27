@@ -34,7 +34,7 @@
                 if (value != _cardNumber)
                 {
                     _cardNumber = value;
-                    OnNotifyPropertyChanged(nameof(CardNumber));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -46,7 +46,7 @@
                 if (value != _block)
                 {
                     _block = value;
-                    OnNotifyPropertyChanged(nameof(Block));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -58,7 +58,7 @@
                 if (value != _hasFoil)
                 {
                     _hasFoil = value;
-                    OnNotifyPropertyChanged(nameof(HasFoil));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -70,7 +70,7 @@
                 if (value != _releaseDate)
                 {
                     _releaseDate = value;
-                    OnNotifyPropertyChanged(nameof(ReleaseDate));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -82,7 +82,7 @@
                 if (value != _code)
                 {
                     _code = value;
-                    OnNotifyPropertyChanged(nameof(Code));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

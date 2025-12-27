@@ -93,7 +93,7 @@
                 if (value != _name)
                 {
                     _name = value;
-                    OnNotifyPropertyChanged(nameof(Name));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -105,7 +105,7 @@
                 if (value != _excludeFunEditions)
                 {
                     _excludeFunEditions = value;
-                    OnNotifyPropertyChanged(nameof(ExcludeFunEditions));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -117,7 +117,7 @@
                 if (value != _excludeSpecialCards)
                 {
                     _excludeSpecialCards = value;
-                    OnNotifyPropertyChanged(nameof(ExcludeSpecialCards));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -136,7 +136,7 @@
                         }
 
                         _countComparatorWanted = (ComparisonType) i;
-                        OnNotifyPropertyChanged(nameof(CountComparatorSelected));
+                        OnNotifyPropertyChanged();
                         break;
                     }
                 }
@@ -150,7 +150,7 @@
                 if (value != _countSelected)
                 {
                     _countSelected = value;
-                    OnNotifyPropertyChanged(nameof(CountSelected));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -162,7 +162,7 @@
                 if (value != _countIsNameBased)
                 {
                     _countIsNameBased = value;
-                    OnNotifyPropertyChanged(nameof(CountIsNameBased));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -174,7 +174,7 @@
                 if (value != _countIncludeFoil)
                 {
                     _countIncludeFoil = value;
-                    OnNotifyPropertyChanged(nameof(CountIncludeFoil));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -186,7 +186,7 @@
                 if (value != _countIncludeAltArt)
                 {
                     _countIncludeAltArt = value;
-                    OnNotifyPropertyChanged(nameof(CountIncludeAltArt));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -198,7 +198,7 @@
                 if (value != _allLanguages)
                 {
                     _allLanguages = value;
-                    OnNotifyPropertyChanged(nameof(AllLanguages));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -210,7 +210,7 @@
                 if (value != _perimeterScope)
                 {
                     _perimeterScope = value;
-                    OnNotifyPropertyChanged(nameof(PerimeterScope));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -222,7 +222,7 @@
                 if (value != _colorAggregation)
                 {
                     _colorAggregation = value;
-                    OnNotifyPropertyChanged(nameof(ColorAggregation));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -234,7 +234,7 @@
                 if (value != _typeAggregation)
                 {
                     _typeAggregation = value;
-                    OnNotifyPropertyChanged(nameof(TypeAggregation));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -247,7 +247,7 @@
                 if (value != _subTypeAggregation)
                 {
                     _subTypeAggregation = value;
-                    OnNotifyPropertyChanged(nameof(SubTypeAggregation));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

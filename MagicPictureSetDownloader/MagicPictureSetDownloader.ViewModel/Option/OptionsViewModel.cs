@@ -37,7 +37,7 @@
                 if (value != _showPicture)
                 {
                     _showPicture = value;
-                    OnNotifyPropertyChanged(nameof(ShowPicture));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -49,7 +49,7 @@
                 if (value != _showVariationPicture)
                 {
                     _showVariationPicture = value;
-                    OnNotifyPropertyChanged(nameof(ShowVariationPicture));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -61,7 +61,7 @@
                 if (value != _showStatistics)
                 {
                     _showStatistics = value;
-                    OnNotifyPropertyChanged(nameof(ShowStatistics));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -73,7 +73,7 @@
                 if (value != _showOnlyCurrentStatistics)
                 {
                     _showOnlyCurrentStatistics = value;
-                    OnNotifyPropertyChanged(nameof(ShowOnlyCurrentStatistics));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -85,7 +85,7 @@
                 if (value != _showOtherLanguages)
                 {
                     _showOtherLanguages = value;
-                    OnNotifyPropertyChanged(nameof(ShowOtherLanguages));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -97,7 +97,7 @@
                 if (value != _showPrices)
                 {
                     _showPrices = value;
-                    OnNotifyPropertyChanged(nameof(ShowPrices));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -109,7 +109,7 @@
                 if (value != _autoCheckUpgrade)
                 {
                     _autoCheckUpgrade = value;
-                    OnNotifyPropertyChanged(nameof(AutoCheckUpgrade));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

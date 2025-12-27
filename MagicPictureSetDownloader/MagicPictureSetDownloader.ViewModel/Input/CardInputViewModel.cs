@@ -112,7 +112,7 @@
                 if (value != _languageSelected)
                 {
                     _languageSelected = value;
-                    OnNotifyPropertyChanged(nameof(LanguageSelected));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -130,7 +130,7 @@
                 if (value != _cardCollection)
                 {
                     _cardCollection = value;
-                    OnNotifyPropertyChanged(nameof(CardCollection));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -142,7 +142,7 @@
                 if (value != _currentCollectionDetail)
                 {
                     _currentCollectionDetail = value;
-                    OnNotifyPropertyChanged(nameof(CurrentCollectionDetail));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -154,7 +154,7 @@
                 if (value != _isFocused)
                 {
                     _isFocused = value;
-                    OnNotifyPropertyChanged(nameof(IsFocused));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -166,7 +166,7 @@
                 if (value != _isFoil)
                 {
                     _isFoil = value;
-                    OnNotifyPropertyChanged(nameof(IsFoil));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -179,7 +179,7 @@
                 if (value != _isAltArt)
                 {
                     _isAltArt = value;
-                    OnNotifyPropertyChanged(nameof(IsAltArt));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.None);
                 }
             }
@@ -192,7 +192,7 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
-                    OnNotifyPropertyChanged(nameof(EditionSelected));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.ByEdition);
                     if (_editionSelected != null && !_editionSelected.HasFoil)
                     {
@@ -211,7 +211,7 @@
                     _cardSelectedName = value;
                     _cardSelected = _cardSelectedName == null ? null : _allCardSorted.GetOrDefault(_cardSelectedName);
 
-                    OnNotifyPropertyChanged(nameof(CardSelectedName));
+                    OnNotifyPropertyChanged();
                     RefreshDisplayedData(InputMode.ByCard);
                 }
             }
@@ -235,7 +235,7 @@
                     {
                         _count = value;
                     }
-                    OnNotifyPropertyChanged(nameof(Count));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -248,7 +248,7 @@
                 {
                     _inputMode = value;
                     _magicDatabaseForOption.InsertNewOption(TypeOfOption.Input, "Mode", _inputMode.ToString());
-                    OnNotifyPropertyChanged(nameof(InputMode));
+                    OnNotifyPropertyChanged();
                     InitWindow();
                 }
             }
@@ -261,7 +261,7 @@
                 if (value != _translate)
                 {
                     _translate = value;
-                    OnNotifyPropertyChanged(nameof(Translate));
+                    OnNotifyPropertyChanged();
                 }
             }
         }

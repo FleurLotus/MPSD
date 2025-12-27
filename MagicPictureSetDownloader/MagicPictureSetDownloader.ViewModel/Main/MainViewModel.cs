@@ -79,7 +79,7 @@
                 if (value != _showFilterConfig)
                 {
                     _showFilterConfig = value;
-                    OnNotifyPropertyChanged(nameof(ShowFilterConfig));
+                    OnNotifyPropertyChanged();
                     if (!_showFilterConfig)
                     {
                         Analysers.Save();
@@ -101,7 +101,7 @@
                 if (value != _upgradeStatus)
                 {
                     _upgradeStatus = value;
-                    OnNotifyPropertyChanged(nameof(UpgradeStatus));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
@@ -113,7 +113,7 @@
                 if (value != _statusBarInfo)
                 {
                     _statusBarInfo = value;
-                    OnNotifyPropertyChanged(nameof(StatusBarInfo));
+                    OnNotifyPropertyChanged();
                 }
             }
         }
