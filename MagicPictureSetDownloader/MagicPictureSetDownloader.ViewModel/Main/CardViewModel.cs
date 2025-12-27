@@ -101,6 +101,10 @@
         {
             get { return Card.Name; }
         }
+        public string FaceName
+        {
+            get { return _currentFace.Name; }
+        }
         public string BlockName
         {
             get { return Edition.BlockName; }

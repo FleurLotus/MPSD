@@ -90,9 +90,9 @@
             <Grid Grid.Column="1" IsEnabled="{Binding ShowFilterConfig, Converter={fl:BoolInvertConverter}}">
                 <!-- Split Tree/Text/Image -->
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition Width="9*"/>
                 </Grid.ColumnDefinitions>
 
                 <Border Grid.Column="0" >

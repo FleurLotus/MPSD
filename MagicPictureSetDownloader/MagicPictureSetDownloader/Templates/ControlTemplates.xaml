@@ -119,7 +119,7 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Part Name" FontSize="15" HorizontalAlignment="Right" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}" />
-            <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Text="{Binding PartName}" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}" />
+            <TextBlock Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" FontSize="15" HorizontalAlignment="Left" Text="{Binding FaceName}" Visibility="{Binding IsMultiPart, Converter={fl:BoolToVisibilityConverter}}" />
 
             <Label Grid.Column="0" Grid.Row="1" Content="Block"/>
             <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding BlockName}"/>
