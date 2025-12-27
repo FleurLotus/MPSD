@@ -3,9 +3,10 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Net;
     using System.Reflection;
-    using System.Text;
-    using System.Xml;
+    using System.Text.Json;
 
     using Common.Web;
     using Common.Zip;
@@ -20,9 +21,8 @@
 
     public class ProgramUpgrader
     {
-        private const string LastVersionUrl = @"https://www.dropbox.com/s/0p3e0rb8dpjml6a/LastVersion.xml?dl=1";
-
         private readonly WebAccess _webaccess = new WebAccess();
+        private Uri _newVersionUrl;
 
         public ProgramUpgrader()
         {
@@ -30,83 +30,65 @@
         }
 
         public UpgradeStatus Status { get; private set; }
-        public string NewVersionComment { get; private set; }
-        public string NewVersionUrl { get; private set; }
-        public Version NewVersionNumberVersion { get; private set; }
 
-        private void GetInfo()
+
+        internal static GitHubRelease GetLatestPublish(WebAccess webAccess, string owner, string repo)
         {
-            NewVersionNumberVersion = null;
-            NewVersionUrl = null;
-            NewVersionComment = null;
-
-            XmlNode lastVersionNode = GetNewVersionFile().SelectSingleNode(@"Version/Last");
-            if (lastVersionNode == null)
+            ArgumentNullException.ThrowIfNull(webAccess);
+            if (string.IsNullOrWhiteSpace(owner))
             {
-                return;
+                throw new ArgumentException("owner is required", nameof(owner));
+            }
+            if (string.IsNullOrWhiteSpace(repo))
+            {
+                throw new ArgumentException("repo is required", nameof(repo));
             }
 
-            XmlAttribute versionNumberAttribute = lastVersionNode.Attributes["Number"];
-            if (versionNumberAttribute == null)
+            try
             {
-                return;
-            }
-
-            string newVersionNumber = versionNumberAttribute.Value;
-            if (string.IsNullOrWhiteSpace(newVersionNumber))
-            {
-                return;
-            }
-
-            XmlNode urlNode = lastVersionNode.SelectSingleNode("Url");
-            if (urlNode == null)
-            {
-                return;
-            }
-
-            string newVersionUrl = urlNode.InnerText;
-            if (string.IsNullOrWhiteSpace(newVersionUrl))
-            {
-                return;
-            }
-
-            XmlNode commentNode = lastVersionNode.SelectSingleNode("Comment");
-            if (commentNode != null)
-            {
-                string newVersionComment = commentNode.InnerText;
-                if (string.IsNullOrWhiteSpace(newVersionComment))
+                string releaseUrl = $"https://api.github.com/repos/{owner}/{repo}/releases/latest";
+                string json = webAccess.GetHtml(releaseUrl, true);
+                if (!string.IsNullOrWhiteSpace(json))
                 {
-                    NewVersionComment = newVersionComment;
+                    return JsonSerializer.Deserialize<GitHubRelease>(json);
                 }
             }
+            catch (WebException)
+            {
+                // network error or authentication required - swallow and try artifact fallback
+            }
+            catch (Exception)
+            {
+                // non-fatal parse error - fallback to artifacts
+            }
 
-            NewVersionNumberVersion = new Version(newVersionNumber);
-            NewVersionUrl = newVersionUrl;
+            return null;
         }
-        private XmlDocument GetNewVersionFile()
-        {
-            byte[] array = _webaccess.GetFile(LastVersionUrl);
-            string xml = Encoding.UTF8.GetString(array);
 
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            return doc;
-        }
+
         public bool HasNewVersionAvailable()
         {
             try
             {
-                GetInfo();
-
-                if (NewVersionNumberVersion == null)
+                GitHubRelease release = GetLatestPublish(_webaccess, "FleurLotus", "MPSD");
+                if (release == null)
                 {
-                    throw new ProgramUpgraderException("Can't get info from new version file");
+                    throw new ProgramUpgraderException("Can't get info from latest version");
                 }
+                GitHubAsset asset = release.Assets.FirstOrDefault(a => a.Name.Equals("MPSD.zip", StringComparison.OrdinalIgnoreCase));
+                if (asset == null)
+                {
+                    throw new ProgramUpgraderException("Can't get asset from latest version");
+                }
+
+                _newVersionUrl = asset.BrowserDownloadUrl;
+                string releaseVersion = release.TagName.Replace("Version_", string.Empty);
+                Version newVersionNumberVersion = new Version(releaseVersion);
 
                 Assembly entryAssembly = Assembly.GetEntryAssembly();
                 Version currentVersion = entryAssembly.GetName().Version;
 
-                bool hasNewVersion = currentVersion < NewVersionNumberVersion;
+                bool hasNewVersion = currentVersion < newVersionNumberVersion;
                 Status = hasNewVersion ? UpgradeStatus.NeedToBeUpdated : UpgradeStatus.UpToDate;
                 return hasNewVersion;
             }
@@ -124,7 +106,7 @@
 
         public void Upgrade()
         {
-            if (NewVersionUrl == null)
+            if (_newVersionUrl == null)
             {
                 throw new ProgramUpgraderException("Can't get info from new version file");
             }
@@ -136,7 +118,7 @@
 
             string temporyDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString().ToUpperInvariant());
 
-            byte[] array = _webaccess.GetFile(NewVersionUrl);
+            byte[] array = _webaccess.GetFile(_newVersionUrl.ToString());
             Zipper.UnZipAll(new MemoryStream(array), temporyDirectory);
 
             if (!Directory.Exists(temporyDirectory))
