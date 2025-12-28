@@ -130,7 +130,7 @@
             </ListBox.ItemTemplate>
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <controls:VirtualizingWrapPanel IsItemsHost="True" Orientation="Vertical" ItemSize="{Binding Size, Converter={conv:ToSize}}" />
+                    <controls:VirtualizingWrapPanel IsItemsHost="True" Orientation="Horizontal" ItemSize="{Binding Size, Converter={conv:ToSize}}" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
         </ListBox>

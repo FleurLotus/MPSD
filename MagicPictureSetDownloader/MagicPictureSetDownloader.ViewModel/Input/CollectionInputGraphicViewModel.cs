@@ -353,12 +353,11 @@
                 int count = 0;
 
                 foreach (ICardInCollectionCount cardInCollectionCount in _magicDatabase.GetCollectionStatisticsForCard(CardCollection, card.Card)
-                                .Where(cicc => cicc.IdLanguage == InputLanguage.Id && _magicDatabase.GetEditionByIdScryFall(cicc.IdScryFall).Id == editionSelected.Id))
+                                .Where(cicc => cicc.IdLanguage == InputLanguage.Id && card.IdScryFall == cicc.IdScryFall))
                 {
                     count += Foil ? cardInCollectionCount.FoilNumber : cardInCollectionCount.Number;
                 }
                 ccigvm.SetInfo(name, count);
-
             }
 
             toSort.Sort(CardCollectionInputGraphicViewModel.GetComparer(DisplayOrder));
