@@ -12,5 +12,6 @@
         string CastingCost { get; }
         string AllPartCastingCost { get; }
         string IdScryFall { get; }
+        string FrameEffect { get; }
     }
 }

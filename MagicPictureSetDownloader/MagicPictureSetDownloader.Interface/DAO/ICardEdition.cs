@@ -11,6 +11,7 @@
         string Url { get; }
         string Url2 { get; }
         string FlavorName { get; }
+        string FrameEffect { get; }
 
         IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId { get; }
     }

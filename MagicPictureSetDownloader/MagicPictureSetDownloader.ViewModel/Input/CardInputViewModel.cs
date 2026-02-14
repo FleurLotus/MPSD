@@ -329,12 +329,14 @@
                     {
                         Cards.Clear();
 
+                        bool isFoilSave = IsFoil;
                         IEdition save = EditionSelected;
                         Editions.Clear();
                         Editions.AddRange(_allEditions);
 
                         CardSelectedName = null;
                         EditionSelected = save;
+                        IsFoil = isFoilSave;
                         break;
                     }
 
@@ -423,7 +425,7 @@
                     return;
                 }
 
-                Versions.AddRange(cardAllDbInfos.Select(cadi => cadi.IdScryFall).OrderBy(id => id));
+                Versions.AddRange(GetOrderedVersions(cardAllDbInfos));
                 if (Versions.Count > 0)
                 {
                     VersionSelected = Versions[0];
@@ -510,6 +512,45 @@
                 }
             }
         }
+        private IEnumerable<string> GetOrderedVersions(ICardAllDbInfo[] cardAllDbInfos)
+        {
+
+            IList<(string id, int order)> versionsWithNumber = new List<(string, int)>();
+
+            for (int i = 0; i < cardAllDbInfos.Length; i++)
+            {
+                int order = 0;
+                string frameEffect = cardAllDbInfos[i].FrameEffect;
+                if (!string.IsNullOrEmpty(frameEffect))
+                {
+                    string[] frameEffects = frameEffect.Split(',');
+                    if (frameEffects.Contains("ExtendedArt"))
+                    {
+                        order += 1;
+                    }
+                    if (frameEffects.Contains("ShowCase"))
+                    {
+                        order += 2;
+                    }
+                    if (frameEffects.Contains("Etched"))
+                    {
+                        order += 4;
+                    }
+                    if (frameEffects.Contains("Inverted"))
+                    {
+                        order += 8;
+                    }
+                    if (frameEffects.Contains("ShatteredGlass"))
+                    {
+                        order += 16;
+                    }
+                }
+                versionsWithNumber.Add((cardAllDbInfos[i].IdScryFall, order));
+            }
+
+            return versionsWithNumber.OrderBy(t => t.order).ThenBy(t => t.id).Select(t => t.id);
+        }
+
         private void UpdateCurrentCollectionDetailAndTranslate()
         {
             if (EditionSelected == null || _cardSelected == null || LanguageSelected == null || VersionSelected == null)

@@ -28,6 +28,8 @@
         public string Url2 { get; set; }
         [DbColumn]
         public string FlavorName { get; set; }
+        [DbColumn]
+        public string FrameEffect { get; set; }
 
         public IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> ExternalId
         {

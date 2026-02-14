@@ -26,6 +26,7 @@
             Edition = edition;
             Rarity = cardAllDbInfo.Rarity;
             IdScryFall = cardAllDbInfo.IdScryFall;
+            FrameEffect = cardAllDbInfo.FrameEffect;
             IsMultiPart = MultiPartCardManager.Instance.HasMultiPart(Card);
             Is90DegreeSide = MultiPartCardManager.Instance.Is90DegreeFrontSide(Card);
             if (!string.IsNullOrWhiteSpace(_currentFace.Power) && !string.IsNullOrWhiteSpace(_currentFace.Toughness))
@@ -96,6 +97,7 @@
         public IEdition Edition { get; }
         public IRarity Rarity { get; }
         public string IdScryFall { get; }
+        public string FrameEffect { get; }
 
         public string Name
         {

@@ -169,7 +169,7 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2, string flavorName)
+        public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2, string flavorName, string frameEffect)
         {
             using (new WriterLock(_lock))
             {
@@ -195,7 +195,8 @@ namespace MagicPictureSetDownloader.Db
                     IdRarity = idRarity,
                     Url = url,
                     Url2 = url2,
-                    FlavorName = flavorName
+                    FlavorName = flavorName,
+                    FrameEffect = frameEffect
                 };
 
                 AddToDbAndUpdateReferential(cardEdition, InsertInReferential);

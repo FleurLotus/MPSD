@@ -16,5 +16,6 @@
         public IList<CardFaceWithExtraInfo> CardFaceWithExtraInfos { get; } = new List<CardFaceWithExtraInfo>();
         public string Language { get; set; }
         public string PrintedName { get; set; }
+        public string FrameEffect { get; set; }
     }
 }

@@ -109,6 +109,7 @@
                         Language = card.Language.ToString(),
                         PrintedName = card.PrintedName,
                         FlavorName = card.FlavorName,
+                        FrameEffect = card.FrameEffects != null && card.FrameEffects.Count > 0 ? string.Join(",", card.FrameEffects) : null,
                     };
 
                     if (card.MtgoId.HasValue)

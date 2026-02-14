@@ -12,6 +12,7 @@
         public IRarity Rarity { get; set; }
         public IEdition Edition { get; set; }
         public ICollection<IPrice> Prices { get; set; }
+        public string FrameEffect { get; set; }
         public IEnumerable<ICardInCollectionCount> Statistics
         {
             get { return _statistics; }

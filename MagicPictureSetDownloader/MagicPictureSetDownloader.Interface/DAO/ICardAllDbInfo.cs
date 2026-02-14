@@ -10,5 +10,6 @@
         string IdScryFall { get; }
         IEnumerable<ICardInCollectionCount> Statistics { get; }
         ICollection<IPrice> Prices { get; }
+        string FrameEffect { get; }
     }
 }
