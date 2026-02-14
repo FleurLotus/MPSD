@@ -31,6 +31,19 @@ namespace MagicPictureSetDownloader.Db
                 return cardEdition?.IdScryFall;
             }
         }
+        public string[] GetAllIdScryFall(ICard card, IEdition edition)
+        {
+            if (card == null || edition == null)
+            {
+                return null;
+            }
+
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return _cardEditions.Values.Where(ce => ce.IdCard == card.Id && ce.IdEdition == edition.Id).Select(ce => ce.IdScryFall).ToArray();
+            }
+        }
         public string GetIdScryFallByFlavorName(string flavorName, IEdition edition)
         {
             if (string.IsNullOrWhiteSpace(flavorName) || edition == null)
@@ -289,20 +302,6 @@ namespace MagicPictureSetDownloader.Db
 
                 InsertOrUpdateCardInCollection(collection.Id, idScryFall, idLanguage, cardCountSource);
                 InsertOrUpdateCardInCollection(collectionDestination.Id, idScryFall, idLanguage, cardCountDestination);
-            }
-        }
-        public void MoveCardToOtherCollection(ICardCollection collection, ICard card, IEdition edition, ILanguage language, ICardCount cardCount, ICardCollection collectionDestination)
-        {
-            if (cardCount == null)
-            {
-                return;
-            }
-
-            using (new WriterLock(_lock))
-            {
-                string idScryFall = GetIdScryFall(card, edition);
-                int idLanguage = language.Id;
-                MoveCardToOtherCollection(collection, idScryFall, idLanguage, cardCount, collectionDestination);
             }
         }
         public ICardCollection UpdateCollectionName(string oldName, string name)

@@ -311,7 +311,7 @@
                     { new CardCountKey(vm.Source.IsFoil), -vm.Source.Count }
                 };
 
-                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, _magicDatabase.GetIdScryFall(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
+                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
                 LoadCardsHierarchy();
             }
         }
@@ -529,11 +529,11 @@
 
                 if (vm.Copy)
                 {
-                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, _magicDatabase.GetIdScryFall(vm.Source.Card, vm.Source.EditionSelected), vm.Source.LanguageSelected.Id, cardCount);
+                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
                 }
                 else
                 {
-                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.Card, vm.Source.EditionSelected, vm.Source.LanguageSelected, cardCount, vm.CardCollectionSelected);
+                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount, vm.CardCollectionSelected);
                 }
 
                 LoadCardsHierarchy();

@@ -15,7 +15,7 @@
 
         protected override bool OkCommandCanExecute(object o)
         {
-            return Source.Count > 0 && Source.Count <= Source.MaxCount && Source.EditionSelected != null;
+            return Source.Count > 0 && Source.Count <= Source.MaxCount && Source.EditionSelected != null && Source.LanguageSelected != null && Source.IdScryfallSelected != null;
         }
     }
 }

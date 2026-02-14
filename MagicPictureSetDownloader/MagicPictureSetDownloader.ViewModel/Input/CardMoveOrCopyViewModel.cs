@@ -59,7 +59,7 @@
 
         protected override bool OkCommandCanExecute(object o)
         {
-            if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null)
+            if (Source.Count <= 0 || Source.Count > Source.MaxCount || Source.EditionSelected == null || Source.LanguageSelected == null || Source.IdScryfallSelected == null)
             {
                 return false;
             }

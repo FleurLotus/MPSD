@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Input
 {
+    using System;
     using System.Linq;
 
     using Common.ViewModel;
@@ -11,6 +12,8 @@
     public class CardSourceViewModel : NotifyPropertyChangedBase
     {
         private IEdition _editionSelected;
+        private string[] _idScryfalls;
+        private string _idScryfallSelected;
         private ILanguage _languageSelected;
         private ILanguage[] _languages;
 
@@ -58,6 +61,22 @@
                 }
             }
         }
+        public string[] IdScryfalls
+        {
+            get { return _idScryfalls; }
+            private set
+            {
+                if (value != _idScryfalls)
+                {
+                    _idScryfalls = value;
+                    OnNotifyPropertyChanged();
+                    if (_idScryfalls != null && _idScryfalls.Length > 0)
+                    {
+                        IdScryfallSelected = _idScryfalls[0];
+                    }
+                }
+            }
+        }
         public bool IsFoil
         {
             get { return _isFoil; }
@@ -79,6 +98,21 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
+                    OnNotifyPropertyChanged();
+                    ChangeIdScryfalls();
+                    ChangeLanguage();
+                    UpdateMaxCount();
+                }
+            }
+        }
+        public string IdScryfallSelected
+        {
+            get { return _idScryfallSelected; }
+            set
+            {
+                if (value != _idScryfallSelected)
+                {
+                    _idScryfallSelected = value;
                     OnNotifyPropertyChanged();
                     ChangeLanguage();
                     UpdateMaxCount();
@@ -130,14 +164,13 @@
 
         private void UpdateMaxCount()
         {
-            string idScryFall = _magicDatabase.GetIdScryFall(Card, EditionSelected);
-            if (LanguageSelected == null)
+            if (LanguageSelected == null || IdScryfallSelected == null)
             {
                 MaxCount = 0;
                 return;
             }
 
-            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdScryFall == idScryFall && cicc.IdLanguage == LanguageSelected.Id);
+            ICardInCollectionCount cardInCollectionCount = _cardInCollectionCounts.FirstOrDefault(cicc => cicc.IdScryFall == IdScryfallSelected && cicc.IdLanguage == LanguageSelected.Id);
 
             if (cardInCollectionCount == null)
             {
@@ -146,14 +179,24 @@
             }
             MaxCount = cardInCollectionCount.GetCount(new CardCountKey(IsFoil));
         }
+        private void ChangeIdScryfalls()
+        {
+            string[] idScryFalls = _magicDatabase.GetAllIdScryFall(Card, EditionSelected);
+
+            IdScryfalls = idScryFalls.Where(id => _cardInCollectionCounts.Any(cicc => cicc.IdScryFall == id)).ToArray();
+        }
         private void ChangeLanguage()
         {
-            string idScryFall = _magicDatabase.GetIdScryFall(Card, EditionSelected);
-            Languages = _cardInCollectionCounts.Where(cicc => cicc.IdScryFall == idScryFall)
-                                                     .Select(cicc => _magicDatabase.GetLanguage(cicc.IdLanguage))
-                                                     .Distinct()
-                                                     .OrderBy(l => l.Id)
-                                                     .ToArray();
+            if (IdScryfallSelected == null)
+            {
+                Languages = Array.Empty<ILanguage>();
+                return;
+            }
+            Languages = _cardInCollectionCounts.Where(cicc => cicc.IdScryFall == IdScryfallSelected)
+                                               .Select(cicc => _magicDatabase.GetLanguage(cicc.IdLanguage))
+                                               .Distinct()
+                                               .OrderBy(l => l.Id)
+                                               .ToArray();
         }
     }
 }

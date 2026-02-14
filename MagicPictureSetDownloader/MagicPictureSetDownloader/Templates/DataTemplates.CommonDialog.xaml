@@ -72,15 +72,19 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Row="0" Grid.Column="0" Content="Edition" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
                     <ComboBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,2" ItemsSource="{Binding Editions}" SelectedItem="{fl:TwoWayBinding EditionSelected}"  />
                     <svgc:SvgViewbox Grid.Row="0" Grid.Column="3" HorizontalAlignment="Left" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
-                    
-                    <Label Grid.Row="1" Grid.Column="0" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
-                    <ComboBox Grid.Row="1" Grid.Column="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}"  />
-                    <CheckBox Grid.Row="1" Grid.Column="2"  VerticalAlignment="Center" Content="Foil" IsChecked="{fl:TwoWayBinding IsFoil}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="IdScryfall" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="10,2" ItemsSource="{Binding IdScryfalls}" SelectedItem="{fl:TwoWayBinding IdScryfallSelected}"  />
+
+                    <Label Grid.Row="2" Grid.Column="0" Content="Language" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" Margin="10,2" ItemsSource="{Binding Languages}" SelectedItem="{fl:TwoWayBinding LanguageSelected}"  />
+                    <CheckBox Grid.Row="2" Grid.Column="2"  VerticalAlignment="Center" Content="Foil" IsChecked="{fl:TwoWayBinding IsFoil}"/>
                 </Grid>
             </GroupBox>
         </Grid>
