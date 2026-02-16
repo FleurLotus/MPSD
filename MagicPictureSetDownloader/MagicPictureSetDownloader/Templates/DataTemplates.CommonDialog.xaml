@@ -385,7 +385,7 @@
                 <DatePicker Grid.Column="3" HorizontalAlignment="Left" SelectedDate="{Binding MaxDate}"/>
             </Grid>
             <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" MaxHeight="500" RowHeight="25"
-                      AlternatingRowBackground="Gainsboro"  AlternationCount="2" SelectionMode="Single" SelectionUnit="FullRow" CanUserSortColumns="False"
+                      AlternatingRowBackground="Gainsboro"  AlternationCount="2" SelectionMode="Single" SelectionUnit="FullRow" CanUserSortColumns="False" IsReadOnly="True"
                       ItemsSource="{Binding AuditInfos}" Visibility="{Binding AuditInfos.Count, Converter={fl:AggregateConverter {fl:ValueIsZeroToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}}">
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="DataGridColumnHeader">
