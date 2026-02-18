@@ -18,12 +18,16 @@
         {
             Card = card;
             AddCommand = new RelayCommand(AddCommandExecute);
+            AddFourCommand = new RelayCommand(AddFourCommandExecute);
             RemoveCommand = new RelayCommand(RemoveCommandExecute);
+            RemoveFourCommand = new RelayCommand(RemoveFourCommandExecute);
             AddLinkedProperty(nameof(ChangedCount), new[] { nameof(Count), nameof(CountLabel) });
         }
 
         public ICommand AddCommand { get; }
+        public ICommand AddFourCommand { get; }
         public ICommand RemoveCommand { get; }
+        public ICommand RemoveFourCommand { get; }
         public CardViewModel Card { get; }
         public string NameInLanguage { get; private set; }
         public string Name { get { return Card.Name; } }
@@ -73,15 +77,33 @@
                 ChangedCount--;
             }
         }
+        private void RemoveFourCommandExecute(object obj)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (ChangedCount + _cardInCollection > 0)
+                {
+                    ChangedCount--;
+                }
+            }
+        }
+
         private void AddCommandExecute(object obj)
         {
             ChangedCount++;
+        }
+        private void AddFourCommandExecute(object obj)
+        {
+            ChangedCount += 3;
         }
         public void Reset()
         {
             ChangedCount = 0;
         }
-
+        internal IRarity GetCardRarity()
+        {
+            return Card.CardAllDbInfo.Rarity;
+        }
         internal CardType GetCardType()
         {
             return MultiPartCardManager.Instance.GetCardType(Card.CardAllDbInfo.Card);

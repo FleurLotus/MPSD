@@ -329,6 +329,14 @@ namespace MagicPictureSetDownloader.Db
                 return _rarities.GetOrDefault(rarity);
             }
         }
+        public IRarity[] GetAllRarities()
+        {
+            CheckReferentialLoaded();
+            using (new ReaderLock(_lock))
+            {
+                return new List<IRarity>(_rarities.Values).ToArray();
+            }
+        }
         private int GetRarityId(string rarity)
         {
             return GetRarity(rarity).Id;

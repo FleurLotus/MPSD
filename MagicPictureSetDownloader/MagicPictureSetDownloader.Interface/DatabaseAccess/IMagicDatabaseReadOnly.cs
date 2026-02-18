@@ -28,6 +28,7 @@
         IPicture GetDefaultPicture();
         ITreePicture GetTreePicture(string key);
         IRarity GetRarity(string rarity);
+        IRarity[] GetAllRarities();
         IEdition GetEdition(string sourceName);
         IEdition GetEditionByCode(string code);
         IEdition GetEditionByIdScryFall(string idScryFall);

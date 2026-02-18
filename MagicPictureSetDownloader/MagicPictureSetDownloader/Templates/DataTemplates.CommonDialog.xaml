@@ -421,6 +421,8 @@
                 <Grid.InputBindings>
                     <MouseBinding Gesture="RightClick" Command="{Binding RemoveCommand}" />
                     <MouseBinding Gesture="LeftClick" Command="{Binding AddCommand}" />
+                    <MouseBinding Gesture="RightDoubleClick" Command="{Binding RemoveFourCommand}" />
+                    <MouseBinding Gesture="LeftDoubleClick" Command="{Binding AddFourCommand}" />
                 </Grid.InputBindings>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

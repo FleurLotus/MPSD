@@ -24,6 +24,7 @@
     public class CollectionInputGraphicViewModel : DialogViewModelBase
     {
         private IEdition _editionSelected;
+        private IBlock _blockSelected;
         private ILanguage _inputLanguage;
         private string _filter;
         private bool _foil;
@@ -75,6 +76,9 @@
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
             _allLanguages = _magicDatabase.GetAllLanguages().ToArray();
 
+            Rarities = _magicDatabase.GetAllRarities();
+
+            Blocks = _magicDatabase.GetAllBlocks().ToArray();
             Editions = _magicDatabase.GetNoneEmptyEditionsOrdered();
             _cards = new RangeObservableCollection<CardCollectionInputGraphicViewModel>();
             Cards = CollectionViewSource.GetDefaultView(_cards);
@@ -90,6 +94,10 @@
             ObservableCollection<CardType> typesSelected = new ObservableCollection<CardType>();
             typesSelected.CollectionChanged += CollectionChanged;
             TypesSelected = typesSelected;
+            ObservableCollection<IRarity> raritiesSelected = new ObservableCollection<IRarity>();
+            raritiesSelected.CollectionChanged += CollectionChanged;
+            RaritiesSelected = raritiesSelected;
+
             ChangeInputLanguageCommand = new RelayCommand(ChangeInputLanguageCommandExecute);
             ResetCommand = new RelayCommand(ResetCommandExecute);
             CardCollection = _magicDatabase.GetAllCollections().First(cc => cc.Name == name);
@@ -101,6 +109,8 @@
         public ICommand ChangeInputLanguageCommand { get; }
         public ICommand ResetCommand { get; }
         public IEdition[] Editions { get; }
+        public IBlock[] Blocks { get; }
+        public IRarity[] Rarities { get; }
         public DisplayOrder[] DisplayOrders { get; }
         public ICardCollection CardCollection { get; }
         public ICollectionView Cards { get; private set; }
@@ -108,6 +118,7 @@
         public ICollection<ShardColor> ColorsSelected { get; }
         public ICollection<CardType> Types { get; }
         public ICollection<CardType> TypesSelected { get; }
+        public ICollection<IRarity> RaritiesSelected { get; }
 
         public string InputLanguageName
         {
@@ -186,6 +197,19 @@
                 if (value != _editionSelected)
                 {
                     _editionSelected = value;
+                    OnNotifyPropertyChanged();
+                    RefreshDisplayedData(true);
+                }
+            }
+        }
+        public IBlock BlockSelected
+        {
+            get { return _blockSelected; }
+            set
+            {
+                if (value != _blockSelected)
+                {
+                    _blockSelected = value;
                     OnNotifyPropertyChanged();
                     RefreshDisplayedData(true);
                 }
@@ -270,7 +294,7 @@
         {
             if (o is CardCollectionInputGraphicViewModel vm)
             {
-                return CheckColor(vm) && CheckType(vm) && CheckName(vm);
+                return CheckColor(vm) && CheckType(vm) && CheckName(vm) && CheckRarity(vm);
             }
 
             return false;
@@ -288,6 +312,17 @@
 
             return Matcher<ShardColor>.HasValue(color, wantedColor) || (wantedColorless && color == ShardColor.Colorless);
         }
+        private bool CheckRarity(CardCollectionInputGraphicViewModel vm)
+        {
+            if (RaritiesSelected.Count == 0)
+            {
+                return true;
+            }
+
+            IRarity rarity = vm.GetCardRarity();
+            return RaritiesSelected.Contains(rarity);
+        }
+
         private bool CheckType(CardCollectionInputGraphicViewModel vm)
         {
             if (TypesSelected.Count == 0)
@@ -316,6 +351,7 @@
         private void RefreshDisplayedData(bool full)
         {
             IEdition editionSelected = EditionSelected;
+            IBlock blockSelected = BlockSelected;
             if (full)
             {
                 foreach (CardCollectionInputGraphicViewModel c in _cards)
@@ -325,7 +361,7 @@
                 _cards.Clear();
             }
 
-            if (editionSelected == null)
+            if (editionSelected == null && blockSelected == null)
             {
                 return;
             }
@@ -333,7 +369,7 @@
             List<CardCollectionInputGraphicViewModel> toSort = new List<CardCollectionInputGraphicViewModel>();
             if (full)
             {
-                foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => cadi.Edition == editionSelected))
+                foreach (ICardAllDbInfo cardInfo in _allCardInfos.Where(cadi => (editionSelected != null && cadi.Edition == editionSelected) || (blockSelected != null && cadi.Edition.IdBlock == blockSelected.Id)))
                 {
                     CardCollectionInputGraphicViewModel newCard = new CardCollectionInputGraphicViewModel(new CardViewModel(cardInfo));
                     newCard.PropertyChanged += ItemChanged;

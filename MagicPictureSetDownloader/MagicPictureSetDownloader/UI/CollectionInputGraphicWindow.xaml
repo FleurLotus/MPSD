@@ -56,6 +56,8 @@
                         <RowDefinition Height="28"/>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
 
                     <Label Grid.Column="0" Grid.Row="0" Content="Language:"/>
@@ -68,14 +70,19 @@
                         <svgc:SvgViewbox Width="30" Source="{Binding InputLanguage.Name, Converter={conv:TreeToTreeImageConverter}}" />
                     </Border>
 
-                    <Label Grid.Column="0" Grid.Row="2" Content="Edition" />
+                    <Label Grid.Column="0" Grid.Row="2" Content="Block" />
                     <ComboBox Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
+                            SelectedValue="{fl:TwoWayBinding Path=BlockSelected}" ItemsSource="{Binding Blocks}" 
+                            IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
+
+                    <Label Grid.Column="0" Grid.Row="4" Content="Edition" />
+                    <ComboBox Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" IsEditable="True" fl:AutoComplete.Enabled="True" fl:AutoComplete.CaseInsensitive="True" 
                             SelectedValue="{fl:TwoWayBinding Path=EditionSelected}" ItemsSource="{Binding Editions}" 
                             IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
-                    <svgc:SvgViewbox Grid.Column="3" Grid.Row="2" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
+                    <svgc:SvgViewbox Grid.Column="3" Grid.Row="4" HorizontalAlignment="Left" Margin="5,0,0,0" Width="20" Height="20" Source="{Binding EditionSelected.Name, Converter={conv:TreeToTreeImageConverter}}"/>
 
-                    <Button Grid.Column="0" Grid.Row="4" Content="Reset" Width="70" VerticalAlignment="Center" Command="{Binding ResetCommand}" />
-                    <CheckBox Grid.Column="1" Grid.Row="4" Content="Foil" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
+                    <Button Grid.Column="0" Grid.Row="6" Content="Reset" Width="70" VerticalAlignment="Center" Command="{Binding ResetCommand}" />
+                    <CheckBox Grid.Column="1" Grid.Row="6" Content="Foil" Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="{Binding Foil}" IsEnabled="{Binding HasChange,Converter={fl:BoolInvertConverter}}" />
                 </Grid>
             </GroupBox>
             <GroupBox Grid.Column="3" Header="Display">
@@ -109,6 +116,8 @@
                         <RowDefinition Height="28"/>
                         <RowDefinition Height="5"/>
                         <RowDefinition Height="28"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
                 
                     <Label Grid.Column="0" Grid.Row="0" Content="Name" />
@@ -119,6 +128,9 @@
 
                     <Label Grid.Column="0" Grid.Row="4" Content="Types" />
                     <xctk:CheckComboBox Grid.Column="1" Grid.Row="4" ItemsSource="{Binding Types}" SelectedItemsOverride="{Binding TypesSelected}" />
+
+                    <Label Grid.Column="0" Grid.Row="6" Content="Rarities" />
+                    <xctk:CheckComboBox Grid.Column="1" Grid.Row="6" ItemsSource="{Binding Rarities}" SelectedItemsOverride="{Binding RaritiesSelected}" />
                 </Grid>
             </GroupBox>
         </Grid>
