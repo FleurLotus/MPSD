@@ -332,5 +332,46 @@
             </StackPanel>
         </Grid>
     </ControlTemplate>
+
+    <LinearGradientBrush x:Key="MtgFoilBrush" StartPoint="0,1" EndPoint="1,0">
+        <GradientStop Color="#33FF0000" Offset="0.0" />
+        <!-- Red -->
+        <GradientStop Color="#33FFFF00" Offset="0.2" />
+        <!-- Yellow -->
+        <GradientStop Color="#3300FF00" Offset="0.4" />
+        <!-- Green -->
+        <GradientStop Color="#3300FFFF" Offset="0.6" />
+        <!-- Cyan -->
+        <GradientStop Color="#330000FF" Offset="0.8" />
+        <!-- Blue -->
+        <GradientStop Color="#33FF00FF" Offset="1.0" />
+        <!-- Magenta -->
+    </LinearGradientBrush>
+
+    <!-- The Animation for the 'Shimmer' -->
+    <Storyboard x:Key="FoilShimmerAnimation">
+        <PointAnimation Storyboard.TargetProperty="Background.StartPoint"
+                        From="-0.5,0.5" To="0.5,1.5" Duration="0:0:4" 
+                        RepeatBehavior="Forever" AutoReverse="True"/>
+        <PointAnimation Storyboard.TargetProperty="Background.EndPoint"
+                        From="0.5,-0.5" To="1.5,0.5" Duration="0:0:4" 
+                        RepeatBehavior="Forever" AutoReverse="True"/>
+    </Storyboard>
+
+    <ControlTemplate x:Key="FoilOverlay" >
+        <Border Background="{StaticResource MtgFoilBrush}" Visibility="{Binding IsFoil, Converter={fl:BoolToVisibilityConverter} }">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFoil}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource FoilShimmerAnimation}"/>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+        </Border>
+    </ControlTemplate>
     
 </ResourceDictionary>

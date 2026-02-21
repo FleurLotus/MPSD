@@ -6,7 +6,6 @@
 
                     xmlns:system="clr-namespace:System;assembly=System.Runtime"
                     
-                    xmlns:edition="clr-namespace:MagicPictureSetDownloader.ViewModel.Download.Edition;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:management="clr-namespace:MagicPictureSetDownloader.ViewModel.Management;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:input="clr-namespace:MagicPictureSetDownloader.ViewModel.Input;assembly=MagicPictureSetDownloader.ViewModel"
                     xmlns:option="clr-namespace:MagicPictureSetDownloader.ViewModel.Option;assembly=MagicPictureSetDownloader.ViewModel"
@@ -234,7 +233,7 @@
                 <Setter Property="Margin" Value="5,0"/>
             </Style>
         </DataTemplate.Resources>
-        <Grid>
+        <Grid RenderOptions.BitmapScalingMode="HighQuality">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="401"/>
                 <ColumnDefinition Width="300"/>
@@ -362,6 +361,8 @@
                 </GroupBox>
             </Grid>
             <Image Grid.Column="1" Margin="10" Source="{Binding VersionSelected, Converter={conv:CardToImageConverter}, ConverterParameter=0}" />
+
+            <Control Grid.Column="1" Margin="10" Template="{StaticResource FoilOverlay}" Visibility="{Binding VersionSelected, Converter={fl:AggregateConverter {conv:CardToImageConverter}, {fl:ObjectNullToBoolConverter}, {fl:BoolInvertConverter}, {fl:BoolToVisibilityConverter}}, ConverterParameter=0}" />
         </Grid>
     </DataTemplate>
 
