@@ -670,14 +670,11 @@ namespace MagicPictureSetDownloader.Db
         }
         private void CheckReferentialLoaded()
         {
-            if (!_referentialLoaded)
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
+                if (!_referentialLoaded)
                 {
-                    if (!_referentialLoaded)
-                    {
-                        LoadReferentials();
-                    }
+                    LoadReferentials();
                 }
             }
         }
