@@ -663,7 +663,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void RemoveFromReferential(IPreconstructedDeckCardEdition preconstructedDeckCardEdition)
         {
-            if (!_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> list))
+            if (_preconstructedDeckCards.TryGetValue(preconstructedDeckCardEdition.IdPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> list))
             {
                 list.Remove(preconstructedDeckCardEdition);
             }
