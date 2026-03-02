@@ -125,7 +125,7 @@
             {
                 if (DownloadManager != null)
                 {
-                    DownloadManager.CredentialRequiered += OnCredentialRequiered;
+                    DownloadManager.CredentialRequiered -= OnCredentialRequiered;
                 }
 
                 IsStopping = true;
