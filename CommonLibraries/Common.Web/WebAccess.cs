@@ -1,7 +1,7 @@
 ﻿namespace Common.Web
 {
     using System;
-    using System.Collections.Generic;
+    using System.Collections.Concurrent;
     using System.IO;
     using System.Net;
     using System.Net.Http;
@@ -16,7 +16,7 @@
 
         private HttpClient _httpClient;
         private ICredentials _credentials;
-        private readonly Dictionary<string, string> _htmlCache;
+        private readonly ConcurrentDictionary<string, string> _htmlCache;
 #if NET9_0_OR_GREATER
         private readonly System.Threading.Lock _lock = new System.Threading.Lock();
 #else
@@ -34,7 +34,7 @@
             _timeout = timeOut;
             _httpClient = GetHttpClient();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Other");
-            _htmlCache = new Dictionary<string, string>();
+            _htmlCache = new ConcurrentDictionary<string, string>();
         }
 
         private bool OnCredentialRequiered()
@@ -110,10 +110,17 @@
 
         private async Task DownloadFileInternalAsync(string url, string outfilepath)
         {
-            HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-            using (FileStream fs = new FileStream(outfilepath, FileMode.CreateNew))
+            using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
             {
-                await response.Content.CopyToAsync(fs);
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new WebException($"{(int) response.StatusCode} {response.ReasonPhrase}");
+                }
+
+                using (FileStream fs = new FileStream(outfilepath, FileMode.CreateNew))
+                {
+                    await response.Content.CopyToAsync(fs);
+                }
             }
         }
 

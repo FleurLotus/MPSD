@@ -1,6 +1,7 @@
 ﻿namespace Common.Database
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -9,7 +10,7 @@
 
     internal static class DbAttributAnalyser
     {
-        private static readonly IDictionary<Type, TypeDbInfo> _analysied = new Dictionary<Type, TypeDbInfo>();
+        private static readonly ConcurrentDictionary<Type, TypeDbInfo> _analysied = new ConcurrentDictionary<Type, TypeDbInfo>();
 
         public static TypeDbInfo Analyse(Type type)
         {
