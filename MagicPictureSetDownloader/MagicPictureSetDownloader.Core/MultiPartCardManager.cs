@@ -76,11 +76,10 @@
             CardSubType subType = MagicRules.GetCardSubType(card.MainCardFace.Type);
             if (IsSplitted(card))
             {
-                subType |= MagicRules.GetCardSubType(card.MainCardFace.Type);
+                subType |= MagicRules.GetCardSubType(card.OtherCardFace.Type);
             }
 
             return subType;
-
         }
     }
 }
