@@ -53,9 +53,22 @@
         }
         internal static FullCard[] GetCardsInfoFromBulk(WebAccess webAccess, BulkData bulkData)
         {
-            string fileName = Path.GetFileName(bulkData.DownloadUri);
-
+            string origfileName = Path.GetFileName(bulkData.DownloadUri);
+            string fileName = Path.GetFileNameWithoutExtension(origfileName) + "_" + bulkData.Id + Path.GetExtension(origfileName);
+            string fileNametemplate = Path.GetFileNameWithoutExtension(origfileName) + "_*" + Path.GetExtension(origfileName);
             string filePath = Path.Combine(Path.GetTempPath(), fileName);
+
+            foreach (string file in Directory.GetFiles(Path.GetTempPath(), fileNametemplate).Where(f => string.Compare(f, filePath, true) != 0))
+            {
+                try
+                {
+                    File.Delete(file);
+                }
+                catch
+                {
+                    // Ignore any errors when trying to delete old files.
+                }
+            }
 
             if (!File.Exists(filePath))
             {
