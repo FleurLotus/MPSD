@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Core
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
@@ -33,7 +34,7 @@
 
         private static readonly string[] Generics = { "X", "Y", "Z" };
 
-        private static readonly IDictionary<string, Shard> _shards = new Dictionary<string, Shard>(StringComparer.InvariantCultureIgnoreCase);
+        private static readonly ConcurrentDictionary<string, Shard> _shards = new ConcurrentDictionary<string, Shard>(StringComparer.InvariantCultureIgnoreCase);
 
         private readonly string _toString;
 
@@ -123,7 +124,7 @@
             {
                 //IsGeneric
                 shard = new Shard(shardCastingCost, true, false, false, false, false, false);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -131,7 +132,7 @@
             {
                 //IsSnow
                 shard = new Shard(shardCastingCost, false, true, false, false, false, false);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -139,7 +140,7 @@
             {
                 //IsColorless
                 shard = new Shard(shardCastingCost, false, false, true, false, false, false);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -147,7 +148,7 @@
             {
                 //IsLegendary
                 shard = new Shard(shardCastingCost, false, false, false, false, true, false);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -155,7 +156,7 @@
             {
                 //IsDrop
                 shard = new Shard(shardCastingCost, false, false, false, false, false, true);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -163,7 +164,7 @@
             {
                 //IsXYZ => IsGeneric
                 shard = new Shard(shardCastingCost, true, false, false, true, false, false);
-                _shards.Add(shardCastingCost, shard);
+                _shards.TryAdd(shardCastingCost, shard);
                 return shard;
             }
 
@@ -214,7 +215,7 @@
             }
 
             shard = new Shard(shardCastingCost, color, isPhyrexian, isHybrid, is2Hybrid, isHalf);
-            _shards.Add(shardCastingCost, shard);
+            _shards.TryAdd(shardCastingCost, shard);
             return shard;
         }
     }
