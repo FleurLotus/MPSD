@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.Db
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
@@ -24,8 +25,8 @@
         private readonly string _cardPath;
         private readonly string _treePath;
 
-        private readonly IDictionary<string, ITreePicture> _treePictures = new Dictionary<string, ITreePicture>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly IDictionary<string, IPicture> _pictures = new Dictionary<string, IPicture>();
+        private readonly ConcurrentDictionary<string, ITreePicture> _treePictures = new ConcurrentDictionary<string, ITreePicture>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly ConcurrentDictionary<string, IPicture> _pictures = new ConcurrentDictionary<string, IPicture>();
 
         public PictureDatabase()
         {
@@ -49,7 +50,7 @@
                 TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(file), Image = File.ReadAllBytes(file), FilePath = file };
                 if (!_treePictures.ContainsKey(treePicture.Name))
                 {
-                    _treePictures.Add(treePicture.Name, treePicture);
+                    _treePictures.TryAdd(treePicture.Name, treePicture);
                 }
             }
         }
@@ -80,7 +81,7 @@
                         picture = new Picture { IdScryFall = idScryFall, Image = File.ReadAllBytes(file) };
                         if (!doNotCache)
                         {
-                            _pictures.Add(picture.IdScryFall, picture);
+                            _pictures.TryAdd(picture.IdScryFall, picture);
                         }
 
                         break;
@@ -128,7 +129,7 @@
             Save(filePath, data);
 
             TreePicture treePicture = new TreePicture { Name = Path.GetFileNameWithoutExtension(filePath), Image = data, FilePath = filePath };
-            _treePictures.Add(treePicture.Name, treePicture);
+            _treePictures.TryAdd(treePicture.Name, treePicture);
         }
         public void InsertNewPicture(string idScryFall, byte[] data)
         {
