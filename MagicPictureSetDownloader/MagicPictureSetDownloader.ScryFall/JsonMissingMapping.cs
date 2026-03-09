@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -9,16 +10,16 @@
 
     public static class JsonMissingMapping
     {
-        private static readonly IDictionary<Type, PropertyInfo[]> Properties = new Dictionary<Type, PropertyInfo[]>();
-        private static readonly IDictionary<PropertyInfo, JsonExtensionDataAttribute> JsonAttributes = new Dictionary<PropertyInfo, JsonExtensionDataAttribute>();
-        private static readonly IDictionary<Type, JsonStringEnumMemberConverterOptionsAttribute> EnumDefault = new Dictionary<Type, JsonStringEnumMemberConverterOptionsAttribute>();
+        private static readonly ConcurrentDictionary<Type, PropertyInfo[]> Properties = new ConcurrentDictionary<Type, PropertyInfo[]>();
+        private static readonly ConcurrentDictionary<PropertyInfo, JsonExtensionDataAttribute> JsonAttributes = new ConcurrentDictionary<PropertyInfo, JsonExtensionDataAttribute>();
+        private static readonly ConcurrentDictionary<Type, JsonStringEnumMemberConverterOptionsAttribute> EnumDefault = new ConcurrentDictionary<Type, JsonStringEnumMemberConverterOptionsAttribute>();
 
         private static PropertyInfo[] GetProperties(Type type)
         {
             if (!Properties.TryGetValue(type, out PropertyInfo[] props))
             {
                 props = type.GetProperties();
-                Properties.Add(type, props);
+                Properties.TryAdd(type, props);
             }
 
             return props;
@@ -28,7 +29,7 @@
             if (!JsonAttributes.TryGetValue(prop, out JsonExtensionDataAttribute attr))
             {
                 attr = prop.GetCustomAttribute<JsonExtensionDataAttribute>();
-                JsonAttributes.Add(prop, attr);
+                JsonAttributes.TryAdd(prop, attr);
             }
 
             return attr;
@@ -38,7 +39,7 @@
             if (!EnumDefault.TryGetValue(type, out JsonStringEnumMemberConverterOptionsAttribute opt))
             {
                 opt = type.GetCustomAttribute<JsonStringEnumMemberConverterOptionsAttribute>();
-                EnumDefault.Add(type, opt);
+                EnumDefault.TryAdd(type, opt);
             }
 
             return opt;
