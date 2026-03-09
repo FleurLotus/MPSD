@@ -132,7 +132,7 @@
                     {
                         c.ExternalId.Add((CardIdSource.Cardmarket, card.CardmarketId.Value.ToString()));
                     }
-                    if (card.MultiverseIds == null || card.MultiverseIds.Count > 0)
+                    if (card.MultiverseIds != null && card.MultiverseIds.Count > 0)
                     {
                         foreach (int id in card.MultiverseIds)
                         {
