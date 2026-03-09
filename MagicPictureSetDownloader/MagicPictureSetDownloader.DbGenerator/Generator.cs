@@ -1,5 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.DbGenerator
 {
+    using System;
     using System.IO;
     using System.Linq;
     using System.Reflection;
@@ -15,7 +16,7 @@
         {
             string resourceName = DatabaseGenerator.GetResourceName();
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            string outDir = tempDir ? Path.GetTempPath() : Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string outDir = tempDir ? Path.GetTempPath() : Path.GetDirectoryName(AppContext.BaseDirectory);
 
             string name = executingAssembly.GetManifestResourceNames().First(s => s.EndsWith(resourceName.Replace(".sqlite", ".zip")));
 
@@ -28,7 +29,7 @@
         internal string GeneratePictures(bool tempDir = false)
         {
             Assembly executingAssembly = Assembly.GetExecutingAssembly();
-            string outDir = tempDir ? Path.GetTempPath() : Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string outDir = tempDir ? Path.GetTempPath() : Path.GetDirectoryName(AppContext.BaseDirectory);
 
             string name = executingAssembly.GetManifestResourceNames().First(s => s.EndsWith("MagicPicture.zip"));
 

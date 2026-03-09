@@ -4,7 +4,6 @@
     using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
 
     using Common.Collection;
     using Common.Drawing;
@@ -31,7 +30,7 @@
         public PictureDatabase()
         {
             DatabaseGenerator.GeneratePictures();
-            string rootPath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), RootFolder);
+            string rootPath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), RootFolder);
             _cardPath = Path.Combine(rootPath, CardFolder);
             _treePath = Path.Combine(rootPath, TreeFolder);
         }

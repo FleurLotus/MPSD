@@ -1,9 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.Db
 {
+    using System;
     using System.Data;
     using System.Data.SQLite;
     using System.IO;
-    using System.Reflection;
 
     using Common.Database;
 
@@ -25,7 +25,7 @@
             string fileName = DatabaseGenerator.GetResourceName();
 
             // ReSharper disable AssignNullToNotNullAttribute
-            string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), fileName);
+            string filePath = Path.Combine(Path.GetDirectoryName(AppContext.BaseDirectory), fileName);
             // ReSharper restore AssignNullToNotNullAttribute
             string connectionString = (new SQLiteConnectionStringBuilder { DataSource = filePath }).ToString();
             if (!File.Exists(filePath))

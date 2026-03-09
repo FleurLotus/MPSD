@@ -86,6 +86,11 @@
                 Version newVersionNumberVersion = new Version(releaseVersion);
 
                 Assembly entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly == null)
+                {
+                    throw new ProgramUpgraderException("Can't get entry assembly");
+                }
+
                 Version currentVersion = entryAssembly.GetName().Version;
 
                 bool hasNewVersion = currentVersion < newVersionNumberVersion;
@@ -127,6 +132,10 @@
             }
 
             Assembly entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly == null)
+            {
+                throw new ProgramUpgraderException("Can't get entry assembly");
+            }
 
             //From http://www.codeproject.com/Articles/31454/How-To-Make-Your-Application-Delete-Itself-Immedia
             ProcessStartInfo info = new ProcessStartInfo
