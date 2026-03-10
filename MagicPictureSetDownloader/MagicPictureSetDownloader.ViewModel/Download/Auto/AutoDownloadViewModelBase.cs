@@ -10,6 +10,7 @@
         private IReadOnlyList<KeyValuePair<string, object>> _urls;
         private int _nextJob;
         private volatile bool _fatalException;
+        private int _finishCalled;
         private const int NbThread = 5;
         private readonly ManualResetEvent _firstDoneEvent = new ManualResetEvent(false);
 
@@ -26,6 +27,7 @@
             _urls = GetUrls();
             CountDown = _urls.Count;
             DownloadReporter.Total = CountDown;
+            _finishCalled = 0;
 
             if (CountDown == 0)
             {
@@ -101,13 +103,12 @@
                     }
                 }
 
-                Interlocked.Decrement(ref CountDown);
-            }
-
-            if (CountDown == 0 || IsStopping || _fatalException)
-            {
-                DownloadReporter.Finish();
-                JobFinished();
+                int newcount = Interlocked.Decrement(ref CountDown);
+                if ((newcount == 0 || IsStopping || _fatalException) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
+                {
+                    DownloadReporter.Finish();
+                    JobFinished();
+                }
             }
         }
     }

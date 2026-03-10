@@ -75,8 +75,14 @@
 
             if (_faces.Count > 2)
             {
-                //Not Normal
+                // INTENTIONAL: Alert developer if Scryfall introduces a new multi-face card with more than two faces, which is not supported by the current implementation.
+                // Gracefully degraded in production (only the first 2 faces stored)
+                // If triggered, update ScryFallCardTransformer to handle this new layout
+#if DEBUG
                 Debugger.Break();
+#endif
+                // Log in Production
+                Debug.WriteLine($"Warning: Card '{Name}' has {_faces.Count} faces. Only first 2 will be accessible via MainCardFace and OtherCardFace properties.");
             }
         }
     }
