@@ -3,6 +3,7 @@
     using System;
     using System.Text;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Library;
     using Common.Notify;
@@ -66,18 +67,18 @@
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public void Start(IDispatcherInvoker dispatcherInvoker)
+        public async Task Start(IDispatcherInvoker dispatcherInvoker, CancellationToken ct = default)
         {
             DispatcherInvoker = dispatcherInvoker ?? throw new ArgumentNullException(nameof(dispatcherInvoker));
 
             JobStarting();
-            if (!StartImpl())
+            if (!await StartImpl(ct).ConfigureAwait(true))
             {
                 JobFinished();
             }
         }
 
-        protected abstract bool StartImpl();
+        protected abstract Task<bool> StartImpl(CancellationToken ct);
         protected void JobStarting()
         {
             SetMessage(null);

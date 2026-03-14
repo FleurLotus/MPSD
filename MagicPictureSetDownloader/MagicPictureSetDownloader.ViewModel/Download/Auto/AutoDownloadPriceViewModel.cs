@@ -1,6 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download.Auto
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Interface;
@@ -15,13 +17,13 @@
         {
             _priceImporter = PriceImporterFactory.Create(priceSource);
         }
-        protected override IReadOnlyList<KeyValuePair<string, object>> GetUrls()
+        protected override IAsyncEnumerable<(string url, object param)> GetUrls(CancellationToken ct)
         {
-            return DownloadManager.GetPricesUrls(_priceImporter);
+            return DownloadManager.GetPricesUrls(_priceImporter, ct);
         }
-        protected override string Download(string url, object param)
+        protected override async Task<string> Download(string url, object param, CancellationToken ct)
         {
-            return DownloadManager.InsertPriceInDb(_priceImporter, url, param);
+            return await DownloadManager.InsertPriceInDb(_priceImporter, url, param, ct).ConfigureAwait(false);
         }
     }
 }

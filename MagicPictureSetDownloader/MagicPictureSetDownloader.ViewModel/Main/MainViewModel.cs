@@ -1,6 +1,7 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Common.Library;
@@ -48,7 +49,7 @@
 
             if (Options.AutoCheckUpgrade)
             {
-                ThreadPool.QueueUserWorkItem(DoCheckNewVersion);
+                _ = Task.Run(DoCheckNewVersion);
             }
 
             Analysers = new HierarchicalInfoAnalysersViewModel();
@@ -117,18 +118,15 @@
                 }
             }
         }
-        private void DoCheckNewVersion(object o)
+        private async Task DoCheckNewVersion()
         {
             try
             {
-                _programUpdater.HasNewVersionAvailable();
+                using (CancellationTokenSource cts = new CancellationTokenSource())
+                {
+                    await _programUpdater.HasNewVersionAvailable(cts.Token).ConfigureAwait(false);
+                }
             }
-            // ReSharper disable EmptyGeneralCatchClause
-            catch
-            {
-                //Call by threadpool must not throw exception
-            }
-            // ReSharper restore EmptyGeneralCatchClause
             finally
             {
                 UpgradeStatus = _programUpdater.Status;

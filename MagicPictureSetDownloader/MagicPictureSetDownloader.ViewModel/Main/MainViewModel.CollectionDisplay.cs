@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ViewModel.Input;
@@ -78,7 +79,7 @@
         }
         private void LoadCardsHierarchyAsync()
         {
-            ThreadPool.QueueUserWorkItem(o => LoadCardsHierarchy());
+            _ = Task.Run(LoadCardsHierarchy);
         }
 
         private void LoadCardsHierarchy()

@@ -1,19 +1,22 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download.Auto
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
+
     public class AutoDownloadImageViewModel : AutoDownloadViewModelBase
     {
         public AutoDownloadImageViewModel()
             : base("Download new images")
         {
         }
-        protected override IReadOnlyList<KeyValuePair<string, object>> GetUrls()
+        protected override IAsyncEnumerable<(string url, object param)> GetUrls(CancellationToken ct)
         {
-            return DownloadManager.GetMissingPictureUrls();
+            return DownloadManager.GetMissingPictureUrls(ct);
         }
-        protected override string Download(string url, object param)
+        protected override async Task<string> Download(string url, object param, CancellationToken ct)
         {
-            return DownloadManager.InsertPictureInDb(url, param);
+            return await DownloadManager.InsertPictureInDb(url, param, ct).ConfigureAwait(false);
         }
     }
 }
