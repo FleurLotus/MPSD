@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFrameworks>net8.0-windows</TargetFrameworks>
-		<AssemblyTitle>Common.WPF.Behavior.UnitTests</AssemblyTitle>
-		<Product>Common.WPF.Behavior.UI.UnitTests</Product>
-		<UseWPF>true</UseWPF>
-	</PropertyGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\Common.ViewModel.Command\Common.ViewModel.Command.csproj" />
-		<ProjectReference Include="..\..\..\Common.WPF\Common.WPF.csproj" />
-		<ProjectReference Include="..\Common.UIBaseTests\Common.UIBaseTests.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-		<PackageReference Include="NUnit" />
-		<PackageReference Include="NUnit3TestAdapter" />
-		<PackageReference Include="coverlet.collector" />
-		<PackageReference Include="XamlTest" />
-	</ItemGroup>
+  <PropertyGroup>
+    <TargetFrameworks>net8.0-windows</TargetFrameworks>
+    <AssemblyTitle>Common.WPF.Behavior.UnitTests</AssemblyTitle>
+    <Product>Common.WPF.Behavior.UI.UnitTests</Product>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Common.ViewModel.Command\Common.ViewModel.Command.csproj" />
+    <ProjectReference Include="..\..\..\Common.WPF\Common.WPF.csproj" />
+    <ProjectReference Include="..\Common.UIBaseTests\Common.UIBaseTests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="XamlTest" />
+  </ItemGroup>
 </Project>
