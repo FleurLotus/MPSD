@@ -63,6 +63,7 @@
             catch (Exception ex)
             {
                 SetMessage(ex.Message);
+                JobFinished();
             }
         }
         private void ScryFallCardTransformerFinished(object sender, EventArgs e)
