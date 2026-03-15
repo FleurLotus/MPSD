@@ -5,6 +5,7 @@
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     using Common.Notify;
@@ -75,6 +76,13 @@
         {
             HttpClient client = new HttpClient(_httpMessageHandlerFactory.Create(_credentials));
 
+            // Required by Scryfall: meaningful User-Agent and Accept header
+            // Use an identifiable app string and a contact URL per Scryfall docs
+            // Example: "MPSD/1.0 (+https://github.com/FleurLotus/MPSD)"
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MPSD/1.0 (+https://github.com/FleurLotus/MPSD)");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             if (_timeout.HasValue)
             {
                 client.Timeout = _timeout.Value;
@@ -92,7 +100,24 @@
         {
             if (forceRefresh || !_htmlCache.TryGetValue(url, out string html))
             {
-                html = await GetDataWithProxyFallBack(() => GetHttpClient().GetStringAsync(url));
+                html = await GetDataWithProxyFallBack(async () =>
+                {
+                    // Use GetAsync so we can read the response body even when status is non-success
+                    using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            // Include status and body to help diagnose API error
+                            string message = $"Request to '{url}' failed {(int) response.StatusCode} {response.ReasonPhrase}. Response body: {content}";
+
+                            throw new WebException(message);
+                        }
+
+                        return content;
+                    }
+                });
+
                 _htmlCache[url] = html;
             }
             return html;
