@@ -637,8 +637,6 @@
 
             _magicDatabaseForCollection.DeleteCollection(toBeDeleted);
 
-            Loading = false;
-
             _dispatcherInvoker.Invoke(() =>
                 {
                     //Delete current collection -> reset display to default
