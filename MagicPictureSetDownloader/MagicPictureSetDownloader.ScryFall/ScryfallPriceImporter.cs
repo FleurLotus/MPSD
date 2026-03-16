@@ -28,6 +28,10 @@
         public async IAsyncEnumerable<(string url, object param)> GetDefaultCardUrls(WebAccess webAccess, [EnumeratorCancellation] CancellationToken ct)
         {
             BulkData bulkData = await ScryFallDataRetriever.GetCardUrls(webAccess, false, ct).ConfigureAwait(false);
+            if (bulkData == null)
+            {
+                yield break;
+            }
 
             ct.ThrowIfCancellationRequested();
             yield return (bulkData.DownloadUri, bulkData);
