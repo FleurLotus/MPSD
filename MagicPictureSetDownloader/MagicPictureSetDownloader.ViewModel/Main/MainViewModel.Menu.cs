@@ -154,7 +154,7 @@
             if (vm.Result == true)
             {
                 Loading = true;
-                await RunAsync(AddPreconstructedDeckToCollectionAsync, vm).ConfigureAwait(false);
+                await RunAsync(AddPreconstructedDeckToCollectionAsync, vm).ConfigureAwait(true);
             }
         }
         private async Task DeleteCollectionCommandExecute()
@@ -176,7 +176,7 @@
                 if (!string.IsNullOrWhiteSpace(toBeDeleted) && !string.IsNullOrWhiteSpace(toAdd))
                 {
                     Loading = true;
-                    await RunAsync(DeleteCollectionAsync, vm).ConfigureAwait(false);
+                    await RunAsync(DeleteCollectionAsync, vm).ConfigureAwait(true);
                 }
             }
         }
@@ -209,7 +209,7 @@
             if (vm.Result == true)
             {
                 Loading = true;
-                await RunAsync(ImportExportAsync, vm).ConfigureAwait(false);
+                await RunAsync(ImportExportAsync, vm).ConfigureAwait(true);
             }
         }
         private void CardInputCommandExecute(object o)

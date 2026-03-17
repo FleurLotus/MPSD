@@ -26,7 +26,7 @@
 
         protected override async Task<bool> StartImpl(CancellationToken ct)
         {
-            _urls = await GetUrls(ct).ToArrayAsync(ct).ConfigureAwait(false);
+            _urls = await GetUrls(ct).ToArrayAsync(ct).ConfigureAwait(true);
             CountDown = _urls.Count;
             DownloadReporter.Total = CountDown;
             _finishCalled = 0;
