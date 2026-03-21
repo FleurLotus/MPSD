@@ -81,7 +81,7 @@
             // Example: "MPSD/1.0 (+https://github.com/FleurLotus/MPSD)"
             client.DefaultRequestHeaders.UserAgent.ParseAdd("MPSD/1.0 (+https://github.com/FleurLotus/MPSD)");
             client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
 
             if (_timeout.HasValue)
             {
