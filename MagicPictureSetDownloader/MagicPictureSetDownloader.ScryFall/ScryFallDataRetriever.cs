@@ -64,7 +64,25 @@
 
             if (!File.Exists(filePath))
             {
-                await webAccess.DownloadFileAsync(bulkData.DownloadUri, filePath, ct).ConfigureAwait(false);
+                try
+                {
+                    await webAccess.DownloadFileAsync(bulkData.DownloadUri, filePath, ct).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    //The file is likely incomplete, so delete it if it exists.
+                    if (File.Exists(filePath))
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    throw;
+                }
             }
 
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous))
