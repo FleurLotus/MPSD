@@ -5,6 +5,7 @@
     using System.Windows.Input;
 
     using Common.Library;
+    using Common.Threading;
     using Common.ViewModel;
     using Common.ViewModel.Command;
     using Common.ViewModel.Menu;
@@ -49,7 +50,7 @@
 
             if (Options.AutoCheckUpgrade)
             {
-                _ = Task.Run(DoCheckNewVersion);
+                Task.Run(DoCheckNewVersion).FireAndForgetSafeAsync();
             }
 
             Analysers = new HierarchicalInfoAnalysersViewModel();
