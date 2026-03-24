@@ -95,14 +95,14 @@
             }
         }
 
-        public async Task Upgrade(CancellationToken ct)
+        public async Task Upgrade(bool alreadyChecked, CancellationToken ct)
         {
             if (_newVersionUrl == null)
             {
                 throw new ProgramUpgraderException("Can't get info from new version file");
             }
 
-            if (!await HasNewVersionAvailable(ct).ConfigureAwait(false))
+            if (!alreadyChecked && !await HasNewVersionAvailable(ct).ConfigureAwait(false))
             {
                 throw new ProgramUpgraderException("No call of upgrade if HasNewVersionAvailable is false");
             }

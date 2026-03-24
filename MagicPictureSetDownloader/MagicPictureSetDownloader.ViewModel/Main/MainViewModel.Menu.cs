@@ -285,7 +285,7 @@
                 if (vm.Result == true)
                 {
                     Loading = true;
-                    await _programUpdater.Upgrade(CancellationToken.None).ConfigureAwait(true);
+                    await _programUpdater.Upgrade(true, CancellationToken.None).ConfigureAwait(true);
                     OnCloseRequested();
                 }
             }
