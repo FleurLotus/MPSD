@@ -68,7 +68,7 @@
                 {
                     await webAccess.DownloadFileAsync(bulkData.DownloadUri, filePath, ct).ConfigureAwait(false);
                 }
-                catch (OperationCanceledException)
+                catch (Exception)
                 {
                     //The file is likely incomplete, so delete it if it exists.
                     if (File.Exists(filePath))
