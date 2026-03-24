@@ -107,7 +107,8 @@
         }
         public async IAsyncEnumerable<(string url, object param)> GetMissingPictureUrls([EnumeratorCancellation] CancellationToken ct)
         {
-            await Task.CompletedTask.ConfigureAwait(false);
+            //prevents the CS1998 "async method lacks 'await'" situation) and forces the compiler to generate the async state machine required for proper async-iterator behavior.
+            await Task.Yield();
 
             foreach (KeyValuePair<string, object> kv in MagicDatabase.GetMissingPictureUrls())
             {
