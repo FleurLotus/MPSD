@@ -123,10 +123,7 @@
         {
             try
             {
-                using (CancellationTokenSource cts = new CancellationTokenSource())
-                {
-                    await _programUpdater.HasNewVersionAvailable(cts.Token).ConfigureAwait(false);
-                }
+                await _programUpdater.HasNewVersionAvailable(CancellationToken.None).ConfigureAwait(false);
             }
             finally
             {

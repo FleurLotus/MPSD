@@ -278,24 +278,21 @@
         }
         private async Task CheckNewVersionCommandExecute()
         {
-            using (CancellationTokenSource cts = new CancellationTokenSource())
+            if (await _programUpdater.HasNewVersionAvailable(CancellationToken.None).ConfigureAwait(true))
             {
-                if (await _programUpdater.HasNewVersionAvailable(cts.Token).ConfigureAwait(true))
+                InputViewModel vm = InputViewModelFactory.Instance.CreateQuestionViewModel("New version available", "Do you want to upgrade?");
+                OnInputRequested(vm);
+                if (vm.Result == true)
                 {
-                    InputViewModel vm = InputViewModelFactory.Instance.CreateQuestionViewModel("New version available", "Do you want to upgrade?");
-                    OnInputRequested(vm);
-                    if (vm.Result == true)
-                    {
-                        Loading = true;
-                        await _programUpdater.Upgrade(cts.Token).ConfigureAwait(true);
-                        OnCloseRequested();
-                    }
+                    Loading = true;
+                    await _programUpdater.Upgrade(CancellationToken.None).ConfigureAwait(true);
+                    OnCloseRequested();
                 }
-                else
-                {
-                    InputViewModel vm = InputViewModelFactory.Instance.CreateInfoViewModel("No new version", "You have the lastest version");
-                    OnInputRequested(vm);
-                }
+            }
+            else
+            {
+                InputViewModel vm = InputViewModelFactory.Instance.CreateInfoViewModel("No new version", "You have the lastest version");
+                OnInputRequested(vm);
             }
         }
         private void RemoveCardCommandExecute(object o)
