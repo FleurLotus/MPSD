@@ -46,7 +46,7 @@
         {
             try
             {
-                Card[] cards = await DownloadManager.GetCards(true, ct).ToArrayAsync().ConfigureAwait(false);
+                Card[] cards = await DownloadManager.GetCards(true, ct).ToArrayAsync(ct).ConfigureAwait(false);
                 _scryFallCardTransformer = new ScryFallCardTransformer(DownloadManager, DownloadReporter);
                 _scryFallCardTransformer.Finished += ScryFallCardTransformerFinished;
 

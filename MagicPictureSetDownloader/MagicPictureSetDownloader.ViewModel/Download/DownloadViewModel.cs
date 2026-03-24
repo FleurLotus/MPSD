@@ -49,7 +49,7 @@
                 DownloadReporter.Total = 2;
                 await DownloadManager.GetAndSaveEditions(ct).ConfigureAwait(false);
                 DownloadReporter.Progress();
-                Card[] cards = await DownloadManager.GetCards(false, ct).ToArrayAsync().ConfigureAwait(false);
+                Card[] cards = await DownloadManager.GetCards(false, ct).ToArrayAsync(ct).ConfigureAwait(false);
                 DownloadReporter.Progress();
 
                 _scryFallCardTransformer = new ScryFallCardTransformer(DownloadManager, DownloadReporter);
