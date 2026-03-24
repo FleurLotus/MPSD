@@ -12,6 +12,7 @@
         private IReadOnlyList<(string url, object param)> _urls;
         private int _nextJob;
         private volatile bool _fatalException;
+        private volatile bool _isCancelled;
         private int _finishCalled;
         private const int NbThread = 5;
         private readonly ManualResetEvent _firstDoneEvent = new ManualResetEvent(false);
@@ -101,6 +102,7 @@
                 catch (OperationCanceledException)
                 {
                     // Cancellation requested -> exit worker loop
+                    _isCancelled = true;
                     break;
                 }
                 catch (Exception ex)
@@ -122,7 +124,7 @@
                 }
 
                 int newcount = Interlocked.Decrement(ref CountDown);
-                if ((newcount == 0 || IsStopping || _fatalException) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
+                if ((newcount == 0 || IsStopping || _fatalException || _isCancelled) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
                 {
                     DownloadReporter.Finish();
                     JobFinished();
