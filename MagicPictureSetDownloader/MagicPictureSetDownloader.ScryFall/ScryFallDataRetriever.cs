@@ -103,13 +103,13 @@
         }
         public static async IAsyncEnumerable<Card> GetCardsInfo(WebAccess webAccess, bool allCards, [EnumeratorCancellation] CancellationToken ct)
         {
-            BulkData bukDate = await GetCardUrls(webAccess, allCards, ct).ConfigureAwait(false);
-            if (bukDate == null)
+            BulkData bukData = await GetCardUrls(webAccess, allCards, ct).ConfigureAwait(false);
+            if (bukData == null)
             {
                 yield break;
             }
 
-            await foreach (FullCard card in GetCardsInfoFromBulk(webAccess, bukDate, ct).ConfigureAwait(false))
+            await foreach (FullCard card in GetCardsInfoFromBulk(webAccess, bukData, ct).ConfigureAwait(false))
             {
 
                 yield return card.ToCard();
