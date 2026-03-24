@@ -62,6 +62,11 @@
                 _scryFallCardTransformer.AddRange(cards);
                 _scryFallCardTransformer.Start();
             }
+            catch (OperationCanceledException)
+            {
+                //No error, just stop the job
+                JobFinished();
+            }
             catch (Exception ex)
             {
                 SetMessage(ex.Message);
