@@ -39,7 +39,7 @@
             {
                 await _vm.Start(new DispatcherInvoker(Application.Current.Dispatcher), _cts.Token).ConfigureAwait(true);
             }
-            catch (OperationCanceledException)
+            catch (Exception)
             {
                 // expected when cancelled
             }
