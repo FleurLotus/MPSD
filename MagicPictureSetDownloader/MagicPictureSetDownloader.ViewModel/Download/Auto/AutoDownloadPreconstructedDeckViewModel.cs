@@ -1,6 +1,8 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download.Auto
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using MagicPictureSetDownloader.Core.Deck;
 
@@ -13,13 +15,13 @@
         {
             _preconstructedDeckImporter = new PreconstructedDeckImporter();
         }
-        protected override IReadOnlyList<KeyValuePair<string, object>> GetUrls()
+        protected override IAsyncEnumerable<(string url, object param)> GetUrls(CancellationToken ct)
         {
-            return DownloadManager.GetPreconstructedDecksUrls(_preconstructedDeckImporter);
+            return DownloadManager.GetPreconstructedDecksUrls(_preconstructedDeckImporter, ct);
         }
-        protected override string Download(string url, object param)
+        protected override async Task<string> Download(string url, object param, CancellationToken ct)
         {
-            return DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter);
+            return await DownloadManager.InsertPreconstructedDeckCardsInDb(url, _preconstructedDeckImporter, ct).ConfigureAwait(false);
         }
     }
 }

@@ -255,12 +255,14 @@ dotnet_diagnostic.CA2249.severity = none
 dotnet_diagnostic.IDE0130.severity = none
 # CA1859: Use concrete types when possible for improved performance
 dotnet_diagnostic.CA1859.severity = none
-
+# CA2007: Do not directly await a Task
+dotnet_diagnostic.CA2007.severity = error
+dotnet_code_quality.CA2007.output_kind = WindowsApplication, DynamicallyLinkedLibrary
 
 dotnet_diagnostic.IDE0001.severity = warning   # Simplify Names
 dotnet_diagnostic.IDE0002.severity = warning   # Name can be simplified
 dotnet_diagnostic.IDE0003.severity = warning   # Remove unnecessary cast
-dotnet_diagnostic.IDE0005.severity = silent   # Remove unnecessary using
+dotnet_diagnostic.IDE0005.severity = silent    # Remove unnecessary using
 dotnet_diagnostic.IDE0006.severity = warning   # Use 'var' instead of explicit type
 dotnet_diagnostic.IDE0007.severity = warning   # Use explicit type instead of 'var'
 dotnet_diagnostic.IDE0010.severity = warning   # Add missing using directive

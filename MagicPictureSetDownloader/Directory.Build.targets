@@ -1,24 +1,24 @@
 <Project>
   <ItemGroup>
 
-    <PackageReference Update="Common.Collection" Version="1.0.0" />
-    <PackageReference Update="Common.Database" Version="1.1.0" />
-    <PackageReference Update="Common.Drawing" Version="1.0.0" />
-    <PackageReference Update="Common.SQLite" Version="1.0.0" />
-    <PackageReference Update="Common.Threading" Version="1.0.0" />
-    <PackageReference Update="Common.ViewModel" Version="1.0.0" />
-    <PackageReference Update="Common.ViewModel.Extended" Version="1.0.0" />
-    <PackageReference Update="Common.Web" Version="1.1.2" />
-    <PackageReference Update="Common.WPF" Version="1.0.0" />
-    <PackageReference Update="Common.WPF.Converter" Version="1.0.0" />
-    <PackageReference Update="Common.Zip" Version="1.0.0" />
+    <PackageReference Update="Common.Collection" Version="1.2.0" />
+    <PackageReference Update="Common.Database" Version="1.2.0" />
+    <PackageReference Update="Common.Drawing" Version="1.2.0" />
+    <PackageReference Update="Common.SQLite" Version="1.2.0" />
+    <PackageReference Update="Common.Threading" Version="1.2.0" />
+    <PackageReference Update="Common.ViewModel" Version="1.2.0" />
+    <PackageReference Update="Common.ViewModel.Extended" Version="1.2.0" />
+    <PackageReference Update="Common.Web" Version="1.2.0" />
+    <PackageReference Update="Common.WPF" Version="1.2.0" />
+    <PackageReference Update="Common.WPF.Converter" Version="1.2.0" />
+    <PackageReference Update="Common.Zip" Version="1.2.0" />
 
     <PackageReference Update="Extended.Wpf.Toolkit" Version="5.0.0" />
     <PackageReference Update="Macross.Json.Extensions" Version="3.0.0" />
-    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+    <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
     <PackageReference Update="SharpVectors.Wpf" Version="1.8.5" />
-    <PackageReference Update="System.Runtime.Caching" Version="8.0.0" />
-    <PackageReference Update="VirtualizingWrapPanel" Version="2.3.2" />
+    <PackageReference Update="System.Runtime.Caching" Version="10.0.5" />
+    <PackageReference Update="VirtualizingWrapPanel" Version="2.5.1" />
   </ItemGroup>
 </Project>
 

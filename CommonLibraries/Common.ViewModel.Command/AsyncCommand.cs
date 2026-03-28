@@ -41,7 +41,7 @@
                 try
                 {
                     _isExecuting = true;
-                    await _execute();
+                    await _execute().ConfigureAwait(true);
                 }
                 finally
                 {
@@ -97,7 +97,7 @@
                 try
                 {
                     _isExecuting = true;
-                    await _execute(parameter);
+                    await _execute(parameter).ConfigureAwait(true);
                 }
                 finally
                 {

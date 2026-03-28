@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Web;
 
@@ -11,18 +13,28 @@
 
     internal class ScryFallPriceImporter : IPriceImporter
     {
-        public IEnumerable<PriceInfo> Parse(WebAccess webAccess, string url, object param)
+        public async IAsyncEnumerable<PriceInfo> Parse(WebAccess webAccess, string url, object param, [EnumeratorCancellation] CancellationToken ct)
         {
             BulkData bulkData = (BulkData) param;
 
-            FullCard[] cards = ScryFallDataRetriever.GetCardsInfoFromBulk(webAccess, bulkData);
-
-            List<PriceInfo> ret = cards.SelectMany(c => ExtractCardPrice(c, bulkData.UpdatedAt)).ToList();
-            return ret;
+            await foreach (FullCard fullcard in ScryFallDataRetriever.GetCardsInfoFromBulk(webAccess, bulkData, ct).ConfigureAwait(false))
+            {
+                foreach (PriceInfo price in ExtractCardPrice(fullcard, bulkData.UpdatedAt))
+                {
+                    yield return price;
+                }
+            }
         }
-        public IReadOnlyList<KeyValuePair<string, object>> GetDefaultCardUrls(WebAccess webAccess)
+        public async IAsyncEnumerable<(string url, object param)> GetDefaultCardUrls(WebAccess webAccess, [EnumeratorCancellation] CancellationToken ct)
         {
-            return new List<KeyValuePair<string, object>>(ScryFallDataRetriever.GetDefaultCardUrls(webAccess).Select(kv => new KeyValuePair<string, object>(kv.Key, kv.Value)));
+            BulkData bulkData = await ScryFallDataRetriever.GetCardUrls(webAccess, false, ct).ConfigureAwait(false);
+            if (bulkData == null)
+            {
+                yield break;
+            }
+
+            ct.ThrowIfCancellationRequested();
+            yield return (bulkData.DownloadUri, bulkData);
         }
         private IEnumerable<PriceInfo> ExtractCardPrice(FullCard scryfallCard, DateTime updatedAt)
         {

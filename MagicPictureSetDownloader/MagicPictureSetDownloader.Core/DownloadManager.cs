@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
+    using System.Runtime.CompilerServices;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Notify;
     using Common.Web;
@@ -30,12 +32,14 @@
             remove { _webAccess.CredentialRequiered -= value; }
         }
 
-        public void GetAndSaveEditions()
+        public async Task GetAndSaveEditions(CancellationToken ct)
         {
-            Set[] sets = ScryFallDataRetriever.GetBulkSets(_webAccess);
+            Set[] sets = await ScryFallDataRetriever.GetBulkSets(_webAccess, ct).ConfigureAwait(false);
 
             foreach (Set set in sets)
             {
+                ct.ThrowIfCancellationRequested();
+
                 IEdition edition = MagicDatabase.GetEdition(set.Name);
                 if (edition == null)
                 {
@@ -43,7 +47,7 @@
                     byte[] icon = null;
                     if (MagicDatabase.GetTreePicture(set.Name) == null)
                     {
-                        icon = GetEditionIcon(set.IconSvgUri);
+                        icon = await GetEditionIcon(set.IconSvgUri, ct).ConfigureAwait(false);
                     }
 
                     MagicDatabase.InsertNewEdition(set.Name, !set.NonFoilOnly, set.Code.ToUpperInvariant(), block?.Id, set.CardCount, set.ReleasedAt, icon);
@@ -64,16 +68,17 @@
             }
             return block;
         }
-        public Card[] GetCards()
+        public async IAsyncEnumerable<Card> GetCards(bool allCards, [EnumeratorCancellation] CancellationToken ct)
         {
-            return ScryFallDataRetriever.GetCardsInfo(_webAccess, out _).Where(c => !Tranformation.CardToIgnore(c)).ToArray();
+            await foreach (Card c in ScryFallDataRetriever.GetCardsInfo(_webAccess, allCards, ct).ConfigureAwait(false))
+            {
+                if (!Tranformation.CardToIgnore(c))
+                {
+                    yield return c;
+                }
+            }
         }
-        public Card[] GetAllCards()
-        {
-            return ScryFallDataRetriever.GetAllCardsInfo(_webAccess, out _).Where(c => !Tranformation.CardToIgnore(c)).ToArray();
-        }
-
-        public string InsertPictureInDb(string pictureUrl, object param)
+        public async Task<string> InsertPictureInDb(string pictureUrl, object param, CancellationToken ct)
         {
             string idScryFall = (string) param;
 
@@ -81,30 +86,37 @@
             if (picture == null)
             {
                 //No id found try insert
-                byte[] pictureData = _webAccess.GetFile(pictureUrl);
+                byte[] pictureData = await _webAccess.GetFileAsync(pictureUrl, ct).ConfigureAwait(false);
 
                 MagicDatabase.InsertNewPicture(idScryFall, pictureData);
             }
 
             return null;
         }
-        public string InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl, object param)
+        public async Task<string> InsertPriceInDb(IPriceImporter priceImporter, string pricesUrl, object param, CancellationToken ct)
         {
-            foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param))
+            await foreach (PriceInfo priceInfo in priceImporter.Parse(_webAccess, pricesUrl, param, ct).ConfigureAwait(false))
             {
                 MagicDatabase.InsertNewPrice(priceInfo.IdScryFall, priceInfo.UpdateDate.Date, priceInfo.PriceSource.ToString("g"), priceInfo.Foil, priceInfo.Value);
             }
             return null;
         }
-        public IReadOnlyList<KeyValuePair<string, object>> GetPricesUrls(IPriceImporter priceImporter)
+        public IAsyncEnumerable<(string url, object param)> GetPricesUrls(IPriceImporter priceImporter, CancellationToken ct)
         {
-            return priceImporter.GetDefaultCardUrls(_webAccess);
+            return priceImporter.GetDefaultCardUrls(_webAccess, ct);
         }
-        public IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls()
+        public async IAsyncEnumerable<(string url, object param)> GetMissingPictureUrls([EnumeratorCancellation] CancellationToken ct)
         {
-            return MagicDatabase.GetMissingPictureUrls();
+            //prevents the CS1998 "async method lacks 'await'" situation) and forces the compiler to generate the async state machine required for proper async-iterator behavior.
+            await Task.Yield();
+
+            foreach (KeyValuePair<string, object> kv in MagicDatabase.GetMissingPictureUrls())
+            {
+                ct.ThrowIfCancellationRequested();
+                yield return (kv.Key, kv.Value);
+            }
         }
-        private byte[] GetEditionIcon(Uri uri)
+        private async Task<byte[]> GetEditionIcon(Uri uri, CancellationToken ct)
         {
             if (uri == null)
             {
@@ -114,7 +126,7 @@
             byte[] editionIcon = null;
             try
             {
-                editionIcon = _webAccess.GetFile(uri.ToString());
+                editionIcon = await _webAccess.GetFileAsync(uri.ToString(), ct).ConfigureAwait(false);
             }
             catch (WebException)
             {
@@ -127,14 +139,19 @@
 
             return null;
         }
-        public IReadOnlyList<KeyValuePair<string, object>> GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter)
+        public async IAsyncEnumerable<(string url, object param)> GetPreconstructedDecksUrls(PreconstructedDeckImporter preconstructedDeckImporter, [EnumeratorCancellation] CancellationToken ct)
         {
-            string html = _webAccess.GetHtml(preconstructedDeckImporter.GetRootUrl());
-            return preconstructedDeckImporter.GetDeckUrls(html).Select(s => new KeyValuePair<string, object>(s, null)).ToList();
+            string html = await _webAccess.GetHtmlAsync(preconstructedDeckImporter.GetRootUrl(), false, ct).ConfigureAwait(false);
+
+            foreach (string s in preconstructedDeckImporter.GetDeckUrls(html))
+            {
+                ct.ThrowIfCancellationRequested();
+                yield return (s, null);
+            }
         }
-        public string InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter)
+        public async Task<string> InsertPreconstructedDeckCardsInDb(string url, PreconstructedDeckImporter preconstructedDeckImporter, CancellationToken ct)
         {
-            string html = _webAccess.GetHtml(url);
+            string html = await _webAccess.GetHtmlAsync(url, false, ct).ConfigureAwait(false);
 
             DeckInfo deckInfo = preconstructedDeckImporter.ParseDeckPage(html);
 
@@ -148,6 +165,7 @@
 
             foreach (DeckCardInfo deckCardInfo in deckInfo.Cards)
             {
+                ct.ThrowIfCancellationRequested();
                 if (deckCardInfo.NeedToCreate)
                 {
                     throw new Exception("Could not create");
@@ -159,9 +177,9 @@
             }
             return null;
         }
-        public string GetExtraInfo(string url)
+        public async Task<string> GetExtraInfo(string url, CancellationToken ct)
         {
-            return _webAccess.GetHtml(url);
+            return await _webAccess.GetHtmlAsync(url, false, ct).ConfigureAwait(false);
         }
         internal void InsertCardInDb(CardWithExtraInfo cardWithExtraInfo)
         {

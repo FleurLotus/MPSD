@@ -5,6 +5,7 @@
     using System.ComponentModel;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Notify;
     using Common.Threading;
@@ -145,7 +146,7 @@
                 }
             }
         }
-        private void ShowPreconstructedDecksCommandExecute(object o)
+        private async Task ShowPreconstructedDecksCommandExecute()
         {
             PreconstructedDecksViewModel vm = new PreconstructedDecksViewModel();
             OnEventRaise(PreconstructedDecksRequested, vm);
@@ -153,10 +154,10 @@
             if (vm.Result == true)
             {
                 Loading = true;
-                ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(AddPreconstructedDeckToCollectionAsync, vm));
+                await RunAsync(AddPreconstructedDeckToCollectionAsync, vm).ConfigureAwait(true);
             }
         }
-        private void DeleteCollectionCommandExecute(object o)
+        private async Task DeleteCollectionCommandExecute()
         {
             ICollection<string> cardCollections = _magicDatabase.GetAllCollections().Select(cc => cc.Name).ToList();
             List<string> source = new List<string>(cardCollections);
@@ -175,7 +176,7 @@
                 if (!string.IsNullOrWhiteSpace(toBeDeleted) && !string.IsNullOrWhiteSpace(toAdd))
                 {
                     Loading = true;
-                    ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(DeleteCollectionAsync, vm));
+                    await RunAsync(DeleteCollectionAsync, vm).ConfigureAwait(true);
                 }
             }
         }
@@ -200,7 +201,7 @@
                 }
             }
         }
-        private void ImportExportCommandExecute(object o)
+        private async Task ImportExportCommandExecute()
         {
             ImportExportViewModel vm = new ImportExportViewModel(_dispatcherInvoker);
             OnImportExportRequested(vm);
@@ -208,7 +209,7 @@
             if (vm.Result == true)
             {
                 Loading = true;
-                ThreadPool.QueueUserWorkItem(AsyncCalling, new ThreadPoolArgs(ImportExportAsync, vm));
+                await RunAsync(ImportExportAsync, vm).ConfigureAwait(true);
             }
         }
         private void CardInputCommandExecute(object o)
@@ -275,16 +276,16 @@
                 Options.GetDbOptions();
             }
         }
-        private void CheckNewVersionCommandExecute(object o)
+        private async Task CheckNewVersionCommandExecute()
         {
-            if (_programUpdater.HasNewVersionAvailable())
+            if (await _programUpdater.HasNewVersionAvailable(CancellationToken.None).ConfigureAwait(true))
             {
                 InputViewModel vm = InputViewModelFactory.Instance.CreateQuestionViewModel("New version available", "Do you want to upgrade?");
                 OnInputRequested(vm);
                 if (vm.Result == true)
                 {
                     Loading = true;
-                    _programUpdater.Upgrade();
+                    await _programUpdater.Upgrade(true, CancellationToken.None).ConfigureAwait(true);
                     OnCloseRequested();
                 }
             }
@@ -424,7 +425,7 @@
             MenuViewModel toolsMenu = new MenuViewModel("_Tools");
             toolsMenu.AddChild(new MenuViewModel("_Options", new RelayCommand(OptionCommandExecute)));
             toolsMenu.AddChild(MenuViewModel.Separator());
-            toolsMenu.AddChild(new MenuViewModel("_Check for new version", new RelayCommand(CheckNewVersionCommandExecute)));
+            toolsMenu.AddChild(new MenuViewModel("_Check for new version", new AsyncCommand(CheckNewVersionCommandExecute)));
             MenuRoot.AddChild(toolsMenu);
 
             //?
@@ -485,16 +486,16 @@
             bool hasCollection = cardCollections.Count > 0;
 
             _collectionViewModel.RemoveAllChildren();
-            _collectionViewModel.AddChild(new MenuViewModel("Preconstructed deck...", new RelayCommand(ShowPreconstructedDecksCommandExecute)));
+            _collectionViewModel.AddChild(new MenuViewModel("Preconstructed deck...", new AsyncCommand(ShowPreconstructedDecksCommandExecute)));
             _collectionViewModel.AddChild(MenuViewModel.Separator());
             _collectionViewModel.AddChild(new MenuViewModel("New collection...", new RelayCommand(CreateCollectionCommandExecute)));
             if (hasCollection)
             {
-                _collectionViewModel.AddChild(new MenuViewModel("Delete collection...", new RelayCommand(DeleteCollectionCommandExecute)));
+                _collectionViewModel.AddChild(new MenuViewModel("Delete collection...", new AsyncCommand(DeleteCollectionCommandExecute)));
                 _collectionViewModel.AddChild(new MenuViewModel("Rename collection...", new RelayCommand(RenameCollectionCommandExecute)));
             }
             _collectionViewModel.AddChild(MenuViewModel.Separator());
-            _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new RelayCommand(ImportExportCommandExecute)));
+            _collectionViewModel.AddChild(new MenuViewModel("Import/Export..", new AsyncCommand(ImportExportCommandExecute)));
 
             _collectionViewModel.AddChild(MenuViewModel.Separator());
             _collectionViewModel.AddChild(new MenuViewModel("All cards", new RelayCommand(ShowAllCollectionCommandExecute)));
@@ -602,14 +603,11 @@
 
         #region Async
 
-        private void AsyncCalling(object state)
+        private async Task RunAsync<T>(Action<T> method, T arg)
         {
             try
             {
-                if (state is ThreadPoolArgs args)
-                {
-                    args.Invoke();
-                }
+                await Task.Run(() => method(arg)).ConfigureAwait(true);
             }
             catch (Exception ex)
             {
@@ -620,13 +618,9 @@
                 Loading = false;
             }
         }
-        private void DeleteCollectionAsync(object obj)
+        private void DeleteCollectionAsync(InputViewModel vm)
         {
-            InputViewModel vm = obj as InputViewModel;
-
-            // ReSharper disable PossibleNullReferenceException
             string toBeDeleted = vm.Selected;
-            // ReSharper restore PossibleNullReferenceException
             string toAdd = vm.Selected2;
 
             if (toAdd == None)
@@ -639,8 +633,6 @@
             }
 
             _magicDatabaseForCollection.DeleteCollection(toBeDeleted);
-
-            Loading = false;
 
             _dispatcherInvoker.Invoke(() =>
                 {
@@ -655,20 +647,14 @@
                     }
                 });
         }
-        private void ImportExportAsync(object obj)
+        private void ImportExportAsync(ImportExportViewModel vm)
         {
-            ImportExportViewModel vm = obj as ImportExportViewModel;
-            // ReSharper disable PossibleNullReferenceException
             vm.ImportExport();
-            // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
         }
-        private void AddPreconstructedDeckToCollectionAsync(object obj)
+        private void AddPreconstructedDeckToCollectionAsync(PreconstructedDecksViewModel vm)
         {
-            PreconstructedDecksViewModel vm = obj as PreconstructedDecksViewModel;
-            // ReSharper disable PossibleNullReferenceException
             _magicDatabaseForCollection.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected, vm.LanguageSelected);
-            // ReSharper restore PossibleNullReferenceException
             LoadCardsHierarchy();
         }
         #endregion

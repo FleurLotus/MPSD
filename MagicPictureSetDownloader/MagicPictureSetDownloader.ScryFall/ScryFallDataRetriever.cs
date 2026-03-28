@@ -5,7 +5,10 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Text.Json;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Web;
 
@@ -19,39 +22,28 @@
         private const string DefaultCard = "default_cards";
         private const string AllCard = "all_cards";
 
-        private static BulkDataList GetBulkData(WebAccess webAccess)
+        private static async Task<BulkDataList> GetBulkData(WebAccess webAccess, CancellationToken ct)
         {
-            string json = webAccess.GetHtml(ScryfallBulk);
+            string json = await webAccess.GetHtmlAsync(ScryfallBulk, false, ct).ConfigureAwait(false);
             return JsonSerializer.Deserialize<BulkDataList>(json);
         }
-        public static Set[] GetBulkSets(WebAccess webAccess)
+        public static async Task<Set[]> GetBulkSets(WebAccess webAccess, CancellationToken ct)
         {
-            string json = webAccess.GetHtml(ScryfallSets);
+            string json = await webAccess.GetHtmlAsync(ScryfallSets, false, ct).ConfigureAwait(false);
             return JsonSerializer.Deserialize<AllSet>(json).Data.Select(fs => fs.ToSet()).ToArray();
         }
 
-        private static IReadOnlyList<KeyValuePair<string, BulkData>> GetUrls(WebAccess webAccess, string type)
+        private static async Task<BulkData> GetUrls(WebAccess webAccess, string type, CancellationToken ct)
         {
-            IList<KeyValuePair<string, BulkData>> urls = new List<KeyValuePair<string, BulkData>>();
-
-            BulkDataList bulkDataList = GetBulkData(webAccess);
-
-            BulkData bulkData = bulkDataList.Data.FirstOrDefault(d => d.Type == type);
-            if (bulkData != null)
-            {
-                urls.Add(new KeyValuePair<string, BulkData>(bulkData.DownloadUri, bulkData));
-            }
-            return urls.ToArray();
+            BulkDataList bulkDataList = await GetBulkData(webAccess, ct).ConfigureAwait(false);
+            ct.ThrowIfCancellationRequested();
+            return bulkDataList.Data.FirstOrDefault(d => d.Type == type);
         }
-        public static IReadOnlyList<KeyValuePair<string, BulkData>> GetDefaultCardUrls(WebAccess webAccess)
+        public static async Task<BulkData> GetCardUrls(WebAccess webAccess, bool allCards, CancellationToken ct)
         {
-            return GetUrls(webAccess, DefaultCard);
+            return await GetUrls(webAccess, allCards ? AllCard : DefaultCard, ct).ConfigureAwait(false);
         }
-        public static IReadOnlyList<KeyValuePair<string, BulkData>> GetAllCardUrls(WebAccess webAccess)
-        {
-            return GetUrls(webAccess, AllCard);
-        }
-        internal static FullCard[] GetCardsInfoFromBulk(WebAccess webAccess, BulkData bulkData)
+        internal static async IAsyncEnumerable<FullCard> GetCardsInfoFromBulk(WebAccess webAccess, BulkData bulkData, [EnumeratorCancellation] CancellationToken ct)
         {
             string origfileName = Path.GetFileName(bulkData.DownloadUri);
             string fileName = Path.GetFileNameWithoutExtension(origfileName) + "_" + bulkData.Id + Path.GetExtension(origfileName);
@@ -72,16 +64,31 @@
 
             if (!File.Exists(filePath))
             {
-                webAccess.DownloadFile(bulkData.DownloadUri, filePath);
+                try
+                {
+                    await webAccess.DownloadFileAsync(bulkData.DownloadUri, filePath, ct).ConfigureAwait(false);
+                }
+                catch (Exception)
+                {
+                    //The file is likely incomplete, so delete it if it exists.
+                    if (File.Exists(filePath))
+                    {
+                        try
+                        {
+                            File.Delete(filePath);
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    throw;
+                }
             }
 
-            IList<FullCard> cards = new List<FullCard>();
-
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, FileOptions.Asynchronous))
             {
-                foreach (FullCard card in JsonSerializer.DeserializeAsyncEnumerable<FullCard>(fileStream).ToEnumerable())
+                await foreach (FullCard card in JsonSerializer.DeserializeAsyncEnumerable<FullCard>(fileStream, cancellationToken: ct).ConfigureAwait(false))
                 {
-                    cards.Add(card);
 
 #if DEBUG
                     IList<string> errors = JsonMissingMapping.Check(card);
@@ -90,33 +97,23 @@
                         Debugger.Break();
                     }
 #endif
+                    yield return card;
                 }
-                return cards.ToArray();
             }
         }
-        public static Card[] GetCardsInfo(WebAccess webAccess, out BulkData bulkData)
+        public static async IAsyncEnumerable<Card> GetCardsInfo(WebAccess webAccess, bool allCards, [EnumeratorCancellation] CancellationToken ct)
         {
-            bulkData = null;
-            IReadOnlyList<KeyValuePair<string, BulkData>> info = GetDefaultCardUrls(webAccess);
-            if (info == null || info.Count < 1)
+            BulkData bukData = await GetCardUrls(webAccess, allCards, ct).ConfigureAwait(false);
+            if (bukData == null)
             {
-                return Array.Empty<Card>();
+                yield break;
             }
 
-            bulkData = info[0].Value;
-            return GetCardsInfoFromBulk(webAccess, bulkData).Select(fc => fc.ToCard()).ToArray();
-        }
-        public static Card[] GetAllCardsInfo(WebAccess webAccess, out BulkData bulkData)
-        {
-            bulkData = null;
-            IReadOnlyList<KeyValuePair<string, BulkData>> info = GetAllCardUrls(webAccess);
-            if (info == null || info.Count < 1)
+            await foreach (FullCard card in GetCardsInfoFromBulk(webAccess, bukData, ct).ConfigureAwait(false))
             {
-                return Array.Empty<Card>();
-            }
 
-            bulkData = info[0].Value;
-            return GetCardsInfoFromBulk(webAccess, bulkData).Select(fc => fc.ToCard()).ToArray();
+                yield return card.ToCard();
+            }
         }
     }
 }

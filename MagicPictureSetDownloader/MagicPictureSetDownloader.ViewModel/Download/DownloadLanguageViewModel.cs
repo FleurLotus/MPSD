@@ -1,7 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
+    using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Notify;
 
@@ -34,17 +36,17 @@
             base.Dispose(disposing);
         }
 
-        protected override bool StartImpl()
+        protected override Task<bool> StartImpl(CancellationToken ct)
         {
-            ThreadPool.QueueUserWorkItem(GetJsonData, null);
-            return true;
+            _ = Task.Run(() => GetJsonData(ct), ct);
+            return Task.FromResult(true);
         }
 
-        private void GetJsonData(object state)
+        private async Task GetJsonData(CancellationToken ct)
         {
             try
             {
-                Card[] cards = DownloadManager.GetAllCards();
+                Card[] cards = await DownloadManager.GetCards(true, ct).ToArrayAsync(ct).ConfigureAwait(false);
                 _scryFallCardTransformer = new ScryFallCardTransformer(DownloadManager, DownloadReporter);
                 _scryFallCardTransformer.Finished += ScryFallCardTransformerFinished;
 

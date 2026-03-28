@@ -5,6 +5,7 @@
     using System.IO;
     using System.Net;
     using System.Net.Http;
+    using System.Threading;
     using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
@@ -91,21 +92,16 @@
             return client;
         }
 
-        public string GetHtml(string url, bool forceRefresh = false)
-        {
-            return AsyncHelper.RunSync(() => GetHtmlAsync(url, forceRefresh));
-        }
-
-        public async Task<string> GetHtmlAsync(string url, bool forceRefresh = false)
+        public async Task<string> GetHtmlAsync(string url, bool forceRefresh = false, CancellationToken ct = default)
         {
             if (forceRefresh || !_htmlCache.TryGetValue(url, out string html))
             {
                 html = await GetDataWithProxyFallBack(async () =>
                 {
                     // Use GetAsync so we can read the response body even when status is non-success
-                    using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                    using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false))
                     {
-                        string content = await response.Content.ReadAsStringAsync();
+                        string content = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
                         if (!response.IsSuccessStatusCode)
                         {
                             // Include status and body to help diagnose API error
@@ -116,26 +112,21 @@
 
                         return content;
                     }
-                });
+                }).ConfigureAwait(false);
 
                 _htmlCache[url] = html;
             }
             return html;
         }
 
-        public void DownloadFile(string url, string outfilepath)
+        public async Task DownloadFileAsync(string url, string outfilepath, CancellationToken ct = default)
         {
-            AsyncHelper.RunSync(() => DownloadFileAsync(url, outfilepath));
+            await GetDataWithProxyFallBack(() => DownloadFileInternalAsync(url, outfilepath, ct)).ConfigureAwait(false);
         }
 
-        public async Task DownloadFileAsync(string url, string outfilepath)
+        private async Task DownloadFileInternalAsync(string url, string outfilepath, CancellationToken ct)
         {
-            await GetDataWithProxyFallBack(() => DownloadFileInternalAsync(url, outfilepath));
-        }
-
-        private async Task DownloadFileInternalAsync(string url, string outfilepath)
-        {
-            using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+            using (HttpResponseMessage response = await GetHttpClient().GetAsync(url, HttpCompletionOption.ResponseHeadersRead, ct).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -144,19 +135,14 @@
 
                 using (FileStream fs = new FileStream(outfilepath, FileMode.CreateNew))
                 {
-                    await response.Content.CopyToAsync(fs);
+                    await response.Content.CopyToAsync(fs, ct).ConfigureAwait(false);
                 }
             }
         }
 
-        public byte[] GetFile(string url)
+        public async Task<byte[]> GetFileAsync(string url, CancellationToken ct = default)
         {
-            return AsyncHelper.RunSync(() => GetFileAsync(url));
-        }
-
-        public async Task<byte[]> GetFileAsync(string url)
-        {
-            return await GetDataWithProxyFallBack(() => GetHttpClient().GetByteArrayAsync(url));
+            return await GetDataWithProxyFallBack(() => GetHttpClient().GetByteArrayAsync(url, ct)).ConfigureAwait(false);
         }
 
         private async Task GetDataWithProxyFallBack(Func<Task> getdata)
@@ -165,7 +151,7 @@
             {
                 try
                 {
-                    await getdata();
+                    await getdata().ConfigureAwait(false);
                     return;
                 }
                 catch (WebException wex)
@@ -184,7 +170,7 @@
             {
                 try
                 {
-                    return await getdata();
+                    return await getdata().ConfigureAwait(false);
                 }
                 catch (WebException wex)
                 {

@@ -1,7 +1,9 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Download
 {
     using System;
+    using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
 
     using Common.Notify;
 
@@ -34,20 +36,20 @@
             base.Dispose(disposing);
         }
 
-        protected override bool StartImpl()
+        protected override Task<bool> StartImpl(CancellationToken ct)
         {
-            ThreadPool.QueueUserWorkItem(GetJsonData, null);
-            return true;
+            _ = Task.Run(() => GetJsonData(ct), ct);
+            return Task.FromResult(true);
         }
 
-        private void GetJsonData(object state)
+        private async Task GetJsonData(CancellationToken ct)
         {
             try
             {
                 DownloadReporter.Total = 2;
-                DownloadManager.GetAndSaveEditions();
+                await DownloadManager.GetAndSaveEditions(ct).ConfigureAwait(false);
                 DownloadReporter.Progress();
-                Card[] cards = DownloadManager.GetCards();
+                Card[] cards = await DownloadManager.GetCards(false, ct).ToArrayAsync(ct).ConfigureAwait(false);
                 DownloadReporter.Progress();
 
                 _scryFallCardTransformer = new ScryFallCardTransformer(DownloadManager, DownloadReporter);
@@ -59,6 +61,11 @@
                 DownloadReporter.Total = cards.Length;
                 _scryFallCardTransformer.AddRange(cards);
                 _scryFallCardTransformer.Start();
+            }
+            catch (OperationCanceledException)
+            {
+                //No error, just stop the job
+                JobFinished();
             }
             catch (Exception ex)
             {

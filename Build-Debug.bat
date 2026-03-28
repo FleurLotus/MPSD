@@ -18,3 +18,4 @@ dotnet build -c Debug -v m .\MagicPictureSetDownloader\MagicPictureSetDownloader
 
 popd
 
+pause

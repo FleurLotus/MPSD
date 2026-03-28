@@ -5,6 +5,7 @@
     using System.Net;
     using System.Net.Http;
     using System.Text;
+    using System.Threading.Tasks;
 
     using Moq;
 
@@ -46,33 +47,33 @@
             Assert.That(access, Is.Not.Null);
         }
         [Test]
-        public void TestGetHtml()
+        public async Task TestGetHtmlAsync()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ReturnsHttpResponseAsync("test", HttpStatusCode.OK);
 
-            string ret = access.GetHtml(FakeAddress);
+            string ret = await access.GetHtmlAsync(FakeAddress);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
         }
 
         [Test]
-        public void TestGetHtmlWithReload()
+        public async Task TestGetHtmlAsyncWithReload()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ReturnsHttpResponseAsync("test", HttpStatusCode.OK);
 
-            string ret = access.GetHtml(FakeAddress);
+            string ret = await access.GetHtmlAsync(FakeAddress);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
 
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ReturnsHttpResponseAsync("test2", HttpStatusCode.OK);
-            ret = access.GetHtml(FakeAddress);
+            ret = await access.GetHtmlAsync(FakeAddress);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
 
-            ret = access.GetHtml(FakeAddress, true);
+            ret = await access.GetHtmlAsync(FakeAddress, true);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test2")));
         }
         [Test]
-        public void TestGetHtmlWithProxyRetry()
+        public async Task TestGetHtmlAsyncWithProxyRetry()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
 
@@ -85,11 +86,11 @@
                 e.Data.Password = "*****";
             };
 
-            string ret = access.GetHtml(FakeAddress);
+            string ret = await access.GetHtmlAsync(FakeAddress);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
         }
         [Test]
-        public void TestGetHtmlNoRetryIfNoCredential()
+        public async Task TestGetHtmlAsyncNoRetryIfNoCredential()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ThrowsAsync(new WebException("407"));
@@ -98,21 +99,28 @@
 
             access.CredentialRequiered += (o, e) => called = true;
 
-            Assert.Throws<WebException>(() => access.GetHtml(FakeAddress));
-            Assert.That(called, Is.True);
+            try
+            {
+                await access.GetHtmlAsync(FakeAddress);
+                throw new Exception("Expected WebException was not thrown.");
+            }
+            catch (WebException)
+            {
+                Assert.That(called, Is.True);
+            }
         }
         [Test]
-        public void TestGetFile()
+        public async Task TestGetFileAsync()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ReturnsHttpResponseAsync("test", HttpStatusCode.OK);
 
-            byte[] bs = access.GetFile(FakeAddress);
+            byte[] bs = await access.GetFileAsync(FakeAddress);
             string ret = Encoding.Default.GetString(bs);
             Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
         }
         [Test]
-        public void TestDownloadFile()
+        public async Task TestDownloadFile()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
             _httpMessageHandler.SetupSendAsync(HttpMethod.Get, FakeAddress).ReturnsHttpResponseAsync("test", HttpStatusCode.OK);
@@ -120,7 +128,7 @@
 
             try
             {
-                access.DownloadFile(FakeAddress, tempfile);
+                await access.DownloadFileAsync(FakeAddress, tempfile);
                 Assert.That(File.Exists(tempfile), Is.True);
                 string ret = File.ReadAllText(tempfile);
                 Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
@@ -134,7 +142,7 @@
             }
         }
         [Test]
-        public void TestDownloadFileWithProxyRetry()
+        public async Task TestDownloadFileWithProxyRetry()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
 
@@ -151,7 +159,7 @@
 
             try
             {
-                access.DownloadFile(FakeAddress, tempfile);
+                await access.DownloadFileAsync(FakeAddress, tempfile);
                 Assert.That(File.Exists(tempfile), Is.True);
                 string ret = File.ReadAllText(tempfile);
                 Assert.That(ret, Is.EqualTo(JsonConvert.SerializeObject("test")));
@@ -165,7 +173,7 @@
             }
         }
         [Test]
-        public void TestDownloadFileNoRetryIfNoCredential()
+        public async Task TestDownloadFileNoRetryIfNoCredential()
         {
             WebAccess access = new WebAccess(_httpMessageHandlerFactory.Object);
 
@@ -179,7 +187,11 @@
 
             try
             {
-                Assert.Throws<WebException>(() => access.DownloadFile(FakeAddress, tempfile));
+                await access.DownloadFileAsync(FakeAddress, tempfile);
+                throw new Exception("Expected WebException was not thrown.");
+            }
+            catch (WebException)
+            {
                 Assert.That(called, Is.True);
             }
             finally

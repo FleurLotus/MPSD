@@ -1,9 +1,11 @@
 ﻿namespace MagicPictureSetDownloader.ViewModel.Main
 {
     using System.Threading;
+    using System.Threading.Tasks;
     using System.Windows.Input;
 
     using Common.Library;
+    using Common.Threading;
     using Common.ViewModel;
     using Common.ViewModel.Command;
     using Common.ViewModel.Menu;
@@ -48,7 +50,7 @@
 
             if (Options.AutoCheckUpgrade)
             {
-                ThreadPool.QueueUserWorkItem(DoCheckNewVersion);
+                Task.Run(DoCheckNewVersion).FireAndForgetSafeAsync();
             }
 
             Analysers = new HierarchicalInfoAnalysersViewModel();
@@ -117,18 +119,12 @@
                 }
             }
         }
-        private void DoCheckNewVersion(object o)
+        private async Task DoCheckNewVersion()
         {
             try
             {
-                _programUpdater.HasNewVersionAvailable();
+                await _programUpdater.HasNewVersionAvailable(CancellationToken.None).ConfigureAwait(false);
             }
-            // ReSharper disable EmptyGeneralCatchClause
-            catch
-            {
-                //Call by threadpool must not throw exception
-            }
-            // ReSharper restore EmptyGeneralCatchClause
             finally
             {
                 UpgradeStatus = _programUpdater.Status;

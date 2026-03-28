@@ -2,14 +2,17 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
 
     public abstract class AutoDownloadViewModelBase : DownloadViewModelBase
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
-        private IReadOnlyList<KeyValuePair<string, object>> _urls;
+        private IReadOnlyList<(string url, object param)> _urls;
         private int _nextJob;
         private volatile bool _fatalException;
+        private volatile bool _isCancelled;
         private int _finishCalled;
         private const int NbThread = 5;
         private readonly ManualResetEvent _firstDoneEvent = new ManualResetEvent(false);
@@ -19,12 +22,12 @@
         {
         }
 
-        protected abstract IReadOnlyList<KeyValuePair<string, object>> GetUrls();
-        protected abstract string Download(string url, object param);
+        protected abstract IAsyncEnumerable<(string url, object param)> GetUrls(CancellationToken ct);
+        protected abstract Task<string> Download(string url, object param, CancellationToken ct);
 
-        protected override bool StartImpl()
+        protected override async Task<bool> StartImpl(CancellationToken ct)
         {
-            _urls = GetUrls();
+            _urls = await GetUrls(ct).ToArrayAsync(ct).ConfigureAwait(true);
             CountDown = _urls.Count;
             DownloadReporter.Total = CountDown;
             _finishCalled = 0;
@@ -37,14 +40,15 @@
 
             for (int i = 0; i < NbThread; i++)
             {
-                ThreadPool.QueueUserWorkItem(Downloader);
+                _ = Task.Run(() => Downloader(ct), ct);
             }
 
             return true;
         }
-        private void Downloader(object state)
+        private async Task Downloader(CancellationToken ct)
         {
             string url = null;
+            object param;
 
             while (true)
             {
@@ -52,33 +56,54 @@
                 try
                 {
                     _lock.EnterWriteLock();
-                    currentJob = _nextJob;
-                    _nextJob++;
-                    _lock.ExitWriteLock();
+                    try
+                    {
+                        currentJob = _nextJob;
+                        _nextJob++;
+                    }
+                    finally
+                    {
+                        _lock.ExitWriteLock();
+                    }
 
                     if (currentJob >= _urls.Count || IsStopping)
                     {
                         break;
                     }
 
-                    KeyValuePair<string, object> kv = _urls[currentJob];
-                    url = kv.Key;
+                    (url, param) = _urls[currentJob];
 
-                    //Do the first alone to wait for proxy if needed
-                    if (currentJob == 0 || _firstDoneEvent.WaitOne())
+                    if (currentJob != 0)
                     {
-                        if (_fatalException)
+                        int signaled = WaitHandle.WaitAny(new WaitHandle[] { _firstDoneEvent, ct.WaitHandle });
+                        if (signaled == 1) // cancellation requested
                         {
                             break;
                         }
+                    }
 
-                        string errors = Download(url, kv.Value);
-                        if (!string.IsNullOrWhiteSpace(errors))
-                        {
-                            AppendMessage(string.Format("{0} -> {1}", url, errors), false);
-                        }
+                    if (ct.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    if (_fatalException)
+                    {
+                        break;
+                    }
+
+                    string errors = await Download(url, param, ct).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(errors))
+                    {
+                        AppendMessage(string.Format("{0} -> {1}", url, errors), false);
                     }
                     DownloadReporter.Progress();
+                }
+                catch (OperationCanceledException)
+                {
+                    // Cancellation requested -> exit worker loop
+                    _isCancelled = true;
+                    break;
                 }
                 catch (Exception ex)
                 {
@@ -86,12 +111,7 @@
                     {
                         _fatalException = true;
                     }
-                    string errormessage = ex.Message;
-                    if (ex.InnerException != null)
-                    {
-                        errormessage = ex.InnerException.Message;
-                    }
-
+                    string errormessage = ex.InnerException?.Message ?? ex.Message;
                     AppendMessage(string.Format("{0} -> {1}", url, errormessage), false);
                 }
                 finally
@@ -104,7 +124,7 @@
                 }
 
                 int newcount = Interlocked.Decrement(ref CountDown);
-                if ((newcount == 0 || IsStopping || _fatalException) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
+                if ((newcount == 0 || IsStopping || _fatalException || _isCancelled) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
                 {
                     DownloadReporter.Finish();
                     JobFinished();

@@ -3,9 +3,6 @@
     <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
     <AssemblyTitle>Common.Database</AssemblyTitle>
     <Product>Common.Database</Product>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common.Enums\Common.Enums.csproj" />
