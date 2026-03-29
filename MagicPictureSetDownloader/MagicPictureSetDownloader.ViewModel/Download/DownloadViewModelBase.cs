@@ -12,6 +12,9 @@
 
     using MagicPictureSetDownloader.Core;
     using MagicPictureSetDownloader.Db;
+    using MagicPictureSetDownloader.Interface;
+
+    using Microsoft.Extensions.Logging;
 
     public abstract class DownloadViewModelBase : NotifyPropertyChangedBase, IDisposable
     {
@@ -19,6 +22,7 @@
 
         protected readonly DownloadManager DownloadManager;
         protected IDispatcherInvoker DispatcherInvoker;
+        private static readonly ILogger Logger = LogManager.Factory.CreateLogger<DownloadViewModelBase>();
 
         protected int CountDown;
         protected bool IsStopping;
@@ -151,6 +155,8 @@
         }
         protected void AppendMessage(string msg, bool before)
         {
+            Logger.LogError(msg);
+
             lock (_stringBuilder)
             {
                 if (before)

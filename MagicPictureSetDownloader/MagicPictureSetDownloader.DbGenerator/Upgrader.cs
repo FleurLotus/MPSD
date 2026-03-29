@@ -11,6 +11,10 @@
     using Common.SQL;
     using Common.SQLite;
 
+    using MagicPictureSetDownloader.Interface;
+
+    using Microsoft.Extensions.Logging;
+
     public class Upgrader
     {
         private const string VersionQuery = "SELECT Major FROM Version";
@@ -18,6 +22,7 @@
         private const string UpdateVersionQuery = "UPDATE Version Set Major = ";
 #endif
         private readonly string _connectionString;
+        private readonly ILogger Logger = LogManager.Factory.CreateLogger<Upgrader>();
         private static readonly Version _applicationVersion;
 
         private class TemporaryDatabase : IDisposable
@@ -69,6 +74,7 @@
             }
             catch (Exception ex)
             {
+                Logger.LogError(ex, "Error while upgrading database");
                 throw new Exception("Error while upgrading database", ex);
             }
         }

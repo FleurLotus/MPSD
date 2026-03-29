@@ -13,4 +13,7 @@
     <PackageReference Include="Common.SQLite" />
     <PackageReference Include="Common.Zip" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MagicPictureSetDownloader.Interface\MagicPictureSetDownloader.Interface.csproj" />
+  </ItemGroup>
 </Project>

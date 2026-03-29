@@ -4,6 +4,7 @@
     <PackageReference Update="Common.Collection" Version="1.2.0" />
     <PackageReference Update="Common.Database" Version="1.2.0" />
     <PackageReference Update="Common.Drawing" Version="1.2.0" />
+    <PackageReference Update="Common.Log" Version="1.2.0" />
     <PackageReference Update="Common.SQLite" Version="1.2.0" />
     <PackageReference Update="Common.Threading" Version="1.2.0" />
     <PackageReference Update="Common.ViewModel" Version="1.2.0" />
@@ -18,6 +19,7 @@
     <PackageReference Update="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.142" />
     <PackageReference Update="SharpVectors.Wpf" Version="1.8.5" />
     <PackageReference Update="System.Runtime.Caching" Version="10.0.5" />
+    <PackageReference Update="Microsoft.Extensions.Logging" Version="10.0.5" />
     <PackageReference Update="VirtualizingWrapPanel" Version="2.5.1" />
   </ItemGroup>
 </Project>

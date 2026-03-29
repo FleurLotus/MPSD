@@ -11,6 +11,8 @@
     using MagicPictureSetDownloader.Interface;
     using MagicPictureSetDownloader.ScryFall.JsonLite;
 
+    using Microsoft.Extensions.Logging;
+
     public class ScryFallCardTransformer
     {
         public event EventHandler<EventArgs<string>> Error;
@@ -22,11 +24,13 @@
 
         private readonly BlockingCollection<Card> _inputs = new BlockingCollection<Card>();
         private readonly BlockingCollection<CardWithExtraInfo> _parsedInput = new BlockingCollection<CardWithExtraInfo>(100);
+        private readonly ILogger _logger;
 
         public ScryFallCardTransformer(DownloadManager downloadManager, IProgressReporter progressReporter)
         {
             _downloadManager = downloadManager;
             _progressReporter = progressReporter;
+            _logger = LogManager.Factory.CreateLogger<ScryFallCardTransformer>();
         }
 
         public void AddRange(IEnumerable<Card> cards)
@@ -259,6 +263,7 @@
         }
         private void SendError(Exception ex, string url)
         {
+            _logger.LogError("{Url} -> {ErrorMessage}", url, ex.Message);
             OnError($"{url} -> {ex.Message}");
         }
         private void OnError(string message)
