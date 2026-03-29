@@ -4,4 +4,7 @@
     <AssemblyTitle>MagicPictureSetDownloader.Interface</AssemblyTitle>
     <Product>MagicPictureSetDownloader.Interface</Product>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Common.Log" />
+  </ItemGroup>
 </Project>

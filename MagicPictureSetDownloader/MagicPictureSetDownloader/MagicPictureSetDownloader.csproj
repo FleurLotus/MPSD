@@ -30,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Common.WPF" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
     <PackageReference Include="Extended.Wpf.Toolkit" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
     <PackageReference Include="SharpVectors.Wpf" />

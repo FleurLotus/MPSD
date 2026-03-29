@@ -13,6 +13,10 @@
     using Common.Web;
     using Common.Zip;
 
+    using MagicPictureSetDownloader.Interface;
+
+    using Microsoft.Extensions.Logging;
+
     public enum UpgradeStatus
     {
         NotChecked,
@@ -23,6 +27,7 @@
 
     public class ProgramUpgrader
     {
+        private static readonly ILogger Logger = LogManager.Factory.CreateLogger<ProgramUpgrader>();
         private readonly WebAccess _webaccess = new WebAccess();
         private Uri _newVersionUrl;
 
@@ -54,12 +59,14 @@
                     return JsonSerializer.Deserialize<GitHubRelease>(json);
                 }
             }
-            catch (WebException)
+            catch (WebException ex)
             {
+                Logger.LogError(ex, "Can't get latest release from GitHub");
                 // network error or authentication required - swallow and try artifact fallback
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogError(ex, "Can't get latest release from GitHub");
                 // non-fatal parse error - fallback to artifacts
             }
 
