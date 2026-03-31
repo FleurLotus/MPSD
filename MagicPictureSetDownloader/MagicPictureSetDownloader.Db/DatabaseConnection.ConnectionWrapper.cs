@@ -11,12 +11,12 @@
         {
             private bool _disposed;
             private readonly IDbConnection _cnx;
-            private readonly bool _bacthMode;
+            private readonly bool _batchMode;
 
-            public ConnectionWrapper(IDbConnection cnx, bool bacthMode)
+            public ConnectionWrapper(IDbConnection cnx, bool batchMode)
             {
                 _cnx = cnx;
-                _bacthMode = bacthMode;
+                _batchMode = batchMode;
             }
 
             public IDbTransaction BeginTransaction(IsolationLevel il)
@@ -117,7 +117,7 @@
 
             private void CloseInner()
             {
-                if (!_bacthMode)
+                if (!_batchMode)
                 {
                     _cnx.Close();
                 }
