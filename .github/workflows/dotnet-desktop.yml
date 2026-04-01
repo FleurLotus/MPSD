@@ -154,7 +154,7 @@ jobs:
 
     # Publish Result
     - name: Publish test results to GitHub
-      uses: dorny/test-reporter@v2
+      uses: dorny/test-reporter@v3
       if: always()
       with:
         name: Unit Test Results
