@@ -5,7 +5,6 @@ namespace MagicPictureSetDownloader.Db
     using System.Data;
     using System.Linq;
 
-    using Common.Collection;
     using Common.Database;
     using Common.Threading;
 
@@ -24,7 +23,6 @@ namespace MagicPictureSetDownloader.Db
                 return null;
             }
 
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 ICardEdition cardEdition = _cardEditions.Values.FirstOrDefault(ce => ce.IdCard == card.Id && ce.IdEdition == edition.Id);
@@ -38,7 +36,6 @@ namespace MagicPictureSetDownloader.Db
                 return null;
             }
 
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return _cardEditions.Values.Where(ce => ce.IdCard == card.Id && ce.IdEdition == edition.Id).Select(ce => ce.IdScryFall).ToArray();
@@ -51,7 +48,6 @@ namespace MagicPictureSetDownloader.Db
                 return null;
             }
 
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 ICardEdition cardEdition = _cardEditions.Values.FirstOrDefault(ce => ce.FlavorName == flavorName && ce.IdEdition == edition.Id);
@@ -60,7 +56,6 @@ namespace MagicPictureSetDownloader.Db
         }
         public IEdition GetEditionFromCode(string code)
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return _editions.FirstOrDefault(ed => ed.IsCode(code));
@@ -68,7 +63,6 @@ namespace MagicPictureSetDownloader.Db
         }
         public IEdition GetEditionById(int idEdition)
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return _editions.FirstOrDefault(ed => ed.Id == idEdition);
@@ -86,7 +80,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new ReaderLock(_lock))
             {
-                return _collections.FirstOrDefault(c => c.Name == name);
+                return GetCollectionRead(name);
             }
         }
         public ICollection<ICardCollection> GetAllCollections()
@@ -99,74 +93,16 @@ namespace MagicPictureSetDownloader.Db
 
         public ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection)
         {
-            if (cardCollection == null)
-            {
-                return null;
-            }
-
-            return GetCardCollection(cardCollection.Id);
-        }
-        private ICollection<ICardInCollectionCount> GetCardCollection(int idCollection)
-        {
             using (new ReaderLock(_lock))
             {
-                return _allCardInCollectionCount.SelectMany(kv => kv.Value).Where(cicc => cicc.IdCollection == idCollection).ToArray();
-            }
-        }
-        public ICollection<ICardInCollectionCount> GetCardCollection(ICardCollection cardCollection, string idScryFall)
-        {
-            if (cardCollection == null)
-            {
-                return null;
-            }
-
-            return GetCardCollection(cardCollection.Id, idScryFall);
-        }
-        private ICollection<ICardInCollectionCount> GetCardCollection(int idCollection, string idScryFall)
-        {
-            using (new ReaderLock(_lock))
-            {
-                ICardEdition cardEdition = GetCardEdition(idScryFall);
-
-                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
-                {
-                    return list.Where(cicc => cicc.IdCollection == idCollection && cicc.IdScryFall == idScryFall).ToArray();
-                }
-                return null;
-            }
-        }
-        public ICardInCollectionCount GetCardCollection(ICardCollection cardCollection, string idScryFall, int idLanguage)
-        {
-            if (cardCollection == null)
-            {
-                return null;
-            }
-
-            return GetCardCollection(cardCollection.Id, idScryFall, idLanguage);
-        }
-        private ICardInCollectionCount GetCardCollection(int idCollection, string idScryFall, int idLanguage)
-        {
-            using (new ReaderLock(_lock))
-            {
-                ICardEdition cardEdition = GetCardEdition(idScryFall);
-
-                if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
-                {
-                    return list.FirstOrDefault(cicc => cicc.IdCollection == idCollection && cicc.IdScryFall == idScryFall && cicc.IdLanguage == idLanguage);
-                }
-                return null;
+                return GetCardCollectionRead(cardCollection?.Id);
             }
         }
         public ICollection<ICardInCollectionCount> GetCardCollectionStatistics(ICard card)
         {
             using (new ReaderLock(_lock))
             {
-                if (_allCardInCollectionCount.TryGetValue(card.Id, out IList<ICardInCollectionCount> list))
-                {
-                    return new List<ICardInCollectionCount>(list).AsReadOnly();
-                }
-
-                return new List<ICardInCollectionCount>();
+                return GetCardCollectionStatisticsRead(card);
             }
         }
 
@@ -174,7 +110,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                if (GetCollection(name) != null || string.IsNullOrWhiteSpace(name))
+                if (GetCollectionRead(name) != null || string.IsNullOrWhiteSpace(name))
                 {
                     return null;
                 }
@@ -191,70 +127,11 @@ namespace MagicPictureSetDownloader.Db
             {
                 return;
             }
-
-            using (new WriterLock(_lock))
+            using (BatchMode())
             {
-                using (BatchMode())
+                using (new WriterLock(_lock))
                 {
-                    int countToAdd = cardCount.GetCount(CardCountKeys.Standard);
-                    int foilCountToAdd = cardCount.GetCount(CardCountKeys.Foil);
-
-                    ICardInCollectionCount cardInCollection = GetCardCollection(idCollection, idScryFall, idLanguage);
-                    if (cardInCollection == null)
-                    {
-                        //Insert new 
-                        if (cardCount.Any(kv => kv.Value < 0) || cardCount.GetTotalCount() == 0)
-                        {
-                            return;
-                        }
-
-                        CardInCollectionCount newCardInCollectionCount = new CardInCollectionCount
-                        {
-                            IdCollection = idCollection,
-                            IdScryFall = idScryFall,
-                            Number = countToAdd,
-                            FoilNumber = foilCountToAdd,
-                            IdLanguage = idLanguage
-                        };
-
-                        AddToDbAndUpdateReferential(newCardInCollectionCount, InsertInReferential);
-
-                        AuditAddCard(idCollection, idScryFall, idLanguage, cardCount);
-                        return;
-                    }
-
-                    //Update
-                    int newCount = countToAdd + cardInCollection.Number;
-                    int newFoilCount = foilCountToAdd + cardInCollection.FoilNumber;
-
-                    if (newCount < 0 || newFoilCount < 0)
-                    {
-                        return;
-                    }
-
-                    if (cardInCollection is not CardInCollectionCount updateCardInCollectionCount)
-                    {
-                        return;
-                    }
-
-                    if (newCount + newFoilCount == 0)
-                    {
-                        RemoveFromDbAndUpdateReferential(updateCardInCollectionCount, RemoveFromReferential);
-
-                        AuditAddCard(idCollection, idScryFall, idLanguage, cardCount);
-
-                        return;
-                    }
-
-                    updateCardInCollectionCount.Number = newCount;
-                    updateCardInCollectionCount.FoilNumber = newFoilCount;
-
-                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
-                    {
-                        Mapper<CardInCollectionCount>.UpdateOne(cnx, updateCardInCollectionCount);
-                    }
-
-                    AuditAddCard(idCollection, idScryFall, idLanguage, cardCount);
+                    InsertOrUpdateCardInCollectionWrite(idCollection, idScryFall, idLanguage, cardCount);
                 }
             }
         }
@@ -277,130 +154,91 @@ namespace MagicPictureSetDownloader.Db
                 return;
             }
 
-            using (new WriterLock(_lock))
+            using (BatchMode())
             {
-                ICardInCollectionCount cardInCollectionCount = GetCardCollection(collection, idScryFall, idLanguage);
-                if (cardInCollectionCount == null)
+                using (new WriterLock(_lock))
                 {
-                    return;
+                    ICardInCollectionCount cardInCollectionCount = GetCardCollectionRead(collection?.Id, idScryFall, idLanguage);
+                    if (cardInCollectionCount == null)
+                    {
+                        return;
+                    }
+
+                    if (cardInCollectionCount.GetCount(cardCountKey) < countToMove)
+                    {
+                        return;
+                    }
+
+                    CardCount cardCountSource = new CardCount
+                    {
+                        { cardCountKey, -countToMove }
+                    };
+
+                    CardCount cardCountDestination = new CardCount
+                    {
+                        { cardCountKey, countToMove }
+                    };
+
+                    InsertOrUpdateCardInCollectionWrite(collection.Id, idScryFall, idLanguage, cardCountSource);
+                    InsertOrUpdateCardInCollectionWrite(collectionDestination.Id, idScryFall, idLanguage, cardCountDestination);
                 }
-
-                if (cardInCollectionCount.GetCount(cardCountKey) < countToMove)
-                {
-                    return;
-                }
-
-                CardCount cardCountSource = new CardCount
-                {
-                    { cardCountKey, -countToMove }
-                };
-
-                CardCount cardCountDestination = new CardCount
-                {
-                    { cardCountKey, countToMove }
-                };
-
-                InsertOrUpdateCardInCollection(collection.Id, idScryFall, idLanguage, cardCountSource);
-                InsertOrUpdateCardInCollection(collectionDestination.Id, idScryFall, idLanguage, cardCountDestination);
             }
         }
         public ICardCollection UpdateCollectionName(string oldName, string name)
         {
-            return UpdateCollectionName(GetCollection(oldName), name);
+            using (new WriterLock(_lock))
+            {
+                return UpdateCollectionNameWrite(oldName, name);
+            }
         }
         public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
         {
             using (new WriterLock(_lock))
             {
-                if (collection == null || string.IsNullOrWhiteSpace(name) || GetCollection(name) != null)
-                {
-                    return collection;
-                }
-
-                if (collection is not CardCollection newCollection)
-                {
-                    return collection;
-                }
-
-                newCollection.Name = name;
-
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
-                {
-                    Mapper<CardCollection>.UpdateOne(cnx, newCollection);
-                }
-
-                return newCollection;
+                return UpdateCollectionNameWrite(collection, name);
             }
         }
 
         public void MoveCollection(string toBeDeletedCollectionName, string toAddCollectionName)
         {
-            using (new WriterLock(_lock))
+            using (BatchMode())
             {
-                ICardCollection toBeDeletedCollection = GetCollection(toBeDeletedCollectionName);
-                if (toBeDeletedCollection == null)
+                using (new WriterLock(_lock))
                 {
-                    return;
-                }
-
-                ICollection<ICardInCollectionCount> collectionToRemove = GetCardCollection(toBeDeletedCollection);
-                if (collectionToRemove == null || collectionToRemove.Count == 0)
-                {
-                    return;
-                }
-
-                ICardCollection toAddCollection = GetCollection(toAddCollectionName);
-                if (toAddCollection == null)
-                {
-                    return;
-                }
-
-                using (BatchMode())
-                {
-                    foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
+                    ICardCollection toBeDeletedCollection = GetCollectionRead(toBeDeletedCollectionName);
+                    if (toBeDeletedCollection == null)
                     {
-                        InsertOrUpdateCardInCollection(toAddCollection.Id, cardInCollectionCount.IdScryFall, cardInCollectionCount.IdLanguage, cardInCollectionCount.GetCardCount());
+                        return;
                     }
 
-                    DeleteAllCardInCollection(toBeDeletedCollectionName);
+                    ICollection<ICardInCollectionCount> collectionToRemove = GetCardCollectionRead(toBeDeletedCollection.Id);
+                    if (collectionToRemove == null || collectionToRemove.Count == 0)
+                    {
+                        return;
+                    }
+
+                    ICardCollection toAddCollection = GetCollectionRead(toAddCollectionName);
+                    if (toAddCollection == null)
+                    {
+                        return;
+                    }
+
+                    foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
+                    {
+                        InsertOrUpdateCardInCollectionWrite(toAddCollection.Id, cardInCollectionCount.IdScryFall, cardInCollectionCount.IdLanguage, cardInCollectionCount.GetCardCount());
+                    }
+
+                    DeleteAllCardInCollectionWrite(toBeDeletedCollectionName);
                 }
             }
         }
-
         public void DeleteAllCardInCollection(string name)
         {
-            using (new WriterLock(_lock))
+            using (BatchMode())
             {
-                ICardCollection cardCollection = GetCollection(name);
-                if (cardCollection == null)
+                using (new WriterLock(_lock))
                 {
-                    return;
-                }
-
-                ICollection<ICardInCollectionCount> collection = GetCardCollection(cardCollection);
-                if (collection == null || collection.Count == 0)
-                {
-                    return;
-                }
-
-                using (BatchMode())
-                {
-                    using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
-                    {
-                        Mapper<CardInCollectionCount>.DeleteMulti(cnx, collection.Cast<CardInCollectionCount>());
-                    }
-
-                    foreach (ICardInCollectionCount cardInCollectionCount in collection)
-                    {
-                        ICardCount cardCount = new CardCount();
-                        foreach (KeyValuePair<ICardCountKey, int> kv in cardInCollectionCount.GetCardCount())
-                        {
-                            cardCount.Add(kv.Key, -kv.Value);
-                        }
-                        AuditAddCard(cardInCollectionCount.IdCollection, cardInCollectionCount.IdScryFall, cardInCollectionCount.IdLanguage, cardCount);
-
-                        RemoveFromReferential(cardInCollectionCount);
-                    }
+                    DeleteAllCardInCollectionWrite(name);
                 }
             }
         }
@@ -408,7 +246,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                ICardCollection cardCollection = GetCollection(name);
+                ICardCollection cardCollection = GetCollectionRead(name);
                 if (cardCollection == null)
                 {
                     return;
@@ -421,21 +259,21 @@ namespace MagicPictureSetDownloader.Db
 
         public void PreconstructedDeckToCollection(IPreconstructedDeck preconstructedDeck, ICardCollection collection, ILanguage language)
         {
-            using (new WriterLock(_lock))
+            using (BatchMode())
             {
-                if (preconstructedDeck == null || collection == null || language == null)
+                using (new WriterLock(_lock))
                 {
-                    return;
-                }
-                ICollection<IPreconstructedDeckCardEdition> deckComposition = GetPreconstructedDeckCards(preconstructedDeck);
-                if (deckComposition == null || deckComposition.Count == 0)
-                {
-                    return;
-                }
-                int idLanguage = language.Id;
+                    if (preconstructedDeck == null || collection == null || language == null)
+                    {
+                        return;
+                    }
+                    ICollection<IPreconstructedDeckCardEdition> deckComposition = GetPreconstructedDeckCardsRead(preconstructedDeck.Id);
+                    if (deckComposition == null || deckComposition.Count == 0)
+                    {
+                        return;
+                    }
+                    int idLanguage = language.Id;
 
-                using (BatchMode())
-                {
                     foreach (IPreconstructedDeckCardEdition card in deckComposition)
                     {
                         CardCount cardCount = new CardCount
@@ -443,7 +281,7 @@ namespace MagicPictureSetDownloader.Db
                             { CardCountKeys.Standard, card.Number }
                         };
 
-                        InsertOrUpdateCardInCollection(collection.Id, card.IdScryFall, idLanguage, cardCount);
+                        InsertOrUpdateCardInCollectionWrite(collection.Id, card.IdScryFall, idLanguage, cardCount);
                     }
                 }
             }
@@ -455,8 +293,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void InsertInReferential(ICardInCollectionCount cardInCollectionCount)
         {
-            //No call to private ICardEdition GetCardEdition(string idScryFall) because call in CheckReferentialLoaded()
-            ICardEdition cardEdition = _cardEditions.GetOrDefault(cardInCollectionCount.IdScryFall);
+            ICardEdition cardEdition = GetCardEditionRead(cardInCollectionCount.IdScryFall);
 
             if (!_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
             {
@@ -478,8 +315,7 @@ namespace MagicPictureSetDownloader.Db
         }
         private void RemoveFromReferential(ICardInCollectionCount cardInCollectionCount)
         {
-            //No call to private ICardEdition GetCardEdition(string idScryFall) because call in CheckReferentialLoaded()
-            ICardEdition cardEdition = _cardEditions.GetOrDefault(cardInCollectionCount.IdScryFall);
+            ICardEdition cardEdition = GetCardEditionRead(cardInCollectionCount.IdScryFall);
 
             if (_allCardInCollectionCount.TryGetValue(cardEdition.IdCard, out IList<ICardInCollectionCount> list))
             {

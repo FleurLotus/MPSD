@@ -14,8 +14,6 @@ namespace MagicPictureSetDownloader.Db
 
     internal partial class MagicDatabase
     {
-        private bool _referentialLoaded;
-
         private readonly IList<IEdition> _editions = new List<IEdition>();
         private readonly IDictionary<string, ILanguage> _languages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
         private readonly IDictionary<string, ILanguage> _alternativeNameLanguages = new Dictionary<string, ILanguage>(StringComparer.InvariantCultureIgnoreCase);
@@ -39,7 +37,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                IEdition edition = GetEdition(sourceName);
+                IEdition edition = GetEditionRead(sourceName);
                 if (edition == null)
                 {
                     Edition realEdition = new Edition
@@ -78,7 +76,7 @@ namespace MagicPictureSetDownloader.Db
             }
             using (new WriterLock(_lock))
             {
-                ICard card = GetCard(name);
+                ICard card = GetCardRead(name);
                 if (null == card)
                 {
                     Card c = new Card { Name = name, Layout = layout };
@@ -98,7 +96,7 @@ namespace MagicPictureSetDownloader.Db
                 ICard refCard = _cardsbyId.GetOrDefault(idCard);
                 if (null != refCard)
                 {
-                    ICardFace cardface = GetCardFace(idCard, name);
+                    ICardFace cardface = GetCardFaceRead(idCard, name);
                     if (cardface == null)
                     {
                         CardFace cardFace = new CardFace
@@ -115,23 +113,8 @@ namespace MagicPictureSetDownloader.Db
                             IsMainFace = isMainFace
                         };
 
-                        InsertNewCardFace(refCard, cardFace);
+                        InsertNewCardFaceWrite(refCard, cardFace);
                     }
-                }
-            }
-        }
-        private void InsertNewCardFace(ICard card, ICardFace cardFace)
-        {
-            if (card == null)
-            {
-                return;
-            }
-
-            using (new WriterLock(_lock))
-            {
-                if (!card.HasCardFace(cardFace.Name))
-                {
-                    AddToDbAndUpdateReferential((CardFace) cardFace, InsertInReferential);
                 }
             }
         }
@@ -148,7 +131,7 @@ namespace MagicPictureSetDownloader.Db
 
             using (new WriterLock(_lock))
             {
-                ICardEdition cd = GetCardEdition(idScryFall);
+                ICardEdition cd = GetCardEditionRead(idScryFall);
                 IReadOnlyDictionary<CardIdSource, IReadOnlyList<string>> allExternalIds = cd.ExternalId;
 
                 if (allExternalIds.TryGetValue(cardIdSource, out IReadOnlyList<string> externalIdList))
@@ -173,16 +156,16 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                int idRarity = GetRarityId(rarity);
-                int idCard = GetCard(name).Id;
-                int idEdition = GetEditionByCode(editionCode).Id;
+                int idRarity = GetRarityRead(rarity).Id;
+                int idCard = GetCardRead(name).Id;
+                int idEdition = GetEditionByCodeRead(editionCode).Id;
 
                 if (string.IsNullOrEmpty(idScryFall))
                 {
                     throw new ApplicationDbException("Data are not filled correctedly");
                 }
 
-                if (GetCardEdition(idScryFall) != null)
+                if (GetCardEditionRead(idScryFall) != null)
                 {
                     return;
                 }
@@ -211,7 +194,7 @@ namespace MagicPictureSetDownloader.Db
 
             using (new WriterLock(_lock))
             {
-                IOption option = GetOption(type, key);
+                IOption option = GetOptionRead(type, key);
 
                 if (option == null)
                 {
@@ -231,7 +214,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                if (GetBlock(blockName) != null)
+                if (GetBlockRead(blockName) != null)
                 {
                     return;
                 }
@@ -244,7 +227,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                if (GetLanguage(languageName) != null)
+                if (GetLanguageRead(languageName) != null)
                 {
                     return;
                 }
@@ -262,10 +245,10 @@ namespace MagicPictureSetDownloader.Db
                 return;
             }
 
-            int idLanguage = GetLanguage(language).Id;
-
             using (new WriterLock(_lock))
             {
+                int idLanguage = GetLanguageRead(language).Id;
+
                 if (!refCard.HasTranslation(idLanguage))
                 {
                     Translate translate = new Translate { IdCard = idCard, IdLanguage = idLanguage, Name = name };
@@ -275,13 +258,13 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewPrice(string idScryFall, DateTime addDate, string source, bool foil, int value)
         {
-            if (GetCardEdition(idScryFall) == null)
-            {
-                return;
-            }
-
             using (new WriterLock(_lock))
             {
+                if (GetCardEditionRead(idScryFall) == null)
+                {
+                    return;
+                }
+
                 Price price = new Price { IdScryFall = idScryFall, AddDate = addDate, Source = source, Foil = foil, Value = value };
                 AddToDbAndUpdateReferential(price, InsertInReferential);
             }
@@ -290,7 +273,7 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                if (GetPreconstructedDeck(idEdition, preconstructedDeckName) != null)
+                if (GetPreconstructedDeckRead(idEdition, preconstructedDeckName) != null)
                 {
                     return;
                 }
@@ -303,12 +286,12 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new WriterLock(_lock))
             {
-                if (GetPreconstructedDeck(idPreconstructedDeck) == null)
+                if (GetPreconstructedDeckRead(idPreconstructedDeck) == null)
                 {
                     return;
                 }
 
-                IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCard(idPreconstructedDeck, idScryFall);
+                IPreconstructedDeckCardEdition preconstructedDeckCard = GetPreconstructedDeckCardRead(idPreconstructedDeck, idScryFall);
                 if (preconstructedDeckCard == null)
                 {
                     //Insert new 
@@ -364,7 +347,7 @@ namespace MagicPictureSetDownloader.Db
 
             using (new WriterLock(_lock))
             {
-                IOption option = GetOption(type, key);
+                IOption option = GetOptionRead(type, key);
 
                 if (option == null)
                 {
@@ -512,8 +495,6 @@ namespace MagicPictureSetDownloader.Db
             }
 
             _pictureDatabase.LoadAllTreePicture();
-
-            _referentialLoaded = true;
         }
         private void InsertInReferential(IRarity rarity)
         {
@@ -668,17 +649,11 @@ namespace MagicPictureSetDownloader.Db
                 list.Remove(preconstructedDeckCardEdition);
             }
         }
-        private void CheckReferentialLoaded()
+        public void Initialize()
         {
-            if (!_referentialLoaded)
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
-                {
-                    if (!_referentialLoaded)
-                    {
-                        LoadReferentials();
-                    }
-                }
+                LoadReferentials();
             }
         }
 

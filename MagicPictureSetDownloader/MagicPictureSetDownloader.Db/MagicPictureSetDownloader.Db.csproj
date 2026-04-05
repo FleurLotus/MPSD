@@ -17,6 +17,9 @@
     <Compile Update="MagicDatabase.Collection.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>
+    <Compile Update="MagicDatabase.Core.cs">
+      <DependentUpon>MagicDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Update="MagicDatabase.Referentiel.cs">
       <DependentUpon>MagicDatabase.cs</DependentUpon>
     </Compile>

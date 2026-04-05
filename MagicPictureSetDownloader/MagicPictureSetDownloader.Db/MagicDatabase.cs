@@ -19,7 +19,7 @@ namespace MagicPictureSetDownloader.Db
                                            IMagicDatabaseReadAndUpdate
 
     {
-        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
         private readonly DatabaseConnection _databaseConnection;
         private readonly PictureDatabase _pictureDatabase;
         //To optimize display
@@ -34,31 +34,9 @@ namespace MagicPictureSetDownloader.Db
         //Unitary Get
         public ICard GetCard(string name)
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _cards.GetOrDefault(name) ?? _cardNameSimple.GetOrDefault(name);
-            }
-        }
-        //Unitary Get
-        public ICardFace GetCardFace(int idCard, string name)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                ICard card = _cardsbyId.GetOrDefault(idCard);
-                if (card != null)
-                {
-                    if (card.MainCardFace?.Name == name)
-                    {
-                        return card.MainCardFace;
-                    }
-                    if (card.OtherCardFace?.Name == name)
-                    {
-                        return card.OtherCardFace;
-                    }
-                }
-                return null;
+                return GetCardRead(name);
             }
         }
 
@@ -76,27 +54,23 @@ namespace MagicPictureSetDownloader.Db
         }
         public IEdition GetEdition(string sourceName)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
-                return _editions.FirstOrDefault(ed => string.Equals(ed.Name, sourceName, StringComparison.InvariantCultureIgnoreCase));
+                return GetEditionRead(sourceName);
             }
         }
         public IEdition GetEditionByCode(string code)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
-                return _editions.FirstOrDefault(ed => string.Equals(ed.Code, code, StringComparison.InvariantCultureIgnoreCase));
+                return GetEditionByCodeRead(code);
             }
         }
         public IEdition GetEditionByIdScryFall(string idScryFall)
         {
             using (new ReaderLock(_lock))
             {
-                ICardEdition cardEdition = GetCardEdition(idScryFall);
+                ICardEdition cardEdition = GetCardEditionRead(idScryFall);
                 if (cardEdition == null)
                 {
                     return null;
@@ -109,30 +83,11 @@ namespace MagicPictureSetDownloader.Db
         {
             using (new ReaderLock(_lock))
             {
-                ICardEdition cardEdition = GetCardEdition(idScryFall);
-                if (cardEdition == null)
-                {
-                    return null;
-                }
-
-                return _cardsbyId.GetOrDefault(cardEdition.IdCard);
-            }
-        }
-        public ICardEdition GetCardEditionByExternalId(CardIdSource cardSource, string id)
-        {
-            using (new ReaderLock(_lock))
-            {
-                if (_cardEditionsByExternalId.TryGetValue($"{cardSource}{id}", out ICardEdition cardEdition))
-                {
-                    return cardEdition;
-                }
-                return null;
+                return GetCardByIdScryFallRead(idScryFall);
             }
         }
         public ILanguage GetLanguage(int idLanguage)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
                 return _languages.Values.FirstOrDefault(l => l.Id == idLanguage);
@@ -140,34 +95,36 @@ namespace MagicPictureSetDownloader.Db
         }
         public IBlock GetBlock(string blockName)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
-                return _blocks.Values.FirstOrDefault(b => string.Compare(b.Name, blockName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                return GetBlockRead(blockName);
             }
         }
         public ILanguage GetDefaultLanguage()
         {
-            return GetLanguage(Constants.Unknown);
+            using (new ReaderLock(_lock))
+            {
+                return GetLanguageRead(Constants.Unknown);
+            }
         }
         public ILanguage GetEnglishLanguage()
         {
-            return GetLanguage(Constants.English);
+            using (new ReaderLock(_lock))
+            {
+                return GetLanguageRead(Constants.English);
+            }
         }
         public IList<ILanguage> GetLanguages(string idScryFall)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
-                ICard card = GetCardByIdScryFall(idScryFall);
+                ICard card = GetCardByIdScryFallRead(idScryFall);
                 if (card == null)
                 {
                     return null;
                 }
 
-                IList<ILanguage> languages = new List<ILanguage> { GetDefaultLanguage() };
+                IList<ILanguage> languages = new List<ILanguage> { GetLanguageRead(Constants.Unknown) };
                 foreach (ILanguage language in _languages.Values.Where(l => !languages.Contains(l) && card.HasTranslation(l.Id)))
                 {
                     languages.Add(language);
@@ -178,60 +135,18 @@ namespace MagicPictureSetDownloader.Db
         }
         public IPreconstructedDeck GetPreconstructedDeck(int? idEdition, string preconstructedDeckName)
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                return _preconstructedDecks.Values.FirstOrDefault(pd => pd.IdEdition == idEdition && string.Compare(pd.Name, preconstructedDeckName, StringComparison.InvariantCultureIgnoreCase) == 0);
+                return GetPreconstructedDeckRead(idEdition, preconstructedDeckName);
             }
         }
         public ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck)
         {
-            if (preconstructedDeck == null)
-            {
-                return null;
-            }
-
-            return GetPreconstructedDeckCards(preconstructedDeck.Id);
-        }
-        private ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(int idPreconstructedDeck)
-        {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
-                if (_preconstructedDeckCards.TryGetValue(idPreconstructedDeck, out IList<IPreconstructedDeckCardEdition> preconstructedDeckCards))
-                {
-                    return preconstructedDeckCards.ToArray();
-                }
-                return Array.Empty<IPreconstructedDeckCardEdition>();
+                return GetPreconstructedDeckCardsRead(preconstructedDeck?.Id);
             }
         }
-        private IPreconstructedDeckCardEdition GetPreconstructedDeckCard(int idPreconstructedDeck, string idScryFall)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                ICollection<IPreconstructedDeckCardEdition> preconstructedDeckCards = GetPreconstructedDeckCards(idPreconstructedDeck);
-                if (preconstructedDeckCards == null)
-                {
-                    return null;
-                }
-
-                return preconstructedDeckCards.FirstOrDefault(pdc => pdc.IdScryFall == idScryFall);
-            }
-        }
-        public IPreconstructedDeck GetPreconstructedDeck(int idPreconstructedDeck)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                if (_preconstructedDecks.TryGetValue(idPreconstructedDeck, out IPreconstructedDeck preconstructedDeck))
-                {
-                    return preconstructedDeck;
-                }
-                return null;
-            }
-        }
-
         public IOption GetOption(TypeOfOption type, string key)
         {
             IList<IOption> options = GetOptions(type);
@@ -241,14 +156,12 @@ namespace MagicPictureSetDownloader.Db
         //Ensembly Get
         public ICollection<ICardAllDbInfo> GetAllInfos(int onlyInCollectionId = -1)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
                 ICollection<ICardInCollectionCount> collection = null;
                 if (onlyInCollectionId != -1)
                 {
-                    collection = GetCardCollection(onlyInCollectionId);
+                    collection = GetCardCollectionRead(onlyInCollectionId);
                 }
 
                 if (collection == null && _cacheForAllDbInfos != null)
@@ -256,7 +169,7 @@ namespace MagicPictureSetDownloader.Db
                     //No filter and no change since last call but recalculate statistics 
                     foreach (CardAllDbInfo cardAllDbInfo in _cacheForAllDbInfos.Cast<CardAllDbInfo>())
                     {
-                        cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(cardAllDbInfo.Card));
+                        cardAllDbInfo.SetStatistics(GetCardCollectionStatisticsRead(cardAllDbInfo.Card));
                     }
 
                     return _cacheForAllDbInfos.AsReadOnly();
@@ -283,7 +196,7 @@ namespace MagicPictureSetDownloader.Db
                     cardAllDbInfo.FrameEffect = cardEdition.FrameEffect;
                     IList<IPrice> prices = _prices.GetOrDefault(cardEdition.IdScryFall);
                     cardAllDbInfo.Prices = prices == null ? new List<IPrice>() : new List<IPrice>(prices);
-                    cardAllDbInfo.SetStatistics(GetCardCollectionStatistics(card));
+                    cardAllDbInfo.SetStatistics(GetCardCollectionStatisticsRead(card));
 
                     ret.Add(cardAllDbInfo);
                 }
@@ -299,8 +212,6 @@ namespace MagicPictureSetDownloader.Db
         }
         public IList<IOption> GetOptions(TypeOfOption type)
         {
-            CheckReferentialLoaded();
-
             using (new ReaderLock(_lock))
             {
                 if (!_allOptions.TryGetValue(type, out IList<IOption> options))
@@ -312,57 +223,15 @@ namespace MagicPictureSetDownloader.Db
             }
         }
 
-        private ICardEdition GetCardEdition(string idScryFall)
+        public ICollection<IRarity> GetAllRarities()
         {
-            CheckReferentialLoaded();
-
-            using (new ReaderLock(_lock))
-            {
-                return _cardEditions.GetOrDefault(idScryFall);
-            }
-        }
-        public IRarity GetRarity(string rarity)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return _rarities.GetOrDefault(rarity);
-            }
-        }
-        public IRarity[] GetAllRarities()
-        {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<IRarity>(_rarities.Values).ToArray();
             }
         }
-        private int GetRarityId(string rarity)
-        {
-            return GetRarity(rarity).Id;
-        }
-        public ILanguage GetLanguage(string language)
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                if (_languages.TryGetValue(language, out ILanguage lang) && lang != null)
-                {
-                    return lang;
-                }
-
-                if (_alternativeNameLanguages.TryGetValue(language, out lang) && lang != null)
-                {
-                    return lang;
-
-                }
-                return null;
-            }
-        }
-
         public ICollection<IEdition> GetAllEditions()
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<IEdition>(_editions).AsReadOnly();
@@ -370,7 +239,6 @@ namespace MagicPictureSetDownloader.Db
         }
         public ICollection<IBlock> GetAllBlocks()
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<IBlock>(_blocks.Values).AsReadOnly();
@@ -378,7 +246,6 @@ namespace MagicPictureSetDownloader.Db
         }
         public ICollection<ILanguage> GetAllLanguages()
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<ILanguage>(_languages.Values).AsReadOnly();
@@ -386,25 +253,14 @@ namespace MagicPictureSetDownloader.Db
         }
         public ICollection<IPreconstructedDeck> GetAllPreconstructedDecks()
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<IPreconstructedDeck>(_preconstructedDecks.Values).AsReadOnly();
             }
         }
 
-        [SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
-        private ICollection<IRarity> AllRarities()
-        {
-            CheckReferentialLoaded();
-            using (new ReaderLock(_lock))
-            {
-                return new List<IRarity>(_rarities.Values).AsReadOnly();
-            }
-        }
         private ICollection<ICardEdition> AllCardEditions()
         {
-            CheckReferentialLoaded();
             using (new ReaderLock(_lock))
             {
                 return new List<ICardEdition>(_cardEditions.Values).AsReadOnly();

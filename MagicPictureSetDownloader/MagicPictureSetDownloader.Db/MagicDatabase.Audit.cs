@@ -15,9 +15,11 @@
         public ICollection<IAudit> GetAllAudits()
         {
             using (new ReaderLock(_lock))
-            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
-                return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
+                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
+                {
+                    return Mapper<Audit>.LoadAll(cnx).Cast<IAudit>().ToArray();
+                }
             }
         }
 
@@ -70,12 +72,9 @@
                 return;
             }
 
-            using (new WriterLock(_lock))
+            using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
             {
-                using (IDbConnection cnx = _databaseConnection.GetMagicConnection())
-                {
-                    Mapper<Audit>.InsertOne(cnx, audit);
-                }
+                Mapper<Audit>.InsertOne(cnx, audit);
             }
         }
     }

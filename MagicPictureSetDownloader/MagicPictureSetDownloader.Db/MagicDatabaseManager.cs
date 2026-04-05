@@ -9,6 +9,7 @@
         public static void Initialise()
         {
             _magicDatabase = new MagicDatabase();
+            _magicDatabase.Initialize();
         }
 
         public static IMagicDatabaseReadOnly ReadOnly

@@ -76,7 +76,7 @@
             _allCardInfos = _magicDatabase.GetAllInfos().ToArray();
             _allLanguages = _magicDatabase.GetAllLanguages().ToArray();
 
-            Rarities = _magicDatabase.GetAllRarities();
+            Rarities = _magicDatabase.GetAllRarities().ToArray();
 
             Blocks = _magicDatabase.GetAllBlocks().ToArray();
             Editions = _magicDatabase.GetNoneEmptyEditionsOrdered();
