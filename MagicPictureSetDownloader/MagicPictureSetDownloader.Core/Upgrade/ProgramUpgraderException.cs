@@ -1,7 +1,6 @@
 ﻿namespace MagicPictureSetDownloader.Core.Upgrade
 {
     using System;
-    using System.Runtime.Serialization;
 
     [Serializable]
     public class ProgramUpgraderException : ApplicationException

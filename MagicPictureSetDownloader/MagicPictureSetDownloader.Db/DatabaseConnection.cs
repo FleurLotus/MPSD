@@ -42,14 +42,14 @@
             cnx.Open();
             return cnx;
         }
-        private bool BatchModeActivated()
+        public bool IsBatchModeActivated()
         {
             return _batchConnection != null;
         }
 
         public IDbConnection GetMagicConnection()
         {
-            if (!BatchModeActivated())
+            if (!IsBatchModeActivated())
             {
                 return new ConnectionWrapper(GetMagicConnectionInternal(), false);
             }
@@ -58,7 +58,7 @@
         }
         public void ActivateBatchMode()
         {
-            if (BatchModeActivated())
+            if (IsBatchModeActivated())
             {
                 throw new ApplicationDbException("BatchMode is already activated");
             }
@@ -66,13 +66,21 @@
             _batchConnection = GetMagicConnectionInternal();
             _batchTransaction = _batchConnection.BeginTransaction();
         }
-        public void DesactivateBatchMode()
+        public void DesactivateBatchMode(bool success)
         {
-            if (!BatchModeActivated())
+            if (!IsBatchModeActivated())
             {
                 throw new ApplicationDbException("BatchMode is not activated");
             }
-            _batchTransaction.Commit();
+            if (success)
+            {
+                _batchTransaction.Commit();
+            }
+            else
+            {
+                _batchTransaction.Rollback();
+            }
+
             _batchTransaction.Dispose();
             _batchTransaction = null;
 

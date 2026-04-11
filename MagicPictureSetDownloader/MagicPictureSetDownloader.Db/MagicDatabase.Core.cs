@@ -7,7 +7,6 @@
 
     using Common.Collection;
     using Common.Database;
-    using Common.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;
@@ -272,10 +271,6 @@
             {
                 AddToDbAndUpdateReferential((CardFace) cardFace, InsertInReferential);
             }
-        }
-        private ICardCollection UpdateCollectionNameWrite(string oldName, string name)
-        {
-            return UpdateCollectionNameWrite(GetCollectionRead(oldName), name);
         }
         private ICardCollection UpdateCollectionNameWrite(ICardCollection collection, string name)
         {

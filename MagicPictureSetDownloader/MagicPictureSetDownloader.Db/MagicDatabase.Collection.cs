@@ -5,7 +5,6 @@ namespace MagicPictureSetDownloader.Db
     using System.Data;
     using System.Linq;
 
-    using Common.Database;
     using Common.Threading;
 
     using MagicPictureSetDownloader.Db.DAO;
@@ -127,12 +126,11 @@ namespace MagicPictureSetDownloader.Db
             {
                 return;
             }
-            using (BatchMode())
+            CheckBatchModeActivated();
+
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
-                {
-                    InsertOrUpdateCardInCollectionWrite(idCollection, idScryFall, idLanguage, cardCount);
-                }
+                InsertOrUpdateCardInCollectionWrite(idCollection, idScryFall, idLanguage, cardCount);
             }
         }
         public void MoveCardToOtherCollection(ICardCollection collection, string idScryFall, int idLanguage, ICardCount cardCount, ICardCollection collectionDestination)
@@ -142,22 +140,20 @@ namespace MagicPictureSetDownloader.Db
                 return;
             }
 
-            foreach (KeyValuePair<ICardCountKey, int> kv in cardCount)
-            {
-                MoveCardToOtherCollection(collection, idScryFall, idLanguage, kv.Value, kv.Key, collectionDestination);
-            }
-        }
-        private void MoveCardToOtherCollection(ICardCollection collection, string idScryFall, int idLanguage, int countToMove, ICardCountKey cardCountKey, ICardCollection collectionDestination)
-        {
-            if (countToMove <= 0 || cardCountKey == null)
-            {
-                return;
-            }
+            CheckBatchModeActivated();
 
-            using (BatchMode())
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
+                foreach (KeyValuePair<ICardCountKey, int> kv in cardCount)
                 {
+                    int countToMove = kv.Value;
+                    ICardCountKey cardCountKey = kv.Key;
+
+                    if (countToMove <= 0 || cardCountKey == null)
+                    {
+                        continue;
+                    }
+
                     ICardInCollectionCount cardInCollectionCount = GetCardCollectionRead(collection?.Id, idScryFall, idLanguage);
                     if (cardInCollectionCount == null)
                     {
@@ -184,13 +180,6 @@ namespace MagicPictureSetDownloader.Db
                 }
             }
         }
-        public ICardCollection UpdateCollectionName(string oldName, string name)
-        {
-            using (new WriterLock(_lock))
-            {
-                return UpdateCollectionNameWrite(oldName, name);
-            }
-        }
         public ICardCollection UpdateCollectionName(ICardCollection collection, string name)
         {
             using (new WriterLock(_lock))
@@ -201,49 +190,49 @@ namespace MagicPictureSetDownloader.Db
 
         public void MoveCollection(string toBeDeletedCollectionName, string toAddCollectionName)
         {
-            using (BatchMode())
+            CheckBatchModeActivated();
+
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
+                ICardCollection toBeDeletedCollection = GetCollectionRead(toBeDeletedCollectionName);
+                if (toBeDeletedCollection == null)
                 {
-                    ICardCollection toBeDeletedCollection = GetCollectionRead(toBeDeletedCollectionName);
-                    if (toBeDeletedCollection == null)
-                    {
-                        return;
-                    }
-
-                    ICollection<ICardInCollectionCount> collectionToRemove = GetCardCollectionRead(toBeDeletedCollection.Id);
-                    if (collectionToRemove == null || collectionToRemove.Count == 0)
-                    {
-                        return;
-                    }
-
-                    ICardCollection toAddCollection = GetCollectionRead(toAddCollectionName);
-                    if (toAddCollection == null)
-                    {
-                        return;
-                    }
-
-                    foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
-                    {
-                        InsertOrUpdateCardInCollectionWrite(toAddCollection.Id, cardInCollectionCount.IdScryFall, cardInCollectionCount.IdLanguage, cardInCollectionCount.GetCardCount());
-                    }
-
-                    DeleteAllCardInCollectionWrite(toBeDeletedCollectionName);
+                    return;
                 }
+
+                ICollection<ICardInCollectionCount> collectionToRemove = GetCardCollectionRead(toBeDeletedCollection.Id);
+                if (collectionToRemove == null || collectionToRemove.Count == 0)
+                {
+                    return;
+                }
+
+                ICardCollection toAddCollection = GetCollectionRead(toAddCollectionName);
+                if (toAddCollection == null)
+                {
+                    return;
+                }
+
+                foreach (ICardInCollectionCount cardInCollectionCount in collectionToRemove)
+                {
+                    InsertOrUpdateCardInCollectionWrite(toAddCollection.Id, cardInCollectionCount.IdScryFall, cardInCollectionCount.IdLanguage, cardInCollectionCount.GetCardCount());
+                }
+
+                DeleteAllCardInCollectionWrite(toBeDeletedCollectionName);
             }
         }
         public void DeleteAllCardInCollection(string name)
         {
-            using (BatchMode())
+            CheckBatchModeActivated();
+
+            using (new WriterLock(_lock))
             {
-                using (new WriterLock(_lock))
-                {
-                    DeleteAllCardInCollectionWrite(name);
-                }
+                DeleteAllCardInCollectionWrite(name);
             }
         }
         public void DeleteCollection(string name)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 ICardCollection cardCollection = GetCollectionRead(name);
@@ -259,30 +248,29 @@ namespace MagicPictureSetDownloader.Db
 
         public void PreconstructedDeckToCollection(IPreconstructedDeck preconstructedDeck, ICardCollection collection, ILanguage language)
         {
-            using (BatchMode())
-            {
-                using (new WriterLock(_lock))
-                {
-                    if (preconstructedDeck == null || collection == null || language == null)
-                    {
-                        return;
-                    }
-                    ICollection<IPreconstructedDeckCardEdition> deckComposition = GetPreconstructedDeckCardsRead(preconstructedDeck.Id);
-                    if (deckComposition == null || deckComposition.Count == 0)
-                    {
-                        return;
-                    }
-                    int idLanguage = language.Id;
+            CheckBatchModeActivated();
 
-                    foreach (IPreconstructedDeckCardEdition card in deckComposition)
-                    {
-                        CardCount cardCount = new CardCount
+            using (new WriterLock(_lock))
+            {
+                if (preconstructedDeck == null || collection == null || language == null)
+                {
+                    return;
+                }
+                ICollection<IPreconstructedDeckCardEdition> deckComposition = GetPreconstructedDeckCardsRead(preconstructedDeck.Id);
+                if (deckComposition == null || deckComposition.Count == 0)
+                {
+                    return;
+                }
+                int idLanguage = language.Id;
+
+                foreach (IPreconstructedDeckCardEdition card in deckComposition)
+                {
+                    CardCount cardCount = new CardCount
                         {
                             { CardCountKeys.Standard, card.Number }
                         };
 
-                        InsertOrUpdateCardInCollectionWrite(collection.Id, card.IdScryFall, idLanguage, cardCount);
-                    }
+                    InsertOrUpdateCardInCollectionWrite(collection.Id, card.IdScryFall, idLanguage, cardCount);
                 }
             }
         }

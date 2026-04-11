@@ -45,14 +45,14 @@
         }
         public ImportStatus ImportToNewCollection(string importFilePath, string newCollectionName)
         {
-            IMagicDatabaseReadAndWriteCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCollection;
+            IMagicDatabaseReadAndWriteCollectionInBatch magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCollectionInBatch;
             ICardCollection collection = magicDatabaseCollection.InsertNewCollection(newCollectionName) ?? throw new ArgumentException("Collection name already exists", nameof(newCollectionName));
             return ImportToCollection(importFilePath, collection);
         }
 
         public ImportStatus ImportToExistingCollection(string importFilePath, string collectionToCompletName)
         {
-            IMagicDatabaseReadAndWriteCardInCollection magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            IMagicDatabaseReadAndWriteCardInCollectionInBatch magicDatabaseCollection = MagicDatabaseManager.ReadAndWriteCardInCollectionInBatch;
             ICardCollection collection = magicDatabaseCollection.GetCollection(collectionToCompletName) ?? throw new ArgumentException("Collection name doesn't exist", nameof(collectionToCompletName));
             return ImportToCollection(importFilePath, collection);
         }
@@ -60,15 +60,17 @@
         {
             ImportStatus status = ImportStatus.BuildStatus(GetImport(importFilePath));
 
-            IMagicDatabaseReadAndWriteCardInCollection magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            IMagicDatabaseReadAndWriteCardInCollectionInBatch magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollectionInBatch;
 
-            using (magicDatabase.BatchMode())
+            using (IBatch batch = magicDatabase.BatchMode())
             {
                 //Add in database the good one
                 foreach (IImportExportCardCount importExportCardCount in status.ReadyToBeInserted)
                 {
                     magicDatabase.InsertOrUpdateCardInCollection(collection.Id, importExportCardCount.IdScryFall, importExportCardCount.IdLanguage, importExportCardCount.GetCardCount());
                 }
+
+                batch.Commit();
             }
 
             return status;

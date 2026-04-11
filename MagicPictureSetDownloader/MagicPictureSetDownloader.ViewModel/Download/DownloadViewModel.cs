@@ -65,12 +65,12 @@
             catch (OperationCanceledException)
             {
                 //No error, just stop the job
-                JobFinished();
+                JobFinished(false);
             }
             catch (Exception ex)
             {
                 SetMessage(ex.Message);
-                JobFinished();
+                JobFinished(false);
             }
         }
         private void ScryFallCardTransformerFinished(object sender, EventArgs e)
@@ -79,7 +79,7 @@
             _scryFallCardTransformer.Error -= ScryFallCardTransformerError;
             _scryFallCardTransformer = null;
 
-            JobFinished();
+            JobFinished(true);
         }
         private void ScryFallCardTransformerError(object sender, EventArgs<string> e)
         {

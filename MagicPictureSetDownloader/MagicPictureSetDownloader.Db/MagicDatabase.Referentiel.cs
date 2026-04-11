@@ -35,6 +35,8 @@ namespace MagicPictureSetDownloader.Db
 
         public void InsertNewEdition(string sourceName, bool hasFoil, string code, int? idBlock, int? cardNumber, DateTime? releaseDate, byte[] icon)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 IEdition edition = GetEditionRead(sourceName);
@@ -70,6 +72,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewCard(string name, string layout)
         {
+            CheckBatchModeActivated();
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
@@ -86,6 +90,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewCardFace(int idCard, bool isMainFace, string name, string text, string power, string toughness, string castingcost, string loyalty, string defense, string type)
         {
+            CheckBatchModeActivated();
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentNullException(nameof(name));
@@ -120,6 +126,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewExternalIds(string idScryFall, CardIdSource cardIdSource, string externalId)
         {
+            CheckBatchModeActivated();
+
             if (string.IsNullOrWhiteSpace(idScryFall))
             {
                 throw new ArgumentNullException(nameof(idScryFall));
@@ -154,6 +162,8 @@ namespace MagicPictureSetDownloader.Db
 
         public void InsertNewCardEdition(string idScryFall, string editionCode, string name, string rarity, string url, string url2, string flavorName, string frameEffect)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 int idRarity = GetRarityRead(rarity).Id;
@@ -212,6 +222,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewBlock(string blockName)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 if (GetBlockRead(blockName) != null)
@@ -238,6 +250,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewTranslate(int idCard, string language, string name)
         {
+            CheckBatchModeActivated();
+
             ICard refCard = _cardsbyId.GetOrDefault(idCard);
 
             if (refCard == null)
@@ -258,6 +272,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewPrice(string idScryFall, DateTime addDate, string source, bool foil, int value)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 if (GetCardEditionRead(idScryFall) == null)
@@ -271,6 +287,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertNewPreconstructedDeck(int? idEdition, string preconstructedDeckName, string url)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 if (GetPreconstructedDeckRead(idEdition, preconstructedDeckName) != null)
@@ -284,6 +302,8 @@ namespace MagicPictureSetDownloader.Db
         }
         public void InsertOrUpdatePreconstructedDeckCardEdition(int idPreconstructedDeck, string idScryFall, int count)
         {
+            CheckBatchModeActivated();
+
             using (new WriterLock(_lock))
             {
                 if (GetPreconstructedDeckRead(idPreconstructedDeck) == null)

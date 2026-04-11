@@ -127,7 +127,7 @@
                 if ((newcount == 0 || IsStopping || _fatalException || _isCancelled) && Interlocked.CompareExchange(ref _finishCalled, 1, 0) == 0)
                 {
                     DownloadReporter.Finish();
-                    JobFinished();
+                    JobFinished(newcount == 0);
                 }
             }
         }

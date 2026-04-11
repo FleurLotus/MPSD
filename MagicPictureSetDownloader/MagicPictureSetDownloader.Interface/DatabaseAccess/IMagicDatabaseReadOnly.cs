@@ -1,6 +1,5 @@
 ﻿namespace MagicPictureSetDownloader.Interface
 {
-    using System;
     using System.Collections.Generic;
 
     public interface IMagicDatabaseReadOnly
@@ -42,6 +41,6 @@
         ICollection<IPreconstructedDeckCardEdition> GetPreconstructedDeckCards(IPreconstructedDeck preconstructedDeck);
         IReadOnlyList<KeyValuePair<string, object>> GetMissingPictureUrls();
         string GetVersoExtension();
-        IDisposable BatchMode();
+        IBatch BatchMode();
     }
 }

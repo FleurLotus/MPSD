@@ -34,14 +34,14 @@
         private IDictionary<ICard, string> _allCardTranslation;
         private readonly RangeObservableCollection<CardCollectionInputGraphicViewModel> _cards;
 
-        private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
+        private readonly IMagicDatabaseReadAndWriteCardInCollectionInBatch _magicDatabase;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
 
         public CollectionInputGraphicViewModel(string name)
         {
-            _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollectionInBatch;
             _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
 
             IOption option = _magicDatabaseForOption.GetOption(TypeOfOption.Input, "Language");
@@ -269,14 +269,19 @@
         }
         protected override void OkCommandExecute(object o)
         {
-            foreach (CardCollectionInputGraphicViewModel card in _cards.Where(c => c.ChangedCount != 0))
+            using (IBatch batch = _magicDatabase.BatchMode())
             {
-                CardCount cardCount = new CardCount
+                foreach (CardCollectionInputGraphicViewModel card in _cards.Where(c => c.ChangedCount != 0))
                 {
-                    { new CardCountKey(Foil), card.ChangedCount }
-                };
+                    CardCount cardCount = new CardCount
+                    {
+                        { new CardCountKey(Foil), card.ChangedCount }
+                    };
 
-                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdScryFall, InputLanguage.Id, cardCount);
+                    _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, card.Card.IdScryFall, InputLanguage.Id, cardCount);
+                }
+
+                batch.Commit();
             }
 
             RefreshDisplayedData(true);

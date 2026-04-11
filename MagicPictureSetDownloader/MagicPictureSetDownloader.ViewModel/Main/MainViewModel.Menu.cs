@@ -8,7 +8,6 @@
     using System.Threading.Tasks;
 
     using Common.Notify;
-    using Common.Threading;
     using Common.ViewModel.Command;
     using Common.ViewModel.Dialog;
     using Common.ViewModel.Input;
@@ -141,7 +140,7 @@
                 {
                     CheckCollectionNameNotAlreadyExists(newName);
 
-                    _magicDatabaseForCollection.InsertNewCollection(newName);
+                    _magicDatabaseForCollectionInBatch.InsertNewCollection(newName);
                     GenerateCollectionMenu();
                 }
             }
@@ -196,7 +195,7 @@
                 if (!string.IsNullOrWhiteSpace(toBeRenamed) && !string.IsNullOrWhiteSpace(newName))
                 {
                     CheckCollectionNameNotAlreadyExists(newName);
-                    _magicDatabaseForCollection.UpdateCollectionName(_magicDatabase.GetCollection(toBeRenamed), newName);
+                    _magicDatabaseForCollectionInBatch.UpdateCollectionName(_magicDatabase.GetCollection(toBeRenamed), newName);
                     GenerateCollectionMenu();
                 }
             }
@@ -307,12 +306,17 @@
 
             if (vm.Result == true)
             {
-                CardCount cardCount = new CardCount
+                using (IBatch batch = _magicDatabaseForCardInCollectionInBatch.BatchMode())
                 {
-                    { new CardCountKey(vm.Source.IsFoil), -vm.Source.Count }
-                };
+                    CardCount cardCount = new CardCount
+                    {
+                        { new CardCountKey(vm.Source.IsFoil), -vm.Source.Count }
+                    };
 
-                _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
+                    _magicDatabaseForCardInCollectionInBatch.InsertOrUpdateCardInCollection(vm.SourceCollection.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
+
+                    batch.Commit();
+                }
                 LoadCardsHierarchy();
             }
         }
@@ -349,7 +353,7 @@
 
             if (questionViewModel.Result == true)
             {
-                using (_magicDatabaseForCardInCollection.BatchMode())
+                using (IBatch batch = _magicDatabaseForCardInCollectionInBatch.BatchMode())
                 {
                     foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
                     {
@@ -359,8 +363,10 @@
                             cardCount.Add(kv.Key, -kv.Value);
                         }
 
-                        _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cardCount);
+                        _magicDatabaseForCardInCollectionInBatch.InsertOrUpdateCardInCollection(sourceCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cardCount);
                     }
+
+                    batch.Commit();
                 }
 
                 LoadCardsHierarchy();
@@ -523,18 +529,23 @@
 
             if (vm.Result == true)
             {
-                CardCount cardCount = new CardCount
+                using (IBatch batch = _magicDatabaseForCardInCollectionInBatch.BatchMode())
                 {
-                    { new CardCountKey(vm.Source.IsFoil), vm.Source.Count }
-                };
+                    CardCount cardCount = new CardCount
+                    {
+                        { new CardCountKey(vm.Source.IsFoil), vm.Source.Count }
+                    };
 
-                if (vm.Copy)
-                {
-                    _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
-                }
-                else
-                {
-                    _magicDatabaseForCardInCollection.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount, vm.CardCollectionSelected);
+                    if (vm.Copy)
+                    {
+                        _magicDatabaseForCardInCollectionInBatch.InsertOrUpdateCardInCollection(vm.CardCollectionSelected.Id, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount);
+                    }
+                    else
+                    {
+                        _magicDatabaseForCardInCollectionInBatch.MoveCardToOtherCollection(vm.SourceCollection, vm.Source.IdScryfallSelected, vm.Source.LanguageSelected.Id, cardCount, vm.CardCollectionSelected);
+                    }
+
+                    batch.Commit();
                 }
 
                 LoadCardsHierarchy();
@@ -555,19 +566,21 @@
 
             if (questionViewModel.Result == true)
             {
-                using (_magicDatabaseForCardInCollection.BatchMode())
+                using (IBatch batch = _magicDatabaseForCardInCollectionInBatch.BatchMode())
                 {
                     foreach (ICardInCollectionCount cicc in GetCardInCollectionInSelected(vm, sourceCollection))
                     {
                         if (copy)
                         {
-                            _magicDatabaseForCardInCollection.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount());
+                            _magicDatabaseForCardInCollectionInBatch.InsertOrUpdateCardInCollection(destCollection.Id, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount());
                         }
                         else
                         {
-                            _magicDatabaseForCardInCollection.MoveCardToOtherCollection(sourceCollection, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount(), destCollection);
+                            _magicDatabaseForCardInCollectionInBatch.MoveCardToOtherCollection(sourceCollection, cicc.IdScryFall, cicc.IdLanguage, cicc.GetCardCount(), destCollection);
                         }
                     }
+
+                    batch.Commit();
                 }
                 LoadCardsHierarchy();
             }
@@ -623,16 +636,21 @@
             string toBeDeleted = vm.Selected;
             string toAdd = vm.Selected2;
 
-            if (toAdd == None)
+            using (IBatch batch = _magicDatabaseForCollectionInBatch.BatchMode())
             {
-                _magicDatabaseForCollection.DeleteAllCardInCollection(toBeDeleted);
-            }
-            else
-            {
-                _magicDatabaseForCollection.MoveCollection(toBeDeleted, toAdd);
-            }
+                if (toAdd == None)
+                {
+                    _magicDatabaseForCollectionInBatch.DeleteAllCardInCollection(toBeDeleted);
+                }
+                else
+                {
+                    _magicDatabaseForCollectionInBatch.MoveCollection(toBeDeleted, toAdd);
+                }
 
-            _magicDatabaseForCollection.DeleteCollection(toBeDeleted);
+                _magicDatabaseForCollectionInBatch.DeleteCollection(toBeDeleted);
+
+                batch.Commit();
+            }
 
             _dispatcherInvoker.Invoke(() =>
                 {
@@ -654,7 +672,12 @@
         }
         private void AddPreconstructedDeckToCollectionAsync(PreconstructedDecksViewModel vm)
         {
-            _magicDatabaseForCollection.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected, vm.LanguageSelected);
+            using (IBatch batch = _magicDatabaseForCollectionInBatch.BatchMode())
+            {
+                _magicDatabaseForCollectionInBatch.PreconstructedDeckToCollection(vm.PreconstructedDeckSelected.PreconstructedDeck, vm.CardCollectionSelected, vm.LanguageSelected);
+
+                batch.Commit();
+            }
             LoadCardsHierarchy();
         }
         #endregion

@@ -1,24 +1,28 @@
 ﻿namespace MagicPictureSetDownloader.Db
 {
-    using System;
+    using Common.Database;
 
-    using Common.Threading;
+    using MagicPictureSetDownloader.Interface;
 
     internal partial class MagicDatabase
     {
-        private int _depth;
-
-        private sealed class Batch : IDisposable
+        private sealed class Batch : IBatch
         {
             private readonly MagicDatabase _database;
             //To avoid multiple call of dispose on the same object and break of recursivity
             private readonly object _sync = new object();
+            private bool _commit;
             private bool _disposed;
 
             public Batch(MagicDatabase database)
             {
                 _database = database;
-                _database.IncrementBatchDepth();
+                _database.ActivateBatchMode();
+            }
+
+            public void Commit()
+            {
+                _commit = true;
             }
 
             public void Dispose()
@@ -32,36 +36,29 @@
 
                     _disposed = true;
                 }
-                _database.DecrementBatchDepth();
+                _database.DesactivateBatchMode(_commit);
             }
         }
 
-        private void IncrementBatchDepth()
+        private void ActivateBatchMode()
         {
-            using (new WriterLock(_lock))
-            {
-                if (_depth == 0)
-                {
-                    _databaseConnection.ActivateBatchMode();
-                }
-                _depth++;
-            }
+            _databaseConnection.ActivateBatchMode();
         }
-        private void DecrementBatchDepth()
+        private void DesactivateBatchMode(bool success)
         {
-            using (new WriterLock(_lock))
-            {
-                _depth--;
-                if (_depth == 0)
-                {
-                    _databaseConnection.DesactivateBatchMode();
-                }
-            }
+            _databaseConnection.DesactivateBatchMode(success);
         }
 
-        public IDisposable BatchMode()
+        public IBatch BatchMode()
         {
             return new Batch(this);
+        }
+        private void CheckBatchModeActivated()
+        {
+            if (!_databaseConnection.IsBatchModeActivated())
+            {
+                throw new ApplicationDbException("BatchMode is not activated");
+            }
         }
     }
 }

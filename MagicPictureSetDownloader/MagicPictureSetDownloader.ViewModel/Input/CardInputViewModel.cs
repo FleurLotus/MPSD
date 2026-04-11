@@ -40,7 +40,7 @@
         private ICardCollection _cardCollection;
         private readonly ICardCollection[] _collections;
 
-        private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabase;
+        private readonly IMagicDatabaseReadAndWriteCardInCollectionInBatch _magicDatabase;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
         private readonly ICardAllDbInfo[] _allCardInfos;
         private readonly ILanguage[] _allLanguages;
@@ -51,7 +51,7 @@
 
         public CardInputViewModel(string name, int defaultQuantity)
         {
-            _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            _magicDatabase = MagicDatabaseManager.ReadAndWriteCardInCollectionInBatch;
             _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
             _defaultQuantity = defaultQuantity;
 
@@ -270,7 +270,18 @@
 
         protected override void OkCommandExecute(object o)
         {
-            AddNewCard();
+            using (IBatch batch = _magicDatabase.BatchMode())
+            {
+                CardCount cardCount = new CardCount
+                {
+                    { new CardCountKey(IsFoil), Count }
+                };
+
+                _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, VersionSelected, LanguageSelected.Id, cardCount);
+
+                batch.Commit();
+            }
+
             InitWindow();
         }
         protected override bool OkCommandCanExecute(object o)
@@ -359,15 +370,6 @@
             Count = _defaultQuantity;
             IsFoil = false;
             ResetFocus();
-        }
-        private void AddNewCard()
-        {
-            CardCount cardCount = new CardCount
-            {
-                { new CardCountKey(IsFoil), Count }
-            };
-
-            _magicDatabase.InsertOrUpdateCardInCollection(CardCollection.Id, VersionSelected, LanguageSelected.Id, cardCount);
         }
         private void SelectCardCollection(string name)
         {

@@ -1,9 +1,7 @@
 namespace MagicPictureSetDownloader.Db
 {
-    using System;
     using System.Collections.Generic;
     using System.Data;
-    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
 
@@ -13,9 +11,9 @@ namespace MagicPictureSetDownloader.Db
     using MagicPictureSetDownloader.Db.DAO;
     using MagicPictureSetDownloader.Interface;
 
-    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollection,
+    internal partial class MagicDatabase : IMagicDatabaseReadAndWriteCollectionInBatch,
                                            IMagicDatabaseReadAndWriteOption,
-                                           IMagicDatabaseReadAndWriteCardInCollection,
+                                           IMagicDatabaseReadAndWriteCardInCollectionInBatch,
                                            IMagicDatabaseReadAndUpdate
 
     {

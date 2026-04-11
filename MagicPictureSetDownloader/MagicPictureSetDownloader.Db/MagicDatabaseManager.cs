@@ -20,11 +20,11 @@
         {
             get { return _magicDatabase; }
         }
-        public static IMagicDatabaseReadAndWriteCollection ReadAndWriteCollection
+        public static IMagicDatabaseReadAndWriteCollectionInBatch ReadAndWriteCollectionInBatch
         {
             get { return _magicDatabase; }
         }
-        public static IMagicDatabaseReadAndWriteCardInCollection ReadAndWriteCardInCollection
+        public static IMagicDatabaseReadAndWriteCardInCollectionInBatch ReadAndWriteCardInCollectionInBatch
         {
             get { return _magicDatabase; }
         }

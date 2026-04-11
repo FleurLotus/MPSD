@@ -28,7 +28,7 @@
         protected bool IsStopping;
         protected readonly ManualResetEvent FinishedStopping = new ManualResetEvent(true);
         private bool _disposed;
-        private IDisposable _batch;
+        private IBatch _batch;
         private readonly object _sync = new object();
         private bool _isBusy;
         private readonly StringBuilder _stringBuilder = new StringBuilder();
@@ -78,7 +78,7 @@
             JobStarting();
             if (!await StartImpl(ct).ConfigureAwait(true))
             {
-                JobFinished();
+                JobFinished(true);
             }
         }
 
@@ -90,16 +90,16 @@
 
             lock (_sync)
             {
-                _batch ??= MagicDatabaseManager.ReadAndUpdate.BatchMode();
+                _batch = MagicDatabaseManager.ReadAndUpdate.BatchMode();
             }
 
             FinishedStopping.Reset();
         }
-        protected void JobFinished()
+        protected void JobFinished(bool success)
         {
             IsBusy = false;
 
-            BatchEnd();
+            BatchEnd(success);
 
             if (!_disposed)
             {
@@ -107,12 +107,16 @@
             }
         }
 
-        private void BatchEnd()
+        private void BatchEnd(bool success)
         {
             lock (_sync)
             {
                 if (_batch != null)
                 {
+                    if (success)
+                    {
+                        _batch.Commit();
+                    }
                     _batch.Dispose();
                     _batch = null;
                 }

@@ -25,8 +25,8 @@
         private readonly IDispatcherInvoker _dispatcherInvoker;
         private readonly IMagicDatabaseReadOnly _magicDatabase;
         private readonly IMagicDatabaseReadAndWriteOption _magicDatabaseForOption;
-        private readonly IMagicDatabaseReadAndWriteCollection _magicDatabaseForCollection;
-        private readonly IMagicDatabaseReadAndWriteCardInCollection _magicDatabaseForCardInCollection;
+        private readonly IMagicDatabaseReadAndWriteCollectionInBatch _magicDatabaseForCollectionInBatch;
+        private readonly IMagicDatabaseReadAndWriteCardInCollectionInBatch _magicDatabaseForCardInCollectionInBatch;
 
         private UpgradeStatus _upgradeStatus;
 
@@ -41,8 +41,8 @@
 
             _magicDatabase = MagicDatabaseManager.ReadOnly;
             _magicDatabaseForOption = MagicDatabaseManager.ReadAndWriteOption;
-            _magicDatabaseForCollection = MagicDatabaseManager.ReadAndWriteCollection;
-            _magicDatabaseForCardInCollection = MagicDatabaseManager.ReadAndWriteCardInCollection;
+            _magicDatabaseForCollectionInBatch = MagicDatabaseManager.ReadAndWriteCollectionInBatch;
+            _magicDatabaseForCardInCollectionInBatch = MagicDatabaseManager.ReadAndWriteCardInCollectionInBatch;
 
             Options = new OptionsViewModel(_magicDatabaseForOption);
             _programUpdater = new ProgramUpgrader();
