@@ -164,7 +164,7 @@ jobs:
 
     # Publish code coverage to Codecov
     - name: Publish coverage to Codecov
-      uses: codecov/codecov-action@v6
+      uses: codecov/codecov-action@v7
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
